@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI处理器全景指南</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; font-size: 15px; line-height: 1.8; color: #1a1a1a; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 60px; padding: 60px 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; border-radius: 12px; }
+        .header h1 { font-size: 2.4em; margin-bottom: 20px; font-weight: 700; }
+        .header .subtitle { font-size: 1.2em; opacity: 0.9; }
+        .header .meta { margin-top: 30px; font-size: 0.9em; opacity: 0.7; }
+        .section { background: white; padding: 40px; margin-bottom: 30px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .section h2 { font-size: 1.6em; color: #1a1a2e; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #fbbf24; }
+        .section h3 { font-size: 1.3em; color: #16213e; margin: 30px 0 15px; }
+        .section h4 { font-size: 1.1em; color: #333; margin: 20px 0 10px; }
+        .section p { margin-bottom: 15px; text-align: justify; }
+        .section ul, .section ol { margin: 15px 0 15px 25px; }
+        .section li { margin-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { background: #f8f9fa; font-weight: 600; color: #1a1a2e; }
+        tr:hover { background: #f8f9fa; }
+        .highlight { background: #fef3c7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #f59e0b; }
+        .info-box { background: #e0f2fe; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #0369a1; }
+        .warning-box { background: #fee2e2; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ef4444; }
+        .success-box { background: #dcfce7; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #10b981; }
+        .code-block { background: #1a1a2e; color: #e5e7eb; padding: 20px; border-radius: 8px; font-family: "SF Mono", "Monaco", monospace; font-size: 13px; line-height: 1.6; overflow-x: auto; white-space: pre; }
+        .chip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
+        .chip-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; border: 2px solid transparent; transition: all 0.3s; }
+        .chip-card:hover { border-color: #fbbf24; transform: translateY(-3px); }
+        .chip-card h4 { color: #1a1a2e; margin-bottom: 10px; }
+        .chip-card .icon { font-size: 2em; margin-bottom: 10px; }
+        .rating { display: inline-block; background: #10b981; color: white; padding: 3px 10px; border-radius: 4px; font-weight: 600; }
+        .rating-a { background: #10b981; }
+        .rating-b { background: #3b82f6; }
+        .rating-c { background: #f59e0b; }
+        .footer { text-align: center; padding: 40px 0; color: #666; font-size: 0.9em; }
+        .conclusion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0; }
+        .conclusion-card { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 25px; border-radius: 12px; }
+        .conclusion-card h4 { color: #fbbf24; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 AI处理器全景指南</h1>
+            <div class="subtitle">深度解析CPU、GPU、TPU、NPU、APU、IPU、RPU、LPU架构与应用</div>
+            <div class="meta">📅 2026-03-25 · 🎯 技术全景 · 📊 多维度对比分析</div>
+        </div>
+
+        <div class="section">
+            <h2>一、AI处理器分类总览</h2>
+            
+            <h3>1.1 处理器类型一览</h3>
+            <div class="chip-grid">
+                <div class="chip-card">
+                    <div class="icon">🖥️</div>
+                    <h4>CPU</h4>
+                    <p>中央处理器</p>
+                    <small>通用计算，串行处理</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">🎮</div>
+                    <h4>GPU</h4>
+                    <p>图形处理器</p>
+                    <small>并行计算，通用AI</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">⚡</div>
+                    <h4>TPU</h4>
+                    <p>张量处理器</p>
+                    <small>矩阵加速，训练优化</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">🧠</div>
+                    <h4>NPU</h4>
+                    <p>神经网络处理器</p>
+                    <small>AI专用，能效高</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">🔗</div>
+                    <h4>IPU</h4>
+                    <p>智能处理器</p>
+                    <small>图计算，MIMD架构</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">💬</div>
+                    <h4>LPU</h4>
+                    <p>语言处理器</p>
+                    <small>大语言模型优化</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">💾</div>
+                    <h4>RPU</h4>
+                    <p>存内处理器</p>
+                    <small>模拟计算，低功耗</small>
+                </div>
+                <div class="chip-card">
+                    <div class="icon">🔀</div>
+                    <h4>APU</h4>
+                    <p>AI处理器</p>
+                    <small>CPU+GPU融合</small>
+                </div>
+            </div>
+
+            <h3>1.2 发展历程</h3>
+            <div class="code-block">2012 ─── 2016 ─── 2017 ─── 2019 ─── 2021 ─── 2023 ─── 2025
+  │        │        │        │        │        │        │
+GPU崛起   TPU发布   NPU兴起   IPU量产   国产NPU   LPU发布   存算一体
+(CUDA)   (Google) (华为昇腾) (Graphcore)(寒武纪)  (Groq)   (Mythic)</div>
+        </div>
+
+        <div class="section">
+            <h2>二、各类型处理器详解</h2>
+            
+            <h3>2.1 CPU（中央处理器）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>冯·诺依曼架构，串行执行为主</li>
+                    <li>多核设计，指令级并行（ILP）</li>
+                    <li>大容量缓存，低延迟内存访问</li>
+                </ul>
+            </div>
+            <table>
+                <tr><th>优势</th><th>劣势</th></tr>
+                <tr><td>✅ 生态成熟，编程简单</td><td>❌ 并行计算能力弱</td></tr>
+                <tr><td>✅ 通用性强，适用各类任务</td><td>❌ AI计算效率低</td></tr>
+                <tr><td>✅ 功耗相对较低</td><td>❌ 不适合大规模矩阵运算</td></tr>
+            </table>
+            <p><strong>适用场景：</strong>控制逻辑、小规模推理、数据预处理</p>
+
+            <h3>2.2 GPU（图形处理器）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>SIMT（单指令多线程）架构</li>
+                    <li>数千个CUDA核心并行计算</li>
+                    <li>高带宽内存（HBM）</li>
+                </ul>
+            </div>
+            <table>
+                <tr><th>产品</th><th>算力(FP16)</th><th>内存</th><th>带宽</th><th>功耗</th><th>价格</th></tr>
+                <tr><td><strong>NVIDIA H100</strong></td><td>4000 TFLOPS</td><td>80GB HBM3</td><td>3.35 TB/s</td><td>700W</td><td>$30,000</td></tr>
+                <tr><td>NVIDIA H20</td><td>296 TFLOPS</td><td>96GB HBM3</td><td>4.0 TB/s</td><td>500W</td><td>$15,000</td></tr>
+                <tr><td>NVIDIA A100</td><td>312 TFLOPS</td><td>80GB HBM2e</td><td>2.0 TB/s</td><td>400W</td><td>$15,000</td></tr>
+                <tr><td>AMD MI300X</td><td>1307 TFLOPS</td><td>192GB HBM3</td><td>5.3 TB/s</td><td>750W</td><td>-</td></tr>
+            </table>
+
+            <h3>2.3 TPU（张量处理器）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>脉动阵列（Systolic Array）设计</li>
+                    <li>专为矩阵乘法优化</li>
+                    <li>高效的数据流动式计算</li>
+                </ul>
+            </div>
+            <table>
+                <tr><th>产品</th><th>算力(BF16)</th><th>内存</th><th>带宽</th><th>功耗</th></tr>
+                <tr><td><strong>TPU v5p</strong></td><td>459 TFLOPS</td><td>95GB HBM</td><td>2.8 TB/s</td><td>200W</td></tr>
+                <tr><td>TPU v5</td><td>197 TFLOPS</td><td>95GB HBM</td><td>2.0 TB/s</td><td>-</td></tr>
+                <tr><td>TPU v4</td><td>275 TFLOPS</td><td>32GB HBM</td><td>1.2 TB/s</td><td>-</td></tr>
+            </table>
+
+            <h3>2.4 NPU（神经网络处理器）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>AI算法硬件化</li>
+                    <li>数据流架构，层间直连</li>
+                    <li>片上SRAM，减少内存访问</li>
+                </ul>
+            </div>
+            <table>
+                <tr><th>产品</th><th>厂商</th><th>算力</th><th>功耗</th><th>状态</th></tr>
+                <tr><td><strong>昇腾910B</strong></td><td>华为</td><td>376 TFLOPS</td><td>310W</td><td>已量产</td></tr>
+                <tr><td>思元370</td><td>寒武纪</td><td>256 TOPS</td><td>75W</td><td>已量产</td></tr>
+                <tr><td>含光800</td><td>平头哥</td><td>78K IPS</td><td>-</td><td>已量产</td></tr>
+                <tr><td>昆仑2</td><td>百度</td><td>-</td><td>-</td><td>已量产</td></tr>
+            </table>
+
+            <h3>2.5 IPU（智能处理器）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>MIMD（多指令多数据）架构</li>
+                    <li>大规模片上SRAM</li>
+                    <li>图计算优化</li>
+                </ul>
+            </div>
+            <table>
+                <tr><th>产品</th><th>算力</th><th>片上内存</th><th>带宽</th></tr>
+                <tr><td><strong>Bow IPU</strong></td><td>560 TFLOPS</td><td>1.4GB SRAM</td><td>47.5 TB/s</td></tr>
+                <tr><td>Colossus MK2</td><td>250 TFLOPS</td><td>900MB SRAM</td><td>45 TB/s</td></tr>
+            </table>
+
+            <h3>2.6 LPU（语言处理单元）</h3>
+            <div class="info-box">
+                <strong>架构特点：</strong>
+                <ul>
+                    <li>专为Transformer优化</li>
+                    <li>确定性执行，无调度开销</li>
+                    <li>极致推理速度</li>
+                </ul>
+            </div>
+            <div class="highlight">
+                <strong>代表产品：Groq LPU</strong>
+                <ul>
+                    <li>推理速度：500+ token/s</li>
+                    <li>延迟：<10ms</li>
+                    <li>特点：确定性执行</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>三、技术架构深度对比</h2>
+            
+            <h3>3.1 计算范式差异</h3>
+            <div class="code-block">CPU: 冯·诺依曼架构
+┌─────┐    ┌─────┐    ┌─────┐
+│ CPU │←──→│内存 │←──→│存储 │  串行执行，指令级并行
+└─────┘    └─────┘    └─────┘
+
+GPU: SIMT架构
+┌──────────────────────────────────────┐
+│  SM1  │  SM2  │  SM3  │  SM4  │ ...  │  大规模并行
+│ ┌───┐ │ ┌───┐ │ ┌───┐ │ ┌───┐ │      │  数千核心
+│ │CUDA│ │ │CUDA│ │ │CUDA│ │ │CUDA│ │      │
+│ └───┘ │ └───┘ │ └───┘ │ └───┘ │      │
+└──────────────────────────────────────┘
+
+TPU: 脉动阵列
+┌──────────────────────────────────────┐
+│  [MAC]→[MAC]→[MAC]→[MAC]→...        │  矩阵乘法专用
+│   ↓     ↓     ↓     ↓               │  数据流动式计算
+│  [MAC]→[MAC]→[MAC]→[MAC]→...        │
+└──────────────────────────────────────┘
+
+NPU: 数据流架构
+┌──────┐   ┌──────┐   ┌──────┐
+│ 卷积 │→→→│ 池化 │→→→│ 激活 │   神经网络层间直连
+│ 引擎 │   │ 引擎 │   │ 引擎 │   减少内存访问
+└──────┘   └──────┘   └──────┘</div>
+
+            <h3>3.2 内存架构对比</h3>
+            <table>
+                <tr><th>架构</th><th>内存类型</th><th>带宽</th><th>容量</th><th>延迟</th></tr>
+                <tr><td><strong>CPU</strong></td><td>DDR5</td><td>~100 GB/s</td><td>1TB+</td><td>低</td></tr>
+                <tr><td><strong>GPU</strong></td><td>HBM3</td><td>3.35 TB/s</td><td>80-192GB</td><td>中</td></tr>
+                <tr><td><strong>TPU</strong></td><td>HBM</td><td>2.8 TB/s</td><td>32-95GB</td><td>中</td></tr>
+                <tr><td><strong>NPU</strong></td><td>片上SRAM</td><td>-</td><td>&lt;100MB</td><td>极低</td></tr>
+                <tr><td><strong>IPU</strong></td><td>片上SRAM</td><td>47.5 TB/s</td><td>1.4GB</td><td>极低</td></tr>
+            </table>
+
+            <h3>3.3 编程模型对比</h3>
+            <table>
+                <tr><th>处理器</th><th>编程框架</th><th>学习曲线</th><th>生态成熟度</th><th>社区规模</th></tr>
+                <tr><td><strong>CPU</strong></td><td>C/C++/Python</td><td>⭐ 简单</td><td>⭐⭐⭐⭐⭐</td><td>极大</td></tr>
+                <tr><td><strong>GPU</strong></td><td>CUDA/OpenCL</td><td>⭐⭐⭐ 中等</td><td>⭐⭐⭐⭐⭐</td><td>极大</td></tr>
+                <tr><td><strong>TPU</strong></td><td>JAX/TensorFlow</td><td>⭐⭐ 简单</td><td>⭐⭐⭐⭐</td><td>大</td></tr>
+                <tr><td><strong>NPU</strong></td><td>厂商SDK</td><td>⭐⭐⭐⭐ 复杂</td><td>⭐⭐⭐</td><td>中</td></tr>
+                <tr><td><strong>IPU</strong></td><td>PopART</td><td>⭐⭐⭐⭐ 复杂</td><td>⭐⭐</td><td>小</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>四、性能与成本分析</h2>
+            
+            <h3>4.1 算力对比</h3>
+            <table>
+                <tr><th>处理器</th><th>FP16算力</th><th>INT8算力</th><th>内存带宽</th><th>功耗</th><th>能效比</th></tr>
+                <tr><td><strong>NVIDIA H100</strong></td><td>4000 TFLOPS</td><td>8000 TOPS</td><td>3.35 TB/s</td><td>700W</td><td>5.7 TFLOPS/W</td></tr>
+                <tr><td>NVIDIA H20</td><td>296 TFLOPS</td><td>592 TOPS</td><td>4.0 TB/s</td><td>500W</td><td>0.6 TFLOPS/W</td></tr>
+                <tr><td>AMD MI300X</td><td>1307 TFLOPS</td><td>2614 TOPS</td><td>5.3 TB/s</td><td>750W</td><td>1.7 TFLOPS/W</td></tr>
+                <tr><td>Google TPU v5p</td><td>459 TFLOPS</td><td>-</td><td>2.8 TB/s</td><td>200W</td><td>2.3 TFLOPS/W</td></tr>
+                <tr><td>华为昇腾910B</td><td>376 TFLOPS</td><td>752 TOPS</td><td>1.2 TB/s</td><td>310W</td><td>1.2 TFLOPS/W</td></tr>
+                <tr><td>寒武纪思元370</td><td>-</td><td>256 TOPS</td><td>-</td><td>75W</td><td>3.4 TOPS/W</td></tr>
+            </table>
+
+            <h3>4.2 成本效益分析</h3>
+            <table>
+                <tr><th>处理器</th><th>单价</th><th>算力/美元</th><th>适用规模</th></tr>
+                <tr><td><strong>NVIDIA H100</strong></td><td>$30,000</td><td>0.13 TFLOPS/$</td><td>大型企业</td></tr>
+                <tr><td>NVIDIA H20</td><td>$15,000</td><td>0.02 TFLOPS/$</td><td>中型企业</td></tr>
+                <tr><td>华为昇腾910B</td><td>¥100,000</td><td>0.04 TFLOPS/¥</td><td>国产替代</td></tr>
+                <tr><td>寒武纪思元370</td><td>¥30,000</td><td>0.08 TOPS/¥</td><td>边缘推理</td></tr>
+            </table>
+
+            <h3>4.3 TCO（总拥有成本）</h3>
+            <div class="highlight">
+                <strong>GPU集群TCO构成：</strong>
+                <ul>
+                    <li>硬件采购：40%</li>
+                    <li>电力成本：30%</li>
+                    <li>机房运维：15%</li>
+                    <li>人员成本：10%</li>
+                    <li>软件授权：5%</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>五、应用场景选型</h2>
+            
+            <h3>5.1 大模型训练</h3>
+            <table>
+                <tr><th>模型规模</th><th>推荐配置</th><th>训练时间</th><th>成本估算</th></tr>
+                <tr><td><strong>7B参数</strong></td><td>8×H100</td><td>1-2周</td><td>$50万</td></tr>
+                <tr><td>70B参数</td><td>64×H100</td><td>2-4周</td><td>$500万</td></tr>
+                <tr><td>175B参数</td><td>512×H100</td><td>1-2月</td><td>$5000万</td></tr>
+                <tr><td>1T参数</td><td>4096×H100</td><td>数月</td><td>$5亿+</td></tr>
+            </table>
+
+            <h3>5.2 大模型推理</h3>
+            <table>
+                <tr><th>场景</th><th>推荐方案</th><th>吞吐量</th><th>延迟</th><th>成本</th></tr>
+                <tr><td><strong>在线服务</strong></td><td>NVIDIA H20</td><td>1000+ token/s</td><td>&lt;50ms</td><td>中</td></tr>
+                <tr><td>批量处理</td><td>TPU v5</td><td>2000+ token/s</td><td>100ms</td><td>低</td></tr>
+                <tr><td>边缘部署</td><td>寒武纪思元</td><td>100+ token/s</td><td>&lt;100ms</td><td>低</td></tr>
+                <tr><td>极致速度</td><td>Groq LPU</td><td>500+ token/s</td><td>&lt;10ms</td><td>中</td></tr>
+            </table>
+
+            <h3>5.3 选型决策树</h3>
+            <div class="code-block">开始选型
+    │
+    ├── 需要训练大模型？
+    │   ├── 是 → 预算充足？
+    │   │   ├── 是 → NVIDIA H100集群
+    │   │   └── 否 → 国产NPU集群（华为昇腾）
+    │   │
+    │   └── 否 → 需要推理？
+    │       ├── 大规模在线服务
+    │       │   ├── NVIDIA H20
+    │       │   └── 国产NPU（平头哥PPU）
+    │       │
+    │       ├── 边缘部署
+    │       │   ├── 寒武纪思元
+    │       │   └── 华为昇腾310
+    │       │
+    │       └── 移动端
+    │           ├── 高通Hexagon
+    │           └── 苹果Neural Engine
+    │
+    └── 特殊需求？
+        ├── 极致速度 → Groq LPU
+        ├── 图神经网络 → Graphcore IPU
+        └── 低功耗 → 存内计算RPU</div>
+        </div>
+
+        <div class="section">
+            <h2>六、国产AI芯片现状</h2>
+            
+            <h3>6.1 主要厂商</h3>
+            <table>
+                <tr><th>厂商</th><th>产品</th><th>架构</th><th>制程</th><th>状态</th></tr>
+                <tr><td><strong>华为</strong></td><td>昇腾910/310</td><td>NPU</td><td>7nm</td><td>已量产</td></tr>
+                <tr><td><strong>寒武纪</strong></td><td>思元370</td><td>MLU</td><td>7nm</td><td>已量产</td></tr>
+                <tr><td><strong>平头哥</strong></td><td>含光800/PPU</td><td>NPU</td><td>12nm/7nm</td><td>已量产</td></tr>
+                <tr><td><strong>昆仑芯</strong></td><td>昆仑2</td><td>KPU</td><td>7nm</td><td>已量产</td></tr>
+                <tr><td><strong>燧原科技</strong></td><td>云燧T20</td><td>-</td><td>-</td><td>已量产</td></tr>
+                <tr><td><strong>壁仞科技</strong></td><td>BR100</td><td>GPU</td><td>7nm</td><td>已量产</td></tr>
+                <tr><td><strong>天数智芯</strong></td><td>天垓100</td><td>GPGPU</td><td>7nm</td><td>已量产</td></tr>
+                <tr><td><strong>海光信息</strong></td><td>DCU</td><td>GPGPU</td><td>-</td><td>已量产</td></tr>
+            </table>
+
+            <h3>6.2 国产替代进展</h3>
+            <table>
+                <tr><th>领域</th><th>国产化率</th><th>主要厂商</th></tr>
+                <tr><td><strong>边缘推理</strong></td><td>60%+</td><td>寒武纪、华为</td></tr>
+                <tr><td>云端推理</td><td>30%+</td><td>华为、平头哥</td></tr>
+                <tr><td>云端训练</td><td>15%+</td><td>华为、寒武纪</td></tr>
+                <tr><td>高端训练</td><td>&lt;10%</td><td>华为</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>七、未来发展趋势</h2>
+            
+            <h3>7.1 技术演进方向</h3>
+            <table>
+                <tr><th>趋势</th><th>说明</th><th>代表产品</th><th>成熟度</th></tr>
+                <tr><td><strong>存算一体</strong></td><td>减少数据搬运</td><td>Mythic RPU</td><td>研发中</td></tr>
+                <tr><td><strong>光子计算</strong></td><td>超低功耗</td><td>Lightmatter</td><td>研发中</td></tr>
+                <tr><td><strong>类脑计算</strong></td><td>神经形态</td><td>Intel Loihi</td><td>研发中</td></tr>
+                <tr><td><strong>量子AI</strong></td><td>量子加速</td><td>IBM Q</td><td>实验阶段</td></tr>
+                <tr><td><strong>3D堆叠</strong></td><td>高密度集成</td><td>AMD 3D V-Cache</td><td>已量产</td></tr>
+            </table>
+
+            <h3>7.2 市场预测</h3>
+            <table>
+                <tr><th>年份</th><th>全球AI芯片市场</th><th>中国AI芯片市场</th><th>增长率</th></tr>
+                <tr><td><strong>2024</strong></td><td>$500亿</td><td>$150亿</td><td>-</td></tr>
+                <tr><td>2025</td><td>$800亿</td><td>$250亿</td><td>60%</td></tr>
+                <tr><td>2026</td><td>$1200亿</td><td>$400亿</td><td>50%</td></tr>
+                <tr><td>2027</td><td>$1800亿</td><td>$600亿</td><td>50%</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>八、核心结论</h2>
+            
+            <div class="conclusion-grid">
+                <div class="conclusion-card">
+                    <h4>📊 市场格局</h4>
+                    <p>GPU主导，NPU崛起，专用化加速</p>
+                </div>
+                <div class="conclusion-card">
+                    <h4>🔬 技术趋势</h4>
+                    <p>存算一体、光子计算、类脑计算</p>
+                </div>
+                <div class="conclusion-card">
+                    <h4>🇨🇳 国产机会</h4>
+                    <p>推理场景优先突破，训练追赶中</p>
+                </div>
+                <div class="conclusion-card">
+                    <h4>💻 生态关键</h4>
+                    <p>软件栈决定硬件价值</p>
+                </div>
+            </div>
+
+            <h3>投资建议</h3>
+            <table>
+                <tr><th>方向</th><th>评级</th><th>理由</th></tr>
+                <tr><td><strong>NPU推理芯片</strong></td><td><span class="rating rating-a">⭐⭐⭐⭐⭐</span></td><td>国产替代需求迫切</td></tr>
+                <tr><td>存算一体</td><td><span class="rating rating-a">⭐⭐⭐⭐</span></td><td>技术突破在即</td></tr>
+                <tr><td>光子计算</td><td><span class="rating rating-b">⭐⭐⭐</span></td><td>长期潜力大</td></tr>
+                <tr><td>类脑计算</td><td><span class="rating rating-c">⭐⭐</span></td><td>技术不成熟</td></tr>
+            </table>
+
+            <div class="warning-box">
+                <h3>⚠️ 风险提示</h3>
+                <ul>
+                    <li><strong>技术风险</strong>：先进制程获取受限</li>
+                    <li><strong>市场风险</strong>：竞争加剧，价格战</li>
+                    <li><strong>生态风险</strong>：软件栈建设周期长</li>
+                    <li><strong>政策风险</strong>：国际技术封锁</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📅 报告日期：2026-03-25 | 作者：Robin</p>
+            <p>🔍 技术全景 | 📊 多维度对比分析</p>
+        </div>
+    </div>
+</body>
+</html>
