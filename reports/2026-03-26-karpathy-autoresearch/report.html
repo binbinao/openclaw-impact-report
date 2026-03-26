@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karpathy AutoResearch 深度调研报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; 
+            font-size: 16px; 
+            line-height: 1.8; 
+            color: #1a1a1a; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .article { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .hero { 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
+            color: white; 
+            padding: 60px 40px; 
+            text-align: center;
+        }
+        .hero h1 { font-size: 42px; margin-bottom: 15px; font-weight: 700; }
+        .hero .subtitle { font-size: 20px; opacity: 0.9; margin-bottom: 20px; }
+        .hero .meta { font-size: 14px; opacity: 0.7; }
+        .hero .stars { 
+            display: inline-block; 
+            background: rgba(255,255,255,0.15); 
+            padding: 8px 20px; 
+            border-radius: 20px; 
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .content { padding: 40px; }
+        .content h2 { 
+            font-size: 28px; 
+            color: #1a1a2e; 
+            margin: 40px 0 20px 0; 
+            padding-bottom: 10px; 
+            border-bottom: 3px solid #667eea; 
+        }
+        .content h3 { font-size: 22px; color: #333; margin: 30px 0 15px 0; }
+        .content h4 { font-size: 18px; color: #444; margin: 20px 0 10px 0; }
+        .content p { margin-bottom: 15px; color: #333; }
+        .content ul, .content ol { margin: 15px 0 15px 25px; }
+        .content li { margin-bottom: 8px; }
+        .content code { 
+            background: #f4f4f5; 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: "SF Mono", Consolas, monospace;
+            font-size: 14px;
+        }
+        .content pre { 
+            background: #1a1a2e; 
+            color: #e0e0e0; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        .content pre code { background: none; padding: 0; color: inherit; }
+        .highlight-box { 
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); 
+            border-left: 4px solid #667eea; 
+            padding: 20px 25px; 
+            margin: 25px 0; 
+            border-radius: 0 8px 8px 0;
+        }
+        .highlight-box strong { color: #667eea; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        th, td { 
+            padding: 12px 15px; 
+            text-align: left; 
+            border-bottom: 1px solid #e5e7eb; 
+        }
+        th { 
+            background: #f8f9fa; 
+            font-weight: 600; 
+            color: #1a1a2e; 
+        }
+        tr:hover { background: #f8f9fa; }
+        .tag { 
+            display: inline-block; 
+            background: #e0f2fe; 
+            color: #0369a1; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 13px; 
+            margin: 3px;
+        }
+        .tag-group { margin: 15px 0; }
+        .workflow { 
+            background: #f8f9fa; 
+            padding: 25px; 
+            border-radius: 12px; 
+            margin: 20px 0;
+            font-family: "SF Mono", Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        .footer { 
+            text-align: center; 
+            padding: 30px; 
+            background: #f8f9fa; 
+            color: #666; 
+            font-size: 14px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .metric-card .number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .metric-card .label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        a { color: #667eea; }
+        a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 28px; }
+            .content { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回报告列表</a>
+        
+        <article class="article">
+            <div class="hero">
+                <h1>🚀 Karpathy AutoResearch</h1>
+                <p class="subtitle">让 AI 自动做 AI 研究 —— 一夜跑完 100 个实验的自动化科研框架</p>
+                <div class="stars">⭐ 35K+ Stars (一周内)</div>
+                <p class="meta">调研日期: 2026-03-26 | 项目地址: github.com/karpathy/autoresearch</p>
+            </div>
+            
+            <div class="content">
+                <div class="highlight-box">
+                    <strong>📌 一句话总结</strong><br>
+                    "你睡一觉，AI 跑了 100 个实验。" —— 这是 Karpathy 的原话。
+                </div>
+                
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="number">630</div>
+                        <div class="label">行代码</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="number">100+</div>
+                        <div class="label">实验/晚</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="number">5min</div>
+                        <div class="label">每次训练</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="number">19%</div>
+                        <div class="label">验证分数提升</div>
+                    </div>
+                </div>
+                
+                <h2>🎯 核心概念：什么是 AutoResearch？</h2>
+                
+                <h3>项目定位</h3>
+                <p>AutoResearch 是一个让 <strong>AI Agent 在单 GPU 上通宵自动运行机器学习实验</strong> 的框架。</p>
+                
+                <div class="comparison-grid">
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #92400e; margin-bottom: 15px;">传统科研流程</h4>
+                        <p style="font-size: 14px; color: #666;">
+                            人类研究员 → 读论文 → 想idea → 写代码 → 跑实验 → 看结果 → 改代码 → 循环...
+                        </p>
+                    </div>
+                    <div style="background: #dbeafe; padding: 20px; border-radius: 12px;">
+                        <h4 style="color: #1e40af; margin-bottom: 15px;">AutoResearch 流程</h4>
+                        <p style="font-size: 14px; color: #666;">
+                            人类 → 写 program.md → 睡觉<br>
+                            AI Agent → 改代码 → 跑实验 → 评估 → 循环100次...<br>
+                            人类 → 醒来 → 看结果
+                        </p>
+                    </div>
+                </div>
+                
+                <h3>为什么这个项目火了？</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>传统方式</th>
+                            <th>AutoResearch 方式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>人类手动调参</td><td><strong>AI 自动调参</strong></td></tr>
+                        <tr><td>一天跑 3-5 个实验</td><td><strong>一晚跑 100 个实验</strong></td></tr>
+                        <tr><td>需要深厚的 ML 背景</td><td><strong>只需要写好 Prompt</strong></td></tr>
+                        <tr><td>容易疲劳、遗漏</td><td><strong>AI 不知疲倦</strong></td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <strong>Karpathy 的实测数据：</strong><br>
+                    • 把 AI Agent 扔在 GPU 上跑了 <strong>2 天</strong><br>
+                    • Agent 自己跑完了 <strong>~700 个实验</strong><br>
+                    • 从中找到了 <strong>20 个真正有效的改进</strong>
+                </div>
+                
+                <h2>🏗️ 项目架构：极简设计哲学</h2>
+                
+                <h3>三个核心文件</h3>
+                <p>整个项目只有 <strong>630 行代码</strong>，三个核心文件：</p>
+                
+                <div class="workflow">
+autoresearch/
+├── <strong>prepare.py</strong>    # 固定不变：数据准备、工具函数
+├── <strong>train.py</strong>      # AI 修改：模型、优化器、训练循环
+├── <strong>program.md</strong>    # 人类编写：研究指令
+└── pyproject.toml # 依赖配置
+                </div>
+                
+                <h4>📄 prepare.py（不要改）</h4>
+                <pre><code># 包含：常量定义、数据下载、BPE分词器训练、数据加载器、评估工具
+# 这个文件 AI 不会碰，保持稳定</code></pre>
+                
+                <h4>📄 train.py（AI 来改）</h4>
+                <pre><code># 包含：完整的 GPT 模型定义、优化器（Muon + AdamW）、训练循环、验证逻辑
+# AI 可以改：模型架构、超参数、优化器配置、正则化方法...一切都可以改！</code></pre>
+                
+                <h4>📄 program.md（你来写）</h4>
+                <pre><code># 这是给 AI 的"研究指令"
+
+## 研究目标
+- 降低验证集 BPB（bits per byte）
+
+## 约束条件
+- 每次训练固定 5 分钟
+- 只修改 train.py
+- 改进必须可验证
+
+## 建议方向
+- 尝试不同的注意力模式
+- 调整模型深度和宽度
+- 实验不同的优化器配置</code></pre>
+                
+                <h3>工作流程图</h3>
+                <div class="workflow">
+┌─────────────────────────────────────────────────────────────┐
+│                    AutoResearch 工作流程                      │
+├─────────────────────────────────────────────────────────────┤
+│  ┌──────────┐    ┌──────────┐    ┌──────────┐              │
+│  │ program  │───▶│  AI      │───▶│ train.py │              │
+│  │   .md    │    │  Agent   │    │  修改    │              │
+│  └──────────┘    └──────────┘    └──────────┘              │
+│       │                               │                      │
+│       │                               ▼                      │
+│       │                        ┌──────────┐                 │
+│       │                        │ 5分钟训练 │                 │
+│       │                        └──────────┘                 │
+│       │                               │                      │
+│       │                               ▼                      │
+│       │                        ┌──────────┐                 │
+│       │                        │ 评估结果 │                 │
+│       │                        └──────────┘                 │
+│       │                    ┌──────┴──────┐                  │
+│       │                    ▼             ▼                  │
+│       │              ┌──────────┐  ┌──────────┐            │
+│       │              │ 改进有效 │  │ 改进无效 │            │
+│       │              │ 保留代码 │  │ 回滚代码 │            │
+│       │              └──────────┘  └──────────┘            │
+│       │                    └──────┬──────┘                  │
+│       │                           ▼                         │
+│       │                    ┌──────────┐                     │
+│       │                    │ 下一轮   │                     │
+│       │                    │ 实验     │                     │
+│       │                    └──────────┘                     │
+│       └─────────────────────────────┘                       │
+│                    （循环往复，一晚100次）                    │
+└─────────────────────────────────────────────────────────────┘
+                </div>
+                
+                <h2>🚀 快速上手：从零开始</h2>
+                
+                <h3>环境要求</h3>
+                <table>
+                    <thead><tr><th>要求</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>GPU</strong></td><td>NVIDIA GPU（推荐 H100，其他也可）</td></tr>
+                        <tr><td><strong>Python</strong></td><td>3.10+</td></tr>
+                        <tr><td><strong>包管理器</strong></td><td>uv（现代 Python 包管理器）</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>安装步骤</h3>
+                <pre><code># 1. 安装 uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2. 克隆项目
+git clone https://github.com/karpathy/autoresearch.git
+cd autoresearch
+
+# 3. 安装依赖
+uv sync
+
+# 4. 准备数据和分词器（约2分钟）
+uv run prepare.py
+
+# 5. 手动运行一次训练（约5分钟）
+uv run train.py</code></pre>
+                
+                <h3>启动自主研究模式</h3>
+                <pre><code># 方式一：使用 Claude Code
+# 在项目目录下启动 Claude Code，然后说：
+"Hi，看看 program.md，我们开始新实验吧！"
+
+# 方式二：使用其他 AI Agent
+# 把你的 AI Agent 放到这个仓库里，关闭权限确认，然后给它 Prompt</code></pre>
+                
+                <h3>低配置适配（MacBook 等）</h3>
+                <pre><code># 在 prepare.py 中调整：
+MAX_SEQ_LEN = 256        # 降低序列长度
+EVAL_TOKENS = 降低       # 减少验证数据量
+
+# 在 train.py 中调整：
+DEPTH = 4                # 降低模型深度（默认8）
+VOCAB_SIZE = 4096        # 降低词表大小（默认8192）
+WINDOW_PATTERN = "L"     # 使用简单注意力模式
+TOTAL_BATCH_SIZE = 2**14 # 降低批次大小</code></pre>
+                
+                <div class="highlight-box">
+                    <strong>推荐数据集：</strong>TinyStories（GPT-4 生成的短故事，熵更低，小模型也能学出效果）
+                </div>
+                
+                <h2>📊 核心设计理念</h2>
+                
+                <h3>固定时间预算</h3>
+                <pre><code>每次训练 = 固定 5 分钟（wall clock）</code></pre>
+                
+                <table>
+                    <thead><tr><th>优点</th><th>缺点</th></tr></thead>
+                    <tbody>
+                        <tr><td>不同实验可直接比较</td><td>不同算力平台结果不可比</td></tr>
+                        <tr><td>自动适配你的硬件</td><td>-</td></tr>
+                        <tr><td>找到最适合你平台的配置</td><td>-</td></tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>预期实验数量：</strong>每小时约 12 个实验，一晚（8小时）约 100 个实验</p>
+                
+                <h3>单一评估指标</h3>
+                <pre><code>val_bpb（验证集 bits per byte）越低越好</code></pre>
+                
+                <p><strong>为什么用 BPB？</strong>与词表大小无关，可以公平比较不同架构，直接反映模型压缩效率</p>
+                
+                <h3>Git 驱动的实验追踪</h3>
+                <pre><code># 每个成功的改进都会提交到 feature 分支
+git log --oneline
+# a1b2c3d experiment_042: val_bpb 0.97 (was 1.0)
+# d4e5f6g experiment_041: val_bpb 0.98</code></pre>
+                
+                <h2>🌟 实际案例：Shopify CEO 的实验</h2>
+                
+                <p><strong>Tobi Lutke（Shopify CEO）</strong> 使用 AutoResearch 的结果：</p>
+                
+                <table>
+                    <thead><tr><th>指标</th><th>改进</th></tr></thead>
+                    <tbody>
+                        <tr><td>验证分数提升</td><td><strong>19%</strong></td></tr>
+                        <tr><td>模型大小</td><td>更小的模型</td></tr>
+                        <tr><td>对比</td><td>小模型超越手动配置的大模型</td></tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <strong>关键发现：</strong>AI 发现的优化后来被整合回 Karpathy 的 nanochat 框架。
+                </div>
+                
+                <h2>🔬 相关项目对比</h2>
+                
+                <h3>自动化科研项目全景</h3>
+                <table>
+                    <thead>
+                        <tr><th>项目</th><th>核心特点</th><th>适用场景</th><th>难度</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>AutoResearch</strong></td><td>单文件、单GPU、5分钟实验</td><td>ML模型调优</td><td>⭐ 入门</td></tr>
+                        <tr><td><strong>EvoScientist</strong></td><td>多智能体、记忆进化、端到端</td><td>完整科研流程</td><td>⭐⭐⭐ 进阶</td></tr>
+                        <tr><td><strong>AI Scientist</strong></td><td>文献→假设→实验→论文</td><td>学术研究</td><td>⭐⭐⭐ 进阶</td></tr>
+                        <tr><td><strong>AlphaEvolve</strong></td><td>Google DeepMind</td><td>科学发现</td><td>⭐⭐⭐⭐ 高级</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>EvoScientist 详解</h3>
+                <p><strong>核心创新：</strong>让 AI 科学家学会"长记性"</p>
+                
+                <div class="workflow">
+┌─────────────────────────────────────────────────────────┐
+│                   EvoScientist 架构                      │
+├─────────────────────────────────────────────────────────┤
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+│  │ Researcher   │  │  Engineer    │  │  Evolution   │  │
+│  │   Agent      │  │    Agent     │  │   Manager    │  │
+│  │ 生成研究想法  │  │ 执行实验代码  │  │ 提炼经验知识  │  │
+│  └──────────────┘  └──────────────┘  └──────────────┘  │
+│         │                 │                 │           │
+│         ▼                 ▼                 ▼           │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │              持久化记忆模块                        │  │
+│  │ • ideation memory（想法记忆）                     │  │
+│  │ • experimentation memory（实验记忆）              │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+                </div>
+                
+                <p><strong>三大进化机制：</strong></p>
+                <ol>
+                    <li><strong>想法方向进化</strong>：从成功/失败中学习研究方向</li>
+                    <li><strong>想法验证进化</strong>：避免重复无效的假设</li>
+                    <li><strong>实验策略进化</strong>：积累有效的代码模式</li>
+                </ol>
+                
+                <div class="highlight-box">
+                    <strong>实测成果：</strong>6 篇完整论文被 ICAIS 2025 接收，2 篇获奖（最佳论文奖 + AI 评审奖）
+                </div>
+                
+                <h3>项目选择指南</h3>
+                <div class="workflow">
+你的需求是什么？
+│
+├─ 快速上手 ML 实验自动化
+│  └─▶ AutoResearch ⭐ 推荐
+│
+├─ 完整的端到端科研流程
+│  └─▶ EvoScientist
+│
+├─ 自动生成学术论文
+│  └─▶ AI Scientist (Sakana)
+│
+└─ 企业级科研自动化
+   └─▶ 组合使用多个框架
+                </div>
+                
+                <h2>💡 新手常见问题</h2>
+                
+                <h3>Q1: 我不懂深度学习，能用吗？</h3>
+                <p><strong>可以！</strong> 这正是 AutoResearch 的魅力所在。你只需要写清楚研究目标，告诉 AI 评估标准，让 AI 自己去探索。</p>
+                
+                <h3>Q2: 需要什么样的 GPU？</h3>
+                <table>
+                    <thead><tr><th>GPU</th><th>预期效果</th></tr></thead>
+                    <tbody>
+                        <tr><td>H100</td><td>完整体验，最佳效果</td></tr>
+                        <tr><td>RTX 4090</td><td>良好体验，需调整参数</td></tr>
+                        <tr><td>RTX 3080</td><td>可用，需大幅降低模型规模</td></tr>
+                        <tr><td>MacBook M系列</td><td>需要使用 fork 版本，降低配置</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Q3: AI 会改坏代码吗？</h3>
+                <p><strong>不会！</strong> 设计了安全机制：每次实验独立运行，只有改进才会保留，所有改动通过 Git 追踪，可以随时回滚。</p>
+                
+                <h3>Q4: 如何写好 program.md？</h3>
+                <pre><code># 研究目标
+降低验证集 BPB，目标 < 0.95
+
+# 约束条件
+- 每次训练 5 分钟
+- 只修改 train.py
+- 保持代码可读性
+
+# 建议探索方向
+1. 注意力机制变体
+2. 优化器调整
+3. 正则化方法
+
+# 评估标准
+val_bpb 降低 = 改进有效
+val_bpb 上升 = 改进无效，回滚</code></pre>
+                
+                <h3>Q5: 一晚真的能跑 100 个实验吗？</h3>
+                <p><strong>是的！</strong> 每个实验 = 5 分钟训练 + ~1 分钟启动/评估，每小时 ≈ 10 个实验，8 小时 = 80-100 个实验</p>
+                
+                <h2>📈 进阶技巧</h2>
+                
+                <h3>多 Agent 协作</h3>
+                <pre><code># 可以启动多个 Agent 并行实验
+# Agent 1: 探索架构变化
+# Agent 2: 探索优化器配置
+# Agent 3: 探索正则化方法
+# 最后合并各 Agent 发现的有效改进</code></pre>
+                
+                <h3>自定义评估指标</h3>
+                <pre><code># 除了 val_bpb，可以添加：
+# - 训练速度（tokens/sec）
+# - 内存占用
+# - 推理延迟
+# - 特定任务性能</code></pre>
+                
+                <h3>迁移到其他领域</h3>
+                <pre><code># AutoResearch 的理念可以迁移到：
+# - 超参数调优
+# - 神经架构搜索（NAS）
+# - 数据增强策略
+# - 损失函数设计</code></pre>
+                
+                <h2>🎓 学习路径</h2>
+                
+                <h3>新手路径（1-2 周）</h3>
+                <div class="workflow">
+Day 1-2: 环境搭建（安装 uv、Python、克隆项目、运行 prepare.py）
+Day 3-4: 手动实验（运行 train.py、理解输出、手动改参数）
+Day 5-7: AI Agent 实验（配置 Claude/Codex、写 program.md、让 AI 跑一晚）
+Day 8-14: 优化迭代（分析结果、改进 program.md、尝试不同方向）
+                </div>
+                
+                <h3>进阶路径（2-4 周）</h3>
+                <div class="workflow">
+Week 1-2: 深入理解（阅读 train.py 源码、理解 GPT 架构、学习优化器原理）
+Week 3-4: 扩展应用（迁移到自己的数据集、添加自定义评估指标、尝试 EvoScientist）
+                </div>
+                
+                <h2>🔗 相关资源</h2>
+                
+                <h3>官方资源</h3>
+                <table>
+                    <thead><tr><th>资源</th><th>链接</th></tr></thead>
+                    <tbody>
+                        <tr><td>AutoResearch GitHub</td><td><a href="https://github.com/karpathy/autoresearch" target="_blank">github.com/karpathy/autoresearch</a></td></tr>
+                        <tr><td>nanochat（父项目）</td><td><a href="https://github.com/karpathy/nanochat" target="_blank">github.com/karpathy/nanochat</a></td></tr>
+                        <tr><td>Karpathy Twitter</td><td>@karpathy</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>相关项目</h3>
+                <table>
+                    <thead><tr><th>项目</th><th>链接</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>EvoScientist</td><td><a href="https://evoscientist.ai/" target="_blank">evoscientist.ai</a></td><td>多智能体进化框架</td></tr>
+                        <tr><td>EvoScientist Paper</td><td><a href="https://arxiv.org/abs/2603.08127" target="_blank">arXiv:2603.08127</a></td><td>学术论文</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>学习资料</h3>
+                <table>
+                    <thead><tr><th>资料</th><th>说明</th></tr></thead>
+                    <tbody>
+                        <tr><td>Karpathy YouTube</td><td>"Let's build GPT" 系列</td></tr>
+                        <tr><td>nanoGPT 教程</td><td>从零实现 GPT</td></tr>
+                        <tr><td>"Dummy's Guide"</td><td>社区贡献的新手指南</td></tr>
+                    </tbody>
+                </table>
+                
+                <h2>📝 总结</h2>
+                
+                <h3>AutoResearch 的核心价值</h3>
+                <div class="workflow" style="text-align: center; font-size: 16px;">
+┌─────────────────────────────────────────────────────────┐
+│   传统科研：人类 × 时间 = 有限实验                        │
+│   AutoResearch：AI × 时间 = 无限可能                     │
+│                                                         │
+│   "写好 Prompt 然后去蒸桑拿，                            │
+│    就是人类研究员在这个新时代的新工作。"                  │
+│                                    —— Karpathy          │
+└─────────────────────────────────────────────────────────┘
+                </div>
+                
+                <h3>关键要点</h3>
+                <ol>
+                    <li><strong>极简设计</strong>：630 行代码，三个文件，清晰分工</li>
+                    <li><strong>固定时间预算</strong>：5 分钟实验，公平比较</li>
+                    <li><strong>单一指标</strong>：val_bpb，简单明了</li>
+                    <li><strong>Git 驱动</strong>：所有改动可追踪、可回滚</li>
+                    <li><strong>低门槛</strong>：新手也能快速上手</li>
+                </ol>
+                
+                <h3>未来展望</h3>
+                <p>AutoResearch 展示了 <strong>AI 自动做 AI 研究</strong> 的可行性。这可能是科研范式转变的开始：</p>
+                <div class="workflow">
+过去：人类研究员 → 手动实验
+现在：人类写指令 → AI 自动实验
+未来：AI 自主发现 → 人类审核应用
+                </div>
+                
+                <div class="tag-group" style="margin-top: 30px;">
+                    <span class="tag">AutoResearch</span>
+                    <span class="tag">Karpathy</span>
+                    <span class="tag">AI自动化</span>
+                    <span class="tag">机器学习</span>
+                    <span class="tag">深度学习</span>
+                    <span class="tag">GPT</span>
+                    <span class="tag">科研自动化</span>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>报告作者: nanobot 🐈 | 生成时间: 2026-03-26</p>
+                <p style="margin-top: 10px;"><a href="../index.html">← 返回报告列表</a></p>
+            </div>
+        </article>
+    </div>
+</body>
+</html>
