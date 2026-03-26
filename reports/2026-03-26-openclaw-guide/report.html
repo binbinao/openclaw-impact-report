@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenClaw 完全指南：从安装到最佳实践</title>
+  <meta name="description" content="开源的、本地优先的 AI Agent 框架——你的助手，你的机器，你说了算。从安装配置到企业部署的完整指南。">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --warning: #ef4444;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text);
+      background: var(--bg);
+    }
+    
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+      padding: 80px 24px;
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.3);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      line-height: 1.4;
+    }
+    
+    .hero-subtitle {
+      font-size: 20px;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 32px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    .content {
+      background: white;
+      border-radius: 16px;
+      padding: 48px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    
+    h2 {
+      background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 22px;
+      font-weight: 600;
+      margin: 56px 0 32px;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    
+    h3 {
+      color: #4338ca;
+      border-left: 4px solid #4338ca;
+      padding-left: 16px;
+      font-size: 20px;
+      font-weight: 600;
+      margin: 40px 0 20px;
+    }
+    
+    h4 {
+      color: #7c3aed;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 28px 0 16px;
+    }
+    
+    p { margin: 16px 0; color: var(--text); line-height: 1.9; }
+    
+    ul, ol { padding-left: 28px; margin: 20px 0; }
+    li { margin: 10px 0; color: var(--text); line-height: 1.8; }
+    
+    strong { color: #4338ca; font-weight: 600; }
+    
+    hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 48px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    th {
+      background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+      color: white;
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      background: #ffffff;
+    }
+    
+    tr:hover td { background: #f8fafc; }
+    
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 24px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    code {
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+    }
+    
+    blockquote {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-left: 4px solid var(--primary);
+      padding: 20px 24px;
+      border-radius: 0 12px 12px 0;
+      margin: 24px 0;
+    }
+    
+    .toc {
+      background: #f8fafc;
+      padding: 24px;
+      border-radius: 12px;
+      margin: 32px 0;
+    }
+    
+    .toc-title {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    
+    .toc-list { list-style: none; padding: 0; }
+    .toc-list li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .toc-list li:last-child { border-bottom: none; }
+    .toc-list a { color: var(--text); text-decoration: none; }
+    .toc-list a:hover { color: var(--primary); }
+    
+    .footer {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-light);
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 26px; }
+      .hero-subtitle { font-size: 16px; }
+      .content { padding: 24px; }
+      h2 { font-size: 18px; }
+      h3 { font-size: 17px; }
+      table { font-size: 12px; }
+      th, td { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <span class="hero-badge">🦞 OpenClaw 完全指南</span>
+      <h1>OpenClaw 完全指南：<br>从安装到最佳实践</h1>
+      <p class="hero-subtitle">开源的、本地优先的 AI Agent 框架——你的助手，你的机器，你说了算</p>
+      <div class="hero-meta">
+        <span>📅 2026年3月</span>
+        <span>📖 约9,200字</span>
+        <span>⏱️ 阅读约30分钟</span>
+      </div>
+    </div>
+  </header>
+  
+  <main class="container">
+    <article class="content">
+      
+      <p>想象一下这样的场景：你对着手机说了一句"帮我把桌面上的 PDF 按日期归档，然后把这周的会议纪要整理成一封邮件发给团队"——几秒钟后，你的电脑真的开始自己动手了。文件在 Finder 里自动移动，邮件客户端弹出一封排版整齐的草稿。这不是科幻电影，这是 OpenClaw 正在做的事。</p>
+      
+      <h2>不只是聊天，而是真正动手</h2>
+      
+      <p>你可能已经用过 ChatGPT、Claude 或文心一言。它们很聪明，能写文章、回答问题、翻译代码。但有一个根本性的限制——<strong>它们只能"说"，不能"做"</strong>。你让 ChatGPT 帮你整理文件，它会告诉你怎么做，但不会真的动手。</p>
+      
+      <p>OpenClaw 不一样。它是一个<strong>开源的、本地优先的 AI Agent 框架</strong>，运行在你自己的电脑或服务器上。它不仅能理解你的意图，还能直接操作文件系统、执行 Shell 命令、控制浏览器、对接消息平台。简单来说：<strong>ChatGPT 是你的顾问，OpenClaw 是你的助手。</strong></p>
+      
+      <h2>从龙虾到开源传奇</h2>
+      
+      <p>OpenClaw 的故事颇具戏剧性。2025 年 11 月，奥地利开发者 Peter Steinberger（PSPDFKit 前 CEO，后加入 OpenAI）发布了一个叫 <strong>Clawdbot</strong> 的项目——名字取自 "Claude" 的谐音，吉祥物是一只龙虾。项目一上线就火了，GitHub Star 在短短数月内从 9000 飙升到 11 万。</p>
+      
+      <p>然后 Anthropic 找上门来，友好地指出 "Clawd" 涉嫌商标侵权。Peter 仓促改名为 "Moltbot"（龙虾蜕壳之意），结果<strong>仅 3 天</strong>就发现 Moltbot 的社交媒体账号已被加密货币诈骗者抢注，品牌安全无法保障。于是在 2026 年 1 月 30 日，经过充分准备——专业商标检索、域名购买、迁移脚本——项目正式更名为 <strong>OpenClaw</strong>。"Open"代表开源，"Claw"保留龙虾主题。</p>
+      
+      <p>如今，OpenClaw 在 GitHub 上拥有超过 <strong>310K Star</strong>，2026 年 3 月甚至超过了 React，成为 GitHub 上最多 Star 的软件项目之一。清华大学沈阳教授团队还为它发布了《OpenClaw 开源 AI Agent 框架技术分析报告》。</p>
+      
+      <h2>核心价值：你的助手，你的机器，你说了算</h2>
+      
+      <p>OpenClaw 的哲学可以用一句话概括：<strong>本地优先，数据不出门</strong>。你的文件、对话、API Key 都留在自己的设备上，不经过任何第三方服务器。这对注重隐私的个人用户和有合规要求的企业来说，是一个巨大的吸引力。</p>
+      
+      <hr>
+      
+      <h2>架构解析 — 三层架构与核心组件</h2>
+      
+      <p>如果把 OpenClaw 比作一家公司，那它有三个"部门"：前台接待（接入层）、核心管理层（控制平面）和执行团队（执行层）。理解这三层，你就理解了 OpenClaw 的一切。</p>
+      
+      <h3>三层架构总览</h3>
+      
+      <p><strong>接入层</strong>负责统一各种消息渠道。无论你从 Telegram 发消息、用飞书 @机器人、还是打开浏览器访问 Web UI，OpenClaw 都会把你的指令转换成统一的内部格式。这意味着<strong>你只需要部署一次，就能同时在多个平台上使用</strong>。</p>
+      
+      <p><strong>控制平面</strong>：Gateway Daemon 是 OpenClaw 的核心，运行在 localhost:18789，通过 WebSocket 协议与各组件通信。它做三件关键的事：会话管理、工具调度、模型路由。</p>
+      
+      <p><strong>执行层</strong>包含 Skills（技能插件）和 Nodes（设备端点），还内置了沙箱隔离机制。</p>
+      
+      <h3>灵魂三件套：让 AI 记住你</h3>
+      
+      <table>
+        <tr><th>文件</th><th>作用</th><th>类比</th></tr>
+        <tr><td><strong>SOUL.md</strong></td><td>定义 AI 的人格、语气、行为边界</td><td>AI 的"性格说明书"</td></tr>
+        <tr><td><strong>USER.md</strong></td><td>记录用户信息、偏好、习惯</td><td>AI 对你的"用户画像"</td></tr>
+        <tr><td><strong>MEMORY.md</strong></td><td>存储长期记忆和重要事项</td><td>AI 的"笔记本"</td></tr>
+      </table>
+      
+      <h3>与同类产品对比</h3>
+      
+      <table>
+        <tr><th>维度</th><th>OpenClaw</th><th>ChatGPT</th><th>Auto-GPT</th></tr>
+        <tr><td><strong>运行位置</strong></td><td>本地设备 / 自建服务器</td><td>OpenAI 云端</td><td>本地运行</td></tr>
+        <tr><td><strong>核心能力</strong></td><td>理解 + 执行操作</td><td>理解 + 文本回复</td><td>理解 + 自主任务循环</td></tr>
+        <tr><td><strong>数据隐私</strong></td><td>数据不出本机</td><td>数据经过 OpenAI 服务器</td><td>数据在本地</td></tr>
+        <tr><td><strong>多平台接入</strong></td><td>✅ 飞书/Telegram/钉钉等</td><td>❌ 仅网页/API</td><td>❌ 仅命令行</td></tr>
+        <tr><td><strong>Skill 扩展</strong></td><td>✅ 13000+ 社区插件</td><td>❌ 有限的 GPTs</td><td>⚠️ 社区较小</td></tr>
+        <tr><td><strong>企业就绪</strong></td><td>✅ RBAC/审计/多租户</td><td>⚠️ 企业版另付费</td><td>❌ 无企业功能</td></tr>
+      </table>
+      
+      <hr>
+      
+      <h2>安装实战 — 全平台手把手安装</h2>
+      
+      <h3>系统要求</h3>
+      
+      <table>
+        <tr><th>要求</th><th>最低配置</th><th>推荐配置</th></tr>
+        <tr><td><strong>操作系统</strong></td><td>macOS 12+ / Ubuntu 20.04+ / Windows 10 (WSL2)</td><td>macOS 14+ / Ubuntu 22.04+</td></tr>
+        <tr><td><strong>Node.js</strong></td><td>v22.16+ (LTS)</td><td>v24（最新稳定版）</td></tr>
+        <tr><td><strong>内存</strong></td><td>4 GB</td><td>8 GB+（运行本地模型需 16 GB+）</td></tr>
+        <tr><td><strong>磁盘空间</strong></td><td>2 GB</td><td>5 GB+（含本地模型缓存）</td></tr>
+      </table>
+      
+      <h3>方式一：一键脚本安装（推荐）</h3>
+      
+      <pre><code># macOS / Linux / WSL2
+$ curl -fsSL https://openclaw.ai/install.sh | bash
+
+# Windows PowerShell（管理员模式）
+$ iwr -useb https://openclaw.ai/install.ps1 | iex
+
+# 🇨🇳 中国用户加速版
+$ curl -fsSL https://open-claw.org.cn/install-cn.sh | bash</code></pre>
+      
+      <h3>安装后验证：三步确认</h3>
+      
+      <pre><code># 第一步：健康检查
+$ openclaw doctor
+
+# 第二步：查看网关状态
+$ openclaw status
+
+# 第三步：打开浏览器管理界面
+$ openclaw dashboard</code></pre>
+      
+      <hr>
+      
+      <h2>首次配置 — 模型、密钥与消息平台</h2>
+      
+      <h3>AI 模型选择指南</h3>
+      
+      <table>
+        <tr><th>模型</th><th>提供商</th><th>优势</th><th>适合场景</th><th>国内可用</th></tr>
+        <tr><td><strong>Claude Sonnet/Opus</strong></td><td>Anthropic</td><td>长文本理解、指令遵循</td><td>复杂分析、长文写作</td><td>需代理</td></tr>
+        <tr><td><strong>GPT-4o / Codex</strong></td><td>OpenAI</td><td>生态完善、代码能力强</td><td>编程、API 调用</td><td>需代理</td></tr>
+        <tr><td><strong>DeepSeek V3</strong></td><td>DeepSeek</td><td>性价比极高、中文优秀</td><td>国内首选、日常对话</td><td>✅ 直连</td></tr>
+        <tr><td><strong>Qwen 3.5</strong></td><td>阿里云</td><td>每天100万免费token</td><td>预算有限、轻量任务</td><td>✅ 直连</td></tr>
+      </table>
+      
+      <blockquote>
+        <p><strong>💡 国内用户推荐路径</strong>：先用 DeepSeek V3（注册即送免费额度，支持支付宝充值），体验满意后再考虑是否需要 Claude 或 GPT。</p>
+      </blockquote>
+      
+      <h3>🔴 安全第一：必须设置访问密码</h3>
+      
+      <p>这一步<strong>绝对不能跳过</strong>。2026 年初，安全研究机构发现互联网上有超过 <strong>13.5 万个 OpenClaw 实例</strong>暴露在公网且未设密码，其中超过 <strong>3 万个实例在 72 小时内被攻陷</strong>。</p>
+      
+      <pre><code># 设置访问密码（必做！）
+$ openclaw config set auth.password "你的强密码"
+
+# 安全审计
+$ openclaw security audit</code></pre>
+      
+      <hr>
+      
+      <h2>Skill 扩展 — 安装社区 Skill + 自定义开发</h2>
+      
+      <p>Skill 就是一个文件夹，里面最核心的是一个 <code>SKILL.md</code> 文件——用自然语言告诉 OpenClaw"在什么场景下、按什么步骤、完成什么任务"。</p>
+      
+      <h3>安装社区 Skill</h3>
+      
+      <pre><code># 搜索可用的 Skill
+$ npx clawhub search "日报"
+
+# 安装一个 Skill
+$ npx clawhub install daily-report
+
+# 刷新 Skill 索引
+$ openclaw gateway restart</code></pre>
+      
+      <h3>🔴 Skill 安全警告</h3>
+      
+      <p>2026 年初，安全研究机构发现 ClawHub 上存在超过 <strong>800 个恶意 Skill</strong>，其中 <strong>76 个包含恶意载荷</strong>。Snyk 的 ToxicSkills 报告显示，<strong>36% 的 ClawHub Skill 存在安全缺陷</strong>。</p>
+      
+      <p><strong>自我保护清单：</strong></p>
+      <ul>
+        <li>✅ 安装前审查源码</li>
+        <li>✅ 优先使用官方精选列表</li>
+        <li>✅ 不要安装来源不明的 Skill</li>
+        <li>✅ 定期运行安全扫描</li>
+      </ul>
+      
+      <hr>
+      
+      <h2>国内生态集成 — DeepSeek/Qwen/飞书/钉钉</h2>
+      
+      <h3>CN 社区版 vs 原版对比</h3>
+      
+      <table>
+        <tr><th>对比维度</th><th>原版</th><th>CN 社区版</th></tr>
+        <tr><td><strong>界面语言</strong></td><td>英文为主</td><td>全中文</td></tr>
+        <tr><td><strong>AI 模型</strong></td><td>Claude/GPT/Gemini</td><td>原生支持 DeepSeek/Qwen + 国际模型</td></tr>
+        <tr><td><strong>网络环境</strong></td><td>需访问国际网络</td><td>Gitee 镜像 + npmmirror 加速</td></tr>
+        <tr><td><strong>消息平台</strong></td><td>Telegram/Discord</td><td>飞书/钉钉/企业微信</td></tr>
+      </table>
+      
+      <h3>飞书集成</h3>
+      
+      <pre><code># 安装飞书插件
+$ openclaw plugins install @openclaw/feishu
+
+# 配置连接信息
+$ openclaw config set feishu.appId "你的App-ID"
+$ openclaw config set feishu.appSecret "你的App-Secret"
+$ openclaw gateway restart</code></pre>
+      
+      <hr>
+      
+      <h2>企业部署 — 多用户、权限隔离与安全加固</h2>
+      
+      <h3>部署架构选择</h3>
+      
+      <p><strong>方案 A：多实例部署（推荐 10-50 人团队）</strong>——每个团队运行独立的 OpenClaw 实例，隔离性最好。</p>
+      
+      <p><strong>方案 B：多租户架构（100+ 人大企业）</strong>——单实例共享，通过租户 ID 区分不同团队。</p>
+      
+      <h3>🔴 安全加固：三层防御模型</h3>
+      
+      <p><strong>🟢 基础层</strong>：设置访问密码、配置白名单、收紧目录权限</p>
+      <p><strong>🟡 标准层</strong>：Docker 沙箱隔离，限制容器权限</p>
+      <p><strong>🔴 深度层</strong>：Prompt Injection 防御，命令白名单</p>
+      
+      <hr>
+      
+      <h2>性能调优与故障排查</h2>
+      
+      <h3>Token 成本：钱都花在哪了？</h3>
+      
+      <table>
+        <tr><th>成本来源</th><th>占比</th><th>说明</th></tr>
+        <tr><td>上下文累积</td><td>40-50%</td><td>对话越长，每次发送的上下文越大</td></tr>
+        <tr><td>工具输出存储</td><td>20-30%</td><td>命令执行结果会作为上下文发送</td></tr>
+        <tr><td>系统提示词</td><td>10-15%</td><td>SOUL.md、Skill 描述等固定开销</td></tr>
+      </table>
+      
+      <h3>四大成本优化策略</h3>
+      
+      <ol>
+        <li><strong>会话及时重置</strong>（节省 40-60%）——任务完成后清理上下文</li>
+        <li><strong>限制上下文窗口</strong>（节省 20-30%）——设置合理的上下文大小</li>
+        <li><strong>本地模型兜底</strong>（节省 60-80%）——用 Ollama 运行本地模型</li>
+        <li><strong>设置 API 支出限制</strong>——给 API 设置硬性预算上限</li>
+      </ol>
+      
+      <h3>常见报错速查表</h3>
+      
+      <table>
+        <tr><th>报错信息</th><th>原因</th><th>解决方案</th></tr>
+        <tr><td>openclaw: command not found</td><td>PATH 未配置</td><td>配置 npm 全局路径到 PATH</td></tr>
+        <tr><td>ECONNREFUSED 127.0.0.1:18789</td><td>Gateway 未启动</td><td>openclaw gateway start</td></tr>
+        <tr><td>Node.js version too old</td><td>Node 版本低于 22.16</td><td>nvm install 24</td></tr>
+        <tr><td>API rate limit exceeded</td><td>API 请求频率过高</td><td>降低并发数或切换模型</td></tr>
+      </table>
+      
+      <hr>
+      
+      <h2>总结与展望</h2>
+      
+      <h3>谁最适合用 OpenClaw？</h3>
+      
+      <table>
+        <tr><th>你是谁</th><th>OpenClaw 能帮你做什么</th><th>推荐起步方案</th></tr>
+        <tr><td><strong>个人用户</strong></td><td>文件整理、信息搜集、日常提效</td><td>DeepSeek + Telegram/Web UI</td></tr>
+        <tr><td><strong>开发者</strong></td><td>代码助手、自动化测试、CI/CD 辅助</td><td>Claude/GPT + 自定义 Skill</td></tr>
+        <tr><td><strong>团队负责人</strong></td><td>内部自动化、知识管理、流程优化</td><td>CN 社区版 + 飞书/钉钉</td></tr>
+        <tr><td><strong>企业 IT</strong></td><td>多团队部署、安全合规、成本管控</td><td>Docker 多实例 + RBAC + 审计</td></tr>
+      </table>
+      
+      <h3>社区资源一站式导航</h3>
+      
+      <ul>
+        <li>🏠 <strong>官方文档</strong>：docs.openclaw.ai</li>
+        <li>📦 <strong>GitHub 仓库</strong>：github.com/openclaw/openclaw（310K+ Star）</li>
+        <li>🇨🇳 <strong>中国社区</strong>：open-claw.org.cn</li>
+        <li>🧩 <strong>Skill 市场</strong>：clawhub.com（13000+ 社区 Skill）</li>
+      </ul>
+      
+      <blockquote>
+        <p>技术世界里，最大的成本从来不是学习，而是犹豫。OpenClaw 是免费的，试错成本是零。如果你读到了这里，说明你已经准备好了。</p>
+        <p><strong>去吧，让你的电脑学会自己干活。🦞</strong></p>
+      </blockquote>
+      
+    </article>
+  </main>
+  
+  <footer class="footer">
+    <p>📅 发布日期：2026年3月26日 | 作者：RobinJi AI Deep Research System</p>
+    <p>📖 约9,200字 | ⏱️ 阅读约30分钟</p>
+  </footer>
+</body>
+</html>
