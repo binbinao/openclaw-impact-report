@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从 0 到 1 学习 Hermes Agent</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            color: #1a1a2e;
+            line-height: 1.8;
+            background: #fafafa;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #6c63ff;
+            color: #16213e;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: #0f3460;
+        }
+        h3 {
+            font-size: 1.2em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: #16213e;
+        }
+        p { margin-bottom: 16px; }
+        strong { color: #6c63ff; }
+        code {
+            background: #2d2d3d;
+            color: #e6e6e6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #2d2d3d;
+            color: #e6e6e6;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-size: 0.9em;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        blockquote {
+            border-left: 4px solid #6c63ff;
+            padding: 10px 20px;
+            margin: 16px 0;
+            background: #f0f0ff;
+            border-radius: 0 8px 8px 0;
+            color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #6c63ff;
+            color: white;
+        }
+        tr:hover { background: #f0f0ff; }
+        ul, ol { margin: 10px 0 16px 24px; }
+        li { margin-bottom: 6px; }
+        a { color: #6c63ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>从 0 到 1 学习 Hermes Agent</h1>
+<p>想象一下——你坐在电脑前，对 Hermes 说：「帮我查一下今天的天气和新闻，整理成简报发给我。」</p>
+<p>几分钟后，你的电脑自己忙活起来：它搜索网页、查天气 API、读新闻、整理排版——然后一份干净漂亮的简报出现在你面前。</p>
+<p>这不是科幻小说，也不是某个大厂内部的秘密武器。这就是 <strong>Hermes Agent</strong>——一个开源的、免费的、你现在就能装到电脑上的 AI 助手。</p>
+<p>很多人听到「AI Agent」这几个字，第一反应是：「太难了吧？程序员才玩得转吧？」打住。我写这篇文章的目的，就是把这层窗户纸捅破。你不必会编程，不必懂机器学习，甚至不需要知道什么是 API——跟着我，从零开始，你也能拥有一个能帮你干活、替你省时间的 AI 伙伴。</p>
+<p>这篇文章分五步走：先花五分钟搞懂 Hermes 到底是什么东西 → 然后一条命令装好 → 接着学会怎么用它 → 再来几个真实世界的实战 → 最后是新手最容易踩的坑和避坑大法。</p>
+<p>准备好出发了吗？走。</p>
+<h3>1.1 一句话解释：Hermes 到底是什么？</h3>
+<p>用最简单的话说：<strong>Hermes 是一个能操控你电脑的 AI</strong>。不是只会聊天那种——它能搜索网页、读写文件、执行终端命令、写代码。你打字，它干活。</p>
+<p>如果你用过 ChatGPT，可以这样理解它们的关系：ChatGPT 像一个「咨询顾问」——你问它问题，它给你答案，很聪明，但只能动嘴。Hermes 像一个「全栈工程师 + 私人助理」——你让它做什么，它直接上手做。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ChatGPT</th>
+<th>Hermes Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回答问题</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>搜网页</td>
+<td>❌（插件另说）</td>
+<td>✅ 内置</td>
+</tr>
+<tr>
+<td>写代码</td>
+<td>✅</td>
+<td>✅ 还能直接跑、自己修 bug</td>
+</tr>
+<tr>
+<td>操作文件</td>
+<td>❌</td>
+<td>✅ 读写、移动、整理</td>
+</tr>
+<tr>
+<td>执行终端命令</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>记住你是谁</td>
+<td>❌（每次重新认识）</td>
+<td>✅ 持久记忆</td>
+</tr>
+<tr>
+<td>定时自动干活</td>
+<td>❌</td>
+<td>✅ Cron 定时任务</td>
+</tr>
+</tbody>
+</table>
+<p>这个「能做」和「光说不做」的区别来自一个关键设计：Hermes 会<strong>调用工具</strong>。工具就是它的手和脚——你问「看看我下载文件夹里什么东西最大」，它的 AI 大脑理解你的意思，然后伸手（terminal 工具）跑一条命令告诉你结果。你不需要告诉它用什么命令——它自己知道。</p>
+<p>打个比方：把 AI 的「智力」比作一个人的大脑，把「工具」比作这个人的双手。ChatGPT 是一个绝顶聪明但瘫痪在床的人——脑子一流，但什么都做不了。Hermes 则是同一个人，但四肢健全——它能站起来，走到电脑前，帮你动手。</p>
+<p>现在你应该对 Hermes 有了一个大概的画像。接下来我们看看——这双手到底能做什么？</p>
+<h3>1.2 它到底能干什么？五个真实场景</h3>
+<p>光说「厉害」没用，我们来点实在的。下面五个场景，每一个都是 Hermes 真实能做到的：</p>
+<p><strong>场景一：写代码 &amp; 自己修 Bug</strong></p>
+<p>你对 Hermes 说：「帮我写个 Python 脚本，把 Markdown 文件批量转成 PDF。」</p>
+<p>它开始干活——创建项目文件、写代码、运行。哦，报错了，缺少一个依赖库。它自己发现、自己安装、重新跑——搞定。你全程只需要盯着屏幕看它表演。</p>
+<p><strong>场景二：搜索 &amp; 整理信息</strong></p>
+<p>「帮我搜一下这周 AI 领域的大新闻，用表格总结。」</p>
+<p>Hermes 打开搜索、翻网页、读内容、提炼要点，最后吐出一张 Markdown 表格——日期、事件、一句话总结，整整齐齐。</p>
+<p><strong>场景三：文件管理</strong></p>
+<p>「下载文件夹里太乱了，帮我把图片按月份分好。」</p>
+<p>它读目录、识别文件日期、创建文件夹、移动文件。几秒钟，你的下载文件夹焕然一新。</p>
+<p><strong>场景四：定时自动化</strong></p>
+<p>「每天早上 8:30，自动抓 GitHub 今日 Trending 项目，总结成一条消息发给我。」</p>
+<p>设一次，以后每天它自己跑。你起床就能看到推送。</p>
+<p><strong>场景五：当学习导师</strong></p>
+<p>「用大白话给我解释一下什么是 Transformer，顺便举三个生活中的例子。」</p>
+<p>它结合搜索，把复杂概念掰开揉碎了讲——不是扔一坨论文给你，是真的让你听懂。</p>
+<p>看完这五个场景，你大概能感觉到：这不是一个聊天机器人，这是一个<strong>能替你干活的人</strong>。而它最妙的地方在于——越用越聪明。</p>
+<h3>1.3 Hermes 的核心秘密：技能系统 &amp; 持久记忆</h3>
+<p>前面说了 Hermes 能做什么，但有一个问题——如果它每次都要你从头教，那跟普通 AI 也没什么区别对吧？</p>
+<p>Hermes 最厉害的地方，恰恰是它<strong>不会忘记</strong>。</p>
+<p><strong>技能系统 (Skills)：给 Hermes 装 App</strong></p>
+<p>你用过手机吧？出厂的时候手机能打电话发短信，但你想修图，装个 App。Hermes 的技能系统就是它的「App Store」。比如说，你教它一次「以后写周报用这个模板」，它就把这套流程存成一个技能。下次你说「写周报」，它自动加载、自动套格式——不需要你再教一遍。</p>
+<p>目前 Hermes 内置了 85+ 个技能，覆盖写代码、做研究、画画、管理服务器……而且你可以自己写技能，或者从社区安装别人分享的。换句话说——Hermes 的能力边界由你决定。</p>
+<p><strong>持久记忆 (Memory)：它记得你</strong></p>
+<p>用过 ChatGPT 的人都有一个共同的烦恼：每次开新对话，都要重新自我介绍一遍。我是谁、做什么工作、用什么工具、喜欢什么风格——说到吐。</p>
+<p>Hermes 不一样。你跟它说过一次「我习惯用中文、写代码用 Python」，它就记住了。下次不管隔了多久、从哪个平台找它（微信、Telegram、终端），它都知道你是谁。</p>
+<p><strong>能力 + 记忆 = 越用越像「你的」助手</strong></p>
+<p>技能让它越来越能干，记忆让它越来越懂你。头几次用可能还不明显，但用一两周之后你会突然发现——它已经不需要你多解释了。你说的半句话，它就能猜到整件事。</p>
+<p>理论部分结束。接下来，咱们撸起袖子——把它装到你的电脑上。</p>
+<h3>2.1 准备工作：三样东西，五分钟搞定</h3>
+<p>安装 Hermes 之前，只需要准备好三样东西。别怕，都很简单。</p>
+<p><strong>第一样：一台电脑</strong></p>
+<p>Linux、macOS、或者 Windows 装个 WSL（Windows 自带的 Linux 子系统），都行。本文以 Linux/macOS 为例。如果你用 Windows，先去微软商店搜「WSL」装一个 Ubuntu，跟本文步骤完全一样。</p>
+<p><strong>第二样：网络</strong></p>
+<p>安装过程需要下载文件，日常使用需要连 AI 服务——所以保持网络通畅就行。注意：如果你在国内，部分 AI 服务商（如 Anthropic）可能需要科学上网才能访问；可以优先选择国内可直连的服务商（如 DeepSeek）或 OpenRouter 的国内友好节点。</p>
+<p><strong>第三样：一个 API Key</strong></p>
+<p>这是最重要的一步，但其实就两分钟。</p>
+<p>API Key 可以理解成「AI 服务的门禁卡」——有了它，Hermes 才能调用背后的 AI 大脑。最推荐新手用 <strong>OpenRouter</strong>，因为：
+- 注册就送免费额度，够你玩几天
+- 一次注册能访问几十个模型，从免费的到最强的都有
+- 不需要绑信用卡</p>
+<p>打开 <a href="https://openrouter.ai">openrouter.ai</a>，用 GitHub 或 Google 账号注册，点「Keys」→「Create Key」，复制那一长串字符。保存好，这就是你的门禁卡。</p>
+<p>费用方面：用免费模型（如 Gemini Flash）完全不要钱。用强模型（如 Claude）也不贵——以 Claude Sonnet 为例，一次复杂任务大概几分钱。一般人一个月花十几二十块就很奢侈了。</p>
+<h3>2.2 安装 Hermes：一条命令的事</h3>
+<p>准备好了？终端打开，复制下面这一行，回车：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+</code></pre></div>
+
+<p>你会看到终端开始跑——下载、安装依赖、配置环境。整个过程大概 1-2 分钟。中间可能会提示你输入密码（安装系统级依赖），正常输入就行。</p>
+<p>安装完成后，先跑一下初始化向导：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>setup
+</code></pre></div>
+
+<p>它会问你几个问题：选模型提供商（填 <code>openrouter</code>）、输入刚才保存的 API Key、选默认模型（推荐 <code>anthropic/claude-sonnet-4</code>，聪明且稳）。</p>
+<p>配好之后，验证一下装没装对：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>doctor
+</code></pre></div>
+
+<p>如果输出全是绿色的 ✅，恭喜——安装成功！如果出现红色报错，别慌，跳到第五节「踩坑指南」对着找。</p>
+<p>现在，是时候打第一声招呼了。终端输入：</p>
+<div class="codehilite"><pre><span></span><code>hermes
+</code></pre></div>
+
+<p>你会进入一个交互界面，光标闪动，等你说第一句话。</p>
+<h3>2.3 第一次对话 &amp; 快速配置</h3>
+<p>Hermes 启动了，光标在闪。说点啥？来句简单的：</p>
+<blockquote>
+<p>「介绍一下你自己，用中文。」</p>
+</blockquote>
+<p>Hermes 会开始「思考」——你会看到它在调工具、查自己的信息，然后回复一段自我介绍。这个过程里你能观察到三件事：</p>
+<ol>
+<li><strong>它不只是在「聊天」</strong>——它真的在跑工具。你可能会看到 <code>skill_view</code>、<code>memory</code> 之类的调用闪过，那是它在加载技能和读取记忆。</li>
+<li><strong>速度很快</strong>——从你发消息到看到回复，通常几秒到十几秒。</li>
+<li><strong>回复有内容</strong>——不是「你好我是 AI 助手」，而是带着具体信息、知道自己的版本和能力的介绍。</li>
+</ol>
+<p>第一次对话跑通之后，花一分钟做两个关键配置：</p>
+<p><strong>配置一：换个模型试试</strong></p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>model
+</code></pre></div>
+
+<p>弹出选择菜单。新手默认用 <code>anthropic/claude-sonnet-4</code> 就好——聪明、稳定、便宜。如果想省钱，切 <code>google/gemini-2.5-flash</code>，免费额度很大方。想体验最强，<code>anthropic/claude-opus-4</code>。随时可换，不影响已有对话。</p>
+<p><strong>配置二：设个合理的对话轮数</strong></p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>agent.max_turns<span class="w"> </span><span class="m">90</span>
+</code></pre></div>
+
+<p>这个数字的意思是：一次任务最多来回 90 轮。太少，复杂任务可能中断；太多，简单任务浪费 token。90 是官方默认，很均衡。</p>
+<p>搞定。退出交互界面：输入 <code>/quit</code> 或按 <code>Ctrl+C</code>。</p>
+<h3>3.1 对话 &amp; 工具：不只是聊天</h3>
+<p>Hermes 的交互方式很简单：你说话，它干活。但「干」和「说」有本质区别。看两个例子：</p>
+<p><strong>普通对话（纯聊天）：</strong></p>
+<blockquote>
+<p>你：「Python 里怎么读取 CSV 文件？」</p>
+</blockquote>
+<p>Hermes 直接回答——跟 ChatGPT 一样，给你一段代码和说明。</p>
+<p><strong>带工具的任务（真干活）：</strong></p>
+<blockquote>
+<p>你：「看看我的 /home 目录下，哪个文件夹占空间最大，列个排行榜。」</p>
+</blockquote>
+<p>Hermes 接到任务后的动作：
+1. 理解意图 → 需要查磁盘使用
+2. 调用 terminal 工具 → 执行 <code>du -sh /home/* | sort -rh | head -10</code>
+3. 拿到结果 → 格式化成一个排行榜回复你</p>
+<p>你看到了吗？你没有告诉它用 <code>du</code> 命令，没有教它 <code>-sh</code> 参数。你只是用人话说了需求，它自己选工具、自己写命令、自己执行。</p>
+<p>这就是 Hermes 和普通聊天 AI 之间那条分界线。<strong>你不会用 Linux 命令？没关系，Hermes 会。你不会 Python？没关系，Hermes 会。你只需要会说人话。</strong></p>
+<blockquote>
+<p>⚠️ <strong>一个小提醒</strong>：Hermes 第一次执行可能「危险」的命令（删文件、改系统配置），会停下来问你确认。这是保护机制。你可以回复「yes」放行，或者回复别的让它调整。等熟练了可以开 <code>/yolo</code> 跳过确认，但新手先别急。</p>
+</blockquote>
+<h3>3.2 技能系统：给 Hermes 装上超能力</h3>
+<p>还记得第一节说的「技能系统」吗？现在亲自体验一下。</p>
+<p>Hermes 自带了 85+ 技能，涵盖写代码、做研究、画图、管服务器、生成视频……你可以像逛 App Store 一样浏览：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>skills<span class="w"> </span>browse
+</code></pre></div>
+
+<p>按关键字搜索：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>skills<span class="w"> </span>search<span class="w"> </span>写作
+</code></pre></div>
+
+<p>找到一个想装的，记下名字：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>skills<span class="w"> </span>install<span class="w"> </span>document-superpowers
+</code></pre></div>
+
+<p>装好后，你甚至不需要手动加载——直接在对话中说：</p>
+<blockquote>
+<p>「我想写一篇文章，讲讲怎么入门 AI Agent。」</p>
+</blockquote>
+<p>Hermes 会自动检测到你的意图，匹配到 document-superpowers 技能，然后启动四阶段写作流程：头脑风暴 → 制定大纲 → 逐节写作 → 多轮审查。你只管回答问题，它负责把文章写出来。</p>
+<p>这才是技能的真正威力——不是你得记住什么时候该用什么技能，而是 Hermes 自己判断、自己调用。<strong>你想的是「我要写文章」，它想的是「该调哪个技能、分几步、用哪些工具」。</strong></p>
+<p>装几个你感兴趣的技能试试看。刚入门推荐这几个：
+- <code>document-superpowers</code> — 写长文
+- <code>deep-research</code> — 深度调研
+- <code>architecture-diagram</code> — 画架构图
+- <code>excalidraw</code> — 手绘风图表</p>
+<h3>3.3 会话管理 &amp; 效率锦囊</h3>
+<p>用着用着，你会积累很多对话。有些是临时的测试，有些是做了半截的重要任务。Hermes 的会话管理让你随时捡起来继续。</p>
+<p><strong>开新会话：</strong></p>
+<div class="codehilite"><pre><span></span><code>/new
+</code></pre></div>
+
+<p>老对话自动存档。新对话干干净净，适合切换任务。</p>
+<p><strong>找回之前的会话：</strong></p>
+<div class="codehilite"><pre><span></span><code>/resume
+</code></pre></div>
+
+<p>弹出列表，选一个继续。或者直接指定名字：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">hermes</span><span class="w"> </span><span class="o">--</span><span class="k">continue</span>
+</code></pre></div>
+
+<p>恢复最近一次对话，连上下文都原样保留——就跟没关过一样。</p>
+<p><strong>后台跑任务：</strong></p>
+<p>有些活要跑很久（比如下载数据集、跑测试），你不想干等着？让它后台跑：</p>
+<div class="codehilite"><pre><span></span><code>/background 帮我下载这个 2GB 的数据集
+</code></pre></div>
+
+<p>Hermes 切到后台干活，你继续聊你的。跑完了通知你。</p>
+<p><strong>速查：常用 slash 命令</strong></p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/new</code></td>
+<td>新会话</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>恢复会话</td>
+</tr>
+<tr>
+<td><code>/model</code></td>
+<td>换模型</td>
+</tr>
+<tr>
+<td><code>/yolo</code></td>
+<td>跳过确认</td>
+</tr>
+<tr>
+<td><code>/skill 技能名</code></td>
+<td>加载技能</td>
+</tr>
+<tr>
+<td><code>/background</code></td>
+<td>后台任务</td>
+</tr>
+<tr>
+<td><code>/quit</code></td>
+<td>退出</td>
+</tr>
+</tbody>
+</table>
+<p>记住这几个就够了，其他的用到再查。</p>
+<h3>4.1 场景一：用 Hermes 写一个完整项目</h3>
+<p>前面看过 Hermes 写小脚本，现在我们搞个大点的——让它从零搭一个 Web 应用。</p>
+<p>打开 Hermes，说：</p>
+<blockquote>
+<p>「帮我用 FastAPI 写一个 TODO 应用，能增删改查，带 SQLite 数据库，写好测试，最后跑起来。」</p>
+</blockquote>
+<p>Hermes 开始干活。以下是你会看到的真实过程：</p>
+<ol>
+<li><strong>规划</strong>：它先梳理需求——API 端点有哪些、数据库表怎么设计、文件怎么组织。可能会问一两个确认问题。</li>
+<li><strong>搭建</strong>：创建项目目录 → 写 <code>main.py</code>（FastAPI 应用）→ 写 <code>models.py</code>（数据库模型）→ 写 <code>test_main.py</code>（测试）。</li>
+<li><strong>跑起来</strong>：执行 <code>uvicorn main:app</code> → 启动服务。如果端口被占，它自己换。</li>
+<li><strong>自己修 bug</strong>：比如忘了装依赖 → 它发现报错 → 自己跑 <code>pip install</code> → 重新启动。比如测试挂了 → 它看报错信息 → 改代码 → 重跑 → 通过。</li>
+<li><strong>交作业</strong>：全部跑通后，它告诉你：「服务跑在 http://localhost:8000，API 文档在 /docs，所有测试通过。」</li>
+</ol>
+<p>你做了什么？就发了一句话。</p>
+<blockquote>
+<p>💡 <strong>加分操作</strong>：用 <code>hermes -w</code> 启动，开启 Git worktree 模式。Hermes 会自动为你每一次任务创建独立分支、自动 commit。做完之后你去 GitHub 一看——commit 记录整整齐齐，像是一个有经验的开发者的提交历史。</p>
+</blockquote>
+<h3>4.2 场景二：用 Hermes 做深度研究</h3>
+<p>不写代码也没关系。Hermes 的研究能力同样惊艳。</p>
+<p>假设你突然对「AI Agent 的未来」产生了好奇。打开 Hermes，丢一句模糊的需求：</p>
+<blockquote>
+<p>「帮我调研 2026 年 AI Agent 领域最重要的趋势，写一份分析报告。要有数据、有案例、能让人十分钟看懂这个赛道。」</p>
+</blockquote>
+<p>Hermes 接下来的操作：</p>
+<ol>
+<li><strong>搜索</strong>：同时搜多个关键词——"AI Agent trends 2026"、"AI Agent market size"、"agent orchestration"、"multi-agent systems"……</li>
+<li><strong>筛选 &amp; 阅读</strong>：打开搜索结果，读文章，提取关键信息。太水的忽略，干货的深读。</li>
+<li><strong>交叉验证</strong>：一个数据源不够，它找两个三个互相对照。</li>
+<li><strong>组织</strong>：把碎片信息按逻辑分组——市场规模、技术趋势、代表产品、挑战与机会。</li>
+<li><strong>输出</strong>：生成一份结构清晰的报告，有标题、分章节、带引用。</li>
+</ol>
+<p>出来的可能是一份 2000 字以上的完整分析。你边喝咖啡边看，十分钟对这个赛道的理解超过很多人查一晚上资料。</p>
+<p><strong>配合技能更猛。</strong> 如果装上 <code>deep-research</code> 技能，它会走更严谨的流程——多个角度交叉提问、对比矛盾信息、标注可信度。装上 <code>arxiv</code> 技能，自动搜索相关论文并用大白话总结核心思路。组合拳打起来，你就有了一个 24 小时待命的研究团队。</p>
+<h3>4.3 场景三：定时任务——设置好就不用管了</h3>
+<p>前面都是你说一句它做一次。但真正让 Hermes 从「工具」升级到「管家」的，是定时任务。</p>
+<p>用法超简单——对话里直接说：</p>
+<blockquote>
+<p>「每天早上 8:30，帮我抓 Hacker News 和 GitHub Trending，挑出 AI 相关的项目，总结成一条消息推送到我微信。」</p>
+</blockquote>
+<p>Hermes 听懂之后，自动调用 <code>cronjob</code> 工具，创建一个后台定时任务。设一次，以后每天到点它自己跑——你连 Hermes 都不用打开，到时间消息就来了。</p>
+<p>更多玩法：</p>
+<ul>
+<li>「每小时检查一次我的服务器 CPU，超过 90% 就提醒我」</li>
+<li>「每周五下午 5 点，汇总本周 git commit，生成周报草稿」</li>
+<li>「每天晚上 10 点，看看明天天气，如果要下雨就提醒我带伞」</li>
+</ul>
+<p>管理这些任务也很简单：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>cron<span class="w"> </span>list<span class="w">        </span><span class="c1"># 看看有哪些定时任务</span>
+hermes<span class="w"> </span>cron<span class="w"> </span>pause<span class="w"> </span>ID<span class="w">    </span><span class="c1"># 暂停某个</span>
+hermes<span class="w"> </span>cron<span class="w"> </span>resume<span class="w"> </span>ID<span class="w">   </span><span class="c1"># 恢复</span>
+hermes<span class="w"> </span>cron<span class="w"> </span>remove<span class="w"> </span>ID<span class="w">   </span><span class="c1"># 删掉不用的</span>
+</code></pre></div>
+
+<p>定时任务 + 多平台推送 = 你有了一个真正的自动化管家。这不是科幻，这是 Hermes 的日常。</p>
+<h3>5.1 新手最容易碰到的 5 个坑</h3>
+<p>从零走到现在，你已经比 90% 的人更懂 Hermes 了。但最后几步，帮你跳过我踩过的坑。</p>
+<p><strong>坑一：「hermes: command not found」</strong></p>
+<p>安装脚本跑完了，但终端不认识 <code>hermes</code>。大概率是安装脚本加了 PATH 但当前终端没刷新。解决方法：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>~/.bashrc<span class="w">    </span><span class="c1"># 或 source ~/.zshrc（看你用哪个 shell）</span>
+</code></pre></div>
+
+<p>如果还不行，看看 <code>~/.local/bin/hermes</code> 在不在，在的话手动加到 PATH。</p>
+<p><strong>坑二：API Key 没配对被拒</strong></p>
+<p>Hermes 报 <code>401 Unauthorized</code> 或类似错误。检查：</p>
+<div class="codehilite"><pre><span></span><code>hermes<span class="w"> </span>config<span class="w"> </span>path<span class="w">    </span><span class="c1"># 找到配置文件位置</span>
+cat<span class="w"> </span>~/.hermes/.env<span class="w">    </span><span class="c1"># 看 Key 在不在、有没有多余的引号或空格</span>
+hermes<span class="w"> </span>doctor<span class="w">         </span><span class="c1"># 一键诊断</span>
+</code></pre></div>
+
+<p>Key 就是一长串字符，前后别有空格或引号。</p>
+<p><strong>坑三：模型不回复 / 报 429</strong></p>
+<p><code>429 Too Many Requests</code> 意思是请求太频繁，被限速了。两种解法：等几分钟再试，或者 <code>hermes model</code> 切到另一个模型（比如从 Claude 切到 Gemini）。</p>
+<p><strong>坑四：工具不生效</strong></p>
+<p>对话里 Hermes 不用工具，只聊天。去 <code>hermes tools</code> 看看对应工具集开了没。开了之后一定要 <code>/reset</code> 开新会话——工具变更不追溯已有对话。</p>
+<p><strong>坑五：它在错误的目录里乱搞</strong></p>
+<p>Hermes 默认在你启动它的目录工作。如果它把文件写到奇怪的地方，先 <code>pwd</code> 看看你在哪，或者启动时指定工作目录：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/projects<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>hermes
+</code></pre></div>
+
+<h3>5.2 遇到问题去哪找答案</h3>
+<p>真卡住了，记住三条路：</p>
+<p><strong>首选：直接问 Hermes。</strong> 对，你没看错——在对话里说「我刚装好，API Key 怎么配？」它会自己查官方文档然后告诉你。有时候最快的方法就是让它帮你搜。</p>
+<p><strong>次选：官方文档。</strong> <a href="https://hermes-agent.nousresearch.com/docs">hermes-agent.nousresearch.com/docs</a> ——安装、配置、工具、技能，应有尽有。用浏览器打开搜关键字。</p>
+<p><strong>最后：社区。</strong> GitHub Issues 搜一下（大概率别人碰到过同样的问题），Discord 社区提问，或者找找有没有中文微信群。</p>
+<p>记住：你不是一个人在战斗。Hermes 的社区很活跃，文档也很全。绝大多数新手问题，都已经有人解决过了。</p>
+<h2>你的 AI 之旅才刚开始</h2>
+<p>回头看——从「AI Agent 是什么鬼」到「我能用 Hermes 写项目、做研究、设自动化」，这一路也就花了一篇文章的时间。</p>
+<p>今天你学会的：
+- 🧠 Hermes 不只是聊天，它能操控电脑帮你干活
+- 🔧 一条命令安装，5 分钟配置
+- 🎯 对话 + 工具 + 技能，三种使用方式
+- 🚀 开发、研究、自动化，三个真实场景
+- 🩹 五个常见坑和求助路径</p>
+<p>下一步？很简单——用 Hermes 做一件你今天本来要手动做的事。哪怕只是「帮我整理下载文件夹」这种小活。跑通第一次，你就回不去了。</p>
+<p>把你的第一个 Hermes 作品发出来吧。最好的学习方式，永远是把它用起来。</p>
+<p>你的 AI 伙伴已经在等你了。</p>
+</body>
+</html>
