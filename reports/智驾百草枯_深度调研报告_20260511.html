@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深度调研：智驾变「百草枯」——中国智能驾驶供应商的生存博弈与平行世界突围</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d2e;
+    --border: #2a2d3e;
+    --text: #e1e4e8;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #f78166;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    padding: 40px 20px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+  
+  /* Header */
+  .report-header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .report-label {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .report-header h1 {
+    font-size: 2.2em;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+  }
+  .report-header h1 span { color: var(--accent2); }
+  .report-meta {
+    margin-top: 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .report-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* Summary card */
+  .summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+  .summary-card h2 {
+    font-size: 1.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .summary-card .big-idea {
+    font-size: 1.25em;
+    font-weight: 700;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    background: rgba(88, 166, 255, 0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+  }
+  .key-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .stat-item {
+    background: rgba(255,255,255,0.03);
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat-item .num {
+    font-size: 1.6em;
+    font-weight: 800;
+    color: var(--accent2);
+  }
+  .stat-item .label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 48px;
+  }
+  .section h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section h2 .num {
+    color: var(--accent);
+    font-size: 0.8em;
+    font-weight: 400;
+  }
+  .section h3 {
+    font-size: 1.15em;
+    font-weight: 700;
+    margin: 28px 0 12px;
+    color: #f0f6fc;
+  }
+  .section p {
+    margin-bottom: 16px;
+    color: #c9d1d9;
+  }
+
+  /* Quote block */
+  .quote {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+  .quote .text {
+    font-size: 1.1em;
+    font-style: italic;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .quote .attr {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  /* Insight box */
+  .insight {
+    background: rgba(163, 113, 247, 0.08);
+    border: 1px solid rgba(163, 113, 247, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 24px 0;
+  }
+  .insight .tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .insight p { margin-bottom: 0; }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Tags */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 24px 0;
+  }
+  .tag {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-yellow { background: rgba(210,153,29,0.15); color: var(--yellow); }
+
+  /* Conclusion */
+  .conclusion {
+    background: linear-gradient(135deg, rgba(88,166,255,0.06), rgba(248,129,102,0.06));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .conclusion h2 {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .conclusion ul {
+    list-style: none;
+    padding: 0;
+  }
+  .conclusion ul li {
+    padding: 8px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+  .conclusion ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* Footer */
+  .report-footer {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    .report-header h1 { font-size: 1.5em; }
+    .summary-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ============ HEADER ============ -->
+<header class="report-header">
+  <div class="report-label">深度调研报告</div>
+  <h1>智驾变「百草枯」：<br>中国智能驾驶供应商的<span>生存博弈</span>与<span>平行世界突围</span></h1>
+  <div class="report-meta">
+    <span>📄 来源：宇多田专访卓驭CTO马陆</span>
+    <span>📅 2026年5月</span>
+    <span>🔍 分析师：Hermes Agent</span>
+    <span>📂 分类：智能驾驶 / 产业战略</span>
+  </div>
+</header>
+
+<!-- ============ EXECUTIVE SUMMARY ============ -->
+<div class="summary-card">
+  <h2>核心论断</h2>
+  <div class="big-idea">
+    智驾大模型化的军备竞赛正在将供应商逼入绝境——年烧20亿是最低入场券，而乘用车前装市场已无法提供对等回报。卓驭的答案：用智驾模型「百草枯」化，收割卡车、公交、割草机等所有平行移动赛道。
+  </div>
+  <div class="key-stats">
+    <div class="stat-item">
+      <div class="num">20亿</div>
+      <div class="label">大模型年投入最低门槛</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">200万套</div>
+      <div class="label">需卖出的license量（@1000元/套）</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">2B</div>
+      <div class="label">车端实际可跑参数量</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">5/6</div>
+      <div class="label">卓驭已拿下中国商用车品牌</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">48年</div>
+      <div class="label">丰田百万→千万销量耗时</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION 1 ============ -->
+<div class="section">
+  <h2><span class="num">01</span> 一段式端到端的终局：技术范式趋于收敛</h2>
+
+  <h3>两派路线，殊途同归</h3>
+  <p>当下中国头部智驾供应商的技术路线已分化为两派：</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>路线</th><th>代表企业</th><th>技术特征</th><th>训练方法</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>半黑盒一段式</strong></td>
+        <td>地平线HSD、华为4.0、Momenta R7</td>
+        <td>Diffusion扩散模型为核心；感知网络→特征→决策规划/轨迹</td>
+        <td>强化学习（RL）调整轨迹分布</td>
+      </tr>
+      <tr>
+        <td><strong>更黑的黑盒</strong></td>
+        <td>文远知行、卓驭</td>
+        <td>Regression模型并行直出感知+轨迹</td>
+        <td>端到端联合训练</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>关键结论：</strong>「一段式端到端」已没有太多技术范式秘密。在体验有跃升的中模型阶段，地（地平线）卓（卓驭）华（华为）魔（Momenta）逐渐趋同，元戎、轻舟稍落后。所有智驾供应商已达成一致：朝「大模型」方向进化。</p>
+
+  <div class="insight">
+    <div class="tag">💡 分析师洞察</div>
+    <p>技术趋同意味着差异化窗口正在关闭。当头部玩家的模型体验曲线收敛时，竞争将从「谁的技术更好」转向「谁的成本更低、谁的覆盖面更广」——这正是卓驭战略转向的根本驱动力。</p>
+  </div>
+
+  <h3>卓驭的「长脑子」时刻</h3>
+  <p>卓驭被大厂研发称赞「终于长脑子」的关键决策：<strong>一段式必须从大算力芯片开始，固定好变量，再下放</strong>。本次发布「单Thor原生多模态基础模型」体验版正是这一认知的产物。</p>
+
+  <div class="quote">
+    <div class="text">「想让车端跑一个基座模型，如果有得选，算力最优选择是2000T；没得选，成本抠得紧，700T也行，1000T算是一个底线。再低于这个算力，只能是浅尝辄止。」</div>
+    <div class="attr">—— 马陆，卓驭CTO</div>
+  </div>
+
+  <p>目前云端训练的参数规模在30B-70B之间，但经过蒸馏优化后，车端实际能跑的只有个位数参数量（如2B模型）。700T级别算力下，除自研外，可选平台基本只有Thor-U与高通8797。</p>
+</div>
+
+<!-- ============ SECTION 2 ============ -->
+<div class="section">
+  <h2><span class="num">02</span> 20亿生死线：大模型军备竞赛的经济学困境</h2>
+
+  <div class="quote">
+    <div class="text">「只要一个公司是真在做大模型，一年一定得花20亿。没花到这个数，那就是假的，就是这么简单。」</div>
+    <div class="attr">—— 马陆，卓驭CTO</div>
+  </div>
+
+  <h3>投入产出完全倒挂</h3>
+  <p>这是一道令人窒息的算术题：</p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>模型时代</th><th>年投入</th><th>商业模式</th><th>可行性</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>小模型时代</td>
+        <td>~2亿</td>
+        <td>license收费</td>
+        <td><span style="color:var(--green)">✓ 可行</span></td>
+      </tr>
+      <tr>
+        <td>中模型时代（端到端入门）</td>
+        <td>~10亿</td>
+        <td>license收费</td>
+        <td><span style="color:var(--yellow)">⚠ 吃力</span></td>
+      </tr>
+      <tr>
+        <td>大模型时代（最低标准）</td>
+        <td>≥20亿</td>
+        <td>license收费</td>
+        <td><span style="color:var(--red)">✗ 不可能</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>残酷的现实：</strong>按一套软件卖1000元计算，100万套才10亿。国内做到这一点的有几家？20亿意味着要卖出200万套——在国产OEM将license压榨至<strong>几十元</strong>的当下，这是天方夜谭。</p>
+
+  <div class="insight">
+    <div class="tag">💡 分析师洞察</div>
+    <p>这个困境与LLM赛道如出一辙：训练成本指数级增长，但单客户付费并未同比例提升。区别在于，LLM公司可以通过「收割白领」（写代码、财务分析）跨赛道变现，而智驾公司困在乘用车前装的单维度里——直到卓驭提出「平行世界」概念。</p>
+  </div>
+
+  <h3>不做是死，做也是死？</h3>
+  <p>马陆描绘了一个两难困境：不做大模型，效果被竞争对手碾压，客户抛弃你；做，20亿的窟窿越滚越大。这就是1到100阶段，智驾Tier1面对的生存冲突——因「模型费用暴涨」被再次强化。</p>
+
+  <p>摆在供应商面前的选择题：</p>
+  <ul style="list-style:none;padding-left:0;margin:16px 0;">
+    <li style="padding:10px 0;border-bottom:1px solid var(--border);">🅐 继续收割项目 → 投更多钱和人 → 亏本死磕</li>
+    <li style="padding:10px 0;border-bottom:1px solid var(--border);">🅑 守住成本底线 → 团队无事可做 → 彻底消失（如采埃孚ADAS变卖给哈曼）</li>
+    <li style="padding:10px 0;">🅒 跳出去 → 用智驾模型收割平行世界</li>
+  </ul>
+
+  <p>卓驭选了C。</p>
+</div>
+
+<!-- ============ SECTION 3 ============ -->
+<div class="section">
+  <h2><span class="num">03</span> 「百草枯」战略：智驾模型的平行世界收割</h2>
+
+  <div class="quote">
+    <div class="text">「做语言大模型只做客服聊天有意思吗？去写代码、做财务分析，把真白领卷傻，市值一飞冲天。那么智驾模型，也可以。」</div>
+    <div class="attr">—— 马陆</div>
+  </div>
+
+  <h3>「平行世界」的定义</h3>
+  <p>卓驭的核心战略逻辑：<strong>乘用车利润微薄，但其他平行移动赛道——卡车、公交车、割草机、四轮车——本质技术完全一样。</strong></p>
+
+  <p>马陆用互联网创业史做类比：当年一堆公司做医疗助理APP、法律小助手，最后被团灭。现在大模型可以穿梭在各种APP里通吃。智驾模型同理——做一个「百草枯」，撒到所有移动场景里。</p>
+
+  <h3>卡车：最典型案例</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>维度</th><th>旧格局</th><th>新格局</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>市场主导者</td>
+        <td>1-2家L4创业公司垄断</td>
+        <td>L2+头部供应商渗透（卓驭、华为等）</td>
+      </tr>
+      <tr>
+        <td>技术迭代速度</td>
+        <td>龟爬——垄断者躺平在旧功劳簿上</td>
+        <td>加速——头部玩家带入最新模型能力</td>
+      </tr>
+      <tr>
+        <td>卓驭成果</td>
+        <td colspan="2">一年内拿下<strong>中国六大商用车品牌的五大客户</strong></td>
+      </tr>
+      <tr>
+        <td>技术难点</td>
+        <td colspan="2">燃油卡车动力形式复杂（柴油/汽油/乙醇/LNG），底盘适配难度远超电动车</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="insight">
+    <div class="tag">💡 分析师洞察</div>
+    <p>卡车市场是一个教科书级的「低端颠覆」案例。被L4公司垄断的市场因缺乏竞争而技术停滞，L2+供应商带着在乘用车市场卷出来的模型能力进入，形成降维打击。这不是技术的胜利，是<strong>竞争密度</strong>的胜利——乘用车市场的高强度竞争倒逼出的能力，在低竞争密度的垂直赛道形成碾压。</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 4 ============ -->
+<div class="section">
+  <h2><span class="num">04</span> 物理AI的分发权：真正的壁垒</h2>
+
+  <h3>数字分发 vs 物理分发</h3>
+  <p>马陆指出AI大厂一定会做智驾，但能否成功取决于两个条件：</p>
+  <ol style="padding-left:24px;margin:16px 0;">
+    <li style="margin-bottom:8px;">互联网市场何时无利可图、数据资源完全饱和，不得不去做「累且慢」的产业</li>
+    <li style="margin-bottom:8px;">何时能占领物理AI的<strong>分发权</strong></li>
+  </ol>
+
+  <p><strong>数字AI分发</strong>极其简单：好产品 + 联网手机 = 几个月搞定10万客户。<br>
+  <strong>物理分发权</strong>则是重资产门槛——跨越漫长制造周期，需要定义硬件标准并完成适配的最终控制权。</p>
+
+  <div class="quote">
+    <div class="text">「人类现代商业史250年，地球上已知靠『抓取』和『上半身』获取价值的产业寥寥无几；但靠『下半身』移动赚钱的产业，横跨海陆空，与真正的市场全面接轨。」</div>
+    <div class="attr">—— 马陆</div>
+  </div>
+
+  <h3>48年的隐喻</h3>
+  <p>马陆专门查了丰田从年销量百万到千万花了多少年：<strong>48年</strong>。大部分创业者早被熬死了。具身智能公司庆祝年出货达1万台的新闻在他看来远远不够——「真正能感知到物理AI对社会有重大影响的量级，应该是上亿台，最好到处都是。」</p>
+
+  <p><strong>横跨移动域有可能把48年砍一半还多</strong>——这就是「百草枯」战略的时间价值。</p>
+
+  <h3>主机厂背书是分发权的钥匙</h3>
+  <p>一汽的投资对卓驭拿到分发权有巨大帮助，如同上汽对Momenta的全方位支持。卓驭最近拿下某日系车企与其他品牌走量车型的订单，正是这一背书的结果。</p>
+
+  <div class="insight">
+    <div class="tag">💡 分析师洞察</div>
+    <p>「物理分发权」是本文最具原创性的概念。它解释了为什么Waymo、Cruise等L4公司十年未盈利——不是技术不行，是没有拿到定义硬件标准并完成适配的控制权。这也解释了为什么华为进入任何一个硬件赛道都强调「全栈」——只有控制硬件定义，才能实现软件价值的最大化。</p>
+  </div>
+</div>
+
+<!-- ============ SECTION 5 ============ -->
+<div class="section">
+  <h2><span class="num">05</span> 组织重构：感知工程师消亡与「大模型算法」大一统</h2>
+
+  <h3>动态感知工程师成为牺牲品</h3>
+  <p>「某头部Tier1裁撤感知工程师」被炒热，但马陆认为这是不值得惊讶的大趋势。一段式模型能力正中动态感知工程师眉心，不止一家因此而调整内部研发架构。</p>
+
+  <h3>卓驭的组织变革（2026年初）</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>变化</th><th>详情</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>算法岗大一统</td>
+        <td>所有算法岗合并为「大模型算法」，下设预训练、后训练、数据评测</td>
+      </tr>
+      <tr>
+        <td>感知工程师转型</td>
+        <td>加入BD与销售，去拓展各类平行业务</td>
+      </tr>
+      <tr>
+        <td>人才策略</td>
+        <td>从大模型公司捞新人直接告知「你来就是做大模型的」，而非「去做感知一脸懵逼」</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="quote">
+    <div class="text">「大模型公司不会干掉所有程序员，只是把『前后端』隔离墙烧掉。你得留着懂行的人防止AI一本正经胡说八道——你知道它在骗你，纠正它，才能做出真结果。」</div>
+    <div class="attr">—— 马陆</div>
+  </div>
+
+  <p><strong>核心洞察：</strong>这群被「吸收」而非「抛弃」的感知工程师，才是智驾模型「百草枯」化的最大功臣——拿着在乘用车市场卷出来的一流技术去清理效率更加低下的物流车市场。</p>
+</div>
+
+<!-- ============ SECTION 6 ============ -->
+<div class="section">
+  <h2><span class="num">06</span> 量产与创新的不可调和矛盾：华为式「算账」方法论</h2>
+
+  <h3>100个项目拖死创新</h3>
+  <p>一家2022年就占据市场先机的头部智驾Tier1，模型没有任何成长，一段式端到端在2025出现大半年「滞空期」。原因：<strong>100多个量产项目严重拖累创新进度</strong>。</p>
+
+  <p>卓驭也经历过一模一样的困境——有段时间没有任何实质技术进步，因为所有人都被派去干交付和量产，但没有及时补齐人手。</p>
+
+  <h3>「量产模型售后部」陷阱</h3>
+  <p>马陆描述了典型的恶性循环：算法工程师写了个bug → 被拉去归纳总结 → 熬夜做复盘报告 → 被拉群给客户汇报 → 100个客户都打电话找工程师 → 连本职工作都做不了了。某家新势力的外包大脑Tier1，自嘲为「量产模型售后部」，每天接报错单，公司还不投钱搞新模型——这是模型工程师离职的首要原因，因为<strong>人被彻底平庸化</strong>。</p>
+
+  <h3>卓驭的解药：剥离</h3>
+  <p>「强行将『技术平台产品』与『交付』剥离。算法大牛被『保护』在内部炼丹。与主机厂扯皮、写复盘报告、解释Bug的活，交给系统工程师。」</p>
+
+  <h3>华为式「算账」：20万大军 vs 2万奇兵</h3>
+  <div class="quote">
+    <div class="text">「大家都在说华为厉害，不一定是他们效率真的高。而是他们算清楚了，究竟投入多少量级，能占领什么市场，能拿多少回报……华为最清醒的是，20万大军压上肯定能拿下来，拿下来就能三分天下，所以他们不会去干『两万兵力』的投机事。」</div>
+    <div class="attr">—— 马陆</div>
+  </div>
+
+  <p>马陆的自我反思：「我们过去也会觉得，用两万奇兵试一试，万一成了呢？后来发现，不是每次都能成功。所以我们才幡然醒悟。」</p>
+
+  <div class="insight">
+    <div class="tag">💡 分析师洞察</div>
+    <p>这一段是全篇最具管理哲学价值的部分。「20万大军」vs「2万奇兵」的比喻精准刻画了两种战略思维：华为的「压强式投入」基于清晰的投入产出计算，而创业公司的「投机式奇袭」本质是对不确定性的赌博。卓驭的「幡然醒悟」标志着公司从创业思维向规模化作战思维的转变。</p>
+  </div>
+</div>
+
+<!-- ============ KEY PLAYERS MAP ============ -->
+<div class="section">
+  <h2><span class="num">07</span> 竞争格局图谱</h2>
+
+  <table class="data-table">
+    <thead>
+      <tr><th>企业</th><th>技术路线</th><th>战略定位</th><th>关键优势</th><th>潜在风险</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>华为</strong></td>
+        <td>Diffusion半黑盒一段式</td>
+        <td>全栈自研+压强投入</td>
+        <td>算力/芯片/生态闭环；「20万大军」模式</td>
+        <td>受地缘政治影响；进入卡车赛道可能分散资源</td>
+      </tr>
+      <tr>
+        <td><strong>地平线</strong></td>
+        <td>Diffusion半黑盒一段式（HSD）</td>
+        <td>芯片+算法一体化</td>
+        <td>征程系列芯片出货量；生态绑定</td>
+        <td>大模型投入是否达到20亿门槛？</td>
+      </tr>
+      <tr>
+        <td><strong>Momenta</strong></td>
+        <td>Diffusion半黑盒一段式（R7）</td>
+        <td>上汽深度绑定</td>
+        <td>主机厂股东背书；数据飞轮</td>
+        <td>对上汽依赖度；全球化受阻</td>
+      </tr>
+      <tr>
+        <td><strong>卓驭</strong></td>
+        <td>Regression黑盒一段式</td>
+        <td>「百草枯」平行世界收割</td>
+        <td>一汽背书；商用车5/6客户；组织变革领先</td>
+        <td>大模型投入持续性；平行赛道商业化验证</td>
+      </tr>
+      <tr>
+        <td><strong>元戎/轻舟</strong></td>
+        <td>一段式端到端（稍落后）</td>
+        <td>追赶者</td>
+        <td>灵活性；特定客户关系</td>
+        <td>技术代差扩大；资金压力</td>
+      </tr>
+      <tr>
+        <td><strong>L4垂直玩家</strong></td>
+        <td>传统模块化</td>
+        <td>单一垂直赛道</td>
+        <td>先发优势（正在消解）</td>
+        <td>无大模型投入能力；被L2+降维打击</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ INVESTMENT IMPLICATIONS ============ -->
+<div class="section">
+  <h2><span class="num">08</span> 投资启示</h2>
+
+  <h3>利好信号</h3>
+  <div class="tag-list">
+    <span class="tag tag-green">商用车智驾渗透率提升</span>
+    <span class="tag tag-green">平行移动赛道扩展</span>
+    <span class="tag tag-green">组织变革领先的Tier1</span>
+    <span class="tag tag-green">主机厂深度绑定（一汽/上汽系）</span>
+  </div>
+
+  <h3>风险信号</h3>
+  <div class="tag-list">
+    <span class="tag tag-red">大模型年投入不足20亿</span>
+    <span class="tag tag-red">量产项目过多拖累创新</span>
+    <span class="tag tag-red">单一乘用车前装依赖</span>
+    <span class="tag tag-red">感知团队动荡</span>
+    <span class="tag tag-red">L4公司技术停滞</span>
+  </div>
+
+  <h3>关键评估维度</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>维度</th><th>评估问题</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型投入</td><td>年度算力+人才投入是否达到或接近20亿？</td></tr>
+      <tr><td>平行赛道</td><td>是否在乘用车之外有至少一个已商业化的平行移动赛道？</td></tr>
+      <tr><td>主机厂关系</td><td>是否有战略级主机厂股东背书提供分发权？</td></tr>
+      <tr><td>组织架构</td><td>是否已完成「技术平台」与「交付」的剥离？</td></tr>
+      <tr><td>芯片平台</td><td>是否在700T+大算力平台上完成模型部署？</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ CONCLUSION ============ -->
+<div class="conclusion">
+  <h2>总结与展望</h2>
+
+  <p style="font-size:1.1em;font-weight:600;margin-bottom:24px;">这篇文章本质上是卓驭CTO马陆通过宇多田的笔，向产业和资本市场递交的一份战略说明书。其核心信息可概括为三条：</p>
+
+  <ul>
+    <li><strong>智驾已进入大模型军备竞赛阶段，20亿/年是生死线。</strong>未达到这一投入水平的供应商将在2-3年内被淘汰。这不是技术问题，是纯粹的资本问题。</li>
+    <li><strong>乘用车前装市场已无法提供对等回报，平行世界是唯一出路。</strong>卓驭的「百草枯」战略——用一个智驾模型收割卡车、公交、工程机械、农业机械等所有移动场景——本质上是大模型「通吃」逻辑在物理世界的投影。</li>
+    <li><strong>物理分发权是终极壁垒。</strong>AI大厂短期乃至长期都无法突破这一壁垒，这给了智驾Tier1一个宝贵的窗口期。但拿到分发权需要主机厂背书、硬件定义能力和漫长的制造周期管理——这正是互联网人才「嫌弃的苦活累活」。</li>
+  </ul>
+
+  <p style="margin-top:24px;color:var(--text-secondary);font-style:italic;">本文最具预言性的观点是：智驾模型正在成为移动世界的「百草枯」——就像LLM从聊天扩展到编程、财务、法律一样，智驾模型将从乘用车扩展到一切移动的物体。谁能率先完成这种跨域迁移，谁就能在物理AI时代占据分发权的制高点。</p>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<footer class="report-footer">
+  <span>📝 调研基于宇多田《智驾变「百草枯」，枯向平行世界》深度加工</span>
+  <span>🤖 Generated by Hermes Agent · 2026-05-11</span>
+  <span>📂 binbinao/openclaw-impact-report</span>
+</footer>
+
+</div>
+</body>
+</html>
