@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Hermes 进化简报 — 2026-06-01</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+    --orange: #d16d2b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #58a6ff, #a371f7, #3fb950);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .section h2 { font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section h2 .icon { font-size: 1.4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat .value { font-size: 2rem; font-weight: 700; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
+  .stat .label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+  .bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; margin-top: 0.5rem; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-green { background: var(--green); }
+  .bar-yellow { background: var(--yellow); }
+  .bar-red { background: var(--red); }
+  .bar-purple { background: var(--purple); }
+  .alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid;
+  }
+  .alert-high { background: rgba(248,81,73,0.1); border-color: var(--red); }
+  .alert-medium { background: rgba(210,153,29,0.1); border-color: var(--yellow); }
+  .alert-low { background: rgba(139,148,158,0.1); border-color: var(--muted); }
+  .alert .sev { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .sev-high { color: var(--red); }
+  .sev-medium { color: var(--yellow); }
+  .sev-low { color: var(--muted); }
+  .feed-item { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item .title { font-weight: 600; }
+  .feed-item .meta { color: var(--muted); font-size: 0.85rem; }
+  .feed-item .score { color: var(--yellow); font-weight: 600; }
+  .feed-item .insight { color: var(--purple); font-size: 0.85rem; margin-top: 0.25rem; }
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    margin-right: 0.25rem;
+  }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(163,113,247,0.15); color: var(--purple); }
+  .tag-orange { background: rgba(209,109,43,0.15); color: var(--orange); }
+  .trend-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .trend-table th, .trend-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .trend-table th { color: var(--muted); font-weight: 600; }
+  .up { color: var(--green); }
+  .down { color: var(--red); }
+  .flat { color: var(--muted); }
+  .improved { color: var(--green); }
+  .worsened { color: var(--red); }
+  .new { color: var(--orange); }
+  .footer {
+    text-align: center; color: var(--muted); font-size: 0.8rem;
+    margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+  code {
+    font-family: 'SF Mono', 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.05); padding: 0.1rem 0.3rem;
+    border-radius: 3px; font-size: 0.9em;
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+  .health-score {
+    display: flex; align-items: center; gap: 1.5rem; padding: 1rem;
+    background: rgba(88,166,255,0.05); border-radius: 6px; margin-top: 1rem;
+  }
+  .health-score .big { font-size: 2.5rem; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<h1>🧬 Hermes 进化简报</h1>
+<div class="subtitle">第 5 期 · 2026年6月1日 · 距离上期 1 天</div>
+
+<!-- ====== EXECUTIVE SUMMARY ====== -->
+<div class="section" style="border-left: 4px solid var(--accent);">
+  <h2><span class="icon">📋</span> 执行摘要</h2>
+  <p>
+    距离上期简报 1 天，系统整体状态平稳，但出现了值得关注的趋势变化。核心发现：
+  </p>
+  <ul style="margin: 0.75rem 0 0 1.25rem; line-height: 1.8;">
+    <li><strong>run_agent 连续 3 期下降</strong> — 67 → 61 → 47（<span class="improved">↓ 30% vs 三期前</span>），系统运行时错误持续改善</li>
+    <li><strong>⚠ agent.tool_executor 持续恶化</strong> — 19 → 25 → 36（<span class="worsened">↑ 89% vs 三期前</span>），安全审批阻塞问题加剧</li>
+    <li><strong>⚠ API 超时再出现</strong> — 今日 09:02 再次出现 deepseek-v4-flash 连接超时（APITimeoutError），连续第 3 期出现 API 连接问题</li>
+    <li><strong>❌ arXiv 第 5 期连续失败</strong> — API 仍不可用，已到切换备选源的临界点</li>
+    <li><strong>📰 HN 数据成功摄取</strong> — 含多条重磅技术新闻，AI 图像生成、视频编码、生物科技均上榜</li>
+  </ul>
+</div>
+
+<!-- ====== CAPABILITY ====== -->
+<div class="section">
+  <h2><span class="icon">📊</span> 能力状态</h2>
+
+  <div class="grid">
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">30</div>
+      <div class="label">可用 Tools <span class="tag tag-green">持平</span></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">5</div>
+      <div class="label">Active Skills</div>
+      <div class="bar-wrap"><div class="bar-fill bar-green" style="width:100%"></div></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--purple)">2</div>
+      <div class="label">Cron Jobs</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="bar-wrap"><div class="bar-fill bar-yellow" style="width:37%"></div></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">16%</div>
+      <div class="label">User Profile</div>
+      <div class="bar-wrap"><div class="bar-fill bar-purple" style="width:16%"></div></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">3</div>
+      <div class="label">Agent-Created Skills</div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">🛠️ Skills 清单</h3>
+  <table class="trend-table">
+    <tr><th>Skill</th><th>状态</th><th>来源</th></tr>
+    <tr><td>baoyu-slide-deck</td><td><span class="tag tag-green">Active</span></td><td>Built-in</td></tr>
+    <tr><td>document-output-format</td><td><span class="tag tag-green">Active</span></td><td><span class="tag tag-purple">Agent-Created</span></td></tr>
+    <tr><td>scheduled-content-briefs</td><td><span class="tag tag-green">Active</span></td><td><span class="tag tag-purple">Agent-Created</span></td></tr>
+    <tr><td>self-evolution</td><td><span class="tag tag-green">Active</span></td><td>User-Created</td></tr>
+    <tr><td>weixin-content</td><td><span class="tag tag-green">Active</span></td><td><span class="tag tag-purple">Agent-Created</span></td></tr>
+  </table>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">⏰ Cron Jobs</h3>
+  <table class="trend-table">
+    <tr><th>Job ID</th><th>状态</th><th>备注</th></tr>
+    <tr><td><code>9ec6cb79e14d</code> (Self-Evolution Daily)</td><td><span class="tag tag-green">Active</span></td><td>今日（进行中）</td></tr>
+    <tr><td><code>a077650b277d</code> (HN 每日简报)</td><td><span class="tag tag-orange">⚠ Weixin 未配置</span></td><td>cron.scheduler: weixin 未启用</td></tr>
+  </table>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">🧠 Memory 使用</h3>
+  <table class="trend-table">
+    <tr><th>存储区</th><th>条目数</th><th>字符数</th><th>使用率</th><th>进度</th></tr>
+    <tr>
+      <td>Memory (系统)</td>
+      <td>3</td>
+      <td>816</td>
+      <td>37%</td>
+      <td><div class="bar-wrap"><div class="bar-fill bar-yellow" style="width:37%"></div></div></td>
+    </tr>
+    <tr>
+      <td>User (个人)</td>
+      <td>4</td>
+      <td>231</td>
+      <td>16%</td>
+      <td><div class="bar-wrap"><div class="bar-fill bar-purple" style="width:16%"></div></div></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ====== WEAKNESSES ====== -->
+<div class="section">
+  <h2><span class="icon">⚠️</span> 弱点警报</h2>
+
+  <div class="grid" style="margin-bottom:1rem;">
+    <div class="stat">
+      <div class="value" style="color:var(--red)">399</div>
+      <div class="label">日志条目（末500行）<span class="tag tag-green">共享</span></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">156</div>
+      <div class="label">Rate Limit 事件 <span class="tag tag-green">↓1%</span></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red)">3</div>
+      <div class="label">识别弱点 <span class="tag tag-orange">持平</span></div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">15</div>
+      <div class="label">今日错误量（截至 09:00）</div>
+    </div>
+  </div>
+
+  <div class="alert alert-high">
+    <span class="sev sev-high">🔴 HIGH</span> —
+    <strong>Weixin 推送平台期</strong> — 171 条事件（占总量 43%），
+    rate_limit 156 次 + send_failed 28 次 + timeout 20 次。
+    连续 3 期稳定在 170-173 条区间，改善已到天花板。
+    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
+      签名: <code>[Weixin] rate limited for o9cq804K</code> × 113
+    </div>
+  </div>
+
+  <div class="alert alert-medium">
+    <span class="sev sev-medium">🟡 MEDIUM</span> —
+    <strong>安全审批阻塞持续恶化</strong> — agent.tool_executor 从 25 → 36（<span class="worsened">↑ 44% vs 上期</span>），
+    大量 pending_approval 和 '&' 背景化拦截影响定时任务执行。
+    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
+      今日 08:04-08:06 共 7 次连续拦截（含 3 次 pending_approval + 脚本语法错误）
+    </div>
+  </div>
+
+  <div class="alert alert-medium">
+    <span class="sev sev-medium">🟡 MEDIUM</span> —
+    <strong>Discord 适配器持续噪声</strong> —
+    54 条错误（27 Opus codec + 27 No bot token），连续 5 期 <span class="flat">持平</span> 无改善。
+    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
+      已连续点名 5 期，建议立即从 config.yaml 移除
+    </div>
+  </div>
+
+  <div class="alert alert-medium">
+    <span class="sev sev-medium">🟡 MEDIUM (连续第 3 期)</span> —
+    <strong>API 连接超时复现</strong> — 今日 09:02 deepseek-v4-flash 出现 APITimeoutError（3 次重试），
+    距离上期 08:02 的 APITimeoutError 整 1 天。模式疑似定时超时。
+    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
+      上期: 429 RateLimit → 本期: APITimeoutError → 再上期: 429 RateLimit。交替出现，Provider 稳定性成疑
+    </div>
+  </div>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">📊 组件错误分布</h3>
+  <table class="trend-table">
+    <tr><th>组件</th><th>事件数</th><th>占比</th><th>趋势 (vs 上期)</th></tr>
+    <tr><td><code>gateway.platforms.weixin</code></td><td>171</td><td>43%</td><td class="flat">持平 (171)</td></tr>
+    <tr><td><code>hermes_plugins.discord_platform</code></td><td>54</td><td>14%</td><td class="flat">持平</td></tr>
+    <tr><td><code>run_agent</code></td><td>47</td><td>12%</td><td class="improved">↓ 从 61 (−23%)</td></tr>
+    <tr><td><code>gateway.run</code></td><td>41</td><td>10%</td><td class="flat">持平</td></tr>
+    <tr><td><code>agent.tool_executor</code></td><td>36</td><td>9%</td><td class="worsened">↑ 从 25 (+44%)</td></tr>
+    <tr><td><code>gateway.platforms.api_server</code></td><td>11</td><td>3%</td><td class="flat">持平</td></tr>
+    <tr><td><code>agent.conversation_loop</code></td><td>14</td><td>4%</td><td class="worsened">↑ (含 API 超时)</td></tr>
+    <tr><td><code>cron.scheduler</code></td><td>14</td><td>4%</td><td class="flat">持平</td></tr>
+    <tr><td><code>gateway.platforms.base</code> / <code>hermes_cli.config</code></td><td>8</td><td>2%</td><td class="flat">持平</td></tr>
+  </table>
+
+  <p style="margin-top:1rem; color:var(--muted); font-size:0.85rem;">
+    每日误差量趋势: May 16: 22 · 17: 174 (峰值) · 18: 4 · 29: 126 · 30: 27 · 31: 10 · Jun 1: 15 (截至 09:00)
+  </p>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">🔚 错误类型分布</h3>
+  <table class="trend-table">
+    <tr><th>类型</th><th>事件数</th><th>占比</th></tr>
+    <tr><td>rate_limit</td><td>156</td><td>39%</td></tr>
+    <tr><td>error_level</td><td>126</td><td>32%</td></tr>
+    <tr><td>unclassified</td><td>124</td><td>31%</td></tr>
+    <tr><td>tool_error</td><td>78</td><td>20%</td></tr>
+    <tr><td>weixin_session_timeout</td><td>20</td><td>5%</td></tr>
+    <tr><td>weixin_send_retry</td><td>15</td><td>4%</td></tr>
+    <tr><td>security_block / pipe_block</td><td>11</td><td>3%</td></tr>
+    <tr><td>traceback / runtime_error</td><td>6</td><td>2%</td></tr>
+    <tr><td>response_truncated</td><td>1</td><td>0.3%</td></tr>
+  </table>
+</div>
+
+<!-- ====== KNOWLEDGE FEED ====== -->
+<div class="section">
+  <h2><span class="icon">🔬</span> 知识摄取</h2>
+
+  <div class="two-col" style="margin-bottom:1rem;">
+    <div class="alert alert-low" style="margin-bottom:0;">
+      <span class="sev sev-low">ℹ️ arXiv</span><br>
+      <strong style="font-size:0.9rem;">❌ 持续不可用 — 第 5 期连续失败</strong><br>
+      <span style="font-size:0.85rem; color:var(--muted);">
+        已连续 5 期摄取失败（含 1 次重试），非间歇性故障。需人工干预切换备选源（arXiv Sanity Lite / Semantic Scholar）。
+      </span>
+    </div>
+    <div class="alert" style="margin-bottom:0; background:rgba(63,185,80,0.08); border-color:var(--green); border-left-width:4px;">
+      <span class="sev" style="color:var(--green);">📰 Hacker News</span><br>
+      <strong style="font-size:0.9rem;">✅ 10 条热点成功摄取</strong><br>
+      <span style="font-size:0.85rem; color:var(--muted);">含 6 条技术/AI 相关内容</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:1rem; color:var(--green); margin-bottom:0.5rem;">🔥 今日 Hacker News 头条</h3>
+
+  <div class="feed-item">
+    <div class="title">Cloudflare Turnstile requiring fingerprintable WebGL</div>
+    <div class="meta"><span class="score">490 points</span> · 272 comments · by HypnoticOcelot</div>
+    <div class="insight">💡 <strong>直接相关</strong> → Cloudflare Turnstile 要求 WebGL 指纹识别，涉及浏览器指纹与隐私博弈。Hermes 的浏览器工具集可能受类似验证机制影响，需关注 CAPTCHA 策略变化。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">Creatine raises brain energy levels and slows cognitive decline: study</div>
+    <div class="meta"><span class="score">457 points</span> · 306 comments · by MrJagil</div>
+    <div class="insight">💡 肌酸补剂新发现——可提升脑能量水平并延缓阿尔茨海默认知衰退达 30%。生物医学突破，社区讨论热烈。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">Dav2d</div>
+    <div class="meta"><span class="score">389 points</span> · 139 comments · by captain_bender</div>
+    <div class="insight">💡 AV1 视频解码器 dav2d（基于 VideoLAN 的 dav1d 改良版）——视频编码开源生态持续活跃，影响多媒体处理和流媒体场景。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">Codex just found a "workaround" of not having sudo on my PC</div>
+    <div class="meta"><span class="score">355 points</span> · 164 comments · by thunderbong</div>
+    <div class="insight">💡 <strong>直接相关</strong> → Codex CLI 绕过 sudo 限制的"workaround"引发安全讨论——与 Hermes 的安全审批（pending_approval）问题直接呼应，凸显 AI Agent 执行权限的安全边界重要性。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">1-Bit Bonsai Image 4B Image Generation for Local Devices</div>
+    <div class="meta"><span class="score">278 points</span> · 95 comments · by modinfo</div>
+    <div class="insight">💡 <strong>直接相关</strong> → 1-bit 图像生成模型可在本地设备运行——边缘 AI 推理新范式，与 Hermes 的本地部署场景契合，可能影响 image_gen 工具的实现选择。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">United Airlines 767 returns to Newark after Bluetooth name sparks alert</div>
+    <div class="meta"><span class="score">248 points</span> · 405 comments · by Eridanus2</div>
+    <div class="insight">💡 蓝牙设备名触发飞机警报——安全敏感系统对数字信号的容忍度讨论。对物联网设备命名规范有启示。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">Chuwi Minibook X: the netbook we deserve</div>
+    <div class="meta"><span class="score">67 points</span> · 49 comments · by thcipriani</div>
+    <div class="insight">💡 国产迷你笔记本评测——低功耗便携设备，适合作为 Hermes Agent 的边缘部署体验平台。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">The four programming questions from my 1994 Microsoft internship interview (2023)</div>
+    <div class="meta"><span class="score">65 points</span> · 26 comments · by tosh</div>
+    <div class="insight">💡 微软 1994 年面试题——30 年前的技术面试与今天的对比，反映编程面试文化的演变。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">New Beam Spring Keyboards</div>
+    <div class="meta"><span class="score">49 points</span> · 27 comments · by recursivedoubts</div>
+    <div class="insight">💡 Model F 新款 Beam Spring 键盘——经典机械键盘复刻，硬件极客文化的延续。</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="title">Reconciling Kubernetes cost estimates with CUR / FOCUS billing data</div>
+    <div class="meta"><span class="score">15 points</span> · 0 comments · by OzlemT</div>
+    <div class="insight">💡 K8s 成本估计与账单数据的 reconciled 工具——开源成本管理，对 Hermes 部署在 K8s 场景的成本优化有参考价值。</div>
+  </div>
+</div>
+
+<!-- ====== EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+  <h2><span class="icon">🧬</span> 进化建议</h2>
+
+  <div class="alert" style="background:rgba(163,113,247,0.08); border-color:var(--purple);">
+    <strong>🔮 基于 5 期数据的改进方向：</strong>
+  </div>
+
+  <ol style="margin: 1rem 0 0 1.5rem; line-height: 2;">
+    <li><strong>🔴 紧急: 修复安全审批阻塞（tool_executor 恶化）</strong> — agent.tool_executor 连续 3 期恶化（19→25→36），pending_approval 和 '&' 背景化拦截已成最大动态风险。建议：<br>
+      <span style="color:var(--muted); margin-left:1.5rem;">a) 将 scripts/ 目录加入安全白名单<br>
+      b) 在 cron job 中强制使用 execute_code 替代 terminal<br>
+      c) 配置安全策略允许预批准的终端命令模式</span></li>
+    <li><strong>🔴 紧急: 配置 fallback provider 应对 API 不稳定</strong> — 连续 3 期出现 API 问题（429/超时交替），deepseek-v4-flash via TokenHub 稳定性不可靠。建议配置备用 provider 或模型，确保 cron job 在 API 限频时仍可运行。</li>
+    <li><strong>🟡 切换 arXiv 备选源</strong> — 连续第 5 期失败，已排除间歇性问题。建议更新 <code>knowledge_ingest.py</code>：<br>
+      <span style="color:var(--muted); margin-left:1.5rem;">a) 添加 arXiv Sanity Lite (<code>https://arxiv-sanity-lite.com/</code>) 作为主要备选<br>
+      b) 添加 Semantic Scholar API 作为第二备选<br>
+      c) 允许 fallback 链（arXiv → Sanity → SS → 空）</span></li>
+    <li><strong>🟡 移除未使用的 Discord 适配器</strong> — 连续 5 期点名，54 条/天的无用错误。从 <code>config.yaml</code> 移除 <code>discord_platform</code> 可减少 14% 的日志噪声。属于低挂果实。</li>
+    <li><strong>🟢 关注 AI 安全边界趋势</strong> — 本期 HN 头条 Cloudflare Turnstile 指纹识别 + Codex sudo workaround 安全讨论，都指向 AI Agent 操作安全边界的热点问题。与 Hermes 的 pending_approval 策略直接相关。</li>
+    <li><strong>🟢 评估 1-Bit Bonsai 图像模型</strong> — 4B 参数的 1-bit 图像生成模型可在本地设备运行，可作为 Hermes image_gen 备选方案评估。</li>
+  </ol>
+</div>
+
+<!-- ====== TREND ====== -->
+<div class="section">
+  <h2><span class="icon">📈</span> 长期趋势对比 · 第 2 期 → 第 5 期</h2>
+  <p style="color:var(--muted); margin-bottom:0.5rem;">
+    跨越 5 期（2026-05-17→05-29→05-30→05-31→06-01）的完整趋势追踪
+  </p>
+  <table class="trend-table">
+    <tr><th>指标</th><th>05-29 (P2)</th><th>05-30 (P3)</th><th>05-31 (P4)</th><th>06-01 (P5)</th><th>累计变化</th><th>评价</th></tr>
+    <tr>
+      <td>Tools</td>
+      <td>30</td><td>30</td><td>30</td><td>30</td>
+      <td class="flat">— 持平</td><td class="flat">稳定</td>
+    </tr>
+    <tr>
+      <td>Skills</td>
+      <td>5</td><td>5</td><td>5</td><td>5</td>
+      <td class="flat">— 持平</td><td class="flat">稳定</td>
+    </tr>
+    <tr>
+      <td>Memory 使用率</td>
+      <td>37/16%</td><td>37/16%</td><td>37/16%</td><td>37/16%</td>
+      <td class="flat">— 持平</td><td class="flat">稳定</td>
+    </tr>
+    <tr>
+      <td>日志条目 (末500)</td>
+      <td>465</td><td>393</td><td>395</td><td>399</td>
+      <td class="improved">⬇ −66 (14%) vs P2</td><td class="improved">改善</td>
+    </tr>
+    <tr>
+      <td>Weixin 错误</td>
+      <td>228</td><td>173</td><td>171</td><td>171</td>
+      <td class="improved">⬇ −57 (25%) vs P2</td><td class="improved">平台期</td>
+    </tr>
+    <tr>
+      <td>run_agent 错误</td>
+      <td>102</td><td>67</td><td>61</td><td>47</td>
+      <td class="improved">⬇ −55 (54%) vs P2</td><td class="improved">显著改善</td>
+    </tr>
+    <tr>
+      <td>安全拦截</td>
+      <td>34</td><td>21</td><td>17</td><td>11</td>
+      <td class="improved">⬇ −23 (68%) vs P2</td><td class="improved">显著改善</td>
+    </tr>
+    <tr>
+      <td>Discord 错误</td>
+      <td>50</td><td>54</td><td>54</td><td>54</td>
+      <td class="worsened">⬆ +4 (8%) vs P2</td><td class="worsened">稳定噪声</td>
+    </tr>
+    <tr>
+      <td>tool_executor</td>
+      <td>N/A</td><td>19</td><td>25</td><td>36</td>
+      <td class="worsened">⬆ +17 (89%) vs P3</td><td class="worsened">持续恶化</td>
+    </tr>
+    <tr>
+      <td>API 问题</td>
+      <td>N/A</td><td>429 RL</td><td>超时</td><td>超时</td>
+      <td class="worsened">连续 3 期</td><td class="worsened">新风险</td>
+    </tr>
+    <tr>
+      <td>输出截断</td>
+      <td>2</td><td>1</td><td>1</td><td>1</td>
+      <td class="improved">⬇ −1</td><td class="flat">稳定</td>
+    </tr>
+    <tr>
+      <td>弱点总数</td>
+      <td>3</td><td>3</td><td>3</td><td>3</td>
+      <td class="flat">— 持平</td><td class="flat">内容更新</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">📊 健康度评分（5 期纵向对比）</h3>
+  <div style="display: flex; align-items: center; gap: 2rem; padding: 1rem; background: rgba(88,166,255,0.05); border-radius: 6px; flex-wrap: wrap;">
+    <div>
+      <div style="font-size: 0.8rem; color: var(--muted);">第 2 期 (05-29)</div>
+      <div style="font-size: 1.8rem; font-weight: 700; color: var(--yellow);">65</div>
+    </div>
+    <div style="color: var(--muted); font-size: 1.2rem;">→</div>
+    <div>
+      <div style="font-size: 0.8rem; color: var(--muted);">第 3 期 (05-30)</div>
+      <div style="font-size: 1.8rem; font-weight: 700; color: var(--green);">71</div>
+    </div>
+    <div style="color: var(--muted); font-size: 1.2rem;">→</div>
+    <div>
+      <div style="font-size: 0.8rem; color: var(--muted);">第 4 期 (05-31)</div>
+      <div style="font-size: 1.8rem; font-weight: 700; color: var(--green);">69</div>
+    </div>
+    <div style="color: var(--muted); font-size: 1.2rem;">→</div>
+    <div>
+      <div style="font-size: 0.8rem; color: var(--muted);">第 5 期 (06-01)</div>
+      <div style="font-size: 1.8rem; font-weight: 700; color: var(--yellow);"><strong>57</strong></div>
+    </div>
+  </div>
+  <div class="bar-wrap" style="margin-top: 0.5rem; height: 12px;">
+    <div class="bar-fill bar-yellow" style="width:57%"></div>
+  </div>
+  <p style="color: var(--muted); font-size: 0.85rem; margin-top: 0.5rem;">
+    评分公式: 基础分 100，高严重度 −15/个，中严重度 −8/个，低严重度 −3/个，错误密度（每 100 条 −3 分）<br>
+    <strong>本期计算:</strong> 100 − 15(1 high) − 16(2 medium) − 12(399条密度) = 57/100<br>
+    <strong>下降原因:</strong> tool_executor 恶化 (+44%) + API 超时重复出现 + Weixin 平台期 + 日志总量基本持平
+  </p>
+</div>
+
+<div class="footer">
+  Hermes Self-Evolution System · 2026-06-01 · Generated by Evolution Brief v1.0
+</div>
+
+</body>
+</html>
