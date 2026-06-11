@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Hermes 进化简报 — 2026-06-11</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+    --orange: #d16d2b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; background: linear-gradient(135deg, #58a6ff, #a371f7, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .section h2 { font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section h2 .icon { font-size: 1.4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .stat { background: rgba(255,255,255,0.03); border-radius: 6px; padding: 1rem; text-align: center; }
+  .stat .value { font-size: 2rem; font-weight: 700; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
+  .stat .label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+  .bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; margin-top: 0.5rem; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-green { background: var(--green); }
+  .bar-yellow { background: var(--yellow); }
+  .bar-red { background: var(--red); }
+  .bar-purple { background: var(--purple); }
+  .alert { padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.75rem; border-left: 4px solid; }
+  .alert-high { background: rgba(248,81,73,0.1); border-color: var(--red); }
+  .alert-medium { background: rgba(210,153,29,0.1); border-color: var(--yellow); }
+  .alert-low { background: rgba(139,148,158,0.1); border-color: var(--muted); }
+  .alert-info { background: rgba(88,166,255,0.08); border-color: var(--accent); }
+  .sev { font-size: 0.8rem; font-weight: 600; }
+  .sev-high { color: var(--red); }
+  .sev-medium { color: var(--yellow); }
+  .sev-low { color: var(--muted); }
+  .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-yellow { background: rgba(210,153,29,0.15); color: var(--yellow); }
+  .tag-purple { background: rgba(163,113,247,0.15); color: var(--purple); }
+  .tag-orange { background: rgba(209,109,43,0.15); color: var(--orange); }
+  .improved { color: var(--green); }
+  .worsened { color: var(--red); }
+  .flat { color: var(--muted); }
+  .new { color: var(--purple); }
+  .trend-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+  .trend-table th, .trend-table td { padding: 0.5rem 0.65rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .trend-table th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .trend-table tr:hover { background: rgba(255,255,255,0.02); }
+  .health-score { display: flex; align-items: center; gap: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+  .health-score .big { font-size: 3rem; font-weight: 800; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
+  .daily-chart { display: flex; align-items: flex-end; gap: 4px; height: 160px; margin-top: 0.5rem; padding-bottom: 1.5rem; }
+  .daily-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; border-radius: 4px 4px 0 0; position: relative; min-height: 12px; }
+  .daily-bar span { position: absolute; top: -1.2rem; font-size: 0.7rem; color: var(--muted); }
+  .daily-bar .lbl { position: absolute; bottom: -1.4rem; font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } body { padding: 1rem; } .trend-table { font-size: 0.75rem; } .trend-table th, .trend-table td { padding: 0.35rem 0.4rem; } }
+  .paper-block { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .paper-block:last-child { border-bottom: none; }
+  .paper-title { font-weight: 600; font-size: 0.9rem; }
+  .paper-title a { color: var(--accent); text-decoration: none; }
+  .paper-title a:hover { text-decoration: underline; }
+  .paper-meta { color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+  .feed-item { padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item .title { font-weight: 600; font-size: 0.9rem; }
+  .feed-item .title a { color: var(--accent); text-decoration: none; }
+  .feed-item .title a:hover { text-decoration: underline; }
+  .feed-item .meta { color: var(--muted); font-size: 0.8rem; }
+  .feed-item .score { color: var(--yellow); font-weight: 600; }
+  .feed-item .insight { color: var(--purple); font-size: 0.85rem; margin-top: 0.25rem; }
+  .footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 2rem 0 1rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<h1>🧬 Hermes 进化简报</h1>
+<div class="subtitle">第 15 期 · 2026-06-11 · 距首期 24 天 · 运行周期 06-10→06-11</div>
+
+<!-- ====== 1. CAPABILITY STATUS ====== -->
+<div class="section">
+<h2><span class="icon">📊</span> 能力状态</h2>
+<div class="grid">
+  <div class="stat">
+    <div class="value">30</div>
+    <div class="label">可用工具</div>
+  </div>
+  <div class="stat">
+    <div class="value">5</div>
+    <div class="label">活跃技能</div>
+    <div class="bar-wrap"><div class="bar-fill bar-green" style="width:26%"></div></div>
+  </div>
+  <div class="stat">
+    <div class="value">2</div>
+    <div class="label">Cron Jobs</div>
+    <div class="tag tag-green">全部活跃</div>
+  </div>
+  <div class="stat">
+    <div class="value">37%</div>
+    <div class="label">记忆使用率</div>
+    <div class="bar-wrap"><div class="bar-fill bar-yellow" style="width:37%"></div></div>
+  </div>
+</div>
+
+<div class="two-col" style="margin-top:1rem;">
+  <div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">📦 技能库存</div>
+    <table style="width:100%;font-size:0.8rem;">
+      <tr><td style="padding:0.15rem 0;">自建技能</td><td style="text-align:right;">3</td><td style="padding-left:0.5rem;color:var(--green);">document-output-format, weixin-content, scheduled-content-briefs</td></tr>
+      <tr><td style="padding:0.15rem 0;">内置技能</td><td style="text-align:right;">2</td><td style="padding-left:0.5rem;color:var(--accent);">baoyu-slide-deck, self-evolution</td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">🧠 记忆存储</div>
+    <table style="width:100%;font-size:0.8rem;">
+      <tr><td style="padding:0.15rem 0;">MEMORY</td><td style="text-align:right;">816 chars / 3 条</td><td style="padding-left:0.5rem;">37%</td></tr>
+      <tr><td style="padding:0.15rem 0;">USER</td><td style="text-align:right;">231 chars / 4 条</td><td style="padding-left:0.5rem;">16%</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ====== 2. WEAKNESS ALERTS ====== -->
+<div class="section">
+<h2><span class="icon">⚠️</span> 弱点告警</h2>
+
+<div class="alert alert-medium">
+  <span class="sev sev-medium">MEDIUM</span> — 安全扫描拦截合法操作 (tool_security)
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">1 次 pending_approval 记录。终端管道式命令（heredoc, pipe）持续被安全层拦截。注意：tool_executor 单期 230 条中绝大部分即 pending_approval 阻塞日志，这是系统最大噪声源。</div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — 模型输出不可修复参数 (model_output_quality)
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">1 次 broken tool args，可能是 JSON 截断或格式错误。持续监控中。</div>
+</div>
+
+<!-- Error Stats -->
+<div class="grid" style="margin-top:1rem;">
+  <div class="stat">
+    <div class="value" style="color:var(--red);">402</div>
+    <div class="label">末 500 行解析条目</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">5 / 397</div>
+    <div class="label">ERROR / WARNING</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">230（57.2%）</div>
+    <div class="label">tool_executor 占比</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">148（36.8%）</div>
+    <div class="label">conversation_loop 占比</div>
+  </div>
+</div>
+
+<!-- Daily error chart -->
+<div style="margin-top:1rem;">
+  <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">📈 每日错误趋势（最近 7 天）</div>
+  <div class="daily-chart">
+    <div class="daily-bar" style="height:53%;background:var(--yellow);"><span>35</span><div class="lbl">06-05</div></div>
+    <div class="daily-bar" style="height:52%;background:var(--yellow);"><span>34</span><div class="lbl">06-06</div></div>
+    <div class="daily-bar" style="height:45%;background:var(--yellow);"><span>30</span><div class="lbl">06-07</div></div>
+    <div class="daily-bar" style="height:45%;background:var(--yellow);"><span>30</span><div class="lbl">06-08</div></div>
+    <div class="daily-bar" style="height:41%;background:var(--yellow);"><span>27</span><div class="lbl">06-09</div></div>
+    <div class="daily-bar" style="height:100%;background:var(--red);"><span>66</span><div class="lbl">06-10</div></div>
+    <div class="daily-bar" style="height:65%;background:var(--red);"><span>43</span><div class="lbl">06-11</div></div>
+  </div>
+</div>
+
+<!-- Top recurring errors -->
+<div style="margin-top:1rem;">
+  <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">🔁 Top 10 高频错误模式</div>
+  <table class="trend-table">
+    <tr><th>#</th><th>错误签名</th><th>计数</th><th>占比</th></tr>
+    <tr><td>1</td><td>终端返回 exit_code=-1（含 pending_approval）</td><td style="color:var(--red);">120</td><td>29.9%</td></tr>
+    <tr><td>2</td><td>API 超时 APITimeoutError（attempt 1/3）</td><td style="color:var(--red);">47</td><td>11.7%</td></tr>
+    <tr><td>3</td><td>API 限频 RateLimitError（429）</td><td style="color:var(--yellow);">16</td><td>4.0%</td></tr>
+    <tr><td>4</td><td>Weixin 平台未配置 (cron deliver)</td><td style="color:var(--muted);">13</td><td>3.2%</td></tr>
+    <tr><td>5</td><td>API 超时重试（attempt 2/3）</td><td style="color:var(--yellow);">8</td><td>2.0%</td></tr>
+    <tr><td>6</td><td>Discord 适配器无配置</td><td style="color:var(--muted);">4</td><td>1.0%</td></tr>
+    <tr><td>7</td><td>security_block（安全拦截）</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+    <tr><td>8</td><td>runtime_error</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+    <tr><td>9</td><td>message_sanitization</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+    <tr><td>10</td><td>chat_completion_helpers</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+  </table>
+</div>
+
+<!-- Recent events -->
+<div style="margin-top:1rem;padding:0.75rem;background:rgba(248,81,73,0.08);border-radius:6px;">
+  <strong style="color:var(--red);">🔥 今日关键事件</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    <ul style="padding-left:1rem;margin:0.25rem 0;">
+      <li><strong>08:19</strong> — pending_approval 阻断（tool_executor），inline heredoc 模式被拦截</li>
+      <li><strong>08:19</strong> — 429 RateLimitError（第 1 次）→ 60s 重试 → 08:21 第 2 次 429</li>
+      <li><strong>08:23</strong> — 第 3 次 RateLimitError（08:19~08:23 密集 429 风暴）</li>
+      <li><strong>08:24</strong> — Weixin cron job 交付失败（平台未配置）</li>
+      <li><strong>06-10 单日 66 条</strong> — 创下本简报周期以来单日最高纪录（06-09 仅 27 条，翻 2.4 倍）</li>
+      <li><strong>06-11 截至 08:24 已有 43 条</strong>（08:19~08:24 集中爆发）</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ====== 3. KNOWLEDGE FEED ====== -->
+<div class="section">
+<h2><span class="icon">🔬</span> 知识摄取</h2>
+
+<div class="two-col">
+  <div>
+    <div style="font-size:0.9rem;color:var(--muted);margin-bottom:0.5rem;">📄 arXiv·<span style="color:var(--red);">失败</span></div>
+    <div class="alert alert-low">
+      <span class="sev sev-low">LOW</span> — arXiv API 请求失败
+      <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+        从 P10 开始的连续 4 期成功窗口（P10-P13）<strong>在 P14 中断后，P15 继续失败</strong>。这是连续第 2 期失败。
+        整体成功率：5/15 = 33.3%。建议考虑启用备选源。
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:0.9rem;color:var(--yellow);margin-bottom:0.5rem;">🔥 Hacker News·Top 10</div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://techcrunch.com/2026/06/10/cybersecurity-researchers-arent-happy-about-the-guardrails-on-anthropics-fable/">Cybersecurity researchers aren't happy about the guardrails on Anthropic's Fable</a></div>
+      <div class="meta"><span class="score">⬆ 165</span> · 145 评论 · by speckx</div>
+      <div class="insight">💡 安全研究人员对 Anthropic Fable 的安全护栏不满——护栏限制了 AI agent 的能力，同时又在 Agent 间竞争场景中留下灰色地带。与 P14 的 Fable 5 争论一脉相承。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://github.com/philipl/pifs">πFS — π 文件系统</a></div>
+      <div class="meta"><span class="score">⬆ 489</span> · 130 评论 · by helterskelter</div>
+      <div class="insight">💡 用 π 的小数位作为存储介质的文件系统——本质上不是存储而是索引。引人思考数据压缩与可计算性的理论边界。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://www.adafruit.com/product/6125?src=raspberrypi">Raspberry Pi 5 — 16GB RAM</a></div>
+      <div class="meta"><span class="score">⬆ 155</span> · 181 评论 · by akman</div>
+      <div class="insight">💡 Pi 5 推出 16GB 内存版本。16GB 的 ARM 设备足以本地运行中小型 LLM（如 7B 量化模型），边缘 AI 部署成本进一步降低。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://support.claude.com/en/articles/15425996-data-retention-practices-for-mythos-class-models">Anthropic requires 30 day data retention for Fable and Mythos</a></div>
+      <div class="meta"><span class="score">⬆ 143</span> · 60 评论 · by lebovic</div>
+      <div class="insight">💡 Anthropic 对 Mythos 级模型要求 30 天数据保留，引发隐私社区讨论。AI 企业与用户数据权之间的博弈持续升温。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://www.smithsonianmag.com/innovation/man-created-written-language-cherokee-did-efficiently-elegantly-peers-thought-magic-180988850/">A Written Language for the Cherokee So Efficient It Was Thought to Be Magic</a></div>
+      <div class="meta"><span class="score">⬆ 76</span> · 38 评论 · by grahambargeron</div>
+      <div class="insight">💡 Sequoyah 创制的切罗基文字因其极高效率被同时代人视为魔法。80 个字符符号覆盖所有音节——对 tokenizer 优化有启发意义。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="">Eric Ries ("The Lean Startup") — AMA</a></div>
+      <div class="meta"><span class="score">⬆ 514</span> · 415 评论 · by eries</div>
+      <div class="insight">💡《精益创业》作者 Eric Ries 的新书 "Incorruptible" —— 关于面对 AI 崛起，人类不该追求"最优化"而是保持"不可腐化"。与 AI agent 治理议题相交。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://spectrum.ieee.org/curiosity-rover-jpl-mars-science">How JPL keeps the 13-year-old Curiosity rover doing science</a></div>
+      <div class="meta"><span class="score">⬆ 166</span> · 34 评论 · by pseudolus</div>
+      <div class="insight">💡 好奇号火星车 13 年仍在工作的运维策略。长寿命远程系统的软件维护经验（冗余、failsafe、渐进式升级）对 Hermes cron job 韧性设计有参考价值。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://pgdog.dev/blog/our-funding-announcement">PgDog is funded and coming to a database near you</a></div>
+      <div class="meta"><span class="score">⬆ 377</span> · 187 评论 · by levkk</div>
+      <div class="insight">💡 PostgreSQL 连接池 PgDog 获得融资。PgBouncer 的现代替代品，支持连接池 + 路由 + 读写分离。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://lwn.net/SubscriberLink/1077035/c7e7c14fbd60fae9/">AI agent runs amok in Fedora and elsewhere</a></div>
+      <div class="meta"><span class="score">⬆ 43</span> · 2 评论 · by tanelpoder</div>
+      <div class="insight">💡 AI agent 在 Fedora 等系统中失控运行的报道。AI agent 沙箱不完善带来的实际系统影响——与 Hermes 自身的 pending_approval 安全策略有直接关联。</div>
+    </div>
+
+    <div class="feed-item">
+      <div class="title"><a href="https://mceglowski.substack.com/p/laffaire-siloxane">L'Affaire Siloxane</a></div>
+      <div class="meta"><span class="score">⬆ 148</span> · 23 评论 · by idlewords</div>
+      <div class="insight">💡 关于硅氧烷污染的环境议题。硅氧烷是防晒霜等个人护理产品中的常见成分，但对生态系统有长期影响。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ====== 4. TREND ANALYSIS ====== -->
+<div class="section">
+<h2><span class="icon">📈</span> 趋势分析（15 期纵向对比）</h2>
+
+<table class="trend-table">
+  <tr>
+    <th>指标</th>
+    <th>P2</th><th>P3</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th><th>P10</th><th>P11</th><th>P12</th><th>P13</th><th>P14</th><th>P15</th>
+    <th>累计变化</th><th>趋势</th>
+  </tr>
+  <tr>
+    <td>总日志条目</td>
+    <td>—</td><td>378</td><td>—</td><td>402</td><td>400</td><td>406</td><td>405</td><td>401</td><td>401</td><td>401</td><td>401</td><td>400</td><td><strong>402</strong></td>
+    <td class="flat">+0.5% vs P14</td><td class="flat">持续持平</td>
+  </tr>
+  <tr>
+    <td>tool_executor</td>
+    <td>—</td><td>19</td><td>—</td><td>—</td><td>—</td><td>—</td><td>87</td><td>116</td><td>141</td><td>153</td><td>168</td><td>197</td><td><strong>230</strong></td>
+    <td class="worsened">⬆ +1111% vs P3</td><td class="worsened"><strong>加速恶化</strong></td>
+  </tr>
+  <tr>
+    <td>conversation_loop</td>
+    <td>—</td><td>—</td><td>14</td><td>24</td><td>34</td><td>46</td><td>62</td><td>76</td><td>78</td><td>88</td><td>102</td><td>128</td><td><strong>148</strong></td>
+    <td class="worsened">⬆ +957% vs P5</td><td class="worsened"><strong>加速恶化</strong></td>
+  </tr>
+  <tr>
+    <td>gateway.run</td>
+    <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>41</td><td>41</td><td>41</td><td>41</td><td>41</td><td>31</td><td>13</td><td><strong>1</strong></td>
+    <td class="improved">⬇ −97.6% vs P8</td><td class="improved">接近消除</td>
+  </tr>
+  <tr>
+    <td>cron.scheduler</td>
+    <td>19</td><td>13</td><td>4</td><td>6</td><td>12</td><td>12</td><td>11</td><td>11</td><td>10</td><td>11</td><td>—</td><td>15</td><td><strong>16</strong></td>
+    <td class="flat">−15.8% vs P2</td><td class="flat">小幅回升</td>
+  </tr>
+  <tr>
+    <td>discord 噪声</td>
+    <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>40</td><td><strong>4</strong></td>
+    <td class="improved">⬇ −90% vs P14</td><td class="improved">大幅下降</td>
+  </tr>
+  <tr>
+    <td>API 双风险</td>
+    <td>—</td><td>429</td><td>持续</td><td>超时+429</td><td>超时</td><td>超时</td><td>超时</td><td>双风险</td><td>双风险</td><td>双风险</td><td>超时为主</td><td>双风险共现</td><td><strong>429 风暴</strong></td>
+    <td>—</td><td class="worsened">连续 12 期</td>
+  </tr>
+  <tr>
+    <td>弱点数</td>
+    <td>3</td><td>3</td><td>4</td><td>3</td><td>3</td><td>2</td><td>3</td><td>2</td><td>2</td><td>2</td><td>3</td><td>2</td><td><strong>2</strong></td>
+    <td>—</td><td class="flat">稳定 2 个</td>
+  </tr>
+</table>
+
+<!-- Health Score -->
+<h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">📊 健康度评分（15 期纵向对比）</h3>
+<div class="health-score">
+  <div>
+    <div class="big" style="color: var(--green);">77</div>
+    <div style="font-size: 0.8rem; color: var(--muted);">P15 (06-11)</div>
+    <div style="font-size: 0.7rem; color: var(--muted);"><span class="tag tag-red">假突破 2.0</span></div>
+  </div>
+  <div style="flex: 1; font-size: 0.9rem;">
+    <div style="padding: 0.3rem 0;">
+      <span style="color:var(--muted);">P14 (06-10):</span> <strong>77</strong>
+      <span class="flat" style="margin-left: 1rem;">持平 ±0</span>
+      <span class="tag tag-red">假突破确认</span>
+    </div>
+    <div style="padding: 0.3rem 0;">
+      <span style="color:var(--muted);">P13 (06-09):</span> <strong>62</strong> ·
+      <span style="color:var(--muted);">P12 (06-08):</span> <strong>70</strong> ·
+      <span style="color:var(--muted);">P11 (06-07):</span> <strong>70</strong> ·
+      <span style="color:var(--muted);">P10 (06-06):</span> <strong>70</strong> ·
+      <span style="color:var(--muted);">P9 (06-05):</span> <strong>65</strong> ·
+      <span style="color:var(--muted);">P8 (06-04):</span> <strong>65</strong> ·
+      <span style="color:var(--muted);">P7 (06-03):</span> <strong>57</strong> ·
+      <span style="color:var(--muted);">P6 (06-02):</span> <strong>57</strong> ·
+      <span style="color:var(--muted);">P5 (06-01):</span> <strong>57</strong>
+    </div>
+    <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem;">
+      ⚠️ <strong>假突破 2.0（false plateau-break, upward — 维持 77 分）</strong><br>
+      评分公式: 100 − 0(high) − 8(medium: tool_security) − 3(low: model_output) − 12(402/100×3) = <strong>77</strong>。<br>
+      连续第 2 期维持在 77 分，但真实恶化在加速：<br>
+      • P14→P15: tool_executor 197→230 <span class="worsened">+16.8%</span>（P13→P14 +17.3%）<br>
+      • P14→P15: conversation_loop 128→148 <span class="worsened">+15.6%</span>（P13→P14 +25.5%）<br>
+      • 双核心合计 378 条，占总日志 <strong>94.0%</strong>——几乎整个错误日志已被这两个组件垄断<br>
+      评分维持在 77 是因为：（1）总日志条目仅微量增加（400→402），错误密度惩罚几乎不变；（2）弱点数稳定在 2 个（无 high 级新增）；（3）Discord 噪声从 40 降至 4（−90%）意外平衡了部分恶化。但 94% 的核心集中度远超任何历史水平。<br>
+      <strong>这是第 6 次评分失真事件：评分公式中弱点数权重（±26 分）和总条目基数（±15 分）掩盖了内部成分的极端恶化。</strong>
+    </div>
+  </div>
+</div>
+
+<!-- Dual-track analysis -->
+<div style="margin-top: 2rem;">
+  <div style="font-size:0.9rem; color:var(--muted); margin-bottom:0.5rem;">📉 双轨分化分析 — 改善轨 vs 恶化轨</div>
+
+  <div class="two-col">
+    <div style="padding: 0.75rem; background: rgba(248,81,73,0.08); border-radius: 6px;">
+      <strong style="color:var(--red);">⚠️ 恶化轨</strong>
+      <ul style="margin-top: 0.3rem; color:var(--muted); padding-left: 1rem;">
+        <li><strong>tool_executor</strong>: P3:19 → P15:230<br>12 期 <span class="worsened">+1111%</span>, 每期 +17.6 条<br><span class="tag tag-red">加速至每期 +33 条（上期 +29）</span></li>
+        <li><strong>conversation_loop</strong>: P5:14 → P15:148<br>10 期 <span class="worsened">+957%</span>, 每期 +14.8 条<br><span class="tag tag-red">加速至每期 +20 条（上期 +26）</span></li>
+        <li><strong>API 双风险</strong>: 连续 12 期（P3→P15），今日 429 密集共现 3 次</li>
+        <li><strong>核心垄断率 94%</strong>: 双核心占总日志 94.0%，已几乎完全覆盖其他噪声来源</li>
+      </ul>
+    </div>
+    <div style="padding: 0.75rem; background: rgba(63,185,80,0.08); border-radius: 6px;">
+      <strong style="color:var(--green);">✅ 改善轨</strong>
+      <ul style="margin-top: 0.3rem; color:var(--muted); padding-left: 1rem;">
+        <li><strong>gateway.run</strong>: P8:41 → P15:1<br>7 期 <span class="improved">−97.6%</span></li>
+        <li><strong>Discord 噪声</strong>: P14:40 → P15:4<br>1 期 <span class="improved">−90%</span></li>
+        <li><strong>Weixin</strong>: 阈值以下，已消除</li>
+        <li><strong>run_agent</strong>: 从日志中消失</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(210,153,29,0.08); border-radius: 6px;">
+    <strong style="color:var(--yellow);">🔍 模式识别：假突破 2.0 平台期 — 净对冲系数 2.65（恶化全面加速）</strong><br>
+    <span style="color:var(--muted); font-size:0.85rem;">
+      本期净对冲系数 <strong>2.65</strong>（恶化增量 +53 / 改善减量 −20），是 P13 的 2.19 倍，继续刷新纪录。<br><br>
+      关键变化：tool_executor 增量从 P13→P14 的 +29 加速至 P14→P15 的 <strong>+33</strong>。conversation_loop 增量从 P13→P14 的 +26 略降至 P14→P15 的 <strong>+20</strong>，但仍处于高位。<br><br>
+      <strong>⚠️ P14 预测验证：路径 A（不接受干预）已验证</strong><br>
+      P14 预测 "P15 tool_executor ≥225 条" → 实际 <strong>230 条 ✓</strong>（超预期 5 条）<br>
+      P14 预测 "P15 conversation_loop ≥150 条" → 实际 <strong>148 条</strong>（仅差 2 条）<br>
+      P14 预测 "日错误峰值突破 60 条" → 06-10 实际 <strong>66 条 ✓</strong>（超越预期）<br><br>
+      <strong>更危险的信号：06-10 单日 66 条 + 06-11 截至 08:24 已有 43 条</strong>。06-11 的 43 条在 5 分钟内集中产出（08:19~08:24），说明每秒的令牌在密集消耗。<br><br>
+      <strong>💡 P14 预测的场景正在精确兑现。如果 P15 剩余时间段保持此强度，单日可能超过 70 条，P16 (06-12) tool_executor 将 ≥260 条。</strong><br><br>
+      <strong>核心诊断：系统已进入运维紧急状态。</strong> 以下是最新演进路径预测：<br>
+      <span style="color:var(--red);">⚠️ 路径 A（仍不接受干预）</span>：P16 (06-12) tool_executor ≥263 条 (+14.3%)，conversation_loop ≥170 条，总日志 ≥450 条，双核心合计占日志 ~95%。健康度仍因总日志持平而维持在 75-77 区间。<strong>评分将彻底失去参考价值</strong>。<br>
+      <span style="color:var(--yellow);">⚠️ 路径 B（部分干预）</span>：部署安全白名单。tool_executor 40-50% 下降 → ~115-138 条。同步配置 secondary_model 降低 conversation_loop。健康度回升至 80+。<br>
+      <span style="color:var(--green);">✅ 路径 C（完全干预）</span>：安全白名单 + secondary_model + 移除 Discord 配置。tool_executor 降 40-50%，conversation_loop 降 30%。总日志可从 402 降至 ~230-260，健康度可达 88+。<br>
+      <strong>已 13 期连续点名安全白名单、12 期连续点名 secondary_model。路径 A 的预测在连续兑现。</strong>
+    </span>
+  </div>
+</div>
+</div>
+
+<!-- ====== 5. EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+<h2><span class="icon">🧬</span> 进化建议</h2>
+
+<div class="alert alert-high">
+  <span class="sev sev-high">HIGH</span> — <strong>立即部署安全白名单</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    P15 tool_executor 已飙升至 230 条/期（占总日志 57.2%），几乎全部由 pending_approval 阻塞产生。将 scripts/ 目录加入安全白名单后预期 tool_executor 下降 40-50%。<br>
+    <strong>已连续 12 期被点名未执行。P14 预测路径 A 已验证。</strong>
+  </div>
+</div>
+
+<div class="alert alert-high">
+  <span class="sev sev-high">HIGH</span> — <strong>配置 secondary_model 作为 fallback</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    conversation_loop 148 条（36.8%），其中 APITimeoutError 47 条 + RateLimitError 16 条共 63 条（42.6%）。在 config.yaml 中设置 fallback provider 可减少 30-40% 的超时重试。<br>
+    <strong>已连续 11 期被点名未执行。</strong>
+  </div>
+</div>
+
+<div class="alert alert-medium">
+  <span class="sev sev-medium">MEDIUM</span> — <strong>移除未配置的平台适配器（Discord）</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    Discord 噪声从 P14 的 40 条降至 P15 的 4 条（显著改善），但仍未彻底消除。从 config.yaml 中移除未使用的 Discord 配置可完全归零。
+  </div>
+</div>
+
+<div class="alert alert-medium">
+  <span class="sev sev-medium">MEDIUM</span> — <strong>arXiv API 备选源（连续 2 期失败）</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    连续 2 期（P14-P15）arXiv API 请求失败。当前整体成功率 33.3%（5/15）。建议启用 arXiv Sanity Lite 或 Semantic Scholar API 作为备选。
+  </div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — <strong>SessionDB 兼容性修复</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    self_scan.py 中 <code>SessionDB.list_sessions()</code> 仍缺失。sessions 数据持续显示为 0。需改为直接 SQLite 查询。
+  </div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — <strong>健康度评分公式改革</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    连续 6 次评分失真事件。核心组件集中度（双核心 94%）与总日志条目（402）已完全脱钩。建议在评分公式中增加"核心组件占比权重"——当 tool_executor + conversation_loop 占比超过 70% 时自动扣减额外 10-15 分。
+  </div>
+</div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div class="footer">
+  🧬 Hermes Self-Evolution System · 第 15 期 · 2026-06-11<br>
+  数据来源: self_scan.py + weakness_scan.py + knowledge_ingest.py | 通过 GitHub Pages 交付
+</div>
+</body>
+</html>
