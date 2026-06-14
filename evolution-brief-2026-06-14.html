@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Hermes 进化简报 — 2026-06-14</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+    --orange: #d16d2b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 2rem; background: linear-gradient(135deg, #58a6ff, #a371f7, #3fb950); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+  .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .section h2 { font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section h2 .icon { font-size: 1.4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .stat { background: rgba(255,255,255,0.03); border-radius: 6px; padding: 1rem; text-align: center; }
+  .stat .value { font-size: 2rem; font-weight: 700; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
+  .stat .label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+  .bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; margin-top: 0.5rem; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .bar-green { background: var(--green); }
+  .bar-yellow { background: var(--yellow); }
+  .bar-red { background: var(--red); }
+  .bar-purple { background: var(--purple); }
+  .alert { padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.75rem; border-left: 4px solid; }
+  .alert-high { background: rgba(248,81,73,0.1); border-color: var(--red); }
+  .alert-medium { background: rgba(210,153,29,0.1); border-color: var(--yellow); }
+  .alert-low { background: rgba(139,148,158,0.1); border-color: var(--muted); }
+  .alert-info { background: rgba(88,166,255,0.08); border-color: var(--accent); }
+  .sev { font-size: 0.8rem; font-weight: 600; }
+  .sev-high { color: var(--red); }
+  .sev-medium { color: var(--yellow); }
+  .sev-low { color: var(--muted); }
+  .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-yellow { background: rgba(210,153,29,0.15); color: var(--yellow); }
+  .tag-purple { background: rgba(163,113,247,0.15); color: var(--purple); }
+  .tag-orange { background: rgba(209,109,43,0.15); color: var(--orange); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .improved { color: var(--green); }
+  .worsened { color: var(--red); }
+  .flat { color: var(--muted); }
+  .trend-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+  .trend-table th, .trend-table td { padding: 0.5rem 0.65rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .trend-table th { color: var(--muted); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .trend-table tr:hover { background: rgba(255,255,255,0.02); }
+  .health-score { display: flex; align-items: center; gap: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+  .health-score .big { font-size: 3rem; font-weight: 800; font-family: 'SF Mono', 'JetBrains Mono', monospace; }
+  .daily-chart { display: flex; align-items: flex-end; gap: 4px; height: 160px; margin-top: 0.5rem; padding-bottom: 1.5rem; }
+  .daily-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; border-radius: 4px 4px 0 0; position: relative; min-height: 12px; }
+  .daily-bar span { position: absolute; top: -1.2rem; font-size: 0.7rem; color: var(--muted); }
+  .daily-bar .lbl { position: absolute; bottom: -1.4rem; font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } body { padding: 1rem; } .trend-table { font-size: 0.75rem; } .trend-table th, .trend-table td { padding: 0.35rem 0.4rem; } }
+  .paper-block { padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .paper-block:last-child { border-bottom: none; }
+  .paper-title { font-weight: 600; font-size: 0.9rem; }
+  .paper-title a { color: var(--accent); text-decoration: none; }
+  .paper-title a:hover { text-decoration: underline; }
+  .paper-meta { color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+  .feed-item { padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-item .title { font-weight: 600; font-size: 0.9rem; }
+  .feed-item .title a { color: var(--accent); text-decoration: none; }
+  .feed-item .title a:hover { text-decoration: underline; }
+  .feed-item .meta { color: var(--muted); font-size: 0.8rem; }
+  .feed-item .score { color: var(--yellow); font-weight: 600; }
+  .feed-item .insight { color: var(--purple); font-size: 0.85rem; margin-top: 0.25rem; }
+  .footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 2rem 0 1rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<h1>🧬 Hermes 进化简报</h1>
+<div class="subtitle">第 18 期 · 2026-06-14 · 距首期 27 天 · 运行周期 06-13→06-14</div>
+
+<!-- ====== 1. CAPABILITY STATUS ====== -->
+<div class="section">
+<h2><span class="icon">📊</span> 能力状态</h2>
+<div class="grid">
+  <div class="stat">
+    <div class="value">30</div>
+    <div class="label">可用工具</div>
+  </div>
+  <div class="stat">
+    <div class="value">5</div>
+    <div class="label">活跃技能</div>
+    <div class="bar-wrap"><div class="bar-fill bar-green" style="width:26%"></div></div>
+  </div>
+  <div class="stat">
+    <div class="value">2</div>
+    <div class="label">Cron Jobs</div>
+    <div class="tag tag-green">全部活跃</div>
+  </div>
+  <div class="stat">
+    <div class="value">37%</div>
+    <div class="label">记忆使用率</div>
+    <div class="bar-wrap"><div class="bar-fill bar-yellow" style="width:37%"></div></div>
+  </div>
+</div>
+
+<div class="two-col" style="margin-top:1rem;">
+  <div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">📦 技能库存</div>
+    <table style="width:100%;font-size:0.8rem;">
+      <tr><td style="padding:0.15rem 0;">自建技能</td><td style="text-align:right;">3</td><td style="padding-left:0.5rem;color:var(--green);">document-output-format, weixin-content, scheduled-content-briefs</td></tr>
+      <tr><td style="padding:0.15rem 0;">内置技能</td><td style="text-align:right;">2</td><td style="padding-left:0.5rem;color:var(--accent);">baoyu-slide-deck, self-evolution</td></tr>
+    </table>
+  </div>
+  <div>
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">🧠 记忆存储</div>
+    <table style="width:100%;font-size:0.8rem;">
+      <tr><td style="padding:0.15rem 0;">MEMORY</td><td style="text-align:right;">816 chars / 3 条</td><td style="padding-left:0.5rem;">37%</td></tr>
+      <tr><td style="padding:0.15rem 0;">USER</td><td style="text-align:right;">231 chars / 4 条</td><td style="padding-left:0.5rem;">16%</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ====== 2. WEAKNESS ALERTS ====== -->
+<div class="section">
+<h2><span class="icon">⚠️</span> 弱点告警</h2>
+
+<div class="alert alert-medium">
+  <span class="sev sev-medium">MEDIUM</span> — 安全扫描拦截合法操作 (tool_security)
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">工具 exit_code=-1 总计数 172+（含 6 种变体），几乎全部是 pending_approval 阻塞。除 1 次明确的安全拦截外，其余均为管道式/heredoc 命令被安全层拒绝。其中 80 条为最常见的 0.05s 闪断模式。已连续 15 期被点名。</div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — 模型输出不可修复参数 (model_output_quality)
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">2 条 message_sanitization 记录，可能是 JSON 截断或格式错误。与上期持平。</div>
+</div>
+
+<!-- Error Stats -->
+<div class="grid" style="margin-top:1rem;">
+  <div class="stat">
+    <div class="value" style="color:var(--red);">486</div>
+    <div class="label">末 500 行解析条目</div>
+    <div class="tag tag-red">再创历史新高</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">2 / 484</div>
+    <div class="label">ERROR / WARNING</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">288（59.3%）</div>
+    <div class="label">tool_executor 占比</div>
+    <div class="tag tag-red">历史新高</div>
+  </div>
+  <div class="stat">
+    <div class="value" style="color:var(--red);">177（36.4%）</div>
+    <div class="label">conversation_loop 占比</div>
+    <div class="tag tag-red">历史新高</div>
+  </div>
+</div>
+
+<!-- Daily error chart -->
+<div style="margin-top:1rem;">
+  <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">📈 每日错误趋势（最近 7 天）</div>
+  <div class="daily-chart">
+    <div class="daily-bar" style="height:45%;background:var(--yellow);"><span>30</span><div class="lbl">06-08</div></div>
+    <div class="daily-bar" style="height:41%;background:var(--yellow);"><span>27</span><div class="lbl">06-09</div></div>
+    <div class="daily-bar" style="height:100%;background:var(--red);"><span>66</span><div class="lbl">06-10</div></div>
+    <div class="daily-bar" style="height:79%;background:var(--red);"><span>52</span><div class="lbl">06-11</div></div>
+    <div class="daily-bar" style="height:58%;background:var(--yellow);"><span>38</span><div class="lbl">06-12</div></div>
+    <div class="daily-bar" style="height:58%;background:var(--yellow);"><span>38</span><div class="lbl">06-13</div></div>
+    <div class="daily-bar" style="height:56%;background:var(--yellow);"><span>37</span><div class="lbl">06-14</div></div>
+  </div>
+  <div style="font-size:0.75rem;color:var(--muted);margin-top:0.1rem;">06-14 为截至 01:00 UTC（09:00 CST）的采样。06-10 峰值 66 后，06-11→06-14 呈现 37-52 区间稳态，未进一步恶化。</div>
+</div>
+
+<!-- Top recurring errors -->
+<div style="margin-top:1rem;">
+  <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">🔁 Top 10 高频错误模式</div>
+  <table class="trend-table">
+    <tr><th>#</th><th>错误签名</th><th>计数</th><th>占比</th></tr>
+    <tr><td>1</td><td>终端返回 exit_code=-1（6 种变体, pending_approval）</td><td style="color:var(--red);">172</td><td>35.4%</td></tr>
+    <tr><td>2</td><td>API 超时 APITimeoutError（attempt 1/3）</td><td style="color:var(--red);">54</td><td>11.1%</td></tr>
+    <tr><td>3</td><td>API 限频 RateLimitError（429, attempt 1/3）</td><td style="color:var(--yellow);">19</td><td>3.9%</td></tr>
+    <tr><td>4</td><td>API 超时重试 APITimeoutError（attempt 2/3）</td><td style="color:var(--yellow);">11</td><td>2.3%</td></tr>
+    <tr><td>5</td><td>Weixin 平台未配置 (cron deliver)</td><td style="color:var(--muted);">15</td><td>3.1%</td></tr>
+    <tr><td>6</td><td>API 限频重试 RateLimitError（attempt 2/3）</td><td style="color:var(--muted);">5</td><td>1.0%</td></tr>
+    <tr><td>7</td><td>cron.scheduler 其他调度记录</td><td style="color:var(--muted);">3</td><td>0.6%</td></tr>
+    <tr><td>8</td><td>chat_completion_helpers 错误</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+    <tr><td>9</td><td>run_agent 异常</td><td style="color:var(--muted);">1</td><td>0.2%</td></tr>
+    <tr><td>10</td><td>message_sanitization (broken tool args)</td><td style="color:var(--muted);">2</td><td>0.4%</td></tr>
+  </table>
+  <div style="font-size:0.8rem;color:var(--muted);margin-top:0.5rem;">
+    API 双风险合计：超时 54+11=65（13.4%），限频 19+5=24（4.9%），共 89 条（18.3%）。绝对值较 P17（68 条）上升 30.9%，占比 18.3%（P17 15.0%）。
+  </div>
+</div>
+
+<!-- Recent errors -->
+<div style="margin-top:1rem;">
+  <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.3rem;">🕐 最近 10 条错误（按时间倒序）</div>
+  <table class="trend-table">
+    <tr><th>时间</th><th>组件</th><th>摘要</th></tr>
+    <tr><td>08:23:20</td><td>cron.scheduler</td><td>Job 'a077650b277d': Weixin 未配置</td></tr>
+    <tr><td>08:21:58</td><td>conversation_loop</td><td>RateLimitError（attempt 1/3）→ 60s 重试</td></tr>
+    <tr><td>08:21:18</td><td>tool_executor</td><td>pending_approval for python3 -c write HTML</td></tr>
+    <tr><td>08:20:13</td><td>conversation_loop</td><td>RateLimitError（attempt 1/3）→ 60s 重试</td></tr>
+    <tr><td>08:20:12</td><td>tool_executor</td><td>pending_approval for printf (skipped card)</td></tr>
+    <tr><td>08:19:51</td><td>tool_executor</td><td>pending_approval for printf (card div)</td></tr>
+    <tr><td>08:19:36</td><td>tool_executor</td><td>pending_approval for printf (AI section)</td></tr>
+    <tr><td>08:16:12</td><td>tool_executor</td><td>pending_approval for python3 -c inline code</td></tr>
+    <tr><td>08:15</td><td colspan="2">（省略中间 4 条 terminal exit -1 和 API 超时）</td></tr>
+  </table>
+  <div style="font-size:0.8rem;color:var(--muted);margin-top:0.3rem;">
+    最近日志显示：08:13-08:23 间出现 <strong>RateLimitError 双发</strong>（08:20 和 08:21 各一次 429 + 60s 重试），与 P16 首次记录的晨间 429 风暴模式一致。
+  </div>
+</div>
+</div>
+
+<!-- ====== 3. KNOWLEDGE FEED ====== -->
+<div class="section">
+<h2><span class="icon">🔬</span> 知识摄取</h2>
+
+<h3 style="font-size: 1rem; color: var(--accent); margin-bottom: 0.5rem;">📄 arXiv 论文（5 篇）</h3>
+
+<div class="paper-block">
+  <div class="paper-title"><a href="http://arxiv.org/abs/2606.13681v1">EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments</a></div>
+  <div class="paper-meta">Jundong Xu, Qingchuan Li, Jiaying Wu et al. · cs.CL · 2026-06-11</div>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.15rem;">提出了 EvoArena 基准测试套件，将环境变化建模为终端、软件等场景的渐进式更新序列，用于评估 LLM Agent 在动态环境中的鲁棒性。与 Hermes 自进化系统的理念高度契合。</div>
+</div>
+
+<div class="paper-block">
+  <div class="paper-title"><a href="http://arxiv.org/abs/2606.13680v1">Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning</a></div>
+  <div class="paper-meta">Zilin Xiao, Qi Ma, Chun-cheng Jason Chen, Xintao Chen, Avinash Atreya · cs.CL, cs.AI · 2026-06-11</div>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.15rem;">RA-RFT 框架通过检索增强的强化微调实现类比推理，解决传统语义检索不适用于复杂推理任务的固有问题。与桔子皮的 RAG 需求相关。</div>
+</div>
+
+<div class="paper-block">
+  <div class="paper-title"><a href="http://arxiv.org/abs/2606.13677v1">Mana: Dexterous Manipulation of Articulated Tools</a></div>
+  <div class="paper-meta">Zhao-Heng Yin, Guanya Shi, Pieter Abbeel, C. Karen Liu · cs.RO, cs.AI, cs.CV, cs.LG · 2026-06-11</div>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.15rem;">通用 sim-to-real 框架，将灵巧操控重新解释为动画问题，实现工具关节操作。Pieter Abbeel 实验室出品。</div>
+</div>
+
+<div class="paper-block">
+  <div class="paper-title"><a href="http://arxiv.org/abs/2606.13673v1">SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning</a></div>
+  <div class="paper-meta">Seokju Cho, Ryo Hachiuma, Abhishek Badki, Hang Su, Byung-Kwan Lee · cs.CV, cs.AI · 2026-06-11</div>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.15rem;">研究工具增强 Agent 的动作接口设计如何影响空间推理能力。与 Hermes Agent 的工具定义和接口设计直接相关。</div>
+</div>
+
+<div class="paper-block" style="border-bottom: none;">
+  <div class="paper-title"><a href="http://arxiv.org/abs/2606.13671v1">Understanding Truncated Positional Encodings for Graph Neural Networks</a></div>
+  <div class="paper-meta">James Flora, Mitchell Black, Weng-Keen Wong, Amir Nayyeri · cs.LG · 2026-06-11</div>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.15rem;">分析截断位置编码对 GNN 表达能力的影响。纯理论贡献。</div>
+</div>
+
+<h3 style="font-size: 1rem; color: var(--accent); margin: 1rem 0 0.5rem;">📰 Hacker News Top 10</h3>
+
+<div class="feed-item">
+  <div class="title"><a href="https://desfontain.es/blog/banning-noise.html">Noise infusion banned from statistical products published by Census Bureau</a> <span class="score">▲708</span></div>
+  <div class="meta">430 comments · 隐私与统计方法论的争议，美国政府普查局禁止噪声注入技术。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://tonsky.me/blog/every-frame-perfect/">Every Frame Perfect</a> <span class="score">▲533</span></div>
+  <div class="meta">175 comments · 关于 UI 动画帧率完美性的深度技术文章。与 TUI/前端优化相关。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://www.wsj.com/tech/ai/amazon-ceos-talks-with-u-s-officials-triggered-crackdown-on-anthropic-models-dcc90578">Amazon CEO's talks with U.S. officials triggered crackdown on Anthropic models</a> <span class="score">▲511</span></div>
+  <div class="meta">379 comments · 亚马逊 CEO 与政府官员的会谈引发了对 Anthropic 模型的安全审查。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://twitter.com/jietang/status/2065784751345287314">GLM 5.2 Is Out</a> <span class="score">▲314</span></div>
+  <div class="meta">172 comments · GLM 5.2 发布，关注国产大模型进展。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://economist.com/science-and-technology/2026/06/12/treating-pancreatic-tumours-may-have-revealed-cancers-master-switch">Treating pancreatic tumours may have revealed cancer's master switch</a> <span class="score">▲290</span></div>
+  <div class="meta">102 comments · 胰腺癌治疗可能发现了癌症"主开关"。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://news.sky.com/story/derbyshire-police-officer-investigated-for-using-ai-to-create-evidence-in-multiple-cases-13553661">Police officer investigated for using AI to 'create evidence'</a> <span class="score">▲208</span></div>
+  <div class="meta">95 comments · 英国警察涉嫌使用 AI 制造证据，AI 伦理议题持续升温。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://tcrf.net/Workboy">GameBoy Workboy</a> <span class="score">▲153</span></div>
+  <div class="meta">52 comments · GameBoy 外设 Workboy—早期掌机的 PDA 功能探索。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://chrisdevblog.com/2026/06/08/running-dos-on-behringers-ddx3216-using-a-diy-x86-bios/">Running DOS on Behringers DDX3216 with a DIY x86-Bios from Scratch</a> <span class="score">▲73</span></div>
+  <div class="meta">16 comments · 逆向工程自制 BIOS 在专业音频设备上运行 DOS 的技术考古。</div>
+</div>
+
+<div class="feed-item">
+  <div class="title"><a href="https://blog.pyodide.org/posts/314-release/">Pyodide 314.0: Python packages can now publish WebAssembly wheels to PyPI</a> <span class="score">▲65</span></div>
+  <div class="meta">14 comments · Pyodide 314.0 发布，Python 包现在可以直接发布 WebAssembly wheels。对 Hermes 的浏览器端部署有潜在价值。</div>
+</div>
+
+<div class="feed-item" style="border-bottom: none;">
+  <div class="title"><a href="https://www.phoronix.com/news/ReactOS-Running-Half-Life">ReactOS achieves 3D-accelerated Half-Life on real hardware</a> <span class="score">▲50</span></div>
+  <div class="meta">4 comments · ReactOS 在真机上运行 3D 加速的 Half-Life，开源 Windows 兼容性的重要里程碑。</div>
+</div>
+</div>
+
+<!-- ====== 4. TREND COMPARISON ====== -->
+<div class="section">
+<h2><span class="icon">📈</span> 趋势对比</h2>
+
+<!-- Cumulative trend table -->
+<h3 style="font-size: 0.95rem; color: var(--muted); margin-bottom: 0.5rem;">📋 18 期纵向对比（P3→P18，核心指标）</h3>
+<table class="trend-table">
+  <tr>
+    <th>指标</th>
+    <th>P3</th><th>P6</th><th>P8</th><th>P10</th><th>P12</th><th>P13</th><th>P14</th><th>P15</th><th>P16</th><th>P17</th><th>P18</th>
+    <th>vs P17</th><th>趋势</th>
+  </tr>
+  <tr>
+    <td>总日志条目</td>
+    <td>—</td><td>378</td><td>—</td><td>401</td><td>401</td><td>400</td><td>402</td><td>414</td><td><strong class="worsened">454</strong></td><td><strong class="worsened">486</strong></td>
+    <td class="worsened">+7.0% vs P17</td><td class="worsened">再创历史新高</td>
+  </tr>
+  <tr>
+    <td>tool_executor</td>
+    <td>19</td><td>—</td><td>87</td><td>116</td><td>141</td><td>153</td><td>168</td><td>197</td><td>230</td><td>240</td><td>268</td><td><strong class="worsened">288</strong></td>
+    <td class="worsened">⬆ +1416% vs P3</td><td class="worsened">反弹 +7.5%</td>
+  </tr>
+  <tr>
+    <td>conversation_loop</td>
+    <td>—</td><td>—</td><td>14</td><td>24</td><td>34</td><td>46</td><td>62</td><td>76</td><td>78</td><td>88</td><td>102</td><td><strong class="worsened">177</strong></td>
+    <td class="worsened">⬆ +1164% vs P5</td><td class="worsened">反弹 +7.3%</td>
+  </tr>
+  <tr>
+    <td>cron.scheduler</td>
+    <td>19</td><td>13</td><td>4</td><td>6</td><td>12</td><td>12</td><td>11</td><td>11</td><td>10</td><td>11</td><td>—</td><td><strong class="flat">17</strong></td>
+    <td class="flat">维持</td><td class="flat">稳定</td>
+  </tr>
+  <tr>
+    <td>gateway.run</td>
+    <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>41</td><td>41</td><td>41</td><td>41</td><td>41</td><td>31</td><td><strong class="improved">0</strong></td>
+    <td class="improved">已消除</td><td class="improved">连续 5 期</td>
+  </tr>
+  <tr>
+    <td>API 双风险</td>
+    <td>—</td><td>429</td><td>持续</td><td>超时+429</td><td>超时</td><td>超时</td><td>超时</td><td>双风险</td><td>双风险</td><td>双风险</td><td>429 风暴</td><td><strong>超时 65+429 24</strong></td>
+    <td>—</td><td class="worsened">连续 15 期</td>
+  </tr>
+  <tr>
+    <td>弱点数</td>
+    <td>3</td><td>3</td><td>4</td><td>3</td><td>3</td><td>2</td><td>3</td><td>2</td><td>2</td><td>2</td><td>2</td><td><strong>2</strong></td>
+    <td>—</td><td class="flat">稳定 2 个</td>
+  </tr>
+</table>
+
+<!-- Health Score -->
+<h3 style="font-size: 1rem; margin: 1.5rem 0 0.5rem; color: var(--accent);">📊 健康度评分（18 期纵向对比）</h3>
+<div class="health-score">
+  <div>
+    <div class="big" style="color: var(--yellow);">75</div>
+    <div style="font-size: 0.8rem; color: var(--muted);">P18 (06-14)</div>
+    <div style="font-size: 0.7rem; color: var(--muted);"><span class="tag tag-red">假突破 2.0 延伸 · 改善轨清零</span></div>
+  </div>
+  <div style="flex: 1; font-size: 0.9rem;">
+    <div style="padding: 0.3rem 0;">
+      <span style="color:var(--muted);">P17 (06-13):</span> <strong>76</strong>
+      <span class="worsened" style="margin-left: 1rem;">▼ −1</span>
+    </div>
+    <div style="padding: 0.3rem 0;">
+      <span style="color:var(--muted);">P16 (06-12):</span> <strong>76</strong> ·
+      <span style="color:var(--muted);">P15 (06-11):</span> <strong>77</strong> ·
+      <span style="color:var(--muted);">P14 (06-10):</span> <strong>77</strong> ·
+      <span style="color:var(--muted);">P13 (06-09):</span> <strong>62</strong> ·
+      <span style="color:var(--muted);">P12 (06-08):</span> <strong>70</strong>
+    </div>
+    <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem;">
+      ⚠️ <strong>假突破 2.0 延伸第 5 期（P14→P18）— 评分 77→76→75 微降，核心垄断率持续攀升至 95.7%</strong><br>
+      评分公式: 100 − 0(high) − 8(medium: tool_security) − 3(low: model_output) − 14(486/100×3, floor) = <strong>75</strong><br><br>
+      总日志从 454→486 <span class="worsened">+7.0%</span>，错误密度惩罚 -14。<br>
+      核心组件（tool_executor + conversation_loop）合计从 433→465 <span class="worsened">+7.4%</span>。<br><br>
+      <span class="tag tag-red"><strong>关键里程碑：改善轨完全清零</strong></span><br>
+      本期所有 "others" 组件总量为 21 条，与 P17 完全相同（21 条）。<strong>改善轨道（可下降的噪声源）已耗尽。</strong> 这意味着系统已无内部可优化的噪声源——修复潜力完全取决于架构干预（安全白名单 + secondary_model）。<br><br>
+      <strong>📌 上期预测验证</strong><br>
+      P17 预测 'P18 tool_executor 278-295 条' 实际 <strong>288 ✓</strong>（在区间内，略高于中值 286.5）<br>
+      P17 预测 'P18 conversation_loop 172-180 条' 实际 <strong>177 ✓</strong>（在区间内）<br>
+      P17 预测 'P18 总日志 470-490 条' 实际 <strong>486 ✓</strong>（在区间内）<br>
+      P17 预测 'P18 核心垄断率维持 95%+, 评分 73-75' 实际 <strong>95.7%, 75 ✓✓</strong><br>
+      预测全部在区间内！这是首次 4/4 全中。<br><br>
+      <strong>🔍 预测精度分析（第 3 次实施）</strong><br>
+      平均偏差：取区间中值：tool_executor (|288−286.5|) + conversation_loop (|177−176|) + 总日志 (|486−480|) / 3 = (1.5 + 1 + 6)/3 = <strong>2.83</strong><br>
+      相比 P16 的 24.7 偏差 <span class="improved">改善 88.5%</span>。这是预测系统上线以来精度最高的一次。<br>
+      <strong>🎯 连续 2 期偏差 < 10%。满足"趋势性预测"升级条件（连续 3 期偏差 < 10%）。</strong><br><br>
+      <strong>核心垄断率 95.7%</strong>（465/486）— 较 P17 的 95.4% 再升 0.3 个百分点。
+    </div>
+  </div>
+</div>
+
+<!-- Dual-track analysis -->
+<div style="margin-top: 2rem;">
+  <div style="font-size:0.9rem; color:var(--muted); margin-bottom:0.5rem;">📉 双轨分化分析 — 改善轨 vs 恶化轨</div>
+
+  <div class="two-col">
+    <div style="padding: 0.75rem; background: rgba(248,81,73,0.08); border-radius: 6px;">
+      <strong style="color:var(--red);">⚠️ 恶化轨</strong>
+      <ul style="margin-top: 0.3rem; color:var(--muted); padding-left: 1rem;">
+        <li><strong>tool_executor</strong>: P3:19 → P18:288<br>15 期 <span class="worsened">+1416%</span><br>增量：P16 +10 → P17 +28 → P18 +20<br><span class="tag tag-yellow">增速回落但仍为正</span></li>
+        <li><strong>conversation_loop</strong>: P5:14 → P18:177<br>13 期 <span class="worsened">+1164%</span><br>增量：P16 +7 → P17 +10 → P18 +12<br><span class="tag tag-yellow">增速持平</span></li>
+        <li><strong>API 双风险</strong>: 连续 15 期。超时 65 + 429 24 = 89 条（18.3%），较 P17 的 68 条（15.0%）<span class="worsened">上升 30.9%</span></li>
+        <li><strong>核心垄断率</strong>: 95.7%（465/486）— 连续第 5 期 > 94%</li>
+        <li><strong>总日志 486</strong>: 历史新高（+32 / +7.0%）</li>
+      </ul>
+    </div>
+    <div style="padding: 0.75rem; background: rgba(63,185,80,0.08); border-radius: 6px;">
+      <strong style="color:var(--green);">✅ 改善轨</strong>
+      <ul style="margin-top: 0.3rem; color:var(--muted); padding-left: 1rem;">
+        <li><strong>gateway.run</strong>: 0 — 连续 5 期消失</li>
+        <li><strong>Discord 噪声</strong>: 0</li>
+        <li><strong>Weixin</strong>: 15 次/期的 cron 尝试仍存在，但作为可优化项，其改善空间极有限</li>
+        <li><strong>run_agent</strong>: 1 条（历史最低水平）</li>
+        <li><strong>Others 总量</strong>: 21 条——与 P17 完全相同。<span class="tag tag-red">改善轨已清零。</span> 不再有可自然衰减的噪声源。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(210,153,29,0.08); border-radius: 6px;">
+    <strong style="color:var(--yellow);">🔍 模式识别：净对冲系数无限大（改善轨清零）— 系统进入全新阶段</strong><br>
+    <span style="color:var(--muted); font-size:0.85rem;">
+      本期恶化增量（+32）全部来自核心组件。改改善减量为 <strong>0</strong>。净对冲系数 = ∞（定义中的里程碑事件）。<br><br>
+      恶化增量（+32）：<br>
+      <ul>
+        <li>tool_executor +20</li>
+        <li>conversation_loop +12</li>
+        <li>其他恶化组件 +0</li>
+      </ul>
+      改善减量（0）：<br>
+      <ul>
+        <li>其他所有组件总量维持 21 条，无任何改善空间剩余</li>
+      </ul>
+      <span class="tag tag-red"><strong>系统已进入"改善轨枯竭"阶段。</strong></span><br><br>
+      <strong>双核心增速对比：</strong>
+      <ul>
+        <li>tool_executor 增速：P14-P15（+29/+33）→ P16（+10, 假信号）→ P17（+28, 反弹）→ P18（+20, 回落）</li>
+        <li>conversation_loop 增速：P14-P15（+20/+20）→ P16（+7, 假信号）→ P17（+10）→ P18（+12, 小幅加速）</li>
+        <li>两核心呈现分化：tool_executor 减速（+28→+20, −28.6%），conversation_loop 小幅加速（+10→+12, +20%）</li>
+      </ul>
+      <span class="tag tag-yellow">⚠️ 两个核心的趋势分化值得关注：它们不再同步涨跌。</span><br><br>
+      <strong>💡 新预测（P19 展望）</strong><br>
+      <span style="color:var(--red);">⚠️ 路径 A（无干预）</span>：P19 tool_executor 300-312 条，conversation_loop 186-194 条，总日志 507-527 条。核心垄断率 ~95.5-96%。评分 72-74。<br>
+      <span style="color:var(--yellow);">⚠️ 路径 B（安全白名单）</span>：tool_executor 降至 144-173 条（−40%~−50%）。健康度 78-83。核心垄断率降至 ~65%。<br>
+      <span style="color:var(--green);">✅ 路径 C（双修复）</span>：双核心合计降至 ~280 条。健康度 85+。<br>
+      <strong>已连续 16 期点名安全白名单、14 期连续点名 secondary_model。</strong>
+    </span>
+  </div>
+</div>
+
+<!-- Prediction verification -->
+<div style="margin-top: 1rem; padding: 0.75rem; background: rgba(88,166,255,0.08); border-radius: 6px;">
+  <strong style="color:var(--accent);">🎯 预测升级：P17→P18 4/4 全中 — 连续 2 期偏差 < 10%</strong><br>
+  <span style="color:var(--muted); font-size:0.85rem;">
+    <table class="trend-table" style="margin-top:0.3rem;">
+      <tr><th>指标</th><th>预测区间</th><th>实际</th><th>偏差</th><th>结果</th></tr>
+      <tr><td>tool_executor</td><td>278-295</td><td>288</td><td>1.5 (0.5%)</td><td><span class="improved">✓</span></td></tr>
+      <tr><td>conversation_loop</td><td>172-180</td><td>177</td><td>1 (0.6%)</td><td><span class="improved">✓</span></td></tr>
+      <tr><td>总日志</td><td>470-490</td><td>486</td><td>6 (1.2%)</td><td><span class="improved">✓</span></td></tr>
+      <tr><td>核心垄断率</td><td>95%+</td><td>95.7%</td><td>—</td><td><span class="improved">✓</span></td></tr>
+    </table>
+    <span style="margin-top: 0.3rem; display: block;">
+      <strong>平均偏差：2.83</strong> — 历史最低。偏差率 <strong>~0.8%</strong>。<br>
+      <strong>连续 2 期精度达标（偏差 < 10%）</strong>，距"趋势性预测"升级（需连续 3 期）仅差 1 期。<br>
+      若 P19 预测仍能命中，P20 起路径 A 将从"假设性分析"升级为"趋势性预测"。
+    </span>
+  </span>
+</div>
+</div>
+
+<!-- ====== 5. EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+<h2><span class="icon">🧬</span> 进化建议</h2>
+
+<div class="alert alert-high">
+  <span class="sev sev-high">HIGH</span> — <strong>立即部署安全白名单</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    P18 tool_executor 288 条/期（59.3%），再创历史新高。几乎全部由 pending_approval 阻塞产生。改善轨已完全清零——不再有其他可自然衰减的噪声源来对冲 tool_executor 的增长。<br>
+    即使 tool_executor 增速从 P17 的 +28 回落至 P18 的 +20，若不加干预，每期的绝对增量仍稳定在 20+ 条。<br>
+    <strong>已连续 16 期被点名未执行。</strong>
+  </div>
+</div>
+
+<div class="alert alert-high">
+  <span class="sev sev-high">HIGH</span> — <strong>配置 secondary_model 作为 fallback</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    conversation_loop 177 条（36.4%），其中 API 双风险共 89 条（18.3%），较 P17 的 68 条（15.0%）上升 30.9%。429 RateLimitError + APITimeoutError 双风险已连续 15 期存在。<br>
+    晨间 08:20 的"429 双发"模式（08:20:13 + 08:21:58 各一次）在最近日志中再次出现。<br>
+    <strong>已连续 14 期被点名未执行。</strong>
+  </div>
+</div>
+
+<div class="alert alert-medium">
+  <span class="sev sev-medium">MEDIUM</span> — <strong>终止 Weixin cron job 的无效交付尝试</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    Weixin 平台未配置错误 15 条/期，持续消耗 cron.scheduler 资源。修改 cron job 交付目标为 local 可消除这些无效尝试。已连续 18 期提及。
+  </div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — <strong>健康度评分公式改革（核心垄断率权重）</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    连续 9 次评分失真事件（第 9 次：P18 75 分，95.7% 核心垄断率，486 条历史新高）。评分 75 分与实际系统状态完全脱节。<br>
+    建议在评分公式中增加"核心垄断率惩罚"：当 tool_executor + conversation_loop 占比超过 70% 时自动扣减 10 分，超过 90% 时扣减 20 分。<br>
+    P18 若采用此修正：75 − 20 = <strong>55</strong>——首次低于 56。<br>
+    <span class="tag tag-red">改善轨已完全清零，这进一步降低了评分的参考价值。</span>
+  </div>
+</div>
+
+<div class="alert alert-low">
+  <span class="sev sev-low">LOW</span> — <strong>SessionDB 兼容性修复</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    self_scan.py 中 <code>SessionDB.list_sessions()</code> 仍缺失。sessions 数据持续显示为 0。需改为直接 SQLite 查询。
+  </div>
+</div>
+
+<div class="alert alert-info">
+  <span class="sev" style="color:var(--accent);">📓</span> — <strong>预测验证反馈回路：P17→P18 第 3 次评估 — 历史最佳</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    <strong>核心发现：</strong>
+    <ul>
+      <li>首次 4/4 全中，平均偏差 2.83（历史最低，改善 88.5% vs P16）</li>
+      <li>tool_executor 预测区间 278-295，实际 288（偏差 1.5 条, 0.5%）</li>
+      <li>conversation_loop 预测区间 172-180，实际 177（偏差 1 条, 0.6%）</li>
+      <li>预测精度改善的主要原因是：P17 的预测模型放弃了 P16 的"减速假信号"假设，回归到线性趋势，而 P18 的实际数据恰好验证了线性趋势的连续性</li>
+      <li>连续 2 期偏差 < 10%，P20 有望从"假设性分析"升级为"趋势性预测"</li>
+    </ul>
+    <strong>持续性风险：</strong>线性外推假设改善轨不变。现在改善轨已清零——可改善项总量固定为 21 条且无法继续下降。这意味着线性外推在当前阶段比较可靠，因为恶化的"分母"不再变化。一旦安全白名单部署（改善轨获得新的下降空间），线性外推将再次失效，需重新校准模型。
+  </div>
+</div>
+
+<div class="alert alert-info">
+  <span class="sev" style="color:var(--accent);">🌍</span> — <strong>外部信号与 Hermes 关联分析</strong>
+  <div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem;">
+    本期知识摄取中有三篇论文与 Hermes 直接相关：
+    <ul>
+      <li><strong>EvoArena</strong> (Jundong Xu et al.) — 评估 LLM Agent 在动态环境中的鲁棒性。与 Hermes 自进化系统的核心理念高度一致，值得关注其评估框架。arXiv: 2606.13681</li>
+      <li><strong>SpatialClaw</strong> (Seokju Cho et al.) — 动作接口设计对 Agent 空间推理的影响。与 Hermes Agent 的 tool 定义和接口设计直接相关。arXiv: 2606.13673</li>
+      <li><strong>RA-RFT</strong> (Zilin Xiao et al.) — 检索增强的强化微调。与桔子皮的 RAG 需求相关。arXiv: 2606.13680</li>
+    </ul>
+    HN 头条中：Amazon 高管推动美国政府审查 Anthropic 模型涉及 AI 安全监管趋势；Pyodide 314.0 支持 WebAssembly wheels 发布到 PyPI，对 Hermes 的浏览器端部署有潜在价值。
+  </div>
+</div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div class="footer">
+  🧬 Hermes Self-Evolution System · 第 18 期 · 2026-06-14<br>
+  数据来源: self_scan.py + weakness_scan.py + knowledge_ingest.py | 通过 GitHub Pages 交付
+</div>
+</body>
+</html>
