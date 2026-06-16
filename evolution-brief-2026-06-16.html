@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 20 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #00d4ff, #7b61ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .period-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(123,97,255,0.15));
+    border: 1px solid rgba(123,97,255,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #a78bfa;
+  }
+
+  .section {
+    background: #111122;
+    border: 1px solid #1e1e3a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-card {
+    background: #0d0d1a;
+    border: 1px solid #1a1a35;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 2em; font-weight: 700; color: #fff; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; }
+  .stat-card .change { font-size: 0.8em; margin-top: 2px; font-weight: 500; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .flat { color: #a78bfa; }
+  .neutral { color: #666; }
+  .bad { color: #ef4444; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9em;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #0d0d1a;
+    color: #888;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #181830;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(123,97,255,0.05); }
+
+  .sev-high { background: rgba(239,68,68,0.15); color: #ef4444; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .sev-medium { background: rgba(251,146,60,0.15); color: #fb923c; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .sev-low { background: rgba(34,197,94,0.15); color: #22c55e; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+
+  .alert {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-warn {
+    background: rgba(251,146,60,0.08);
+    border: 1px solid rgba(251,146,60,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-info {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-success {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert h3 { font-size: 0.95em; margin-bottom: 6px; }
+  .alert p, .alert li { font-size: 0.9em; color: #aaa; line-height: 1.6; }
+  .alert ul { list-style: none; padding: 0; }
+  .alert li { padding: 2px 0; }
+  .alert li::before { content: "• "; color: #666; }
+
+  .score-ring {
+    width: 100px; height: 100px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 1.8em; font-weight: 800;
+  }
+  .score-label { font-size: 0.8em; color: #666; text-align: center; }
+  .score-breakdown { font-size: 0.8em; color: #888; text-align: center; margin-top: 4px; }
+
+  .bar-container { margin: 6px 0; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.82em; color: #999; margin-bottom: 3px; }
+  .bar { height: 6px; background: #1a1a35; border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.82em; color: #888; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  @media (max-width: 768px) {
+    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 1.6em; }
+  }
+  @media (max-width: 480px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  .insight-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #444;
+    font-size: 0.8em;
+    border-top: 1px solid #1a1a2e;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ======== HEADER ======== -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">Hermes Self-Evolution Daily Brief · Period 20</div>
+  <div class="period-badge">📅 2026-06-16 (Tue) · 第 2 次结构性突变演变期</div>
+</div>
+
+<!-- ======== 1. CAPABILITY STATUS ======== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="value">31</div>
+      <div class="label">可用工具</div>
+      <div class="change flat">+0 vs P19</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">5</div>
+      <div class="label">活跃 Skills</div>
+      <div class="change flat">3 agent-created</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="change flat">816 chars / 3 entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">2</div>
+      <div class="label">活跃 Cron Jobs</div>
+      <div class="change flat">self-evolution + 1 other</div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-top:16px">
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">User Memory: 16%</div>
+      <div class="label">231 chars / 4 entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">User: 纪多斌</div>
+      <div class="label">IT 技术 · 80% 杂务 / 20% 代码</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">Sessions: N/A</div>
+      <div class="label">SessionDB.list_sessions 不可用</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== 2. HEALTH SCORE ======== -->
+<div class="section">
+  <h2>🏥 健康度评分</h2>
+  <div style="display:flex; align-items:center; gap:40px; flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div class="score-ring" style="border:4px solid #a78bfa;">
+        <span style="color:#a78bfa;">77</span>
+      </div>
+      <div class="score-label">健康度评分</div>
+      <div class="score-breakdown">+8 vs P19 (69→77)</div>
+    </div>
+    <div style="flex:1; min-width:200px;">
+      <div class="alert" style="border-color:rgba(239,68,68,0.3);">
+        <h3>🚨 评分全面失效 —— 假突破 3.0</h3>
+        <p>健康度评分 77 分，看似较 P19 的 69 分回升 +8。但这是<strong>评分公式在结构性突变下的完全失真</strong>——api_server 组件洪水 (86.4%) 淹没了滑动窗口，挤掉了个数上为 zero 的旧错误项，导致 error density 惩罚和弱点数双减，从而推高了总分。</p>
+        <p>这是假突破模式的第三次迭代（假突破 3.0）：评分信息价值已几乎为零。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px; color:#888; font-size:0.9em; font-weight:500;">📈 长期评分趋势（P6→P20）</h3>
+  <table>
+    <thead>
+      <tr><th>指标</th><th style="text-align:center;">P10 06-06</th><th style="text-align:center;">P15 06-11</th><th style="text-align:center;">P18 06-14</th><th style="text-align:center;">P19 06-15</th><th style="text-align:center; color:#fb923c;">P20 06-16</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>健康度评分</td><td style="text-align:center;">70</td><td style="text-align:center;">77</td><td style="text-align:center;">77</td><td style="text-align:center;">69</td><td style="text-align:center; color:#a78bfa; font-weight:700;">77 ⚠️</td></tr>
+      <tr><td>tool_executor</td><td style="text-align:center;">116</td><td style="text-align:center;">230</td><td style="text-align:center;">288</td><td style="text-align:center;">189*</td><td style="text-align:center; color:#666;">34*</td></tr>
+      <tr><td>conversation_loop</td><td style="text-align:center;">76</td><td style="text-align:center;">148</td><td style="text-align:center;">177</td><td style="text-align:center;">116*</td><td style="text-align:center; color:#666;">21*</td></tr>
+      <tr><td>api_server</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center; color:#fb923c; font-weight:700;">168</td><td style="text-align:center; color:#ef4444; font-weight:700;">432</td></tr>
+      <tr><td>核心垄断率</td><td style="text-align:center;">~75%</td><td style="text-align:center;">94.0%</td><td style="text-align:center;">95.7%</td><td style="text-align:center;">61.5%*</td><td style="text-align:center; color:#666;">11.0%*</td></tr>
+      <tr><td>总日志条目</td><td style="text-align:center;">401</td><td style="text-align:center;">~460</td><td style="text-align:center;">486</td><td style="text-align:center;">496</td><td style="text-align:center; color:#ef4444; font-weight:700;">500</td></tr>
+      <tr><td>chat_completion_helpers</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center; color:#fb923c;">11</td></tr>
+    </tbody>
+  </table>
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">* P19-P20 的 tool_executor/conversation_loop 数值受 api_server 滑动窗口稀释影响，不可直接与前几期对比。实际错误量并未下降，只是被新错误源挤出 500 行窗口。</p>
+  </div>
+  <div class="alert-warn" style="margin-top:16px;">
+    <h3>메评分公式失效声明（假突破 3.0）</h3>
+    <p>在本期（P20）中，健康度评分 <strong>77</strong> 完全失去了参考价值。原因是：</p>
+    <ul>
+      <li><strong>86.4% 的日志被单个配置错误（api_server）占据</strong>——修复该配置即可瞬间消除几乎全部错误日志</li>
+      <li><strong>弱点检出数降至 1 个</strong>（medium），但这是因为其他弱点（如 tool_security、model_output_quality）被 api_server 的洪水冲出了最近 500 行的滑动窗口</li>
+      <li><strong>评分从 69→77 是一个反直觉的跳升</strong>——本质是系统状态显著恶化（新增 264 条 api_server 错误行），但评分却因稀释效应反而上升了 8 分</li>
+      <li><strong>核心垄断率降至 11.0%</strong>——但这不是改善，而是 api_server (86.4%) 对旧错误的全面掩埋</li>
+    </ul>
+    <p>评分公式已连续经历三次假突破迭代（假突破 2.0 在 P14-P18，真实下突破在 P19，假突破 3.0 在 P20）。<strong>在结构性突变未恢复前，暂停评分生成，使用原始日志统计替代。</strong></p>
+  </div>
+</div>
+
+<!-- ======== 3. COMPONENT BREAKDOWN ======== -->
+<div class="section">
+  <h2>🔍 组件错误分布</h2>
+  <div class="bar-container"><div class="bar-label"><span>gateway.platforms.api_server <span class="insight-tag" style="background:rgba(239,68,68,0.2);color:#ef4444;">ACCELERATING</span></span><span>432条 (86.4%)</span></div><div class="bar"><div class="bar-fill" style="width:86.4%; background:linear-gradient(90deg,#ef4444,#dc2626);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.tool_executor</span><span>34条 (6.8%)</span></div><div class="bar"><div class="bar-fill" style="width:6.8%; background:linear-gradient(90deg,#f97316,#ea580c);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.conversation_loop</span><span>21条 (4.2%)</span></div><div class="bar"><div class="bar-fill" style="width:4.2%; background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.chat_completion_helpers <span class="insight-tag" style="background:rgba(59,130,246,0.2);color:#60a5fa;">NEW</span></span><span>11条 (2.2%)</span></div><div class="bar"><div class="bar-fill" style="width:2.2%; background:linear-gradient(90deg,#60a5fa,#3b82f6);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>cron.scheduler</span><span>2条 (0.4%)</span></div><div class="bar"><div class="bar-fill" style="width:0.4%; background:#555;"></div></div></div>
+
+  <div class="alert" style="margin-top:16px; border-color:rgba(239,68,68,0.4);">
+    <h3>🔥 🚨 危机升级：api_server 加速占领</h3>
+    <p>P19 首次出现的 <strong>api_server 拒绝启动</strong> 错误在 P20 从 168 条飙升至 432 条（+157%），占比从 33.9% 扩张到 86.4%。问题的根源是一个配置缺陷——API server 每 ~5 分钟尝试启动一次并失败，已持续运行超过 37.5 小时。</p>
+    <ul>
+      <li><strong>时间跨度的证据：</strong>首个 api_server 错误出现在 06-14 19:25 UTC，最近一条在 06-16 09:04 UTC（扫描时间）——连续无中断运行 37.5 小时</li>
+      <li><strong>发生频率：</strong>~12 次/小时（每 5 分钟一次），稳定可预测</li>
+      <li><strong>真实影响评估：</strong>虽然日志量大，但这是<strong>配置噪声</strong>而非运行时崩溃——系统其他功能未受影响</li>
+      <li><strong>对监测系统的影响：</strong>完全淹没了滑动窗口监测能力，所有其他错误被挤出视线</li>
+    </ul>
+    <p><strong>修复建议：</strong>在 config.yaml 中配置 API_SERVER_KEY，或移除未使用的 api_server 平台配置。修复后可消除约 86.4% 的日志噪声。</p>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📊 完全日志窗口分析（tail -600）</h3>
+    <p>为了突破滑动窗口（仅最后 500 行）的限制，使用 tail -600 进行扩展分析：</p>
+    <ul>
+      <li>api_server: 457/600 (76.2%) —— 略低于 500 行窗口的 86.4%，说明窗口边缘仍有非 api_server 日志</li>
+      <li>tool_executor: 79/600 (13.2%) —— 比 500 行窗口的 34 条多，因为窗口外的早期日志记录了更多 tool_executor 错误</li>
+      <li>conversation_loop: 45/600 (7.5%) —— 同理，比 21 条多</li>
+      <li>chat_completion_helpers: 11/600 (1.8%) —— 与 500 行窗口一致</li>
+    </ul>
+    <p><strong>结论：tool_executor + conversation_loop 的真实错误量（600 行内 124 条，20.7%）远高于 500 行窗口显示的 11.0%。</strong>它们仍在持续产生错误，只是被 api_server 洪水遮蔽了。</p>
+  </div>
+</div>
+
+<!-- ======== 4. WEAKNESS ALERTS ======== -->
+<div class="section">
+  <h2>⚠️ 弱点告警</h2>
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="value" style="color:#22c55e;">0</div>
+      <div class="label">High 严重度</div>
+      <div class="change flat">无高风险弱点</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#fb923c;">1</div>
+      <div class="label">Medium 严重度</div>
+      <div class="change flat">外部网络失败</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#a78bfa;">0</div>
+      <div class="label">Low 严重度</div>
+      <div class="change flat">无低频弱点</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>领域</th><th>严重度</th><th>描述</th><th>证据数</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🌐 network_access</td>
+        <td><span class="sev-medium">Medium</span></td>
+        <td>外部网络连接失败 11 次（Polymarket 等 API 被 GFW 阻断 / TokenHub API 超时），备选数据源可能受影响</td>
+        <td>11</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>⚠️ 弱点检出率下降是假象</h3>
+    <p>P19 检出 3 个弱点（2 medium + 1 low），P20 仅 1 个 medium。但这并非系统改善——<strong>tool_security 和 model_output_quality 弱点相关证据（16 条）被 api_server 洪水挤出了 500 行滑动窗口</strong>。真实的系统弱点数量并未减少。</p>
+  </div>
+</div>
+
+<!-- ======== 5. TOP RECURRING ERRORS ======== -->
+<div class="section">
+  <h2>🔁 高频错误签名</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>错误签名 (截断)</th><th>计数</th><th>占比</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>[Api_Server] Refusing to start: API_SERVER_KEY is required</td><td style="color:#ef4444;font-weight:700;">432</td><td>86.4%</td></tr>
+      <tr><td>2</td><td>Stream stale for 180s — no chunks received (deepseek-v4-flash)</td><td>11</td><td>2.2%</td></tr>
+      <tr><td>3</td><td>Tool terminal returned error (0.05s) exit_code=-1</td><td>11</td><td>2.2%</td></tr>
+      <tr><td>4</td><td>Tool terminal returned error (0.09s) exit_code=-1</td><td>9</td><td>1.8%</td></tr>
+      <tr><td>5</td><td>API call failed (attempt 1/3) APIConnectionError</td><td>7</td><td>1.4%</td></tr>
+      <tr><td>6</td><td>API call failed (attempt 2/3) APIConnectionError</td><td>3</td><td>0.6%</td></tr>
+      <tr><td>7</td><td>Tool terminal returned error (0.10s) exit_code=-1</td><td>2</td><td>0.4%</td></tr>
+      <tr><td>8</td><td>Job 'a077650b277d': platform 'weixin' not configured/enabled</td><td>2</td><td>0.4%</td></tr>
+    </tbody>
+  </table>
+  
+  <div class="alert-warn" style="margin-top:16px;">
+    <h3>📌 关键变化 vs P19</h3>
+    <ul>
+      <li><strong>#1 api_server 加速：</strong>从 P19 的 168 条（33.9%）→ P20 的 432 条（86.4%），+157% 增幅。连续第二轮稳居头号错误。完全垄断日志窗口。</li>
+      <li><strong>#2-4 terminal 错误集群：</strong>合计 22 条（4.4%），较 P19 的 103 条（20.8%）大幅缩减——但这是稀释效应，非真实改善。</li>
+      <li><strong>API 错误模式转换：</strong>从 P19 的 APITimeoutError + RateLimitError 变为 P20 的 APIConnectionError（10 条）。错误类型的变化提示 TokenHub 提供商的连接性模式在变化——超时→完全断开。</li>
+      <li><strong>Weixin 噪声：</strong>降至仅 2 条（从 P19 的 8 条），改善轨持续清零。</li>
+      <li><strong>chat_completion_helpers：</strong>首次上榜，11 条 stream stale 事件（2.2%）。这些是 conversation_loop 的超时报错前缀，标志着 API 超时正在增加。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 6. DAILY COUNT ANALYSIS ======== -->
+<div class="section">
+  <h2>📆 每日错误计数</h2>
+  <div class="grid-2">
+    <div>
+      <table>
+        <thead><tr><th>日期</th><th>计数</th><th>变化</th><th>趋势</th></tr></thead>
+        <tbody>
+          <tr><td>06-14 (Sun)</td><td>35</td><td class="flat">—</td><td>—</td></tr>
+          <tr><td>06-15 (Mon)</td><td style="color:#ef4444;font-weight:700;">330</td><td class="up">+843%</td><td style="color:#ef4444;">↗️↗️</td></tr>
+          <tr><td>06-16 (Tue)</td><td>135</td><td class="up">— (进行中)</td><td style="color:#fb923c;">↗️ (截至09:06)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="alert" style="border-color:rgba(239,68,68,0.4);">
+        <h3>📊 06-15 全日：重构后的首个完整天</h3>
+        <p><strong>P19 预测验证：</strong>预计 06-15 全日 280-350 条。实际：<strong>330 条 ✓</strong>（完全在预测区间内）。</p>
+        <ul>
+          <li>06-15 全日 330 条中，api_server 约占 ~288 条（5 分钟/次 × 24 小时）</li>
+          <li>非 api_server 错误：~42 条（与 06-09 的 27 条基线基本吻合）</li>
+          <li>06-16 上午 09:06 已达 135 条，全天预计 ~280-300 条</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-success" style="margin-top:12px;">
+    <h3>📏 预测精度验证 —— P19 预测 P20</h3>
+    <table>
+      <thead><tr><th>预测指标</th><th style="text-align:center;">P19 预测值</th><th style="text-align:center;">P20 实际值</th><th style="text-align:center;">偏差</th><th style="text-align:center;">结果</th></tr></thead>
+      <tbody>
+        <tr><td>总日志条目</td><td style="text-align:center;">~500（滑动窗口上限）</td><td style="text-align:center;">500</td><td style="text-align:center;">0</td><td style="text-align:center; color:#22c55e;">✓</td></tr>
+        <tr><td>06-15 全日计数</td><td style="text-align:center;">280-350</td><td style="text-align:center;">330</td><td style="text-align:center;">+0 (~5.7%)</td><td style="text-align:center; color:#22c55e;">✓ 精确</td></tr>
+        <tr><td>api_server 持续加速</td><td style="text-align:center;">定性: 新组件观测期</td><td style="text-align:center;">432 (86.4%)</td><td style="text-align:center;">+264 vs P19</td><td style="text-align:center; color:#ef4444;">✓ 确认加速</td></tr>
+        <tr><td>tool_executor / conv_loop</td><td style="text-align:center;">数据不可比（结构变化）</td><td style="text-align:center;">34 / 21（稀释）</td><td style="text-align:center;">N/A</td><td style="text-align:center; color:#fb923c;">≈ 确认稀释</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======== 7. API SERVER CRISIS DEEP DIVE ======== -->
+<div class="section">
+  <h2>🚨 专题：Api_Server 配置危机 · 第 2 季</h2>
+  <div class="alert" style="border-color:rgba(239,68,68,0.4);">
+    <h3>连续 37.5 小时、仍未修复</h3>
+    <p><strong>gateway.platforms.api_server</strong> 自 P19 首次出现（168条，33.9%）以来，在 P20 <strong>翻了 2.57 倍</strong>，达到 <strong>432 条（86.4%）</strong>。该问题自 06-14 19:25 UTC 起持续运行，截至 06-16 09:04 UTC 已连续产生错误超过 37.5 小时。</p>
+    <p>错误签名: <code style="background:#1a1a35;padding:2px 8px;border-radius:4px;color:#fb923c;">[Api_Server] Refusing to start: API_SERVER_KEY is required for the API server, including loopback-only binds on 127.0.0.1.</code></p>
+    <p style="margin-top:12px; color:#fbbf24; font-size:1.05em;"><strong>关键问题：</strong>若此错误不被修复，明日（P21）预计 api_server 将贡献约 460-500 条错误（24 小时 × 12 次/小时 = 288 + 今日剩余 = 460+），几乎填满整个 500 行滑动窗口。</p>
+    
+    <h3 style="margin-top:16px; color:#aaa; font-size:0.95em;">🕐 37.5 小时时间线</h3>
+    <table>
+      <thead><tr><th>时间段</th><th>api_server 新增</th><th>累计</th><th>其他错误</th></tr></thead>
+      <tbody>
+        <tr><td>06-14 19:25 ~ 23:59 (4.5h)</td><td style="color:#fb923c;">~54</td><td>54</td><td style="color:#888;">~10</td></tr>
+        <tr><td>06-15 全日 (24h)</td><td style="color:#ef4444;font-weight:700;">~288</td><td>342</td><td style="color:#888;">~42</td></tr>
+        <tr><td>06-16 00:00 ~ 09:04 (9h)</td><td style="color:#ef4444;">~108</td><td style="color:#ef4444;font-weight:700;">450</td><td style="color:#888;">~27</td></tr>
+        <tr><td style="color:#888;">06-16 全日推估</td><td style="color:#fb923c;">~288</td><td style="color:#fb923c;">~630</td><td style="color:#888;">~70</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======== 8. DUAL TRACK ANALYSIS ======== -->
+<div class="section">
+  <h2>🛤️ 双轨分析（结构性突变版）</h2>
+  <div class="alert-warn" style="border-color:rgba(251,146,60,0.3);">
+    <h3>改善轨 vs 恶化轨 — P20 分析</h3>
+    <p>在结构性突变（api_server 洪水）的背景下，双轨分析框架需要进行重大调整：</p>
+  </div>
+
+  <table>
+    <thead><tr><th>维度</th><th style="text-align:center;">P19</th><th style="text-align:center;">P20</th><th style="text-align:center;">变化</th></tr></thead>
+    <tbody>
+      <tr><td>Api Server 配置错误</td><td style="text-align:center; color:#fb923c;">168 (33.9%)</td><td style="text-align:center; color:#ef4444; font-weight:700;">432 (86.4%)</td><td style="text-align:center; color:#ef4444;">+157%</td></tr>
+      <tr><td>改善轨（Weixin, gateway.run, others）</td><td style="text-align:center; color:#22c55e;">13 (2.6%)</td><td style="text-align:center; color:#22c55e;">2 (0.4%)</td><td style="text-align:center; color:#22c55e;">-84.6%</td></tr>
+      <tr><td>恶化轨（tool_executor + conv_loop + helpers）</td><td style="text-align:center;">305（合并）</td><td style="text-align:center;">66（稀释）</td><td style="text-align:center; color:#666;">N/A（稀释）</td></tr>
+      <tr><td>净对冲系数</td><td style="text-align:center; color:#ef4444;">∞（改善清零）</td><td style="text-align:center; color:#666;">N/A</td><td style="text-align:center; color:#888;">框架失效</td></tr>
+      <tr><td>核心垄断率</td><td style="text-align:center; color:#fb923c;">61.5%*</td><td style="text-align:center; color:#666;">11.0%*</td><td style="text-align:center; color:#888;">稀释失准</td></tr>
+    </tbody>
+  </table>
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📌 双轨分析框架暂停声明</h3>
+    <p>自 P19 结构性突变以来，双轨分析（改善轨 vs 恶化轨）的核心指标如净对冲系数和核心垄断率因 api_server 的滑动窗口稀释效应而全面失准。在 api_server 修复前：</p>
+    <ul>
+      <li>净对冲系数：无数学定义（改善减量 ≈ 0，恶化增量被 api_server 淹没）</li>
+      <li>核心垄断率：从 95.7% → 61.5% → 11.0% 的表面下降是虚假的</li>
+      <li><strong>唯一可靠的指标：每日总日志计数 + api_server 的绝对运行时长</strong></li>
+    </ul>
+    <p>修复 api_server 后，将重新校准双轨分析框架，届时核心组件（tool_executor + conversation_loop）的真实走势才能被重新观测。</p>
+  </div>
+</div>
+
+<!-- ======== 9. PREDICTION MODEL STATUS ======== -->
+<div class="section">
+  <h2>🔮 预测模型状态</h2>
+  <div class="alert-warn">
+    <h3>📋 结构性突变 → 观测期第 2 期</h3>
+    <p>自 P19（06-15）声明结构性突变以来，已进入第 2 期观测期。预测模型状态：</p>
+    <ul>
+      <li><strong>趋势性预测：暂停</strong> —— 此前连续 2 期偏差 <10% 的升级进程因结构性突变而中止</li>
+      <li><strong>短期预测（每日计数）：有效</strong> —— P19 预测 06-15 全日 280-350，实际 330 ✓</li>
+      <li><strong>中期预测（组件趋势）：需等待 api_server 修复</strong></li>
+    </ul>
+    <p style="margin-top:8px; color:#fbbf24;"><strong>预测修正：</strong>假设 api_server 在新的一期仍未被修复，P21 将看到：</p>
+    <ul>
+      <li>api_server 占比继续攀升至 >90%（窗口内剩余空间有限）</li>
+      <li>每日总日志计数稳定在 500（滑动窗口上限）</li>
+      <li>tool_executor 和 conversation_loop 数据将进一步稀释至 <5%</li>
+    </ul>
+    <p>如果 api_server 在 P21 期间被修复：</p>
+    <ul>
+      <li>滑动窗口将迅速恢复为仅包含 tool_executor + conversation_loop + chat_completion_helpers</li>
+      <li>核心垄断率将反弹至 90%+</li>
+      <li>双轨分析和健康度评分将重新生效</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 10. KNOWLEDGE FEED ======== -->
+<div class="section">
+  <h2>🔬 外部知识摄取</h2>
+  <div class="grid-2">
+    <div>
+      <div class="alert-warn">
+        <h3>📄 arXiv — 不可用</h3>
+        <p>arXiv API 本期返回失败（0 篇），延续间歇性不可用模式。整体成功率维持约 37.5%。</p>
+      </div>
+    </div>
+    <div>
+      <div class="alert-success">
+        <h3>🔥 Hacker News — 10 条头条</h3>
+        <p>今日 HN 头条已成功获取（10 条）。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px; color:#888; font-size:0.9em; font-weight:500;">📰 Hacker News 头条</h3>
+  <table>
+    <thead><tr><th>#</th><th>标题</th><th>得分</th><th>评论</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>A backdoor in a LinkedIn job offer</td><td style="color:#fbbf24;">635</td><td>129</td></tr>
+      <tr><td>2</td><td>Ask HN: Has anyone replaced Claude/GPT with a local model for daily coding?</td><td style="color:#fbbf24;">646</td><td>324</td></tr>
+      <tr><td>3</td><td>TinyWind: A pixel pirate sailing game with real wind physics</td><td style="color:#fbbf24;">579</td><td>119</td></tr>
+      <tr><td>4</td><td>Iroh 1.0</td><td style="color:#fbbf24;">916</td><td>281</td></tr>
+      <tr><td>5</td><td>My Homelab AI Dev Platform</td><td>230</td><td>46</td></tr>
+      <tr><td>6</td><td>US battery manufacturing output continues to break records</td><td>147</td><td>119</td></tr>
+      <tr><td>7</td><td>I Love the Computer</td><td>128</td><td>81</td></tr>
+      <tr><td>8</td><td>Banned Book Library in a Wi-Fi Smart Light Bulb</td><td>124</td><td>24</td></tr>
+      <tr><td>9</td><td>Peopleless economy? Not technically impossible</td><td>77</td><td>128</td></tr>
+      <tr><td>10</td><td>Why I email complete strangers</td><td>62</td><td>33</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert-info" style="margin-top:16px;">
+    <h3>📌 值得关注的 HN 话题</h3>
+    <ul>
+      <li><strong>🤖 "Has anyone replaced Claude/GPT with a local model for daily coding?"</strong> (646分, 324评论) — 直接相关于 Hermes 的 LLM 推理依赖。社区在探索本地模型替代方案，值得考虑为 Hermes 配置备选本地推理后端。</li>
+      <li><strong>🛡️ "A backdoor in a LinkedIn job offer"</strong> (635分, 129评论) — 供应链安全话题，提醒关注 Hermes 的依赖安全。</li>
+      <li><strong>🔧 "My Homelab AI Dev Platform"</strong> (230分, 46评论) — 本地 AI 开发平台经验，对比 Hermes 的云依赖模式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 11. EVOLUTION SUGGESTIONS ======== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+
+  <div class="alert" style="border-color:rgba(239,68,68,0.3);">
+    <h3>🔴 紧急（本轮必须处理）</h3>
+    <ul>
+      <li><strong>1. 🚨 修复 API_SERVER_KEY 配置</strong> — 当前最大单错误源（432条，86.4%），已持续运行 37.5 小时仍未修复。修复方法：在 config.yaml 中配置 API_SERVER_KEY（即使 loopback-only 绑定也要密钥），或从配置中移除未使用的 api_server 平台段。修复后可消除 ~86.4% 的日志噪声。</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🟠 高优先级</h3>
+    <ul>
+      <li><strong>2. 恢复预测模型校准：</strong>一旦 api_server 修复，立即重建新基线。使用修复后 2-3 期的数据建立新的趋势模型。核心垄断率和双轨分析框架将重新生效。</li>
+      <li><strong>3. 评估备选 LLM 后端：</strong>HN 讨论显示"本地模型替代 GPT/Claude 进行日常编程"已成为社区热点。考虑到 TokenHub 连接性不稳定（连续多期出现），评估 Ollama / llama.cpp 等本地推理后端作为 fallback，减少对单一 provider 的依赖。</li>
+    </ul>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>🔵 观察项</h3>
+    <ul>
+      <li><strong>4. 滑动窗口监测的脆弱性暴露：</strong>单一配置错误（api_server 持续尝试启动）即可让整个 500 行错误日志监测体系失效。建议在 weakness_scan.py 中增加 <strong>异常洪水的模式识别</strong>——当单个错误签名占比 >50% 时，触发"日志洪水检测"告警，并自动统计上一个非洪水窗口的有效数据。</li>
+      <li><strong>5. 健康度评分公式修订：</strong>在结构性突变场景下，评分计算公式已连续 3 期失效。建议加入"日志多样性"维度——当单一组件占比 >70% 时，标记为"评分不可靠"状态。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<div class="footer">
+  <p>🧬 Hermes Self-Evolution Daily Brief · Period 20 · 2026-06-16</p>
+  <p>Auto-generated by cron job 9ec6cb79e14d · Pre-commit evolution check</p>
+</div>
+
+</div>
+</body>
+</html>
