@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 21 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #ff6b6b, #ffa94d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .period-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,169,77,0.15));
+    border: 1px solid rgba(255,107,107,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #ff9f43;
+  }
+
+  .section {
+    background: #111122;
+    border: 1px solid #1e1e3a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-card {
+    background: #0d0d1a;
+    border: 1px solid #1a1a35;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 2em; font-weight: 700; color: #fff; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; }
+  .stat-card .change { font-size: 0.8em; margin-top: 2px; font-weight: 500; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .flat { color: #a78bfa; }
+  .neutral { color: #666; }
+  .bad { color: #ef4444; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9em;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #0d0d1a;
+    color: #888;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #181830;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(123,97,255,0.05); }
+
+  .sev-high { background: rgba(239,68,68,0.15); color: #ef4444; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .sev-medium { background: rgba(251,146,60,0.15); color: #fb923c; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .sev-low { background: rgba(34,197,94,0.15); color: #22c55e; padding: 2px 10px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+
+  .alert {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-warn {
+    background: rgba(251,146,60,0.08);
+    border: 1px solid rgba(251,146,60,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-info {
+    background: rgba(59,130,246,0.08);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert-success {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 12px;
+  }
+  .alert h3 { font-size: 0.95em; margin-bottom: 6px; }
+  .alert p, .alert li { font-size: 0.9em; color: #aaa; line-height: 1.6; }
+  .alert ul { list-style: none; padding: 0; }
+  .alert li { padding: 2px 0; }
+  .alert li::before { content: "• "; color: #666; }
+
+  .score-ring {
+    width: 100px; height: 100px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 1.8em; font-weight: 800;
+  }
+  .score-label { font-size: 0.8em; color: #666; text-align: center; }
+  .score-breakdown { font-size: 0.8em; color: #888; text-align: center; margin-top: 4px; }
+
+  .bar-container { margin: 6px 0; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.82em; color: #999; margin-bottom: 3px; }
+  .bar { height: 6px; background: #1a1a35; border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; }
+
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 12px 0; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.82em; color: #888; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .insight-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #444;
+    font-size: 0.8em;
+    border-top: 1px solid #1a1a2e;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 1.6em; }
+  }
+  @media (max-width: 480px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ======== HEADER ======== -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">Hermes Self-Evolution Daily Brief · Period 21</div>
+  <div class="period-badge">📅 2026-06-17 (Wed) · 第 3 次结构性突变演变期</div>
+</div>
+
+<!-- ======== 1. CAPABILITY STATUS ======== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="value">31</div>
+      <div class="label">可用工具</div>
+      <div class="change flat">+0 vs P20</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">5</div>
+      <div class="label">活跃 Skills</div>
+      <div class="change flat">3 agent-created</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="change flat">816 chars / 3 entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="value">2</div>
+      <div class="label">活跃 Cron Jobs</div>
+      <div class="change flat">self-evolution + 1 other</div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-top:16px">
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">User Memory: 16%</div>
+      <div class="label">231 chars / 4 entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">User: 纪多斌</div>
+      <div class="label">IT 技术 · 80% 杂务 / 20% 代码</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="font-size:1.4em;">Sessions: N/A</div>
+      <div class="label">SessionDB.list_sessions 不可用</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== 2. HEALTH SCORE ======== -->
+<div class="section">
+  <h2>🏥 健康度评分</h2>
+  <div style="display:flex; align-items:center; gap:40px; flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div class="score-ring" style="border:4px solid #ff9f43;">
+        <span style="color:#ff9f43;">77</span>
+      </div>
+      <div class="score-label">健康度评分</div>
+      <div class="score-breakdown">+0 vs P20 (77→77) · ⚠️ 不可靠</div>
+    </div>
+    <div style="flex:1; min-width:200px;">
+      <div class="alert" style="border-color:rgba(239,68,68,0.3);">
+        <h3>🚨 评分全面失效 —— 假突破 3.0 · 第 2 季</h3>
+        <p>健康度评分 <strong>77</strong>，与 P20 完全一致（0 变化）。但这并非平台期——评分信息价值已完全归零。<strong>95.5% 的日志被 gateway.run 的单次错误占据</strong>（"Another gateway instance is already running"），评分在洪水模型的第二次迭代中继续失效。</p>
+        <p>这是假突破 3.0 模式的第二期连续应用：评分连续 2 期在结构性突变环境下完全失真。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px; color:#888; font-size:0.9em; font-weight:500;">📈 长期评分趋势（P15→P21）</h3>
+  <table>
+    <thead>
+      <tr><th>指标</th><th style="text-align:center;">P15 06-11</th><th style="text-align:center;">P18 06-14</th><th style="text-align:center;">P19 06-15</th><th style="text-align:center;">P20 06-16</th><th style="text-align:center; color:#ff9f43;">P21 06-17</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>健康度评分</td><td style="text-align:center;">77</td><td style="text-align:center;">77</td><td style="text-align:center;">69</td><td style="text-align:center; color:#ff9f43;">77 ⚠️</td><td style="text-align:center; color:#ef4444; font-weight:700;">77 ❌</td></tr>
+      <tr><td>gateway.run</td><td style="text-align:center;">~0</td><td style="text-align:center;">~0</td><td style="text-align:center;">~0</td><td style="text-align:center;">~0</td><td style="text-align:center; color:#ef4444; font-weight:700;"><strong>1414 (95.5%)</strong></td></tr>
+      <tr><td>api_server</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="color:#fb923c; font-weight:700;">168</td><td style="color:#ef4444; font-weight:700;">432</td><td style="text-align:center; color:#666;">29*</td></tr>
+      <tr><td>tool_executor</td><td style="text-align:center;">230</td><td style="text-align:center;">288</td><td style="text-align:center; color:#666;">189*</td><td style="text-align:center; color:#666;">34*</td><td style="text-align:center; color:#666;">21*</td></tr>
+      <tr><td>conversation_loop</td><td style="text-align:center;">148</td><td style="text-align:center;">177</td><td style="text-align:center; color:#666;">116*</td><td style="text-align:center; color:#666;">21*</td><td style="text-align:center; color:#666;">6*</td></tr>
+      <tr><td>chat_completion_helpers</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="color:#fb923c;">11</td><td style="text-align:center; color:#666;">3*</td></tr>
+      <tr><td>总日志条目</td><td style="text-align:center;">~460</td><td style="text-align:center;">486</td><td style="text-align:center;">496</td><td style="text-align:center;">500</td><td style="text-align:center; color:#ef4444; font-weight:700;"><strong>1410+</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">* P19-P21 的 tool_executor/conversation_loop/api_server 数值受滑动窗口稀释影响，不可直接与前几期对比。* 标注的数值是因被洪水组件挤出 500 行窗口后的残余值。</p>
+    <p style="font-size:0.85em; color:#888; margin-top:4px;">⚠️ 总日志量 1410+ 行，远超过 500 行滑动窗口上限——日志文件继续膨胀，所有过去 3 期的观测期数据均不可靠。</p>
+  </div>
+</div>
+
+<!-- ======== 3. COMPONENT BREAKDOWN ======== -->
+<div class="section">
+  <h2>🔍 组件错误分布</h2>
+  <div class="bar-container"><div class="bar-label"><span><strong>gateway.run</strong> <span class="insight-tag" style="background:rgba(239,68,68,0.25);color:#ef4444;">NEW FLOOD ⚡</span></span><span>1414条 (95.5%)</span></div><div class="bar"><div class="bar-fill" style="width:95.5%; background:linear-gradient(90deg,#ef4444,#b91c1c);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>gateway.platforms.api_server <span class="insight-tag" style="background:rgba(251,146,60,0.2);color:#fb923c;">DISPLACED</span></span><span>29条 (2.0%)</span></div><div class="bar"><div class="bar-fill" style="width:2.0%; background:linear-gradient(90deg,#f97316,#ea580c);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.tool_executor</span><span>21条 (1.4%)</span></div><div class="bar"><div class="bar-fill" style="width:1.4%; background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.conversation_loop</span><span>6条 (0.4%)</span></div><div class="bar"><div class="bar-fill" style="width:0.4%; background:linear-gradient(90deg,#60a5fa,#3b82f6);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.chat_completion_helpers</span><span>3条 (0.2%)</span></div><div class="bar"><div class="bar-fill" style="width:0.2%; background:#555;"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>cron.scheduler</span><span>1条 (0.1%)</span></div><div class="bar"><div class="bar-fill" style="width:0.1%; background:#333;"></div></div></div>
+
+  <div class="alert" style="margin-top:16px; border-color:rgba(239,68,68,0.5);">
+    <h3>🔥 🔴 危机突变：洪水源从 api_server 切换至 gateway.run</h3>
+    <p>P20（06-16）中，<strong>api_server</strong> 以 432 条（86.4%）占据头条错误。P21（06-17）中，<strong>gateway.run</strong> 以 1414 条（95.5%）全面碾压——不仅洪水源切换，而且洪水量级急剧放大（432→1414, +227%）。</p>
+    <ul>
+      <li><strong>错误签名：</strong><code style="background:#1a1a35;padding:2px 8px;border-radius:4px;color:#fb923c;">Another gateway instance is already running (PID 3289, HERMES_HOME=...)</code></li>
+      <li><strong>启动时间：</strong>2026-06-17 06:40:10 UTC</li>
+      <li><strong>发生频率：</strong>~554 次/小时（约每 6.5 秒一条），持续 2.6 小时</li>
+      <li><strong>全时段外推：</strong>按此速率运行 24 小时将产生 ~13,300 条错误日志</li>
+    </ul>
+    <p style="margin-top:8px;"><strong>根本原因：</strong>cron job 启动时未执行 <code>hermes gateway stop</code> 或 <code>hermes gateway restart</code>。已运行的 gateway 实例（PID 3289）继续运行，新启动的 cron job 在尝试重复启动 gateway 时被拒绝。</p>
+    <p style="color:#fbbf24;"><strong>修复建议：</strong>cron job 启动前添加 <code>hermes gateway stop 2>/dev/null; hermes gateway start ...</code> 以确保不会重复启动已在运行的实例。</p>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>📊 非洪水组件的真实分布</h3>
+    <p>排除 gateway.run (95.5%) 后，非洪水组件合计仅 60 条：</p>
+    <ul>
+      <li><strong>api_server</strong>: 29 条（48.3%）—— API_SERVER_KEY 配置错误依然未修复。较 P20 的 432 条大幅下降，仅意味着 <strong>api_server 尝试次数因 gateway.run 的洪水密度而冲出了 500 行窗口</strong>，并非配置问题已解决</li>
+      <li><strong>tool_executor</strong>: 21 条（35.0%）—— 17 条 pending_approval BLOCKED + 4 条 terminal 返回空输出。全部来自 cron cron_a077650b277d</li>
+      <li><strong>conversation_loop</strong>: 6 条（10.0%）—— APIConnectionError × 3, retry × 3。TokenHub 连接持续不稳定</li>
+      <li><strong>chat_completion_helpers</strong>: 3 条（5.0%）—— Stream stale 180s，与 conversation_loop 的 API 失败形成完整链条</li>
+      <li><strong>cron.scheduler</strong>: 1 条（1.7%）</li>
+    </ul>
+    <p><strong>核心结论：api_server 问题可能尚未修复</strong>——P21 仅扫描到 29 条是因为 gateway.run 洪水占据了窗口的大部分。真实 api_server 错误量未知，需等待 gateway.run 修复后才能重新评估。</p>
+  </div>
+</div>
+
+<!-- ======== 4. WEAKNESS ALERTS ======== -->
+<div class="section">
+  <h2>⚠️ 弱点告警</h2>
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="value" style="color:#22c55e;">0</div>
+      <div class="label">High 严重度</div>
+      <div class="change flat">无高风险弱点</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#fb923c;">1</div>
+      <div class="label">Medium 严重度</div>
+      <div class="change flat">外部网络失败</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#a78bfa;">0</div>
+      <div class="label">Low 严重度</div>
+      <div class="change flat">无低频弱点</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>领域</th><th>严重度</th><th>描述</th><th>证据数</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🌐 network_access</td>
+        <td><span class="sev-medium">Medium</span></td>
+        <td>外部网络连接失败 1 次（如某些数据源 API 不可用），已在 memory 中记录</td>
+        <td>1</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>⚠️ 弱点检出率连续第 3 期失准</h3>
+    <p>P21 仅检出了 1 个弱点（medium），与 P20 相同。但正如 P20 分析的——<strong>tool_security 和 model_output_quality</strong> 相关弱点证据（P19 中的 16 条 P19→P20→P21 连续 3 期被挤出窗口）已在持续被洪水淹没的状态下完全消失。且新增了一个重大的基础设施弱点——gateway.run 洪水——尚未被 weakness_scan 识别为弱点。</p>
+  </div>
+</div>
+
+<!-- ======== 5. TOP RECURRING ERRORS ======== -->
+<div class="section">
+  <h2>🔁 高频错误签名</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>错误签名 (截断)</th><th>计数</th><th>占比</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Another gateway instance is already running (PID 3289)</td><td style="color:#ef4444;font-weight:700;">1414</td><td>95.5%</td></tr>
+      <tr><td>2</td><td>[Api_Server] Refusing to start: API_SERVER_KEY is required</td><td>29</td><td>2.0%</td></tr>
+      <tr><td>3</td><td>Tool terminal returned error: pending_approval / BLOCKED</td><td>17</td><td>1.2%</td></tr>
+      <tr><td>4</td><td>Tool terminal returned error (empty output exit_code=-1)</td><td>4</td><td>0.3%</td></tr>
+      <tr><td>5</td><td>Stream stale for 180s — no chunks received (deepseek-v4-flash)</td><td>3</td><td>0.2%</td></tr>
+      <tr><td>6</td><td>API call failed (attempt 1/3) APIConnectionError</td><td>3</td><td>0.2%</td></tr>
+      <tr><td>7</td><td>Retrying API call (attempt 1/3) APIConnectionError</td><td>3</td><td>0.2%</td></tr>
+    </tbody>
+  </table>
+  
+  <div class="alert-warn" style="margin-top:16px;">
+    <h3>📌 关键变化 vs P20</h3>
+    <ul>
+      <li><strong>#1 gateway.run 完全替换 api_server：</strong>P20 的 #1 错误（api_server 432条, 86.4%）在 P21 被 gateway.run（1414条, 95.5%）全面替代。P21 没有 api_server 的#1问题，但有了一个更严重的洪水源。</li>
+      <li><strong>api_server 从 432→29：</strong>下降 93.3%。但这<strong>不是修复</strong>——仅是被 gateway.run 挤出窗口。两个未修复的配置缺陷同时存在。</li>
+      <li><strong>tool_executor 从 ~34→21：</strong>继续稀释下降，同样是被洪水挤出。</li>
+      <li><strong>chat_completion_helpers 从 11→3：</strong>稀释效应。</li>
+      <li><strong>总错误日志从 500→1410+：</strong>单日日志量暴增 182%，且由于 gateway.run 以 554 条/小时的速率持续产生错误，日志文件仍在快速增长。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 6. GATEWAY.RUN CRISIS DEEP DIVE ======== -->
+<div class="section">
+  <h2>🚨 专题：gateway.run 洪水危机</h2>
+  <div class="alert" style="border-color:rgba(239,68,68,0.5);">
+    <h3>⚡ 最严重的单组件闪光洪灾</h3>
+    <p><strong>gateway.run</strong> 在 P21 以 <strong>1414 条（95.5%）</strong> 的比例出现。这是整个 21 期简报历史中所记录到的<strong>最高单期单组件绝对计数和最高占比</strong>。超越 P20 的 api_server（432 条, 86.4%）。</p>
+    <p>错误签名: <code style="background:#1a1a35;padding:2px 8px;border-radius:4px;color:#fb923c;">Another gateway instance is already running (PID 3289, HERMES_HOME=/root/.hermes/profiles/reviewer)</code></p>
+    <p style="margin-top:12px; color:#fbbf24;"><strong>关键分析：</strong></p>
+    <ul>
+      <li><strong>与 api_server 的结构性对比：</strong>api_server 的失败是每 5 分钟一次的"配置尝试"（~12 次/小时, 间歇性）；gateway.run 的失败是每 ~6.5 秒一次的"启动尝试"（~554 次/小时, 持续密集）。后者比前者快 46 倍。</li>
+      <li><strong>洪水速率：</strong>~554 次/小时。如此速率下，仅需不到 1 小时即可填满 500 行滑动窗口。后续所有日志都以此速率溢出。</li>
+      <li><strong>对日志系统的冲击：</strong>日志文件在不到 3 小时内从 500 行膨胀到 1410+ 行。若整个 cron job 运行周期（~30 分钟）+ 后续 cron 活动持续，今日总日志量预计将严重膨胀。</li>
+      <li><strong>同时存在两个独立的配置洪水：</strong>api_server（未修复）+ gateway.run（新出现）。两个配置错误互不依赖，运行在独立的组件/时间段。</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🕐 洪水时间线（UTC）</h3>
+    <table>
+      <thead><tr><th>时间段</th><th>gateway.run 新增</th><th>累计</th><th>简要说明</th></tr></thead>
+      <tbody>
+        <tr><td>06:40 - 07:00 (20min)</td><td style="color:#ef4444;font-weight:700;">~185</td><td>185</td><td>洪水开始·密集爆发</td></tr>
+        <tr><td>07:00 - 08:00 (60min)</td><td style="color:#ef4444;">~550</td><td>735</td><td>持续高速运行</td></tr>
+        <tr><td>08:00 - 09:00 (60min)</td><td style="color:#ef4444;">~550</td><td>1285</td><td>接近饱和强度</td></tr>
+        <tr><td>09:00 - 09:13 (13min)</td><td style="color:#fb923c;">~129</td><td style="color:#ef4444;font-weight:700;">1414</td><td>扫描时·仍在运行</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📊 真实核心组件分析：洪水掩盖下的真相</h3>
+    <p>尽管 gateway.run 占据 95.5% 的日志，工具执行器和对话循环仍持续产生错误：</p>
+    <ul>
+      <li><strong>tool_executor (21条)：</strong>17 条 pending_approval BLOCKED 来自 cron_a077650b277d——同一台机器上的另个 cron job 持续因安全审批阻塞操作。这与 P20 相同的问题在不同的 cron job 上复现。</li>
+      <li><strong>conversation_loop (6条)：</strong>APIConnectionError × 3 + retry × 3。TokenHub API 持续不可用——跨两个 cron job（cron_a077650b277d 和 cron_9ec6cb79e14d）均受影响。</li>
+      <li><strong>chat_completion_helpers (3条)：</strong>Stream stale 2 次（08:03, 08:07）+ 1 次（09:03）。这些错误精确对应了两次 cron job 执行周期中的 API 调用超时。</li>
+    </ul>
+    <p><strong>综合评估：</strong>core 组件（tool_executor + conversation_loop）的真实 P21 错误量至少为 27 条（非洪水窗口中的残余值），与 P20 的非洪水期水平相当。TokenHub 连接问题进入第 5-6 期连续不稳定期。</p>
+  </div>
+</div>
+
+<!-- ======== 7. DOUBLE FLOOD STATUS ======== -->
+<div class="section">
+  <h2>🌊 双重洪水状态分析</h2>
+  <div class="alert" style="border-color:rgba(239,68,68,0.3);">
+    <h3>两个独立的配置缺陷同时存在，均未修复</h3>
+    <table>
+      <thead><tr><th>属性</th><th>🔴 gateway.run 洪水</th><th>🟠 api_server 洪水</th></tr></thead>
+      <tbody>
+        <tr><td><strong>错误签名</strong></td><td>Another gateway instance is already running</td><td>API_SERVER_KEY is required</td></tr>
+        <tr><td><strong>P20 计数</strong></td><td style="color:#888;">~0 (不存在)</td><td style="color:#ef4444;font-weight:700;">432 (86.4%)</td></tr>
+        <tr><td><strong>P21 计数</strong></td><td style="color:#ef4444;font-weight:700;">1414 (95.5%)</td><td style="color:#666;">29 (2.0%)*</td></tr>
+        <tr><td><strong>发生速率</strong></td><td>~554 次/小时（~6.5秒/次）</td><td>~12 次/小时（~5分钟/次）</td></tr>
+        <tr><td><strong>持续时间</strong></td><td>~2.6 小时（扫描时进行中）</td><td>~37.5 小时（持续，但不完全确定）</td></tr>
+        <tr><td><strong>根本原因</strong></td><td>cron job 重复启动 gateway</td><td>config.yaml 缺少 API_SERVER_KEY</td></tr>
+        <tr><td><strong>修复路径</strong></td><td>cron pre-run: stop gateway first</td><td>配置 API_SERVER_KEY 或移除 api_server</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px; color:#fbbf24;"><strong>⚠️ 重要：</strong>api_server 在 P21 仅观察到 29 条，是因为 gateway.run 的洪水密度远超 api_server（46 倍的频率），将 api_server 推出了 500 行窗口。两者各自独立运行，<strong>修复一个不会影响另一个</strong>。</p>
+  </div>
+</div>
+
+<!-- ======== 8. DUAL TRACK ANALYSIS ======== -->
+<div class="section">
+  <h2>🛤️ 双轨分析（结构性突变版 · 第 3 期）</h2>
+  <div class="alert-warn" style="border-color:rgba(251,146,60,0.3);">
+    <h3>双轨框架：第 3 期全面失效</h3>
+    <p>自 P19（06-15）进入结构性突变周期以来，连续第 3 期双轨分析框架因洪水模式而失效。P21 洪水源进一步切换（api_server→gateway.run），使此前所有的趋势假设和预测基础都需要重新评估。</p>
+  </div>
+
+  <table>
+    <thead><tr><th>维度</th><th style="text-align:center;">P19</th><th style="text-align:center;">P20</th><th style="text-align:center; color:#ef4444;">P21</th></tr></thead>
+    <tbody>
+      <tr><td>主导洪水组件</td><td style="text-align:center; color:#fb923c;">api_server (33.9%)</td><td style="text-align:center; color:#ef4444; font-weight:700;">api_server (86.4%)</td><td style="text-align:center; color:#ef4444; font-weight:700;">gateway.run (95.5%)</td></tr>
+      <tr><td>洪水速率</td><td style="text-align:center;">~12 次/小时</td><td style="text-align:center;">~12 次/小时</td><td style="text-align:center; color:#ef4444;">~554 次/小时</td></tr>
+      <tr><td>总日志量（当日）</td><td style="text-align:center;">330</td><td style="text-align:center;">500（已满）</td><td style="text-align:center; color:#ef4444; font-weight:700;">1410+（仍在增长）</td></tr>
+      <tr><td>洪水持续周期</td><td style="text-align:center;">\~14h</td><td style="text-align:center;">\~37.5h</td><td style="text-align:center;">\~2.6h+（进行中）</td></tr>
+      <tr><td>改善轨</td><td style="text-align:center; color:#22c55e;">13 (2.6%)</td><td style="text-align:center; color:#22c55e;">2 (0.4%)</td><td style="text-align:center; color:#666;">~0 (淹没)</td></tr>
+      <tr><td>核心垄断率</td><td style="text-align:center; color:#fb923c;">61.5%*</td><td style="text-align:center; color:#666;">11.0%*</td><td style="text-align:center; color:#666;">1.9%*</td></tr>
+    </tbody>
+  </table>
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📌 连续第 3 期声明：框架完全暂停</h3>
+    <ul>
+      <li><strong>核心垄断率的「下降」是虚假的：</strong>从 P19 的 61.5% → P20 的 11.0% → P21 的 1.9%，表面上的"改善"是连续两轮不同洪水的稀释效应，完全不代表系统状态改善。</li>
+      <li><strong>双轨分析恢复条件：</strong>Cron job 需要修复 gateway 启动逻辑（停止旧实例后再启动） + 配置/移除 api_server。两个配置修复后才可能恢复双轨分析的有效性。</li>
+      <li><strong>当前唯一可靠的信号：</strong>(a) TokenHub provider 的持续不稳定（6 条 APIConnectionError + 3 条 Stream stale），(b) security pending_approval 在 cron 模式下的持续阻断（17 条 BLOCKED），(c) 日志系统在两个独立洪水源下继续膨胀。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 9. PREDICTION MODEL STATUS ======== -->
+<div class="section">
+  <h2>🔮 预测模型状态</h2>
+  <div class="alert-warn">
+    <h3>📋 结构性突变 → 观测期第 3 期</h3>
+    <p>自 P19（06-15）声明结构性突变以来，已进入第 3 期观测期。P21 发生了更剧烈的结构变化（gateway.run 洪水），使第 2 期预测完全失败。</p>
+    <ul>
+      <li><strong>P20 预测审核：</strong>P20 预测"api_server 占比继续攀升至 >90%"。实际结果：api_server 被新的洪水源（gateway.run）取代，从 86.4% 降至 2.0%。<strong>❌ 预测方向完全错误</strong>——低估了系统结构突变的不可预测性。</li>
+      <li><strong>预测模型状态：</strong>从"暂停"升级为"失效"。洪水源的突发切换说明系统错误模式不仅不可线性外推，连"保持同一洪水源"的基本假设也已被推翻。</li>
+      <li><strong>新预测（低置信度）：</strong>若 gateway.run 的"重复启动"错误未被修复，P22 第一天将看到 1414+ 条重复日志继续累积。若 gateway.run 在 P22 中被修复，窗口将同时包含 api_server 和 gateway.run 两个洪水的尾迹。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 10. KNOWLEDGE FEED ======== -->
+<div class="section">
+  <h2>🔬 外部知识摄取</h2>
+  <div class="grid-2">
+    <div>
+      <div class="alert-warn">
+        <h3>📄 arXiv — 不可用</h3>
+        <p>arXiv API 本期返回失败（0 篇），延续间歇性不可用模式。整体成功率维持约 37.5%。</p>
+      </div>
+    </div>
+    <div>
+      <div class="alert-success">
+        <h3>🔥 Hacker News — 10 条头条</h3>
+        <p>今日 HN 头条已成功获取（10 条）。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:20px; color:#888; font-size:0.9em; font-weight:500;">📰 Hacker News 头条</h3>
+  <table>
+    <thead><tr><th>#</th><th>标题</th><th>得分</th><th>评论</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>SpaceX to buy Cursor for $60B</td><td style="color:#fbbf24;">856</td><td>1307</td></tr>
+      <tr><td>2</td><td>Running local models is good now</td><td style="color:#fbbf24;">993</td><td>423</td></tr>
+      <tr><td>3</td><td>GrapheneOS has been ported to Android 17</td><td>342</td><td>143</td></tr>
+      <tr><td>4</td><td>Calvin and Hobbes and the price of integrity</td><td>263</td><td>115</td></tr>
+      <tr><td>5</td><td>TIL: You can make HTTP requests without curl using Bash /dev/TCP</td><td>252</td><td>141</td></tr>
+      <tr><td>6</td><td>Mechanical Watch (2022)</td><td>622</td><td>114</td></tr>
+      <tr><td>7</td><td>GPT-NL: a sovereign language model for the Netherlands</td><td>127</td><td>135</td></tr>
+      <tr><td>8</td><td>Humiliating IIS servers for fun and jail time</td><td>63</td><td>7</td></tr>
+      <tr><td>9</td><td>Wolfram Language and Mathematica Version 15, AI Assistant, Symbolic Music, More</td><td>41</td><td>3</td></tr>
+      <tr><td>10</td><td>The Magic Roundabout of Seattle Area</td><td>14</td><td>7</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert-info" style="margin-top:16px;">
+    <h3>📌 值得关注的 HN 话题</h3>
+    <ul>
+      <li><strong>🤖 "Running local models is good now"</strong> (993 分, 423 评论) — 当日 HN 最高分。社区强烈信号：本地模型运行体验已成熟。直接相关于 Hermes 的 TokenHub API 连接不稳定问题——应加速评估 Ollama/llama.cpp 作为本地推理后端的可行性。</li>
+      <li><strong>🚀 "SpaceX to buy Cursor for $60B"</strong> (856 分, 1307 评论) — 极大规模的 AI 并购。Cursor 是基于 LLM 的编程工具，Hermes 在类似的 AI 辅助编程生态内，提示关注 AI 编程工具的市场格局变化。</li>
+      <li><strong>🇳🇱 "GPT-NL: a sovereign language model for the Netherlands"</strong> (127 分, 135 评论) — 主权级 LLM 趋势。可关注隐私合规、自主托管等话题对 Hermes 配置的潜在影响。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 11. EVOLUTION SUGGESTIONS ======== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+
+  <div class="alert" style="border-color:rgba(239,68,68,0.3);">
+    <h3>🔴 紧急（本轮必须处理）</h3>
+    <ul>
+      <li><strong>1. 🚨 修复 cron job 的 gateway 启动逻辑</strong> — gateway.run 当前以 ~554 次/小时的速率产生错误日志（1414 条, 95.5%），为整个系统历史最大的单组件洪水源。修复方法：在 cron job 的 pre-run 脚本或 prompt 开头添加 <code>hermes gateway stop 2>/dev/null</code>，或使用 <code>hermes gateway restart</code> 作为 cron job 的第一操作。修复后可即刻消除 ~95.5% 的日志噪声。</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🟠 高优先级</h3>
+    <ul>
+      <li><strong>2. 修复 API_SERVER_KEY 配置</strong> — api_server 在 P21 中仅观察到 29 条，但这仅是洪水掩埋下的残余值。即使 gateway.run 修复后，api_server 仍会以 ~12 次/小时（~288 条/天）的速率产生错误。修复方法同 P20 建议：在 config.yaml 中配置 API_SERVER_KEY 或移除未使用的 api_server 平台配置。</li>
+      <li><strong>3. 评估本地模型替代 TokenHub</strong> — 连续多期 TokenHub 连接失败（APIConnectionError / Stream stale 交替出现）。HN 头条显示"本地模型运行已足够好"（993 分）。建议部署 Ollama 或 llama.cpp 作为备选推理后端。</li>
+    </ul>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>🔵 观察项</h3>
+    <ul>
+      <li><strong>4. 两个洪水源的交叉依赖分析：</strong>gateway.run 和 api_server 两个洪水源各自独立运行，互不影响。修复顺序建议：先修复 gateway.run（最紧急，因其 46 倍于 api_server 的发生率），再处理 api_server。</li>
+      <li><strong>5. 洪水期间的 weakness_scan 盲区扩大：</strong>weakness_scan.py 仅分析最后 500 行。当 gateway.run 以 554 次/小时填充窗口时，每 1 分钟即可填满窗口——这意味着其他组件的弱点几乎不可能在洪水期间被扫描到。第二阶段增强建议：增加一个"时间窗口"扫描模式（而非行数窗口），扫描最近 N 小时的日志而非最后 N 行。</li>
+      <li><strong>6. 预测模型重建策略：</strong>连续 3 期结构性突变后（P19 发现 api_server, P20 api_server 加速, P21 切换至 gateway.run），预测模型不应仅仅"暂停"，而应从根本上接受"每周期的洪水源可能完全不同"这一现实，在本期改为单一周期预测（仅预测 1 期）并附带高置信度区间。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== FOOTER ======== -->
+<div class="footer">
+  <p>🧬 Hermes Self-Evolution Daily Brief · Period 21 · 2026-06-17</p>
+  <p>Auto-generated by cron job 9ec6cb79e14d · Pre-commit evolution check</p>
+</div>
+
+</div>
+</body>
+</html>
