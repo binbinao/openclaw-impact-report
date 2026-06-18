@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 22 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #ff6b6b, #ffa94d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .period-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,169,77,0.15));
+    border: 1px solid rgba(255,107,107,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #ff9f43;
+  }
+  .header .critical-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    background: rgba(239,68,68,0.2);
+    border: 1px solid #ef4444;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #ef4444;
+    font-weight: 600;
+  }
+
+  .section {
+    background: #111122;
+    border: 1px solid #1e1e3a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-card {
+    background: #0d0d1a;
+    border: 1px solid #1a1a35;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 2em; font-weight: 700; color: #fff; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; }
+  .stat-card .change { font-size: 0.8em; margin-top: 2px; font-weight: 500; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .flat { color: #a78bfa; }
+  .neutral { color: #666; }
+  .bad { color: #ef4444; }
+  .worse { color: #b91c1c; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9em;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #0d0d1a;
+    color: #888;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #0d0d1a;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .bar-container { margin-bottom: 12px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 4px; }
+  .bar { height: 24px; background: #0d0d1a; border-radius: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 12px; transition: width 0.5s; }
+
+  .alert {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .alert h3 { color: #ef4444; font-size: 1em; margin-bottom: 8px; }
+  .alert ul { padding-left: 20px; }
+  .alert li { margin-bottom: 4px; color: #ccc; font-size: 0.9em; }
+
+  .alert-warn {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 12px;
+  }
+  .alert-warn h3 { color: #fbbf24; font-size: 1em; margin-bottom: 8px; }
+
+  .alert-info {
+    background: rgba(96,165,250,0.08);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .insight-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+
+  .sev-high { color: #ef4444; font-weight: 600; }
+  .sev-medium { color: #fb923c; font-weight: 600; }
+  .sev-low { color: #a78bfa; font-weight: 600; }
+
+  .hn-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #0d0d1a;
+  }
+  .hn-item:last-child { border-bottom: none; }
+  .hn-item .title { font-weight: 500; }
+  .hn-item .title a { color: #e0e0e0; text-decoration: none; }
+  .hn-item .title a:hover { color: #60a5fa; }
+  .hn-item .meta { font-size: 0.8em; color: #666; margin-top: 4px; }
+
+  @media (max-width: 600px) {
+    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">第 22 期 · 2026-06-18 （周四）</div>
+  <div class="critical-badge">🔴 危机等级：严重 — gateway.run 洪水持续放大</div>
+  <div class="period-badge">📡 采集: 2026-06-18 09:04 UTC &nbsp;|&nbsp; ⏱ 周期: 24h</div>
+</div>
+
+<!-- ======== 1. EXECUTIVE SUMMARY ======== -->
+<div class="section">
+  <h2>🚨 执行摘要</h2>
+  <div class="alert" style="border-color: rgba(239,68,68,0.6);">
+    <h3>🔴 第 2 期洪水持续·量级放大 267%</h3>
+    <p style="color:#ccc; font-size:0.9em; margin-top:4px;">
+      P21 的 <strong>gateway.run</strong> 洪水（1,414 条, 95.5%）在 P22 量级再度放大 267% 至 <strong>5,317 条 (97.1%)</strong>。
+      日志文件已在 9 小时内膨胀至 5,474 行，全部系统性指标完全失效。
+      gateway.run 洪水已成为有史以来持续时间最长的错误模式。
+    </p>
+    <p style="color:#888; font-size:0.85em; margin-top:8px;">
+      <strong>根本原因：</strong>与 P21 相同 — cron job 未执行 <code>hermes gateway stop</code> 导致重复启动失败。
+      此现象已持续 24+ 小时，累计产生超过 6,700 条重复错误日志。
+    </p>
+  </div>
+
+  <div class="grid-3" style="margin-top:16px;">
+    <div class="stat-card">
+      <div class="value" style="color:#ef4444;">5,474</div>
+      <div class="label">总日志行数</div>
+      <div class="change up">↑ +288% vs P21</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#ef4444;">97.1%</div>
+      <div class="label">gateway.run 占比</div>
+      <div class="change up">↑ +1.6pp vs P21</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">N/A</div>
+      <div class="label">健康度评分</div>
+      <div class="change neutral">假突破 3.0 - 不可靠</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== 2. TREND TABLE ======== -->
+<div class="section">
+  <h2>📈 长期趋势对比（P15→P22）</h2>
+  <table>
+    <thead>
+      <tr><th>指标</th><th style="text-align:center;">P15 06-11</th><th style="text-align:center;">P18 06-14</th><th style="text-align:center;">P19 06-15</th><th style="text-align:center;">P20 06-16</th><th style="text-align:center;">P21 06-17</th><th style="text-align:center; color:#ff9f43; font-weight:700;">P22 06-18</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>健康度评分</td>
+        <td style="text-align:center;">77</td>
+        <td style="text-align:center;">77</td>
+        <td style="text-align:center;">69</td>
+        <td style="text-align:center; color:#ff9f43;">77 ⚠️</td>
+        <td style="text-align:center; color:#ef4444;">77 ❌</td>
+        <td style="text-align:center; color:#b91c1c; font-weight:700;">❌ 不可靠</td>
+      </tr>
+      <tr>
+        <td>gateway.run</td>
+        <td style="text-align:center;">~0</td>
+        <td style="text-align:center;">~0</td>
+        <td style="text-align:center;">~0</td>
+        <td style="text-align:center;">~0</td>
+        <td style="text-align:center; color:#ef4444; font-weight:700;"><strong>1,414</strong></td>
+        <td style="text-align:center; color:#b91c1c; font-weight:700;"><strong>5,317 ⬆⬆⬆</strong></td>
+      </tr>
+      <tr>
+        <td>api_server</td>
+        <td style="text-align:center;">—</td>
+        <td style="text-align:center;">—</td>
+        <td style="color:#fb923c; font-weight:700;">168</td>
+        <td style="color:#ef4444; font-weight:700;">432</td>
+        <td style="text-align:center; color:#666;">29*</td>
+        <td style="text-align:center; color:#666;">116*</td>
+      </tr>
+      <tr>
+        <td>tool_executor</td>
+        <td style="text-align:center;">230</td>
+        <td style="text-align:center;">288</td>
+        <td style="text-align:center; color:#666;">189*</td>
+        <td style="text-align:center; color:#666;">34*</td>
+        <td style="text-align:center; color:#666;">21*</td>
+        <td style="text-align:center; color:#666;">14*</td>
+      </tr>
+      <tr>
+        <td>conversation_loop</td>
+        <td style="text-align:center;">148</td>
+        <td style="text-align:center;">177</td>
+        <td style="text-align:center; color:#666;">116*</td>
+        <td style="text-align:center; color:#666;">21*</td>
+        <td style="text-align:center; color:#666;">6*</td>
+        <td style="text-align:center; color:#666;">2*</td>
+      </tr>
+      <tr>
+        <td>总日志条目</td>
+        <td style="text-align:center;">~460</td>
+        <td style="text-align:center;">486</td>
+        <td style="text-align:center;">496</td>
+        <td style="text-align:center;">500</td>
+        <td style="text-align:center; color:#ef4444; font-weight:700;"><strong>~1,410</strong></td>
+        <td style="text-align:center; color:#b91c1c; font-weight:700;"><strong>5,474 ⬆⬆⬆</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="alert-info">
+    <p style="font-size:0.85em; color:#888;">* 标注的数值均受到 gateway.run 洪水挤出 500 行滑动窗口的影响，不可直接与前几期对比。</p>
+    <p style="font-size:0.85em; color:#888; margin-top:4px;">⬆⬆⬆ = 该指标连续 2 期以 >200% 的环比增速恶化。</p>
+    <p style="font-size:0.85em; color:#888; margin-top:4px;">📊 预测验证：P21 预测"gateway.run 洪水继续"，今日 5,317 条确认。预测正确，但量级远超预期。</p>
+  </div>
+</div>
+
+<!-- ======== 3. COMPONENT BREAKDOWN ======== -->
+<div class="section">
+  <h2>🔍 组件错误分布</h2>
+  <div class="bar-container"><div class="bar-label"><span><strong>gateway.run</strong> <span class="insight-tag" style="background:rgba(239,68,68,0.25);color:#ef4444;">🔥 洪水持续·第2期·量级放大</span></span><span>5,317条 (97.1%)</span></div><div class="bar"><div class="bar-fill" style="width:97.1%; background:linear-gradient(90deg,#ef4444,#7f1d1d);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>gateway.platforms.api_server <span class="insight-tag" style="background:rgba(251,146,60,0.2);color:#fb923c;">未被修复</span></span><span>116条 (2.1%)</span></div><div class="bar"><div class="bar-fill" style="width:2.1%; background:linear-gradient(90deg,#f97316,#ea580c);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.tool_executor <span class="insight-tag" style="background:rgba(167,139,250,0.15);color:#a78bfa;">窗口挤出</span></span><span>~14条 (0.3%)</span></div><div class="bar"><div class="bar-fill" style="width:0.3%; background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.conversation_loop</span><span>~2条 (~0%)</span></div><div class="bar"><div class="bar-fill" style="width:0.1%; background:linear-gradient(90deg,#60a5fa,#3b82f6);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>cron.scheduler</span><span>1条 (~0%)</span></div><div class="bar"><div class="bar-fill" style="width:0.1%; background:#333;"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.chat_completion_helpers</span><span>1条 (~0%)</span></div><div class="bar"><div class="bar-fill" style="width:0.1%; background:#222;"></div></div></div>
+
+  <div class="alert" style="margin-top:16px;">
+    <h3>🔴 🔴 🔴 三阶段洪水升级：P20→P21→P22</h3>
+    <ul>
+      <li><strong>P20 (06-16):</strong> api_server 洪水 · 432 条/6h（~72条/h）</li>
+      <li><strong>P21 (06-17):</strong> 洪水源切换至 gateway.run · 1,414 条/2.6h（~554条/h）</li>
+      <li><strong>P22 (06-18):</strong> gateway.run 洪水全面加速 · 5,317 条/9h（~576条/h，持续全日）</li>
+    </ul>
+    <p style="margin-top:8px; color:#fbbf24;">
+      <strong>关键发现：</strong>P21 的 554条/h 速率在 P22 基本延续（576条/h），但持续时间从 2.6h 扩张至 9h（原因：洪水源跨越午夜边界持续运行 24h+）。如果此趋势继续，未来每天将产生 <strong>~13,800 条</strong> 日志行，日志文件将在 3 天内膨胀至 20,000+ 行。
+    </p>
+  </div>
+
+  <div class="alert-warn">
+    <h3>📊 两源并存模式（第 2 期确认）</h3>
+    <ul>
+      <li><strong>gateway.run (97.1%):</strong> 5,317 条，错误签名：<code style="background:#1a1a35;padding:2px 8px;border-radius:4px;color:#fb923c;">Another gateway instance is already running (PID 3289)</code></li>
+      <li><strong>api_server (2.1%):</strong> 116 条，全时段分布——预示着 API_SERVER_KEY 配置问题从未被修复</li>
+      <li><strong>全文件扫描确认（5,474 行）：</strong>gateway.run 占总线数的 97.1%，是单一最严重的错误源。</li>
+    </ul>
+    <p style="margin-top:8px; color:#888; font-size:0.85em;">
+      两源并存的第 2 期确认。修复优先级：gateway.run（产出率 576条/h）&gt; api_server（产出率 ~13条/h）。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 4. WEAKNESS ======== -->
+<div class="section">
+  <h2>⚠️ 弱点告警</h2>
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="value" style="color:#22c55e;">0</div>
+      <div class="label">High 严重度</div>
+      <div class="change flat">无高风险弱点</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#fb923c;">1</div>
+      <div class="label">Medium 严重度</div>
+      <div class="change flat">外部网络失败</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#a78bfa;">0</div>
+      <div class="label">Low 严重度</div>
+      <div class="change flat">无低频弱点</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>领域</th><th>严重度</th><th>描述</th><th>证据数</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🌐 network_access</td>
+        <td><span class="sev-medium">Medium</span></td>
+        <td>外部网络连接失败 1 次（某些数据源 API 不可用），已在 memory 中记录</td>
+        <td>1</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>⚠️ 弱点检出盲区 — 连续第 4 期失准</h3>
+    <p style="font-size:0.9em; color:#ccc;">
+      与 P20→P21 相同——gateway.run 洪水（97.1%）将 tool_security 和 model_output_quality
+      相关弱点证据推出了 500 行滑动窗口。P19 中的 3 个弱点已连续 4 期未被检出。
+      此为 <strong>weakness_scan 数据库结构性缺陷</strong>：尾部扫描窗口在处理洪水时完全失效。
+    </p>
+    <p style="font-size:0.85em; color:#888; margin-top:4px;">
+      <strong>建议修复：</strong>启用全日志周期扫描（扫描整个 errors.log 而非仅尾部 500 行）或者启用时间窗口扫描（最近 N 小时）。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 5. TOP ERRORS ======== -->
+<div class="section">
+  <h2>🔴 高频错误排行</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>错误签名</th><th style="text-align:right;">计数</th><th style="text-align:right;">占比</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><code style="font-size:0.85em;">Another gateway instance is already running (PID 3289, ...)</code></td>
+        <td style="text-align:right; color:#ef4444; font-weight:700;">5,317</td>
+        <td style="text-align:right; color:#ef4444;">97.1%</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><code style="font-size:0.85em;">[Api_Server] Refusing to start: API_SERVER_KEY is required</code></td>
+        <td style="text-align:right; color:#fb923c;">116</td>
+        <td style="text-align:right; color:#fb923c;">2.1%</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><code style="font-size:0.85em;">Tool terminal returned error (exit_code=-1/pending_approval)</code></td>
+        <td style="text-align:right;">~14</td>
+        <td style="text-align:right;">~0.3%</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><code style="font-size:0.85em;">Stream stale for 180s / API call failed (APIConnectionError)</code></td>
+        <td style="text-align:right;">~3</td>
+        <td style="text-align:right;">~0.1%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ======== 6. CAPABILITY STATUS ======== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">31</div>
+      <div class="label">可用 Tools</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">5</div>
+      <div class="label">活跃 Skills</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">37%</div>
+      <div class="label">Memory 占用</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="change flat">all active</div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-top:12px;">
+    <div class="stat-card">
+      <div class="value" style="color:#888;">0</div>
+      <div class="label">Stale Skills</div>
+      <div class="change flat">无垃圾</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">3</div>
+      <div class="label">Agent 自创 Skills</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">0</div>
+      <div class="label">Session DB</div>
+      <div class="change neutral">不可用</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== 7. KNOWLEDGE FEED ======== -->
+<div class="section">
+  <h2>🔬 外部知识源</h2>
+  <div class="alert-warn">
+    <h3>📄 arXiv</h3>
+    <p style="font-size:0.9em; color:#888;">
+      ❌ 获取失败（连续第 N 期间歇性故障）。故障模式：长时间不可用窗口中偶尔恢复。
+      当前成功率约 37.5%。
+    </p>
+  </div>
+
+  <h3 style="margin-top:16px; color:#888; font-size:0.9em; font-weight:500;">📰 Hacker News 头条（TOP 10）</h3>
+  <table>
+    <thead>
+      <tr><th style="width:40px;">#</th><th>标题</th><th style="width:60px; text-align:right;">得分</th><th style="width:60px; text-align:right;">评论</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Lore</strong> — 开源版本控制系统，专为可扩展性设计</td><td style="text-align:right; color:#ff9f43;">961</td><td style="text-align:right;">519</td></tr>
+      <tr><td>2</td><td><strong>GLM-5.2</strong> — Artificial Analysis 上最新开源权重模型榜首</td><td style="text-align:right; color:#ff9f43;">778</td><td style="text-align:right;">384</td></tr>
+      <tr><td>3</td><td>美方暂缓将 DeepSeek 等 100+ 公司列入黑名单</td><td style="text-align:right; color:#fb923c;">336</td><td style="text-align:right;">363</td></tr>
+      <tr><td>4</td><td>OpenAI 泄露财务文件：年亏损数十亿美元</td><td style="text-align:right; color:#fb923c;">261</td><td style="text-align:right;">178</td></tr>
+      <tr><td>5</td><td>如何在 EC2 内运行 Firecracker VM 并在 &lt;1s 启动浏览器</td><td style="text-align:right;">196</td><td style="text-align:right;">127</td></tr>
+      <tr><td>6</td><td><strong>Adam (YC W25)</strong> — 开源 AI CAD 工具</td><td style="text-align:right;">149</td><td style="text-align:right;">78</td></tr>
+      <tr><td>7</td><td>Storied Colors — 命名颜色目录</td><td style="text-align:right;">75</td><td style="text-align:right;">15</td></tr>
+      <tr><td>8</td><td>Loreline — 交互式小说创作工具</td><td style="text-align:right;">63</td><td style="text-align:right;">8</td></tr>
+      <tr><td>9</td><td>Occlupanida 分类学（面包袋标签上的寄生生物）</td><td style="text-align:right;">27</td><td style="text-align:right;">5</td></tr>
+      <tr><td>10</td><td>ChatGPT 自发生成暴力色情图像</td><td style="text-align:right;">8</td><td style="text-align:right;">2</td></tr>
+    </tbody>
+  </table>
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">
+      <strong>AI 行业重点：</strong>GLM-5.2 登上开源模型榜首（778 票），DeepSeek 面临但暂缓了美国制裁（336 票），
+      OpenAI 年亏损数十亿美元（261 票）。三者在同一天出现在 HN 头条，说明开源模型竞争格局正在急速演变。
+      Adam (YC W25, 149 票) 作为开源 AI CAD 获得了社区关注，可能对 AI 工程工作流产生影响。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 8. EVOLUTION SUGGESTIONS ======== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+
+  <div class="alert" style="border-color: rgba(239,68,68,0.5);">
+    <h3>🛑 紧急：修复 gateway.run 重复启动（优先级：P0）</h3>
+    <ul>
+      <li>cron job 启动脚本前添加 <code>hermes gateway stop 2&gt;/dev/null</code> 或 <code>hermes gateway restart</code></li>
+      <li>在 cron job 执行入口处检查 gateway PID 是否已存在，若存在则先停止</li>
+      <li>此问题已持续 第 2 期，累计产生 6,700+ 条错误日志</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🛠 建议修复：API_SERVER_KEY 配置（优先级：P1）</h3>
+    <ul>
+      <li>配置 API_SERVER_KEY 环境变量以解决 api_server 拒绝启动问题（累计 548 条错误）</li>
+      <li>还需确认 cron job a077650b277d 是否仍在使用——其 tool_executor 错误可能因该 cron job 不再运行而自然消退</li>
+    </ul>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📐 架构建议：weakness_scan 时间窗口模式（优先级：P2）</h3>
+    <ul>
+      <li>weakness_scan.py 连续 4 期在洪水期间失效。核心问题是尾部 500 行扫描策略在洪水 >70% 时完全失明。</li>
+      <li><strong>建议方案：</strong>添加全日志周期扫描（扫描整个 errors.log）或时间窗口模式（扫描最近 N 小时而非最后 N 行）。</li>
+      <li>当 top-1 组件占比 >50% 时，自动切换扫描模式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 9. FOOTER ======== -->
+<div style="text-align:center; padding:24px; color:#444; font-size:0.8em; border-top:1px solid #1a1a2e;">
+  <p>🧬 Hermes 自进化系统 · 第 22 期</p>
+  <p style="margin-top:4px;">Generated 2026-06-18 01:04 UTC · data from self_scan / weakness_scan / knowledge_ingest</p>
+  <p style="margin-top:4px; color:#555;">GitHub Pages: <a href="https://binbinao.github.io/openclaw-impact-report/" style="color:#60a5fa;">binbinao/openclaw-impact-report</a></p>
+</div>
+
+</div>
+</body>
+</html>
