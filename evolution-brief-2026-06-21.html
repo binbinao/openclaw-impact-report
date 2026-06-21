@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 25 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #ff6b6b, #ffa94d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .critical-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    background: rgba(239,68,68,0.2);
+    border: 1px solid #ef4444;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #ef4444;
+    font-weight: 600;
+  }
+  .header .event-badge {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(250,204,21,0.15), rgba(250,204,21,0.05));
+    border: 1px solid rgba(250,204,21,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #facc15;
+  }
+  .header .period-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,169,77,0.15));
+    border: 1px solid rgba(255,107,107,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #ff9f43;
+  }
+
+  .section {
+    background: #111122;
+    border: 1px solid #1e1e3a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-card {
+    background: #0d0d1a;
+    border: 1px solid #1a1a35;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 2em; font-weight: 700; color: #fff; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; }
+  .stat-card .change { font-size: 0.8em; margin-top: 2px; font-weight: 500; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .flat { color: #a78bfa; }
+  .neutral { color: #666; }
+  .bad { color: #ef4444; }
+  .worse { color: #b91c1c; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9em;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #0d0d1a;
+    color: #888;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #0d0d1a;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .bar-container { margin-bottom: 12px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 4px; }
+  .bar { height: 24px; background: #0d0d1a; border-radius: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 12px; transition: width 0.5s; }
+
+  .alert {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+  }
+  .alert h3 { color: #ef4444; font-size: 1em; margin-bottom: 8px; }
+  .alert ul { padding-left: 20px; }
+  .alert li { margin-bottom: 4px; color: #ccc; font-size: 0.9em; }
+
+  .alert-warn {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 12px;
+  }
+  .alert-warn h3 { color: #fbbf24; font-size: 1em; margin-bottom: 8px; }
+
+  .alert-info {
+    background: rgba(96,165,250,0.08);
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 12px;
+  }
+
+  .insight-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+
+  .sev-high { color: #ef4444; font-weight: 600; }
+  .sev-medium { color: #fb923c; font-weight: 600; }
+  .sev-low { color: #a78bfa; font-weight: 600; }
+
+  .hn-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #0d0d1a;
+  }
+  .hn-item:last-child { border-bottom: none; }
+  .hn-item .title { font-weight: 500; }
+  .hn-item .title a { color: #e0e0e0; text-decoration: none; }
+  .hn-item .title a:hover { color: #60a5fa; }
+  .hn-item .meta { font-size: 0.8em; color: #666; margin-top: 4px; }
+
+  .timeline {
+    position: relative;
+    padding: 16px 0;
+  }
+  .timeline-item {
+    position: relative;
+    padding: 12px 0 12px 28px;
+    border-left: 2px solid #1e1e3a;
+    margin-left: 8px;
+  }
+  .timeline-item:last-child { border-left-color: transparent; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #333;
+  }
+  .timeline-item.critical::before { background: #ef4444; }
+  .timeline-item.warning::before { background: #fbbf24; }
+  .timeline-item.info::before { background: #60a5fa; }
+  .timeline-item .tl-time { color: #555; font-size: 0.8em; font-family: 'JetBrains Mono', monospace; }
+  .timeline-item .tl-event { margin-top: 2px; color: #ccc; font-size: 0.9em; }
+
+  @media (max-width: 600px) {
+    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">第 25 期 · 2026-06-21 （周日）</div>
+  <div class="critical-badge">🔴 危机等级：严重 — gateway.run 洪水第 5 期（PID 2398093 持续）</div>
+  <div class="event-badge">📈 总文件 5,007 行 · 06-21 已产生 4,472 行</div>
+  <div class="period-badge">📡 采集: 2026-06-21 01:00 UTC &nbsp;|&nbsp; ⏱ 周期: 24h</div>
+</div>
+
+<!-- ======== 1. EXECUTIVE SUMMARY ======== -->
+<div class="section">
+  <h2>🚨 执行摘要</h2>
+  <div class="alert" style="border-color: rgba(239,68,68,0.6);">
+    <h3>🔄 第 5 期洪水持续 — 无日志轮转 · 同一 PID · 跨午夜连续运行</h3>
+    <p style="color:#ccc; font-size:0.9em; margin-top:4px;">
+      P25（06-21）关键特征：洪水源不变、PID 不变、无日志轮转，进入"纯稳态洪水"模式。
+    </p>
+    <ul style="margin-top:8px;">
+      <li><strong>PID 不变（2398093）：</strong>与 P24 的 PID 一致，P24 的 PID 重置事件后进程持续运行至第 2 天。</li>
+      <li><strong>无新日志轮转：</strong>文件从 P24 的 2,934 行增长至 5,007 行，无轮转事件。</li>
+      <li><strong>gateway.run 占比历史最高值之一：</strong>464/498（93.2%），接近 P21-P22 的 95-97% 水平。</li>
+      <li><strong>06-21 日产量 4,472 行：</strong>从午夜 00:00 到采集时间 09:09 CST，日均速率为 ~490/h。</li>
+      <li><strong>chat_completion_helpers 重现 5 条：</strong> "Stream stale for 180s" + "API call failed (APIConnectionError)"，确认 API 超时问题持续存在。</li>
+    </ul>
+  </div>
+
+  <div class="grid-3" style="margin-top:16px;">
+    <div class="stat-card">
+      <div class="value" style="color:#b91c1c;">5,007</div>
+      <div class="label">日志文件总行数</div>
+      <div class="change up" style="color:#ef4444;">↑ +71% vs P24（正常增长）</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#b91c1c;">93.2%</div>
+      <div class="label">gateway.run 占比（末500行）</div>
+      <div class="change flat">≈ −0.2pp vs P24</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">❌</div>
+      <div class="label">健康度评分</div>
+      <div class="change neutral">假突破 3.0 - 连续第 5 期不可靠</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======== 2. FLOOD TIMELINE (P21→P25) ======== -->
+<div class="section">
+  <h2>📜 gateway.run 洪水完整时间线（P21→P25）</h2>
+  <div class="timeline">
+    <div class="timeline-item critical">
+      <div class="tl-time">2026-06-17 06:40 UTC (P21)</div>
+      <div class="tl-event">🚨 PID 3289 首次启动 → 1,414 条错误（95.5%），速率 ~554/h</div>
+    </div>
+    <div class="timeline-item critical">
+      <div class="tl-time">2026-06-18 (P22)</div>
+      <div class="tl-event">跨午夜运行：PID 3289 存活至 26h+，文件达 5,474 行，速率 ~576/h</div>
+    </div>
+    <div class="timeline-item critical">
+      <div class="tl-time">2026-06-19 (P23)</div>
+      <div class="tl-event">衰减稳态：PID 3289 存活至 48h+，文件达 9,589 行（96.6%），速率 ~171/h</div>
+    </div>
+    <div class="timeline-item warning">
+      <div class="tl-time">2026-06-19~20 (P23→P24 边界)</div>
+      <div class="tl-event">🔄 日志轮转：错误日志被截断/滚动 → 2,934 行。PID 3289 全部记录被清除。</div>
+    </div>
+    <div class="timeline-item warning">
+      <div class="tl-time">2026-06-20 09:08 UTC (P24)</div>
+      <div class="tl-event">🔄 PID 更换：PID 2398093 开始产生 gateway.run 错误 → 467 条（93.4%），新周期启</div>
+    </div>
+    <div class="timeline-item info" style="border-left-color: #3b82f6;">
+      <div class="tl-time">2026-06-20 22:52 → 2026-06-21 09:19+ (P25)</div>
+      <div class="tl-event">📈 稳态运行：PID 2398093 持续运行 ~10.5h，文件增长至 5,007 行，06-21 产 4,472 行，gateway.run 93.2%</div>
+    </div>
+  </div>
+
+  <table style="margin-top:16px;">
+    <thead>
+      <tr><th>指标</th><th style="text-align:center;">P21 06-17</th><th style="text-align:center;">P22 06-18</th><th style="text-align:center;">P23 06-19</th><th style="text-align:center;">P24 06-20</th><th style="text-align:center; color:#ff9f43; font-weight:700;">P25 06-21</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>洪水源</td>
+        <td style="text-align:center;color:#ef4444;">gateway.run</td>
+        <td style="text-align:center;color:#b91c1c;">gateway.run</td>
+        <td style="text-align:center;color:#7f1d1d;">gateway.run</td>
+        <td style="text-align:center;color:#facc15;font-weight:700;">gateway.run ⚡PID重置</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">gateway.run</td>
+      </tr>
+      <tr>
+        <td>PID</td>
+        <td style="text-align:center;">3289</td>
+        <td style="text-align:center;">3289</td>
+        <td style="text-align:center;">3289</td>
+        <td style="text-align:center;color:#facc15;font-weight:700;">2398093</td>
+        <td style="text-align:center;color:#60a5fa;font-weight:700;">2398093 (同 P24)</td>
+      </tr>
+      <tr>
+        <td>gateway.run 计数</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">1,414</td>
+        <td style="text-align:center;color:#b91c1c;font-weight:700;">5,317</td>
+        <td style="text-align:center;color:#7f1d1d;font-weight:700;">9,265</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">~467*</td>
+        <td style="text-align:center;color:#b91c1c;font-weight:700;">~4,160**</td>
+      </tr>
+      <tr>
+        <td>占比</td>
+        <td style="text-align:center;color:#ef4444;">95.5%</td>
+        <td style="text-align:center;color:#b91c1c;">97.1%</td>
+        <td style="text-align:center;color:#7f1d1d;">96.6%</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">93.4%*</td>
+        <td style="text-align:center;color:#b91c1c;font-weight:700;">93.2%</td>
+      </tr>
+      <tr>
+        <td>日志文件总行数</td>
+        <td style="text-align:center;color:#ef4444;">~1,410</td>
+        <td style="text-align:center;color:#b91c1c;">5,474</td>
+        <td style="text-align:center;color:#7f1d1d;">9,589</td>
+        <td style="text-align:center;color:#22c55e;font-weight:700;">2,934 ↓轮转</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">5,007 ↑增长</td>
+      </tr>
+      <tr>
+        <td>06-21 日产量</td>
+        <td style="text-align:center;color:#888;">-</td>
+        <td style="text-align:center;color:#888;">-</td>
+        <td style="text-align:center;color:#888;">-</td>
+        <td style="text-align:center;color:#888;">-</td>
+        <td style="text-align:center;color:#ef4444;font-weight:700;">~4,472</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="alert-info">
+    <p style="font-size:0.85em; color:#888;">
+      * P24 数据基于 500 行滑动窗口（已轮转后）。<br>
+      ** P25 gateway.run 计数估算：全文件 5,007 行 × 93.2% ≈ ~4,666 条（减去约 506 条非 gateway.run 行），实际约 4,160-4,660 条。06-21 产 4,472 行，其中 gateway.run 约占 4,160 条。<br>
+      <strong>纯稳态模式确认：</strong>P25 首次出现"同一 PID + 无日志轮转 + 洪水源不变"的三稳态特征。平均产率约 490/h。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 3. COMPONENT BREAKDOWN ======== -->
+<div class="section">
+  <h2>🔍 组件错误分布（末 500 行 · 当前文件 5,007 行）</h2>
+  <div class="bar-container"><div class="bar-label"><span><strong>gateway.run</strong> <span class="insight-tag" style="background:rgba(239,68,68,0.25);color:#ef4444;">🔥 第5期 · PID 2398093</span></span><span>464条 (93.2%)</span></div><div class="bar"><div class="bar-fill" style="width:93.2%; background:linear-gradient(90deg,#ef4444,#7f1d1d);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>gateway.platforms.api_server</span><span>12条 (2.4%)</span></div><div class="bar"><div class="bar-fill" style="width:2.4%; background:linear-gradient(90deg,#f97316,#ea580c);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.conversation_loop</span><span>9条 (1.8%)</span></div><div class="bar"><div class="bar-fill" style="width:1.8%; background:linear-gradient(90deg,#60a5fa,#3b82f6);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.tool_executor</span><span>7条 (1.4%)</span></div><div class="bar"><div class="bar-fill" style="width:1.4%; background:linear-gradient(90deg,#a78bfa,#7c3aed);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>agent.chat_completion_helpers</span><span>5条 (1.0%)</span></div><div class="bar"><div class="bar-fill" style="width:1.0%; background:linear-gradient(90deg,#f59e0b,#d97706);"></div></div></div>
+  <div class="bar-container"><div class="bar-label"><span>cron.scheduler + 其他</span><span>1条 (0.2%)</span></div><div class="bar"><div class="bar-fill" style="width:0.2%; background:#333;"></div></div></div>
+
+  <div class="alert" style="margin-top:16px;">
+    <h3>🔍 非洪水组件趋势（末 500 行）</h3>
+    <ul>
+      <li><strong>chat_completion_helpers 从 P24 的 3 条增至 5 条：</strong>"Stream stale for 180s"（3 条 + "API call failed (APIConnectionError)"（2 条）。这是 P25 最值得关注的信号——API 超时/流中断问题在洪水掩护下持续恶化。</li>
+      <li><strong>conversation_loop 从 P24 的 5 条增至 9 条：</strong>API call failed (attempt 3/3) error_type=APIConnectionError — 对应聊天循环因 API 超时失败。</li>
+      <li><strong>tool_executor 从 P24 的 12 条降至 7 条：</strong>"Tool terminal/read_file returned error (exit_code=-1 / access_denied)" 计数下降，但这可能由于今日 cron job 的运行模式有差异而非实际修复。</li>
+      <li><strong>api_server 维持 12 条不变：</strong>API_SERVER_KEY 配置问题的速率稳定在 ~12/h，未加剧也未改善。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======== 4. WEAKNESS ======== -->
+<div class="section">
+  <h2>⚠️ 弱点告警</h2>
+  <div class="grid-3">
+    <div class="stat-card">
+      <div class="value" style="color:#22c55e;">0</div>
+      <div class="label">High 严重度</div>
+      <div class="change flat">洪水盲区</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#fb923c;">1</div>
+      <div class="label">Medium 严重度</div>
+      <div class="change flat">外部网络失败</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#a78bfa;">0</div>
+      <div class="label">Low 严重度</div>
+      <div class="change flat">无低频弱点</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>领域</th><th>严重度</th><th>描述</th><th>证据数</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🌐 network_access</td>
+        <td><span class="sev-medium">Medium</span></td>
+        <td>外部网络连接失败 5 次（Polymarket API 被 GFW 阻断），某些数据源不可用</td>
+        <td>5</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>⚠️ 弱点检出盲区 — 连续第 7 期失准（确定性缺陷确认）</h3>
+    <p style="font-size:0.9em; color:#ccc;">
+      P19 中的 tool_security 和 model_output_quality 相关弱点证据已连续 <strong>7 期</strong>
+      （06-15→06-21，跨越 P20-P25 六个周期 + 五场洪水源）未被检出。该盲区已被确认为
+      确定性缺陷，需要 architecture-level 修复。
+    </p>
+    <p style="font-size:0.85em; color:#888; margin-top:4px;">
+      <strong>第 7 期确认：</strong>weakness_scan 的尾部 500 行扫描策略在 >90% 单组件占比如期持续失能。
+      本期 chat_completion_helpers（5 条, 1.0%）和 API 连接错误（9 条, 1.8%）有微弱信号，
+      但这些信号量不足以触发 weakness 检测阈值。
+    </p>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>📊 全文件扫描估算（5,007 行）</h3>
+    <p style="font-size:0.9em; color:#ccc;">
+      基于尾窗口 6.8% 的非洪水占比进行估算，全文件中非洪水组件总量约 340 条（5,007×6.8%）。
+      其中 api_server 占 ~60 条（06-20 + 06-21 两日合计），工具执行错误 ~35 条，
+      API 超时/流中断 ~25 条，其他 ~20 条。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 5. TOP ERRORS ======== -->
+<div class="section">
+  <h2>🔴 高频错误排行（末 500 行）</h2>
+  <table>
+    <thead>
+      <tr><th>#</th><th>错误签名</th><th style="text-align:right;">计数</th><th style="text-align:right;">占比</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><code style="font-size:0.85em;">Another gateway instance is already running (PID 2398093, ...)</code></td>
+        <td style="text-align:right; color:#b91c1c; font-weight:700;">464</td>
+        <td style="text-align:right; color:#b91c1c;">93.2%</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><code style="font-size:0.85em;">[Api_Server] Refusing to start: API_SERVER_KEY is required</code></td>
+        <td style="text-align:right; color:#fb923c;">12</td>
+        <td style="text-align:right; color:#fb923c;">2.4%</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><code style="font-size:0.85em;">conversation_loop API call failed (APIConnectionError / 3/3)</code></td>
+        <td style="text-align:right; color:#60a5fa;">9</td>
+        <td style="text-align:right; color:#60a5fa;">1.8%</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><code style="font-size:0.85em;">Tool terminal/read_file returned error (exit_code=-1 / access_denied)</code></td>
+        <td style="text-align:right; color:#a78bfa;">7</td>
+        <td style="text-align:right; color:#a78bfa;">1.4%</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><code style="font-size:0.85em;">Stream stale for 180s — no chunks received (deepseek-v4-flash)</code></td>
+        <td style="text-align:right; color:#f59e0b;">3</td>
+        <td style="text-align:right; color:#f59e0b;">0.6%</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><code style="font-size:0.85em;">API call failed (attempt 1/3) error_type=APIConnectionError</code></td>
+        <td style="text-align:right; color:#f59e0b;">3</td>
+        <td style="text-align:right; color:#f59e0b;">0.6%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert" style="margin-top:12px; border-color: rgba(251,191,36,0.5);">
+    <h3>⚠️ API 可靠性风险持续</h3>
+    <p style="font-size:0.85em; color:#ccc;">
+      <strong>"Stream stale for 180s" + "API call failed" 组合（#5+#6, 共 6 条）</strong>——两者密切相关：
+      stream stale 触发 3 次重试，重试全部以 APIConnectionError 失败。该模式指向 deepseek-v4-flash 
+      通过 TokenHub provider 的连接不稳定。这在本期简报生成时也可能被观测到。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 6. CAPABILITY STATUS ======== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">30</div>
+      <div class="label">可用 Tools</div>
+      <div class="change flat">持平 P24</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">63</div>
+      <div class="label">Skills 总数</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">37%</div>
+      <div class="label">Memory 占用</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="change flat">all active</div>
+    </div>
+  </div>
+  <div class="grid-3" style="margin-top:12px;">
+    <div class="stat-card">
+      <div class="value" style="color:#888;">0</div>
+      <div class="label">Stale Skills</div>
+      <div class="change flat">无垃圾</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">3</div>
+      <div class="label">Agent 自创 Skills</div>
+      <div class="change flat">持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">0</div>
+      <div class="label">Session DB</div>
+      <div class="change neutral">不可用（list_sessions 缺失）</div>
+    </div>
+  </div>
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">
+      <strong>能力稳定性总评：</strong>系统基础设施稳定（工具 30、技能 63、内存 37%、cron 2 任务活跃）。
+      全部 63 个技能处于 active 状态，无 stale/archived 堆积。连续多周无变化，处于稳态。
+      仅 session DB 接口损坏问题持续未修复（<code>list_sessions</code> 属性缺失）。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 7. KNOWLEDGE FEED ======== -->
+<div class="section">
+  <h2>🔬 外部知识源</h2>
+  <div class="alert-info">
+    <h3>📄 arXiv（5 篇 · 2026-06-18 提交）</h3>
+
+    <div class="hn-item">
+      <div class="title">🟣 <a href="http://arxiv.org/abs/2606.20560v1" target="_blank">How Transparent is DiffusionGemma?</a></div>
+      <div class="meta">Joshua Engels, Callum McDougall, Bilal Chughtai et al. · cs.LG, cs.AI</div>
+      <div style="font-size:0.85em; color:#888; margin-top:4px;">
+        DiffusionGemma 的推理透明度研究——连续潜在空间中的计算是否降低了模型的可解释性？
+        分解透明度为"变量透明度"和"算法透明度"两个维度进行分析。
+      </div>
+    </div>
+
+    <div class="hn-item">
+      <div class="title">🟣 <a href="http://arxiv.org/abs/2606.20559v1" target="_blank">UNIEGO: Proxies as Mediators for Unified Egocentric Video Representation Learning</a></div>
+      <div class="meta">Wenhao Chi, Arkaprava Sinha, Dominick Reilly et al. · cs.CV, cs.LG</div>
+      <div style="font-size:0.85em; color:#888; margin-top:4px;">
+        以自我为中心的视频理解——多教师知识蒸馏框架，跨视角/跨模态/跨基础模型的知识融合。
+      </div>
+    </div>
+
+    <div class="hn-item">
+      <div class="title">🟣 <a href="http://arxiv.org/abs/2606.20557v1" target="_blank">Optimal Deterministic Multicalibration and Omniprediction</a></div>
+      <div class="meta">Georgy Noarov, Aaron Roth · cs.LG, math.ST, stat.ML</div>
+      <div style="font-size:0.85em; color:#888; margin-top:4px;">
+        达到最优样本复杂度的确定性多校准预测器——无需随机性即可实现 O(ε⁻³) 最优效率。
+        对可信机器学习的基础理论有重要贡献。
+      </div>
+    </div>
+
+    <div class="hn-item">
+      <div class="title">🟣 <a href="http://arxiv.org/abs/2606.20554v1" target="_blank">Structuring and Tokenizing Distributed User Interest Context for Generative Recommendation</a></div>
+      <div class="meta">Ruizhong Qiu, Yinglong Xia, Dongqi Fu et al. · cs.IR, cs.AI</div>
+      <div style="font-size:0.85em; color:#888; margin-top:4px;">
+        工业推荐系统 Tokenization 架构——结构化用户兴趣上下文注入生成式推荐模型。
+        核心挑战：同时对用户行为语境和物品语义进行有效编码。
+      </div>
+    </div>
+
+    <div class="hn-item" style="border:none;">
+      <div class="title">🟣 <a href="http://arxiv.org/abs/2606.20547v1" target="_blank">The Token Is a Group Element: On Lie-Algebra Attention over Matrix Lie Groups</a></div>
+      <div class="meta">Przemyslaw Musialski · cs.LG, cs.CV, cs.GR, cs.RO, math.DG</div>
+      <div style="font-size:0.85em; color:#888; margin-top:4px;">
+        将 attention token 置于 Lie 群元素之上——token 是矩阵 Lie 群的纯变换元素，无特征载荷。
+        分数由相对位姿的代数的闭式范数计算。对 Attention 基础理论的几何重构。
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:16px; color:#888; font-size:0.9em; font-weight:500;">📰 Hacker News 头条（TOP 10 · 按热度排序）</h3>
+
+  <div class="hn-item">
+    <div class="title">🥇 <span style="font-size:0.9em; color:#f59e0b; font-weight:700;">226 分</span> <a href="https://www.smpte.org/blog/smpte-makes-its-standards-freely-accessible-openingstandards-library-to-the-global-media-technology-community" target="_blank">SMPTE Makes Its Standards Freely Accessible</a></div>
+    <div class="meta">60 评论 · by zdw — 影视技术标准组织 SMPTE 向全球公开所有标准文档</div>
+  </div>
+  <div class="hn-item">
+    <div class="title">🥇 <span style="font-size:0.9em; color:#ff9f43; font-weight:700;">155 分</span> <a href="https://www.lispm.net/apps/uhf-x11/" target="_blank">UHF X11: X11 Built for VisionOS and Apple Vision Pro</a></div>
+    <div class="meta">25 评论 · by zdw — 为 Vision Pro 定制的 X11 实现</div>
+  </div>
+  <div class="hn-item">
+    <div class="title">🥇 <span style="font-size:0.9em; color:#fb923c; font-weight:700;">80 分</span> <a href="https://www.cnn.com/2026/06/20/americas/brazil-hackers-unauthorized-alert-latam" target="_blank">Unauthorized alert sent to cell phones across Brazil</a></div>
+    <div class="meta">54 评论 · by zdw — 巴西全民手机收到未经授权的紧急警报</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">77 分</span> <a href="https://www.bbc.com/future/article/20260618-the-weird-and-wonderful-libraries-of-finland" target="_blank">Renting a sewing machine from the library</a></div>
+    <div class="meta">30 评论 · by sohkamyung — 芬兰图书馆的奇特出租服务</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">49 分</span> <a href="https://brooker.co.za/blog/2026/06/19/waiting.html" target="_blank">Alice is impatient</a></div>
+    <div class="meta">10 评论 · by birdculture — Jeff Brooker 论分布式系统中等待的代价（与令牌桶、重试语义相关）</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">43 分</span> <a href="https://townsquare.cauenapier.com/" target="_blank">Show HN: TownSquare, a tiny presence layer for websites</a></div>
+    <div class="meta">17 评论 · by cauenapier</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">39 分</span> <a href="https://sibexi.co/posts/epoll-vs-io_uring-in-linux/" target="_blank">Epoll vs. io_uring in Linux</a></div>
+    <div class="meta">9 评论 · by Sibexico — 深入 Linux I/O 模型对比</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">36 分</span> <a href="https://www.cell.com/neuron/fulltext/S0896-6273(26)00339-9" target="_blank">Slow breathing modulates brain function and risk behavior</a></div>
+    <div class="meta">2 评论 · by croes</div>
+  </div>
+  <div class="hn-item">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">36 分</span> <a href="https://github.com/mysk-research/loupe" target="_blank">Loupe – iOS app that reveals what native apps can see</a></div>
+    <div class="meta">5 评论 · by Cider9986</div>
+  </div>
+  <div class="hn-item" style="border:none;">
+    <div class="title"><span style="font-size:0.9em; color:#888; font-weight:700;">20 分</span> <a href="https://www.anthropic.com/research/project-fetch-phase-two" target="_blank">Project Fetch: Phase Two</a></div>
+    <div class="meta">1 评论 · by stopachka — Anthropic 的自主代码执行研究第二阶段</div>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">
+      <strong>本周深度解读：</strong><br>
+      (1) <strong>Anthropic Project Fetch Phase 2</strong>（20 分，重要度高）—— Anthropic 的自主代码执行研究推进至第二阶段，对 AI agent 安全与能力有直接参考价值。<br>
+      (2) <strong>"Alice is impatient"</strong>（49 分）—— Jeff Brooker（AWS 首席工程师）论分布式系统中的重试语义与等待成本，与当前系统中 API call failed + 重试模式直接相关。<br>
+      (3) <strong>SMPTE 公开标准</strong>（226 分，热度最高）—— 媒体技术标准组织的开放运动，技术标准共享是行业趋势。<br>
+      (4) <strong>Two papers on attention fundamentals:</strong> DiffusionGemma 透明度 (cs.LG) 和 Lie-algebra attention (cs.LG/cs.CV) 对 transformer 架构的底层理解有理论价值。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 8. PREDICTION VERIFICATION ======== -->
+<div class="section">
+  <h2>🎯 上期预测验证</h2>
+
+  <table>
+    <thead>
+      <tr><th>预测（P24 → P25）</th><th style="text-align:center;">结果</th><th>偏差分析</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>gateway.run 洪水持续（方向预测）</td>
+        <td style="text-align:center; color:#22c55e; font-weight:700;">✓ 正确</td>
+        <td>方向正确，P24 预警变为现实。PID 2398093 持续运行，占比 93.2%</td>
+      </tr>
+      <tr>
+        <td>日志轮转重置基线后新基准期形成</td>
+        <td style="text-align:center; color:#facc15; font-weight:700;">≈ 部分确认</td>
+        <td>文件从 2,934→5,007 增长，新基准已建立（06-21 日 4,472 行）。无二次轮转。</td>
+      </tr>
+      <tr>
+        <td>API 超时（Stream stale）持续存在</td>
+        <td style="text-align:center; color:#22c55e; font-weight:700;">✓ 确认</td>
+        <td>chat_completion_helpers 3 条 + conversation_loop 9 条 API 错误，合计 12 条</td>
+      </tr>
+      <tr>
+        <td>health score 仍不可靠（假突破 3.0）</td>
+        <td style="text-align:center; color:#22c55e; font-weight:700;">✓ 确认</td>
+        <td>93.2% 单一组件垄断 → 评分不可用，连续第 5 期</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <p style="font-size:0.85em; color:#888;">
+      <strong>预测精度：</strong>4/4 方向正确。但 P24 处于"日志轮转 + PID 变更后"的观测期，
+      定量预测均标注为"暂停中"。P25 数据提供了新基准数据：
+      06-21 全日 4,472 行可估算日均洪水产率 ~490/h（低于 P22 的 576/h，
+      但高于 P23 的 171/h）。<strong>无二次日志轮转，进入真正的稳态洪水模式。</strong>
+    </p>
+  </div>
+</div>
+
+<!-- ======== 9. EVOLUTION SUGGESTIONS ======== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+
+  <div class="alert" style="border-color: rgba(239,68,68,0.5);">
+    <h3>🛑 紧急：修复 gateway.run 重复启动（优先级：P0 — 第 5 期同一建议）</h3>
+    <ul>
+      <li><strong>根本原因：</strong>cron job 执行时 gateway 实例已存在（PID 2398093，已持续运行 ~5 天）</li>
+      <li><strong>当前损失累积（P21→P25）：</strong>大约：1,414 + 5,317 + 9,265 + 467 + 4,660 ≈ <strong>21,123+ 条错误日志</strong>，持续 5 期未修复</li>
+      <li><strong>立即修复（< 5 分钟）：</strong>在 cron job 执行入口处添加 <code>hermes gateway restart 2&gt;/dev/null</code></li>
+      <li><strong>根本修复（推荐）：</strong>在 cron job pre-script 中添加检测逻辑——如果 gateway 已在运行，先停止并重新启动</li>
+      <li><strong>修复后预期：</strong>错误日志总量降至约 50-100 条/周期，health score 恢复可评估，weakness 盲区消失</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🛠 建议修复：API_SERVER_KEY 配置（优先级：P1 — 第 5 期同一建议）</h3>
+    <ul>
+      <li>配置 API_SERVER_KEY 环境变量或禁用 API server（<code>api.api_server.enabled=false</code>）</li>
+      <li>持续 5 期，累计 ~1,000+ 条错误日志（~12/h × 24h × 5d = ~1,440）</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>🛠 架构建议 1：weakness_scan 时间窗口模式（优先级：P2 — 第 5 期同一条建议）</h3>
+    <ul>
+      <li>连续 <strong>7 期</strong>（06-15→06-21）在高洪水期间完全失明</li>
+      <li><strong>严重度已升级：</strong>此盲区跨越 5 种不同的洪水源状态（新源、同一源、PID 重置、日志轮转、纯稳态），已确认在任意洪水场景下均会导致 weakness_scan 失能</li>
+      <li>添加全日志周期扫描模式或时间窗口模式。当 top-1 组件占比 >50% 时自动切换。</li>
+    </ul>
+  </div>
+
+  <div class="alert-warn" style="margin-top:12px;">
+    <h3>📐 架构建议 2：预测模型现已进入稳态期（优先级：P2 — 本期更新）</h3>
+    <ul>
+      <li><strong>P25 确认：</strong>日志轮转后的新基准已稳定。5,007 行全文件数据 + 同一 PID 持续运行 → 预测模型可恢复定量预测</li>
+      <li><strong>需校准的参数：</strong>(a) 日均海水化产率：06-21 的 4,472 行表明 ~490/h 的产率（远低于 P22 的 576/h，但高于 P23-P24 的轮转期低谷）</li>
+      <li><strong>本期作为新基线（B=1）：</strong>从 P25 开始建立新的跨期基准，下一期（P26）可恢复组件级定量预测</li>
+      <li><strong>下期预测：</strong>假设洪水未修复 → 07-22 日志总量约 5,000-7,000 行（基于 06-21 的 4,472 行 + 06-20 晚间的 533 行）</li>
+    </ul>
+  </div>
+
+  <div class="alert-info" style="margin-top:12px;">
+    <h3>📊 长期趋势：gateway.run 洪水累积损失</h3>
+    <div style="margin-top:8px;">
+      <div class="bar-container"><div class="bar-label"><span>P21 (06-17)</span><span>1,414 行</span></div><div class="bar"><div class="bar-fill" style="width:12%; background:linear-gradient(90deg,#ef4444,#b91c1c);"></div></div></div>
+      <div class="bar-container"><div class="bar-label"><span>P22 (06-18)</span><span>5,317 行</span></div><div class="bar"><div class="bar-fill" style="width:45%; background:linear-gradient(90deg,#b91c1c,#7f1d1d);"></div></div></div>
+      <div class="bar-container"><div class="bar-label"><span>P23 (06-19)</span><span>9,589 行</span></div><div class="bar"><div class="bar-fill" style="width:81%; background:linear-gradient(90deg,#7f1d1d,#450a0a);"></div></div></div>
+      <div class="bar-container"><div class="bar-label"><span>P24 (06-20) 轮转</span><span>2,934 行</span></div><div class="bar"><div class="bar-fill" style="width:25%; background:linear-gradient(90deg,#facc15,#a16207);"></div></div></div>
+      <div class="bar-container"><div class="bar-label"><span style="color:#ff9f43; font-weight:700;">P25 (06-21) 新稳态</span><span style="color:#ff9f43; font-weight:700;">5,007 行 (GDP)</span></div><div class="bar"><div class="bar-fill" style="width:42%; background:linear-gradient(90deg,#ef4444,#dc2626);"></div></div></div>
+    </div>
+    <p style="font-size:0.85em; color:#888; margin-top:8px;">
+      <strong>累积错误总量（P21→P25，含轮转后重新计数）：</strong>约 1,414 + 5,317 + 9,589 + 2,934 + 5,007 = <strong>~24,261 条</strong>。
+      其中 gateway.run 单一错误来源贡献了 95%+ 的日志总量。
+    </p>
+  </div>
+</div>
+
+<!-- ======== 10. FOOTER ======== -->
+<div style="text-align:center; padding:24px; color:#444; font-size:0.8em; border-top:1px solid #1a1a2e;">
+  <p>🧬 Hermes 自进化系统 · 第 25 期</p>
+  <p style="margin-top:4px;">Generated 2026-06-21 01:00 UTC · data from self_scan / weakness_scan / knowledge_ingest</p>
+  <p style="margin-top:4px; color:#555;">GitHub Pages: <a href="https://binbinao.github.io/openclaw-impact-report/" style="color:#60a5fa;">binbinao/openclaw-impact-report</a></p>
+</div>
+
+</div>
+</body>
+</html>
