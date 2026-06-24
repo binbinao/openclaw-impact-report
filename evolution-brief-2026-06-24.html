@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 28 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .stable-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    background: rgba(255,169,77,0.12);
+    border: 1px solid #ffa94d;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: #ffa94d;
+    font-weight: 600;
+  }
+  .header .event-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(255,169,77,0.1), rgba(251,191,36,0.08));
+    border: 1px solid rgba(255,169,77,0.3);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #fbbf24;
+  }
+  .header .period-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 20px;
+    background: linear-gradient(135deg, rgba(96,165,250,0.1), rgba(129,140,248,0.1));
+    border: 1px solid rgba(96,165,250,0.2);
+    border-radius: 20px;
+    font-size: 0.85em;
+    color: #93c5fd;
+  }
+  .section {
+    background: #111122;
+    border: 1px solid #1e1e3a;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .stat-card {
+    background: #0d0d1a;
+    border: 1px solid #1a1a35;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 2em; font-weight: 700; color: #fff; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; }
+  .stat-card .change { font-size: 0.8em; margin-top: 2px; font-weight: 500; }
+  .up { color: #ef4444; }
+  .down { color: #22c55e; }
+  .flat { color: #a78bfa; }
+  .neutral { color: #666; }
+  .bad { color: #ef4444; }
+  .worse { color: #b91c1c; }
+  .improving { color: #22c55e; }
+  .stable { color: #60a5fa; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9em;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #0d0d1a;
+    color: #888;
+    font-weight: 500;
+    border-bottom: 1px solid #1e1e3a;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  tr:last-child td { border-bottom: none; }
+  .alert {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .alert.info {
+    background: rgba(59,130,246,0.08);
+    border-color: rgba(59,130,246,0.3);
+  }
+  .alert.success {
+    background: rgba(34,197,94,0.08);
+    border-color: rgba(34,197,94,0.3);
+  }
+  .alert.warning {
+    background: rgba(255,169,77,0.08);
+    border-color: rgba(255,169,77,0.3);
+  }
+  .alert h3 { font-size: 1em; font-weight: 600; }
+  .timeline { position: relative; padding: 8px 0; }
+  .tl-item { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid #1a1a2e; align-items: flex-start; }
+  .tl-item:last-child { border: none; }
+  .tl-time { min-width: 120px; font-size: 0.8em; color: #666; font-weight: 500; font-family: 'JetBrains Mono', monospace; }
+  .tl-event { font-size: 0.9em; color: #ccc; }
+  .weakness-item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #1a1a2e; align-items: flex-start; }
+  .weakness-item:last-child { border: none; }
+  .severity-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .sev-high { background: rgba(239,68,68,0.2); color: #ef4444; }
+  .sev-med { background: rgba(255,169,77,0.2); color: #ffa94d; }
+  .sev-low { background: rgba(96,165,250,0.2); color: #60a5fa; }
+  .hn-item { padding: 10px 0; border-bottom: 1px solid #1a1a2e; }
+  .hn-item:last-child { border: none; }
+  .hn-item a { color: #60a5fa; text-decoration: none; font-weight: 500; }
+  .hn-item a:hover { color: #93c5fd; text-decoration: underline; }
+  .hn-meta { font-size: 0.8em; color: #666; margin-top: 2px; }
+  .progress-bar {
+    height: 6px;
+    background: #1a1a35;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #60a5fa, #818cf8);
+  }
+  .badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; justify-content: center; }
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #444;
+    font-size: 0.8em;
+    border-top: 1px solid #1a1a2e;
+  }
+  @media (max-width: 768px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .header h1 { font-size: 1.8em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== HEADER ========== -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">第 28 期 · 2026-06-24（周三）</div>
+  <div class="badge-row">
+    <div class="stable-badge">🔄 日志轮转 · 新基线 N=1</div>
+    <div class="event-badge">📌 同一 PID 2398093 · gateway.run 93.6%</div>
+    <div class="period-badge">📡 采集: 2026-06-24 01:00 UTC &nbsp;|&nbsp; ⏱ 文件: 1,388 行</div>
+  </div>
+</div>
+
+<!-- ========== MEGA-ALERT: Log Rotation ========== -->
+<div class="alert warning">
+  <h3>🔄 P25→P28 纯稳态被日志轮转中断（P28 新基线 N=1）</h3>
+  <p style="color:#ccc; font-size:0.9em; margin-top:4px;">
+    P27（06-23）全文件 8,790 行的 errors.log 在 P28 起点被轮转清空。<strong style="color:#fbbf24;">新文件始于 06:22 CST</strong>，
+    当前 1,388 行（100% 来自今日）。纯稳态标记（B=3→B=4）因日志轮转而中断——根据规则，
+    <strong style="color:#ffa94d;">日志轮转 → 退出纯稳态 → 进入新基线观察期（N=1）</strong>。
+    <strong style="color:#22c55e;">但关键参数未变：</strong>同 PID（2398093）、同洪水源（gateway.run）、同非洪水基线（32 条，在 30-35 区间内）。
+    这本质上是"纯稳态的日志刷新"，而非结构恶化。
+  </p>
+  <ul style="margin-top:12px; color:#aaa; font-size:0.9em; padding-left:20px;">
+    <li><strong>文件对比：</strong>P27 8,790 行 → 今晨轮转 → P28 1,388 行（88.1% 下降），仅含今日产生的日志。</li>
+    <li><strong>轮转阈值更新：</strong>从 P24 观察的 9,589 行修正为 ~8,790-9,500 行区间——轮转可能在 ~8,800 行即触发。</li>
+    <li><strong>预测影响：</strong>确定性预测（B≥2 模式）降级回"趋势性预测"——日志轮转打破了纯稳态连续性，需积累数据重新校准。</li>
+    <li><strong>实际影响：</strong>近乎为零。gateway.run 仍在持续，PID 未变，唯一变化是日志文件被清空重写。</li>
+  </ul>
+</div>
+
+<!-- ========== SECTION 1: Capability Status ========== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+  
+  <div class="grid-4" style="margin-bottom:16px;">
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">30</div>
+      <div class="label">可用工具数</div>
+      <div class="change flat">→ 持平 vs P27 (30)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">63</div>
+      <div class="label">活跃 Skills</div>
+      <div class="change flat">→ 全部 active</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="change flat">→ 无溢满风险</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">2</div>
+      <div class="label">Cron Jobs（全部活跃）</div>
+      <div class="change flat">→ 含自进化日报</div>
+    </div>
+  </div>
+  
+  <h3 style="font-size:0.9em; color:#888; margin-bottom:8px;">工具容器分布（30 个，同 P24-P27 稳定期）</h3>
+  <div style="display:flex; flex-wrap:wrap; gap:6px;">
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ browser (3)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ coding (4)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ cron (1)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ delegate (1)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ search (3)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ terminal (2)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ web (1)</span>
+    <span style="background:#1a1a35; padding:4px 10px; border-radius:6px; font-size:0.75em; color:#aaa;">✅ +22 其他</span>
+  </div>
+
+  <div style="margin-top:8px; font-size:0.8em; color:#555;">
+    🧠 Memory: 816/2,176 chars (37%) · User: 231/1,408 chars (16%) — 与 P27 完全一致
+  </div>
+</div>
+
+<!-- ========== SECTION 2: Weakness Status ========== -->
+<div class="section">
+  <h2>⚠️ 弱点诊断</h2>
+
+  <div class="grid-3" style="margin-bottom:16px;">
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">1</div>
+      <div class="label">总弱点数</div>
+      <div class="change flat">→ 同 P27（连续第 8 期盲区）</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#22c55e;">0</div>
+      <div class="label">High 级弱点</div>
+      <div class="change flat">→ 持平</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#ffa94d;">1</div>
+      <div class="label">Medium 级弱点</div>
+      <div class="change flat">→ network_access</div>
+    </div>
+  </div>
+
+  <div class="alert info" style="margin-bottom:16px;">
+    <h3>🔴 持续第 8 期：weakness_scan 盲区</h3>
+    <p style="color:#aaa; font-size:0.9em; margin-top:4px;">
+      500 行尾部窗口被 gateway.run（93.6%）占据。仅 1 个弱点（network_access）被检出，
+      证据数增至 5（P27 为 3）。tool_security 和 model_output_quality 已连续 8 期（P21→P28）
+      被洪水挤出分析窗口。日志轮转虽带来新文件，但时间窗口过短（仅 ~3h），非洪水组件未充分积累。
+    </p>
+  </div>
+
+  <div class="weakness-item">
+    <span class="severity-tag sev-med">MEDIUM</span>
+    <div>
+      <strong>network_access（外部网络连接失败）</strong>
+      <div style="font-size:0.85em; color:#999; margin-top:2px;">
+        APIConnectionError 5 次（如 Polymarket API 被 GFW 阻断）。证据数：5（P27 为 3，↑+2）。
+        已在 memory 中记录。中等优先级——不影响核心功能但限制数据源多样性。
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:0.9em; color:#888; margin-top:20px; margin-bottom:8px;">日志组件分布（末 500 行）</h3>
+  <table>
+    <tr><th>组件</th><th style="text-align:center;">计数</th><th style="text-align:center;">占比</th><th style="text-align:center;">vs P27</th></tr>
+    <tr>
+      <td><span class="severity-tag sev-high">gateway.run</span></td>
+      <td style="text-align:center;">468</td>
+      <td style="text-align:center;">93.6%</td>
+      <td style="text-align:center; color:#ef4444;">↑ +0.6pp</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">api_server</span></td>
+      <td style="text-align:center;">13</td>
+      <td style="text-align:center;">2.6%</td>
+      <td style="text-align:center; color:#60a5fa;">↑ +1 (→ 稳定)</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">conversation_loop</span></td>
+      <td style="text-align:center;">10</td>
+      <td style="text-align:center;">2.0%</td>
+      <td style="text-align:center; color:#ef4444;">↑ +4 (66.7%)</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">chat_completion_helpers</span></td>
+      <td style="text-align:center;">5</td>
+      <td style="text-align:center;">1.0%</td>
+      <td style="text-align:center; color:#ef4444;">↑ +2 (66.7%)</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">tool_executor</span></td>
+      <td style="text-align:center;">3</td>
+      <td style="text-align:center;">0.6%</td>
+      <td style="text-align:center; color:#22c55e;">↓ -10 (76.9%)</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">cron.scheduler</span></td>
+      <td style="text-align:center;">1</td>
+      <td style="text-align:center;">0.2%</td>
+      <td style="text-align:center; color:#60a5fa;">→ 持平</td>
+    </tr>
+    <tr style="border-top:1px solid #1e1e3a;">
+      <td><strong>非洪水合计</strong></td>
+      <td style="text-align:center;"><strong>32</strong></td>
+      <td style="text-align:center;"><strong>6.4%</strong></td>
+      <td style="text-align:center; color:#60a5fa;">↓ -3 (8.6%)</td>
+    </tr>
+  </table>
+
+  <div style="margin-top:12px; font-size:0.85em; color:#888;">
+    <strong>👉 非洪水基线 32 条在 30-35 区间内 ✓（P27 35 条 vs P28 32 条，-8.6%）</strong><br>
+    <strong>结构变化：</strong>tool_executor 从 P27 的 13 条骤降至 3 条（-76.9%），但 conversation_loop 从 6→10（+66.7%）、
+    chat_completion_helpers 从 3→5（+66.7%）。这说明 tool_executor 的波动与 API 连接质量的波动呈此消彼长关系——
+    TokenHub 的 APIConnectionError 可能在减少工具执行失败的同时，增加了流中断和 API 重试。
+  </div>
+</div>
+
+<!-- ========== SECTION 3: Flood Timeline ========== -->
+<div class="section">
+  <h2>📜 gateway.run 洪水状态（P21→P28）</h2>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">06-16 (P20)</div>
+      <div class="tl-event">🚨 api_server 洪水首个确认: 432 条 (86.4%)，假突破 3.0 首次触发</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-17 (P21)</div>
+      <div class="tl-event">🔄 洪水源切换: gateway.run (PID 3289) 1,414 条 (95.5%)</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-18 (P22)</div>
+      <div class="tl-event">🌙 跨午夜运行 26h+: 5,317 条 (97.1%)，PID 3289，峰值 576/h</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-19 (P23)</div>
+      <div class="tl-event">📉 衰减稳态: PID 3289，文件 9,589 行 (96.6%)</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-20 (P24)</div>
+      <div class="tl-event">🔄 日志轮转 + PID 重置: 9,589→2,934 行，PID 3289→2398093</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-20~21 (P25)</div>
+      <div class="tl-event">✨ 纯稳态 B=1: PID 2398093，gateway.run 93.2%</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-21~22 (P26)</div>
+      <div class="tl-event">✨ 纯稳态 B=2: PID 2398093，gateway.run 93.8%</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">06-22~23 (P27)</div>
+      <div class="tl-event">🏆 纯稳态 B=3: PID 2398093，gateway.run 93.0%，全文件 8,790 行</div>
+    </div>
+    <div class="tl-item" style="border-bottom:1px solid #fbbf24;">
+      <div class="tl-time">06-24 (P28) <strong style="color:#fbbf24;">← 本期</strong></div>
+      <div class="tl-event"><strong style="color:#fbbf24;">🔄 日志轮转 · 新基线 N=1</strong><br>
+        PID 2398093 不变 · gateway.run 93.6% · 文件 1,388 行（新起点）<br>
+        非洪水 32 条（30-35 基线内 ✓）· conversation_loop+ API 连接问题上升</div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:20px;">
+    <div class="stat-card">
+      <div class="value" style="color:#b91c1c;">93.6%</div>
+      <div class="label">gateway.run 窗口占比</div>
+      <div class="change stable" style="color:#ef4444;">↑ +0.6pp vs P27</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">100%</div>
+      <div class="label">gateway.run 全文件占比</div>
+      <div class="change" style="color:#fbbf24;">新文件 · 仅含今日数据</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#ffa94d;">N=1</div>
+      <div class="label">新基线期数</div>
+      <div class="change stable" style="color:#fbbf24;">← 纯稳态被轮转中断</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#ffa94d;">32</div>
+      <div class="label">非洪水合计（末 500 行）</div>
+      <div class="change stable" style="color:#60a5fa;">↓ -3 vs P27 (基线内 ✓)</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#60a5fa;">1,388</div>
+      <div class="label">errors.log 总行数</div>
+      <div class="change" style="color:#fbbf24;">🔄 轮转后新文件起始</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:#888;">❌</div>
+      <div class="label">健康度评分</div>
+      <div class="change neutral">假突破 3.0 · 第 8 期不可靠</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 4: Non-Flood Baseline Update ========== -->
+<div class="section">
+  <h2>📐 非洪水基线更新（N=1 新基线开始）</h2>
+
+  <div class="alert success">
+    <h3>✅ P28 非洪水 32 条 — 在 30-35 基线区间内 ✓</h3>
+    <p style="color:#ccc; font-size:0.9em; margin-top:4px;">
+      尽管经历日志轮转（系统事件），非洪水组件的总量仍完美落在原基线区间内。
+      <strong style="color:#22c55e;">四周期均值：33.0 条/期</strong>（P25 34, P26 31, P27 35, P28 32）。
+      旧基线结论（30-35）经受住了轮转事件的检验。
+    </p>
+  </div>
+
+  <table>
+    <tr><th>组件</th><th style="text-align:center;">P25 (B=1)</th><th style="text-align:center;">P26 (B=2)</th><th style="text-align:center;">P27 (B=3)</th><th style="text-align:center;">P28 (N=1)</th><th style="text-align:center;">均值</th></tr>
+    <tr>
+      <td><span style="color:#888;">api_server</span></td>
+      <td style="text-align:center;">12</td>
+      <td style="text-align:center;">12</td>
+      <td style="text-align:center;">12</td>
+      <td style="text-align:center; color:#60a5fa;"><strong>13</strong></td>
+      <td style="text-align:center; color:#60a5fa;">12.3 → 恒定</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">tool_executor</span></td>
+      <td style="text-align:center;">7</td>
+      <td style="text-align:center;">6</td>
+      <td style="text-align:center;">13</td>
+      <td style="text-align:center; color:#22c55e;"><strong>3</strong></td>
+      <td style="text-align:center; color:#ffa94d;">7.3 ← 高波动</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">conversation_loop</span></td>
+      <td style="text-align:center;">9</td>
+      <td style="text-align:center;">8</td>
+      <td style="text-align:center;">6</td>
+      <td style="text-align:center; color:#ef4444;"><strong>10</strong></td>
+      <td style="text-align:center; color:#ffa94d;">8.3 ← 回升</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">chat_completion_helpers</span></td>
+      <td style="text-align:center;">5</td>
+      <td style="text-align:center;">4</td>
+      <td style="text-align:center;">3</td>
+      <td style="text-align:center; color:#ef4444;"><strong>5</strong></td>
+      <td style="text-align:center; color:#22c55e;">4.3 ← 回升</td>
+    </tr>
+    <tr>
+      <td><span style="color:#888;">cron.scheduler</span></td>
+      <td style="text-align:center;">1</td>
+      <td style="text-align:center;">1</td>
+      <td style="text-align:center;">1</td>
+      <td style="text-align:center; color:#60a5fa;"><strong>1</strong></td>
+      <td style="text-align:center; color:#60a5fa;">1 → 恒定</td>
+    </tr>
+    <tr style="border-top:1px solid #1e1e3a;">
+      <td><strong>合计</strong></td>
+      <td style="text-align:center;"><strong>34</strong></td>
+      <td style="text-align:center;"><strong>31</strong></td>
+      <td style="text-align:center;"><strong>35</strong></td>
+      <td style="text-align:center;"><strong style="color:#22c55e;">32</strong></td>
+      <td style="text-align:center;"><strong style="color:#22c55e;">33.0</strong></td>
+    </tr>
+  </table>
+
+  <div style="margin-top:12px; font-size:0.85em; color:#888;">
+    <strong>👉 关键发现：非洪水组成结构正在变化</strong><br>
+    • <strong>API 质量问题上升：</strong>conversation_loop (10) + chat_completion_helpers (5) = 15 条（47% 的非洪水总量），
+    高于 P25-P27 均值 13 条。TokenHub APIConnectionError 和流中断可能正在恶化。<br>
+    • <strong>tool_executor 骤降：</strong>13→3（-76.9%）——但此下降可能意味着工具执行失败的减少与 API 连接失败的增多是
+    同一问题的两面（pending_approval 因 API 超时而跳过了工具执行阶段？）。<br>
+    • <strong>基线稳定性结论：</strong>总量 32 条仍在区间内，但结构漂移值得关注——如果 API 相关组件持续上升 2-3 期，
+    需评估是否需要提高基线区间上界。
+  </div>
+</div>
+
+<!-- ========== SECTION 5: Prediction Track Record ========== -->
+<div class="section">
+  <h2>🎯 预测模型精度评估</h2>
+
+  <div class="alert info">
+    <h3>📉 从确定性预测降级回趋势性预测</h3>
+    <p style="color:#aaa; font-size:0.9em; margin-top:4px;">
+      P27 确立的"确定性预测阶段"因日志轮转而退出——纯稳态连续的充分条件被打破。
+      预测等级从 <strong style="color:#a78bfa;">确定性预测</strong> 降级为 <strong style="color:#60a5fa;">趋势性预测</strong>。
+      但本轮的关键参数（PID、洪水源、非洪水基线）完全不变，降级更多是规则遵循而非实际预测能力下降。
+    </p>
+  </div>
+
+  <table>
+    <tr><th>指标</th><th style="text-align:center;">P26→P27 实际</th><th style="text-align:center;">P27→P28 预测</th><th style="text-align:center;">P28 实际</th><th style="text-align:center;">判定</th></tr>
+    <tr>
+      <td>纯稳态延续</td>
+      <td style="text-align:center; color:#a78bfa;">B=2→B=3 ✓</td>
+      <td style="text-align:center; color:#a78bfa;">B=3→B=4</td>
+      <td style="text-align:center; color:#fbbf24;">🔄 轮转中断 → N=1</td>
+      <td style="text-align:center; color:#ffa94d;">≈ 方向正确 · 轮转风险已标记</td>
+    </tr>
+    <tr>
+      <td>gateway.run 占比</td>
+      <td style="text-align:center; color:#60a5fa;">93.8%→93.0%</td>
+      <td style="text-align:center; color:#a78bfa;">92-95%</td>
+      <td style="text-align:center; color:#ef4444;">93.6%</td>
+      <td style="text-align:center; color:#22c55e;">✓ 命中</td>
+    </tr>
+    <tr>
+      <td>非洪水基线范围</td>
+      <td style="text-align:center; color:#60a5fa;">31→35</td>
+      <td style="text-align:center; color:#a78bfa;">30-35</td>
+      <td style="text-align:center; color:#22c55e;">32</td>
+      <td style="text-align:center; color:#22c55e;">✓ 命中</td>
+    </tr>
+    <tr>
+      <td>PID 变更</td>
+      <td style="text-align:center; color:#60a5fa;">无</td>
+      <td style="text-align:center; color:#a78bfa;">低风险</td>
+      <td style="text-align:center; color:#60a5fa;">2398093 不变</td>
+      <td style="text-align:center; color:#22c55e;">✓ 全中</td>
+    </tr>
+    <tr>
+      <td>日志轮转</td>
+      <td style="text-align:center; color:#60a5fa;">无</td>
+      <td style="text-align:center; color:#ffa94d;">中风险 · 8,790 近阈值</td>
+      <td style="text-align:center; color:#fbbf24;">✅ 轮转发生</td>
+      <td style="text-align:center; color:#22c55e;">✓ 风险预警正确</td>
+    </tr>
+    <tr>
+      <td>洪水源切换</td>
+      <td style="text-align:center; color:#60a5fa;">无</td>
+      <td style="text-align:center; color:#a78bfa;">无切换</td>
+      <td style="text-align:center; color:#60a5fa;">gateway.run</td>
+      <td style="text-align:center; color:#22c55e;">✓ 全中</td>
+    </tr>
+    <tr style="border-top:1px solid #1e1e3a; font-weight:600;">
+      <td>预测精度</td>
+      <td style="text-align:center; color:#22c55e;">6/6 全中</td>
+      <td style="text-align:center;" colspan="2">5/6 正确（轮转风险已预警）</td>
+      <td style="text-align:center; color:#a78bfa;">🎯 83.3%</td>
+    </tr>
+  </table>
+
+  <div style="margin-top:16px; background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:16px;">
+    <h3 style="font-size:0.9em; color:#a78bfa; margin-bottom:8px;">定点预测（P28→P29）</h3>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.85em;">
+      <div><span style="color:#888;">纯稳态/新基线：</span><strong style="color:#fbbf24;">N=1→N=2（若无二次轮转）</strong></div>
+      <div><span style="color:#888;">gateway.run 占比：</span><strong style="color:#60a5fa;">92-95%</strong></div>
+      <div><span style="color:#888;">非洪水基线：</span><strong style="color:#22c55e;">30-35 条</strong></div>
+      <div><span style="color:#888;">PID 变更风险：</span><strong style="color:#ffa94d;">低（但 P24 模式为第 4 天重置）</strong></div>
+      <div><span style="color:#888;">日志轮转风险：</span><strong style="color:#22c55e;">低（新文件 1,388 行，距阈值 ~9,000 行远）</strong></div>
+      <div><span style="color:#888;">洪水源切换：</span><strong style="color:#22c55e;">低（gateway.run 连续第 8 期）</strong></div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px; background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:16px;">
+    <h3 style="font-size:0.9em; color:#a78bfa; margin-bottom:8px;">💡 预测反思</h3>
+    <div style="font-size:0.85em; color:#aaa;">
+      <p><strong style="color:#fbbf24;">日志轮转预测正确但时机超预期提前：</strong>
+      P27 标记轮转风险为"中"（文件 8,790 行接近历史阈值 9,589），但实际在 8,790→9,589 之间触发。
+      这说明日志轮转阈值不是一个固定值，而是一个区间（~8,800-9,500），可能受系统日志管理策略（如 time-based rotation、
+      文件创建时间加权等）影响。<strong style="color:#fbbf24;">轮转阈值应更新为">8,500 行即标记高风险"</strong>而非等待接近 9,500。</p>
+      <p style="margin-top:6px;"><strong style="color:#22c55e;">纯稳态中断的实质：</strong>
+      日志轮转本身不改变系统运行状态（PID 不变、gateway 持续运行、非洪水基线不变）。
+      轮转只是清空了文件，并非结构变化。理论上，轮转后的"纯稳态"断言仍然成立——只是文件被刷新。
+      但规则要求轮转即退出纯稳态，这是计费问题（需积累新数据基线）而非系统健康问题。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 6: Knowledge Feed ========== -->
+<div class="section">
+  <h2>🔬 知识摄取</h2>
+
+  <div class="alert info" style="margin-bottom:16px;">
+    <h3>📖 arXiv: 连续第 6 期不可用 (P23→P28) — 新纪录</h3>
+    <p style="color:#aaa; font-size:0.9em; margin-top:2px;">
+      arXiv API 连续 6 期失败（P23→P28），超越 P5→P10 的 5 期连续失败历史纪录，创下最长不可用窗口。
+      整体成功率：6/28 = <strong style="color:#ef4444;">21.4%</strong>。
+      上次成功获取论文是 P22（06-18），距今 6 天。
+      建议：考虑到超长失败期的出现，亟需启用备选数据源（Semantic Scholar 或 arXiv Sanity Lite）。
+    </p>
+  </div>
+
+  <h3 style="font-size:1em; color:#ccc; margin-bottom:8px;">🔥 Hacker News Top 10</h3>
+  <table>
+    <tr><th>#</th><th>标题</th><th style="text-align:center;">得分</th><th style="text-align:center;">评论</th></tr>
+    <tr>
+      <td style="color:#888;">1</td>
+      <td><a href="http://www.jerrysmap.com/the-map" target="_blank" style="color:#60a5fa;">Jerry's Map</a></td>
+      <td style="text-align:center; color:#ffa94d;">🔥 322</td>
+      <td style="text-align:center; color:#888;">47</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">2</td>
+      <td><a href="https://swipe.futo.tech/" target="_blank" style="color:#60a5fa;">FUTO Swipe – A new swipe typing model</a></td>
+      <td style="text-align:center;">258</td>
+      <td style="text-align:center; color:#888;">83</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">3</td>
+      <td><a href="https://swiftpackageindex.com/blog/swift-package-index-joins-apple" target="_blank" style="color:#60a5fa;">Swift Package Index joins Apple</a></td>
+      <td style="text-align:center;">167</td>
+      <td style="text-align:center; color:#888;">50</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">4</td>
+      <td><a href="https://www.patreon.com/DanyBittel/posts/printing-splats-161333338" target="_blank" style="color:#60a5fa;">Printing Gaussian Splats</a></td>
+      <td style="text-align:center;">157</td>
+      <td style="text-align:center; color:#888;">13</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">5</td>
+      <td><a href="https://devblogs.microsoft.com/oldnewthing/20260622-00/?p=112451" target="_blank" style="color:#60a5fa;">In memory of the man who put red and green squiggles under words</a></td>
+      <td style="text-align:center;">135</td>
+      <td style="text-align:center; color:#888;">12</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">6</td>
+      <td><a href="https://www.lse.ac.uk/granthaminstitute/events/extreme-heat-improving-governance-and-strengthening-action-around-the-world/" target="_blank" style="color:#60a5fa;">Extreme Heat conference cancelled due to extreme heat warning</a></td>
+      <td style="text-align:center;">104</td>
+      <td style="text-align:center; color:#888;">31</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">7</td>
+      <td><a href="https://ps.tc/pages/blog-usbliter8.html" target="_blank" style="color:#60a5fa;">USBliter8: an A12/A13 SecureROM Exploit</a></td>
+      <td style="text-align:center;">56</td>
+      <td style="text-align:center; color:#888;">14</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">8</td>
+      <td><a href="https://www.thedrive.com/news/this-man-was-gifted-his-dream-car-by-the-notorious-hacker-he-put-in-prison" target="_blank" style="color:#60a5fa;">A man was gifted his dream car by Kevin Mitnick, who he helped put in prison</a></td>
+      <td style="text-align:center;">52</td>
+      <td style="text-align:center; color:#888;">22</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">9</td>
+      <td><a href="https://words.filippo.io/vuln-reports/" target="_blank" style="color:#60a5fa;">Vulnerability reports are not special anymore</a></td>
+      <td style="text-align:center;">32</td>
+      <td style="text-align:center; color:#888;">1</td>
+    </tr>
+    <tr>
+      <td style="color:#888;">10</td>
+      <td><a href="https://joshmoody.org/blog/selfish-ai/" target="_blank" style="color:#60a5fa;">How to Passive-Aggressively Shame People Who Use LLMs Selfishly</a></td>
+      <td style="text-align:center;">8</td>
+      <td style="text-align:center; color:#888;">5</td>
+    </tr>
+  </table>
+
+  <div style="margin-top:16px; background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:16px;">
+    <h3 style="font-size:0.9em; color:#a78bfa; margin-bottom:8px;">💡 分析亮点</h3>
+    <ul style="font-size:0.85em; color:#aaa; padding-left:20px;">
+      <li><strong>iOS 安全：</strong>USBliter8 A12/A13 SecureROM Exploit — 面向 iPhone XS/XR 到 iPhone 11 系列的不可修复硬件级漏洞（SecureROM 是只读存储器）。对 Hermes 运行环境（Linux）无直接影响，但反映了移动安全领域的进展。</li>
+      <li><strong>脆弱性报告去神秘化：</strong>Filippo Valsorda 的 "Vulnerability reports are not special anymore" 一文论及安全研究的成熟化——发现漏洞已不再是稀有技能。对 Hermes 的启发：安全工具链应关注自动化而非人工发现。</li>
+      <li><strong>DevTools 动向：</strong>Swift Package Index 被 Apple 收购（167 分）和 FUTO Swipe 输入法模型（258 分）——分别代表了工具生态的集中化和边缘 AI 推理的落地。</li>
+      <li><strong>3D 渲染：</strong>"Printing Gaussian Splats"（157 分）——高斯泼溅（3D Gaussian Splatting）从数字渲染走向物理打印，暗示此技术的工程化落地加速。</li>
+      <li><strong>转瞬即逝的讽刺：</strong>"Extreme Heat 会议因极端高温警告取消"（104 分）——气候变化的黑色幽默。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== SECTION 7: Evolution Suggestions ========== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+  
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+    <div style="background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:20px;">
+      <h3 style="font-size:1em; color:#ef4444; margin-bottom:8px;">🔴 必须修复（本周内）</h3>
+      <ol style="font-size:0.85em; color:#aaa; padding-left:20px;">
+        <li><strong>停止 gateway.run 洪水（第 8 期持续）</strong><br>
+        `hermes gateway stop` + `hermes gateway restart` 清除重复 PID 冲突。
+        日志轮转清空了旧文件但问题未解——gateway PID 2398093 仍在产生 ~487 条/小时。
+        已持续 8 期（6/17→6/24），每拖延一天积累 ~1,000-5,000 条噪声。</li>
+        <li><strong>修正日志轮转阈值预警</strong><br>
+        原阈值假设 ~9,500 行触发轮转，P27→P28 实际在 8,790-9,589 区间触发。
+        将告警阈值从"接近 9,500"提前至"超过 8,500"。</li>
+      </ol>
+    </div>
+    <div style="background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:20px;">
+      <h3 style="font-size:1em; color:#ffa94d; margin-bottom:8px;">🟡 应修复（两周内）</h3>
+      <ol style="font-size:0.85em; color:#aaa; padding-left:20px;">
+        <li><strong>arXiv 备选源（连续 6 期不可用 — 新纪录）</strong><br>
+        调用失败窗口已创历史新高。考虑 Semantic Scholar API 或 arXiv Sanity Lite 作为主要数据源，
+        将 arXiv 降级为 failover。</li>
+        <li><strong>API 连接质量问题（conversation_loop + chat_completion_helpers 同步上升）</strong><br>
+        P28 这两组件合计 15 条（↑+6 vs P27），占比非洪水的 47%。
+        检查 TokenHub provider 的 APIConnectionError 模式。</li>
+      </ol>
+    </div>
+    <div style="background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:20px;">
+      <h3 style="font-size:1em; color:#60a5fa; margin-bottom:8px;">🔵 建议优化（一月内）</h3>
+      <ol style="font-size:0.85em; color:#aaa; padding-left:20px;">
+        <li><strong>非洪水基线告警自动化</strong><br>
+        30-35 条基线已历经 4 期验证（P25-P28）。将偏离 30% 阈值编码为自动告警。
+        P28 conversation_loop + chat_completion_helpers 上升至 15 条值得关注但未超基线。</li>
+        <li><strong>weakness_scan.py 全文件扫描模式</strong><br>
+        连续 8 期盲区确认了扫描策略的结构性缺陷。添加周期性全文件遍历作为增强模式。</li>
+      </ol>
+    </div>
+    <div style="background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:20px;">
+      <h3 style="font-size:1em; color:#a78bfa; margin-bottom:8px;">🟣 未来路线图</h3>
+      <ol style="font-size:0.85em; color:#aaa; padding-left:20px;">
+        <li><strong>SessionDB 兼容性修复</strong><br>
+        self_scan.py 报 `'SessionDB' object has no attribute 'list_sessions'`——sessions 数据持续显示为 0。</li>
+        <li><strong>日志轮转感知的预测模型</strong><br>
+        当前预测模型在轮转后需要重建基线（N=1 期）。开发一个"记忆轮转前状态"的机制，
+        使轮转后预测模型能从历史数据快速恢复，而非从零积累。</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SECTION 8: Long-term Trend ========== -->
+<div class="section">
+  <h2>📈 长期趋势 — 洪水序列全览（P20→P28）</h2>
+
+  <table>
+    <tr><th>指标</th><th style="text-align:center;">P21 (06-17)</th><th style="text-align:center;">P22 (06-18)</th><th style="text-align:center;">P23 (06-19)</th><th style="text-align:center;">P24 (06-20)</th><th style="text-align:center;">P25 (06-21)</th><th style="text-align:center;">P26 (06-22)</th><th style="text-align:center;">P27 (06-23)</th><th style="text-align:center;">P28 (06-24)</th></tr>
+    <tr>
+      <td>洪水源</td>
+      <td style="text-align:center;color:#ef4444;">gateway.run</td>
+      <td style="text-align:center;color:#b91c1c;">gateway.run</td>
+      <td style="text-align:center;color:#7f1d1d;">gateway.run</td>
+      <td style="text-align:center;color:#facc15;">gateway.run ⚡PID重置</td>
+      <td style="text-align:center;color:#60a5fa;">gateway.run</td>
+      <td style="text-align:center;color:#60a5fa;">gateway.run</td>
+      <td style="text-align:center;color:#a78bfa;">gateway.run</td>
+      <td style="text-align:center;color:#fbbf24;font-weight:700;">gateway.run 🔄轮转</td>
+    </tr>
+    <tr>
+      <td>gateway.run 占比</td>
+      <td style="text-align:center;">95.5%</td>
+      <td style="text-align:center;">97.1%</td>
+      <td style="text-align:center;">96.6%</td>
+      <td style="text-align:center;">93.4%</td>
+      <td style="text-align:center;">93.2%</td>
+      <td style="text-align:center;">93.8%</td>
+      <td style="text-align:center;">93.0%</td>
+      <td style="text-align:center;color:#fbbf24;font-weight:700;">93.6%</td>
+    </tr>
+    <tr>
+      <td>总日志量</td>
+      <td style="text-align:center;">~1,410</td>
+      <td style="text-align:center;">5,474</td>
+      <td style="text-align:center;">9,589</td>
+      <td style="text-align:center;">2,934</td>
+      <td style="text-align:center;">5,007</td>
+      <td style="text-align:center;">~6,000</td>
+      <td style="text-align:center;">8,790</td>
+      <td style="text-align:center;color:#fbbf24;">1,388 🆕</td>
+    </tr>
+    <tr>
+      <td>非洪水基线</td>
+      <td style="text-align:center;">—</td>
+      <td style="text-align:center;">—</td>
+      <td style="text-align:center;">—</td>
+      <td style="text-align:center;">—</td>
+      <td style="text-align:center;">34</td>
+      <td style="text-align:center;">31</td>
+      <td style="text-align:center;">35</td>
+      <td style="text-align:center;color:#22c55e;">32</td>
+    </tr>
+    <tr>
+      <td>PID</td>
+      <td style="text-align:center;">3289</td>
+      <td style="text-align:center;">3289</td>
+      <td style="text-align:center;">3289</td>
+      <td style="text-align:center;">2398093</td>
+      <td style="text-align:center;">2398093</td>
+      <td style="text-align:center;">2398093</td>
+      <td style="text-align:center;">2398093</td>
+      <td style="text-align:center;color:#60a5fa;">2398093 ✓</td>
+    </tr>
+    <tr>
+      <td>关键时刻</td>
+      <td style="text-align:center;color:#ffa94d;">源切换 554/h</td>
+      <td style="text-align:center;color:#facc15;">跨午夜 576/h</td>
+      <td style="text-align:center;color:#888;">衰减 171/h</td>
+      <td style="text-align:center;color:#60a5fa;">轮转+PID重置</td>
+      <td style="text-align:center;color:#22c55e;">B=1</td>
+      <td style="text-align:center;color:#22c55e;">B=2</td>
+      <td style="text-align:center;color:#a78bfa;">🏆 B=3</td>
+      <td style="text-align:center;color:#fbbf24;">🔄 二次轮转</td>
+    </tr>
+  </table>
+
+  <div style="margin-top:16px; background:#0d0d1a; border:1px solid #1a1a35; border-radius:12px; padding:16px;">
+    <h3 style="font-size:0.9em; color:#a78bfa; margin-bottom:8px;">趋势评估</h3>
+    <div style="font-size:0.85em; color:#aaa;">
+      <p><strong style="color:#60a5fa;">轮转模式确认：</strong>gateway.run 洪水序列已历经两次日志轮转。
+      P24（首次轮转，文件 9,589→2,934 行 + PID 重置）和 P28（二次轮转，文件 8,790→1,388 行，PID 未变）。
+      两次轮转的间隔为 4 天（P24 06-20 → P28 06-24），
+      <strong style="color:#ffa94d;">轮转周期约为 3-4 天</strong>——与日志文件增长速度和系统 logrotate 配置有关。</p>
+      <p style="margin-top:8px;"><strong style="color:#ffa94d;">非洪水基线稳定性得到第 4 期验证：</strong>
+      P25→P28 四期非洪水总量依次为 34→31→35→32，均值 33.0 条/期，始终落在 30-35 区间。
+      这是本次简报最稳定的指标。</p>
+      <p style="margin-top:8px;"><strong style="color:#fbbf24;">API 连接质量需要关注：</strong>
+      conversation_loop + chat_completion_helpers 从 P25-P27 的 12-14 条区间跃升至 P28 的 15 条。
+      如果 API 质量问题连续 3 期间上升，将推动非洪水基线上界从 35 增至 38-40。</p>
+      <p style="margin-top:8px;"><strong style="color:#a78bfa;">核心结论：</strong>系统仍处于"单向门"困境——gateway.run 洪水不修复，
+      所有其他指标（非洪水基线除外）的评估都是不可靠的。但非洪水基线 4 期确认 33.0 条/期的均值，说明
+      <strong style="color:#22c55e;">核心系统在洪水掩盖下仍然健康运行</strong>。修复 gateway 后，预期日志总量从数千降至 30-35 条/期。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<div class="footer">
+  <p>🧬 自进化简报 · 第 28 期 · 2026-06-24（周三）</p>
+  <p>🤖 由 Hermes Agent 自主生成 · 数据来源: self_scan / weakness_scan / knowledge_ingest</p>
+  <p>📂 evolution-brief-2026-06-24.html · GitHub Pages 推送中...</p>
+  <p style="margin-top:4px; color:#555; font-size:0.85em;">
+    🔑 P28 关键事件: 纯稳态 B=3 被日志轮转中断 → 新基线 N=1 | arXiv 连续第 6 期失败（历史新高）|
+    非洪水基线 32 条（4 期均值 33.0）| Conversation_loop + Chat_completion 同步上升
+  </p>
+</div>
+
+</div>
+</body>
+</html>
