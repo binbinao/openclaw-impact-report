@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intel vs AMD 芯片架构核心差异</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #3B7EBF; --sky-bg: rgba(59,126,191,0.08);
+  --clay-bg: rgba(217,119,87,0.06); --olive-bg: rgba(120,140,93,0.08);
+  --rust-bg: rgba(176,74,63,0.08);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300); --radius-panel: 12px; --radius-row: 8px; --radius-pill: 999px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 920px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  color: var(--slate); margin: 48px 0 16px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 32px; }
+
+.card {
+  background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 24px; margin-bottom: 24px;
+}
+.card.intel { border-left: 4px solid var(--sky); }
+.card.amd   { border-left: 4px solid var(--clay); }
+.card.summary { border-left: 4px solid var(--olive); }
+
+/* Diagram containers */
+.diagram-box {
+  background: var(--gray-150); border: var(--border);
+  border-radius: var(--radius-row); padding: 18px;
+  margin: 16px 0; overflow-x: auto;
+}
+.diagram-box pre {
+  font-family: var(--mono); font-size: 12px; line-height: 1.4;
+  color: var(--gray-700); margin: 0; white-space: pre;
+}
+
+table { width: 100%; border-collapse: collapse; }
+th {
+  font-family: var(--mono); font-size: 11px; color: var(--gray-500);
+  text-align: left; padding: 10px 14px; background: var(--gray-150);
+  border-bottom: var(--border);
+}
+td {
+  font-size: 14px; padding: 10px 14px; border-bottom: 1px solid var(--gray-150);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+
+.callout {
+  background: var(--clay-bg); border-left: 3px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 20px 0;
+  font-size: 15px;
+}
+
+.badge { border-radius: 6px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; }
+.badge.blue { background: rgba(59,126,191,0.18); color: var(--sky); }
+.badge.orange { background: rgba(217,119,87,0.18); color: var(--clay); }
+.badge.green { background: rgba(120,140,93,0.18); color: var(--olive); }
+
+.pill { border-radius: var(--radius-pill); padding: 2px 12px;
+  font-family: var(--mono); font-size: 11px; background: var(--oat); }
+
+ul { padding-left: 20px; font-size: 14px; line-height: 2; }
+li::marker { color: var(--gray-500); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.footnote {
+  font-family: var(--mono); font-size: 10px; color: var(--gray-500);
+  border-top: var(--border); padding-top: 18px; margin-top: 48px;
+}
+strong { color: var(--slate); }
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="eyebrow">CPU Architecture · Deep Dive</p>
+<h1>Intel 环形总线 vs AMD 小芯粒</h1>
+<p class="subtitle">一篇文章搞懂两巨头芯片架构的核心差异</p>
+
+<div class="callout">
+<strong>一句话概括：</strong>Intel 是"一个环形跑道串起所有人"，AMD 是"多个小分队 + 中央指挥部"。Intel 适合低延迟（游戏/桌面），AMD 适合堆核心数（服务器/EPYC）。
+</div>
+
+<!-- ===== INTEL ===== -->
+<h2><span class="badge blue">Intel</span> 环形总线（Ring Bus）</h2>
+
+<div class="card intel">
+<p>想象一个<strong>环形跑道</strong>，CPU 核心、缓存、内存控制器、IO 接口都挂在跑道边上。数据在跑道上顺时针或逆时针跑，跑到目的地就下车。</p>
+
+<div class="diagram-box">
+<pre>        ┌──────────────────────────┐
+        │    Core 0    Core 1      │
+        │      │         │         │
+   ┌────┼──────┼─────────┼─────┼────┐
+   │    │   ┌──┴─────────┴──┐  │    │
+   │  IO    │   RING BUS    │ Cache │
+   │    │   └──┬─────────┬──┘  │    │
+   └────┼──────┼─────────┼─────┼────┘
+        │      │         │         │
+        │    Core 2    Core 3      │
+        └──────────────────────────┘</pre>
+</div>
+
+<h3>优点</h3>
+<ul>
+  <li><strong>延迟低</strong>——核心间通信快，数据跑半圈就到目的地</li>
+  <li><strong>设计简单</strong>——所有核心共享同一个 L3 缓存，一致性协议简单</li>
+</ul>
+
+<h3>缺点</h3>
+<ul>
+  <li>核心越多，跑道越堵——<strong>超过 10-12 个核</strong>，环形总线就成了瓶颈</li>
+  <li>一个核坏了，整个跑道受影响</li>
+</ul>
+</div>
+
+<!-- ===== AMD ===== -->
+<h2><span class="badge orange">AMD</span> 小芯粒（Chiplet）</h2>
+
+<div class="card amd">
+<p>AMD 的做法是<strong>把大芯片拆成多个小芯片</strong>，每个 CCD（Core Complex Die）是独立小芯片，通过 Infinity Fabric 总线连接到中央 IOD。</p>
+
+<div class="diagram-box">
+<pre>   ┌──────────────┐   ┌──────────────┐
+   │    CCD 0     │   │    CCD 1     │
+   │  8核 + L3    │   │  8核 + L3    │
+   └──────┬───────┘   └──────┬───────┘
+          │     Infinity     │
+          │     Fabric       │
+          └────────┬─────────┘
+          ┌────────┴─────────┐
+          │       IOD        │
+          │  内存控制器 + IO  │
+          └──────────────────┘</pre>
+</div>
+
+<h3>优点</h3>
+<ul>
+  <li><strong>良率高、成本低</strong>——小芯片做坏的概率远低于大芯片</li>
+  <li><strong>制程混搭</strong>——CCD 用最先进 5nm/3nm，IOD 用便宜的 12nm</li>
+  <li><strong>轻松堆核</strong>——可以堆到 96/128 核</li>
+</ul>
+
+<h3>缺点</h3>
+<ul>
+  <li><strong>跨 CCD 延迟高</strong>——核心 0 访问 CCD 1 的缓存，得绕一大圈经过 IOD</li>
+  <li>两个 CCD 之间通信要经过中央 IOD 中转</li>
+</ul>
+</div>
+
+<!-- ===== COMPARISON TABLE ===== -->
+<h2>全面对比</h2>
+
+<div class="card">
+<table>
+<thead>
+<tr><th>维度</th><th style="width:50%">Intel 环形总线</th><th style="width:50%">AMD 小芯粒</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>结构</strong></td><td>一块大芯片，所有东西挂环形跑道</td><td>多个小芯粒 + 中央 IOD</td></tr>
+<tr><td><strong>核心数</strong></td><td><span class="badge blue">≤ 12 核</span></td><td><span class="badge orange">96+ 核</span></td></tr>
+<tr><td><strong>核心间延迟</strong></td><td><span class="badge green">低</span> 半圈就到</td><td><span class="badge orange">高</span> 跨 CCD 绕远路</td></tr>
+<tr><td><strong>良率 / 成本</strong></td><td>低良率，贵</td><td><span class="badge green">高良率，便宜</span></td></tr>
+<tr><td><strong>制程灵活度</strong></td><td>必须统一制程</td><td><span class="badge green">可混搭</span></td></tr>
+<tr><td><strong>L3 缓存</strong></td><td>所有核心共享</td><td>每个 CCD 独立 L3</td></tr>
+<tr><td><strong>适合场景</strong></td><td><span class="badge blue">游戏 / 桌面 / 低延迟</span></td><td><span class="badge orange">服务器 / EPYC / 多核</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== EVOLUTION ===== -->
+<h2>现在的演进</h2>
+
+<div class="card summary">
+<h3><span class="pill">Intel</span> 也不死守环形了</h3>
+<ul>
+  <li>12 代酷睿引入<strong>大小核混合架构</strong>（P-core + E-core）</li>
+  <li>Meteor Lake 引入 <strong>Tile 架构</strong>（类似 Chiplet，但用 Foveros 3D 堆叠 + EMIB 桥接）</li>
+  <li>现在走的是<strong>"环形 + Mesh + Tile"混合路线</strong></li>
+</ul>
+
+<h3 style="margin-top:20px;"><span class="pill">AMD</span> 也在补延迟短板</h3>
+<ul>
+  <li><strong>3D V-Cache</strong>——额外 L3 缓存垂直堆叠在 CCD 上方，大幅降低缓存延迟</li>
+  <li>对游戏性能提升巨大（Ryzen 7 9800X3D 成为游戏神 U）</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>总结：</strong>Intel 是"一条跑道串所有"，AMD 是"多个小分队 + 中央指挥部"。但两者现在都在往对方的方向靠——Intel 学 Chiplet，AMD 补延迟。
+</div>
+
+<div class="footnote">
+Published via GitHub Pages · openclaw-impact-report · June 2026
+</div>
+
+</div>
+</body>
+</html>
