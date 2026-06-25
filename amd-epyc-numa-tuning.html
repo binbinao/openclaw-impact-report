@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMD EPYC CCD NUMA 调优实战</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #3B7EBF; --sky-bg: rgba(59,126,191,0.08);
+  --clay-bg: rgba(217,119,87,0.06); --olive-bg: rgba(120,140,93,0.08);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300); --radius-panel: 12px; --radius-row: 8px; --radius-pill: 999px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 920px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  color: var(--slate); margin: 48px 0 16px; }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 32px; }
+
+.card {
+  background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 24px; margin-bottom: 24px;
+}
+.card.l1 { border-left: 4px solid var(--olive); }
+.card.l2 { border-left: 4px solid var(--sky); }
+.card.l3 { border-left: 4px solid var(--clay); }
+.card.summary { border-left: 4px solid var(--olive); }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+thead th {
+  font-family: var(--mono); font-size: 11px; color: var(--gray-500);
+  text-align: left; padding: 10px 14px; background: var(--gray-150);
+  border-bottom: var(--border);
+}
+td {
+  font-size: 14px; padding: 10px 14px; border-bottom: 1px solid var(--gray-150);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+td.nowrap { white-space: nowrap; }
+
+.code-block {
+  background: var(--slate); color: #E8E6DF; border-radius: var(--radius-row);
+  padding: 14px 18px; font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  overflow-x: auto; margin: 12px 0;
+}
+.code-block .cm { color: #8B8B83; }
+.code-block .kw { color: var(--clay); }
+.code-block .fn { color: #C9B98A; }
+.code-block .str { color: var(--olive); }
+
+.callout {
+  background: var(--clay-bg); border-left: 3px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 20px 0; font-size: 15px;
+}
+.callout.info { background: var(--sky-bg); border-left-color: var(--sky); }
+.callout.good { background: var(--olive-bg); border-left-color: var(--olive); }
+
+.badge { border-radius: 6px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; white-space: nowrap; }
+.badge.green { background: rgba(120,140,93,0.18); color: var(--olive); }
+.badge.blue { background: rgba(59,126,191,0.18); color: var(--sky); }
+.badge.orange { background: rgba(217,119,87,0.18); color: var(--clay); }
+.badge.gray { background: var(--gray-150); color: var(--gray-500); }
+
+.footnote {
+  font-family: var(--mono); font-size: 10px; color: var(--gray-500);
+  border-top: var(--border); padding-top: 18px; margin-top: 48px;
+}
+strong { color: var(--slate); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+@media (max-width: 768px) {
+  .two-col { grid-template-columns: 1fr; }
+  td, th { font-size: 13px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="eyebrow">HPC · NUMA · Performance Tuning</p>
+<h1>AMD EPYC CCD NUMA 调优实战</h1>
+<p class="subtitle">从零代码到改通信层——三阶段调优指南，以及算例业务层是否受影响</p>
+
+<div class="callout good">
+<strong>核心结论：</strong>绝大多数 CFD 团队只需要改启动命令（零代码），就能拿到 20-50% 的性能提升。需要改代码的深度调优，通常只有 HPC 国家实验室或求解器开发商才会做。
+</div>
+
+<!-- ===== L1 ===== -->
+<h2><span class="badge green">L1</span> 最简单：只改启动命令（零代码）</h2>
+
+<div class="card l1">
+<p>不改任何算例代码，纯运维操作，<strong>5 分钟搞定</strong>。</p>
+
+<div class="code-block">
+<span class="cm"># 查看 NUMA 拓扑</span>
+numactl --hardware
+
+<span class="cm"># 典型 AMD EPYC 双路输出：</span>
+<span class="cm">#   node 0: CCD 0-3 (cores 0-31)</span>
+<span class="cm">#   node 1: CCD 4-7 (cores 32-63)</span>
+<span class="cm">#   node 2: CCD 0-3 (cores 64-95)   ← 第二个 CPU</span>
+<span class="cm">#   node 3: CCD 4-7 (cores 96-127)</span>
+
+<span class="cm"># 把 MPI rank 绑定到指定 NUMA 域</span>
+<span class="kw">mpirun</span> -np 128 \
+  <span class="fn">--map-by</span> ppr:32:numa \
+  <span class="fn">--bind-to</span> core \
+  ./solver
+</div>
+
+<p><code>--map-by ppr:32:numa</code> 意思是每个 NUMA 域放 32 个进程，确保相邻 rank 在同一个 CCD 内。Halo Exchange 的相邻 rank 大概率落在同 CCD 内，延迟从跨 CCD 的 ~200ns 降到同 CCD 的 ~50ns。</p>
+
+<table>
+<thead><tr><th>操作</th><th>涉及代码</th><th>耗时</th><th>收益</th></tr></thead>
+<tbody>
+<tr><td><code>mpirun --map-by</code> + <code>numactl</code></td><td><span class="badge green">❌ 零代码</span></td><td class="nowrap">5 分钟</td><td><strong>10-30%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== L2 ===== -->
+<h2><span class="badge blue">L2</span> 中等：理解网格分区（不改代码）</h2>
+
+<div class="card l2">
+<p>开始触及算例元数据，但<strong>不改求解器源码</strong>。关键问题：网格分区器（METIS/Scotch）不知道 NUMA 拓扑。</p>
+
+<h3>方案 A：重排 rank 顺序</h3>
+<div class="code-block">
+<span class="kw">mpirun</span> -np 128 \
+  <span class="fn">--map-by</span> ppr:32:numa:PE=1 \
+  <span class="fn">--rank-by</span> numa \
+  <span class="fn">--bind-to</span> core \
+  ./solver
+</div>
+
+<h3>方案 B：拓扑感知通信</h3>
+<div class="code-block">
+<span class="cm">// OpenFOAM 的 system/controlDict</span>
+<span class="fn">mpiBufferSize</span>   0;  <span class="cm">// 让 MPI 自动管理</span>
+</div>
+
+<p>需要理解网格分区结果和 NUMA 拓扑的对应关系，可能需要重排 rank 或调整分区策略。</p>
+
+<table>
+<thead><tr><th>操作</th><th>涉及代码</th><th>耗时</th><th>收益</th></tr></thead>
+<tbody>
+<tr><td>重排 rank + 调整分区策略</td><td><span class="badge green">❌ 不改代码</span></td><td class="nowrap">1-2 天</td><td><strong>额外 10-20%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== L3 ===== -->
+<h2><span class="badge orange">L3</span> 深度：改通信层（需改代码）</h2>
+
+<div class="card l3">
+<p>需要修改求解器源码，但改的是<strong>通信层</strong>，<strong>不改物理模型</strong>。</p>
+
+<h3>3.1 异步通信 + 计算重叠</h3>
+<div class="code-block">
+<span class="cm">// 原始代码（同步通信）</span>
+<span class="fn">updateBoundary</span>();           <span class="cm">// 等 Halo 数据到达</span>
+<span class="fn">solve</span>(UEqn);                <span class="cm">// 然后计算</span>
+
+<span class="cm">// 改为异步重叠</span>
+<span class="fn">MPI_Irecv</span>(halo_data);       <span class="cm">// 非阻塞接收</span>
+<span class="fn">solve</span>(inner_cells);         <span class="cm">// 先算内部网格（不依赖 Halo）</span>
+<span class="fn">MPI_Wait</span>(halo_complete);    <span class="cm">// 等 Halo 数据到</span>
+<span class="fn">solve</span>(boundary_cells);      <span class="cm">// 再算边界</span>
+</div>
+<p><strong>收益</strong>：Halo Exchange 的延迟被内部计算掩盖，对 CFD 迭代整体时间影响显著降低。</p>
+
+<h3>3.2 NUMA 感知内存分配</h3>
+<div class="code-block">
+<span class="cm">// 确保每个 MPI rank 的数据在本地 NUMA 域</span>
+<span class="kw">#include</span> <span class="str">&lt;hwloc.h&gt;</span>
+
+<span class="fn">hwloc_topology_t</span> topology;
+<span class="fn">hwloc_topology_init</span>(&topology);
+<span class="fn">hwloc_topology_load</span>(topology);
+
+<span class="cm">// 在本地 NUMA 域分配网格数据</span>
+<span class="kw">void</span>* local_data = <span class="fn">hwloc_alloc_membind</span>(
+    topology, size,
+    <span class="fn">hwloc_get_numa_node_objs</span>(topology),
+    HWLOC_MEMBIND_BIND, 0
+);
+</div>
+
+<table>
+<thead><tr><th>操作</th><th>涉及代码</th><th>耗时</th><th>收益</th></tr></thead>
+<tbody>
+<tr><td>异步通信重叠 + NUMA 感知分配</td><td><span class="badge orange">✅ 改通信层</span></td><td class="nowrap">1-2 周</td><td><strong>额外 10-15%</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== BUSINESS LAYER ===== -->
+<h2>算例业务层是否受影响？</h2>
+
+<div class="card">
+<p><strong>绝大多数情况下不需要动算例。</strong></p>
+
+<div class="two-col">
+<div>
+<h3 style="margin-top:0;">需要改什么</h3>
+<ul>
+  <li>✅ MPI 启动参数（<code>--map-by</code>）</li>
+  <li>✅ 网格分区策略（分区器选择）</li>
+  <li>✅ 内存分配策略（<code>numactl</code>）</li>
+  <li>✅ 通信模式（同步→异步重叠）</li>
+</ul>
+</div>
+<div>
+<h3 style="margin-top:0;">不动什么</h3>
+<ul>
+  <li>❌ 物理模型（湍流、燃烧、多相等）</li>
+  <li>❌ 边界条件</li>
+  <li>❌ 求解器算法</li>
+  <li>❌ 网格文件</li>
+  <li>❌ 后处理</li>
+</ul>
+</div>
+</div>
+
+<div class="callout info">
+<strong>唯一例外：</strong>极度不均匀的网格（如局部极端加密）可能导致分区器产生的子域大小悬殊，某些 CCD 满载而其他 CCD 空闲。这时需要改分区策略——但这属于<strong>预处理阶段</strong>，不涉及求解器。
+</div>
+</div>
+
+<!-- ===== SUMMARY ===== -->
+<h2>调优复杂度总览</h2>
+
+<div class="card summary">
+<table>
+<thead><tr><th>层级</th><th>操作</th><th style="width:12%">涉及代码</th><th style="width:10%">耗时</th><th style="width:10%">收益</th></tr></thead>
+<tbody>
+<tr><td><span class="badge green">L1</span></td><td><code>mpirun --map-by</code> + <code>numactl</code></td><td><span class="badge green">零代码</span></td><td class="nowrap">5 分钟</td><td><strong>10-30%</strong></td></tr>
+<tr><td><span class="badge blue">L2</span></td><td>重排 rank + 调整分区策略</td><td><span class="badge green">不改代码</span></td><td class="nowrap">1-2 天</td><td><strong>+10-20%</strong></td></tr>
+<tr><td><span class="badge orange">L3</span></td><td>异步通信重叠 + NUMA 感知分配</td><td><span class="badge orange">改通信层</span></td><td class="nowrap">1-2 周</td><td><strong>+10-15%</strong></td></tr>
+<tr><td><span class="badge gray">L4</span></td><td>改物理模型</td><td>—</td><td class="nowrap">—</td><td>不需要</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout good">
+<strong>实战建议：</strong>先做 L1，5 分钟拿到最大收益。如果 L1 后性能仍未达预期，再逐步推进到 L2。L3 仅建议有 HPC 专责工程师的团队尝试——维护私有代码分支的长期成本通常超过那 10-15% 的额外收益。
+</div>
+
+<div class="footnote">
+Published via GitHub Pages · openclaw-impact-report · June 2026
+</div>
+
+</div>
+</body>
+</html>
