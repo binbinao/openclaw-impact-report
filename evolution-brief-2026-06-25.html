@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 29 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .stable-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    background: rgba(255,169,77,0.12);
+    border: 1px solid rgba(255,169,77,0.25);
+    border-radius: 20px;
+    color: #ffa94d;
+    font-weight: 600;
+    font-size: 0.85em;
+  }
+  .header .flood-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.25);
+    border-radius: 20px;
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 0.85em;
+    margin-left: 8px;
+  }
+  .section {
+    background: #111118;
+    border: 1px solid #1a1a2e;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.3em; font-weight: 700; margin-bottom: 24px; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .section h2 .icon { font-size: 1.2em; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #16161f;
+    border: 1px solid #1f1f30;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 1.8em; font-weight: 700; color: #60a5fa; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card.warn .value { color: #ffa94d; }
+  .stat-card.danger .value { color: #ef4444; }
+  .stat-card.success .value { color: #22c55e; }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .name { color: #888; font-size: 0.9em; }
+  .stat-row .val { font-weight: 600; color: #e0e0e0; }
+  .bar-container { background: #1a1a2e; height: 24px; border-radius: 12px; overflow: hidden; margin: 8px 0; }
+  .bar-fill { height: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 600; color: #fff; transition: width 0.5s; }
+  .bar-gateway { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .bar-api { background: linear-gradient(90deg, #f97316, #ea580c); }
+  .bar-conv { background: linear-gradient(90deg, #eab308, #ca8a04); }
+  .bar-other { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 0.8em; font-weight: 600; }
+  .badge-high { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .badge-med { background: rgba(255,169,77,0.15); color: #ffa94d; }
+  .badge-low { background: rgba(99,102,241,0.15); color: #818cf8; }
+  .badge-ok { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .alert-box {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+    font-size: 0.9em;
+  }
+  .alert-critical { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); }
+  .alert-warning { background: rgba(255,169,77,0.08); border: 1px solid rgba(255,169,77,0.2); }
+  .alert-info { background: rgba(96,165,250,0.08); border: 1px solid rgba(96,165,250,0.2); }
+  .alert-success { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); }
+  .alert-box strong { display: block; margin-bottom: 6px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.85em;
+  }
+  th {
+    background: #1a1a2e;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.8em;
+  }
+  td { padding: 10px 12px; border-bottom: 1px solid #1a1a2e; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .timeline { position: relative; padding-left: 24px; margin: 16px 0; }
+  .tl-event { position: relative; padding: 8px 0 8px 16px; border-left: 2px solid #1f1f30; }
+  .tl-event:last-child { border-left-color: transparent; }
+  .tl-event::before { content: ''; position: absolute; left: -6px; top: 14px; width: 10px; height: 10px; border-radius: 50%; background: #1f1f30; }
+  .tl-event.critical::before { background: #ef4444; }
+  .tl-event.success::before { background: #22c55e; }
+  .tl-event.warn::before { background: #ffa94d; }
+  .hn-item { padding: 12px 0; border-bottom: 1px solid #1a1a2e; }
+  .hn-item:last-child { border-bottom: none; }
+  .hn-item .title { font-weight: 600; color: #e0e0e0; }
+  .hn-item .title a { color: #60a5fa; text-decoration: none; }
+  .hn-item .title a:hover { text-decoration: underline; }
+  .hn-item .meta { font-size: 0.85em; color: #666; margin-top: 4px; }
+  .hn-item .score { color: #ffa94d; font-weight: 600; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: 500; margin: 0 3px; }
+  .tag-red { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .tag-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .tag-blue { background: rgba(96,165,250,0.15); color: #60a5fa; }
+  .tag-yellow { background: rgba(255,169,77,0.15); color: #ffa94d; }
+  .tag-purple { background: rgba(168,85,247,0.15); color: #a855f7; }
+  .suggestion-card {
+    background: #16161f;
+    border: 1px solid #1f1f30;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 12px 0;
+  }
+  .suggestion-card h4 { color: #60a5fa; margin-bottom: 8px; }
+  .suggestion-card p { color: #888; font-size: 0.9em; }
+  .discovery-box {
+    background: linear-gradient(135deg, rgba(96,165,250,0.06), rgba(139,92,246,0.06));
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .discovery-box h4 { color: #a78bfa; margin-bottom: 8px; }
+  .discovery-box p { color: #aaa; font-size: 0.9em; }
+  .footer { text-align: center; padding: 40px 0; color: #444; font-size: 0.8em; }
+  .code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; background: #16161f; padding: 2px 6px; border-radius: 4px; color: #ffa94d; }
+  @media (max-width: 640px) {
+    .container { padding: 20px 12px; }
+    .header h1 { font-size: 1.6em; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 自进化简报 · 第 29 期</h1>
+  <div class="subtitle">2026-06-25 · Period 29 · cron job 9ec6cb79e14d</div>
+  <div>
+    <span class="flood-badge">⚠️ 洪水第 9 天 · PID 2398093</span>
+    <span class="stable-badge">📌 日志轮转 N=2</span>
+  </div>
+</div>
+
+<!-- KEY STATS -->
+<div class="stat-grid">
+  <div class="stat-card danger"><div class="value">30</div><div class="label">可用工具</div></div>
+  <div class="stat-card"><div class="value">63</div><div class="label">活跃技能</div></div>
+  <div class="stat-card"><div class="value">37%</div><div class="label">记忆使用率</div></div>
+  <div class="stat-card warn"><div class="value">96.8%</div><div class="label">核心垄断率</div></div>
+  <div class="stat-card danger"><div class="value">3,297</div><div class="label">今日日志量</div></div>
+  <div class="stat-card success"><div class="value">25</div><div class="label">非洪水基线</div></div>
+</div>
+
+<!-- CRITICAL ALERT -->
+<div class="alert-box alert-critical">
+  <strong>🚨 假突破 3.0 持续 · 第 9 期盲区继续</strong>
+  <p>gateway.run 以 96.8%（3,192/3,297）的占比继续触发假突破 3.0 告警。同一 PID 2398093 已连续运行 9 天（自 06-17），但 weakness_scan 的 500 行滑动窗口仅能检出 1 个弱点（network_access）。tool_security 和 model_output_quality 已被挤出窗口连续 9 期。</p>
+</div>
+
+<!-- ====== SECTION 1: CAPABILITY ====== -->
+<div class="section">
+  <h2><span class="icon">📊</span> 能力图谱</h2>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="value">30</div><div class="label">工具总数</div></div>
+    <div class="stat-card"><div class="value">30</div><div class="label">唯一分类</div></div>
+    <div class="stat-card success"><div class="value">63</div><div class="label">活跃技能</div></div>
+    <div class="stat-card"><div class="value">0</div><div class="label">待归档</div></div>
+  </div>
+
+  <div class="stat-row"><span class="name">可用工具数</span><span class="val">30（稳定，与 P28 一致）</span></div>
+  <div class="stat-row"><span class="name">活跃技能</span><span class="val">63（+0 vs P28，含 3 个 agent 创建）</span></div>
+  <div class="stat-row"><span class="name">记忆使用率</span><span class="val"><span style="color:#22c55e;">memory 37%</span> · user 16%</span></div>
+  <div class="stat-row"><span class="name">Cron Jobs</span><span class="val">2 active（a077650b277d, 9ec6cb79e14d）</span></div>
+  <div class="stat-row"><span class="name">Session DB</span><span class="val"><span style="color:#ef4444;">⚠️ list_sessions 仍不可用</span></span></div>
+  <div style="margin-top:12px;"><span class="tag tag-green">🔧 工具</span> <span class="tag tag-blue">📘 技能</span> <span class="tag tag-yellow">🧠 记忆</span> <span class="tag tag-purple">⏰ Cron</span></div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>💡 能力趋势洞察</h4>
+    <p>工具数连续 2 期稳定在 30（无波动），技能数保持 63。系统能力面稳定，无明显扩张或收缩。SessionDB 兼容性问题（P1 起存在）已是 29 期未解决的老问题——建议尝试用 SQLite 直接查询替代 API。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 2: WEAKNESS ====== -->
+<div class="section">
+  <h2><span class="icon">⚠️</span> 弱点诊断</h2>
+
+  <div class="alert-box alert-critical">
+    <strong>🔴 假突破 3.0 · 单一组件 >70% 告警</strong>
+    <p>gateway.run 以 <strong>96.8%</strong>（3,192/3,297）的全文件占比形成单体洪水。这是连续第 9 天同一 PID（2398093）运行。检测规则已被验证 9 期——不同洪水源（api_server→gateway.run）均能触发，规则具有普适性。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">尾 500 行组件分布</h3>
+  <table>
+    <thead><tr><th>组件</th><th>条数</th><th>占比</th><th>趋势 vs P28</th></tr></thead>
+    <tbody>
+      <tr><td>gateway.run</td><td>475</td><td>95.0%</td><td><span style="color:#ffa94d;">持平</span> (93.6%→95.0%)</td></tr>
+      <tr><td>gateway.platforms.api_server</td><td>12</td><td>2.4%</td><td><span style="color:#ef4444;">↑ 3→12</span></td></tr>
+      <tr><td>agent.conversation_loop</td><td>7</td><td>1.4%</td><td><span style="color:#22c55e;">↓ 10→7</span></td></tr>
+      <tr><td>agent.chat_completion_helpers</td><td>4</td><td>0.8%</td><td><span style="color:#22c55e;">↓ 16→4</span></td></tr>
+      <tr><td>agent.tool_executor</td><td>1</td><td>0.2%</td><td><span style="color:#22c55e;">↓ 3→1</span></td></tr>
+      <tr><td>cron.scheduler</td><td>1</td><td>0.2%</td><td><span style="color:#888;">→ 1</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bar-container" style="margin:16px 0;">
+    <div class="bar-fill bar-gateway" style="width:95%">gateway.run 95.0%</div>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px; margin-top:20px;">全文件分布（3,297 行，全部来自 06-25）</h3>
+  <table>
+    <thead><tr><th>组件</th><th>条数</th><th>占比</th></tr></thead>
+    <tbody>
+      <tr><td>gateway.run</td><td>3,192</td><td>96.8%</td></tr>
+      <tr><td>gateway.platforms.api_server</td><td>83</td><td>2.5%</td></tr>
+      <tr><td>agent.conversation_loop</td><td>9</td><td>0.3%</td></tr>
+      <tr><td>agent.tool_executor</td><td>7</td><td>0.2%</td></tr>
+      <tr><td>agent.chat_completion_helpers</td><td>5</td><td>0.2%</td></tr>
+      <tr><td>cron.scheduler</td><td>1</td><td>0.0%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="stat-row" style="margin-top:12px;">
+    <span class="name">非洪水合计（尾 500 行）</span>
+    <span class="val"><span style="color:#22c55e;">25 条</span> — 低于 30-35 基线区间</span>
+  </div>
+  <div class="stat-row">
+    <span class="name">非洪水合计（全文件）</span>
+    <span class="val">105 条（3.2%）</span>
+  </div>
+
+  <div class="alert-box alert-warning" style="margin-top:16px;">
+    <strong>📌 弱点检出</strong>
+    <p>
+      <span class="badge badge-med">MEDIUM</span> network_access · 4 次证据 · 外部网络连接失败（Polymarket API 被 GFW 阻断）
+    </p>
+    <p style="margin-top:8px; color:#666; font-size:0.85em;">
+      🔴 盲区持续第 9 期：tail-500 窗口已被 gateway.run 垄断，tool_security 和 model_output_quality 证据自 P21 起已被全部挤出，已连续 9 期未被检出。
+    </p>
+  </div>
+</div>
+
+<!-- ====== SECTION 3: TREND ====== -->
+<div class="section">
+  <h2><span class="icon">📈</span> 趋势分析</h2>
+
+  <div class="discovery-box">
+    <h4>🔑 关键发现：每日日志轮转确认</h4>
+    <p>P28（06-24）和 P29（06-25）的 errors.log 均仅含当日日志（1,388 行 + 3,297 行，跨越两天无残留）。这确认了日志轮转为 <strong>每日时间驱动</strong>（每日 00:00 轮转），而非仅基于文件大小。之前 P25-P27 能跨日积累（5,007→8,790）是因为洪水速率较高导致文件在轮转前已达数日数据。P28-P29 连续两天干净轮转，轮转模式已明确。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">5 期趋势对比</h3>
+  <table>
+    <thead><tr><th>指标</th><th>P25 (06-21)</th><th>P26 (06-22)</th><th>P27 (06-23)</th><th>P28 (06-24)</th><th style="color:#60a5fa;">P29 (06-25)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>gateway.run (尾 500)</strong></td><td>93.2%</td><td>93.8%</td><td>93.0%</td><td>93.6%</td><td style="color:#ef4444;"><strong>95.0%</strong></td></tr>
+      <tr><td><strong>非洪水基线</strong></td><td>34</td><td>31</td><td>35</td><td>32</td><td style="color:#22c55e;"><strong>25</strong></td></tr>
+      <tr><td><strong>文件行数</strong></td><td>5,007</td><td>~6,500</td><td>8,790</td><td>1,388</td><td style="color:#ffa94d;">3,297</td></tr>
+      <tr><td><strong>每日速率</strong></td><td>~490/h</td><td>~475/h</td><td>~450/h</td><td>~350/h</td><td style="color:#ffa94d;">~366/h</td></tr>
+      <tr><td><strong>弱点数</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td><strong>健康度评分</strong></td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td><td style="color:#888;">不可靠</td></tr>
+      <tr><td><strong>稳态标记</strong></td><td>B=1</td><td>B=2</td><td>B=3</td><td>N=1</td><td style="color:#22c55e;">N=2</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px; margin-top:20px;">结构化事件时间线</h3>
+  <div class="timeline">
+    <div class="tl-event">P20 (06-16) · 🚨 api_server 洪水开始（86.4%）</div>
+    <div class="tl-event critical">P21 (06-17) · 🔴 洪水源切换至 gateway.run（95.5%）· PID 3289</div>
+    <div class="tl-event critical">P22 (06-18) · 🔴 跨午夜运行 · PID 3289 · 5,317 行</div>
+    <div class="tl-event warn">P23 (06-19) · 🟡 衰减稳态 · PID 3289 · 9,589 行</div>
+    <div class="tl-event warn">P24 (06-20) · 🟡 日志轮转 + PID 重置 2398093</div>
+    <div class="tl-event success">P25 (06-21) · ✅ 纯稳态 B=1 · PID 2398093</div>
+    <div class="tl-event success">P26 (06-22) · ✅ 纯稳态 B=2 · 6/6 预测全中</div>
+    <div class="tl-event success">P27 (06-23) · ✅ 纯稳态 B=3 · 基线锁定</div>
+    <div class="tl-event warn">P28 (06-24) · 🟡 日志轮转 N=1 · 基线 32 条（区间内）</div>
+    <div class="tl-event" style="color:#60a5fa;"><strong>P29 (06-25) · 每日日志轮转确认 N=2 · 非洪水 25 条</strong></div>
+  </div>
+
+  <div class="discovery-box" style="margin-top:20px;">
+    <h4>📐 预测验证反馈回路</h4>
+    <p><strong>P28→P29 预测验证：</strong></p>
+    <p>P28 预测：gateway.run 将继续（PID 不变），非洪水基线将在 30-35 区间，日志轮转后新基线建立。</p>
+    <p><strong>实际：</strong>gateway.run 继续 ✓ | 非洪水 25 条（低于区间下限）≈ | 日志轮转确认每日模式 ✓</p>
+    <p style="color:#ffa94d; margin-top:8px;">非洪水基线 25 条首次低于 30 区间下限，需关注是否为新常态。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 4: KNOWLEDGE FEED ====== -->
+<div class="section">
+  <h2><span class="icon">🔬</span> 知识摄取</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card danger"><div class="value">0</div><div class="label">arXiv 论文</div></div>
+    <div class="stat-card"><div class="value">10</div><div class="label">HN 故事</div></div>
+  </div>
+
+  <div class="alert-box alert-warning">
+    <strong>📡 arXiv API 连续 7 期失败</strong>
+    <p>P23→P29 已连续 7 期无法获取 arXiv 论文（历史最低成功率 6/29 = 20.7%）。当前失败窗口已超越历史最长记录（P5→P10 的 5 期）。建议提高备选源优先级：Semantic Scholar API 或 arXiv Sanity Lite。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">🔥 Hacker News 头条</h3>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://techcrunch.com/2026/06/24/openai-unveils-its-first-custom-chip-built-by-broadcom/">OpenAI 发布首款自研芯片（Broadcom 制造）</a></div>
+    <div class="meta"><span class="tag tag-red">AI 硬件</span> <span class="score">↑504</span> · 316 评论 · 大幅提升推理效率，减少对 NVIDIA 依赖</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://bunny.net/blog/were-making-bunny-dns-free/">Bunny 宣布 DNS 服务免费</a></div>
+    <div class="meta"><span class="tag tag-green">基础设施</span> <span class="score">↑845</span> · 255 评论 · 当日最热门，CDN 厂商的免费 DNS 战略</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://rubyllm.com/">RubyLLM：覆盖所有主流 AI 提供商的 Ruby 框架</a></div>
+    <div class="meta"><span class="tag tag-blue">开发工具</span> <span class="score">↑339</span> · 53 评论 · 类似 LangChain 的 Ruby 生态替代品</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.reuters.com/business/qualcomm-buy-ai-startup-modular-2026-06-24/">高通收购 AI 初创公司 Modular</a></div>
+    <div class="meta"><span class="tag tag-purple">行业收购</span> <span class="score">↑135</span> · 34 评论 · Modular 的 Mojo 语言团队加入高通</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.greptile.com/blog/prs-on-openclaw">PR 垃圾邮件像 2000 年代初的电子邮件垃圾</a></div>
+    <div class="meta"><span class="tag tag-yellow">开源治理</span> <span class="score">↑176</span> · 99 评论 · AI 生成 PR 的治理挑战</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-computer-use-gemini-3-5-flash/">Gemini 3.5 Flash 支持 Computer Use</a></div>
+    <div class="meta"><span class="tag tag-blue">AI 代理</span> <span class="score">↑167</span> · 101 评论 · 类似 Claude Computer Use 的 Google 方案</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://blogs.nvidia.com/blog/liquid-cooling-ai-factories/">45°C 冷却设计将数据中心用水量降至接近零</a></div>
+    <div class="meta"><span class="tag tag-green">基础设施</span> <span class="score">↑180</span> · 135 评论 · NVIDIA 的液冷 AI 工厂设计</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.elastic.co/blog/ceo-ash-kulkarni-announcement-to-elastic-employees">Elastic 裁员 7%</a></div>
+    <div class="meta"><span class="tag tag-red">行业动态</span> <span class="score">↑110</span> · 106 评论 · 搜索基础设施公司持续重组</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://github.com/LuaJIT/LuaJIT/issues/1475">LuaJIT 3.0 提议的语法扩展</a></div>
+    <div class="meta"><span class="tag tag-purple">编程语言</span> <span class="score">↑17</span> · 技术讨论</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://blog.jim-nielsen.com/2026/blogging-stating-the-obvious/">博客写作可以只是陈述显而易见的事</a></div>
+    <div class="meta"><span class="tag tag-yellow">技术写作</span> <span class="score">↑42</span> · 8 评论</div>
+  </div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>💡 行业趋势洞察</h4>
+    <p><strong>1) AI 芯片军备竞赛：</strong> OpenAI 首款自研芯片（Broadcom 制造）表明自研 AI 芯片趋势加速。这对 Hermes 的推理成本和性能有长期积极影响。</p>
+    <p><strong>2) AI 代理标准化：</strong> RubyLLM、Gemini 3.5 Flash Computer Use 显示 AI 代理框架进入标准化阶段。Hermes 的代理编排能力处于行业前沿。</p>
+    <p><strong>3) PR 垃圾邮件的治理挑战：</strong> AI 生成的 PR 垃圾已构成开源社区的显著问题，与 Hermes 的 openclaw 关联——需要考虑请求质量过滤。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 5: EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+  <h2><span class="icon">🧬</span> 进化建议</h2>
+
+  <div class="stat-grid" style="margin-bottom:20px;">
+    <div class="stat-card danger"><div class="value" style="font-size:1.4em;">9</div><div class="label">洪水持续天数</div></div>
+    <div class="stat-card"><div class="value" style="font-size:1.4em;">0</div><div class="label">未修复核心问题</div></div>
+    <div class="stat-card warn"><div class="value" style="font-size:1.4em;">9</div><div class="label">盲区持续期数</div></div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>⚡ P0 — 停止 gateway.run 洪水（9 天未解决）</h4>
+    <p>PID 2398093 的 gateway 实例已持续运行 9 天，每日产生 ~3,300 条重复错误日志。cron job 的启动检查逻辑需要修正：在启动 gateway 前检查 <code class="code">hermes gateway status</code> 或 PID 文件，避免重复启动。如非有意多实例，应统一 gateway 的生命周期管理。</p>
+    <div style="margin-top:8px;">
+      <span class="tag tag-red">优先级 P0</span>
+      <span class="tag tag-yellow">影响范围重大</span>
+    </div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>🛠️ P1 — 部署安全白名单（打破核心垄断）</h4>
+    <p>改善轨已清零（噪声源全部消除），每一条额外日志均来自核心组件恶化。安全白名单部署（将扫描脚本目录加入白名单）将消除 tool_executor 的 access_denied 错误，直接减少 ~7 条/期的非洪水日志。这是自 P18 以来最具潜力的单一改善动作。</p>
+    <div style="margin-top:8px;"><span class="tag tag-yellow">优先级 P1</span></div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>🔄 P1 — arXiv API 备选源切换</h4>
+    <p>连续 7 期失败，历史成功率仅 20.7%。应将 default 数据源切换至 Semantic Scholar API 或 arXiv Sanity Lite，待 arXiv 成功恢复 2 期后再切换回来。建议在 <code class="code">knowledge_ingest.py</code> 中添加自动 fallback 逻辑。</p>
+    <div style="margin-top:8px;"><span class="tag tag-yellow">优先级 P1</span></div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>🔍 P2 — weakness_scan.py 扫描策略重构</h4>
+    <p>连续 9 期盲区已从"偶发"升级为"确定性缺陷"。建议添加全文件周期扫描模式：在洪水期自动切换到全文件扫描（而非仅 500 行尾部窗口），或添加时间窗口（扫描最近 N 小时）。</p>
+    <div style="margin-top:8px;"><span class="tag tag-blue">优先级 P2</span></div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>📐 P2 — 非洪水基线告警自动化</h4>
+    <p>P29 非洪水基线 25 条首次低于 30 区间下限。应添加自动化告警：当非洪水基线连续 2 期偏离 30-35 区间时，自动标记为"基线偏移"，并更新基线范围。</p>
+    <div style="margin-top:8px;"><span class="tag tag-blue">优先级 P2</span></div>
+  </div>
+
+  <div class="suggestion-card">
+    <h4>📊 P3 — SessionDB 兼容性修复</h4>
+    <p>29 期末解决——<code class="code">'SessionDB' object has no attribute 'list_sessions'</code>。建议使用直接 SQLite 查询 <code class="code">~/.hermes/logs/*.db</code> 作为替代。</p>
+    <div style="margin-top:8px;"><span class="tag tag-purple">优先级 P3</span></div>
+  </div>
+</div>
+
+<!-- ====== SECTION 6: CUMULATIVE METRICS ====== -->
+<div class="section">
+  <h2><span class="icon">📉</span> 累计指标与长期趋势</h2>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">关键指标 3 期对比（P27→P28→P29）</h3>
+  <table>
+    <thead><tr><th>指标</th><th>P27 (06-23)</th><th>P28 (06-24)</th><th style="color:#60a5fa;">P29 (06-25)</th><th>累计变化</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>gateway.run 占比</strong></td>
+        <td>93.0%</td>
+        <td>93.6%</td>
+        <td style="color:#ef4444;"><strong>95.0%</strong></td>
+        <td style="color:#ef4444;">↑ +2.0pp</td>
+      </tr>
+      <tr>
+        <td><strong>核心垄断率</strong></td>
+        <td>~93%</td>
+        <td>~94%</td>
+        <td style="color:#ef4444;"><strong>96.8%</strong></td>
+        <td style="color:#ef4444;">↑ +3.8pp</td>
+      </tr>
+      <tr>
+        <td><strong>非洪水基线</strong></td>
+        <td>35</td>
+        <td>32</td>
+        <td style="color:#22c55e;"><strong>25</strong></td>
+        <td style="color:#22c55e;">↓ -10 (28.6%)</td>
+      </tr>
+      <tr>
+        <td><strong>API 相关错误</strong></td>
+        <td>~23</td>
+        <td>~26</td>
+        <td style="color:#22c55e;"><strong>~11</strong></td>
+        <td style="color:#22c55e;">↓ -15</td>
+      </tr>
+      <tr>
+        <td><strong>弱点数</strong></td>
+        <td>1</td>
+        <td>1</td>
+        <td>1</td>
+        <td>持平</td>
+      </tr>
+      <tr>
+        <td><strong>日志轮转</strong></td>
+        <td>无</td>
+        <td>✅ 已触发</td>
+        <td>✅ 已触发</td>
+        <td>每日模式确认</td>
+      </tr>
+      <tr>
+        <td><strong>PID 稳定性</strong></td>
+        <td>2398093</td>
+        <td>2398093</td>
+        <td>2398093</td>
+        <td>稳定 6 期</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px; margin-top:20px;">健康度评分</h3>
+  <div class="alert-box alert-warning">
+    <p><strong>假突破 3.0 持续 — 评分不可靠</strong></p>
+    <p>gateway.run 单一组件占 96.8%，假突破 3.0 规则生效中。健康度评分数值已被标注"不可靠"并暂停生成。当前系统的真实状态比初始 6 期（使用量模式）差，但比 P20-P24（双洪水源模式）略好。</p>
+    <p style="margin-top:8px; color:#666;">替代度量：核心垄断率 96.8% + 非洪水基线 25 条（区间外，需关注）。</p>
+  </div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>📌 核心结论</h4>
+    <p>系统处于<strong>超稳定洪水阶段</strong>——无源切换、无 PID 变更、速率恒定（~366/h）、每日轮转干净。这是洪水最稳定的阶段，但修复潜力也最小——唯一的积极变化是 API 质量指标的改善（chat_completion_helpers 从 16→4），抵消了 gateway.run 占比的进一步上升。</p>
+    <p style="margin-top:8px; color:#888;">非洪水基线 25 条首次低于 30-35 区间，原因在于 chat_completion_helpers 的下降。如果持续 2 期，应下调基线范围至 25-35。</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>🧬 Hermes Self-Evolution · 第 29 期 · 2026-06-25</p>
+  <p style="margin-top:4px;">Generated by cron job 9ec6cb79e14d · model deepseek-v4-flash</p>
+</div>
+
+</div>
+</body>
+</html>
