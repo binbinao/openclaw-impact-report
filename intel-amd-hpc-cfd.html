@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intel vs AMD HPC 千核 CFD 场景对比</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #3B7EBF; --sky-bg: rgba(59,126,191,0.08);
+  --clay-bg: rgba(217,119,87,0.06); --olive-bg: rgba(120,140,93,0.08);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300); --radius-panel: 12px; --radius-row: 8px; --radius-pill: 999px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 920px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  color: var(--slate); margin: 48px 0 16px; }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 32px; }
+
+.card {
+  background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 24px; margin-bottom: 24px;
+}
+.card.amd { border-left: 4px solid var(--clay); }
+.card.intel { border-left: 4px solid var(--sky); }
+.card.summary { border-left: 4px solid var(--olive); }
+
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  font-family: var(--mono); font-size: 11px; color: var(--gray-500);
+  text-align: left; padding: 10px 14px; background: var(--gray-150);
+  border-bottom: var(--border);
+}
+td {
+  font-size: 14px; padding: 10px 14px; border-bottom: 1px solid var(--gray-150);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+td.label { font-family: var(--mono); font-size: 12px; color: var(--gray-500); white-space: nowrap; }
+
+ul { padding-left: 20px; font-size: 14px; line-height: 2; }
+li::marker { color: var(--gray-500); }
+.badge { border-radius: 6px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; white-space: nowrap; }
+.badge.blue { background: rgba(59,126,191,0.18); color: var(--sky); }
+.badge.orange { background: rgba(217,119,87,0.18); color: var(--clay); }
+.badge.green { background: rgba(120,140,93,0.18); color: var(--olive); }
+.badge.gray { background: var(--gray-150); color: var(--gray-500); }
+.pill { border-radius: var(--radius-pill); padding: 2px 12px;
+  font-family: var(--mono); font-size: 11px; background: var(--oat); }
+
+.callout {
+  background: var(--clay-bg); border-left: 3px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 20px 0;
+  font-size: 15px;
+}
+.callout.info { background: var(--sky-bg); border-left-color: var(--sky); }
+.callout.good { background: var(--olive-bg); border-left-color: var(--olive); }
+
+.code-block {
+  background: var(--slate); color: #E8E6DF; border-radius: var(--radius-row);
+  padding: 14px 18px; font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  overflow-x: auto; margin: 12px 0;
+}
+.code-block .kw { color: var(--clay); }
+.code-block .cm { color: var(--gray-500); }
+
+.footnote {
+  font-family: var(--mono); font-size: 10px; color: var(--gray-500);
+  border-top: var(--border); padding-top: 18px; margin-top: 48px;
+}
+strong { color: var(--slate); }
+.em { font-family: var(--mono); font-size: 12px; color: var(--gray-500); }
+
+@media (max-width: 768px) {
+  table { font-size: 13px; }
+  td { padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="eyebrow">HPC · CFD · Architecture</p>
+<h1>Intel vs AMD 在千核 CFD 场景下的差异</h1>
+<p class="subtitle">环形总线 vs Chiplet 的桌面故事，到了 HPC 千核级别需要重新讲</p>
+
+<!-- ===== CORRECTION ===== -->
+<h2>前置修正：千核场景下 Intel 不是环形总线</h2>
+
+<div class="card">
+<p>桌面端 Intel 用环形总线，但<strong>服务器端从 Skylake-SP 开始就用 Mesh 网格拓扑</strong>。千核 CFD 场景下，对比的是：</p>
+
+<table>
+<thead><tr><th>级别</th><th style="width:50%">Intel</th><th style="width:50%">AMD</th></tr></thead>
+<tbody>
+<tr><td class="label">桌面（≤12核）</td><td><span class="badge blue">环形总线</span> Ring Bus</td><td><span class="badge orange">Chiplet</span> 1–2 CCD</td></tr>
+<tr><td class="label">服务器（≤60核）</td><td><span class="badge blue">网格拓扑</span> Mesh</td><td><span class="badge orange">Chiplet</span> 多 CCD</td></tr>
+<tr><td class="label">千核集群</td><td>多节点 Mesh + 高速互联</td><td>多节点 Chiplet + 高速互联</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== CFD CHARACTERISTICS ===== -->
+<h2>CFD 计算的核心特征</h2>
+
+<div class="card">
+<p>CFD 求解器（OpenFOAM、ANSYS Fluent、SU2 等）的典型迭代模式：</p>
+
+<div class="code-block">
+<span class="cm"># 每次迭代：</span>
+<span class="cm">#   1. 计算本子域内部（计算密集，但通常是 memory-bound）</span>
+<span class="cm">#   2. 与相邻子域交换边界数据（Halo Exchange）</span>
+<span class="cm">#   3. 全局归约（残差/收敛判断，AllReduce）</span>
+<span class="cm">#   4. 循环 → 步骤 1</span>
+</div>
+
+<h3>瓶颈排序</h3>
+<ul>
+  <li>🥇 <strong>内存带宽</strong>——CFD 是典型的 memory-bound 负载，稀疏矩阵 SpMV 大量时间花在等数据</li>
+  <li>🥈 <strong>Halo Exchange 延迟</strong>——每个迭代都要通信，延迟直接乘迭代次数</li>
+  <li>🥉 <strong>计算吞吐</strong>——浮点算力反而最不重要</li>
+</ul>
+</div>
+
+<!-- ===== SINGLE NODE ===== -->
+<h2>单节点对比：EPYC 9755 vs Xeon 6980P</h2>
+
+<div class="card">
+<table>
+<thead><tr><th>维度</th><th><span class="badge orange">AMD EPYC 9755</span></th><th><span class="badge blue">Intel Xeon 6980P</span></th><th>对 CFD 的影响</th></tr></thead>
+<tbody>
+<tr><td class="label">内存通道</td><td><strong>12 通道 DDR5</strong></td><td>8 通道 MCR DIMM</td><td>AMD 带宽优势</td></tr>
+<tr><td class="label">理论带宽</td><td>~460 GB/s</td><td>~410 GB/s</td><td>AMD 略胜</td></tr>
+<tr><td class="label">每核带宽</td><td>~3.6 GB/s</td><td>~3.4 GB/s</td><td>接近</td></tr>
+<tr><td class="label">L3 缓存</td><td>384MB（12×32MB）</td><td><strong>504MB（共享）</strong></td><td>各有优势</td></tr>
+<tr><td class="label">3D V-Cache</td><td><span class="badge green">✅ 最高 1.3GB</span></td><td><span class="badge gray">❌ 无</span></td><td><strong>AMD 杀手锏</strong></td></tr>
+<tr><td class="label">NUMA 域</td><td>NPS 可配 1/2/4</td><td>2-4 SNC</td><td>AMD 更灵活但更复杂</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== 3D V-CACHE ===== -->
+<h2>为什么 3D V-Cache 对 CFD 是杀手锏？</h2>
+
+<div class="card amd">
+<p>CFD 的 SpMV 操作极度依赖缓存。网格节点反复访问相邻节点数据——<strong>如果 L3 能装下局部网格，性能直接翻倍</strong>。</p>
+
+<table>
+<thead><tr><th>场景</th><th>行为</th><th>瓶颈</th></tr></thead>
+<tbody>
+<tr><td class="label">无 3D V-Cache</td><td>局部网格放不下 → 频繁访问 DDR5</td><td>内存带宽瓶颈</td></tr>
+<tr><td class="label">有 3D V-Cache</td><td>局部网格全在 L3 里 → 极低延迟</td><td><span class="badge green">带宽瓶颈消失</span></td></tr>
+</tbody>
+</table>
+
+<p>AMD 的 EPYC 9005 系列 3D V-Cache 型号（如 9185X）L3 可达 <strong>1.3GB</strong>。对于中等规模 CFD（几百万到几千万网格），整个局部子域可以完全放在 L3 里，不需要访问主存。<strong>这是 Intel 目前无法匹敌的。</strong></p>
+</div>
+
+<!-- ===== THOUSAND CORE ===== -->
+<h2>千核场景：关键在于 NUMA 拓扑</h2>
+
+<div class="card">
+<p>到了千核级别（几十个节点），瓶颈从 CPU 内部转移到：</p>
+
+<table>
+<thead><tr><th>瓶颈</th><th>影响</th></tr></thead>
+<tbody>
+<tr><td class="label">网络互联</td><td>InfiniBand NDR400 vs HPE Slingshot，延迟和带宽决定一切</td></tr>
+<tr><td class="label">MPI 实现</td><td>集合通信（AllReduce）的效率，与 CPU 架构关系不大</td></tr>
+<tr><td class="label">负载均衡</td><td>网格分区质量，与求解器算法有关，与 CPU 无关</td></tr>
+<tr><td class="label">NUMA 亲和性</td><td>MPI rank 与 CCD 的绑定策略——<strong>AMD 需要更精细的调优</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>AMD 的 NUMA 挑战</h2>
+
+<div class="card amd">
+<p>Chiplet 架构下 NUMA 拓扑更复杂——每个 CCD 是一个 NUMA 域。如果 Halo Exchange 的两个 rank 在<strong>同一个 CCD 内</strong>，通信极快；如果<strong>跨 CCD</strong>，延迟高 <strong>3-5 倍</strong>。</p>
+</div>
+
+<h2>Intel 的 NUMA 优势</h2>
+
+<div class="card intel">
+<p>Mesh 拓扑的 NUMA 结构更简单，延迟更均匀，不需要过多调优。<strong>开箱即用，对缺乏 HPC 调优经验的中小团队更友好。</strong></p>
+</div>
+
+<h2>实战结论</h2>
+
+<div class="callout">
+<strong>AMD 开箱性能可能不如 Intel</strong>——默认 MPI 配置不感知 Chiplet 拓扑。<br>
+但通过 <code>numactl</code> + <code>mpirun --map-by</code> 精细调优后，<strong>AMD 通常反超</strong>。
+</div>
+
+<!-- ===== FINAL RECOMMENDATION ===== -->
+<h2>分场景推荐</h2>
+
+<div class="card summary">
+<table>
+<thead><tr><th style="width:30%">场景</th><th style="width:15%">推荐</th><th>原因</th></tr></thead>
+<tbody>
+<tr><td class="label">小规模 CFD<br><span class="em">单节点 &lt; 几千万网格</span></td><td><span class="badge orange">AMD 3D V-Cache</span></td><td>L3 装下全部数据，性能碾压</td></tr>
+<tr><td class="label">中等规模 CFD<br><span class="em">单节点，几亿网格</span></td><td><span class="badge orange">AMD 高核心数</span></td><td>128核 + 高带宽，无需 3D V-Cache</td></tr>
+<tr><td class="label">大规模 CFD<br><span class="em">多节点，千核</span></td><td><span class="badge gray">看调优</span></td><td>AMD 需精细 NUMA 绑定，Intel 开箱即用</td></tr>
+<tr><td class="label">最大规模 CFD<br><span class="em">百节点，万核</span></td><td><span class="badge blue">Intel</span></td><td>延迟均匀 + 调优简单，社区成熟度更高</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ===== TREND ===== -->
+<h2>行业趋势</h2>
+
+<div class="card">
+<p>2024-2026 年 TOP500 和 HPC 集群采购中，<strong>AMD EPYC 份额持续增长</strong>。美国三大国家实验室（ORNL、LANL、LLNL）的 Frontier、El Capitan 全部采用 AMD EPYC + AMD Instinct GPU。Intel 在纯 CPU HPC 场景的优势在缩小。</p>
+</div>
+
+<div class="callout good">
+<strong>最佳实践：</strong>AMD EPYC + 精细 NUMA 绑定 + 高速 InfiniBand。<br>
+千核 CFD 场景下，CPU 架构差异的影响远小于网络互联和 MPI 调优。
+</div>
+
+<div class="footnote">
+Published via GitHub Pages · openclaw-impact-report · June 2026
+</div>
+
+</div>
+</body>
+</html>
