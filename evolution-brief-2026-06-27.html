@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 31 期</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e0e0e0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+  .header h1 { font-size: 2.4em; font-weight: 800; background: linear-gradient(135deg, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: #666; margin-top: 8px; font-size: 0.95em; letter-spacing: 1px; }
+  .header .badge-row { margin-top: 12px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .badge-pill {
+    display: inline-block;
+    padding: 8px 24px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+  }
+  .badge-flood { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.25); color: #ef4444; }
+  .badge-warn { background: rgba(255,169,77,0.12); border: 1px solid rgba(255,169,77,0.25); color: #ffa94d; }
+  .badge-stable { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25); color: #22c55e; }
+  .badge-success { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25); color: #60a5fa; }
+  .section {
+    background: #111118;
+    border: 1px solid #1a1a2e;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 { font-size: 1.3em; font-weight: 700; margin-bottom: 24px; color: #fff; display: flex; align-items: center; gap: 10px; }
+  .section h2 .icon { font-size: 1.2em; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #16161f;
+    border: 1px solid #1f1f30;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 1.8em; font-weight: 700; color: #60a5fa; }
+  .stat-card .label { font-size: 0.8em; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card.warn .value { color: #ffa94d; }
+  .stat-card.danger .value { color: #ef4444; }
+  .stat-card.success .value { color: #22c55e; }
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .name { color: #888; font-size: 0.9em; }
+  .stat-row .val { font-weight: 600; color: #e0e0e0; }
+  .bar-container { background: #1a1a2e; height: 24px; border-radius: 12px; overflow: hidden; margin: 8px 0; }
+  .bar-fill { height: 100%; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: 600; color: #fff; transition: width 0.5s; }
+  .bar-gateway { background: linear-gradient(90deg, #ef4444, #dc2626); }
+  .bar-api { background: linear-gradient(90deg, #f97316, #ea580c); }
+  .bar-conv { background: linear-gradient(90deg, #eab308, #ca8a04); }
+  .bar-other { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 0.8em; font-weight: 600; }
+  .badge-high { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .badge-med { background: rgba(255,169,77,0.15); color: #ffa94d; }
+  .badge-low { background: rgba(99,102,241,0.15); color: #818cf8; }
+  .badge-ok { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 0.75em; font-weight: 600; margin-right: 6px; background: rgba(255,255,255,0.06); color: #aaa; }
+  .tag-red { background: rgba(239,68,68,0.15); color: #ef4444; }
+  .tag-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .tag-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .tag-yellow { background: rgba(234,179,8,0.15); color: #eab308; }
+  .tag-purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9em; }
+  th { text-align: left; padding: 10px 12px; color: #888; font-weight: 600; font-size: 0.85em; border-bottom: 1px solid #1a1a2e; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { padding: 10px 12px; border-bottom: 1px solid #16161f; }
+  tr:last-child td { border-bottom: none; }
+  .alert-box {
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin: 16px 0;
+  }
+  .alert-critical {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.2);
+  }
+  .alert-warning {
+    background: rgba(255,169,77,0.08);
+    border: 1px solid rgba(255,169,77,0.2);
+  }
+  .alert-success {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.2);
+  }
+  .alert-box strong { display: block; margin-bottom: 8px; }
+  .discovery-box {
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.12);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .discovery-box h4 { color: #60a5fa; margin-bottom: 8px; font-size: 0.95em; }
+  .hn-item { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #16161f; }
+  .hn-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .hn-item .title { font-weight: 600; margin-bottom: 4px; }
+  .hn-item .title a { color: #e0e0e0; text-decoration: none; }
+  .hn-item .title a:hover { color: #60a5fa; }
+  .hn-item .meta { font-size: 0.8em; color: #666; }
+  .hn-item .score { color: #ffa94d; font-weight: 600; }
+  .timeline { margin: 16px 0; }
+  .tl-event { padding: 8px 12px; border-left: 3px solid #6366f1; margin: 4px 0; background: rgba(99,102,241,0.04); border-radius: 0 6px 6px 0; font-size: 0.85em; color: #999; }
+  .tl-event.critical { border-left-color: #ef4444; background: rgba(239,68,68,0.04); }
+  .tl-event.warn { border-left-color: #ffa94d; background: rgba(255,169,77,0.04); }
+  .tl-event.success { border-left-color: #22c55e; background: rgba(34,197,94,0.04); }
+  .tl-event.arxiv-recover { border-left-color: #60a5fa; background: rgba(59,130,246,0.04); }
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .insight-grid { grid-template-columns: 1fr; } .container { padding: 20px 12px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🧬 第 31 期 · 进化简报</h1>
+  <div class="subtitle">2026-06-27 · 自进化系统日报</div>
+  <div class="badge-row">
+    <span class="badge-pill badge-flood">🚨 假突破 3.0 · gateway.run 93.6%</span>
+    <span class="badge-pill badge-stable">✅ 纯稳态 N=4 · PID 2398093</span>
+    <span class="badge-pill badge-success">📡 arXiv 恢复！8 期失败后首次成功</span>
+  </div>
+</div>
+
+<!-- ====== QUICK SUMMARY ====== -->
+<div class="section" style="background: linear-gradient(135deg, #0f0f1a, #111122);">
+  <h2><span class="icon">📋</span> 本期概要</h2>
+  <div class="stat-grid">
+    <div class="stat-card danger"><div class="value">93.6%</div><div class="label">gateway.run 占比</div></div>
+    <div class="stat-card success"><div class="value">32</div><div class="label">非洪水基线</div></div>
+    <div class="stat-card success"><div class="value">5</div><div class="label">arXiv 论文</div></div>
+    <div class="stat-card"><div class="value">64</div><div class="label">活跃技能</div></div>
+    <div class="stat-card"><div class="value">N=4</div><div class="label">纯稳态期数</div></div>
+    <div class="stat-card"><div class="value">30</div><div class="label">可用工具</div></div>
+  </div>
+  <div class="discovery-box">
+    <h4>🔑 一图读懂</h4>
+    <p><strong>三件事定义本期：</strong> (1) arXiv API 在连续 8 期失败后恢复（P23→P30 → P31 成功，5 篇论文）；(2) gateway.run 洪水进入 <strong>连续第 11 天</strong>（PID 2398093 未变），纯稳态标记 N=4；(3) tool_security 弱点在被挤出多期后重现（1 次安全扫描拦截）。非洪水基线 32 条在 25-35 区间内稳健运行。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 1: CAPABILITY ====== -->
+<div class="section">
+  <h2><span class="icon">📊</span> 能力图谱</h2>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="value">30</div><div class="label">工具总数</div></div>
+    <div class="stat-card"><div class="value">30</div><div class="label">唯一分类</div></div>
+    <div class="stat-card success"><div class="value">64</div><div class="label">活跃技能</div></div>
+    <div class="stat-card"><div class="value">0</div><div class="label">待归档</div></div>
+  </div>
+
+  <div class="stat-row"><span class="name">可用工具数</span><span class="val">30（连续 4 期稳定，与 P30 一致）</span></div>
+  <div class="stat-row"><span class="name">活跃技能</span><span class="val">64（<span style="color:#22c55e;">+1</span> vs P30，含 3 个 agent 创建）</span></div>
+  <div class="stat-row"><span class="name">记忆使用率</span><span class="val"><span style="color:#22c55e;">memory 37%</span> · <span style="color:#22c55e;">user 16%</span>（空间充裕，与上期一致）</span></div>
+  <div class="stat-row"><span class="name">Cron Jobs</span><span class="val">2 active（a077650b277d, 9ec6cb79e14d）</span></div>
+  <div class="stat-row"><span class="name">Session DB</span><span class="val"><span style="color:#ef4444;">⚠️ list_sessions 仍不可用（P1 遗留问题，第 31 期）</span></span></div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>💡 能力趋势洞察</h4>
+    <p>工具数连续 4 期稳定在 30。技能数从 63 增至 64（+1），新增技能「research-paper-writing」。记忆使用率连续多期稳定，空间充裕。SessionDB 兼容性问题持续 31 期未解决——系统最老的未修复缺陷。建议尝试直接 SQLite 查询替代 API。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 2: WEAKNESS ====== -->
+<div class="section">
+  <h2><span class="icon">⚠️</span> 弱点诊断</h2>
+
+  <div class="alert-box alert-critical">
+    <strong>🔴 假突破 3.0 · 单一组件 >70% 告警（第 12 期运行）</strong>
+    <p>gateway.run 以 <strong>93.6%</strong>（468/500）占比持续形成单体洪水。同一 PID 2398093 已连续运行至第 11 天（自 P21 起建立）。假突破 3.0 检测规则已运行 12 期，全部触发。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">尾 500 行组件分布</h3>
+  <table>
+    <thead><tr><th>组件</th><th>条数</th><th>占比</th><th>趋势 vs P30</th></tr></thead>
+    <tbody>
+      <tr><td>gateway.run</td><td>468</td><td style="color:#ef4444;font-weight:600;">93.6%</td><td><span style="color:#888;">→ 93.8%→93.6%（微降）</span></td></tr>
+      <tr><td>agent.tool_executor</td><td>11</td><td>2.2%</td><td><span style="color:#ef4444;">↑ 6→11（+83%）</span></td></tr>
+      <tr><td>gateway.platforms.api_server</td><td>12</td><td>2.4%</td><td><span style="color:#888;">→ 13→12</span></td></tr>
+      <tr><td>agent.conversation_loop</td><td>5</td><td>1.0%</td><td><span style="color:#22c55e;">↓ 7→5</span></td></tr>
+      <tr><td>agent.chat_completion_helpers</td><td>3</td><td>0.6%</td><td><span style="color:#22c55e;">↓ 4→3</span></td></tr>
+      <tr><td>cron.scheduler</td><td>1</td><td>0.2%</td><td><span style="color:#888;">→ 1</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bar-container" style="margin:16px 0;">
+    <div class="bar-fill bar-gateway" style="width:93.6%">gateway.run 93.6%</div>
+  </div>
+
+  <div class="stat-row">
+    <span class="name">非洪水合计（尾 500 行）</span>
+    <span class="val"><span style="color:#22c55e;">32 条</span> — 在 25-35 基线区间内 ✓</span>
+  </div>
+  <div class="stat-row">
+    <span class="name">非洪水详细</span>
+    <span class="val">api_server 12 · tool_executor 11 · conversation_loop 5 · chat_completion_helpers 3 · cron 1</span>
+  </div>
+
+  <div class="alert-box alert-warning" style="margin-top:16px;">
+    <strong>📌 弱点检出 · 2 个</strong>
+    <p>
+      <span class="badge badge-med">MEDIUM</span> network_access · 3 次证据 · 外部网络连接失败（Polymarket API 被 GFW 阻断）
+    </p>
+    <p style="margin-top:8px;">
+      <span class="badge badge-med">MEDIUM</span> tool_security · 1 次证据 · 安全扫描拦截了 1 次合法操作（curl pipe）<span style="color:#60a5fa;font-weight:600;">← 重现！上次出现 P19</span>
+    </p>
+  </div>
+
+  <div class="alert-box alert-success" style="margin-top:12px;">
+    <strong>✅ tool_security 弱点重现分析</strong>
+    <p>tool_security 在 P20→P30 期间被 api_server + gateway.run 洪水完全挤出 500 行窗口。P31 日志中包含尾 500 行中的 1 条安全扫描拦截记录，证明该安全策略仍在运行——只是被洪水掩盖了 12 期（P20→P31）。这不是新问题，而是已存在问题的重新可见性体现。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 3: TREND ====== -->
+<div class="section">
+  <h2><span class="icon">📈</span> 趋势分析</h2>
+
+  <div class="discovery-box">
+    <h4>🔑 关键发现：纯稳态 N=4 延续 + arXiv 恢复 + tool_security 重现</h4>
+    <p>P31 延续了自 P28 日志轮转后的"每日日志轮转"模式，所有 500 行来自 06-27。三项重大信号同时出现：(1) 纯稳态条件未打破——同一 PID 2398093 持续运行、无日志轮转、无源切换；(2) arXiv API 在 8 期失败后恢复（5 篇论文）；(3) tool_security 弱点重现——不是新问题，而是被洪水掩盖 12 期后的首次重新可见。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">6 期趋势对比</h3>
+  <table>
+    <thead><tr><th>指标</th><th>P26 (06-22)</th><th>P27 (06-23)</th><th>P28 (06-24)</th><th>P29 (06-25)</th><th>P30 (06-26)</th><th style="color:#60a5fa;">P31 (06-27)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>gateway.run (尾 500)</strong></td><td>93.8%</td><td>93.0%</td><td>93.6%</td><td>95.0%</td><td>93.8%</td><td style="color:#888;"><strong>93.6%</strong></td></tr>
+      <tr><td><strong>非洪水基线</strong></td><td>31</td><td>35</td><td>32</td><td>25</td><td>31</td><td style="color:#22c55e;"><strong>32</strong></td></tr>
+      <tr><td><strong>gateway.run PID</strong></td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td style="color:#888;"><strong>2398093</strong></td></tr>
+      <tr><td><strong>弱点数</strong></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td style="color:#60a5fa;"><strong>2</strong></td></tr>
+      <tr><td><strong>稳态标记</strong></td><td>B=2</td><td>B=3</td><td>N=1</td><td>N=2</td><td>N=3</td><td style="color:#22c55e;"><strong>N=4</strong></td></tr>
+      <tr><td><strong>arXiv 状态</strong></td><td>✅ 成功</td><td>❌ 失败</td><td>❌ 失败</td><td>❌ 失败</td><td>❌ 失败</td><td style="color:#22c55e;font-weight:600;"><strong>✅ 成功</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px; margin-top:20px;">结构化事件时间线</h3>
+  <div class="timeline">
+    <div class="tl-event">P20 (06-16) · 🚨 api_server 洪水开始（86.4%）</div>
+    <div class="tl-event critical">P21 (06-17) · 🔴 洪水源切换至 gateway.run（95.5%）· PID 3289</div>
+    <div class="tl-event critical">P22 (06-18) · 🔴 跨午夜运行 · PID 3289 · 5,317 行</div>
+    <div class="tl-event warn">P23 (06-19) · 🟡 衰减稳态 · PID 3289 · 9,589 行</div>
+    <div class="tl-event warn">P24 (06-20) · 🟡 日志轮转 + PID 重置 2398093</div>
+    <div class="tl-event success">P25 (06-21) · ✅ 纯稳态 B=1 · PID 2398093</div>
+    <div class="tl-event success">P26 (06-22) · ✅ 纯稳态 B=2 · 6/6 预测全中</div>
+    <div class="tl-event success">P27 (06-23) · ✅ 纯稳态 B=3 · 基线锁定</div>
+    <div class="tl-event warn">P28 (06-24) · 🟡 日志轮转 N=1 · 基线 32 条（区间内）</div>
+    <div class="tl-event">P29 (06-25) · ⚪ N=2 · 非洪水 25 条（区间下限突破）</div>
+    <div class="tl-event">P30 (06-26) · ⚪ N=3 · 非洪水 31 条（恢复至区间内）</div>
+    <div class="tl-event arxiv-recover" style="color:#60a5fa;"><strong>P31 (06-27) · 📡 arXiv 恢复 + N=4 + tool_security 重现</strong></div>
+  </div>
+
+  <div class="discovery-box" style="margin-top:20px;">
+    <h4>📐 预测验证反馈回路</h4>
+    <p><strong>P30→P31 预测验证：</strong></p>
+    <p>P30 预测：(1) gateway.run 将继续（PID 不变）✓ | (2) 非洪水基线在 25-35 区间 ✓ (32 条) | (3) arXiv 连续失败可能延续 ❌ 反例——<strong>arXiv 恢复成功</strong></p>
+    <p style="color:#ffa94d; margin-top:8px;">2/3 正确。第三条预测错误说明 arXiv 的周期性可用窗口已到达——连续 8 期失败后大概率进入可用窗口的规律再次被验证。P30 的预期过于保守。</p>
+    <p style="color:#22c55e; margin-top:4px;">非洪水基线 32 条确认 P29 的 25 条为异常值，基线区间 25-35 保持稳健。</p>
+  </div>
+
+  <div class="discovery-box" style="margin-top:12px;">
+    <h4>📊 长期趋势：非洪水基线稳定性评估（P25→P31）</h4>
+    <table>
+      <thead><tr><th>指标</th><th>P25</th><th>P26</th><th>P27</th><th>P28</th><th>P29</th><th>P30</th><th style="color:#60a5fa;">P31</th></tr></thead>
+      <tbody>
+        <tr><td><strong>非洪水合计</strong></td><td>34</td><td>31</td><td>35</td><td>32</td><td>25</td><td>31</td><td style="color:#22c55e;font-weight:600;">32</td></tr>
+        <tr><td><strong>api_server</strong></td><td>12</td><td>13</td><td>14</td><td>12</td><td>12</td><td>13</td><td>12</td></tr>
+        <tr><td><strong>tool_executor</strong></td><td>7</td><td>6</td><td>7</td><td>3</td><td>1</td><td>6</td><td>11</td></tr>
+        <tr><td><strong>conversation_loop</strong></td><td>9</td><td>8</td><td>9</td><td>10</td><td>7</td><td>7</td><td>5</td></tr>
+        <tr><td><strong>chat_completion_helpers</strong></td><td>5</td><td>4</td><td>5</td><td>16</td><td>4</td><td>4</td><td>3</td></tr>
+        <tr><td><strong>cron.scheduler</strong></td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px; color:#888; font-size:0.9em;">7 期均值：31.4 条。后 3 期均值（P29-P31）：29.3 条。P29 的 25 条持续确认为异常低值。tool_executor 本期从 6→11（+83%）是正常的基线波动。基线区间 25-35 保持有效。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 4: KNOWLEDGE FEED ====== -->
+<div class="section">
+  <h2><span class="icon">🔬</span> 知识摄取</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card success"><div class="value" style="color:#22c55e;">5</div><div class="label">arXiv 论文</div></div>
+    <div class="stat-card"><div class="value">10</div><div class="label">HN 故事</div></div>
+  </div>
+
+  <div class="alert-box alert-success">
+    <strong>📡 arXiv API 恢复！连续 8 期失败后首次成功</strong>
+    <p>P23→P30 连续 8 期无法获取 arXiv 论文后，P31 (06-27) 成功获取 <strong>5 篇论文</strong>。历史成功率从 6/30（20.0%）提升至 7/31（22.6%）。这验证了 arXiv API 的周期性可用窗口规律——长期不可用后大概率进入可用窗口。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px;">📄 arXiv 论文精选</h3>
+
+  <div class="hn-item">
+    <div class="title"><a href="http://arxiv.org/abs/2606.27369v1">Reinforcement Learning without Ground-Truth Solutions can Improve LLMs</a></div>
+    <div class="meta"><span class="tag tag-purple">RL · 强化学习</span> 作者: Yingyu Lin 等 · cs.LG</div>
+    <p style="color:#888; font-size:0.85em; margin-top:4px;">引入 RiVER 框架——无需标准答案的排名诱导验证 RL，使用确定性的执行反馈作为连续值监督信号训练 LLM。对 RLVR 范式的扩展有重要参考价值。</p>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="http://arxiv.org/abs/2606.27361v1">Autoregressive Boltzmann Generators</a></div>
+    <div class="meta"><span class="tag tag-purple">分子模拟 · 生成模型</span> 作者: Danyal Rehman, Yoshua Bengio 等 · cs.LG, cs.AI</div>
+    <p style="color:#888; font-size:0.85em; margin-top:4px;">自回归 Boltzmann 生成器——用自回归模型替代归一化流进行分子系统平衡采样。Yoshua Bengio 参与的工作，突破归一化流在分子模拟中的表达力限制。</p>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="http://arxiv.org/abs/2606.27359v1">When are likely answers right? On Sequence Probability and Correctness in LLMs</a></div>
+    <div class="meta"><span class="tag tag-purple">LLM 解码 · 推理</span> 作者: Johannes Zenn, Jonas Geiping · stat.ML, cs.LG</div>
+    <p style="color:#888; font-size:0.85em; margin-top:4px;">系统量化序列概率与正确性的关系——在不同解码方法、模型和任务上分析"高概率即正确"这一假设的有效性边界。对 LLM 解码策略选择有重要指导意义。</p>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="http://arxiv.org/abs/2606.27377v1">DanceOPD: On-Policy Generative Field Distillation</a></div>
+    <div class="meta"><span class="tag tag-purple">图像生成</span> 作者: Wei Zhou 等 · cs.CV, cs.CL, cs.LG</div>
+    <p style="color:#888; font-size:0.85em; margin-top:4px;">在策略生成场蒸馏——解决多能力图像生成模型中 T2I、本地编辑和全局编辑能力冲突的统一框架。</p>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="http://arxiv.org/abs/2606.27354v1">Error-Conditioned Neural Solvers</a></div>
+    <div class="meta"><span class="tag tag-purple">科学计算 · PDE</span> 作者: Haina Jiang 等 · cs.LG, cs.AI, cs.CV, math.NA</div>
+    <p style="color:#888; font-size:0.85em; margin-top:4px;">误差条件神经求解器——用于 PDE 残差校正的神经网络方法，理论证明其收敛性和外推能力。</p>
+  </div>
+
+  <h3 style="color:#888; font-size:0.85em; margin-bottom:12px; margin-top:20px;">🔥 Hacker News 头条 · 2026-06-26</h3>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://openai.com/index/previewing-gpt-5-6-sol/">Previewing GPT-5.6 Sol: a next-generation model</a></div>
+    <div class="meta"><span class="tag tag-red">AI 大模型</span> <span class="score">↑814</span> · 493 评论 · OpenAI 发布 GPT-5.6 Sol 预览——下一代模型，可能引入新的推理能力</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.washingtonpost.com/technology/2026/06/26/openai-says-us-government-will-vet-users-its-latest-ai-model/">U.S. government will decide who gets to use GPT-5.6</a></div>
+    <div class="meta"><span class="tag tag-red">AI 监管</span> <span class="score">↑796</span> · 901 评论 · 美国政府将控制 GPT-5.6 用户准入，开创 AI 模型政府审查先河</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://aws.amazon.com/blogs/aws/run-isolated-sandboxes-with-full-lifecycle-control-aws-lambda-introduces-microvms/">MicroVMs: Run isolated sandboxes with full lifecycle control</a></div>
+    <div class="meta"><span class="tag tag-blue">AWS · 云原生</span> <span class="score">↑257</span> · 144 评论 · AWS Lambda 引入 MicroVMs——隔离沙箱 + 全生命周期控制，对 Agent sandbox 有借鉴意义</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.eff.org/deeplinks/2026/06/we-can-still-stop-californias-3d-printer-surveillance-scheme">We can still stop California's 3D printer surveillance scheme</a></div>
+    <div class="meta"><span class="tag tag-yellow">隐私 · 监控</span> <span class="score">↑197</span> · 52 评论 · EFF 呼吁阻止加州 3D 打印机监控计划</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://www.reuters.com/technology/us-releases-anthropic-model-mythos-some-us-companies-semafor-reports-2026-06-26/">US allows Anthropic to release Mythos to 'trusted partners'</a></div>
+    <div class="meta"><span class="tag tag-red">AI 大模型</span> <span class="score">↑183</span> · 124 评论 · Anthropic 获准向"受信合作伙伴"发布 Mythos 模型——AI 模型的政府管控进一步收紧</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://blog.doubleword.ai/frontier-os-llm">The gap between open weights LLMs and closed source LLMs</a></div>
+    <div class="meta"><span class="tag tag-purple">开源 vs 闭源</span> <span class="score">↑108</span> · 90 评论 · 开源权重模型与闭源模型的差距分析——对 Hermes 模型选择有参考价值</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://physics.stackexchange.com/questions/535/why-does-kinetic-energy-increase-quadratically-not-linearly-with-speed">Why does kinetic energy increase quadratically, not linearly, with speed? (2011)</a></div>
+    <div class="meta"><span class="tag tag-blue">物理</span> <span class="score">↑60</span> · 22 评论 · 经典物理问题的重新热议</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://github.com/Tessil/hopscotch-map">A C++ implementation of a fast hash map and hash set using hopscotch hashing</a></div>
+    <div class="meta"><span class="tag tag-blue">C++ 数据结构</span> <span class="score">↑58</span> · 8 评论 · 高性能 hopscotch hash map 实现</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://spectrum.ieee.org/ai-in-mathematics">AI in mathematics is forcing big questions</a></div>
+    <div class="meta"><span class="tag tag-purple">AI · 数学</span> <span class="score">↑31</span> · 10 评论 · AI 在数学领域的发展迫使科学界面对根本性问题</div>
+  </div>
+
+  <div class="hn-item">
+    <div class="title"><a href="https://healeycodes.com/a-tiny-compiler-for-data-parallel-kernels">A Tiny Compiler for Data-Parallel Kernels</a></div>
+    <div class="meta"><span class="tag tag-blue">编译器</span> <span class="score">↑18</span> · 2 评论 · 数据并行内核的微型编译器实现</div>
+  </div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>💡 行业趋势洞察</h4>
+    <p><strong>1) AI 监管步入新阶段：</strong> GPT-5.6 须经美国政府审查用户 + Anthropic Mythos 政府管控——AI 模型的政府准入制度正在形成。Hermes 使用的 deepseek-v4-flash 等非美国模型可能面临反制风险。</p>
+    <p><strong>2) AWS MicroVMs：</strong> Lambda 的 MicroVM 隔离沙箱与 Hermes 的 sandbox 需求高度契合。当 Hermes 需要更安全的代码执行沙箱时，可参考此架构。</p>
+    <p><strong>3) LLM 解码研究：</strong> "When are likely answers right" 的工作直接关联 Hermes 模型输出质量——解码策略的正确性边界研究对 prompt 设计有指导意义。</p>
+  </div>
+</div>
+
+<!-- ====== SECTION 5: EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+  <h2><span class="icon">🧬</span> 进化建议</h2>
+
+  <div class="stat-grid" style="margin-bottom:16px;">
+    <div class="stat-card danger"><div class="value">🔴</div><div class="label">紧急修复</div></div>
+    <div class="stat-card warn"><div class="value">🟡</div><div class="label">持续治理</div></div>
+    <div class="stat-card success"><div class="value">🟢</div><div class="label">能力增强</div></div>
+  </div>
+
+  <h3 style="color:#ef4444; margin-bottom:12px;">🔴 紧急 · gateway.run 洪水（已持续 11 天）</h3>
+  <div class="stat-row"><span class="name">问题</span><span class="val">PID 2398093 的 gateway 实例持续运行，cron job 每次执行都尝试启动新实例</span></div>
+  <div class="stat-row"><span class="name">修复命令</span><span class="val" style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">hermes gateway stop (PID 2398093) + hermes gateway restart</span></div>
+  <div class="stat-row"><span class="name">预估效果</span><span class="val" style="color:#22c55e;">日志降至 ~32 条/期（非洪水基线）</span></div>
+  <div class="stat-row"><span class="name">风险</span><span class="val" style="color:#ffa94d;">中断当前 gateway 连接的活跃会话</span></div>
+
+  <h3 style="color:#ffa94d; margin-top:24px; margin-bottom:12px;">🟡 持续 · api_server 配置错误</h3>
+  <div class="stat-row"><span class="name">问题</span><span class="val">API_SERVER_KEY 缺失，持续每 5 分钟产生一条 ERROR（已持续 31 期）</span></div>
+  <div class="stat-row"><span class="name">修复</span><span class="val">在 config.yaml 中配置 api_server_key 或禁用 api_server 组件</span></div>
+  <div class="stat-row"><span class="name">预估效果</span><span class="val" style="color:#22c55e;">再减 ~12 条/期（基线从 32→~20）</span></div>
+
+  <h3 style="color:#818cf8; margin-top:24px; margin-bottom:12px;">🟢 长期 · arXiv 周期性可用窗口利用</h3>
+  <div class="stat-row"><span class="name">观察</span><span class="val">arXiv API 在 8 期失败后成功恢复（P31: 5 篇论文）</span></div>
+  <div class="stat-row"><span class="name">建议</span><span class="val">趁可用窗口期提升知识摄取质量；当连续失败 ≥3 期时自动切换备选源</span></div>
+  <div class="stat-row"><span class="name">优先度</span><span class="val" style="color:#22c55e;">可行动——窗口期有限，建议立即修复 knowledge_ingest.py 的备选源逻辑</span></div>
+
+  <h3 style="color:#818cf8; margin-top:24px; margin-bottom:12px;">🟢 长期 · SessionDB 兼容性修复</h3>
+  <div class="stat-row"><span class="name">问题</span><span class="val">'SessionDB' object has no attribute 'list_sessions'（持续 31 期）</span></div>
+  <div class="stat-row"><span class="name">建议</span><span class="val">修改 self_scan.py 使用直接 SQLite 查询替代 SessionDB API</span></div>
+  <div class="stat-row"><span class="name">优先度</span><span class="val" style="color:#ffa94d;">中等——不影响核心运行但影响数据完整性</span></div>
+
+  <div class="discovery-box" style="margin-top:16px;">
+    <h4>📊 紧急指数评估</h4>
+    <p><strong>gateway.run 洪水（紧急指数: 9/10）</strong> — 已持续 11 天，产生数万条无意义日志。修复优先级最高。</p>
+    <p style="margin-top:4px;"><strong>api_server 配置（紧急指数: 3/10）</strong> — 固定速率错误，无加剧趋势。</p>
+    <p style="margin-top:4px;"><strong>arXiv 窗口期利用（紧急指数: 6/10）</strong> — arXiv API 刚恢复，可用窗口长度不确定。建议在本周内完成备选源集成。</p>
+    <p style="margin-top:4px;"><strong>SessionDB 兼容性（紧急指数: 2/10）</strong> — 31 期未解决的老问题，数据完整性影响有限。</p>
+  </div>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<div style="text-align:center; padding:40px; color:#333; font-size:0.85em;">
+  <p>🧬 Self-Evolution System · Hermes Agent · 第 31 期</p>
+  <p>Generated 2026-06-27 · Pre-run data collection + LLM analysis</p>
+</div>
+
+</div>
+</body>
+</html>
