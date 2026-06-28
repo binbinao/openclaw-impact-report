@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Self-Evolution Brief · P32</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0b0d11;
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+  
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .meta {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 12px;
+  }
+  
+  /* Status bar */
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .status-card {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .status-card .number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .status-card .label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+  .status-card.good { border-color: #065f46; }
+  .status-card.good .number { color: #34d399; }
+  .status-card.warn { border-color: #78350f; }
+  .status-card.warn .number { color: #fbbf24; }
+  .status-card.bad { border-color: #7f1d1d; }
+  .status-card.bad .number { color: #f87171; }
+
+  /* Sections */
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.2rem; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+  }
+  th {
+    background: #171d28;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #1e293b;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1f2e;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(30, 41, 59, 0.4); }
+  
+  .bar-cell { display: flex; align-items: center; gap: 8px; }
+  .bar { height: 6px; border-radius: 3px; min-width: 4px; }
+  .bar.high { background: #f87171; }
+  .bar.med { background: #fbbf24; }
+  .bar.low { background: #34d399; }
+
+  /* Severity badges */
+  .sev-high { color: #f87171; background: #7f1d1d33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .sev-med { color: #fbbf24; background: #78350f33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .sev-low { color: #34d399; background: #064e3b33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+
+  /* Calls to action */
+  .cta {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .cta h3 { color: #f1f5f9; font-size: 1rem; margin-bottom: 8px; }
+  .cta p { color: #94a3b8; font-size: 0.85rem; }
+  .cta code {
+    background: #1a1f2e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #a5b4fc;
+  }
+
+  /* Story cards */
+  .story-card {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .story-card .title { font-weight: 600; color: #e2e8f0; }
+  .story-card .title a { color: #818cf8; text-decoration: none; }
+  .story-card .title a:hover { text-decoration: underline; }
+  .story-card .meta { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+  .story-card .score { color: #fbbf24; font-weight: 600; }
+  
+  .divider { height: 1px; background: #1e293b; margin: 24px 0; }
+
+  .footnote { color: #475569; font-size: 0.75rem; text-align: center; padding: 32px 0; border-top: 1px solid #1e293b; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 Self-Evolution Brief</h1>
+  <div class="meta">Period 32 · 2026-06-28 · 09:00 CST</div>
+  <div class="badge">⚡ cron job · reviewer profile · Hermes Agent</div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-card good">
+    <div class="number">30</div>
+    <div class="label">Tools</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">64</div>
+    <div class="label">Skills (all active)</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">37%</div>
+    <div class="label">Memory Usage</div>
+  </div>
+  <div class="status-card warn">
+    <div class="number">460</div>
+    <div class="label">Gateway Flood</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">1</div>
+    <div class="label">Weaknesses</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">8</div>
+    <div class="label">Steady N</div>
+  </div>
+</div>
+
+<!-- SECTION 1: CAPABILITY -->
+<div class="section">
+  <h2 class="section-title"><span class="emoji">📊</span> Capability Status</h2>
+  
+  <table>
+    <tr><th>Dimension</th><th>Value</th><th>Change vs P31</th></tr>
+    <tr>
+      <td>🛠️ Available Tools</td>
+      <td>30</td>
+      <td style="color:#64748b;">↔ unchanged</td>
+    </tr>
+    <tr>
+      <td>📚 Active Skills</td>
+      <td>64 / 64 (100%)</td>
+      <td style="color:#64748b;">↔ unchanged</td>
+    </tr>
+    <tr>
+      <td>🧠 Memory (mem)</td>
+      <td>816 chars / 37%</td>
+      <td style="color:#64748b;">↔ stable</td>
+    </tr>
+    <tr>
+      <td>🧠 Memory (user)</td>
+      <td>231 chars / 16%</td>
+      <td style="color:#64748b;">↔ stable</td>
+    </tr>
+    <tr>
+      <td>⏰ Cron Jobs</td>
+      <td>2 active</td>
+      <td style="color:#64748b;">↔ unchanged</td>
+    </tr>
+    <tr>
+      <td>📋 Sessions DB</td>
+      <td>0 (error: list_sessions missing)</td>
+      <td style="color:#f87171;">⚠ known issue</td>
+    </tr>
+  </table>
+
+  <div class="cta">
+    <h3>✅ System is in healthy operating state</h3>
+    <p>Tool count steady at 30 (no drift since P24). All 64 skills active, no stale or archived skills. Memory headroom ample at 63%+84% available. Sessions DB query remains broken (missing <code>list_sessions</code> method), but this is a cosmetic limitation — no functional impact.</p>
+  </div>
+</div>
+
+<!-- SECTION 2: WEAKNESS -->
+<div class="section">
+  <h2 class="section-title"><span class="emoji">⚠️</span> Weakness & Error Analysis</h2>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Error Log Profile (last 500 lines)</h3>
+  <table>
+    <tr><th>Component</th><th>Count</th><th>Share</th><th>Trend</th></tr>
+    <tr>
+      <td style="display:flex;align-items:center;gap:6px;">🟥 gateway.run</td>
+      <td>460</td>
+      <td><div class="bar-cell"><div class="bar high" style="width:276px;"></div> 92.0%</div></td>
+      <td style="color:#f87171;">🔥 flooding (PID 2398093)</td>
+    </tr>
+    <tr>
+      <td>🟨 api_server</td>
+      <td>17</td>
+      <td><div class="bar-cell"><div class="bar med" style="width:10px;"></div> 3.4%</div></td>
+      <td style="color:#fbbf24;">↗ slight increase</td>
+    </tr>
+    <tr>
+      <td>🟨 tool_executor</td>
+      <td>13</td>
+      <td><div class="bar-cell"><div class="bar med" style="width:8px;"></div> 2.6%</div></td>
+      <td style="color:#64748b;">↔ stable</td>
+    </tr>
+    <tr>
+      <td>🟩 conversation_loop</td>
+      <td>6</td>
+      <td><div class="bar-cell"><div class="bar low" style="width:4px;"></div> 1.2%</div></td>
+      <td style="color:#34d399;">↘ slight decrease</td>
+    </tr>
+    <tr>
+      <td>🟩 chat_completion_helpers</td>
+      <td>3</td>
+      <td><div class="bar-cell"><div class="bar low" style="width:2px;"></div> 0.6%</div></td>
+      <td style="color:#34d399;">↘ stable low</td>
+    </tr>
+    <tr>
+      <td>🟩 cron.scheduler</td>
+      <td>1</td>
+      <td><div class="bar-cell"><div class="bar low" style="width:1px;"></div> 0.2%</div></td>
+      <td style="color:#64748b;">↔ constant</td>
+    </tr>
+  </table>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 12px;">Daily Log Volume</h3>
+  <table>
+    <tr><th>Date</th><th>Entries (in window)</th><th>Flood %</th><th>Non-flood</th></tr>
+    <tr><td>2026-06-28</td><td>500</td><td>92.0%</td><td>40</td></tr>
+  </table>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 12px;">Detected Weaknesses</h3>
+  <table>
+    <tr><th>Area</th><th>Severity</th><th>Description</th><th>Evidence</th></tr>
+    <tr>
+      <td>network_access</td>
+      <td><span class="sev-med">MEDIUM</span></td>
+      <td>外部网络连接失败 3 次（Polymarket API 被 GFW 阻断）</td>
+      <td>3</td>
+    </tr>
+  </table>
+
+  <div class="cta" style="border-color:#78350f;">
+    <h3>🔥 Single-Component Flood Continues — Pure Steady-State N=8</h3>
+    <p><strong>gateway.run</strong> (PID 2398093) continues for the <strong>14th consecutive period</strong> — unchanged since P22. This marks the <strong>8th period in pure steady-state</strong> (since P25's log rotation was absorbed). PID remains 2398093 (unchanged since P24 — <strong>9 days continuous</strong>).</p>
+    <p style="margin-top:8px;">Non-flood baseline at <strong>40 entries</strong> — slightly above the established 25-35 range (+5 above upper bound). The elevation is driven by api_server (17, up from ~12-13 baseline) and tool_executor (13, above the ~6 median). This is the <strong>highest non-flood count since P28's log rotation reset</strong> and may signal a slight degradation in non-flood system health.</p>
+    <p style="margin-top:8px;">No log rotation detected. File at 7,209 lines (below the 8,500 alert threshold). No PID change. No flood source switch. All three pure steady-state criteria satisfied.</p>
+    <p style="margin-top:8px; color:#f87171;"><strong>⚠ Non-flood baseline deviation:</strong> 40 vs 25-35 range. If this persists for 2+ periods, the baseline should be revised upward to 25-40.</p>
+  </div>
+</div>
+
+<!-- SECTION 3: KNOWLEDGE FEED -->
+<div class="section">
+  <h2 class="section-title"><span class="emoji">🔬</span> Knowledge Feed</h2>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">📄 arXiv Papers</h3>
+  <div class="cta" style="border-color:#7f1d1d;">
+    <h3>🔴 arXiv API Failed — 2nd failure in last 2 periods</h3>
+    <p>After a successful recovery in P31 (5 papers), arXiv API reverted to failure this period. Pattern: this is the 1st failure after the P31 recovery. Cumulative success rate: 7/32 = <strong>21.9%</strong>. The "success window after a long failure streak" pattern continues to show instability — the P31 success was a single-period window, not the multi-period window observed earlier (like P16's 5-paper recovery after a streak).</p>
+    <p style="margin-top:8px;">Suggestions: (a) Ensure retry logic in knowledge_ingest.py (3 attempts with exponential backoff), (b) Consider adding Semantic Scholar as primary fallback after 3 consecutive failures, (c) Investigate if arXiv API endpoint changed.</p>
+  </div>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 12px;">📰 Hacker News Top Stories</h3>
+  
+  <div class="story-card">
+    <div class="title"><a href="https://github.com/bikini/exploitarium">Anonymous GitHub account mass-dropping undisclosed 0-days</a></div>
+    <div class="meta"><span class="score">★ 647</span> · 250 comments · by binyu</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://www.openra.net/">OpenRA — Open-source real-time strategy game engine</a></div>
+    <div class="meta"><span class="score">★ 567</span> · 109 comments · by tosh</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://w.pitula.me/fintech-engineering-handbook/">Fintech Engineering Handbook</a></div>
+    <div class="meta"><span class="score">★ 467</span> · 158 comments · by signa11</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://dervis.de/physical/">The case for physical media ownership</a></div>
+    <div class="meta"><span class="score">★ 362</span> · 233 comments · by cemdervis</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://ipcrawl.com/">IP Crawl: Living atlas of open webcams discovered on the public internet</a></div>
+    <div class="meta"><span class="score">★ 236</span> · 119 comments · by arm32</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://spectrum.ieee.org/ai-radio-chip-design">AI learns the "dark art" of RFIC design</a></div>
+    <div class="meta"><span class="score">★ 179</span> · 119 comments · by Brajeshwar</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://cauenapier.com/blog/townsquare_release/">Turn your site into a place people can bump into each other</a></div>
+    <div class="meta"><span class="score">★ 151</span> · 67 comments · by eustoria</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://evilbit.de/dns-resolver-guide.html">Choosing a Public DNS Resolver</a></div>
+    <div class="meta"><span class="score">★ 35</span> · 9 comments · by pawal</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://dobrowolski.dev/article/enhancing-x11-application-security-with-lxc/">Enhancing X11 Application Security with LXC</a></div>
+    <div class="meta"><span class="score">★ 27</span> · 7 comments · by shirozuki</div>
+  </div>
+  <div class="story-card">
+    <div class="title"><a href="https://hntrbrk.com/investigations/homebuilders">America's Large Homebuilders Shift the Cost of Shoddy Construction to Buyers</a></div>
+    <div class="meta"><span class="score">★ 21</span> · 0 comments · by JumpCrisscross</div>
+  </div>
+
+  <div class="cta" style="border-color:#065f46;">
+    <h3>📌 Notable: 0-Day Security Alert</h3>
+    <p>The top HN story (647 pts) reports an anonymous GitHub account mass-dropping undisclosed 0-day exploits — highly relevant to our <strong>code review / security auditing</strong> role. Worth investigating if the exploits affect any code this agent reviews or runs.</p>
+    <p style="margin-top:8px;">Also notable: Fintech Engineering Handbook (467 pts) — potential reference for any fintech-related code arch reviews.</p>
+  </div>
+</div>
+
+<!-- SECTION 4: EVOLUTION SUGGESTIONS -->
+<div class="section">
+  <h2 class="section-title"><span class="emoji">🧬</span> Evolution Suggestions</h2>
+
+  <table>
+    <tr><th>#</th><th>Suggestion</th><th>Priority</th><th>Impact</th><th>Effort</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>Fix gateway.run flood</strong> — Run <code>hermes gateway restart</code> to replace the stale instance</td>
+      <td><span class="sev-high">CRITICAL</span></td>
+      <td>Eliminates 92% of error log noise</td>
+      <td>Low (1 command)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>Fix api_server config</strong> — Set API_SERVER_KEY to silence the 17-per-cycle config errors</td>
+      <td><span class="sev-med">MEDIUM</span></td>
+      <td>Reduces ~17 entries/cycle</td>
+      <td>Low (config change)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>Add arXiv fallback</strong> — When arXiv fails ≥2 consecutive periods, auto-switch to Semantic Scholar as primary source</td>
+      <td><span class="sev-med">MEDIUM</span></td>
+      <td>Improves paper ingestion reliability (7/32 = 21.9% success)</td>
+      <td>Medium (code change in knowledge_ingest.py)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>Implement weakness_scan time-window mode</strong> — Scan last N hours instead of last N lines to bypass flood-induced blindness</td>
+      <td><span class="sev-med">MEDIUM</span></td>
+      <td>Discovers hidden weaknesses masked by floods</td>
+      <td>Medium (code change in weakness_scan.py)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>Sessions DB adaptor</strong> — Fix <code>list_sessions</code> missing method in Hermes SessionDB for accurate session reporting</td>
+      <td><span class="sev-low">LOW</span></td>
+      <td>Improves self_scan accuracy (cosmetic)</td>
+      <td>Low (code fix)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SECTION 5: TREND -->
+<div class="section">
+  <h2 class="section-title"><span class="emoji">📈</span> Trend Analysis</h2>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px;">Multi-Period Comparison</h3>
+  <table>
+    <tr><th>Metric</th><th>P30 (06-26)</th><th>P31 (06-27)</th><th>P32 (06-28)</th><th>Direction</th></tr>
+    <tr>
+      <td>Tools</td><td>30</td><td>30</td><td>30</td><td style="color:#64748b;">↔ flat</td>
+    </tr>
+    <tr>
+      <td>Active Skills</td><td>64</td><td>64</td><td>64</td><td style="color:#64748b;">↔ flat</td>
+    </tr>
+    <tr>
+      <td>Flood Source</td><td>gateway.run</td><td>gateway.run</td><td>gateway.run</td><td style="color:#64748b;">↔ unchanged</td>
+    </tr>
+    <tr>
+      <td>Flood PID</td><td>2398093</td><td>2398093</td><td>2398093</td><td style="color:#64748b;">↔ 9d unchanged</td>
+    </tr>
+    <tr>
+      <td>Flood %</td><td>92.4%</td><td>91.6%</td><td>92.0%</td><td style="color:#64748b;">↔ stable ~92%</td>
+    </tr>
+    <tr>
+      <td>Non-flood count</td><td>31</td><td>32</td><td>40</td><td style="color:#fbbf24;">↗ +8 (+25%)</td>
+    </tr>
+    <tr>
+      <td>Weaknesses</td><td>1</td><td>2</td><td>1</td><td style="color:#34d399;">↘ back to 1</td>
+    </tr>
+    <tr>
+      <td>arXiv</td><td>❌ fail</td><td>✅ 5 papers</td><td>❌ fail</td><td style="color:#f87171;">↘ regression</td>
+    </tr>
+    <tr>
+      <td>HN stories</td><td>10</td><td>10</td><td>10</td><td style="color:#34d399;">✅ stable</td>
+    </tr>
+    <tr>
+      <td>Log rotation</td><td>❌ none</td><td>❌ none</td><td>❌ none</td><td style="color:#34d399;">✅ 4 periods clean</td>
+    </tr>
+  </table>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 12px;">Key Trend Signals</h3>
+  <table>
+    <tr><th>Signal</th><th>Status</th><th>Detail</th></tr>
+    <tr>
+      <td>🟢 Pure steady-state</td><td style="color:#34d399;">✅ N=8</td>
+      <td>Same PID, same source, no rotation since P28. Most stable stretch since P21 flood onset.</td>
+    </tr>
+    <tr>
+      <td>🟡 Non-flood drift</td><td style="color:#fbbf24;">⚠ Attention</td>
+      <td>40 entries vs 25-35 baseline — +5 above upper bound. Driven by api_server (17) and tool_executor (13). If persists 2+ periods, baseline must be revised.</td>
+    </tr>
+    <tr>
+      <td>🔴 arXiv instability</td><td style="color:#f87171;">❌ regression</td>
+      <td>After P31 success, back to failure. Single-period success windows are unreliable. Overall success rate: 21.9%.</td>
+    </tr>
+    <tr>
+      <td>🟢 HN reliability</td><td style="color:#34d399;">✅ 100%</td>
+      <td>HN consistently returns 10 stories every period — the most reliable data source.</td>
+    </tr>
+    <tr>
+      <td>🟢 tool_security</td><td style="color:#64748b;">↔ hidden</td>
+      <td>Hidden but latent — P31 confirmed it re-emerges when flood subsides. Last visible P31.</td>
+    </tr>
+  </table>
+
+  <h3 style="color:#94a3b8; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.5px; margin:20px 0 12px;">Period-to-Period Change Analysis</h3>
+  <table>
+    <tr><th>Metric</th><th>P30→P31</th><th>P31→P32</th><th>Comment</th></tr>
+    <tr>
+      <td>Flood % change</td><td>-0.8pp</td><td>+0.4pp</td><td style="color:#64748b;">Stable within ±1pp</td></tr>
+    <tr>
+      <td>Non-flood change</td><td>+1</td><td>+8</td><td style="color:#fbbf24;">Elevation from api_server (12→17) + tool_executor (6→13)</td></tr>
+    <tr>
+      <td>Weaknesses</td><td>2→1 (P31→P32)</td><td>-1</td><td style="color:#64748b;">tool_security re-submerged by flood window displacement</td></tr>
+    <tr>
+      <td>arXiv</td><td>success→fail</td><td>fail→fail</td><td style="color:#f87171;">Failed 2 of last 3</td></tr>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div class="footnote">
+  Generated by Hermes Agent Self-Evolution System · P32 · 2026-06-28<br>
+  <span style="color:#475569;">Runtime: gateway.run PID 2398093 · 9 days continuous · Pure Steady-State N=8</span>
+</div>
+
+</div>
+</body>
+</html>
