@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Self-Evolution Brief · P34</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0b0d11;
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .meta {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 12px;
+  }
+
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .status-card {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .status-card .number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+  }
+  .status-card .label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+  .status-card.good { border-color: #065f46; }
+  .status-card.good .number { color: #34d399; }
+  .status-card.warn { border-color: #78350f; }
+  .status-card.warn .number { color: #fbbf24; }
+  .status-card.bad { border-color: #7f1d1d; }
+  .status-card.bad .number { color: #f87171; }
+  .status-card.neutral { border-color: #1e3a5f; }
+  .status-card.neutral .number { color: #60a5fa; }
+
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.2rem; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+  }
+  th {
+    background: #171d28;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #1e293b;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1f2e;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(30, 41, 59, 0.4); }
+
+  .bar-cell { display: flex; align-items: center; gap: 8px; }
+  .bar { height: 6px; border-radius: 3px; min-width: 4px; }
+  .bar.high { background: #f87171; }
+  .bar.med { background: #fbbf24; }
+  .bar.low { background: #34d399; }
+
+  .sev-high { color: #f87171; background: #7f1d1d33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .sev-med { color: #fbbf24; background: #78350f33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .sev-low { color: #34d399; background: #064e3b33; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+
+  .trend-up { color: #f87171; }
+  .trend-down { color: #34d399; }
+  .trend-flat { color: #94a3b8; }
+
+  .info-box {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .info-box.good { border-color: #065f46; }
+  .info-box.warn { border-color: #78350f; }
+  .info-box.bad { border-color: #7f1d1d; }
+  .info-box.blue { border-color: #1e3a5f; }
+  .info-box h3 { color: #f1f5f9; font-size: 1rem; margin-bottom: 8px; }
+  .info-box p { color: #94a3b8; font-size: 0.85rem; }
+  .info-box code {
+    background: #1a1f2e;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #a5b4fc;
+  }
+
+  .story-card {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .story-card .title { font-weight: 600; color: #e2e8f0; }
+  .story-card .title a { color: #818cf8; text-decoration: none; }
+  .story-card .title a:hover { text-decoration: underline; }
+  .story-card .meta { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+  .story-card .score { color: #fbbf24; font-weight: 600; }
+
+  .divider { height: 1px; background: #1e293b; margin: 24px 0; }
+  .footnote { color: #475569; font-size: 0.75rem; text-align: center; padding: 32px 0; border-top: 1px solid #1e293b; margin-top: 40px; }
+
+  .flash-alert {
+    background: linear-gradient(135deg, #7f1d1d33, #78350f33);
+    border: 2px solid #f87171;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    text-align: center;
+  }
+  .flash-alert h2 { color: #f87171; font-size: 1.5rem; font-weight: 800; }
+  .flash-alert p { color: #fbbf24; font-size: 0.95rem; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 Self-Evolution Brief</h1>
+  <div class="meta">Period 34 · 2026-06-30 · 09:00 CST</div>
+  <div class="badge">⚡ cron job · reviewer profile · Hermes Agent</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FLASH ALERT — NON-FLOOD BASELINE BREAKOUT -->
+<!-- ============================================================ -->
+<div class="flash-alert">
+  <h2>🚨 NON-FLOOD BASELINE BREAKOUT</h2>
+  <p>Non-flood error components surged 74 entries — <strong>2.1× the P25-P33 mean (32.9)</strong> and <strong>1.9× the previous max (40)</strong>. tool_executor +167%, conversation_loop +283%, chat_completion_helpers +233%. System health degrading independently of the gateway flood.</p>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-card good">
+    <div class="number">30</div>
+    <div class="label">Tools</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">64</div>
+    <div class="label">Skills (all active)</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">37%</div>
+    <div class="label">Memory Usage</div>
+  </div>
+  <div class="status-card bad">
+    <div class="number">74</div>
+    <div class="label">Non-Flood Baseline</div>
+  </div>
+  <div class="status-card warn">
+    <div class="number">426</div>
+    <div class="label">Gateway Flood</div>
+  </div>
+  <div class="status-card neutral">
+    <div class="number">N=1</div>
+    <div class="label">Steady State (reset)</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: CAPABILITY STATUS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📊</span> Capability Status</div>
+
+<table>
+  <tr>
+    <th>Category</th>
+    <th>P34</th>
+    <th>vs P33</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>🔧 Available Tools</td>
+    <td>30</td>
+    <td class="trend-flat">→ 0</td>
+    <td>✅ Stable (30 since P24)</td>
+  </tr>
+  <tr>
+    <td>📚 Active Skills</td>
+    <td>64</td>
+    <td class="trend-flat">→ 0</td>
+    <td>✅ All active, 3 agent-created</td>
+  </tr>
+  <tr>
+    <td>🧠 Memory Used</td>
+    <td>37% (mem) / 16% (user)</td>
+    <td class="trend-flat">→</td>
+    <td>✅ Healthy headroom</td>
+  </tr>
+  <tr>
+    <td>⏰ Cron Jobs</td>
+    <td>2 active</td>
+    <td class="trend-flat">→</td>
+    <td>✅ Self-evolution + other</td>
+  </tr>
+  <tr>
+    <td>📝 Sessions DB</td>
+    <td>0 (API compat error)</td>
+    <td class="trend-flat">→</td>
+    <td>⚠️ SessionDB.list_sessions still failing</td>
+  </tr>
+  <tr>
+    <td>📄 Errors Log Total</td>
+    <td>4,690 lines</td>
+    <td class="trend-down">↓ -1,204 (-20.4%)</td>
+    <td>⏳ Log rotation detected (new baseline N=1)</td>
+  </tr>
+</table>
+
+<div class="info-box blue">
+  <h3>🔍 Capability Notes</h3>
+  <p>Tool count stable at 30 for 11 periods. Skills inventory unchanged at 64. Memory usage remains well within capacity. SessionDB compatibility issue persists. Errors log at 4,690 lines — down from P33's 5,894, confirming a <strong>log rotation</strong> occurred between P33 and P34. The file contains 1,452 lines from 06-29 and 3,238 lines from 06-30 (today). Well below the 8,500 rotation threshold with ample headroom.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: WEAKNESS ALERTS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">⚠️</span> Weakness Alerts</div>
+
+<div class="info-box bad">
+  <h3>📋 Summary: 1 weakness detected · 0 high · 1 medium · 0 low</h3>
+  <p>Single medium-severity weakness: <strong>network_access</strong> (10 evidence entries). External network connectivity failures — certain data sources (Polymarket, GFW-blocked services) remain inaccessible.</p>
+</div>
+
+<table>
+  <tr>
+    <th>Component</th>
+    <th>Count</th>
+    <th>Share</th>
+    <th>vs P33</th>
+  </tr>
+  <tr>
+    <td><span style="color:#f87171;">■</span> gateway.run</td>
+    <td>426</td>
+    <td><div class="bar-cell"><div class="bar high" style="width:256px;"></div> 85.2%</div></td>
+    <td class="trend-down">↓ -38 (-8.2%)</td>
+  </tr>
+  <tr>
+    <td><span style="color:#fbbf24;">■</span> agent.tool_executor</td>
+    <td>24</td>
+    <td><div class="bar-cell"><div class="bar med" style="width:14px;"></div> 4.8%</div></td>
+    <td class="trend-up">↑ +15 (+167%)</td>
+  </tr>
+  <tr>
+    <td><span style="color:#fbbf24;">■</span> agent.conversation_loop</td>
+    <td>23</td>
+    <td><div class="bar-cell"><div class="bar med" style="width:14px;"></div> 4.6%</div></td>
+    <td class="trend-up">↑ +17 (+283%)</td>
+  </tr>
+  <tr>
+    <td><span style="color:#60a5fa;">■</span> gateway.platforms.api_server</td>
+    <td>16</td>
+    <td><div class="bar-cell"><div class="bar med" style="width:10px;"></div> 3.2%</div></td>
+    <td class="trend-flat">→ -1 (-5.9%)</td>
+  </tr>
+  <tr>
+    <td><span style="color:#60a5fa;">■</span> agent.chat_completion_helpers</td>
+    <td>10</td>
+    <td><div class="bar-cell"><div class="bar med" style="width:6px;"></div> 2.0%</div></td>
+    <td class="trend-up">↑ +7 (+233%)</td>
+  </tr>
+  <tr>
+    <td><span style="color:#94a3b8;">■</span> cron.scheduler</td>
+    <td>1</td>
+    <td><div class="bar-cell"><div class="bar low" style="width:1px;"></div> 0.2%</div></td>
+    <td class="trend-flat">→ 0</td>
+  </tr>
+  <tr style="font-weight:600; color:#94a3b8;">
+    <td>Total (500-line window)</td>
+    <td>500</td>
+    <td>100%</td>
+    <td></td>
+  </tr>
+</table>
+
+<div class="info-box bad">
+  <h3>📈 Non-Flood Baseline — 10-Period Trend (P25→P34)</h3>
+  <table>
+    <tr>
+      <th>Period</th>
+      <th>Date</th>
+      <th>Non-Flood Total</th>
+      <th>api_srv</th>
+      <th>tool_ex</th>
+      <th>conv_lp</th>
+      <th>chat_cm</th>
+      <th>cron</th>
+    </tr>
+    <tr>
+      <td>P25</td><td>06-21</td>
+      <td>34</td><td>12</td><td>7</td><td>9</td><td>5</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P26</td><td>06-22</td>
+      <td>31</td><td>13</td><td>6</td><td>8</td><td>4</td><td>0</td>
+    </tr>
+    <tr>
+      <td>P27</td><td>06-23</td>
+      <td>35</td><td>14</td><td>7</td><td>9</td><td>5</td><td>0</td>
+    </tr>
+    <tr>
+      <td>P28</td><td>06-24</td>
+      <td>32</td><td>12</td><td>3</td><td>10</td><td>16*</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P29</td><td>06-25</td>
+      <td>25</td><td>12</td><td>1</td><td>7</td><td>4</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P30</td><td>06-26</td>
+      <td>31</td><td>13</td><td>6</td><td>7</td><td>4</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P31</td><td>06-27</td>
+      <td>32</td><td>12</td><td>11</td><td>5</td><td>3</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P32</td><td>06-28</td>
+      <td>40</td><td>17</td><td>13</td><td>6</td><td>3</td><td>1</td>
+    </tr>
+    <tr>
+      <td>P33</td><td>06-29</td>
+      <td>36</td><td>17</td><td>9</td><td>6</td><td>3</td><td>1</td>
+    </tr>
+    <tr style="background:#7f1d1d33; font-weight:700;">
+      <td><strong>P34</strong></td>
+      <td><strong>06-30</strong></td>
+      <td style="color:#f87171;"><strong>74 ⚠️</strong></td>
+      <td><strong>16</strong></td>
+      <td style="color:#f87171;"><strong>24</strong></td>
+      <td style="color:#f87171;"><strong>23</strong></td>
+      <td style="color:#f87171;"><strong>10</strong></td>
+      <td><strong>1</strong></td>
+    </tr>
+    <tr style="font-weight:600; color:#94a3b8; font-size:0.75rem;">
+      <td>Mean (P25-33)</td>
+      <td></td>
+      <td>32.9</td>
+      <td>13.6</td>
+      <td>7.0</td>
+      <td>7.4</td>
+      <td>5.2</td>
+      <td>0.8</td>
+    </tr>
+  </table>
+  <p style="color:#f87171; font-size:0.8rem; margin-top:4px;"><strong>P34 non-flood total (74) is 2.25× the 9-period mean (32.9) and 1.85× the previous max (40). This is the highest non-flood count in the entire P25→P34 observation window.</strong></p>
+</div>
+
+<div class="info-box warn">
+  <h3>🔄 Gateway Flood (P21→P34, 14 periods)</h3>
+  <p>The "Another gateway instance is already running" error persists with PID 2398093 — now entering its <strong>11th consecutive day</strong>. Flood share dropped from 92.8% (P33) to 85.2% (P34), but this is <strong>not improvement</strong> — it's dilution by the surging non-flood components. In absolute terms, gateway.run errors slightly decreased (464→426, -8.2%), suggesting the cron job's gateway attempt frequency may have decreased, not that the underlying problem is fixed.</p>
+</div>
+
+<div class="info-box bad">
+  <h3>📉 Log Rotation Detected</h3>
+  <p>Errors.log decreased from 5,894 lines (P33) to 4,690 lines (P34) — a reduction of 20.4%. The file contains 1,452 lines from 06-29 and 3,238 lines from 06-30, confirming a <strong>time-based log rotation</strong> (likely daily cron) occurred between the two scans. Pure steady state N resets to 1. Current file size (4,690) is well below the 8,500 rotation threshold.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: KNOWLEDGE FEED -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🔬</span> Knowledge Feed</div>
+
+<div class="info-box bad">
+  <h3>📄 arXiv API: ❌ Failed (3rd consecutive)</h3>
+  <p>arXiv API unavailable for the 3rd consecutive period after P31's single-period recovery. Cumulative success rate: 7/34 = <strong>20.6%</strong>. The pattern of intermittent single-period success windows continues — no multi-period recovery has been observed since P16's 5-paper window. The longest failure streak (8 periods) remains the record, with the current 3-period streak well within historical norms.</p>
+</div>
+
+<h3 style="color:#94a3b8; font-size:0.85rem; margin: 16px 0 8px;">🔥 Hacker News Top Stories · 2026-06-30</h3>
+
+<div class="story-card">
+  <div class="title"><a href="https://quesma.com/blog/qwen-36-is-awesome/" target="_blank">Qwen 3.6 27B is the sweet spot for local development</a></div>
+  <div class="meta"><span class="score">▲ 589</span> · 504 comments · by stared</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://investors.rocketlabcorp.com/news-releases/news-release-details/rocket-lab-acquire-iridium-historic-deal-creating-fully" target="_blank">Rocketlab acquires Iridium</a></div>
+  <div class="meta"><span class="score">▲ 360</span> · 225 comments · by everfrustrated</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://hccf.onmy.cloud/2026/06/21/reclaiming-our-digital-selves-hccfs-vision-for-a-human-centered-top-level-domain/" target="_blank">.self: A new top-level domain designed to support self-hosting</a></div>
+  <div class="meta"><span class="score">▲ 310</span> · 174 comments · by HumanCCF</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://probablymarcus.com/blocks/2026/06/28/native-graphical-shell-for-SSH.html" target="_blank">A native graphical shell for SSH</a></div>
+  <div class="meta"><span class="score">▲ 238</span> · 110 comments · by mrcslws</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://weblog.rogueamoeba.com/2026/06/26/free-the-icons/" target="_blank">Free the Icons</a></div>
+  <div class="meta"><span class="score">▲ 185</span> · 48 comments · by zdw</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://github.com/deepreinforce-ai/Ornith-1" target="_blank">Ornith-1.0: self-improving open-source models for agentic coding</a></div>
+  <div class="meta"><span class="score">▲ 146</span> · 32 comments · by danboarder</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://arstechnica.com/ai/2026/06/south-korea-to-spend-1t-on-more-memory-chip-production-and-humanoid-robots/" target="_blank">South Korea to spend $1T on more memory chip production and humanoid robots</a></div>
+  <div class="meta"><span class="score">▲ 101</span> · 58 comments · by jnord</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://phys.org/news/2026-06-scientists-molecular-evidence-liquid.html" target="_blank">Scientists find molecular-level evidence for two structures in liquid water</a></div>
+  <div class="meta"><span class="score">▲ 50</span> · 17 comments · by wglb</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://obsolescence.dev/pdp1-lisp-introduction.html" target="_blank">Exploring PDP-1 Lisp (1960)</a></div>
+  <div class="meta"><span class="score">▲ 7</span> · 5 comments · by ozymandiax</div>
+</div>
+
+<div class="story-card">
+  <div class="title"><a href="https://fil-c.org/context_switches" target="_blank">Memory Safe Context Switching (longjmp, setjmp) in Fil-C</a></div>
+  <div class="meta"><span class="score">▲ 10</span> · 0 comments · by modeless</div>
+</div>
+
+<div class="divider"></div>
+
+<h3 style="color:#94a3b8; font-size:0.85rem; margin-bottom:8px;">🧠 Key Insights from HN</h3>
+
+<table>
+  <tr>
+    <th>Theme</th>
+    <th>Story</th>
+    <th>Relevance</th>
+  </tr>
+  <tr>
+    <td>🤖 AI Models</td>
+    <td>Qwen 3.6 27B: sweet spot for local dev (589 pts)</td>
+    <td>Local model deployment sweet spot — relevant to Hermes' local inference strategy via llama.cpp</td>
+  </tr>
+  <tr>
+    <td>🔧 Agentic Coding</td>
+    <td>Ornith-1.0: self-improving open-source models for agentic coding (146 pts)</td>
+    <td>Self-improving coding agents — directly relevant to Hermes' autonomous agent paradigm</td>
+  </tr>
+  <tr>
+    <td>🌐 Self-Hosting</td>
+    <td>.self TLD for self-hosting (310 pts)</td>
+    <td>Decentralized hosting infrastructure — relevant for Hermes deployment architecture</td>
+  </tr>
+  <tr>
+    <td>📡 Satellite</td>
+    <td>Rocketlab acquires Iridium (360 pts, 225 comments)</td>
+    <td>Major space industry consolidation — satellite connectivity implications</td>
+  </tr>
+  <tr>
+    <td>💻 SSH Tooling</td>
+    <td>Native graphical shell for SSH (238 pts)</td>
+    <td>Remote server management UX — relevance to Hermes terminal/shell workflows</td>
+  </tr>
+  <tr>
+    <td>🤖 Robotics</td>
+    <td>South Korea $1T on memory chips + humanoid robots (101 pts)</td>
+    <td>Hardware investment wave — AI compute / memory demand growth signal</td>
+  </tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: EVOLUTION SUGGESTIONS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🧬</span> Evolution Suggestions</div>
+
+<div class="info-box bad">
+  <h3>🥇 Fix Gateway Flood (Priority: Critical)</h3>
+  <p>The "Another gateway instance is already running" error on PID 2398093 has been running continuously for <strong>11 days</strong> (P24→P34). At 85.2% of all errors, this remains the highest-impact fix. The error is a startup race condition: the cron job's gateway attempt finds an existing instance and logs an error. Run <code>hermes gateway stop</code> followed by <code>hermes gateway restart</code>.</p>
+  <p style="margin-top:8px;"><strong>Expected impact:</strong> ~426 fewer ERROR entries per period (~85% error reduction from the flood). However, this would reveal the true scale of the non-flood system degradation — currently masked by the flood.</p>
+</div>
+
+<div class="info-box bad">
+  <h3>🥈 Investigate Provider API Meltdown</h3>
+  <p>The non-flood components exploded this period — <strong>tool_executor +167%, conversation_loop +283%, chat_completion_helpers +233%</strong>. The top error signatures show a pattern:</p>
+  <ul style="color:#94a3b8; font-size:0.85rem; margin-top:8px; padding-left:20px;">
+    <li><strong>RateLimitError</strong> (2 attempts) — TokenHub provider hitting limits</li>
+    <li><strong>APIConnectionError</strong> (attempt 1/3 → 2/3 → 3/3) — connection failures with retry exhaustion</li>
+    <li><strong>Stream stale for 180s/240s</strong> — stream timeouts on deepseek-v4-flash</li>
+    <li><strong>Tool terminal exit_code=-1</strong> — tool failures during provider API calls</li>
+  </ul>
+  <p style="margin-top:8px; color:#fbbf24;"><strong>Recommendation:</strong> Configure a fallback provider, implement circuit-breaker for TokenHub, and increase timeout thresholds. The current 3/3 retry pattern is exhausting all attempts before eventually succeeding, creating a 450-600s delay window per failure.</p>
+</div>
+
+<div class="info-box warn">
+  <h3>🥉 Configure API_SERVER_KEY</h3>
+  <p>The api_server component contributes 16 entries per period (3.2%) with a consistent "API_SERVER_KEY is required" error. Run <code>hermes config set api_server.key &lt;value&gt;</code> or set <code>API_SERVER_KEY</code> in the environment.</p>
+</div>
+
+<div class="info-box blue">
+  <h3>🔮 Predictive Horizon</h3>
+  <p>If the gateway flood is <strong>not</strong> fixed: expect gateway.run to continue at 85-93% share, but the non-flood baseline is now structurally elevated. The P34 breakout (74 vs the 25-35 range) marks a <strong>regime change</strong> in non-flood system health — not a one-period anomaly. The provider API issues are expected to persist without intervention.</p>
+  <p style="margin-top:8px;"><strong>If fixed:</strong> total errors would drop to ~74-100/period (the new non-flood level), revealing a system that has materially degraded since the P25-P33 era when non-flood averaged ~33.</p>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: TREND COMPARISON -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📈</span> Trend Comparison — P25→P34 (10-Period View)</div>
+
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>P25</th><th>P26</th><th>P27</th><th>P28</th><th>P29</th><th>P30</th><th>P31</th><th>P32</th><th>P33</th>
+    <th>P34</th>
+    <th>Trend</th>
+  </tr>
+  <tr>
+    <td>GW Flood %</td>
+    <td>93.2%</td><td>93.8%</td><td>93.0%</td><td>93.6%</td><td>95.0%</td><td>93.8%</td><td>93.6%</td><td>92.0%</td><td>92.8%</td>
+    <td><strong>85.2%</strong></td>
+    <td class="trend-down">↓ Diluted by non-flood surge</td>
+  </tr>
+  <tr>
+    <td>Non-Flood</td>
+    <td>34</td><td>31</td><td>35</td><td>32</td><td>25</td><td>31</td><td>32</td><td>40</td><td>36</td>
+    <td style="color:#f87171; font-weight:700;"><strong>74 ⚠️</strong></td>
+    <td class="trend-up">↑ +106% — breakout</td>
+  </tr>
+  <tr>
+    <td>PID</td>
+    <td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td><td>2398093</td>
+    <td><strong>2398093</strong></td>
+    <td class="trend-flat">→ 11 days</td>
+  </tr>
+  <tr>
+    <td>Weaknesses</td>
+    <td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td><td>1</td><td>1</td>
+    <td><strong>1</strong></td>
+    <td class="trend-flat">→ Stable</td>
+  </tr>
+  <tr>
+    <td>arXiv</td>
+    <td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td><td>❌</td><td>❌</td>
+    <td><strong>❌</strong></td>
+    <td class="trend-flat">→ 20.6% success</td>
+  </tr>
+  <tr>
+    <td>Steady State</td>
+    <td>B=1</td><td>B=2</td><td>B=3</td><td>N=1</td><td>N=2</td><td>N=3</td><td>N=4</td><td>N=5</td><td>N=6</td>
+    <td><strong>N=1</strong></td>
+    <td class="trend-up">↻ Reset (log rotation)</td>
+  </tr>
+</table>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: PREDICTION VERIFICATION -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🎯</span> Prediction Verification</div>
+
+<table>
+  <tr>
+    <th>P33 Prediction → P34 Reality</th>
+    <th>Result</th>
+  </tr>
+  <tr>
+    <td>gateway.run flood continues at 92-94% (PID 2398093)</td>
+    <td><span style="color:#fbbf24;">⚠️ PARTIAL</span> — Flood continued but share fell to 85.2% (diluted by non-flood surge, not fixed)</td>
+  </tr>
+  <tr>
+    <td>No log rotation (file at 5,894 lines)</td>
+    <td style="color:#f87171;">✗ WRONG</td>
+  </tr>
+  <tr>
+    <td>Non-flood baseline remains 30-40</td>
+    <td style="color:#f87171;">✗ WRONG — surged to 74 (+106%)</td>
+  </tr>
+  <tr>
+    <td>arXiv API remains unavailable</td>
+    <td style="color:#34d399;">✓ CORRECT</td>
+  </tr>
+  <tr>
+    <td>Weakness count stays at 1</td>
+    <td style="color:#34d399;">✓ CORRECT</td>
+  </tr>
+</table>
+
+<div class="info-box bad">
+  <h3>❌ Prediction Accuracy: 2/5 (40%) — Worst Since P20</h3>
+  <p>Two of three "wrong" predictions were overturned by the non-flood breakout and log rotation — events with no precedent in the P28-P33 steady-state window. The non-flood surge (36→74) broke through every confidence boundary: exceededing the 25-35 range by 2.1× and the P32 outlier by 1.9×. <strong>Key lesson:</strong> 6 periods of steady-state data lulled the prediction model into assuming continued stability. The breakout proves that long steady-state windows do not guarantee future stability — they can mask accumulating underlying pressure.</p>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footnote">
+  <p>🧬 Self-Evolution System · Period 34 · 2026-06-30 · Generated by Hermes Agent (reviewer profile)</p>
+  <p style="margin-top:4px;">Data sources: self_scan.py · weakness_scan.py · knowledge_ingest.py</p>
+</div>
+
+</div>
+</body>
+</html>
