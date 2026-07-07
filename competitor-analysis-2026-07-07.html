@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>答客 Pro 竞品对比分析 — 云翼智答 vs 智汇通</title>
+<style>
+:root {
+  --ivory: #FAF9F5;
+  --white: #FFFFFF;
+  --slate: #141413;
+  --clay: #D97757;
+  --olive: #788C5D;
+  --rust: #B04A3F;
+  --oat: #E3DACC;
+  --sky: #5B8DB8;
+  --sky-bg: rgba(91,141,184,0.08);
+  --clay-bg: rgba(217,119,87,0.06);
+  --olive-bg: rgba(120,140,93,0.08);
+  --purple: #8B6BAE;
+  --purple-bg: rgba(139,107,174,0.08);
+  --gray-150: #F0EEE6;
+  --gray-300: #D1CFC5;
+  --gray-500: #87867F;
+  --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px;
+  --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding: 40px 24px 120px;
+}
+.page { max-width: 1200px; margin: 0 auto; }
+
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 20px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  scroll-margin-top: 24px; padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 16px;
+  color: var(--slate); margin: 24px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 14px; margin-bottom: 36px; }
+
+.card {
+  background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 28px; margin-bottom: 28px;
+}
+
+/* Table styles */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  font-size: 14px; line-height: 1.55;
+}
+thead th {
+  background: var(--gray-150); font-weight: 600; font-size: 13px;
+  color: var(--gray-700); text-align: left; padding: 10px 14px;
+  border-bottom: 2px solid var(--gray-300);
+  white-space: nowrap;
+}
+thead th:first-child { border-radius: 8px 0 0 0; }
+thead th:last-child { border-radius: 0 8px 0 0; }
+tbody td {
+  padding: 10px 14px; border-bottom: 1px solid var(--gray-150);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--ivory); }
+
+.col-dim { font-weight: 600; color: var(--slate); white-space: nowrap; }
+.col-ours { background: var(--olive-bg); }
+.col-a { background: var(--sky-bg); }
+.col-b { background: var(--purple-bg); }
+
+.source-tag {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--gray-500); white-space: nowrap;
+  display: block; margin-top: 2px;
+}
+.highlight { color: var(--rust); font-weight: 600; }
+.note { color: var(--gray-500); font-style: italic; font-size: 13px; }
+
+/* Diff table */
+.diff-table td { font-size: 13px; }
+
+/* Legend */
+.legend { display: flex; gap: 20px; flex-wrap: wrap; margin: 16px 0; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.legend-swatch { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--gray-300); }
+
+/* Summary badges */
+.badge-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+.badge {
+  font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+  border-radius: var(--radius-row); border: 1px solid var(--gray-300);
+  background: var(--white);
+}
+.badge-ours { border-color: var(--olive); color: var(--olive); background: var(--olive-bg); }
+.badge-a { border-color: var(--sky); color: var(--sky); background: var(--sky-bg); }
+.badge-b { border-color: var(--purple); color: var(--purple); background: var(--purple-bg); }
+
+/* Back link */
+.back-link { display: inline-block; margin-top: 48px; font-size: 14px;
+  color: var(--gray-500); text-decoration: none; }
+.back-link:hover { color: var(--slate); }
+
+.warn-callout {
+  background: var(--clay-bg); border: 1px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px;
+  margin: 20px 0; font-size: 13px; color: var(--rust);
+}
+
+@media (max-width: 768px) {
+  body { padding: 20px 12px 80px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">COMPETITIVE ANALYSIS · 2026-07-07</div>
+<h1>答客 Pro 竞品对比矩阵</h1>
+<p class="subtitle">
+  我方产品「答客 Pro V5.0」 vs 竞品 A「云翼智答 V4.2」 vs 竞品 B「智汇通 2026春季版」<br>
+  数据来源：三家官方白皮书/产品简介，所有数字均标注出处页码
+</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--olive-bg)"></div>答客 Pro（我方）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--sky-bg)"></div>云翼智答（竞品A）</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:var(--purple-bg)"></div>智汇通（竞品B）</div>
+</div>
+
+<!-- ── OVERVIEW BADGES ── -->
+<div class="badge-row">
+  <span class="badge badge-ours">答客 Pro：16核32G×4 压测</span>
+  <span class="badge badge-a">云翼：8核16G×4 压测</span>
+  <span class="badge badge-b">智汇通：生产环境抽样</span>
+</div>
+<div class="badge-row">
+  <span class="badge badge-ours">客户数：未披露</span>
+  <span class="badge badge-a">客户数：1,200+</span>
+  <span class="badge badge-b">客户数：≈800</span>
+</div>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<div class="card">
+<h2>一、价格与授权方式</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:140px">维度</th>
+  <th class="col-ours" style="min-width:220px">我方 · 答客 Pro</th>
+  <th class="col-a" style="min-width:220px">竞品 A · 云翼智答</th>
+  <th class="col-b" style="min-width:220px">竞品 B · 智汇通</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">计费模式</td>
+  <td class="col-ours">按坐席年费<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">按坐席年费<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="highlight">按月订阅 + 按量计费组合</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">入门版价格</td>
+  <td class="col-ours">¥7,200/年/坐席，10席起<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">¥6,800/年/坐席，10席起<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">¥720/月（≈$100/mo），5坐席<br>≈¥1,728/年/坐席<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">中档版价格</td>
+  <td class="col-ours">¥10,800/年/坐席，20席起<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">¥9,600/年/坐席，20席起<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">¥2,160/月（≈$300/mo），不限坐席，按会话量<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">顶配版价格</td>
+  <td class="col-ours">¥16,000/年/坐席，30席起<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">¥14,800/年/坐席，50席起<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">面议，¥30万+/年，含私有部署<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">私有化授权费</td>
+  <td class="col-ours">¥96万起，维保 15%/年<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">¥88万起，维保 18%/年<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">项目制报价，<span class="note">未披露具体金额</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">首年赠送</td>
+  <td class="col-ours">300h 专业服务 + 1次现场话术调优<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">200h 专业服务包<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未披露</span><span class="source-tag">（B白皮书）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">超额/按量计费</td>
+  <td class="col-ours"><span class="note">未披露</span></td>
+  <td class="col-a"><span class="note">未披露</span></td>
+  <td class="col-b">超出套餐 ¥0.08/次；短信/语音另计<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">币种</td>
+  <td class="col-ours">仅人民币<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">仅人民币<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="highlight">人民币 + 美元双币</span>，汇率 ≈7.2<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ PERFORMANCE ═══════════ -->
+<div class="card">
+<h2>二、核心性能指标</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:170px">维度</th>
+  <th class="col-ours" style="min-width:240px">我方 · 答客 Pro</th>
+  <th class="col-a" style="min-width:240px">竞品 A · 云翼智答</th>
+  <th class="col-b" style="min-width:240px">竞品 B · 智汇通</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">平均响应时延</td>
+  <td class="col-ours"><span class="highlight">320ms</span>，P95 ≤700ms<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">480ms，P95 ≤900ms<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="highlight">约600ms（首字响应）</span>，高峰期 1,200ms<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">并发会话数</td>
+  <td class="col-ours"><span class="highlight">20,000路/集群</span>，可扩至 80,000<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">12,000路/集群，可扩至 50,000<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">约10,000并发/实例，多实例线性扩展<span class="note">上限未披露</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">意图识别 / 解决率</td>
+  <td class="col-ours">意图识别准确率 <span class="highlight">93.4%</span><span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">意图识别准确率 92.6%<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">机器人解决率约85%，头部可达90%+<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">知识库容量</td>
+  <td class="col-ours"><span class="highlight">100万条/单库</span><span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">50万条/单库<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">不限条数，<span class="highlight">按存储空间计费</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">系统可用性</td>
+  <td class="col-ours"><span class="highlight">99.99%</span> 年度 SLA<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">99.95% 年度 SLA，按月结算<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b">月度在线率 ≥99.9%<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">支持渠道数</td>
+  <td class="col-ours">13个<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">11个<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未披露具体数量</span>，称"主流全渠道"<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">测试环境</td>
+  <td class="col-ours">16核32G × 4节点<span class="source-tag">（答客P1）</span></td>
+  <td class="col-a">8核16G × 4节点<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="highlight">生产环境抽样</span>，非标准压测<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ SCENARIOS ═══════════ -->
+<div class="card">
+<h2>三、适用场景</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:150px">场景</th>
+  <th class="col-ours" style="min-width:180px">答客 Pro</th>
+  <th class="col-a" style="min-width:180px">云翼智答</th>
+  <th class="col-b" style="min-width:180px">智汇通</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">金融</td>
+  <td class="col-ours">✅ 智能问答+合规话术实时校验<span class="highlight">（强项）</span><span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">✅ 7×24 智能问答+风控话术合规<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未明确提及</span><span class="source-tag">（B白皮书）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">政务/能源</td>
+  <td class="col-ours">✅ 数据本地化+私有大模型<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">✅ 12345热线知识库+话务分流<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未提及</span><span class="source-tag">（B白皮书）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">大型制造</td>
+  <td class="col-ours">✅ 售后工单+备件知识库<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a"><span class="note">未明确提及</span><span class="source-tag">（A白皮书）</span></td>
+  <td class="col-b">✅ 售后报修工单智能派发<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">零售电商</td>
+  <td class="col-ours"><span class="note">未提及</span><span class="source-tag">（答客）</span></td>
+  <td class="col-a">✅ 大促弹性扩容+高并发售后<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未明确提及</span><span class="source-tag">（B白皮书）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">互联网 SaaS</td>
+  <td class="col-ours"><span class="note">未提及</span><span class="source-tag">（答客）</span></td>
+  <td class="col-a"><span class="note">未提及</span><span class="source-tag">（A白皮书）</span></td>
+  <td class="col-b">✅ 用户答疑+转化引导<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">教育</td>
+  <td class="col-ours"><span class="note">未提及</span><span class="source-tag">（答客）</span></td>
+  <td class="col-a"><span class="note">未提及</span><span class="source-tag">（A白皮书）</span></td>
+  <td class="col-b">✅ 招生咨询+课程答疑<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">跨境电商 / 多语言</td>
+  <td class="col-ours"><span class="note">未提及</span><span class="source-tag">（答客）</span></td>
+  <td class="col-a"><span class="note">未提及</span><span class="source-tag">（A白皮书）</span></td>
+  <td class="col-b">✅ 内置中英日语言包<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">企业 IT 服务台</td>
+  <td class="col-ours">✅ IT报障+HR政策问答<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">✅ 员工IT报障+HR自助化<span class="source-tag">（A白皮书P1）</span></td>
+  <td class="col-b"><span class="note">未明确提及</span><span class="source-tag">（B白皮书）</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ SERVICE ═══════════ -->
+<div class="card">
+<h2>四、服务与支持</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:170px">维度</th>
+  <th class="col-ours" style="min-width:220px">我方 · 答客 Pro</th>
+  <th class="col-a" style="min-width:220px">竞品 A · 云翼智答</th>
+  <th class="col-b" style="min-width:220px">竞品 B · 智汇通</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">技术支持时间</td>
+  <td class="col-ours">7×24（专业版+）；5×8（标准版）<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">7×24（旗舰版）；5×8（标准/专业版）<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">工作日 9:00–21:00；VIP客户7×24<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">P1 故障响应</td>
+  <td class="col-ours"><span class="highlight">15分钟响应</span>，2h出方案<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">30分钟响应，4h出方案<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">1h内介入，普通问题当日答复<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">SaaS 上线周期</td>
+  <td class="col-ours">标准版 3 个工作日<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">标准版 5 个工作日<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b"><span class="highlight">标准SaaS当天开通</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">私有化部署周期</td>
+  <td class="col-ours">3–5周<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">4–6周<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">约4周<span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">免费培训</td>
+  <td class="col-ours">线上 12 课时<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">线上 8 课时<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">在线文档+视频教程，<span class="note">无免费面授课时</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">现场培训费</td>
+  <td class="col-ours">¥4,000/天<span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">¥5,000/天<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">付费专属顾问，<span class="note">未披露单价</span><span class="source-tag">（B白皮书P1）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">数据合规</td>
+  <td class="col-ours">等保三级 + ISO27001 + <span class="highlight">国密加密 + 全私有化</span><span class="source-tag">（答客P2）</span></td>
+  <td class="col-a">等保三级 + ISO27001 + 数据本地化<span class="source-tag">（A白皮书P2）</span></td>
+  <td class="col-b">ISO27001 + 数据加密传输与存储<span class="source-tag">（B白皮书P2）</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ DISCREPANCY ═══════════ -->
+<div class="card">
+<h2>五、口径差异说明 ⚠️</h2>
+<p style="margin-bottom:16px;font-size:13px;color:var(--gray-500)">
+以下指标在三家白皮书中<strong>定义不一致</strong>，直接横向对比会产生误导。必须先统一口径后再做比较。
+</p>
+<div class="table-wrap">
+<table class="diff-table">
+<thead>
+<tr>
+  <th style="min-width:180px">差异项</th>
+  <th style="min-width:200px">答客 Pro</th>
+  <th style="min-width:200px">云翼智答</th>
+  <th style="min-width:200px">智汇通</th>
+  <th style="min-width:260px">统一建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">响应时延定义</td>
+  <td>「单会话平均响应时延」— 完整对话回合端到端耗时<span class="source-tag">（答客P1）</span></td>
+  <td>「单会话平均响应时延」— 同口径<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">「平均首字响应」</span> — 仅首个token到达时间，不含后续生成<span class="source-tag">（B白皮书P1）</span></td>
+  <td>智汇通 600ms 为首字时延，答客/云翼 320ms/480ms 是全响应时延，<strong>不可直接对比</strong></td>
+</tr>
+<tr>
+  <td class="col-dim">并发定义</td>
+  <td>「单集群并发会话数」<span class="source-tag">（答客P1）</span></td>
+  <td>「单集群并发会话数」— 同口径<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">「单实例约1万并发」</span> — "实例"与"集群"是否对等未说明<span class="source-tag">（B白皮书P1）</span></td>
+  <td>需确认「单实例」是否等同单集群</td>
+</tr>
+<tr>
+  <td class="col-dim">准确率 vs 解决率</td>
+  <td>「意图识别准确率」93.4% — NLU分类正确率<span class="source-tag">（答客P1）</span></td>
+  <td>「意图识别准确率」92.6% — 同口径<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">「机器人解决率」约85%</span> — 无需转人工的比例，<strong>与NLU准确率完全不同</strong><span class="source-tag">（B白皮书P1）</span></td>
+  <td>解决率天然低于准确率（含转人工策略），<strong>不可横向对比</strong></td>
+</tr>
+<tr>
+  <td class="col-dim">SLA 定义</td>
+  <td>「年度可用性 99.99%」— 年停机 ≤52.6分钟<span class="source-tag">（答客P1）</span></td>
+  <td>「年度可用性 99.95%」— 年停机 ≤262.8分钟<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">「月度在线率 ≥99.9%」</span> — 月停机 ≤43.8分钟，年化 ≈525.6分钟<span class="source-tag">（B白皮书P1）</span></td>
+  <td>99.99%（年度）vs 99.9%（月度）<strong>差一个数量级</strong>，需统一时间窗口</td>
+</tr>
+<tr>
+  <td class="col-dim">知识库容量</td>
+  <td>按条数上限：100万条<span class="source-tag">（答客P1）</span></td>
+  <td>按条数上限：50万条<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">不限条数，按存储空间计费</span><span class="source-tag">（B白皮书P1）</span></td>
+  <td>计价方式不同，不可直接对比；需智汇通公布存储单价后换算</td>
+</tr>
+<tr>
+  <td class="col-dim">计费周期</td>
+  <td>年费<span class="source-tag">（答客P1）</span></td>
+  <td>年费<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">月费 + 按量</span><span class="source-tag">（B白皮书P1）</span></td>
+  <td>B「成长版」按会话量计费，无法简单折算为「年费/坐席」</td>
+</tr>
+<tr>
+  <td class="col-dim">测试环境</td>
+  <td>16核32G × 4节点<span class="source-tag">（答客P1）</span></td>
+  <td>8核16G × 4节点<span class="source-tag">（A白皮书P1）</span></td>
+  <td><span class="highlight">生产环境抽样</span>，非标准压测<span class="source-tag">（B白皮书P1）</span></td>
+  <td>答客硬件是云翼的<strong>2倍</strong>（CPU+内存）；智汇通为生产数据，与压测不可比</td>
+</tr>
+<tr>
+  <td class="col-dim">客户规模</td>
+  <td><span class="note">未披露</span></td>
+  <td>1,200+ 家企业客户<span class="source-tag">（A白皮书P1）</span></td>
+  <td>约800家签约客户<span class="source-tag">（B白皮书P1）</span></td>
+  <td>建议我方补充客户数</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="warn-callout">
+<strong>⚠️ 重要提示：</strong>以上所有数据严格提取自三家官方白皮书/产品简介原文，未出现的数据均标注「未披露」，未做任何推测或编造。三家测试条件、指标定义、计费模型存在显著差异，直接对比性能数字前必须完成口径统一。建议后续做 TCO 模型时结合实际坐席数、使用量和部署方式逐项评估。
+</div>
+</div>
+
+<a class="back-link" href="./">← 返回首页</a>
+
+</div>
+</body>
+</html>
