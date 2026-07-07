@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Self-Evolution Brief · P41</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0b0d11;
+    color: #e2e8f0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #818cf8, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .meta { color: #64748b; font-size: 0.9rem; margin-top: 8px; }
+  .header .badge {
+    display: inline-block;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 12px;
+  }
+
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .status-card {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .status-card .number { font-size: 1.8rem; font-weight: 700; color: #e2e8f0; }
+  .status-card .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .status-card.good { border-color: #065f46; }
+  .status-card.good .number { color: #34d399; }
+  .status-card.warn { border-color: #78350f; }
+  .status-card.warn .number { color: #fbbf24; }
+  .status-card.bad { border-color: #7f1d1d; }
+  .status-card.bad .number { color: #f87171; }
+  .status-card.neutral { border-color: #1e3a5f; }
+  .status-card.neutral .number { color: #60a5fa; }
+  .status-card.success { border-color: #34d399; }
+  .status-card.success .number { color: #34d399; }
+  .status-card.purple { border-color: #5b21b6; }
+  .status-card.purple .number { color: #a78bfa; }
+
+  .section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .emoji { font-size: 1.2rem; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+  }
+  th {
+    background: #171d28;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #1a1f2e;
+    font-size: 0.85rem;
+  }
+  tr:hover td { background: #131824; }
+  td:first-child { font-weight: 500; color: #cbd5e1; }
+  .trend-up { color: #f87171; }
+  .trend-down { color: #34d399; }
+  .trend-flat { color: #94a3b8; }
+
+  .info-box {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .info-box h3 { font-size: 0.95rem; margin-bottom: 10px; color: #e2e8f0; }
+  .info-box p { font-size: 0.85rem; color: #94a3b8; line-height: 1.7; }
+  .info-box.blue { border-color: #1e3a5f; }
+  .info-box.blue h3 { color: #60a5fa; }
+  .info-box.warn { border-color: #78350f; }
+  .info-box.warn h3 { color: #fbbf24; }
+  .info-box.green { border-color: #065f46; }
+  .info-box.green h3 { color: #34d399; }
+  .info-box.red { border-color: #7f1d1d; }
+  .info-box.red h3 { color: #f87171; }
+
+  .component-bar {
+    display: flex;
+    height: 24px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .component-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; color: #fff; }
+  .bar-gateway { background: #7c3aed; }
+  .bar-tool { background: #f59e0b; }
+  .bar-api { background: #3b82f6; }
+  .bar-other { background: #64748b; }
+
+  .footnote {
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid #1e293b;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #475569;
+  }
+
+  .paper-item, .story-item {
+    background: #11141c;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+  }
+  .paper-item .title { font-weight: 600; color: #e2e8f0; font-size: 0.85rem; }
+  .paper-item .meta { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+  .story-item .title { font-weight: 500; color: #60a5fa; font-size: 0.85rem; }
+  .story-item .meta { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+  .story-item .score { color: #fbbf24; font-weight: 600; }
+
+  .highlight-new { background: linear-gradient(90deg, rgba(52,211,153,0.1), transparent); border-left: 3px solid #34d399; }
+  .highlight-warn { background: linear-gradient(90deg, rgba(251,191,36,0.1), transparent); border-left: 3px solid #fbbf24; }
+  .highlight-critical { background: linear-gradient(90deg, rgba(248,113,113,0.1), transparent); border-left: 3px solid #f87171; }
+
+  .badge-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .badge-tag.green { background: #065f46; color: #34d399; }
+  .badge-tag.yellow { background: #78350f; color: #fbbf24; }
+  .badge-tag.red { background: #7f1d1d; color: #f87171; }
+  .badge-tag.blue { background: #1e3a5f; color: #60a5fa; }
+  .badge-tag.purple { background: #3b0f5e; color: #a78bfa; }
+
+  .trend-row { display: flex; align-items: center; gap: 8px; }
+  @media (max-width: 640px) {
+    .container { padding: 20px 12px; }
+    .header h1 { font-size: 1.8rem; }
+    .status-bar { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🧬 Self-Evolution Brief</h1>
+  <div class="meta">Period 41 · 2026-07-07 · Daily Evolution Report</div>
+  <div class="badge">🟢 3 consecutive arXiv successes · 🔄 Pure steady-state day 18</div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="status-card good">
+    <div class="number">30</div>
+    <div class="label">🧰 Tools</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">66</div>
+    <div class="label">📚 Skills</div>
+  </div>
+  <div class="status-card neutral">
+    <div class="number">37%</div>
+    <div class="label">💾 Memory</div>
+  </div>
+  <div class="status-card neutral">
+    <div class="number">2</div>
+    <div class="label">⏰ Cron Jobs</div>
+  </div>
+  <div class="status-card bad">
+    <div class="number">92.4%</div>
+    <div class="label">🌊 Flood Share</div>
+  </div>
+  <div class="status-card good">
+    <div class="number">38</div>
+    <div class="label">📊 Non-Flood</div>
+  </div>
+  <div class="status-card success">
+    <div class="number">3</div>
+    <div class="label">✅ arXiv Streak</div>
+  </div>
+  <div class="status-card warn">
+    <div class="number">0</div>
+    <div class="label">⚠️ Weaknesses</div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: CAPABILITY STATUS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📊</span> Capability Status</div>
+
+<table>
+  <tr><th>Category</th><th>Value</th><th>vs P40</th><th>Status</th></tr>
+  <tr>
+    <td>🧰 Available Tools</td>
+    <td>30</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag yellow">Unchanged 17 periods</span></td>
+  </tr>
+  <tr>
+    <td>📚 Active Skills</td>
+    <td>66</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag green">All active, 0 stale</span></td>
+  </tr>
+  <tr>
+    <td>🤖 Agent-Created Skills</td>
+    <td>3</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag blue">document-output-format, scheduled-content-briefs, weixin-content</span></td>
+  </tr>
+  <tr>
+    <td>💾 Memory Usage</td>
+    <td>37% (816 chars)</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag green">Stable</span></td>
+  </tr>
+  <tr>
+    <td>👤 User Memory</td>
+    <td>16% (231 chars)</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag green">Stable</span></td>
+  </tr>
+  <tr>
+    <td>⏰ Cron Jobs</td>
+    <td>2 active, 0 paused</td>
+    <td class="trend-flat">0</td>
+    <td><span class="badge-tag green">Normal</span></td>
+  </tr>
+  <tr>
+    <td>📝 Sessions DB</td>
+    <td>0 (API unavailable)</td>
+    <td class="trend-flat">—</td>
+    <td><span class="badge-tag yellow">SessionDB.list_sessions unavailable</span></td>
+  </tr>
+</table>
+
+<p style="color:#64748b; font-size:0.8rem;">All capability metrics stable for 17+ periods. No drift detected.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: WEAKNESS ALERTS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">⚠️</span> Weakness Alerts</div>
+
+<div class="component-bar">
+  <div class="seg bar-gateway" style="width:92.4%;">gateway.run 462</div>
+  <div class="seg bar-tool" style="width:4.0%;">tool 20</div>
+  <div class="seg bar-api" style="width:3.4%;">api 17</div>
+  <div class="seg bar-other" style="width:0.2%;">1</div>
+</div>
+
+<table>
+  <tr><th>Component</th><th>Count</th><th>Share</th><th>vs P40</th><th>Notes</th></tr>
+  <tr>
+    <td>🔮 gateway.run</td>
+    <td>462</td>
+    <td>92.4%</td>
+    <td class="trend-flat">−2 (−0.4%)</td>
+    <td>PID 2398093 · Day 18</td>
+  </tr>
+  <tr>
+    <td class="highlight-warn">⚙️ tool_executor</td>
+    <td>20</td>
+    <td>4.0%</td>
+    <td class="trend-up">+2 (+11.1%)</td>
+    <td>exit_code=-1 · 4+ terminal signatures</td>
+  </tr>
+  <tr>
+    <td>🌐 api_server</td>
+    <td>17</td>
+    <td>3.4%</td>
+    <td class="trend-flat">0</td>
+    <td>API_SERVER_KEY · 10th consecutive at 17±1</td>
+  </tr>
+  <tr>
+    <td>📅 cron.scheduler</td>
+    <td>1</td>
+    <td>0.2%</td>
+    <td class="trend-flat">0</td>
+    <td>Long prompt execution</td>
+  </tr>
+</table>
+
+<h3 style="color:#fbbf24; font-size:0.95rem; margin: 16px 0 8px;">Detected Issues</h3>
+
+<div class="info-box warn">
+  <h3>🔴 Flood: gateway.run (92.4%) — False Breakthrough 3.0</h3>
+  <p><strong>Signature:</strong> "Another gateway instance is already running (PID 2398093)"</p>
+  <p><strong>Duration:</strong> 18 consecutive days — longest continuous flood in system history.</p>
+  <p><strong>PID:</strong> 2398093 (unchanged since P24 PID reset, now Day 18).</p>
+  <p><strong>Rate:</strong> ~462/17min window ≈ 1,630/h during cron job execution. Steady-state plateau.</p>
+  <p><strong>Health score unreliable</strong> due to Flood Breakthrough 3.0 (mono-component >70%). Non-flood baseline of <strong>38</strong> is the preferred health metric.</p>
+</div>
+
+<div class="info-box red">
+  <h3>⚠️ Fragmentation Blind Area: tool_executor 20 (Weakness: 0)</h3>
+  <p>tool_executor at 20 entries (+11.1% vs P40) but <strong>0 weaknesses detected</strong>. This is the <strong>7th consecutive period</strong> of blind area operation. The 20 entries are dispersed across 4+ terminal tool signatures (6+2+2+2 from terminal alone, plus other tool types), none reaching the pattern-matching threshold.</p>
+  <p><strong>Confirmation:</strong> tool_executor oscillation continues (4-24 range, 8-period amplitude 20). Direction prediction remains low-confidence.</p>
+  <p><strong>Action:</strong> weakness_scan.py needs aggregated exit_code=-1 counting. Without fix, weakness count will remain 0 whenever tool_executor >10 but fragmented.</p>
+</div>
+
+<div class="info-box blue">
+  <h3>🔄 api_server: Structural Step-Change Confirmed (10th Period)</h3>
+  <p>api_server at exactly 17 entries for the 10th consecutive period (P32→P41). This structural step-change from the P25-P31 baseline of 12-13 is fully validated. The configuration error generates a predictable ~12/h error rate. Non-emergent — stable chronic condition.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: KEY METRICS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📈</span> Key Metrics & Comparisons</div>
+
+<table>
+  <tr><th>Metric</th><th>P40 (07-06)</th><th>P41 (07-07)</th><th>Δ</th><th>Assessment</th></tr>
+  <tr>
+    <td>Total Errors (500-line window)</td>
+    <td>500</td>
+    <td>500</td>
+    <td class="trend-flat">0</td>
+    <td>Window saturated both periods</td>
+  </tr>
+  <tr>
+    <td>gateway.run %</td>
+    <td>92.8%</td>
+    <td>92.4%</td>
+    <td class="trend-flat">−0.4 pp</td>
+    <td>Pure steady-state</td>
+  </tr>
+  <tr>
+    <td>Non-Flood Baseline</td>
+    <td>36</td>
+    <td>38</td>
+    <td class="trend-up">+2 (+5.6%)</td>
+    <td>Slightly above 25-35 range</td>
+  </tr>
+  <tr>
+    <td>tool_executor</td>
+    <td>18</td>
+    <td>20</td>
+    <td class="trend-up">+2 (+11.1%)</td>
+    <td>Oscillation continues</td>
+  </tr>
+  <tr>
+    <td>api_server</td>
+    <td>17</td>
+    <td>17</td>
+    <td class="trend-flat">0</td>
+    <td>Perpetual steady-state</td>
+  </tr>
+  <tr>
+    <td>Weaknesses Detected</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="trend-flat">0</td>
+    <td>Fragmentation blind area (7th period)</td>
+  </tr>
+  <tr>
+    <td>arXiv Success</td>
+    <td>✅</td>
+    <td>✅</td>
+    <td class="trend-up">+1</td>
+    <td>3 consecutive — new record!</td>
+  </tr>
+  <tr>
+    <td>Daily Rotation</td>
+    <td>N=1</td>
+    <td>N=1</td>
+    <td class="trend-flat">—</td>
+    <td>Daily rotation confirmed</td>
+  </tr>
+  <tr>
+    <td>PID</td>
+    <td>2398093</td>
+    <td>2398093</td>
+    <td class="trend-flat">—</td>
+    <td>Day 18</td>
+  </tr>
+  <tr>
+    <td>Tools Count</td>
+    <td>30</td>
+    <td>30</td>
+    <td class="trend-flat">0</td>
+    <td>Stable 17 periods</td>
+  </tr>
+  <tr>
+    <td>Skills Count</td>
+    <td>66</td>
+    <td>66</td>
+    <td class="trend-flat">0</td>
+    <td>Stable</td>
+  </tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 4: TREND ANALYSIS (P25→P41) -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📈</span> Trend Analysis — Pure Steady-State Monitoring (P25→P41)</div>
+
+<table>
+  <tr>
+    <th>Period</th><th>Date</th><th>GW Run</th><th>GW%</th><th>tool_exec</th><th>api_srv</th><th>Non-flood</th><th>Weakn</th><th>arXiv</th><th>Notes</th>
+  </tr>
+  <tr><td>P25</td><td>06-21</td><td>464</td><td>92.8%</td><td>~1</td><td>13</td><td>32</td><td>1</td><td>❌</td><td>B=1 (pure steady-state established)</td></tr>
+  <tr><td>P26</td><td>06-22</td><td>465</td><td>93.0%</td><td>~8</td><td>12</td><td>35</td><td>1</td><td>❌</td><td>B=2, 6/6 prediction accuracy</td></tr>
+  <tr><td>P27</td><td>06-23</td><td>465</td><td>93.0%</td><td>~10</td><td>12</td><td>35</td><td>1</td><td>❌</td><td>B=3</td></tr>
+  <tr><td>P28</td><td>06-24</td><td>456</td><td>91.2%</td><td>~10</td><td>12</td><td>32</td><td>1</td><td>❌</td><td>N=1 (log rotation, B=3→N=1)</td></tr>
+  <tr><td>P29</td><td>06-25</td><td>474</td><td>94.8%</td><td>~1</td><td>13</td><td>25</td><td>1</td><td>❌</td><td>N=2, non-flood hit lower bound</td></tr>
+  <tr><td>P30</td><td>06-26</td><td>469</td><td>93.8%</td><td>~6</td><td>13</td><td>31</td><td>1</td><td>❌</td><td>N=3</td></tr>
+  <tr><td>P31</td><td>06-27</td><td>468</td><td>93.6%</td><td>~8</td><td>12</td><td>32</td><td>1</td><td>✅</td><td>tool_security reappeared after 12p</td></tr>
+  <tr><td>P32</td><td>06-28</td><td>460</td><td>92.0%</td><td>13</td><td>17</td><td>40</td><td>1</td><td>❌</td><td>api_server step-change to 17</td></tr>
+  <tr><td>P33</td><td>06-29</td><td>464</td><td>92.8%</td><td>6</td><td>17</td><td>36</td><td>1</td><td>❌</td><td>Non-flood 36 at upper bound</td></tr>
+  <tr><td>P34</td><td>06-30</td><td>426</td><td>85.2%</td><td>24</td><td>17</td><td>74</td><td>1</td><td>❌</td><td>⚠️ Single-period outlier (74)</td></tr>
+  <tr><td>P35</td><td>07-01</td><td>467</td><td>93.4%</td><td>4</td><td>17</td><td>33</td><td>1</td><td>❌</td><td>P34 confirmed as outlier</td></tr>
+  <tr><td>P36</td><td>07-02</td><td>463</td><td>92.6%</td><td>7</td><td>17</td><td>37</td><td>1</td><td>❌</td><td>api_server step-change (6th)</td></tr>
+  <tr><td>P37</td><td>07-03</td><td>468</td><td>93.6%</td><td>8</td><td>17</td><td>32</td><td>1</td><td>✅</td><td>arXiv recovered (5 papers)</td></tr>
+  <tr><td>P38</td><td>07-04</td><td>466</td><td>93.2%</td><td>15</td><td>17</td><td>34</td><td>0</td><td>❌</td><td>Fragmentation blind area begins</td></tr>
+  <tr><td>P39</td><td>07-05</td><td>468</td><td>93.6%</td><td>13</td><td>17</td><td>32</td><td>1</td><td>✅</td><td>Weakness rebounded to 1</td></tr>
+  <tr><td>P40</td><td>07-06</td><td>464</td><td>92.8%</td><td>18</td><td>17</td><td>36</td><td>0</td><td>✅</td><td>2 consecutive arXiv, frag blind area</td></tr>
+  <tr style="background:linear-gradient(90deg, rgba(52,211,153,0.05), transparent);">
+    <td><strong>P41</strong></td><td><strong>07-07</strong></td>
+    <td><strong>462</strong></td><td><strong>92.4%</strong></td>
+    <td><strong>20</strong></td><td><strong>17</strong></td>
+    <td><strong>38</strong></td><td><strong>0</strong></td>
+    <td style="color:#34d399;"><strong>✅</strong></td>
+    <td><strong>3 consecutive arXiv! Fragmentation persists</strong></td>
+  </tr>
+</table>
+
+<div class="info-box green">
+  <h3>🏆 Record: arXiv 3 Consecutive Successes</h3>
+  <p>P39→P40→P41 marks <strong>3 consecutive successful arXiv API calls</strong> — the longest continuous success window since P10-P13 (4 consecutive in June 2026). The cumulative success rate rises to <strong>11/41 = 26.8%</strong> (from 10/40 = 25.0%). The recovery gap pattern is shifting: P38 failure → only 1 period to recover (P39), sustained through P41. This exceeds P37's "shortest recovery interval" record.</p>
+</div>
+
+<div class="info-box warn">
+  <h3>📐 Pure Steady-State Confirmed — Gateway Flood at Day 18</h3>
+  <p>gateway.run (PID 2398093) continues its <strong>18th day</strong> of uninterrupted operation at 92-93% share. <strong>Three conditions for pure steady-state all hold:</strong> (a) no log rotation, (b) no PID change, (c) no flood source switch. The absolute count (462) is within the 460-475 stable range observed for 16+ periods. No acceleration or deceleration signal.</p>
+  <p style="margin-top:8px;"><strong>Non-flood baseline:</strong> 38 (slightly above the 25-35 range — 2nd consecutive period above upper bound, following P40's 36). This is the first time since P36 (37) that the baseline has exceeded 35 for consecutive periods. The upward drift is minimal (+3 above upper bound) and may represent a new equilibrium rather than acceleration.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 5: PREDICTION VERIFICATION -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🎯</span> Prediction Verification (P40 Predictions)</div>
+
+<table>
+  <tr><th>Prediction (from P40)</th><th>Actual (P41)</th><th>Result</th></tr>
+  <tr>
+    <td>Gateway flood 92-94% (PID same)</td>
+    <td>92.4% ✓ PID 2398093</td>
+    <td style="color:#34d399;">✅ CORRECT</td>
+  </tr>
+  <tr>
+    <td>Non-flood baseline within 25-35</td>
+    <td>38 (slightly above)</td>
+    <td style="color:#fbbf24;">≈ PARTIAL (38 > 35)</td>
+  </tr>
+  <tr>
+    <td>tool_executor continues oscillation</td>
+    <td>20 (+11.1% vs P40)</td>
+    <td style="color:#34d399;">✅ CORRECT (oscillation confirmed)</td>
+  </tr>
+  <tr>
+    <td>arXiv continues success</td>
+    <td>✅ 5 papers</td>
+    <td style="color:#34d399;">✅ CORRECT (3rd consecutive)</td>
+  </tr>
+  <tr>
+    <td>Weakness count at 1</td>
+    <td>0 (fragmentation blind area)</td>
+    <td style="color:#f87171;">✗ INCORRECT (blind area persists)</td>
+  </tr>
+  <tr>
+    <td>Daily rotation continues</td>
+    <td>N=1 (fresh 07-07 file)</td>
+    <td style="color:#34d399;">✅ CORRECT</td>
+  </tr>
+  <tr>
+    <td>api_server at 17-18</td>
+    <td>17 (10th consecutive)</td>
+    <td style="color:#34d399;">✅ CORRECT</td>
+  </tr>
+</table>
+
+<p style="color:#e2e8f0; font-weight:500; margin-top:8px;"><strong>Accuracy: 5.0/7 = 71.4%</strong> (improved from P40's 64.3%, recovering toward P39's 78.6%)</p>
+
+<div class="info-box blue" style="margin-top:12px;">
+  <h3>🔬 Prediction Quality Analysis</h3>
+  <p>P41 recovers to 71.4% after P40's dip (64.3%). Two errors remain: (1) <strong>Non-flood baseline</strong> barely missed (38 vs 35 upper bound) — the upward drift is minimal but real. (2) <strong>Weakness fragmentation</strong> persists as a systematic blind area, not correctable without scanner changes. The tool_executor <strong>oscillation</strong> prediction was correct in direction (still oscillating, not reversing) but the exact count prediction is not attempted due to the confirmed low-confidence state.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 6: KNOWLEDGE FEED -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🔬</span> Knowledge Feed</div>
+
+<h3 style="font-size:0.9rem; color:#e2e8f0; margin-bottom:12px;">📄 arXiv Papers (5) — 3rd consecutive success ✅</h3>
+
+<div class="paper-item highlight-new">
+  <div class="title">Graph Classification via Network Usable Information</div>
+  <div class="meta">cs.LG · Abdullah Shaik, Anwar Said · <a href="http://arxiv.org/abs/2607.03587v1" style="color:#60a5fa;">arXiv:2607.03587</a></div>
+  <div class="meta" style="color:#94a3b8; margin-top:4px;">Proposes NetinfoGC — permutation-invariant graph representations for graph classification using NUI paradigm. Relevant to understanding graph neural network interpretability.</div>
+</div>
+
+<div class="paper-item">
+  <div class="title">Modular Foundation Models for Time-Series Perception in Digital Twins</div>
+  <div class="meta">cs.LG · Quang Hung Pham et al. · <a href="http://arxiv.org/abs/2607.03585v1" style="color:#60a5fa;">arXiv:2607.03585</a></div>
+  <div class="meta" style="color:#94a3b8; margin-top:4px;">Modular foundation model approach for heterogeneous time-series in digital twins. Addresses robustness and transferability across operating conditions.</div>
+</div>
+
+<div class="paper-item">
+  <div class="title">PLGSA-Transformer: Cross-Modal Face Recognition with Occlusion Adaptation</div>
+  <div class="meta">cs.CV, cs.AI · Dana A Abdullah · <a href="http://arxiv.org/abs/2607.03581v1" style="color:#60a5fa;">arXiv:2607.03581</a></div>
+  <div class="meta" style="color:#94a3b8; margin-top:4px;">Periocular landmark-guided attention with occlusion-adaptive cosine thresholding for masked/unmasked face recognition. Combines CNNs with adaptive thresholding.</div>
+</div>
+
+<div class="paper-item">
+  <div class="title">Dihedral Hidden-State Transformations in UNet, ViT, and DiT Architectures</div>
+  <div class="meta">cs.LG, cs.CV · Mojtaba Faramarzi et al. · <a href="http://arxiv.org/abs/2607.03580v1" style="color:#60a5fa;">arXiv:2607.03580</a></div>
+  <div class="meta" style="color:#94a3b8; margin-top:4px;">Studies dihedral group reflection perturbations on hidden states across diffusion architectures (UNet, ViT, DiT). Fundamental insights into geometric perturbation effects.</div>
+</div>
+
+<div class="paper-item">
+  <div class="title">Differentiate the Evaluator, Not the Program: Efficient Neuro-Symbolic Learning</div>
+  <div class="meta">cs.LG, cs.AI, cs.PL · Lucas Sheneman · <a href="http://arxiv.org/abs/2607.03574v1" style="color:#60a5fa;">arXiv:2607.03574</a></div>
+  <div class="meta" style="color:#94a3b8; margin-top:4px;">Novel runtime representation for neuro-symbolic learning — differentiates the evaluator instead of the program itself. Promising for program-and-parameter co-search efficiency.</div>
+</div>
+
+<h3 style="font-size:0.9rem; color:#e2e8f0; margin:24px 0 12px;">📰 Hacker News Top Stories</h3>
+
+<div class="story-item">
+  <div class="title"><span class="score">▲418</span> <a href="https://openwrt.org/toh/openwrt/one" style="color:#60a5fa;">OpenWrt One – Open Hardware Router</a></div>
+  <div class="meta">by peter_d_sherman · 166 comments</div>
+</div>
+
+<div class="story-item">
+  <div class="title"><span class="score">▲296</span> <a href="https://www.comaps.app/" style="color:#60a5fa;">CoMaps – FOSS Offline Maps</a></div>
+  <div class="meta">by basilikum · 60 comments</div>
+</div>
+
+<div class="story-item">
+  <div class="title"><span class="score">▲258</span> <a href="https://www.anthropic.com/research/global-workspace" style="color:#60a5fa;">A Global Workspace in Language Models (Anthropic Research)</a></div>
+  <div class="meta">by in-silico · 91 comments</div>
+</div>
+
+<div class="story-item">
+  <div class="title"><span class="score">▲134</span> <a href="https://martinalderson.com/posts/the-upcoming-ai-margin-collapse-part-1-glm-5-2/" style="color:#60a5fa;">GLM 5.2 and the Coming AI Margin Collapse</a></div>
+  <div class="meta">by martinald · 86 comments</div>
+</div>
+
+<div class="story-item">
+  <div class="title"><span class="score">▲100</span> <a href="https://github.com/MaximeRivest/Riddle" style="color:#60a5fa;">Fable turned remarkable into Tom Riddle's diary from Harry Potter</a></div>
+  <div class="meta">by modinfo · 46 comments</div>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: LONG-TERM CUMULATIVE METRICS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">📊</span> Long-Term Cumulative Metrics</div>
+
+<table>
+  <tr>
+    <th>Metric</th>
+    <th>P1 (2026-05-17)</th>
+    <th>P20 (2026-06-16)</th>
+    <th>P40 (2026-07-06)</th>
+    <th>P41 (2026-07-07)</th>
+    <th>Δ P1→P41</th>
+  </tr>
+  <tr>
+    <td>Total Periods</td>
+    <td>1</td>
+    <td>20</td>
+    <td>40</td>
+    <td><strong>41</strong></td>
+    <td class="trend-up">+40</td>
+  </tr>
+  <tr>
+    <td>Tools Available</td>
+    <td>31</td>
+    <td>31</td>
+    <td>30</td>
+    <td><strong>30</strong></td>
+    <td class="trend-down">−1 (−3.2%)</td>
+  </tr>
+  <tr>
+    <td>Skills Active</td>
+    <td>—</td>
+    <td>~64</td>
+    <td>66</td>
+    <td><strong>66</strong></td>
+    <td class="trend-flat">Stable</td>
+  </tr>
+  <tr>
+    <td>Memory Usage</td>
+    <td>—</td>
+    <td>~30%</td>
+    <td>37%</td>
+    <td><strong>37%</strong></td>
+    <td class="trend-flat">Stable</td>
+  </tr>
+  <tr>
+    <td>Gateway Flood %</td>
+    <td>0%</td>
+    <td>86.4% (api_server)</td>
+    <td>92.8% (gateway.run)</td>
+    <td><strong>92.4%</strong></td>
+    <td class="trend-up">Dominant since P21</td>
+  </tr>
+  <tr>
+    <td>Non-Flood Baseline</td>
+    <td>—</td>
+    <td>—</td>
+    <td>25-35 (17p)</td>
+    <td><strong>38 (slightly above)</strong></td>
+    <td class="trend-flat">Minimal drift</td>
+  </tr>
+  <tr>
+    <td>arXiv Success Rate</td>
+    <td>0/1</td>
+    <td>3/20 (15%)</td>
+    <td>10/40 (25%)</td>
+    <td><strong>11/41 (26.8%)</strong></td>
+    <td class="trend-up">+26.8 pp</td>
+  </tr>
+  <tr>
+    <td>Weaknesses (avg)</td>
+    <td>—</td>
+    <td>1.2</td>
+    <td>0.9</td>
+    <td><strong>~0.9</strong></td>
+    <td class="trend-flat">Stable (~1/period)</td>
+  </tr>
+  <tr>
+    <td>Health Score</td>
+    <td>—</td>
+    <td>69 (unreliable)</td>
+    <td>85 (unreliable, F.B. 3.0)</td>
+    <td><strong>Unreliable</strong></td>
+    <td class="trend-flat">Score capture since P20</td>
+  </tr>
+</table>
+
+<p style="color:#64748b; font-size:0.8rem; margin-top:8px;">* Health score is marked unreliable due to the gateway.run flood dominating the error window (False Breakthrough 3.0) since P20. The non-flood baseline is the preferred system health indicator.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 8: PITFALLS & PATTERNS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🔍</span> Pitfalls & Pattern Detection</div>
+
+<div class="info-box blue">
+  <h3>📐 Plateau Detection</h3>
+  <p><strong>Gateway flood plateau (18 periods):</strong> The gateway.run flood has been at 92-93% for 18 consecutive periods (P24→P41). PID 2398093 continues unchanged since P24. Absolute count range (460-475) has been stable for 16+ periods. No acceleration or deceleration — pure plateau at the ceiling.</p>
+  <p style="margin-top:8px; color:#fbbf24;"><strong>Non-flood baseline drift:</strong> P41 (38) and P40 (36) mark 2 consecutive periods above the established 25-35 range. While the drift is minimal (+3 above upper bound), this is the first extended above-range behavior since P36 (37). Not yet a structural change — needs 1 more period to confirm direction.</p>
+  <p style="margin-top:8px; color:#34d399;"><strong>arXiv improvement streak:</strong> 3 consecutive successes is a genuine improvement trend. If this continues to 4, it will tie the all-time record (P10-P13). The API is demonstrating a new degree of reliability.</p>
+</div>
+
+<div class="info-box warn">
+  <h3>⚡ Oscillation Pattern: tool_executor (4-24 range, 8-period cycle)</h3>
+  <p>tool_executor continues to oscillate within the 4-24 range (P34→P41: 24→4→7→8→15→13→18→20). The amplitude is wide (20) but the oscillation is bounded — no new extremes this period. Direction prediction remains low-confidence. The fragmentation blind area (weakness=0 despite tool_executor=20) is now 7 consecutive periods.</p>
+</div>
+
+<div class="info-box warn">
+  <h3>🔄 tool_executor Single-Direction Prediction Failure (3rd Confirmation)</h3>
+  <p>tool_executor direction predictions have failed for 3 consecutive periods: P38→P39 (surge→reversal, −15,+13), P39→P40 (reversal→increase, 13→18), P40→P41 (increase→increase, 18→20). The P41 outcome was correct only because the oscillation pattern continued — a binary "up" guess was 50/50. <strong>Recommendation:</strong> tool_executor predictions should be downgraded to "no direction prediction attempted" until the oscillation cycle completes and a clear directional trend emerges.</p>
+</div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 9: EVOLUTION SUGGESTIONS -->
+<!-- ============================================================ -->
+<div class="section">
+<div class="section-title"><span class="emoji">🧬</span> Evolution Suggestions</div>
+
+<table>
+  <tr><th>#</th><th>Suggestion</th><th>Priority</th><th>Impact</th></tr>
+  <tr>
+    <td>1</td>
+    <td><strong>Kill PID 2398093</strong> — Run <code>hermes gateway stop && hermes gateway start</code> to eliminate the 18-day-old gateway flood. This single action would eliminate ~92% of current error log noise.</td>
+    <td><span class="badge-tag red">Critical</span></td>
+    <td>~92% error reduction</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><strong>Fix weakness_scan.py fragmentation blind area</strong> — Add aggregated exit_code=-1 counting for tool_executor. Single rule: sum all exit_code=-1 signatures; if total >10, emit one aggregated medium weakness.</td>
+    <td><span class="badge-tag red">Critical</span></td>
+    <td>Restores weakness detection</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td><strong>Fix api_server config</strong> — Set <code>API_SERVER_KEY</code> or disable the API server config to eliminate 17 persistent errors/period.</td>
+    <td><span class="badge-tag yellow">Medium</span></td>
+    <td>~3.4% error reduction</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td><strong>arXiv backup source</strong> — After 3 consecutive successes, the API is more reliable than ever, but a backup (Semantic Scholar) would ensure zero failure risk.</td>
+    <td><span class="badge-tag yellow">Medium</span></td>
+    <td>Knowledge feed resilience</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td><strong>SessionDB fix</strong> — self_scan.py still reports 0 sessions due to <code>SessionDB.list_sessions</code> unavailability. Add SQLite fallback query.</td>
+    <td><span class="badge-tag blue">Low</span></td>
+    <td>Completeness</td>
+  </tr>
+</table>
+</div>
+
+<!-- FOOTER -->
+<div class="footnote">
+  <p>🧬 Self-Evolution System · Period 41 · 2026-07-07 · Generated by Hermes Agent (reviewer profile)</p>
+  <p style="margin-top:4px;">Data sources: self_scan.py · weakness_scan.py · knowledge_ingest.py</p>
+  <p style="margin-top:4px; color:#334155;">Runtime: gateway.run PID 2398093 · 18 days continuous · Daily rotation N=1 · arXiv: 3 consecutive successes (record) · tool_executor 20 (oscillation) · Weakness: 0 (fragmentation blind area) · Prediction accuracy: 71.4%</p>
+</div>
+
+</div>
+</body>
+</html>
