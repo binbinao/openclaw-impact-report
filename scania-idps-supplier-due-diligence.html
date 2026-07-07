@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scania IDPS 供应商标的调研 — 为辰信安 vs 云驰未来 vs PlaxidityX</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --sky-bg: rgba(91,141,184,0.08); --olive-bg: rgba(120,140,93,0.08);
+  --purple-bg: rgba(139,107,174,0.08); --clay-bg: rgba(217,119,87,0.06);
+  --amber-bg: rgba(199,132,58,0.06);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1200px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 20px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-size: 16px; color: var(--slate); margin: 24px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 14px; margin-bottom: 36px; }
+.card { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 28px; margin-bottom: 28px; }
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; line-height: 1.55; }
+thead th { background: var(--gray-150); font-weight: 600; font-size: 13px;
+  color: var(--gray-700); text-align: left; padding: 10px 14px;
+  border-bottom: 2px solid var(--gray-300); white-space: nowrap; }
+thead th:first-child { border-radius: 8px 0 0 0; }
+thead th:last-child { border-radius: 0 8px 0 0; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--ivory); }
+.col-dim { font-weight: 600; color: var(--slate); white-space: nowrap; }
+.col-wc { background: var(--olive-bg); }
+.col-yc { background: var(--sky-bg); }
+.col-px { background: var(--purple-bg); }
+.highlight { color: var(--rust); font-weight: 600; }
+.note { color: var(--gray-500); font-style: italic; font-size: 13px; }
+.source-tag { font-family: var(--mono); font-size: 11px; color: var(--gray-500); display: block; margin-top: 2px; }
+
+/* Recap box */
+.recap-box { background: var(--clay-bg); border: 1px solid var(--clay);
+  border-radius: var(--radius-row); padding: 16px 20px; margin: 20px 0; font-size: 14px; }
+.recap-box strong { color: var(--rust); }
+
+/* Score card */
+.score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 16px 0; }
+.score-item { background: var(--white); border: var(--border); border-radius: var(--radius-row); padding: 16px; }
+.score-label { font-size: 12px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; }
+.score-value { font-size: 24px; font-weight: 600; color: var(--slate); margin: 4px 0; }
+.score-value.high { color: var(--olive); }
+.score-value.mid { color: var(--amber); }
+.score-value.low { color: var(--rust); }
+
+/* Badge */
+.badge-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+.badge { font-family: var(--mono); font-size: 11px; padding: 5px 12px; border-radius: var(--radius-row);
+  border: 1px solid var(--gray-300); background: var(--white); }
+.badge-green { border-color: var(--olive); color: var(--olive); background: var(--olive-bg); }
+.badge-red { border-color: var(--rust); color: var(--rust); background: var(--clay-bg); }
+.badge-blue { border-color: var(--sky); color: var(--sky); background: var(--sky-bg); }
+
+/* warn */
+.warn-callout { background: var(--clay-bg); border: 1px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 20px 0; font-size: 13px; color: var(--rust); }
+.info-callout { background: var(--sky-bg); border: 1px solid var(--sky);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 16px 0; font-size: 13px; }
+
+.section-label { font-family: var(--mono); font-size: 11px; color: var(--gray-500);
+  letter-spacing: 0.05em; margin-bottom: 4px; }
+.back-link { display: inline-block; margin-top: 48px; font-size: 14px;
+  color: var(--gray-500); text-decoration: none; }
+.back-link:hover { color: var(--slate); }
+
+/* path cards */
+.path-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; margin: 16px 0; }
+.path-card { border: var(--border); border-radius: var(--radius-panel); padding: 24px; background: var(--white); }
+.path-card.recommend { border-color: var(--olive); border-width: 2px; background: var(--olive-bg); }
+.path-card h3 { margin-top: 0; font-size: 17px; }
+.path-card .tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px;
+  border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+.tag-recommend { background: var(--olive); color: white; }
+.tag-consider { background: var(--amber); color: white; }
+.tag-risk { background: var(--rust); color: white; }
+
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { margin-bottom: 4px; font-size: 14px; }
+
+@media (max-width: 768px) {
+  body { padding: 20px 12px 80px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">SCANIA IDPS · SUPPLIER DUE DILIGENCE · 2026-07-07</div>
+<h1>Scania IDPS 潜在合作/收购标的调研</h1>
+<p class="subtitle">
+  背景：Scania 发布车载 IDPS（QNX 部署 / HIDS+NIDS / VSOC / 10min 合规）RFP，正式 PD 预计 7/21 发出。<br>
+  腾讯云当前无可直接投标的车载 IDPS 产品。本报告筛选三家标的企业评估合作/收购可行性。
+</p>
+
+<div class="recap-box">
+<strong>前置结论：</strong>三家都支持 QNX 部署和 HIDS+NIDS+VSOC 全栈能力，技术上均能满足 Scania 核心要求。差异在于 <strong>量产规模、海外部署经验、白盒交付能力和收购可行性</strong>。
+</div>
+
+<!-- ═══════════ SECTION 1: COMPANY PROFILES ═══════════ -->
+<div class="card">
+<h2>一、三家标的企业概览</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:130px">维度</th>
+  <th class="col-wc" style="min-width:280px">为辰信安 (Vecentek)</th>
+  <th class="col-yc" style="min-width:280px">云驰未来 (InchTek)</th>
+  <th class="col-px" style="min-width:240px">PlaxidityX (国际对标)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">成立时间</td>
+  <td class="col-wc">2016年7月，近10年<span class="source-tag">（36氪）</span></td>
+  <td class="col-yc">2020年11月，近6年<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">2013年（原 Argus Cyber Security），13年</td>
+</tr>
+<tr>
+  <td class="col-dim">总部</td>
+  <td class="col-wc">东莞/成都，上海/天津/重庆/武汉/长春/保定设点<span class="source-tag">（官网）</span></td>
+  <td class="col-yc">北京亦庄<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">以色列特拉维夫</td>
+</tr>
+<tr>
+  <td class="col-dim">创始人 / CEO</td>
+  <td class="col-wc">李允，电子科技大学博士，嵌入式操作系统背景<span class="source-tag">（36氪）</span></td>
+  <td class="col-yc">曾剑隽，北京交大硕士，前阿里钉钉副总裁、九州云腾CEO、WatchGuard高管<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">Ofer Ben-Noon（CEO），以色列8200情报部队背景</td>
+</tr>
+<tr>
+  <td class="col-dim">核心团队</td>
+  <td class="col-wc">李允 + 罗蕾（股东，成电教授）+ 蔡红红<span class="source-tag">（36氪）</span></td>
+  <td class="col-yc">曾剑隽 + 郑强（总裁，20年车载经验）<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">网络安全 + 汽车电子跨界团队</td>
+</tr>
+<tr>
+  <td class="col-dim">融资轮次</td>
+  <td class="col-wc">天使→A→战略（数千万）→B→B+（2025.12）<span class="source-tag">（36氪）</span></td>
+  <td class="col-yc">天使（数千万）→A→战略（2022.09，累计过亿）<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">2017被大陆集团收购，2023管理层回购独立</td>
+</tr>
+<tr>
+  <td class="col-dim">主要投资方</td>
+  <td class="col-wc">四维图新、国投招商、永鑫方舟、武侯发展、长兴基金<span class="source-tag">（36氪）</span></td>
+  <td class="col-yc">绿盟科技、金沙江创投、中电基金、中关村前沿、达晨财智<span class="source-tag">（36氪）</span></td>
+  <td class="col-px">大陆集团（历史）、SoftBank、Magma VC</td>
+</tr>
+<tr>
+  <td class="col-dim">最新估值</td>
+  <td class="col-wc"><span class="note">未公开披露</span>（B+轮推测 5-10亿 RMB）</td>
+  <td class="col-yc"><span class="note">未公开披露</span>（战略轮累计过亿，推测 3-6亿 RMB）</td>
+  <td class="col-px"><span class="note">未公开披露</span>（独立后推测 $50-100M）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ SECTION 2: PRODUCTS ═══════════ -->
+<div class="card">
+<h2>二、产品能力对标 Scania RFP</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:160px">Scania RFP 要求</th>
+  <th class="col-wc" style="min-width:260px">为辰信安</th>
+  <th class="col-yc" style="min-width:260px">云驰未来</th>
+  <th class="col-px" style="min-width:220px">PlaxidityX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">① QNX 部署</td>
+  <td class="col-wc"><span class="highlight">✅ 明确支持</span>：适配 QNX / Android / Linux，无需改代码，直接编译移植<span class="source-tag">（CSDN/51CTO）</span></td>
+  <td class="col-yc"><span class="highlight">✅ 覆盖兼容</span>：QNX / Android / Linux，中间件 SDK 模式<span class="source-tag">（EET-China）</span></td>
+  <td class="col-px"><span class="highlight">✅ 原生支持</span>：eBPF 技术深度监控 QNX 内核<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">② HIDS + NIDS</td>
+  <td class="col-wc"><span class="highlight">✅ HIDS + NIDS + CANIDS</span>：覆盖车载以太网 / CAN 网络 / 主机系统，原子化服务适配 SOA 架构<span class="source-tag">（官网）</span></td>
+  <td class="col-yc"><span class="highlight">✅ HIDS + NIDS + CANIDS</span>：全栈 IDPS，支持 CAN/CANFD/Ethernet<span class="source-tag">（官网）</span></td>
+  <td class="col-px"><span class="highlight">✅ HIDS + NIDS</span>：IDPX agent 支持 eBPF 深度检测<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">③ Log & Event 聚合</td>
+  <td class="col-wc"><span class="highlight">✅</span>：CGW / TBOX / IVI 分布式探针 → 统一 VSOC 上报<span class="source-tag">（官网）</span></td>
+  <td class="col-yc"><span class="highlight">✅</span>：CNCU 中央网络控制器 + IDPS SDK 完成车端聚合<span class="source-tag">（官网）</span></td>
+  <td class="col-px"><span class="highlight">✅</span>：IDXM Manager 统一日志汇聚<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">④ VSOC 对接</td>
+  <td class="col-wc"><span class="highlight">✅ deCORE VSOC</span>：AWS 云部署，态势感知 + 联动响应，<span class="highlight">3家 OEM 通过 VTA 目击测试</span><span class="source-tag">（官网/AWS）</span></td>
+  <td class="col-yc"><span class="highlight">✅ inVSOC</span>：AWS IoT Core 架构，<span class="highlight">已为某新能源车企部署欧洲 VSOC</span><span class="source-tag">（官网/AWS）</span></td>
+  <td class="col-px"><span class="highlight">✅</span>：自有 VSOC 或对接第三方<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">⑤ 10min 合规窗口</td>
+  <td class="col-wc"><span class="highlight">✅ 常态化支持</span>：200万+车辆在线运营经验，满足 UN R155 持续性监测要求<span class="source-tag">（中金在线/官网）</span></td>
+  <td class="col-yc"><span class="highlight">✅ 支持</span>：UN R155 / ISO 21434 合规，海外多地区部署经验<span class="source-tag">（官网）</span></td>
+  <td class="col-px"><span class="highlight">✅ 支持</span>：UN R155 / ISO 21434，全球 OEM 合规案例<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">⑥ 白盒交付</td>
+  <td class="col-wc"><span class="highlight">⚠️ 部分白盒</span>：IDPS 策略可配置，VSOC 提供 API，但 <span class="note">未见"全源码交付"承诺</span></td>
+  <td class="col-yc"><span class="highlight">⚠️ 部分白盒</span>：安全网关 SDK + 中间件可定制，同样 <span class="note">未见全源码承诺</span></td>
+  <td class="col-px"><span class="highlight">✅ 明确白盒</span>：IDPX 规则透明、可自定义策略，支持 white-box 模式<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">两阶段交付</td>
+  <td class="col-wc"><span class="highlight">✅</span>：100+ 车型量产经验，分阶段 SOP 交付成熟<span class="source-tag">（官网）</span></td>
+  <td class="col-yc"><span class="highlight">✅</span>：已服务 OEM + L4 双线客户，工程化能力强<span class="source-tag">（36氪）</span></td>
+  <td class="col-px"><span class="highlight">✅</span>：全球 Tier1 合作经验，项目管理成熟</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="info-callout">
+<strong>关键发现：</strong>为辰信安和云驰未来技术上 6/6 覆盖 Scania 需求（白盒交付为"部分支持"需要进一步确认），PlaxidityX 在白盒交付和 QNX 深度支持上有优势。但对腾讯而言，国内两家是更现实的合作/收购对象。
+</div>
+</div>
+
+<!-- ═══════════ SECTION 3: BUSINESS METRICS ═══════════ -->
+<div class="card">
+<h2>三、商业指标对比</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:150px">维度</th>
+  <th class="col-wc">为辰信安</th>
+  <th class="col-yc">云驰未来</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">量产装机量</td>
+  <td class="col-wc"><span class="highlight">200万+ 辆</span>，国内 IDPS 装机量第一<span class="source-tag">（CSDN/中金在线）</span></td>
+  <td class="col-yc"><span class="note">未公开披露</span>，客户含 BMW / 东风 / 一汽等<span class="source-tag">（36氪）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">合作 OEM 数</td>
+  <td class="col-wc"><span class="highlight">40+ 家</span><span class="source-tag">（CSDN 2024.01）</span></td>
+  <td class="col-yc"><span class="highlight">20+ 家</span> OEM 及 Tier1<span class="source-tag">（AWS 案例）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">适配车型数</td>
+  <td class="col-wc"><span class="highlight">100+ 款</span><span class="source-tag">（CSDN 2024.01）</span></td>
+  <td class="col-yc"><span class="note">未披露具体数字</span></td>
+</tr>
+<tr>
+  <td class="col-dim">海外部署经验</td>
+  <td class="col-wc"><span class="highlight">✅ 3家 OEM 近10款车型通过欧盟 VTA</span>，基于 AWS 全球部署<span class="source-tag">（官网/AWS）</span></td>
+  <td class="col-yc"><span class="highlight">✅ 已为某新能源车企成功上线欧洲 VSOC</span><span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">头部客户</td>
+  <td class="col-wc">40+ OEM（含头部自主品牌，<span class="note">具体名单未完整公开</span>）<span class="source-tag">（CSDN）</span></td>
+  <td class="col-yc">百度 Apollo、京东物流、滴滴、文远知行、图森未来、<span class="highlight">BMW</span>、东风、一汽、福特、福田、金龙<span class="source-tag">（36氪/官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">产品矩阵</td>
+  <td class="col-wc">deCORE IDPS + deCORE VSOC + 数字钥匙 + 安全测试工具 + 网络靶场 + VTA 咨询<span class="source-tag">（官网）</span></td>
+  <td class="col-yc">CNCU 安全网关(硬) + IDPS SDK(软) + inVSOC(云) + HSM固件 + 安全中间件<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">合规认证</td>
+  <td class="col-wc">UN R155 / ISO 21434 / 等保三级 / VTA（3家 OEM 通过）<span class="source-tag">（官网）</span></td>
+  <td class="col-yc">UN R155 / ISO 21434 / <span class="highlight">TISAX</span> / EAL4 车规 / CMMI3<span class="source-tag">（官网）</span></td>
+</tr>
+<tr>
+  <td class="col-dim">团队规模</td>
+  <td class="col-wc"><span class="note">未公开披露</span>（多城市布局推测 200-400人）</td>
+  <td class="col-yc"><span class="note">未公开披露</span>（推测 100-200人）</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ SECTION 4: ACQUISITION ASSESSMENT ═══════════ -->
+<div class="card">
+<h2>四、收购可行性评估</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th style="min-width:160px">评估维度</th>
+  <th class="col-wc" style="min-width:260px">为辰信安</th>
+  <th class="col-yc" style="min-width:260px">云驰未来</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="col-dim">收购难度</td>
+  <td class="col-wc"><span class="highlight">中等偏高</span>：股东含国资背景（国投招商/武侯发展/长兴基金），已到 B+ 轮，创始人学术背景，可能偏好独立发展或 IPO</td>
+  <td class="col-yc"><span class="highlight">中等</span>：股东含金沙江等 VC（有退出诉求），CEO 连续创业者（曾卖过公司给阿里），<span class="highlight">有出售意愿基因</span></td>
+</tr>
+<tr>
+  <td class="col-dim">估计估值区间</td>
+  <td class="col-wc">推测 ¥5-10亿 RMB（基于装机量 200万+ 和 B+ 轮）</td>
+  <td class="col-yc">推测 ¥3-6亿 RMB（基于累计融资过亿和战略轮估值）</td>
+</tr>
+<tr>
+  <td class="col-dim">腾讯整合难度</td>
+  <td class="col-wc"><span class="highlight">高</span>：独立运营多地，产品体系完整独立，与腾讯云安全产品线重叠整合需大手术</td>
+  <td class="col-yc"><span class="highlight">中</span>：创始人阿里背景，组织文化接近；产品"软硬结合"与腾讯云互补性强</td>
+</tr>
+<tr>
+  <td class="col-dim">Scania 匹配度</td>
+  <td class="col-wc"><span class="highlight">⭐⭐⭐⭐⭐</span>：装机量第一、VTA 通过数最多、QNX 适配明确、200万+在线验证</td>
+  <td class="col-yc"><span class="highlight">⭐⭐⭐⭐</span>：BMW 客户背书、TISAX 认证、欧洲 VSOC 落地、硬件 EAL4 认证</td>
+</tr>
+<tr>
+  <td class="col-dim">与腾讯协同</td>
+  <td class="col-wc">IDPS+VSOC 能力可直接补齐腾讯车联网安全空白；AWS 云迁移到腾讯云有工作但可行</td>
+  <td class="col-yc">安全网关硬件 + IDPS 中间件可嵌入腾讯"端-边-云"架构；AWS 迁移同理</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ SECTION 5: RECOMMENDATIONS ═══════════ -->
+<div class="card">
+<h2>五、推荐路径与行动建议</h2>
+
+<p style="font-size:14px;color:var(--gray-700);margin-bottom:20px;">
+综合技术匹配度、收购可行性、Scania 需求紧迫度（7/21 正式 PD 发出），给出三条路径：
+</p>
+
+<div class="path-grid">
+
+<div class="path-card recommend">
+  <span class="tag tag-recommend">推荐 ⭐</span>
+  <h3>路径 A：战略合作 + 联合投标</h3>
+  <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">短期最可行，可赶上 Scania 7/21 RFP</p>
+  <ol>
+    <li>选择 <strong>为辰信安</strong> 或 <strong>云驰未来</strong> 作为车端 IDPS 技术伙伴</li>
+    <li>腾讯提供云端 VSOC（替换 AWS）+ 威胁情报 + 合规咨询</li>
+    <li>联合响应 Scania RFP，以"双供应商"模式（腾讯云 + IDPS 伙伴）投标</li>
+    <li>对 Scania 口径："腾讯云车联网安全方案，整合中国领先的 IDPS 供应商"</li>
+  </ol>
+  <div style="margin-top:12px;font-size:13px;">
+    <strong>第一选择：为辰信安</strong> — 装机量/量产经验/海外VTA最强<br>
+    <strong>第二选择：云驰未来</strong> — BMW背书/TISAX/创始人更有出售意愿
+  </div>
+</div>
+
+<div class="path-card">
+  <span class="tag tag-consider">考虑</span>
+  <h3>路径 B：收购云驰未来</h3>
+  <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">中长期战略动作，建立自有车载安全能力</p>
+  <ol>
+    <li>启动与金沙江创投/曾剑隽的初步接触</li>
+    <li>估值 ¥3-6亿 RMB，对腾讯属于可控规模</li>
+    <li>收购后可形成"腾讯云安全 × 车载 IDPS"独特定位</li>
+    <li>时间线：至少 6-12 个月，赶不上当前 Scania 标</li>
+  </ol>
+  <div style="margin-top:12px;font-size:13px;color:var(--amber);">
+    ⚠ 风险：创始人阿里系背景可能对大厂收购有戒心；团队整合可能有人才流失
+  </div>
+</div>
+
+<div class="path-card">
+  <span class="tag tag-risk">高风险</span>
+  <h3>路径 C：自研 IDPS</h3>
+  <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">利用科恩实验室自研，但时间完全不够</p>
+  <ol>
+    <li>科恩实验室在汽车攻防研究有积累（IEEE S&P 2024 顶会论文）</li>
+    <li>但 QNX agent 从零开发 + 量产验证 ≈ 18-24 个月</li>
+    <li>完全不可能赶上 Scania Phase 1（2026年底）</li>
+  </ol>
+  <div style="margin-top:12px;font-size:13px;color:var(--rust);">
+    ❌ 不推荐 — 除非放弃本次 Scania 标，作为长期战略布局
+  </div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════ SECTION 6: IMMEDIATE ACTION ═══════════ -->
+<div class="card">
+<h2>六、立即行动清单</h2>
+
+<table>
+<thead>
+<tr>
+  <th style="min-width:40px">#</th>
+  <th>行动项</th>
+  <th style="min-width:100px">时间窗口</th>
+  <th style="min-width:80px">优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td><strong>联系为辰信安 CEO 李允</strong>，探讨 Scania 联合投标合作模式</td>
+  <td>本周内（7/11前）</td>
+  <td><span class="highlight">P0</span></td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><strong>联系云驰未来 CEO 曾剑隽</strong>，并行接洽，了解合作/收购意向</td>
+  <td>本周内（7/11前）</td>
+  <td><span class="highlight">P0</span></td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>准备 Scania 7/21 RFP 的 <strong>联合投标方案框架</strong>（腾讯云端能力 + 伙伴车端能力）</td>
+  <td>7/14前</td>
+  <td><span class="highlight">P0</span></td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>与 Scania 采购方赵士雅沟通，确认是否接受"双供应商"联合投标模式</td>
+  <td>7/14前</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>评估 B2B 平台登录状态，确认 Scania Volkswagen B2B 账户可用</td>
+  <td>7/18前</td>
+  <td>P1</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>若路径 B 启动：安排与金沙江创投（云驰未来最大 VC 股东）非正式交流</td>
+  <td>7月下旬</td>
+  <td>P2</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="warn-callout">
+<strong>⚠️ 关键风险提示：</strong><br>
+1. <strong>白盒交付确认</strong>：为辰信安和云驰未来均未见"全源码交付"的公开承诺。Scania 明确要求 Phase 2 终验时"所有规则和策略完全透明且可调整"。需在初步接触中直接确认是否接受此条款。<br>
+2. <strong>QNX agent 需实测验证</strong>：两家宣称"适配 QNX"均为编译移植方案，非原生 QNX agent。需在 PoC 阶段验证实际性能。<br>
+3. <strong>时间紧迫</strong>：7/21 正式 PD 发出前仅有 2 周，需立即启动与标的企业的对接。
+</div>
+
+<a class="back-link" href="./">← 返回首页</a>
+
+</div>
+</body>
+</html>
