@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>灵巧手供应链图谱调研报告</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+
+  .page { max-width:860px; margin:0 auto; }
+
+  /* ---------- header ---------- */
+  header { margin-bottom:44px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:8px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:34px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; margin-top:6px; }
+  .meta .src { font-family:var(--mono); color:var(--gray-700); }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.warn { background:rgba(217,119,87,.15); color:var(--clay); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:18px; line-height:1.75; }
+
+  /* ---------- summary band ---------- */
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:24px; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); padding-left:19px; }
+  .stat-num { font-family:var(--serif); font-size:40px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+  .stat-delta { font-family:var(--mono); font-size:11px; margin-top:6px; color:var(--gray-500); }
+
+  /* ---------- sections ---------- */
+  section { margin-bottom:52px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:24px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+  p { margin-bottom:12px; }
+  p.standfirst { font-size:17px; color:var(--slate); margin-bottom:20px; line-height:1.65; }
+
+  /* ---------- callouts ---------- */
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  /* ---------- tables ---------- */
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:12px 16px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:13px 16px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+  .tier-label { font-family:var(--mono); font-size:12px; color:var(--clay); font-weight:500; }
+  .verify-high { color:var(--olive); font-family:var(--mono); font-size:12px; }
+  .verify-low { color:var(--clay); font-family:var(--mono); font-size:12px; }
+
+  /* ---------- pills ---------- */
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin-right:6px; }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+
+  /* ---------- lists ---------- */
+  .insight-list { list-style:none; margin:0; padding:0; }
+  .insight-list li { position:relative; padding:0 0 14px 26px; font-size:15px; color:var(--gray-700); }
+  .insight-list li::before { content:""; position:absolute; left:6px; top:8px;
+      width:7px; height:7px; border-radius:2px; background:var(--clay); }
+  .insight-list li.olive::before { background:var(--olive); }
+  .insight-list li.rust::before { background:var(--rust); }
+  .insight-list li strong { color:var(--slate); font-weight:600; }
+  .insight-list li .tag { font-family:var(--mono); font-size:11px; color:var(--gray-500); }
+
+  /* ---------- timeline ---------- */
+  .timeline { list-style:none; margin:0; padding:0; }
+  .timeline li { position:relative; padding:0 0 18px 24px; font-size:14px; }
+  .timeline li::before { content:""; position:absolute; left:0; top:4px; width:9px; height:9px;
+      border-radius:50%; background:var(--clay); }
+  .timeline li::after { content:""; position:absolute; left:3.5px; top:17px; bottom:0;
+      width:2px; background:var(--gray-300); }
+  .timeline li:last-child::after { display:none; }
+  .timeline .date { font-family:var(--mono); font-size:12px; color:var(--gray-500); margin-right:8px; }
+
+  /* ---------- quote ---------- */
+  blockquote { font-family:var(--serif); font-size:20px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:10px 0 10px 20px; margin:24px 0; letter-spacing:-.005em; }
+
+  /* ---------- grid variants ---------- */
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+
+  /* ---------- insight cards ---------- */
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+                  padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:18px;
+      color:var(--slate); margin-bottom:8px; }
+
+  /* ---------- footer ---------- */
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+  footer a { color:var(--clay); text-decoration:none; }
+
+  @media (max-width:720px) {
+    .summary-band, .grid-2, .grid-3 { grid-template-columns:1fr; }
+    h1 { font-size:28px; }
+  }
+  @media (max-width:860px) {
+    .summary-band { grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>🖐️ 灵巧手供应链图谱</h1>
+    <span class="badge warn">⚠ 图片未读取</span>
+  </div>
+  <p class="eyebrow">Research Report · 2026-07-08</p>
+  <div class="meta">
+    源文章：<span class="src">契阔资本</span> 微信公众号 &nbsp;·&nbsp; 来源：机甲觉醒 &nbsp;·&nbsp; 方法：原文提取 + 独立交叉验证
+  </div>
+  <p class="lead">灵巧手正在从硬件生意转变为数据生意。谁能在真实世界中部署最多的触手，谁就掌握了训练下一代通用具身智能模型的核心燃料。本报告对文章涉及的15家企业进行逐家交叉验证，并提出反向批判视角。</p>
+</header>
+
+<!-- Summary Band -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card">
+      <div class="stat-num">15</div>
+      <div class="stat-label">涉及企业</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5</div>
+      <div class="stat-label">灵巧手成品商</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">6</div>
+      <div class="stat-label">上游核心部件商</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">11</div>
+      <div class="stat-label">图⽚未提取</div>
+      <div class="stat-delta">模型不支持视觉</div>
+    </div>
+  </div>
+</section>
+
+<!-- 一、核心事件 -->
+<section>
+  <h2>一、核心事件</h2>
+  <hr class="rule">
+  <p>契阔资本微信公众号转载机甲觉醒制作的灵巧手产业供应链图谱。文章核心论断：全球灵巧手产业链正<strong>快速向亚洲聚拢</strong>——中国企业率先实现商业化出货，上游核心部件完成国产替代，而真正的制高点争夺在触觉传感器与<strong>物理交互数据</strong>维度。</p>
+
+  <blockquote>当亚洲公司用供应链优势将灵巧手成本打下来、将产量提上去时，他们真正在构建的，是一条通向通用物理智能的、难以逾越的数据护城河。</blockquote>
+</section>
+
+<!-- 二、供应链企业全景 -->
+<section>
+  <h2>二、供应链企业全景</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr>
+      <th style="width:130px">层级</th><th>企业</th><th style="width:100px">地区</th><th>核心产品/定位</th><th style="width:100px">商业化状态</th><th style="width:70px">验证</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="tier-label">成品手</td><td><strong>Sharpa</strong></td><td>新加坡/中国</td>
+        <td>SharpaWave直驱灵巧手，22自由度，1:1人手，指尖触觉阵列DTA</td>
+        <td>2025.10量产交付</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label">成品手</td><td><strong>舞肌科技</strong></td><td>深圳</td>
+        <td>Wuji Hand 1/2，20自由度，550g，1:1仿生，100+人团队</td>
+        <td>ICRA 2026发布二代</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label">成品手</td><td><strong>帕西尼感知</strong></td><td>中国</td>
+        <td>双模态灵巧手，多维触觉传感器15维度感知，出货量第一</td>
+        <td>批量商业交付</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label">成品手</td><td><strong>临界点</strong></td><td>中国</td>
+        <td>智元机器人子公司，前腾讯Robotics X熊坤带队</td>
+        <td>2026.1成立</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label">成品手</td><td><strong>XYNOVA 曦诺未来</strong></td><td>中国</td>
+        <td>Flex 2混驱灵巧手，自研电缸，万台级订单</td>
+        <td>行业量产领先</td><td class="verify-high">✓✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="data-table">
+    <thead><tr>
+      <th style="width:130px">层级</th><th>企业</th><th style="width:160px">核心产品</th><th>行业地位</th><th style="width:70px">验证</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">减速器</td><td><strong>绿的谐波</strong></td>
+        <td>微型谐波减速器，专为人形优化</td><td>国内龙头，全球市占18.1%，打破日本垄断</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">减速器</td><td><strong>来福谐波</strong></td><td>谐波减速器</td><td>国内TOP6，市占5.8%</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">丝杠</td><td><strong>五洲新春</strong></td><td>灵巧手微型丝杠，行星滚柱丝杠</td><td>已送样特斯拉链，小批量销售</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">控制器</td><td><strong>雷赛智能</strong></td><td>空心杯电机，无框电机，DH系列灵巧手方案</td><td>伺服系统内资第二，近百客户</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">FPC</td><td><strong>鹏鼎控股</strong></td><td>柔性线路板FPC</td><td>全球最大PCB/FPC之一</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--olive)">FPC</td><td><strong>东山精密</strong></td><td>柔性线路板FPC</td><td>全球第三大FPC，苹果核心供应商</td><td class="verify-high">✓✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="data-table">
+    <thead><tr>
+      <th style="width:130px">层级</th><th>企业</th><th style="width:70px">国家</th><th>技术路线</th><th>核心产品</th><th style="width:70px">验证</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="tier-label" style="color:var(--clay)">触觉传感器</td><td><strong>GelSight</strong></td><td>美国</td>
+        <td>视触觉（凝胶+摄像头）</td><td>Digit 360（与Meta合作），GelSight Mini</td><td class="verify-high">✓✓</td>
+      </tr>
+      <tr>
+        <td class="tier-label" style="color:var(--clay)">触觉传感器</td><td><strong>XELA Robotics</strong></td><td>日本</td>
+        <td>磁感触觉</td><td>uSkin（4×4三轴形变感知）</td><td class="verify-high">✓✓</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>⚠ 数据完整性问题：</strong>原文含11张供应链图谱图片（PNG/JPG），包含详细的企业分类、上下游箭头关系、品牌logo等。因当前模型不支持视觉识别，图片中的结构化数据未能提取。以上表格基于原文文字内容 + 独立 web 搜索交叉验证。
+  </div>
+</section>
+
+<!-- 三、深层背景 -->
+<section>
+  <h2>三、深层背景</h2>
+  <hr class="rule">
+
+  <ul class="timeline">
+    <li><span class="date">2011</span> MIT开发GelSight触觉传感器原型</li>
+    <li><span class="date">2022–2023</span> 特斯拉Optimus点燃人形机器人赛道</li>
+    <li><span class="date">2024</span> 因时机器人灵巧手售价降至5万元/只，国内市占率50%</li>
+    <li><span class="date">2025 H1</span> 因时机器人灵巧手销量突破4000台</li>
+    <li><span class="date">2025 Q4</span> SharpaWave量产交付；傅利叶FDH-6定价4999元拉低价格门槛</li>
+    <li><span class="date">2025 全年</span> 国内整机企业超140家，人形机器人出货突破万台</li>
+    <li><span class="date">2026.1</span> 智元成立灵巧手子公司"临界点"；XYNOVA获万台级高自由度灵巧手订单</li>
+    <li><span class="date">2026.6</span> ICRA 2026：舞肌Wuji Hand 2 + XYNOVA Flex 2亮相</li>
+  </ul>
+
+  <div class="grid-3">
+    <div class="insight-card">
+      <div class="label">BOM 占比</div>
+      <h3>17.3%</h3>
+      <p style="font-size:13px;color:var(--gray-500);margin:0;">灵巧手在人形机器人<br>成本结构中的占比</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">减速器成本</div>
+      <h3>15–20%</h3>
+      <p style="font-size:13px;color:var(--gray-500);margin:0;">减速器在单台Optimus<br>成本中的占比</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">哈默纳科市占</div>
+      <h3>35.6%</h3>
+      <p style="font-size:13px;color:var(--gray-500);margin:0;">日本哈默纳科仍为<br>谐波减速器绝对龙头</p>
+    </div>
+  </div>
+</section>
+
+<!-- 四、关键转折 -->
+<section>
+  <h2>四、关键转折</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">范式转移</div>
+      <h3>PPT造手 → 量产卡位战</h3>
+      <p style="font-size:14px;margin:0;">2025年分水岭。XYNOVA万台订单、因时4000+台销量、Sharpa量产交付，标志行业从实验室进入产品化竞争。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">价格断崖</div>
+      <h3>10万+ → 4999元</h3>
+      <p style="font-size:14px;margin:0;">傅利叶FDH-6将灵巧手价格拉低到5000元以下，改变了行业定价锚点。对比：Shadow Hand约100万元。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">维度升级</div>
+      <h3>硬件 → 数据平台</h3>
+      <p style="font-size:14px;margin:0;">灵巧手本质从"卖硬件"转向"卖数据入口"。部署量→数据量→模型能力→更多部署，形成飞轮效应。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">人才信号</div>
+      <h3>腾讯团队"出逃"</h3>
+      <p style="font-size:14px;margin:0;">Sharpa、临界点均有腾讯Robotics X背景。顶级人才流向初创是产业进入爆发期的强烈信号。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 五、技术路线对比 -->
+<section>
+  <h2>五、技术路线分化</h2>
+  <hr class="rule">
+  <table class="data-table">
+    <thead><tr><th>路线</th><th>代表企业</th><th>优势</th><th>劣势</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill">直驱</span></td><td>Sharpa、舞肌</td><td>高精度，独立关节控制</td><td>体积大，成本高</td></tr>
+      <tr><td><span class="pill">绳驱/腱绳</span></td><td>Shadow Hand、特斯拉Optimus</td><td>轻量化，拟人度高</td><td>控制复杂，维护难</td></tr>
+      <tr><td><span class="pill">连杆</span></td><td>因时、灵心巧手</td><td>刚性好，模块化</td><td>灵活度受限</td></tr>
+      <tr><td><span class="pill clay">混驱</span></td><td>XYNOVA Flex 2</td><td>兼顾力与巧</td><td>系统复杂度高</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 六、交叉验证 -->
+<section>
+  <h2>六、交叉验证</h2>
+  <hr class="rule">
+
+  <div class="callout olive">
+    <strong>✓✓ 多源确认 (12项)：</strong>Sharpa、舞肌、帕西尼、临界点、XYNOVA、绿的谐波、来福谐波、五洲新春、雷赛智能、鹏鼎、东山、GelSight、XELA——各家均有至少2个独立来源交叉验证（甲子光年、IT之家、36氪、券商研报、学术论文等）。
+  </div>
+
+  <div class="callout warn">
+    <strong>✓ 部分验证 / 无法验证 (3项)：</strong><br>
+    · "全球灵巧手产业链快速向亚洲聚拢" — 趋势方向可观察，但缺乏量化的全球产值/出货量份额数据<br>
+    · "国产替代完整矩阵" — 偏乐观，高端触觉传感器仍依赖GelSight/XELA<br>
+    · 11张图谱图片中的详细企业分类 — 未读取
+  </div>
+
+  <div class="callout rust">
+    <strong>⚠ 数据口径差异：</strong><br>
+    · 因时"市占率50%" vs "H1销量4000+台" — 市占率可能限指"五指灵巧手"细分<br>
+    · 傅利叶4999元 vs 因时3-5万元 — 消费级 vs 工业级，不可直接对比<br>
+    · 鹏鼎/东山FPC — 主要服务消费电子（苹果），灵巧手FPC占比极低，"供应链"概念存在泛化
+  </div>
+</section>
+
+<!-- 七、洞察与洞见 -->
+<section>
+  <h2>七、洞察与洞见</h2>
+  <hr class="rule">
+
+  <ul class="insight-list">
+    <li>
+      <span class="tag">L1 · So What</span><br>
+      <strong>灵巧手正从"机器人配件"升级为"具身智能基础设施"</strong>——估值逻辑将从硬件制造转向数据平台。触觉数据是下一个未被垄断的"数据石油"。
+    </li>
+    <li>
+      <span class="tag">L2 · 模式识别</span><br>
+      <strong>复刻智能手机供应链剧本</strong>——中国企业先做部件替代（减速器、丝杠），再做整机（灵巧手成品），路径清晰。从"追赶"到"定义标准"的转折正在发生。
+    </li>
+    <li class="olive">
+      <span class="tag">L3 · 反向批判</span><br>
+      <strong>契阔资本作为投资机构，有动机强调"数据护城河"叙事。</strong>这种叙事隐含假设"数据飞轮"会自然形成——但实际部署的灵巧手有多少在真正收集可用数据？视觉AI的经验表明数据边际价值递减——触觉数据是否同样存在饱和点？
+    </li>
+    <li class="olive">
+      <span class="tag">L3 · 被低估的日本</span><br>
+      <strong>文章仅将日本列为XELA触觉传感器，但哈默纳科（谐波减速器35.6%市占率）才是真正的产业基石。</strong>日本在精密传动领域仍占统治地位。
+    </li>
+    <li class="rust">
+      <span class="tag">L3 · FPC"搭车"</span><br>
+      <strong>将鹏鼎、东山列为"灵巧手供应链"存在概念泛化之嫌。</strong>FPC业务90%+服务于消费电子（苹果），灵巧手FPC占比极低。
+    </li>
+    <li>
+      <span class="tag">L4 · 可操作</span><br>
+      <strong>投资人：</strong>区分"真供应链"（绿的谐波、雷赛）与"概念搭车"（FPC）。<strong>求职者：</strong>触觉传感器（视触觉、磁感触觉）是人才洼地。<strong>整机厂：</strong>尽早锁定优质灵巧手供应商产能。
+    </li>
+  </ul>
+</section>
+
+<!-- 八、待观察 -->
+<section>
+  <h2>八、待观察</h2>
+  <hr class="rule">
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">01</div>
+      <h3>XYNOVA 交付进度</h3>
+      <p style="font-size:14px;margin:0;">万台订单能否按期交付，验证"量产时代"真伪。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">02</div>
+      <h3>价格战风险</h3>
+      <p style="font-size:14px;margin:0;">傅利叶4999元定价是否引发行业价格战，挤压利润。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">03</div>
+      <h3>Meta Digit 360</h3>
+      <p style="font-size:14px;margin:0;">GelSight/Meta触觉传感器的商业化，会否定义"iPhone时刻"。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">04</div>
+      <h3>特斯拉供应商</h3>
+      <p style="font-size:14px;margin:0;">Optimus灵巧手是否采用中国供应链？五洲新春已在送样。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 总结 -->
+<section>
+  <h2>总结</h2>
+  <hr class="rule">
+
+  <div class="callout olive">
+    <strong>最有价值的洞察：</strong>灵巧手产业链正经历从精密机械到数据平台的范式转换。中国企业在量产和性价比上已形成全球领先优势，但触觉传感器仍是卡脖子环节。终局不是"谁的手最灵巧"，而是"谁拥有最多的物理世界交互数据"。
+  </div>
+
+  <div class="callout rust">
+    <strong>需要警惕的叙事陷阱：</strong><br>
+    1. <strong>数据护城河可能被高估</strong> — 视觉AI经验表明数据边际价值递减<br>
+    2. <strong>供应链泛化概念</strong> — FPC企业（鹏鼎/东山）与灵巧手关联度低<br>
+    3. <strong>亚洲中心论的风险</strong> — 日本哈默纳科仍是减速器绝对龙头，欧洲在学术和高端制造有深厚积累
+  </div>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 数据截止：2026年6月 &nbsp;·&nbsp; 源文章：<a href="#">契阔资本×机甲觉醒</a><br>
+  方法：原文提取 + 独立 web 搜索交叉验证（多源≥2）&nbsp;·&nbsp; 11张图谱图片未能读取（模型视觉限制）
+</footer>
+
+</div>
+</body>
+</html>
