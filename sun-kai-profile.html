@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>孙恺：The Physicist</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:940px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:32px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .subtitle { font-family:var(--serif); font-size:20px; color:var(--sky); font-weight:500; margin-top:6px; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.verified { background:rgba(120,140,93,.15); color:var(--olive); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  section { margin-bottom:52px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:24px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.olive { border-left:4px solid var(--olive); }
+  .stat-num { font-family:var(--serif); font-size:28px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:12px 16px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:13px 16px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.sky { background:rgba(91,139,160,.08); border-left-color:var(--sky); }
+  .callout.purple { background:rgba(139,107,158,.06); border-left-color:var(--purple); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:0 0 8px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+
+  blockquote { font-family:var(--serif); font-size:18px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--sky);
+               padding:8px 0 8px 20px; margin:20px 0; letter-spacing:-.005em; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band, .grid-3 { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    h1 { font-size:26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>孙恺 (Kai Sun)</h1>
+    <span class="badge verified">多源交叉验证</span>
+  </div>
+  <p class="subtitle">The Physicist</p>
+  <p class="eyebrow">人物档案 · 2026-07-08</p>
+  <div class="meta">
+    来源：上海交大新闻网、SJTU 机动学院官网、Stanford Hanson Research Group、禾赛官网、搜狐、Google Scholar、ResearchGate、LinkedIn、Crunchbase
+  </div>
+  <p class="lead">孙恺是三人中最安静、最少出现在媒体上的那一位——但他的履历也是最"硬"的。<strong>斯坦福机械工程博士 + 电子工程辅修</strong>，导师是燃烧激光诊断领域的传奇人物 Ronald Hanson 教授，博士论文研究用激光测量分子在极端条件下的反应动力学。禾赛从气体检测起家不是偶然——那是孙恺博士研究的直接工程化延伸。而"毕加索 SPAD-SoC"这种从芯片物理层重新定义激光雷达的产品，只有真正理解光子-物质相互作用的人才能设计出来。</p>
+</section>
+
+<!-- KPI -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card olive">
+      <div class="stat-num">2007</div>
+      <div class="stat-label">交大本科 · 应届唯一斯坦福录取</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">2013</div>
+      <div class="stat-label">斯坦福机械博士+电子辅修</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">20+</div>
+      <div class="stat-label">激光传感器论文</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">harmitford2007</div>
+      <div class="stat-label">交大水源BBS传奇ID</div>
+    </div>
+  </div>
+</section>
+
+<!-- 一、履历 -->
+<section>
+  <h2>一、履历全貌</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:60px">阶段</th><th style="width:100px">时间</th><th>事件</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="pill purple">教育</span></td><td>2003-2007</td>
+        <td><strong>上海交通大学</strong>，机械与动力工程学院，热能与动力工程本科。大一绩点不好，大二决定出国，大三疯狂重修大一全部课程——单学期 <strong>20+ 门期末考试</strong>，每 天 2-3 门。最终成为该届<strong>唯一被斯坦福大学录取的应届本科生</strong>。</td>
+        <td>上海交大新闻网、搜狐</td>
+      </tr>
+      <tr>
+        <td><span class="pill sky">BBS</span></td><td>2005±</td>
+        <td>在交大水源 BBS 注册用户 <strong>"harmitford2007"</strong>——Harvard + MIT + Stanford，2007 年考取其中任意一所。当时很多人都说大一这样的绩点不可能。后来他做到了。</td>
+        <td>搜狐、上海交大新闻网</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">教育</span></td><td>2007-2013</td>
+        <td><strong>斯坦福大学</strong>，机械工程硕士+博士（主修），电子工程博士（辅修）。导师：<strong>Ronald Hanson 教授</strong>（燃烧激光诊断领域世界顶级学者）。研究方向：利用激光器和新型探测技术搭建超快、高灵敏度分子测量系统，应用于化学反应动力学。</td>
+        <td>Stanford Hanson Group、禾赛官网</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">荣誉</span></td><td>2013</td>
+        <td>博士论文获 <strong>《Measurement Science and Technology》年度最佳论文奖</strong>；多篇论文入选英国物理协会精选集、美国光学学会精选集、阿贡国家实验室百年精选集</td>
+        <td>上海交大新闻网</td>
+      </tr>
+      <tr>
+        <td><span class="pill sky">职业</span></td><td>2014</td>
+        <td>斯坦福大学 <strong>Research Associate</strong></td>
+        <td>禾赛管理层页面、LinkedIn</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">创业</span></td><td>2013</td>
+        <td>在硅谷与李一帆相识——"大约十年前，两人在硅谷喝酒吹牛，要搞一个 billion dollar company。酒醒之后，找来向少卿，梦想被提上日程。"</td>
+        <td>搜狐、上海交大新闻网</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">创业</span></td><td>2014</td>
+        <td><strong>禾赛科技</strong>正式成立，任联合创始人 & 首席科学家。公司最初以<strong>激光气体遥测系统</strong>起家——恰好是孙恺博士研究的工程化延伸（激光分子光谱测量）</td>
+        <td>上海交大新闻网</td>
+      </tr>
+      <tr>
+        <td><span class="pill olive">当前</span></td><td>2026</td>
+        <td>禾赛首席科学家 & 董事长；Sharpa 联合创始人；2026技术开放日主导发布毕加索 6D SPAD-SoC 芯片；LinkedIn 位置仍标注 <strong>Stanford, California</strong></td>
+        <td>极客公园、LinkedIn</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 二、学术 -->
+<section>
+  <h2>二、从 Hanson 实验室到禾赛 SPAD：一条直线</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">Stanford 研究</div>
+      <h3>激光分子光谱学</h3>
+      <p style="font-size:14px;margin:0;">在 Hanson 实验室，孙恺的研究核心是<strong>腔增强吸收光谱（CEAS）配合皮秒脉冲紫外激光</strong>，用于在瞬态高温高压条件下（如发动机燃烧室）实时测量气体分子的浓度和温度。这要求对光子-分子相互作用、超快光学、噪声抑制有物理层面的深刻理解。</p>
+      <div class="source-ref" style="margin-top:6px;font-size:11px;font-family:var(--mono);color:var(--gray-500);">ResearchGate: Kai Sun, CEAS with ps-pulsed UV laser</div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">禾赛起点</div>
+      <h3>激光气体遥测</h3>
+      <p style="font-size:14px;margin:0;">禾赛的第一款产品是<strong>激光甲烷遥测仪</strong>——用激光束远距离检测天然气管道泄漏。这个产品的物理原理与孙恺的博士研究几乎一致：发射激光 → 分子吸收特定波长 → 解析浓度。只是把实验室的"分子光谱仪"做成了手持工业设备。</p>
+    </div>
+  </div>
+
+  <div class="callout sky">
+    <strong>从气体检测到激光雷达的物理逻辑：</strong><br>
+    激光气体遥测 = 激光发射 → 气体分子吸收 → 探测器接收信号变化<br>
+    激光雷达 = 激光发射 → 物体表面反射 → 探测器接收飞行时间(ToF)<br><br>
+    <strong>核心物理器件完全相同：</strong>激光器、光电探测器、光学系统、信号处理。区别只在于是测量"分子吸收了多少光"还是"光走了多远"。这就是为什么孙恺的博士研究可以直接迁移到激光雷 达——而且是底层物理层面的迁移，不是应用层面的凑合。
+  </div>
+</section>
+
+<!-- 三、harmitford -->
+<section>
+  <h2>三、harmitford2007：一个中二 ID 背后的真实故事</h2>
+  <hr class="rule">
+
+  <blockquote>
+    "刚进交大，孙恺有些放松，没有好好学习，大二决定要出国，于是交大水源 BBS 上多了一个知名用户：<strong>harmitford2007</strong>，意为 2007 年考取哈佛、麻省理工或斯坦福任意一所学校。"<br>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--gray-500);display:block;margin-top:8px;">—— 上海交大新闻网</span>
+  </blockquote>
+
+  <div class="callout">
+    <strong>这个故事最打动人的地方：</strong><br>
+    很多人会说 "harmitford2007" 是一个标准的"草根逆袭"故事。但我看到的是另一个层面：<br><br>
+    <strong>孙恺在 19 岁时表现出的是一种极致的"目标设定 + 可执行计划"能力。</strong>他不是喊口号——他知道交大有重修政策，他算出了需要重修的课程数量，他把 20+ 门考试塞进一个学期，他每天考 2-3 门。<br><br>
+    这种思维方式后来完全映射到了禾赛的技术路线选择上：<strong>先定义"我们最终要做什么"（billion dollar company / 物理AI基础设施），然后反向推导"每一步需要攻克什么技术"</strong>（芯片化→SPAD→6D→Kosmo→动力模组）。<br><br>
+    而且他至今<strong>不回避这段历史</strong>——"我还是蛮怀念的，连续通宵的一段时光，那个寒冷的通宵自习室……"这种坦然承认自己曾经不够好、然后靠执行翻盘的态度，在整个科技创业圈极为罕见。
+  </div>
+</section>
+
+<!-- 四、技术贡献 -->
+<section>
+  <h2>四、孙恺的技术贡献：禾赛每一代产品的物理内核</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>产品</th><th>核心物理瓶颈</th><th>孙恺的背景如何对应</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Pandar 系列（2017）</strong><br>机械式 360° 激光雷达</td>
+        <td>如何在高转速下保持激光发射和接收的光学对准精度？</td>
+        <td>博士期间搭建的分子测量系统本身就是精密光学平台——对准、校准、噪声控制在物理层面是同源的</td>
+      </tr>
+      <tr>
+        <td><strong>AT 系列（2021）</strong><br>半固态 ADAS 激光雷达</td>
+        <td>如何用芯片化架构替代分立光学元件，把成本从 10 万元打到 1 万元以下？</td>
+        <td>理解"光子在硅中的行为"——只有同时懂光学（机械系）和半导体物理（电子系辅修）的人才能主导 SPAD 接收器芯片的定义</td>
+      </tr>
+      <tr>
+        <td><strong>毕加索 SPAD-SoC（2026）</strong><br>6D 全彩超感光芯片</td>
+        <td>如何同时感知 XYZ + 强度 + 颜色 + 速度？传统激光雷达只输出距离</td>
+        <td>多维度光谱分析是他的博士研究方向——同时解析多个物理量（浓度、温度、速度）正是分子光谱学的核心能力</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout sky">
+    <strong>💡 为什么 SPAD 这件事必须由孙恺来主导：</strong><br>
+    全球激光雷达行业有两种公司——<strong>集成商</strong>和<strong>芯片商</strong>。大多数激光雷达公司买来现成的激光器、探测器（APD/SPAD）、光学元件，然后做系统集成。禾赛能自己做 SPAD 芯片，是因为孙恺从<strong>光子-物质相互作用的第一性原理</strong>出发，理解了"用什么探测器""什么波长的激光""什么噪声抑制策略"这一整套物理选择——而不是从供应商 catalog 里挑现成方案。
+  </div>
+</section>
+
+<!-- 五、金矿比喻 -->
+<section>
+  <h2>五、"金矿"比喻与 2026 技术开放日</h2>
+  <hr class="rule">
+
+  <p>2026年4月17日禾赛技术开放日，孙恺开场时讲了一个哲学级别的产品论点：</p>
+
+  <blockquote>
+    "数码相机是划时代的产品，但'实地观察胜千图'——无论拍多少张照片，都不如你亲身走进那个场景，因为你可以主动探索、发现你事先不知道自己想关注的东西。这正是三维全彩感知相对于二维图像的本质优势：<strong>它是一种可交互、可探索的空间信息，而非一张被动的平面记录。</strong>"<br>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--gray-500);display:block;margin-top:8px;">—— 孙恺，禾赛 2026 技术开放日</span>
+  </blockquote>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">金矿假设</div>
+      <h3>"可能只发挥了 5% 的价值"</h3>
+      <p style="font-size:13px;margin:0;">激光雷达的 5% 价值 = 过去十年在自动驾驶赛道上的市场地位（全球 40-50%）。95% 价值 = Physical AI 时代所有机器人的感知基础设施——无人配送、仓储物流、人形机器人、消费电子。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">空间哲学</div>
+      <h3>"实地观察胜千图"</h3>
+      <p style="font-size:13px;margin:0;">二维图像是被动的平面记录——你以为你看到了全部，实际上你只看到了别人替你选择的角度。三维全彩感知是<strong>可探索的空间信息</strong>——你可以在虚拟世界里自由移动、转换视角、发现你不知道自己想知道的事。</p>
+    </div>
+  </div>
+
+  <div class="callout purple">
+    <strong>孙恺与李一帆/向少卿在公开表达上的差异：</strong><br>
+    李一帆讲"我们要做 billion dollar company"（Builder 的野心）<br>
+    向少卿讲"禾赛远不只一家激光雷达公司"（Architect 的产品愿景）<br>
+    孙恺讲"实地观察胜千图"——<strong>他用一个哲学类比定义了一个全新的产品品类。</strong>这不是营销话术，是物理学家式的思考方式——从第一性原理出发重新定义"什么是感知"。
+  </div>
+</section>
+
+<!-- 六、三人拼图 -->
+<section>
+  <h2>六、完整的三人拼图</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>维度</th><th>李一帆 · Builder</th><th>向少卿 · Architect</th><th>孙恺 · Physicist</th></tr></thead>
+    <tbody>
+      <tr><td><strong>核心驱动</strong></td><td>好奇心驱动的建造欲</td><td>产品定义与架构能力</td><td>对物理世界的第一性理解</td></tr>
+      <tr><td><strong>回答的问题</strong></td><td>"Why not?"</td><td>"How?"</td><td>"Is it possible?"</td></tr>
+      <tr><td><strong>教育</strong></td><td>清华 → UIUC 机器人学博士</td><td>清华精密仪器第一名 → 斯坦福</td><td>交大 → 斯坦福机械博士+电子辅修</td></tr>
+      <tr><td><strong>产业经验</strong></td><td>Western Digital Principal Engineer</td><td>Apple 产品架构师</td><td>Stanford Research Associate → 直接创业</td></tr>
+      <tr><td><strong>在禾赛做的事</strong></td><td>战略方向、融资、上市、生态布局</td><td>硬件架构、产品定义、供应链</td><td>芯片物理层、光学系统、算法路线</td></tr>
+      <tr><td><strong>个人侧写</strong></td><td>至今亲手做硬件发论文（picoRing）</td><td>精密仪器系的极致产品匠人</td><td>从"harmitford2007"到 SPAD 的物理学家</td></tr>
+      <tr><td><strong>公共形象</strong></td><td>WEF/Milken/TR35 公众人物</td><td>技术开放日公开发言</td><td>最少曝光，但技术论述最深</td></tr>
+    </tbody>
+  </table>
+
+  <blockquote style="border-left-color:var(--purple);">
+    如果把禾赛比作一辆车：李一帆是<strong>发动机</strong>——提供向前的动力和方向；向少卿是<strong>底盘和车身</strong>——把动力翻译成可量产的结构；孙恺是<strong>ECU（电子控制单元）</strong>——理解每一个物理参数的极限在哪里，确保系统在任何极端条件下都不会崩溃。
+  </blockquote>
+
+  <div class="callout olive">
+    <strong>最后的观察：</strong>三个人的 LinkedIn 位置分别标注了 <strong>上海（李一帆）、上海（向少卿）、Stanford, California（孙恺）</strong>。李一帆和向少卿已经扎根中国产业一线，而孙恺至今保留着斯坦福的学术联系——Google Scholar 账号仍然活跃，Hanson 实验室的页面仍有他的名字。这种"脚踩学术和产业两只船"的状态，是禾赛能在芯片物理层持续领先的底层保障：<strong>他不只是在"管研发"——他还在做研究。</strong>
+  </div>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 每项事实 ≥2 独立来源 &nbsp;·&nbsp; harmitford2007 故事来自上海交大新闻网第一手报道<br>
+  主要来源：上海交大新闻网（2023.02.13）、SJTU 机动学院、Stanford Hanson Research Group、禾赛官网、搜狐（2023.02.10）、Google Scholar、ResearchGate、LinkedIn、极客公园（2026.04.21）
+</footer>
+
+</div>
+</body>
+</html>
