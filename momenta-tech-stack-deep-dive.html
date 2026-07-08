@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momenta 核心技术栈深度挖掘</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:920px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:34px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.verified { background:rgba(120,140,93,.15); color:var(--olive); }
+  .badge.caution { background:rgba(217,119,87,.15); color:var(--clay); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  section { margin-bottom:52px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:24px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:18px; color:var(--slate); margin:24px 0 10px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:12px 16px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:13px 16px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout.sky { background:rgba(91,139,160,.06); border-left-color:var(--sky); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:0 0 8px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+
+  blockquote { font-family:var(--serif); font-size:18px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:20px 0; letter-spacing:-.005em; }
+
+  .source-ref { font-size:11px; font-family:var(--mono); color:var(--gray-500); margin-top:4px; }
+  .source-ref a { color:var(--clay); text-decoration:none; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    h1 { font-size:26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>Momenta 核心技术栈深度挖掘</h1>
+    <span class="badge verified">多源交叉验证</span>
+  </div>
+  <p class="eyebrow">Technical Deep Dive · 2026-07-08</p>
+  <div class="meta">
+    信息来源：Momenta 官方技术页面、R7 发布会、DoNews 专栏、招股书摘要、arXiv 学术论文等多源核实
+  </div>
+  <p class="lead">Momenta 对外讲的故事一直在升级——从"自动驾驶大脑"到"数据飞轮"再到"Physical AI"。每个标签背后都对应一套真实的技术架构。本报告剥离 PR 话术，从官方文档、发布会实录、第三方分析中还原 Momenta 真实的技术栈，<strong>区分已验证的技术事实与未经验证的技术宣称</strong>。</p>
+</section>
+
+<!-- 技术演化 -->
+<section>
+  <h2>一、技术架构演化：从模块化到一段式端到端</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>阶段</th><th>架构</th><th>核心特点</th><th>验证状态</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>2.0</strong></td>
+        <td>模块化方案</td>
+        <td>感知-预测-规划-控制分离，各模块独立优化，需高精地图</td>
+        <td><span class="pill olive">✓ 行业共识起点</span></td>
+      </tr>
+      <tr>
+        <td><strong>3.0</strong></td>
+        <td>感知大模型 + 规划模块化</td>
+        <td>感知端统一为 BEV+Transformer 大模型，规划仍为模块化</td>
+        <td><span class="pill olive">✓ 2023年 Mpilot Pro 发布确认</span></td>
+      </tr>
+      <tr>
+        <td><strong>4.0</strong></td>
+        <td>两段式端到端</td>
+        <td>感知→规划两段端到端，去高精地图依赖</td>
+        <td><span class="pill sky">⚠ 推断，未找到官方命名</span></td>
+      </tr>
+      <tr>
+        <td><strong>5.0</strong></td>
+        <td>一段式端到端</td>
+        <td>传感器输入→规划/控制直接输出，全神经网络化</td>
+        <td><span class="pill olive">✓ 2025-2026 量产方案确认</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>技术演化要点：</strong>Momenta 的技术路线遵循了行业共识的演进方向——从规则驱动到数据驱动，从模块化到端到端。但 Momenta 在 2024 年就宣布量产了一段式端到端，这比多数竞争对手（2025年底至2026年落地）领先约1年。这个时间差是其城市 NOA 市占率 65% 的技术基础。<br>
+    <span class="source-ref">来源：Momenta 官方技术路线图 + 招股书摘要 + arXiv 2401.08658 将 Momenta 与 Tesla、Nvidia 并列为端到端规划三大工业代表</span>
+  </div>
+</section>
+
+<!-- 核心架构 -->
+<section>
+  <h2>二、当前核心架构：数据飞轮 + 两条腿</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">核心理念</div>
+      <h3>数据飞轮</h3>
+      <p style="font-size:13px;margin:0;"><strong>海量数据回流 → 闭环自动化筛选 → 数据驱动算法迭代 → 更好的驾驶体验 → 更多车辆搭载 → 更多数据</strong>。核心在于"不依赖人工标注，用数据本身驱动模型进化"。</p>
+      <div class="source-ref">来源：Momenta 官方技术页面</div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">量产腿</div>
+      <h3>Mpilot 量产辅助驾驶</h3>
+      <p style="font-size:13px;margin:0;">面向前装量产车，提供覆盖高速/城市/泊车全场景的端到端智能驾驶。累计定点车型超 170 款、交付近 70 款、搭载量突破 100 万台（截至 2026.7）。</p>
+      <div class="source-ref">来源：Momenta 官网 + IPO 新闻稿</div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">无人驾驶腿</div>
+      <h3>Scalable Robo</h3>
+      <p style="font-size:13px;margin:0;">以 Robotaxi 和 Robovan 为核心，持续拓展 Robotruck。量产车积累的数据和算法直接反哺无人驾驶——这是 Momenta 与纯 Robotaxi 公司（小马、文远）的本质差异。</p>
+      <div class="source-ref">来源：Momenta 官方技术页面</div>
+    </div>
+  </div>
+
+  <h3>闭环自动化 (CLA)</h3>
+  <p>CLA（Closed Loop Automation）是数据飞轮的工程实现——一套让数据流推动算法自动迭代的工具链。核心流程：</p>
+  <div class="grid-3" style="margin-top:12px;">
+    <div class="insight-card">
+      <div class="label">Step 1</div>
+      <h3>数据采集与回流</h3>
+      <p style="font-size:13px;margin:0;">量产车辆通过影子模式采集真实驾驶场景数据，回传云端。2025 年城市 NOA 搭载 50 万+ 辆车作为数据采集终端。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">Step 2</div>
+      <h3>黄金数据自动筛选</h3>
+      <p style="font-size:13px;margin:0;">CLA 自动从海量数据中筛选出"黄金数据"——算法表现不佳的场景、长尾边缘案例、高价值交互场景。无需人工标注。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">Step 3</div>
+      <h3>自动训练与部署</h3>
+      <p style="font-size:13px;margin:0;">黄金数据驱动模型自动重训练 → 仿真验证 → OTA 推送。迭代周期从传统的"季度级"缩短到"月级甚至周级"。</p>
+    </div>
+  </div>
+
+  <div class="callout sky">
+    <strong>⚠ 关键区分：</strong>"闭环自动化"在 Momenta 官方技术页面有明确描述，是已验证的技术架构。但"月级/周级迭代"的具体周期数据来自行业分析推论，而非 Momenta 官方承诺。<strong>影子模式</strong>的概念 Momenta 官方使用了"数据回流"的表述，未直接使用 Tesla 的"shadow mode"术语。
+  </div>
+</section>
+
+<!-- R7 世界模型 -->
+<section>
+  <h2>三、R7 世界模型：Momenta 最重要的技术赌注</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">官方定义</div>
+      <h3>R7 的三层能力</h3>
+      <p style="font-size:14px;margin:0;">
+        ① <strong>理解物体的物理属性</strong>——不仅仅是检测"这是一个行人"，而是理解重量、速度、脆性等属性<br>
+        ② <strong>理解运动的因果关系</strong>——预测物体的运动轨迹不是基于统计相关性，而是基于物理因果<br>
+        ③ <strong>理解交互的潜在可能</strong>——预判其他交通参与者的意图和可能的交互
+      </p>
+      <div class="source-ref">来源：Momenta 官方 R7 发布新闻 + 技术页面</div>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">技术路线（据百度百科）</div>
+      <h3>三层训练架构</h3>
+      <p style="font-size:14px;margin:0;">
+        ① <strong>世界模型预训练</strong>——海量真实驾驶数据预训练，模型习得物理常识<br>
+        ② <strong>闭环仿真</strong>——虚拟仿真推演极端场景、长尾场景<br>
+        ③ <strong>强化学习</strong>——在高度拟真环境中通过试错完成策略优化
+      </p>
+      <div class="source-ref">来源：Momenta 合伙人夏炎介绍（百度百科 R7 词条引用）</div>
+    </div>
+  </div>
+
+  <h3>R7 vs VLA：Momenta 的技术路线选择</h3>
+  <table class="data-table">
+    <thead><tr><th>维度</th><th>VLA 路线（Tesla/元戎启行等）</th><th>R7 世界模型路线（Momenta）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>核心理念</td><td>视觉(Vision)→语言(Language)→动作(Action)，三者统一建模</td><td>世界模型理解物理规律 → 强化学习优化决策</td>
+      </tr>
+      <tr>
+        <td>技术基础</td><td>通常基于 LLM 底座（~100B 参数），先做视觉语言对齐，再做行动对齐</td><td>直接从驾驶数据学习世界动态，不需要大语言模型中间层</td>
+      </tr>
+      <tr>
+        <td>Momenta 的批评<br><span class="pill rust">⚠ 来自 Momenta 自身</span></td>
+        <td colspan="2">曹旭东："VLA 对自动驾驶是锦上添花，很难雪中送炭。语义优先级远高于驾驶本身，大量参数未服务驾驶核心任务，好钢没用在刀刃上。"</td>
+      </tr>
+      <tr>
+        <td>R7 的优势宣称</td>
+        <td colspan="2">突破语言限制，博弈能力更强、选道策略更智能、窄路通行更灵活</td>
+      </tr>
+      <tr>
+        <td>首次量产</td>
+        <td>—</td>
+        <td>上汽大众 ID.ERA 9X，2026年3月宣布，先锋用户体验</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>⚠ 重要的独立判断：R7 世界模型的三个未验证问题</strong><br><br>
+    <strong>1. 实际效果未知：</strong>R7 于 2026 年 3 月发布，目前仅在上汽大众 ID.ERA 9X 一款车上以"先锋用户体验"形式搭载。没有第三方评测、没有公开 benchmark 对比。<strong>曹旭东"相比特斯拉 FSD 毫不逊色"的宣言是发布会上说的，而非基于公开评测数据。</strong><br><br>
+    <strong>2. 学术界的世界模型定义 ≠ Momenta 的工程实现：</strong>学术界定义的世界模型要求能够生成未来状态的完整预测（像素级或状态级），这与 Momenta 工程中的"理解物理规律"存在鸿沟。R7 更准确的描述可能是"引入世界模型思想的端到端架构增强"而非"完整的生成式世界模型"。<br><br>
+    <strong>3. VLA vs 世界模型之争尚无定论：</strong>曹旭东的批评有一定技术逻辑（VLA 的语言层确实消耗了大量参数），但这只是 Momenta 一方的论述。Tesla、元戎启行并未公开回应。两条路线孰优孰劣，目前没有任何独立的评测数据可以支撑判断。
+  </div>
+</section>
+
+<!-- BMC7X 芯片 -->
+<section>
+  <h2>四、BMC7X 芯片：软件公司向下的"硬"延伸</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>维度</th><th>数据</th><th>验证状态</th></tr></thead>
+    <tbody>
+      <tr><td>芯片代号</td><td>BMC 7X（BMC X7）</td><td><span class="pill olive">✓ DoNews + 多家媒体报道</span></td></tr>
+      <tr><td>合作方</td><td>新芯航途（Momenta 合作的芯片公司，非 Momenta 内部团队）</td><td><span class="pill olive">✓ DoNews 确认</span></td></tr>
+      <tr><td>算力</td><td>272 TOPS，对标英伟达 Orin X</td><td><span class="pill olive">✓ 多家媒体报道</span></td></tr>
+      <tr><td>架构</td><td>单核大算力架构，针对端到端大模型定制专属 NPU 单元</td><td><span class="pill sky">⚠ 来自媒体报道，非芯片规格书</span></td></tr>
+      <tr><td>团队背景</td><td>吸纳 OPPO 哲库核心成员（SoC 架构、异构计算）</td><td><span class="pill olive">✓ DoNews 确认</span></td></tr>
+      <tr><td>投资方</td><td>上汽、奇瑞、蔚来资本等产业资本</td><td><span class="pill olive">✓ DoNews 确认</span></td></tr>
+      <tr><td>时间线</td><td>2023年底成立 → 流片成功 → 车企定点 → 预计2026底-2027装车</td><td><span class="pill sky">⚠ 预计时间未官方确认</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>关键澄清：</strong>"BMC7X 芯片"严格来说是<strong>新芯航途的产品</strong>，不是 Momenta 内部自研。Momenta 的核心角色是算法适配和系统集成——将 R6/R7 模型与芯片 NPU 做软硬协同优化。这与 Tesla Dojo/HW4（完全自研）和华为昇腾（完全自研）有本质区别。<br>
+    <span class="source-ref">来源：DoNews 2026-04-09 专栏（作者 刘亮）</span>
+  </div>
+</section>
+
+<!-- 竞争对比 -->
+<section>
+  <h2>五、技术竞争对比</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>维度</th><th>Momenta</th><th>华为 ADS</th><th>Tesla FSD</th><th>地平线</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>感知架构</strong></td>
+        <td>纯视觉为主，去激光雷达路线</td>
+        <td>激光雷达+视觉+毫米波融合（ADS 3.0 GOD网络）</td>
+        <td>纯视觉，8摄像头 HydraNet → 端到端</td>
+        <td>芯片平台，不直接提供算法方案</td>
+      </tr>
+      <tr>
+        <td><strong>规划架构</strong></td>
+        <td>一段式端到端，2024年落地</td>
+        <td>端到端 + 规则兜底（渐进式）</td>
+        <td>FSD V12 纯神经网络端到端</td>
+        <td>HSD 全场景方案（征程6P）</td>
+      </tr>
+      <tr>
+        <td><strong>数据飞轮</strong></td>
+        <td>50万+量产车采集，CLA自动筛选</td>
+        <td>鸿蒙智行全系回传，数据量级更大</td>
+        <td>全球数百万辆车，数据规模最大</td>
+        <td>芯片出货1000万+套，但不直接拥有数据</td>
+      </tr>
+      <tr>
+        <td><strong>芯片</strong></td>
+        <td>合作新芯航途 BMC7X (272 TOPS)，尚未量产</td>
+        <td>自研昇腾芯片</td>
+        <td>自研 HW4 / Dojo 超算</td>
+        <td>自研征程系列（征程6P 560 TOPS）</td>
+      </tr>
+      <tr>
+        <td><strong>世界模型</strong></td>
+        <td>R7 世界模型，2026.3 发布</td>
+        <td>ADS 4.0 引入世界模型概念</td>
+        <td>Dojo + 真实世界仿真</td>
+        <td>未单独发布世界模型</td>
+      </tr>
+      <tr>
+        <td><strong>商业模式</strong></td>
+        <td>纯软件许可（71.6% 毛利）</td>
+        <td>HI 模式（全栈）+ 零部件模式</td>
+        <td>FSD 按月订阅</td>
+        <td>芯片销售 + 软件许可（64.5% 毛利）</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout olive">
+    <strong>Momenta 的差异化技术优势：</strong><br>
+    ① <strong>最早量产端到端</strong>——2024年落地，比多数对手领先1年，这1年的真实里程数据在数据飞轮中是难以复制的先发优势<br>
+    ② <strong>纯视觉+去图路线与 Tesla 一致</strong>——在成本结构中占据优势，适配更广泛价位车型<br>
+    ③ <strong>中立第三方身份</strong>——不造车承诺使其能同时服务奔驰、丰田、比亚迪等竞争品牌<br>
+    <strong>Momenta 的技术劣势：</strong><br>
+    ④ <strong>芯片依赖外部</strong>——与华为/Tesla/地平线的自研芯片有本质差距，芯片节奏不受控<br>
+    ⑤ <strong>数据体量不及华为/Tesla</strong>——50万辆车 vs 鸿蒙智行全系 vs Tesla全球数百万<br>
+    ⑥ <strong>世界模型技术未经验证</strong>——R7 刚发布，尚无独立的第三方评测
+  </div>
+</section>
+
+<!-- 核心人才 -->
+<section>
+  <h2>六、核心技术人员</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>姓名</th><th>角色</th><th>背景</th><th>技术贡献</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>曹旭东</strong></td>
+        <td>CEO，创始人</td>
+        <td>清华大学机械工程学士（2008），前微软亚洲研究院科学家，前商汤科技 R&D 执行总监</td>
+        <td>公司技术战略制定，R7 世界模型首发主导，VLA vs 世界模型的路线决策者</td>
+      </tr>
+      <tr>
+        <td><strong>夏炎</strong></td>
+        <td>合伙人，研发 SVP</td>
+        <td>联合创始人之一，负责算法研发</td>
+        <td>R7 世界模型三层训练架构的核心阐释者（世界模型预训练→闭环仿真→强化学习）</td>
+      </tr>
+      <tr>
+        <td><strong>孙刚</strong></td>
+        <td>合伙人</td>
+        <td>联合创始人之一</td>
+        <td>具体技术分工未公开披露</td>
+      </tr>
+      <tr>
+        <td><strong>任少卿</strong></td>
+        <td>已离职</td>
+        <td>联合创始人之一，原 Momenta 研发总监</td>
+        <td>早期视觉感知算法奠基，后离开 Momenta 加入蔚来汽车</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout sky">
+    <strong>⚠ 人才透明度说明：</strong>Momenta 四位联合创始人中，任少卿已离职（加入蔚来）。剩余三位中，仅曹旭东和夏炎有公开的技术贡献记录。孙刚的技术角色和贡献未在公开渠道获得详细描述。Momenta 招股书中的技术团队规模和结构也未在本次调研中获取到详细数据。<br>
+    <span class="source-ref">来源：Momenta 百度百科、R7 发布会（夏炎发言）、DoNews 报道</span>
+  </div>
+</section>
+
+<!-- 技术风险 -->
+<section>
+  <h2>七、技术风险评估</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">风险 1</div>
+      <h3>R7 世界模型未经验证</h3>
+      <p style="font-size:13px;margin:0;">这是 Momenta 最大的技术赌注。如果 R7 在实际道路表现中未能显著超越现有端到端方案（一段式端到端其实已经够好了），那么"世界模型"的叙事将失去技术支撑。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">风险 2</div>
+      <h3>芯片自主性不足</h3>
+      <p style="font-size:13px;margin:0;">BMC7X 是新芯航途的产品，非 Momenta 自研。芯片的流片节奏、产能、良率都不在 Momenta 控制范围内。如果芯片交付延迟或性能不达标，Momenta 将被迫继续使用英伟达 Orin。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">风险 3</div>
+      <h3>数据体量差距</h3>
+      <p style="font-size:13px;margin:0;">Momenta 50万+辆城市 NOA 搭载量 vs 华为鸿蒙智行全系 vs Tesla 全球数百万辆。世界模型的有效性高度依赖海量真实数据——数据体量的鸿沟可能无法纯靠算法优势弥补。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">风险 4</div>
+      <h3>车企自研替代</h3>
+      <p style="font-size:13px;margin:0;">Momenta 的"中立第三方"身份在车企自研成功后将迅速贬值。如果比亚迪、吉利、蔚来的自研方案成熟到可以替换 Momenta，"中立"就不再是护城河。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 总结 -->
+<section>
+  <h2>总结：技术栈核心判断</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:160px">技术模块</th><th>成熟度</th><th>竞争力</th><th>独立验证</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>一段式端到端</td>
+        <td><span class="pill olive">成熟，已规模量产</span></td>
+        <td>领先多数对手1年</td>
+        <td><span class="pill olive">✓ 多源确认</span></td>
+      </tr>
+      <tr>
+        <td>数据飞轮 + CLA</td>
+        <td><span class="pill olive">成熟，已运行多年</span></td>
+        <td>核心护城河</td>
+        <td><span class="pill olive">✓ 官方文档 + 行业认可</span></td>
+      </tr>
+      <tr>
+        <td>R7 世界模型</td>
+        <td><span class="pill clay">早期，仅1款车型先锋体验</span></td>
+        <td>潜在颠覆性，但未验证</td>
+        <td><span class="pill rust">✗ 无独立评测</span></td>
+      </tr>
+      <tr>
+        <td>BMC7X 芯片</td>
+        <td><span class="pill clay">研发中，未量产</span></td>
+        <td>潜在差异化，但依赖外部</td>
+        <td><span class="pill sky">⚠ 仅媒体报道</span></td>
+      </tr>
+      <tr>
+        <td>纯视觉路线</td>
+        <td><span class="pill olive">成熟</span></td>
+        <td>成本优势显著</td>
+        <td><span class="pill olive">✓ 多家搭载验证</span></td>
+      </tr>
+      <tr>
+        <td>去高精地图</td>
+        <td><span class="pill olive">成熟</span></td>
+        <td>规模化的必要条件</td>
+        <td><span class="pill olive">✓ 多款车型落地</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    Momenta 真正的技术护城河不是某个单一的"惊艳模型"，而是两件事的组合：<strong>① 比对手早1年量产端到端积累的真实里程数据 + ② 7家全球 OEM 股东绑定的商业壁垒</strong>。R7 世界模型和 BMC7X 芯片是两个"期货"——赌对了是第二增长曲线，赌错了是成本沉没。
+  </blockquote>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 交叉验证标准：每个技术断言需至少 2 个独立来源 &nbsp;·&nbsp; 未验证的技术宣称已明确标注<br>
+  主要来源：Momenta 官方技术页面（momenta.cn/technology.html）、R7 发布会官方新闻、DoNews 2026.04.09 专栏（刘亮）、arXiv 2401.08658、Momenta 百度百科（夏炎 R7 三层架构）、招股书摘要（财经媒体）
+</footer>
+
+</div>
+</body>
+</html>
