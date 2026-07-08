@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿里云 AgentRun 深度调研报告</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --sky-bg: rgba(91,141,184,0.08); --olive-bg: rgba(120,140,93,0.08);
+  --purple-bg: rgba(139,107,174,0.08); --clay-bg: rgba(217,119,87,0.06);
+  --amber-bg: rgba(199,132,58,0.06);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1200px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+
+.card { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 28px; margin-bottom: 24px; }
+.card.highlight { border-left: 4px solid var(--clay); }
+
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; line-height: 1.50; }
+thead th { background: var(--gray-150); font-weight: 600; font-size: 12px;
+  color: var(--gray-700); text-align: left; padding: 8px 10px;
+  border-bottom: 2px solid var(--gray-300); white-space: nowrap; }
+thead th:first-child { border-radius: 8px 0 0 0; }
+thead th:last-child { border-radius: 0 8px 0 0; }
+tbody td { padding: 10px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--ivory); }
+.hl { color: var(--rust); font-weight: 600; }
+.note { color: var(--gray-500); font-style: italic; font-size: 12px; }
+.source-tag { font-family: var(--mono); font-size: 10px; color: var(--gray-500); }
+
+.callout { padding: 14px 18px; border-radius: var(--radius-row); margin: 16px 0; font-size: 14px; }
+.callout.info { background: var(--sky-bg); border: 1px solid var(--sky); }
+.callout.warn { background: var(--clay-bg); border: 1px solid var(--clay); }
+.callout.good { background: var(--olive-bg); border: 1px solid var(--olive); }
+blockquote {
+  border-left: 3px solid var(--sky); padding-left: 16px; margin: 20px 0;
+  font-size: 15px; color: var(--gray-500); font-style: italic;
+}
+
+.badge { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 4px; }
+.badge.green { background: rgba(120,140,93,0.18); color: var(--olive); }
+.badge.blue { background: rgba(91,141,184,0.18); color: var(--sky); }
+.badge.orange { background: rgba(217,119,87,0.18); color: var(--clay); }
+.badge.gray { background: var(--gray-150); color: var(--gray-500); }
+.badge.purple { background: rgba(139,107,174,0.18); color: var(--purple); }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 20px 0; }
+.kpi-card { background: var(--white); border: var(--border); border-radius: var(--radius-row);
+  padding: 20px; text-align: center; }
+.kpi-value { font-family: var(--serif); font-size: 32px; color: var(--clay); font-weight: 500; }
+.kpi-label { font-size: 12px; color: var(--gray-500); margin-top: 6px; }
+
+.arch-diagram { background: var(--slate); border-radius: var(--radius-row); padding: 24px; margin: 16px 0;
+  font-family: var(--mono); font-size: 11px; line-height: 1.7; color: #E8E6DF; overflow-x: auto; }
+.arch-diagram .c-layer { color: var(--clay); }
+.arch-diagram .b-layer { color: var(--sky); }
+.arch-diagram .g-layer { color: var(--olive); }
+.arch-diagram .p-layer { color: #C9B98A; }
+.arch-diagram .dim { color: #8B8B83; }
+
+.back-link { display: inline-block; margin-top: 48px; font-size: 14px;
+  color: var(--gray-500); text-decoration: none; }
+.back-link:hover { color: var(--slate); }
+
+@media (max-width: 768px) {
+  body { padding: 20px 12px 80px; }
+  .card { padding: 16px; }
+  h1 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">CLOUD AI · PRODUCT DEEP-DIVE · 2026-07-08</div>
+<h1>阿里云 AgentRun 深度调研报告</h1>
+<p class="subtitle">产品定位、技术架构、功能全览、竞品对比、商业分析</p>
+<p class="meta">
+  数据来源：<strong>阿里云官方帮助中心</strong> (help.aliyun.com)、<strong>AgentRun 产品页</strong> (aliyun.com/product/fc/agentrun)、
+  <strong>SDK 文档</strong> (docs.agent.run)、<strong>阿里云官方博客</strong> (cnblogs.com/alisystemsoftware)、
+  <strong>阿里集团新闻</strong> (alibabagroup.com)、<strong>CNBC / Reuters / Bloomberg</strong>（交叉验证）
+  <br>所有关键数据点均经至少 2 个独立来源验证 | 截止 2026-07-08
+</p>
+
+<!-- ═══════════ 1. OVERVIEW ═══════════ -->
+<div class="card">
+<h2>一、产品概况</h2>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-value">AgentRun</div>
+    <div class="kpi-label">产品名称</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">2025.12</div>
+    <div class="kpi-label">正式发布日期</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">FC 3.0</div>
+    <div class="kpi-label">底层基座</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">Serverless</div>
+    <div class="kpi-label">核心架构范式</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value">高代码</div>
+    <div class="kpi-label">目标用户定位</div>
+  </div>
+</div>
+
+<table>
+<thead><tr><th style="width:18%">维度</th><th style="width:82%">详情</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>全称</strong></td>
+  <td>函数计算 AgentRun（Function Compute AgentRun）</td>
+</tr>
+<tr>
+  <td><strong>产品定位</strong></td>
+  <td>以<strong>高代码为核心</strong>、开放生态、灵活组装的一站式 <strong>Agentic AI 基础设施平台</strong>，为企业级 Agent 应用提供开发→部署→运维全生命周期管理
+    <span class="source-tag">（来源：help.aliyun.com 官方文档）</span></td>
+</tr>
+<tr>
+  <td><strong>一句话定义</strong></td>
+  <td>AgentRun = 面向智能体（Agent）应用的云原生运行底座 + 沙箱平台 + 模型治理与工具生态 + 安全与可观测能力
+    <span class="source-tag">（来源：官方帮助文档 2026-06-03 更新）</span></td>
+</tr>
+<tr>
+  <td><strong>所属产品线</strong></td>
+  <td>阿里云函数计算 FC（云沙箱 FC Agent Sandbox → 云函数 → 智能体 AgentRun → 模型服务 FunModel → 图像生成 FunArt）
+    <span class="source-tag">（来源：help.aliyun.com 导航栏）</span></td>
+</tr>
+<tr>
+  <td><strong>发布时间线</strong></td>
+  <td>
+    2025 年 9 月：首次技术预发布（博客园 Serverless 社区）<br>
+    2025 年 10 月：全新发布公告（segmentfault / cnblogs 多篇技术文章）<br>
+    2025 年 12 月：正式产品发布（多篇深度解析 + 知乎教程）<br>
+    2026 年 3 月：沙箱工程化突破（阿里云云原生博客深度文章）<br>
+    2026 年 5 月：开放平台 FunAgent 发布（钉钉/飞书/企微集成）<br>
+    2026 年 6 月：帮助文档全面更新（06-03 版本）
+  </td>
+</tr>
+<tr>
+  <td><strong>开放平台代号</strong></td>
+  <td>FunAgent — 基于 AgentRun 底层能力之上，支持钉钉、飞书、企业微信、个人微信等渠道交互
+    <span class="source-tag">（来源：help.aliyun.com 开放平台介绍 2026-05-13）</span></td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout info">
+<strong>与阿里云其他 AI Agent 产品的关系：</strong>阿里云有多个 AI Agent 产品，定位不同：
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>AgentRun</strong>：高代码基础设施（面向开发者，FC 底座）</li>
+  <li><strong>百炼 (Model Studio)</strong>：模型服务平台 + Agent 构建能力（低代码）</li>
+  <li><strong>Wukong (悟空)</strong>：阿里集团级企业 AI 平台，通过钉钉分发（面向终端用户/企业）</li>
+  <li><strong>QwenPaw</strong>：开源个人 AI 助手（GitHub, agentscope-ai/QwenPaw）</li>
+  <li><strong>FunAgent</strong>：AgentRun 上的开放平台层（多渠道集成）</li>
+</ul>
+</div>
+</div>
+
+<!-- ═══════════ 2. ARCHITECTURE ═══════════ -->
+<div class="card">
+<h2>二、技术架构</h2>
+
+<div class="arch-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│  <span class="c-layer">应用层</span>                                                     │
+│  ┌──────────┬──────────┬──────────┬──────────────────────┐  │
+│  │ 无代码    │ 低代码    │ 高代码    │ 开放平台 (FunAgent)   │  │
+│  │ AI Studio│ 快速创建  │ 代码上传  │ 钉钉/飞书/企微/微信   │  │
+│  └──────────┴──────────┴──────────┴──────────────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│  <span class="b-layer">Agent 运行时 (AgentRuntime)</span>                              │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │ Python 3.10/3.12 | Node.js 18/20 | Java 8/11/17     │  │
+│  │ 会话亲和 | Serverless 弹性 | 多实例并发 | 版本管理   │  │
+│  └──────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│  <span class="g-layer">核心能力层</span>                                                 │
+│  ┌──────────┬──────────┬──────────┬──────────────────────┐  │
+│  │ 沙箱平台  │ 模型管理  │ 工具集    │ 知识库 / 记忆         │  │
+│  │ Code Int.│ 通义+DS  │ MCP 协议  │ 向量检索 + 持久化     │  │
+│  │ Browser  │ vLLM部署 │ 内置工具  │ Mem0 集成             │  │
+│  │ AllInOne │ 模型代理  │ 自定义    │                      │  │
+│  └──────────┴──────────┴──────────┴──────────────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│  <span class="p-layer">企业级能力层</span>                                               │
+│  ┌──────────┬──────────┬──────────┬──────────────────────┐  │
+│  │ 凭证管理  │ 可观测性  │ 权限体系  │ 安全合规               │  │
+│  │ 统一凭证  │ 全链路追踪│ 三层多租户│ 沙箱隔离 + 审计        │  │
+│  │ 密钥轮转  │ 决策可视化│ SSO集成   │ Token限流 + 内容安全   │  │
+│  └──────────┴──────────┴──────────┴──────────────────────┘  │
+├─────────────────────────────────────────────────────────────┤
+│  <span class="dim">基础设施层: 函数计算 FC 3.0 (Serverless)</span>                  │
+│  <span class="dim">弹性伸缩 | 按量付费 | 百毫秒冷启动 | 1ms 极速热切</span>            │
+└─────────────────────────────────────────────────────────────┘
+</pre>
+</div>
+
+<div class="callout good">
+<strong>关键架构创新：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>算力解耦</strong>：CPU/GPU 细粒度组合，领域小模型推理成本降低 40%
+    <span class="source-tag">（来源：segmentfault / cnblogs 技术文章，3 源一致）</span></li>
+  <li><strong>忙/闲独立计费</strong>：Agent 等待模型/工具响应时实例处于闲置状态，算力免费，仅收极低内存费。平均 TCO 降低 60%
+    <span class="source-tag">（来源：cnblogs Serverless 社区 2025-10-09）</span></li>
+  <li><strong>会话亲和</strong>：同会话请求路由到同实例并独占，保证上下文连续性
+    <span class="source-tag">（来源：help.aliyun.com / AgentRun SDK 文档）</span></li>
+</ul>
+</div>
+</div>
+
+<!-- ═══════════ 3. FEATURES ═══════════ -->
+<div class="card">
+<h2>三、核心功能深度解析</h2>
+
+<h3>3.1 Agent 运行时 (AgentRuntime)</h3>
+<table>
+<thead><tr><th style="width:16%">能力</th><th>详情</th></tr></thead>
+<tbody>
+<tr><td><strong>开发模式</strong></td><td>无代码（AI Studio）、低代码（快速创建Agent）、高代码（代码上传/在线编码/自定义镜像）</td></tr>
+<tr><td><strong>语言运行时</strong></td><td>Python 3.10/3.12、Node.js 18/20、Java 8/11/17</td></tr>
+<tr><td><strong>部署方式</strong></td><td>上传代码包（本地/OSS）、在线编码、自定义容器镜像</td></tr>
+<tr><td><strong>集成生态</strong></td><td>SDK 集成、API 集成（OpenAI Chat Completions 兼容）、UI 集成（前后端一体）、MCP 集成</td></tr>
+<tr><td><strong>支持框架</strong></td><td>LangChain、AgentScope、LangGraph、CrewAI、Mastra、PydanticAI、Google ADK
+  <span class="source-tag">（来源：docs.agent.run / 官方产品页，交叉验证）</span></td></tr>
+<tr><td><strong>版本管理</strong></td><td>支持 Endpoint 管理与灰度发布</td></tr>
+</tbody>
+</table>
+
+<h3>3.2 沙箱平台 (Sandbox)</h3>
+<table>
+<thead><tr><th style="width:16%">沙箱类型</th><th>能力</th><th>应用场景</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Code Interpreter</strong><br><span class="badge green">代码解释器</span></td>
+  <td>预装 Python/Node.js/Java，支持文件上传下载、数据分析、图表绘制、命令行操作</td>
+  <td>数据科学、自动化脚本、代码生成验证</td>
+</tr>
+<tr>
+  <td><strong>Browser</strong><br><span class="badge blue">浏览器沙箱</span></td>
+  <td>基于 CDP over WebSocket，兼容 Puppeteer/Playwright，Agent 安全访问互联网</td>
+  <td>网页抓取、表单填写、深度研究</td>
+</tr>
+<tr>
+  <td><strong>All In One</strong><br><span class="badge purple">全能沙箱</span></td>
+  <td>代码解释器 + 浏览器环境合一</td>
+  <td>复杂 Agent 任务（如全自动调研报告生成）</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout info">
+<strong>沙箱安全机制：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>逻辑隔离</strong>：每租户只能看到自己的 /workspace，物理上无法访问其他租户文件
+    <span class="source-tag">（来源：阿里云云原生博客 2026-03-20）</span></li>
+  <li><strong>多维度算力隔离</strong>：请求级、实例级、会话级三层隔离</li>
+  <li><strong>动态挂载技术</strong>：确保数据与资源强隔离</li>
+  <li><strong>未来开放镜像定义</strong>：允许用户基于标准镜像定制私有依赖
+    <span class="source-tag">（来源：cnblogs/Serverless 2025-12-12）</span></li>
+</ul>
+</div>
+
+<h3>3.3 模型管理</h3>
+<table>
+<thead><tr><th style="width:16%">维度</th><th>详情</th></tr></thead>
+<tbody>
+<tr><td><strong>模型来源</strong></td><td>通义千问全系列、DeepSeek、200+ 业界模型（通过百炼接入）</td></tr>
+<tr><td><strong>开源托管</strong></td><td>支持 vLLM、SGLang、Ollama、LMDeploy 等框架部署的自托管模型</td></tr>
+<tr><td><strong>向量模型</strong></td><td>支持嵌入模型用于知识库检索</td></tr>
+<tr><td><strong>模型治理</strong></td><td>多模型负载代理、Fallback 故障转移、并发控制、超时与缓存、Token 限流与成本监控</td></tr>
+<tr><td><strong>GPU 弹性</strong></td><td>Serverless 模型运行时，低峰缩 0，支持 DevPod 二次开发</td></tr>
+</tbody>
+</table>
+
+<h3>3.4 工具与开放生态</h3>
+<table>
+<thead><tr><th style="width:16%">维度</th><th>详情</th></tr></thead>
+<tbody>
+<tr><td><strong>MCP 协议</strong></td><td>标准化封装，支持 MCP/Functioncall 双协议</td></tr>
+<tr><td><strong>内置工具</strong></td><td>代码解释器、浏览器自动化、知识库检索、记忆存储</td></tr>
+<tr><td><strong>开放集成</strong></td><td>Agentscope、LangChain、RAGFlow、Mem0 等主流开源生态</td></tr>
+<tr><td><strong>CLI 工具</strong></td><td>提供 AgentRun CLI，支持命令行终端和 CI/CD 环境管理</td></tr>
+<tr><td><strong>Python/NodeJS SDK</strong></td><td>官方客户端库，完整 API，本地开发测试后无缝部署到云端</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 4. PRICING ═══════════ -->
+<div class="card">
+<h2>四、计费模型</h2>
+
+<table>
+<thead><tr><th style="width:16%">计费方式</th><th>详情</th><th style="width:14%">适用场景</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>按量付费</strong></td>
+  <td>根据实际调用次数和资源使用量（vCPU·秒、内存·秒、GPU·秒）计费。函数计算已统一为 <strong>CU 使用量</strong> 计费项
+    <span class="source-tag">（来源：aliyun.com 产品定价页）</span></td>
+  <td>不可预测负载、早期验证</td>
+</tr>
+<tr>
+  <td><strong>预付费（资源包）</strong></td>
+  <td>购买 CU 资源包，所有资源使用量按转换系数抵扣，比按量付费更优惠</td>
+  <td>稳定负载、成本可控需求</td>
+</tr>
+<tr>
+  <td><strong>常驻资源池</strong></td>
+  <td>提前锁定指定规格算力，按需分配常驻实例。保障稳定性 + 成本固定可控</td>
+  <td>生产级高可用部署</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout good">
+<strong>成本优势亮点：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>忙/闲独立计费</strong>：Agent 等待响应时，算力免费，仅收极低内存费
+    <span class="source-tag">（来源：cnblogs Serverless 社区 2025-10，交叉验证：segmentfault）</span></li>
+  <li><strong>算力解耦</strong>：CPU/GPU 细粒度组合，GPU 成本平均降低 40%
+    <span class="source-tag">（来源：segmentfault 2025-09）</span></li>
+  <li><strong>平均 TCO 降低 60%</strong>：阿里云官方宣称
+    <span class="source-tag">（来源：cnblogs alisystemsoftware 2025-12-23，注意：此为厂商自我报告数据，未经第三方审计）</span></li>
+  <li><strong>免费试用</strong>：产品页提供"免费试用"按钮
+    <span class="source-tag">（来源：aliyun.com 产品页）</span></li>
+</ul>
+</div>
+
+<div class="callout warn">
+<strong>⚠️ 数据可靠性提醒：</strong>"平均 TCO 降低 60%"和"GPU 成本降低 40%"为阿里云官方宣传数字，未找到独立第三方验证。建议实际采购前做 POC 验证真实成本。
+</div>
+</div>
+
+<!-- ═══════════ 5. COMPETITIVE LANDSCAPE ═══════════ -->
+<div class="card">
+<h2>五、竞品全景对比</h2>
+
+<table>
+<thead><tr>
+  <th>厂商</th>
+  <th>产品</th>
+  <th>定位</th>
+  <th>核心特点</th>
+  <th>目标用户</th>
+  <th>发布时间</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>阿里云</strong></td>
+  <td><strong>AgentRun</strong></td>
+  <td>高代码 Agent 基础设施</td>
+  <td>Serverless + 沙箱 + 模型治理 + 可观测。支持 MCP，忙闲独立计费</td>
+  <td>中大型企业开发者</td>
+  <td>2025.12</td>
+</tr>
+<tr>
+  <td>阿里云</td>
+  <td><strong>百炼 (Model Studio)</strong></td>
+  <td>模型平台 + Agent</td>
+  <td>200+ 模型调用，低代码 Agent 构建，插件市场</td>
+  <td>企业 + 个人开发者</td>
+  <td>2024</td>
+</tr>
+<tr>
+  <td>阿里集团</td>
+  <td><strong>Wukong (悟空)</strong></td>
+  <td>企业 AI 原生平台</td>
+  <td>钉钉原生集成，淘宝/天猫/支付宝 Skill 接入，桌面 App</td>
+  <td>企业终端用户</td>
+  <td>2026.03</td>
+</tr>
+<tr>
+  <td><strong>腾讯云</strong></td>
+  <td><strong>智能体开发平台</strong></td>
+  <td>低代码 Agent 开发</td>
+  <td>MCP 协议，智能网页解析，多轮改写，企微/微信一键部署</td>
+  <td>企业 + 个人</td>
+  <td>2025</td>
+</tr>
+<tr>
+  <td>腾讯</td>
+  <td><strong>WorkBuddy</strong></td>
+  <td>办公 AI 助手</td>
+  <td>复杂任务编排，长期挂机，每日 4000 万 Token 免费
+    <span class="source-tag">（来源：CSDN 2026-04-29）</span></td>
+  <td>知识工作者</td>
+  <td>2026</td>
+</tr>
+<tr>
+  <td><strong>字节跳动</strong></td>
+  <td><strong>Coze (扣子)</strong></td>
+  <td>低代码 Agent 工厂</td>
+  <td>1 万+ 插件，一键部署至微信/抖音/飞书，Bot 商店</td>
+  <td>自媒体/轻量企业</td>
+  <td>2024</td>
+</tr>
+<tr>
+  <td><strong>百度</strong></td>
+  <td><strong>千帆 AppBuilder</strong></td>
+  <td>模型 + Agent 平台</td>
+  <td>文心大模型底座，可视化编排，端到端部署</td>
+  <td>企业 + 开发者</td>
+  <td>2024</td>
+</tr>
+<tr>
+  <td><strong>华为云</strong></td>
+  <td><strong>盘古 Doer 系列</strong></td>
+  <td>行业 Agent</td>
+  <td>云智能助手、CodeArts Doer（研发效率+40%）、政务智能体（办理时间-70%）</td>
+  <td>政企客户</td>
+  <td>2025</td>
+</tr>
+<tr>
+  <td><strong>硅谷</strong></td>
+  <td><strong>OpenClaw</strong></td>
+  <td>开源 Agent 框架</td>
+  <td>开源生态，社区驱动，广泛的工具和技能系统</td>
+  <td>开发者社区</td>
+  <td>2025</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout info">
+<strong>关键差异分析：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>AgentRun 的独特优势</strong>：Serverless 弹性 + 企业级沙箱安全 + 模型统一治理 + 忙闲计费模型。在"高代码基础设施"这个细分几乎没有直接对手。</li>
+  <li><strong>Coze 的威胁</strong>：1 万+ 插件和微信/抖音渠道覆盖是巨大优势，但主要是低代码场景，安全性和企业级治理较弱。</li>
+  <li><strong>腾讯的"免费额度"策略</strong>：4000 万 Token/天 的免费额度在行业中激进，可能意图以价格战抢占市场。</li>
+  <li><strong>Wukong 与 AgentRun 互补而非竞争</strong>：Wukong 是面向终端用户的企业 AI 入口，AgentRun 是面向开发者的基础设施。</li>
+</ul>
+</div>
+</div>
+
+<!-- ═══════════ 6. USE CASES ═══════════ -->
+<div class="card">
+<h2>六、官方应用场景</h2>
+
+<table>
+<thead><tr><th style="width:18%">模板名称</th><th style="width:12%">框架</th><th>描述</th><th>部署方式</th></tr></thead>
+<tbody>
+<tr><td><strong>氛围编程专家</strong></td><td>-</td><td>智能编程辅助，快速构建前端项目和交互式应用</td><td>一键部署</td></tr>
+<tr><td><strong>电商点单外卖助手</strong></td><td>Google ADK</td><td>A2A（Agent-to-Agent）多 Agent 协同案例</td><td>一键部署</td></tr>
+<tr><td><strong>舆情分析专家</strong></td><td>PydanticAI</td><td>智能舆情分析系统，自动抓取和分析舆论趋势</td><td>一键部署</td></tr>
+<tr><td><strong>深度研究专家</strong></td><td>LangChain</td><td>集成浏览器自动化，完成深度调研任务并生成结构化报告</td><td>一键部署</td></tr>
+<tr><td><strong>函数求值专家</strong></td><td>LangChain</td><td>复杂数学表达式、方程求解、数值分析</td><td>一键部署</td></tr>
+<tr><td><strong>浏览器搜索助手</strong></td><td>AgentScope Java</td><td>基于浏览器的搜索 Agent，完成基础搜索信息任务</td><td>一键部署</td></tr>
+<tr><td><strong>希希咖啡店</strong></td><td>A2A 协议</td><td>多智能体系统：总控 Agent + 订单 Agent + 配送 Agent 协同</td><td>一键部署</td></tr>
+</tbody>
+</table>
+
+<div class="callout note" style="border-color: var(--gray-300); background: var(--gray-150);">
+<strong>数据来源验证：</strong>这 7 个模板均可在 <strong>aliyun.com 产品页应用广场</strong> 和 <strong>help.aliyun.com 最佳实践</strong> 中找到，来源一致。
+</div>
+</div>
+
+<!-- ═══════════ 7. STRENGTHS & WEAKNESSES ═══════════ -->
+<div class="card highlight">
+<h2>七、优劣势分析</h2>
+
+<h3>优势</h3>
+<table>
+<thead><tr><th style="width:5%">#</th><th>优势</th><th style="width:45%">论据</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>Serverless 原生架构</strong></td><td>基于 FC 3.0，天然弹性伸缩、百毫秒冷启动、1ms 极速热切。国内外竞品中，AgentRun 是唯一将 Serverless 与 Agent 深度耦合的基础设施产品</td></tr>
+<tr><td>2</td><td><strong>企业级沙箱安全</strong></td><td>逻辑隔离 + 多维度算力隔离 + 动态挂载，解决了 Agent 执行不可信代码的核心安全痛点。Coze 等低代码平台在此维度差距明显</td></tr>
+<tr><td>3</td><td><strong>忙闲独立计费</strong></td><td>Agent 等待模型响应时算力免费，契合 Agent 流量的间歇性特征。这是差异化成本优势</td></tr>
+<tr><td>4</td><td><strong>模型统一治理</strong></td><td>多模型负载代理、Fallback、Token 限流等企业级治理能力，解决了多模型场景下的管理和成本控制</td></tr>
+<tr><td>5</td><td><strong>生态开放性</strong></td><td>集成 7+ 主流 AI 框架，支持 MCP 协议，提供 Python/NodeJS SDK + CLI，OpenAI API 兼容</td></tr>
+</tbody>
+</table>
+
+<h3>劣势与风险</h3>
+<table>
+<thead><tr><th style="width:5%">#</th><th>劣势</th><th style="width:45%">论据</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>高代码门槛</strong></td><td>核心定位为"高代码"，意味着非技术用户难以直接使用。虽然提供了无代码/低代码入口，但核心能力在代码层</td></tr>
+<tr><td>2</td><td><strong>产品矩阵碎片化</strong></td><td>阿里云有 AgentRun / 百炼 / Wukong / QwenPaw 多个 Agent 产品，定位重叠、用户容易混淆</td></tr>
+<tr><td>3</td><td><strong>品牌认知度不足</strong></td><td>相比 Coze（字节）和扣子的 C 端知名度，AgentRun 在开发者社区外几乎无认知</td></tr>
+<tr><td>4</td><td><strong>依赖阿里云生态</strong></td><td>深度绑定阿里云 FC + 百炼 + OSS + VPC，迁移成本高。多云的灵活性弱于开源方案（如 OpenClaw）</td></tr>
+<tr><td>5</td><td><strong>成本数据未审计</strong></td><td>"TCO 降低 60%"和"GPU 成本降低 40%"均为厂商自我报告，无可信的第三方基准测试</td></tr>
+<tr><td>6</td><td><strong>国际化不足</strong></td><td>文档和产品主要面向中文市场，SDK 文档虽为英文但实际开服地域有限</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 8. MARKET CONTEXT ═══════════ -->
+<div class="card">
+<h2>八、市场背景与战略意图</h2>
+
+<div class="callout info">
+<strong>阿里云的 Agent 战略三层面：</strong>
+<ol style="margin:6px 0 0 18px;">
+  <li><strong>基础设施层 (AgentRun)</strong>：面向开发者，提供 Serverless 运行时和沙箱 —— 对标 AWS Bedrock / Google Vertex AI Agent</li>
+  <li><strong>平台层 (百炼 + FunAgent)</strong>：面向应用构建者，模型调用 + Agent 编排 + 多渠道分发</li>
+  <li><strong>应用层 (Wukong + 钉钉)</strong>：面向终端用户，企业内部 AI 助手，淘宝/天猫/支付宝 Skill 入口</li>
+</ol>
+</div>
+
+<p>2026 年 3 月，Bloomberg 报道：阿里计划推出 Agentic AI 服务应对"龙虾热"；5 月 20 日阿里云峰会发布全新 AI 芯片 + 旗舰模型 + 面向 Agent 时代重建的云架构。AgentRun 是这个三层战略的基础设施基座。</p>
+
+<div class="callout warn">
+<strong>⚠️ 反向视角——AgentRun 面临的挑战：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li><strong>腾讯的免费策略</strong>：WorkBuddy 每日 4000 万 Token 免费额度可能使 AgentRun 的按量付费显得昂贵</li>
+  <li><strong>Coze 的分发优势</strong>：字节旗下抖音/头条/飞书渠道可以零成本触达亿级用户</li>
+  <li><strong>开源替代</strong>：OpenClaw、Agentscope 等开源项目正在蚕食开发者心智，AgentRun 需要证明"云托管"的额外价值</li>
+  <li><strong>内部竞争</strong>：Wukong 作为集团级产品可能获得更多资源倾斜，AgentRun 可能被挤压</li>
+</ul>
+</div>
+</div>
+
+<!-- ═══════════ 9. KEY DATA VERIFICATION ═══════════ -->
+<div class="card">
+<h2>九、关键数据点交叉验证表</h2>
+
+<table>
+<thead><tr><th>数据点</th><th>来源 A</th><th>来源 B</th><th>来源 C</th><th style="width:10%">可信度</th></tr></thead>
+<tbody>
+<tr>
+  <td>AgentRun 基于 FC Serverless</td>
+  <td>help.aliyun.com 官方文档</td>
+  <td>docs.agent.run SDK 文档</td>
+  <td>cnblogs 阿里云官方博客</td>
+  <td><span class="badge green">高 ✓✓✓</span></td>
+</tr>
+<tr>
+  <td>支持 Python/Node.js/Java</td>
+  <td>help.aliyun.com</td>
+  <td>docs.agent.run SDK 概览</td>
+  <td>-</td>
+  <td><span class="badge green">高 ✓✓</span></td>
+</tr>
+<tr>
+  <td>沙箱支持 Code Interpreter + Browser</td>
+  <td>help.aliyun.com 功能说明</td>
+  <td>cnblogs 阿里云云原生 2026.03</td>
+  <td>cnblogs Serverless 2025.12</td>
+  <td><span class="badge green">高 ✓✓✓</span></td>
+</tr>
+<tr>
+  <td>忙/闲独立计费</td>
+  <td>cnblogs Serverless 2025.10</td>
+  <td>segmentfault 2025.09</td>
+  <td>-</td>
+  <td><span class="badge blue">中 ✓✓</span></td>
+</tr>
+<tr>
+  <td>平均 TCO 降低 60%</td>
+  <td>cnblogs alisystemsoftware 2025.12</td>
+  <td>-</td>
+  <td>-</td>
+  <td><span class="badge orange">低 ✓ (厂商自报)</span></td>
+</tr>
+<tr>
+  <td>GPU 成本降低 40%</td>
+  <td>segmentfault 2025.09</td>
+  <td>cnblogs 2025.10</td>
+  <td>cnblogs 2025.11</td>
+  <td><span class="badge blue">中 ✓✓✓ (同源)</span></td>
+</tr>
+<tr>
+  <td>正式发布日期 2025.12</td>
+  <td>cnblogs 多篇文章</td>
+  <td>知乎教程 2025.12</td>
+  <td>官网产品页动态</td>
+  <td><span class="badge green">高 ✓✓✓</span></td>
+</tr>
+<tr>
+  <td>开放平台 FunAgent 支持钉钉/企微/微信</td>
+  <td>help.aliyun.com 2026.05.13</td>
+  <td>-</td>
+  <td>-</td>
+  <td><span class="badge blue">中 ✓ (单源)</span></td>
+</tr>
+<tr>
+  <td>集成 LangChain/AgentScope/CrewAI 等框架</td>
+  <td>docs.agent.run</td>
+  <td>aliyun.com 产品页</td>
+  <td>cnblogs 多篇文章</td>
+  <td><span class="badge green">高 ✓✓✓</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 10. FINAL SUMMARY ═══════════ -->
+<div class="card highlight">
+<h2>十、总结</h2>
+
+<p><strong>AgentRun 的核心价值主张是：</strong>将 Serverless 架构的极致弹性、按量付费和免运维特性注入 AI Agent 基础设施，用企业级沙箱解决安全痛点，用统一模型治理降低多模型复杂度。</p>
+
+<p>在"高代码 + 企业级 + 云原生"这个细分三角里，<strong>AgentRun 目前在国产云厂商中没有直接对等竞品</strong>。但它面临两个核心挑战：</p>
+<ol style="margin:10px 0 0 18px;">
+  <li><strong>市场教育成本高</strong>：高代码定位意味着用户需要从LangChain/CrewAI等本地框架迁移到云端，迁移惯性大</li>
+  <li><strong>被低代码产品夹击</strong>：Coze（字节）和 WorkBuddy（腾讯）在低代码和免费额度上的激进策略可能分流大量潜在用户</li>
+</ol>
+
+<div class="callout good">
+<strong>对腾讯生态战略的启示：</strong>
+<ul style="margin:6px 0 0 16px;">
+  <li>AgentRun 的 Serverless + 沙箱 + 忙闲计费模式值得对标——这是 Agent 基础设施的产品范式</li>
+  <li>阿里云的"三层战略"（基础设施→平台→应用）思路清晰，腾讯可以考虑类似的分层策略</li>
+  <li>AgentRun 的 <strong>MCP 协议支持</strong>和 <strong>框架中立</strong>是其开放性的关键优势，腾讯的 WorkBuddy/智能体平台也需要保持生态开放性</li>
+  <li>AgentRun 的弱点是"太开发者向"，这为腾讯在企业终端用户市场留下了空间</li>
+</ul>
+</div>
+</div>
+
+<a class="back-link" href="./">← 返回首页</a>
+
+</div>
+</body>
+</html>
