@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 · 第 42 期 · 2026-07-08</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+  .stat .delta { font-size: 0.75em; margin-top: 2px; }
+  .delta.up { color: var(--green); }
+  .delta.down { color: var(--red); }
+  .delta.flat { color: var(--text2); }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .progress-bar-bg { background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-bar { height: 100%; border-radius: 4px; min-width: 2px; }
+
+  .severity-high { color: var(--red); }
+  .severity-medium { color: var(--orange); }
+  .severity-low { color: var(--yellow); }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin: 1px;
+  }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-orange { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .insight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  .warn-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  .success-box {
+    background: rgba(63,185,80,0.08);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+
+  .guidance-suggestion {
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin: 8px 0;
+    font-size: 0.9em;
+  }
+  .guidance-suggestion.critical { background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.2); }
+  .guidance-suggestion.normal { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.15); }
+  .guidance-suggestion.neutral { background: rgba(139,148,158,0.08); border: 1px solid rgba(139,148,158,0.15); }
+
+  .paper-entry {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .paper-entry:last-child { border-bottom: none; }
+  .paper-title { font-weight: 600; color: var(--accent); }
+  .paper-authors { font-size: 0.85em; color: var(--text2); margin: 4px 0; }
+  .paper-summary { font-size: 0.88em; color: var(--text); line-height: 1.5; }
+  .paper-categories { margin-top: 6px; }
+  .paper-categories .tag { margin: 1px; }
+  .story-title { font-weight: 600; }
+  .story-meta { font-size: 0.82em; color: var(--text2); margin-top: 2px; }
+  .story-score { color: var(--yellow); font-weight: 600; }
+
+  .footer {
+    text-align: center;
+    color: var(--text2);
+    font-size: 0.8em;
+    padding: 30px 0 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 30px;
+  }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .flood-indicator {
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .pulse-red { background: var(--red); }
+  .pulse-green { background: var(--green); }
+  .pulse-yellow { background: var(--yellow); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">第 42 期 · 2026 年 07 月 08 日</div>
+  <span class="tag tag-purple period-badge">P42</span>
+</div>
+
+<!-- Quick Stats -->
+<div class="card">
+  <h2>📊 全景概览</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">32</div>
+      <div class="label">可用工具</div>
+      <div class="delta up">+2 ↑ 近期首次增长</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">66</div>
+      <div class="label">活跃技能</div>
+      <div class="delta flat">持平</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange)">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="delta flat">—</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">2</div>
+      <div class="label">活跃 Cron</div>
+      <div class="delta flat">持平</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red)">8,941</div>
+      <div class="label">日志总行数</div>
+      <div class="delta up" style="color:var(--orange)">逼近轮转阈值</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">弱点检出</div>
+      <div class="delta down" style="color:var(--text2)">碎片化盲区第 8 期</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--text2)">28</div>
+      <div class="label">非洪水基线<br>(末 500 行)</div>
+      <div class="delta flat">在 25-35 区间内</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">5</div>
+      <div class="label">arXiv 论文</div>
+      <div class="delta up">连续第 4 期成功<br>=历史纪录</div>
+    </div>
+  </div>
+</div>
+
+<!-- Capability Status -->
+<div class="card">
+  <h2>⚙️ 能力状态</h2>
+  <table>
+    <tr><th>维度</th><th>当前值</th><th>变化</th><th>详情</th></tr>
+    <tr>
+      <td>工具数</td>
+      <td><strong>32</strong></td>
+      <td><span class="tag tag-green">+2</span></td>
+      <td>新增 feishu_doc, feishu_drive, homeassistant, xai_video, yuanbao (净增 +2)</td>
+    </tr>
+    <tr>
+      <td>技能总数</td>
+      <td><strong>66</strong></td>
+      <td><span class="tag tag-blue">持平</span></td>
+      <td>0 stale, 0 archived, 3 agent-created</td>
+    </tr>
+    <tr>
+      <td>Memory</td>
+      <td><strong>37% / 16%</strong></td>
+      <td><span class="tag tag-blue">—</span></td>
+      <td>Memory: 816 chars / 3 entries · User: 231 chars / 4 entries</td>
+    </tr>
+    <tr>
+      <td>Cron Jobs</td>
+      <td><strong>2 活跃</strong></td>
+      <td><span class="tag tag-blue">持平</span></td>
+      <td>self-evolution-daily + a077650b277d</td>
+    </tr>
+  </table>
+
+  <div class="insight-box">
+    <strong>🔔 工具数量变化:</strong> 自 P25 以来首次突破 30 个工具的上限。新增工具包括飞书文档/网盘、Home Assistant、xAI 视频、元宝等。这反映出 MCP 和平台集成能力的扩展——新工具可能引入新的调用模式和安全边界。
+  </div>
+
+  <!-- Tool Categories -->
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">工具分类分布 (32 个)</h3>
+  <div style="display:flex; flex-wrap:wrap; gap:4px;">
+    <span class="tag tag-blue">browser_cdp</span>
+    <span class="tag tag-blue">browser_dialog</span>
+    <span class="tag tag-blue">browser</span>
+    <span class="tag tag-green">clarify</span>
+    <span class="tag tag-green">close_terminal</span>
+    <span class="tag tag-green">code_execution</span>
+    <span class="tag tag-purple">computer_use</span>
+    <span class="tag tag-orange">cronjobs</span>
+    <span class="tag tag-blue">delegate</span>
+    <span class="tag tag-orange">discord</span>
+    <span class="tag tag-green">feishu_doc</span>
+    <span class="tag tag-green">feishu_drive</span>
+    <span class="tag tag-blue">files</span>
+    <span class="tag tag-green">homeassistant</span>
+    <span class="tag tag-purple">image_generation</span>
+    <span class="tag tag-yellow">kanbans</span>
+    <span class="tag tag-orange">memory</span>
+    <span class="tag tag-orange">process_registry</span>
+    <span class="tag tag-yellow">projects</span>
+    <span class="tag tag-blue">read_terminal</span>
+    <span class="tag tag-blue">session_search</span>
+    <span class="tag tag-green">skill_manager</span>
+    <span class="tag tag-green">skills</span>
+    <span class="tag tag-blue">terminal</span>
+    <span class="tag tag-green">todo</span>
+    <span class="tag tag-orange">tts</span>
+    <span class="tag tag-purple">video_generation</span>
+    <span class="tag tag-purple">visions</span>
+    <span class="tag tag-blue">webs</span>
+    <span class="tag tag-blue">x_search</span>
+    <span class="tag tag-purple">xai_video</span>
+    <span class="tag tag-orange">yuanbao</span>
+  </div>
+</div>
+
+<!-- Weakness Alert -->
+<div class="card">
+  <h2>⚠️ 弱点警报</h2>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">弱点总数</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">HIGH</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange)">0</div>
+      <div class="label">MEDIUM</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">0</div>
+      <div class="label">LOW</div>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>⚠️ 碎片化盲区持续第 8 期:</strong> 弱点检出数为 0，但非洪水组件合计 28 条。tools.approval (13), api_server (10), tools.registry (6), cron.scheduler (1) 分散在多个签名下，无单一签名达到 pattern-matching 阈值。工具签名碎片化持续导致 weakness_scan 失明。
+  </div>
+
+  <!-- Component Distribution -->
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">组件分布 (末 500 行)</h3>
+  <table>
+    <tr><th>组件</th><th>条数</th><th>占比</th><th>趋势</th></tr>
+    <tr>
+      <td><span class="tag tag-red">gateway.run</span></td>
+      <td>472</td>
+      <td>94.4%</td>
+      <td><span class="flood-indicator"><span class="pulse-dot pulse-red"></span>洪水持续 · PID 3433647</span></td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">tools.approval</span></td>
+      <td>11</td>
+      <td>2.2%</td>
+      <td><span class="delta up" style="color:var(--orange)">新组件 ↑</span></td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">api_server</span></td>
+      <td>10</td>
+      <td>2.0%</td>
+      <td><span class="delta flat">步进变化确认</span></td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">tools.registry</span></td>
+      <td>6</td>
+      <td>1.2%</td>
+      <td><span class="delta flat">——</span></td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">cron.scheduler</span></td>
+      <td>1</td>
+      <td>0.2%</td>
+      <td><span class="delta flat">恒定</span></td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">全文件组件分布 (8,941 行)</h3>
+  <table>
+    <tr><th>组件</th><th>条数</th><th>占比</th></tr>
+    <tr><td>gateway.run</td><td>8,657</td><td>96.8%</td></tr>
+    <tr><td>api_server</td><td>180</td><td>2.0%</td></tr>
+    <tr><td>tools.approval</td><td>76</td><td>0.9%</td></tr>
+    <tr><td>tools.registry</td><td>8</td><td>0.1%</td></tr>
+    <tr><td>cron.scheduler</td><td>1</td><td>&lt;0.1%</td></tr>
+  </table>
+
+  <!-- Non-flood Baseline -->
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">非洪水基线评估</h3>
+  <table>
+    <tr><th>指标</th><th>P42</th><th>P41</th><th>基线区间</th><th>判定</th></tr>
+    <tr>
+      <td>非洪水条数 (末 500)</td>
+      <td><strong>28</strong></td>
+      <td>38</td>
+      <td>25-35</td>
+      <td><span class="tag tag-green">✅ 基线内</span></td>
+    </tr>
+    <tr>
+      <td>api_server (全文件)</td>
+      <td>180 (12/h)</td>
+      <td>~17</td>
+      <td>17±1</td>
+      <td><span class="tag tag-yellow">步进变化持续</span></td>
+    </tr>
+    <tr>
+      <td>tools.approval</td>
+      <td>76 条</td>
+      <td>—</td>
+      <td>新组件</td>
+      <td><span class="tag tag-orange">新错误源</span></td>
+    </tr>
+    <tr>
+      <td>gateway.run (07-08)</td>
+      <td>5,223 条 (~580/h)</td>
+      <td>—</td>
+      <td>洪水</td>
+      <td><span class="tag tag-red">96.8%</span></td>
+    </tr>
+  </table>
+
+  <div class="insight-box">
+    <strong>🔍 非洪水结构漂移:</strong> 与 P41 相比，非洪水组件构成发生显著变化——tool_executor (20 条) 和 conversation_loop 消失在窗口中，tools.approval (76 条) 成为新的主导非洪水源。这主要由 config.yaml 中 `approvals.mode: auto` 配置错误引起（无效值，默认回退 manual）。
+  </div>
+
+  <div class="warn-box">
+    <strong>🚨 日志轮转预警:</strong> 文件 8,941 行已逼近 ~9,500 行的轮转阈值。预计未来 1-2 期将触发 size-based 日志轮转。轮转后数据库基准重置 (N=1)，预测模型将进入短期校准期。
+  </div>
+
+  <!-- Recurring Errors -->
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">Top 错误签名</h3>
+  <table>
+    <tr><th>#</th><th>签名</th><th>条数</th><th>严重度</th></tr>
+    <tr>
+      <td>1</td>
+      <td>Another gateway instance is already running (PID 3433647)</td>
+      <td>472</td>
+      <td><span class="tag tag-red">洪水</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Unknown approvals.mode 'auto' — defaulting to 'manual'</td>
+      <td>11</td>
+      <td><span class="tag tag-yellow">低 (配置)</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>[Api_Server] Refusing to start: API_SERVER_KEY required</td>
+      <td>10</td>
+      <td><span class="tag tag-yellow">低 (配置)</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- Knowledge Feed -->
+<div class="card">
+  <h2>🔬 知识发现</h2>
+
+  <div class="success-box">
+    <strong>🎯 arXiv 连续第 4 期成功!</strong> 5 篇论文获取成功，追平 P10-P13 (4 期) 的历史纪录。整体成功率: 12/42 = 28.6% (历史新高)。
+  </div>
+
+  <h3 style="font-size:1em; margin-bottom:12px;">📄 arXiv 论文</h3>
+
+  <div class="paper-entry">
+    <div class="paper-title">From Fixed to Free Cameras: Calibration-Free View-Robust VLA</div>
+    <div class="paper-authors">Wenhao Li, Xueying Jiang, Quanhao Qian, Deli Zhao, Shijian Lu</div>
+    <div class="paper-summary">机器人 VLA 策略的视角鲁棒性——无需相机外参即可适应相机重新定位/安装。端到端自适应的思路对 Agent 系统有参考价值。</div>
+    <div class="paper-categories"><span class="tag tag-blue">cs.CV</span><span class="tag tag-blue">cs.AI</span><span class="tag tag-blue">cs.LG</span><span class="tag tag-blue">cs.RO</span></div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="paper-title">Weak-to-Strong Generalization via Direct On-Policy Distillation</div>
+    <div class="paper-authors">Shiyuan Feng, Huan-ang Gao, Haohan Chi, Hanlin Wu, Zhilong Zhang</div>
+    <div class="paper-summary">弱到强泛化新方法——在小模型上运行 RLVR 再蒸馏到强模型，降低后训练成本。对大规模模型后训练效率有直接参考意义。</div>
+    <div class="paper-categories"><span class="tag tag-blue">cs.LG</span><span class="tag tag-blue">cs.AI</span><span class="tag tag-blue">cs.CL</span></div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="paper-title">LLM-as-a-Verifier: A General-Purpose Verification Framework</div>
+    <div class="paper-authors">Jacky Kwok, Shulu Li, Pranav Atreya, Yuejiang Liu, Yixing Jiang</div>
+    <div class="paper-summary">将验证 (verification) 作为 LLM Agent 的新扩展轴——LLM-as-a-Verifier 提供细粒度反馈，无需额外训练。对 Agent 系统自我校验机制的设计有参考价值。</div>
+    <div class="paper-categories"><span class="tag tag-blue">cs.AI</span><span class="tag tag-blue">cs.CL</span><span class="tag tag-blue">cs.LG</span><span class="tag tag-blue">cs.MA</span><span class="tag tag-blue">cs.RO</span></div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="paper-title">Search Beyond What Can Be Taught: Evolving Knowledge Boundary in Agentic Visual Generation</div>
+    <div class="paper-authors">Haozhe Wang, Weijia Feng, Jinpeng Yu, Che Liu, Ping Nie</div>
+    <div class="paper-summary">视觉生成器的知识边界问题——构建 SearchGen-Bench (20,839 prompts, 12 类失败, 22 领域)。对搜索增强生成架构的设计有参考意义。</div>
+    <div class="paper-categories"><span class="tag tag-blue">cs.CV</span><span class="tag tag-blue">cs.AI</span></div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="paper-title">Interpretable Human-Label-Free Deep Learning for Real-Bogus Classification</div>
+    <div class="paper-authors">Raphaël Bonnet-Guerrini, Bruno Sanchez, Dominique Fouchez, Benjamin Racine, Maya Guy</div>
+    <div class="paper-summary">无需人工标注的天文瞬变候选分类框架——通过注入瞬变 + 不确定性量化实现。对无监督可靠性评估有参考意义。</div>
+    <div class="paper-categories"><span class="tag tag-blue">astro-ph.IM</span><span class="tag tag-blue">cs.AI</span><span class="tag tag-blue">cs.LG</span></div>
+  </div>
+
+  <h3 style="font-size:1em; margin:16px 0 12px;">🔥 Hacker News 热门</h3>
+
+  <div class="paper-entry">
+    <div class="story-title">🏆 StreetComplete: Fixing OpenStreetMap, one tiny quest at a time</div>
+    <div class="story-meta">👤 kls0e · ⭐ 682 · 💬 168</div>
+    <div class="paper-summary">街景级 OSM 编辑工具——把地图数据修复拆解为"微型任务"。对任务分解和众包系统设计有启发性。</div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="story-title">🔒 Chat Control 1.0 and 2.0 Explained</div>
+    <div class="story-meta">👤 gasull · ⭐ 418 · 💬 143</div>
+    <div class="paper-summary">欧盟聊天控制的隐私影响分析——消息扫描、加密后门等技术细节。</div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="story-title">🚗 Every new car sold in the EU must include a driver monitoring camera</div>
+    <div class="story-meta">👤 nickslaughter02 · ⭐ 401 · 💬 522</div>
+    <div class="paper-summary">欧盟强制驾驶员监控摄像头——引发关于隐私与安全的大量讨论 (522 条评论)。</div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="story-title">📚 30papers.com – Ilya's 30 essential ML papers, beginner friendly</div>
+    <div class="story-meta">👤 notmcrowley · ⭐ 339 · 💬 61</div>
+    <div class="paper-summary">Ilya Sutskever 推荐的 30 篇必读 ML 论文，以入门友好格式呈现。推荐用于知识库构建。</div>
+  </div>
+
+  <div class="paper-entry">
+    <div class="story-title">🗣️ Local, CPU-Friendly, High-Quality TTS: Kokoro</div>
+    <div class="story-meta">👤 speckx · ⭐ 274 · 💬 60</div>
+    <div class="paper-summary">本地 CPU 友好的高质量 TTS 引擎——可能替代现有 TTS 方案。</div>
+  </div>
+</div>
+
+<!-- Evolution Suggestions -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <div class="guidance-suggestion critical">
+    <strong>🔴 CRITICAL: 修复 approvals.mode 配置</strong><br>
+    tools.approval 贡献 76 条/期的 "Unknown approvals.mode 'auto'" 错误。修复：在 config.yaml 中将 <code>approvals.mode</code> 设为 <code>off</code> 或 <code>smart</code>（有效值：manual, smart, off）。消除后可减少非洪水基线约 8+/h 的噪声。
+  </div>
+
+  <div class="guidance-suggestion critical">
+    <strong>🔴 CRITICAL: PID 变更 & gateway.run 洪水持续</strong><br>
+    PID 从 2398093 变更为 3433647（gateway 进程被重新创建），但洪水根本原因未变——cron job 在已有 gateway 实例运行时重复尝试启动。修复：cron job 启动 gateway 前检查进程是否存在。
+  </div>
+
+  <div class="guidance-suggestion normal">
+    <strong>🟡 日志轮转防御: 文件 8,941 行逼近 </strong><br>
+    文件已接近 ~9,500 行的 threshold。建议在下一期前手动轮转或增加 size-based 阈值以避免在校准期丢失数据连续性。
+  </div>
+
+  <div class="guidance-suggestion neutral">
+    <strong>🔵 弱点扫描器升级: 签名聚合规则</strong><br>
+    连续第 8 期 weakness_scan 输出为 0，但非洪水组件存在可验证的错误。建议添加聚合规则——统计所有 exit_code=-1/配置错误的 tool_executor 错误总和，当聚合计数 >5 时产生一条弱点。建议同时添加 tools.approval 和 api_server 的配置错误检测规则。
+  </div>
+
+  <div class="guidance-suggestion normal">
+    <strong>🟢 weakness_scan.py 全文件扫描模式</strong><br>
+    添加周期性的全文件错误日志扫描参数化——在洪水淹没 500 行窗口时，自动提取非洪水组件的真实分布。
+  </div>
+</div>
+
+<!-- Trend -->
+<div class="card">
+  <h2>📈 趋势对比</h2>
+  <p style="color:var(--text2); margin-bottom:12px;">本期为 P42，与上期 P41 (2026-07-07) 对比（无线下参考文件，基于当期观测）</p>
+
+  <table>
+    <tr><th>指标</th><th>P42</th><th>P41</th><th>方向</th></tr>
+    <tr>
+      <td>工具数</td>
+      <td><strong>32</strong></td>
+      <td>30</td>
+      <td><span class="tag tag-green">+2 ↑</span></td>
+    </tr>
+    <tr>
+      <td>非洪水基线 (末 500)</td>
+      <td><strong>28</strong></td>
+      <td>38</td>
+      <td><span class="tag tag-green">回归基线 ↓</span></td>
+    </tr>
+    <tr>
+      <td>gateway.run 占比</td>
+      <td>96.8%</td>
+      <td>~93%</td>
+      <td><span class="tag tag-red">↑ 洪水加剧</span></td>
+    </tr>
+    <tr>
+      <td>api_server</td>
+      <td>180 条 (全文件)</td>
+      <td>~17 条</td>
+      <td><span class="tag tag-orange">跨日累积</span></td>
+    </tr>
+    <tr>
+      <td>弱点检出</td>
+      <td>0</td>
+      <td>0</td>
+      <td><span class="tag tag-yellow">盲区持续</span></td>
+    </tr>
+    <tr>
+      <td>arXiv 成功</td>
+      <td>✅ 5 篇</td>
+      <td>✅ 成功</td>
+      <td><span class="tag tag-green">连续 4 期 ✓</span></td>
+    </tr>
+    <tr>
+      <td>tool_executor</td>
+      <td>0 (窗口被替换)</td>
+      <td>20</td>
+      <td><span class="tag tag-yellow">被 tools.approval 取代</span></td>
+    </tr>
+    <tr>
+      <td>conversation_loop</td>
+      <td>0</td>
+      <td>~10</td>
+      <td><span class="tag tag-green">窗口消失 ↓</span></td>
+    </tr>
+    <tr>
+      <td>日志文件大小</td>
+      <td>8,941 行</td>
+      <td>~6,000</td>
+      <td><span class="tag tag-red">↑ 逼近轮转</span></td>
+    </tr>
+  </table>
+
+  <div class="insight-box">
+    <strong>📊 结构性变化:</strong> P42 出现两重要结构变化：<br>
+    (1) <strong>工具数从 30→32</strong>——是 P25 以来首次变动，反映平台集成能力扩展<br>
+    (2) <strong>tools.approval 作为新非洪水组件出现</strong>——取代 tool_executor 在非洪水基线中的主导地位。非洪水结构从 tool_executor 主导 (P41) 转为 tools.approval + api_server 双主导 (P42)
+  </div>
+
+  <!-- Log Data Details -->
+  <h3 style="font-size:1em; color:var(--text2); margin-top:16px;">日志产出时序</h3>
+  <table>
+    <tr><th>日期</th><th>总行数</th><th>非洪水行数</th><th>每日占比</th></tr>
+    <tr><td>2026-07-07</td><td>3,515</td><td>72</td><td>2.0%</td></tr>
+    <tr><td>2026-07-08</td><td>5,426</td><td>213</td><td>3.9%</td></tr>
+  </table>
+  <p style="font-size:0.85em; color:var(--text2); margin-top:4px;">07-08 数据截至 09:00 CST (~9h)，非洪水中的 tools.approval (76) 是新出现的最大非洪水源。</p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>🧬 Hermes Self-Evolution · P42 · 2026-07-08 09:00 CST</p>
+  <p>Generated by Self-Evolution System (~/.hermes/profiles/reviewer/skills/self-evolution)</p>
+  <p style="margin-top:8px; font-size:0.75em; color:var(--text2);">
+    数据源: self_scan.py · weakness_scan.py · knowledge_ingest.py (arXiv + HN)
+  </p>
+</div>
+
+</div>
+</body>
+</html>
