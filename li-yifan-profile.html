@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>李一帆：The Builder CEO</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:940px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:32px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .subtitle { font-family:var(--serif); font-size:20px; color:var(--clay); font-weight:500; margin-top:6px; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.verified { background:rgba(120,140,93,.15); color:var(--olive); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  section { margin-bottom:52px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:24px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.olive { border-left:4px solid var(--olive); }
+  .stat-num { font-family:var(--serif); font-size:32px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:12px 16px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:13px 16px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.sky { background:rgba(91,139,160,.06); border-left-color:var(--sky); }
+  .callout.purple { background:rgba(139,107,158,.06); border-left-color:var(--purple); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:0 0 8px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+
+  blockquote { font-family:var(--serif); font-size:18px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:20px 0; letter-spacing:-.005em; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band, .grid-3 { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    h1 { font-size:26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>李一帆 (David Li)</h1>
+  </div>
+  <p class="subtitle">The Builder CEO</p>
+  <p class="eyebrow">人物档案 · 2026-07-08</p>
+  <div class="meta">
+    来源：UIUC MechSE、MIT Technology Review、WEF、Milken Institute、Crunchbase、LinkedIn、arXiv、36氪、新浪财经
+  </div>
+  <p class="lead">李一帆是中国科技创业者中最罕见的类型——一个<strong>拿到了 UIUC 机器人学博士、在纳斯达克敲过钟、管着全球激光雷达市占率 50% 的上市公司</strong>，但至今仍在以第一作者身份发学术论文（arXiv 2504.03253，2025年4月）、在 LinkedIn 上炫耀自己做的超低功耗戒指。<strong>他不是"转型做管理"的技术人——他从未停止做一个 Builder。</strong></p>
+</section>
+
+<!-- KPI -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card olive">
+      <div class="stat-num">2013</div>
+      <div class="stat-label">UIUC 机器人学 PhD</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">2014</div>
+      <div class="stat-label">创立禾赛 · 仅隔 1 年</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">2023</div>
+      <div class="stat-label">Nasdaq 上市 HSAI</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">50%</div>
+      <div class="stat-label">全球激光雷达市占率</div>
+    </div>
+  </div>
+</section>
+
+<!-- 一、履历 -->
+<section>
+  <h2>一、履历全貌</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:60px">阶段</th><th style="width:100px">时间</th><th>事件</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="pill purple">教育</span></td><td>2007</td>
+        <td><strong>清华大学</strong>，机械工程学士</td>
+        <td>WEF、UIUC</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">教育</span></td><td>2009</td>
+        <td><strong>UIUC 机械工程硕士</strong> (MSME)，研究方向：人类辅助设备测试平台</td>
+        <td>UIUC Human Dynamics Lab</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">教育</span></td><td>2013</td>
+        <td><strong>UIUC 机器人学博士</strong> (PhD ME)，导师 <strong>Elizabeth Hsiao-Wecksler</strong> 教授</td>
+        <td>UIUC MechSE 官方公告</td>
+      </tr>
+      <tr>
+        <td><span class="pill sky">职业</span></td><td>2013.8 — 2014.10</td>
+        <td><strong>Western Digital</strong>（硅谷），<strong>Principal Engineer</strong>（主任工程师）。期间认识到 3D 传感器对机器人的重要性</td>
+        <td>禾赛管理层页面、MIT TR35</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">创业</span></td><td>2013</td>
+        <td>在硅谷圣何塞与向少卿、孙恺相识，"在一次聊天中"决定创立一家 billion dollar company</td>
+        <td>新浪财经</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">创业</span></td><td>2014.10</td>
+        <td><strong>禾赛科技</strong>正式成立（上海），任 CEO & 董事长。博士毕业仅 1 年</td>
+        <td>Wikipedia、禾赛官网</td>
+      </tr>
+      <tr>
+        <td><span class="pill olive">里程碑</span></td><td>2023.2</td>
+        <td>禾赛在 <strong>Nasdaq 上市</strong>（HSAI），成为"中国激光雷达第一股"</td>
+        <td>SEC 文件</td>
+      </tr>
+      <tr>
+        <td><span class="pill olive">里程碑</span></td><td>2024</td>
+        <td>年出货 160 万颗，<strong>全球首家全年盈利的激光雷达公司</strong>，全球市占率超 40%</td>
+        <td>极客公园</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">学界</span></td><td>2025.4</td>
+        <td>以第一作者在 arXiv 发表 <strong>picoRing</strong> 论文——超低功耗戒指鼠标，单次充电续航 <strong>600-1000 小时</strong></td>
+        <td>arXiv 2504.03253</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">二次创业</span></td><td>2024底</td>
+        <td>联合创立 <strong>Sharpa</strong>（通用机器人+灵巧手），任联合创始人</td>
+        <td>晚点Auto</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout sky">
+    <strong>⚠ 信息缺口：</strong>禾赛创立初期的具体产品方向（是否从气体检测激光传感器起步）未在本轮调研中获取到独立可验证的详细资料。已知的是李一帆在 WD 期间"recognized the growing importance of 3D sensors for robotics"（MIT TR35），这直接导向了激光雷达方向。
+  </div>
+</section>
+
+<!-- 二、三人组角色 -->
+<section>
+  <h2>二、三人组的角色分工——李一帆的生态位</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>创始人</th><th>核心标签</th><th>在公司做的事</th><th>个人特质</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>李一帆</strong><br>CEO</td>
+        <td><span class="pill clay">The Builder CEO</span></td>
+        <td>战略方向、融资、市场、上市路演、公共形象（WEF/Milken/TR35）</td>
+        <td>至今亲手做硬件（picoRing），LinkedIn self-description 是 "I enjoy building things, especially things that move on its own"——这不是 PR 话术，有 arXiv 论文为证</td>
+      </tr>
+      <tr>
+        <td><strong>向少卿</strong><br>CTO</td>
+        <td><span class="pill purple">The Product Architect</span></td>
+        <td>硬件架构、精密机电系统、产品定义</td>
+        <td>清华精密仪器第一名，斯坦福，Apple 产品架构师——定义"什么是好产品"</td>
+      </tr>
+      <tr>
+        <td><strong>孙恺</strong><br>Chief Scientist</td>
+        <td><span class="pill sky">The Physicist</span></td>
+        <td>技术奠基、芯片/光学/算法路线</td>
+        <td>斯坦福机械工程博士+电子工程辅修——从第一性原理出发设计技术路线</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>李一帆与向少卿的对比——为什么这个 CEO 不一样：</strong><br><br>
+    典型的硬科技 CEO 有两种：<strong>① 技术出身但上岸后只做管理</strong>（如大部分自动驾驶公司 CEO）或 <strong>② 纯商业背景、靠融资驱动</strong>。<br><br>
+    李一帆是第三种：<strong>他从未离开实验室。</strong>2025 年 4 月——禾赛已经上市两年、年出货 160 万颗、全球市占率 50%——他居然以第一作者身份在 arXiv 发了一篇关于戒指鼠标的论文（picoRing: Ultra-low-power ring-based wireless tinymouse, arXiv 2504.03253）。这篇论文的工程细节之深（820μW 功耗、5g 重量、1000 小时续航、拇指对食指的微手势交互），表明这不是挂名——是亲手做的。<br><br>
+    这种"CEO 还在写论文"的现象在全球科技公司中极为罕见。最接近的类比可能是 <strong>马斯克也深度参与工程</strong>，但马斯克不发学术论文。李一帆保留了学术界的可验证性传统——他把成果写成论文让同行评审。
+  </div>
+</section>
+
+<!-- 三、战略决策 -->
+<section>
+  <h2>三、三个关键战略决策</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">决策 1 · 2015-2017</div>
+      <h3>从 Robotaxi 机械式切入</h3>
+      <p style="font-size:13px;margin:0;">禾赛第一款成功的产品是 <strong>Pandar40/64 机械式激光雷达</strong>，面向 L4 Robotaxi 市场。凭借性能和可靠性，迅速拿下全球 70%+ Robotaxi 份额。这个决策的关键洞察：<strong>先做最难的高端产品建立技术壁垒，再向下沉。</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">决策 2 · 2021</div>
+      <h3>转向 ADAS 前装量产</h3>
+      <p style="font-size:13px;margin:0;">在 L4 Robotaxi 商业化进程慢于预期时，果断将重心转向 L2+/L3 ADAS 市场。发布 <strong>AT 系列</strong>——用自研芯片将高线数激光雷达价格从"科研设备"打到"平民化"。这个 pivot 让禾赛从年出货几千颗跃升到百万颗级。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">决策 3 · 2024-2026</div>
+      <h3>升维到 Physical AI 基础设施</h3>
+      <p style="font-size:13px;margin:0;">在 ADAS 做到全球第一后，不是躺平收割利润，而是：毕加索 6D 芯片、ETX 4320 线、Kosmo 空间智能、机器人动力模组、Sharpa 通用机器人。<strong>从"卖传感器"到"提供 Physical AI 全栈基础设施"</strong>。</p>
+    </div>
+  </div>
+
+  <div class="callout olive">
+    <strong>战略演化的内在逻辑：</strong><br>
+    李一帆的每一步都不是"追风口"，而是<strong>顺着同一技术栈的自然延伸</strong>。激光雷达做到了全球第一→发现"只发挥了 5%"→同一套精密机电能力可以做机器人动力模组→同一支团队可以做灵巧手（Sharpa）。这不是多元化，是<strong>技术栈的纵深挖掘</strong>。
+  </div>
+</section>
+
+<!-- 四、picoRing -->
+<section>
+  <h2>四、picoRing：理解李一帆的钥匙</h2>
+  <hr class="rule">
+
+  <p>如果你只看禾赛的公开报道，你会觉得李一帆是一个"典型的成功 CEO"——UIUC 博士、Nasdaq 上市、WEF 青年领袖、MIT TR35。但这些标签下藏着一个完全不同的人。</p>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">picoRing 是什么</div>
+      <h3>超低功耗戒指鼠标</h3>
+      <p style="font-size:13px;margin:0;">一枚重 5g 的戒指，通过拇指对食指的微手势实现无线鼠标功能。功耗仅 <strong>820μW</strong>，单次充电续航 <strong>600-1000 小时</strong>（约 1-3 个月日常使用）。2025 年发表在 UIST 顶会，arXiv 有预印本。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">为什么重要</div>
+      <h3>证明他不是"转型管理者"</h3>
+      <p style="font-size:13px;margin:0;">一个管理 2000+ 人、市值数百亿的上市公司 CEO，在 2025 年以第一作者身份发硬件论文。这件事的意义不在于论文本身——在于它证明了李一帆的 <strong>Builder 身份从未中断</strong>。</p>
+    </div>
+  </div>
+
+  <blockquote>
+    "In reality, I enjoy building things, especially things that move on its own, from the most critical sensors on a self-driving car (LiDAR), to a mechatronic diamond that senses motion and opens..."<br>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--gray-500);display:block;margin-top:8px;">—— 李一帆 LinkedIn 个人简介</span>
+  </blockquote>
+
+  <p>这句话里的 <strong>"mechatronic diamond that senses motion and opens"</strong> 指的是一个可以感知运动并自动打开的机械钻石——一个介于珠宝和机电艺术品之间的个人项目。从激光雷达到戒指鼠标到机械钻石，这些项目共享同一个底层逻辑：<strong>精密机电系统 × 超低功耗设计 × 微型化</strong>——恰好也是禾赛的核心技术栈。</p>
+</section>
+
+<!-- 五、三人角色 / 对比总结 -->
+<section>
+  <h2>五、三人组的真正分工：不是 CEO/CTO/CSO，而是三种思维方式</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">李一帆 · The Builder</div>
+      <h3>回答 "Why Not?"</h3>
+      <p style="font-size:13px;margin:0;">从 UIUC 机器人实验室到 WD 硅谷到上海创业，他一直在问"为什么不做一个 billion dollar company？""为什么激光雷达不能便宜 90%？""为什么不能从传感器延伸到整个机器人基础设施？"<br><br>他的驱动力是 <strong>好奇心驱动的建造欲</strong>——picoRing、mechatronic diamond 都是这份驱动力的溢出。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">向少卿 · The Architect</div>
+      <h3>回答 "How?"</h3>
+      <p style="font-size:13px;margin:0;">清华精密仪器第一名 → 斯坦福 → Apple 产品架构师。李一帆提出"我们要做 X"，向少卿把它翻译成具体的硬件架构、量产方案、供应链布局。<br><br>他的驱动力是 <strong>产品定义能力</strong>——不是"做出来"，而是"做出对的东西"。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">孙恺 · The Physicist</div>
+      <h3>回答 "Is it possible?"</h3>
+      <p style="font-size:13px;margin:0;">斯坦福机械+电子双修博士。当李一帆和向少卿提出产品方向时，孙恺从第一性原理判断"这在物理上是否可行"以及"最优的技术路径是什么"。<br><br>他的驱动力是 <strong>对物理世界的深刻理解</strong>——禾赛从芯片化到 6D SPAD 的技术路线，背后是物理学判断。</p>
+    </div>
+  </div>
+
+  <div class="callout sky">
+    <strong>💡 为什么这个组合几乎不可复制：</strong><br>
+    大多数创业团队的"三人组"是 CEO（融资）+ CTO（技术）+ COO（运营）的职能分工。禾赛的三人组是更深层的 <strong>认知分工</strong>——Builder（好奇心驱动）、Architect（产品驱动）、Physicist（原理驱动）。三个人的内在驱动力完全不同，但恰好覆盖了从"为什么要做"到"做什么"到"能不能做"的完整链条。<br><br>
+    而且——12 年后他们还在同一张桌子上，还在一起做 Sharpa。这在科技创业圈极其罕见。
+  </div>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 交叉验证标准：每项事实需 ≥2 个独立来源<br>
+  主要来源：UIUC MechSE 官方公告、MIT Technology Review Innovators Under 35、WEF Young Global Leaders、Milken Institute、禾赛投资者关系页面、arXiv 2504.03253 (picoRing)、LinkedIn、Crunchbase、新浪财经、极客公园、36氪
+</footer>
+
+</div>
+</body>
+</html>
