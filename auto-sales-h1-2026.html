@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026上半年车企销量深度评估</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:1000px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:30px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 20px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.rust { border-left:4px solid var(--rust); }
+  .stat-num { font-family:var(--serif); font-size:32px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:16px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:11px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+  .data-table tbody tr.row-rust { background:rgba(176,74,63,.04); }
+  .data-table tbody tr.row-olive { background:rgba(120,140,93,.04); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:16px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:16px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:18px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:16px; color:var(--slate); margin:0 0 8px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+
+  .bar-track { width:100%; height:8px; background:var(--gray-100); border-radius:4px; margin:4px 0; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; }
+  .bar-label { font-family:var(--mono); font-size:10px; color:var(--gray-500); }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    h1 { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>2026 上半年车企销量深度评估</h1>
+  </div>
+  <p class="eyebrow">Industry Report · 2026-07-08</p>
+  <div class="meta">
+    源文章：华尔街见闻《中国车企的半年考，没人轻松过关》 &nbsp;·&nbsp; 交叉验证：盖世汽车、36氪、汽车之家、CLS、虎嗅
+  </div>
+  <p class="lead">2026 年上半年，中国车企<strong>没有一家真正"半程过关"</strong>。绝大多数完成率在 30%-40% 区间，无人达到 50% 及格线。新能源渗透率冲到 63%，但纯电增速放缓——插混和增程成为主力。更深刻的结构性变化是：<strong>出口已经成为多家头部车企维持财务健康的绝对支柱</strong>，国内价格战和销量微降被海外高利润对冲。下半年车企的胜负不在交付榜上——在谁能从海外带回利润。</p>
+</section>
+
+<!-- KPI -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card rust">
+      <div class="stat-num">0</div>
+      <div class="stat-label">车企完成率达50%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">63%</div>
+      <div class="stat-label">6月新能源渗透率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">~30-40%</div>
+      <div class="stat-label">行业完成率中位数</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">-2%</div>
+      <div class="stat-label">整体产销微降</div>
+    </div>
+  </div>
+</section>
+
+<!-- 一、传统车企 -->
+<section>
+  <h2>一、传统自主品牌：出口成为唯一增长引擎</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>车企</th><th style="width:80px">H1 销量(万辆)</th><th style="width:80px">全年目标(万辆)</th><th style="width:60px">完成率</th><th style="width:80px">出口(万辆)</th><th style="width:80px">出口占比</th><th>核心判断</th></tr></thead>
+    <tbody>
+      <tr class="row-olive">
+        <td><strong>吉利</strong></td><td>142.3</td><td>~345</td><td><strong>44.5%</strong><span class="pill olive">最高</span></td><td>47.42 (+158%)</td><td>33%</td><td>新能源出口 +585% 是最大亮点，极氪放量是关键。下半年月均需 33.8 万辆</td>
+      </tr>
+      <tr class="row-olive">
+        <td><strong>奇瑞</strong></td><td>135.75</td><td>~320</td><td><strong>42.4%</strong></td><td>94.38</td><td><strong>70%</strong></td><td>出口占比近七成居首，但子品牌高端化缓慢。主品牌占 93.8%</td>
+      </tr>
+      <tr>
+        <td><strong>上汽</strong></td><td>204.54</td><td>500</td><td>40.9%</td><td>73.5 (+48.7%)</td><td>36%</td><td>绝对体量第一，但下半年月均需近 50 万辆。MG 欧洲走量是核心支撑</td>
+      </tr>
+      <tr>
+        <td><strong>广汽</strong></td><td>77.31</td><td>~200</td><td>38.6%</td><td>12.15 (+132%)</td><td>16%</td><td>广丰/广本仍占 55%，但自主增速 35.7% 成亮点。出口体量小但增速最快</td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>长安</strong></td><td>119.56</td><td>~330</td><td>36.2%</td><td>40.2 (+35.1%)</td><td>34%</td><td>新能源增速仅 5.2% 偏低，燃油车仍是基本盘。阿维塔未成规模</td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>比亚迪</strong></td><td>180.85</td><td>500-550</td><td><strong>32.9-36.2%</strong></td><td>78.94 (+95%)</td><td>44%</td><td>6月破40万创纪录，下半年月均需53-60万辆。海外四成占比对冲国内价格战</td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>长城</strong></td><td>58.39</td><td>~180</td><td>32.4%</td><td>29.14 (+44.5%)</td><td><strong>50%</strong></td><td>出口占比接近一半。哈弗 H6 光环褪去，缺乏新销量支柱</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>🔑 传统车企的核心方程：</strong><br>
+    国内燃油车基本盘持续萎缩 + 新能源增速不足以弥补缺口 + 出口高毛利勉强对冲。<strong>谁出口占比越高，谁下半年的容错空间越大。</strong>奇瑞（70%出口占比）和长城（50%）抗风险能力最强，长安和比亚迪虽然总量大但国内价格战压力更大。
+  </div>
+</section>
+
+<!-- 二、新势力 -->
+<section>
+  <h2>二、新势力：分层加速，"零跑现象"独领风骚</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>车企</th><th style="width:60px">6月</th><th style="width:70px">H1 销量(万辆)</th><th style="width:70px">全年目标(万辆)</th><th style="width:50px">完成率</th><th style="width:60px">同比</th><th>核心判断</th></tr></thead>
+    <tbody>
+      <tr class="row-olive">
+        <td><strong>零跑</strong></td><td>93,376</td><td>35.65</td><td>~100-105</td><td><strong>35.7%</strong></td><td>+95%</td><td>新势力第一。性价比+下沉市场+出海 22% 组合拳。下半年月均需 11 万辆</td>
+      </tr>
+      <tr class="row-olive">
+        <td><strong>蔚来</strong></td><td>40,597</td><td>19.11</td><td>~45.6</td><td><strong>41.9%</strong></td><td>正增长</td><td>完成率新势力最高。多品牌矩阵（NIO+ONVO+萤火虫）发力。海外进展缓慢</td>
+      </tr>
+      <tr>
+        <td><strong>鸿蒙智行</strong></td><td>50,624</td><td>~24</td><td>—</td><td>—</td><td>—</td><td>问界 3 万+、尚界 1 万+。华为生态的"隐形新势力"，不计入传统车企排行榜</td>
+      </tr>
+      <tr>
+        <td><strong>理想</strong></td><td>30,895</td><td>19.35</td><td>~48.7</td><td>39.7%</td><td><strong>-5.1%</strong></td><td>头部唯一负增长。纯电车型受阻，全靠增程基本盘。新 L9 Q2 上市是下半年变量</td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>小米</strong></td><td>30,000+</td><td>~18</td><td>~60</td><td><strong>~30%</strong></td><td>—</td><td>瓶颈在产线扩能。订单远大于产能。30% 完成率不代表需求不足</td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>小鹏</strong></td><td>40,126</td><td>16.60</td><td>55-60</td><td><strong>30.2%</strong></td><td>—</td><td>完成率最低但出海占 20%+客单价高。MONA L03 能否爆发是下半年唯一翻盘希望</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>🔑 新势力的分水岭：</strong><br>
+    2026 年上半年，原来的"蔚小理"格局被彻底打破——<strong>"鸿零米"取代了"蔚小理"</strong>。零跑以绝对的规模优势（3 倍于理想/蔚来单月）坐稳新势力第一，鸿蒙智行凭借华为生态成为"第六极"，小米以产能瓶颈而非需求不足的状态守住底线。
+  </div>
+</section>
+
+<!-- 三、完成率评估 -->
+<section>
+  <h2>三、全年完成率评估：谁会达标，谁会掉队？</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">大概率达标 (完成率 > 90%)</div>
+      <h3>奇瑞、吉利</h3>
+      <p style="font-size:13px;margin:0;">两家完成率均超 42% 且出口引擎强劲。奇瑞出口占比 70% 使其几乎不受国内价格战影响。吉利新能源出口 +585%、极氪放量，下半年节奏可控。下半年月均分别需 30 万和 34 万辆，压力虽大但在射程内。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">可能达标 (完成率 80-90%)</div>
+      <h3>上汽、比亚迪、零跑、蔚来</h3>
+      <p style="font-size:13px;margin:0;">上汽海外 MG 放量+国内自主板块增长可期待。比亚迪 6 月 40 万+势头若保持，全年 500 万下限可实现。零跑单月逼近 10 万且仍在加速。蔚来完成率新势力最高但海外慢。四家都需下半年显著提速。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">大概率掉队 (完成率 < 80%)</div>
+      <h3>长安、长城、小鹏、小米</h3>
+      <p style="font-size:13px;margin:0;">长安新能源增速 5.2% 在头部车企中垫底。长城缺乏新支柱车型。小鹏完成率 30.2% 最低，下半年月均需 6.4-7.2 万辆（当前 1.6 倍）。小米产线瓶颈短期难以突破。四家中只有小米是"被动掉队"（有订单没产能）。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">已亮红灯</div>
+      <h3>理想</h3>
+      <p style="font-size:13px;margin:0;">唯一同比负增长（-5.1%）的头部品牌。纯电受阻、增程基本盘承压。全年 48.7 万辆目标需要下半年月均 4.9 万辆（目前 3.1 万），差距 58%。新 L9 能否翻盘决定全年命运。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 四、收益评估 -->
+<section>
+  <h2>四、收益面评估：谁能从海外带回利润？</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>车企</th><th style="width:70px">出口占比</th><th>利润结构判断</th><th>收益评级</th></tr></thead>
+    <tbody>
+      <tr class="row-olive">
+        <td><strong>奇瑞</strong></td><td><strong>70%</strong></td><td>出口绝对主导，海外高毛利几乎不受国内价格战影响。利润确定性最高。</td><td><span class="pill olive">★★★★★</span></td>
+      </tr>
+      <tr class="row-olive">
+        <td><strong>比亚迪</strong></td><td>44%</td><td>海外 95% 增速+垂直整合成本优势。国内虽打价格战但自供率高，每辆车仍盈利。</td><td><span class="pill olive">★★★★☆</span></td>
+      </tr>
+      <tr class="row-olive">
+        <td><strong>吉利</strong></td><td>33%</td><td>海外增速 158% 行业第一。极氪高端线拉高单车利润。多品牌矩阵分散风险。</td><td><span class="pill olive">★★★★☆</span></td>
+      </tr>
+      <tr>
+        <td><strong>长城</strong></td><td>50%</td><td>Tank/炮系列海外高溢价，但国内销量持续萎缩抵消了部分出口利润。</td><td><span class="pill">★★★☆☆</span></td>
+      </tr>
+      <tr>
+        <td><strong>上汽</strong></td><td>36%</td><td>MG 欧洲走量但面临关税风险。合资板块（大众/通用）拖累整体利润率。</td><td><span class="pill">★★★☆☆</span></td>
+      </tr>
+      <tr>
+        <td><strong>零跑</strong></td><td>22%</td><td>出海增速最快但基盘小。国内极致性价比策略压缩单车利润。薄利多销型。</td><td><span class="pill">★★☆☆☆</span></td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>小鹏/蔚来</strong></td><td>20%/低</td><td>小鹏出海客单价高但总量小。蔚来海外进展缓慢。国内高端市场竞争加剧。</td><td><span class="pill rust">★★☆☆☆</span></td>
+      </tr>
+      <tr class="row-rust">
+        <td><strong>理想/小米</strong></td><td>0%/0%</td><td>完全依赖国内市场。理想负增长、小米产能受限。无海外利润对冲国内内卷。</td><td><span class="pill rust">★☆☆☆☆</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>下半年的胜负不会只写在交付榜上。能从海外带回利润的，才有余力继续在国内竞争；而只能靠降价换量的，年底销量再高，也很难把这张半年考卷补回来。<br><span style="font-family:var(--mono);font-size:12px;color:var(--gray-500);display:block;margin-top:8px;">—— 华尔街见闻</span></blockquote>
+</section>
+
+<!-- 五、结构性判断 -->
+<section>
+  <h2>五、五个结构性判断</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">判断 1</div>
+      <h3>"以价换量"失效了</h3>
+      <p style="font-size:13px;margin:0;">整体产销微降的背景下，降价不再能换来销量增长——只能换来利润流失。2026上半年证明：<strong>价格战已经打到边际，谁再降谁死。</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">判断 2</div>
+      <h3>出口从"加分项"变成"生存项"</h3>
+      <p style="font-size:13px;margin:0;">奇瑞 70%、长城 50%、比亚迪 44% 的出口占比不是锦上添花——如果去掉出口，这三家的国内完成率将分别为 12.7%、16.2%、18.5%。<strong>出口已经不是战略选择，是生存必需。</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">判断 3</div>
+      <h3>纯电红利转向插混/增程</h3>
+      <p style="font-size:13px;margin:0;">新能源渗透率 63% 但纯电增速放缓。插混/增程成为增长核心动力。单一路线（纯电-only 或 燃油-only）的车企在下半年将面临更大的结构性压力。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">判断 4</div>
+      <h3>合资品牌加速边缘化</h3>
+      <p style="font-size:13px;margin:0;">广汽丰田+本田仍占广汽 55% 销量，但自主板块增速 35.7% 远超合资。燃油车市场被压缩的背景下，<strong>合资品牌的市场份额缩水是结构性不可逆的。</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">判断 5</div>
+      <h3>出海从"贸易输出"转型"属地制造"</h3>
+      <p style="font-size:13px;margin:0;">欧美关税壁垒落地后，简单海运出口不再可行。头部企业已全面转向 CKD 工厂和属地化供应链。这是重资产转型——<strong>海外利润的持续性取决于属地化制造能力，不取决于出口销量数字。</strong></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 源文章：华尔街见闻 &nbsp;·&nbsp; 交叉验证：盖世汽车、36氪、汽车之家、CLS财联社、虎嗅、腾讯新闻、EDN<br>
+  数据说明：H1 销量数据来自车企官方产销快报；全年目标来自年初公开披露。完成率可能存在口径差异。
+</footer>
+
+</div>
+</body>
+</html>
