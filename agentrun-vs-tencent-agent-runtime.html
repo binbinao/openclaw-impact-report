@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿里云 AgentRun vs 腾讯云 Agent Runtime：全维度对比</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --ali: #FF6A00; --tencent: #006EFF;
+  --ali-bg: rgba(255,106,0,0.07); --tencent-bg: rgba(0,110,255,0.07);
+  --sky-bg: rgba(91,141,184,0.08); --olive-bg: rgba(120,140,93,0.08);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1200px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+
+.card { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 28px; margin-bottom: 24px; }
+
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; line-height: 1.50; }
+thead th { background: var(--gray-150); font-weight: 600; font-size: 12px;
+  color: var(--gray-700); text-align: left; padding: 10px 12px;
+  border-bottom: 2px solid var(--gray-300); white-space: nowrap; }
+thead th:first-child { border-radius: 8px 0 0 0; }
+thead th:last-child { border-radius: 0 8px 0 0; }
+tbody td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--ivory); }
+
+/* Winner highlighting */
+.win-ali { background: var(--ali-bg) !important; }
+.win-tencent { background: var(--tencent-bg) !important; }
+.win-draw { }
+td.win-ali, td.win-tencent { font-weight: 600; }
+
+.hl { font-weight: 600; }
+.hl-a { color: var(--ali); }
+.hl-t { color: var(--tencent); }
+.note { color: var(--gray-500); font-style: italic; font-size: 12px; }
+.source-tag { font-family: var(--mono); font-size: 10px; color: var(--gray-500); }
+
+.callout { padding: 14px 18px; border-radius: var(--radius-row); margin: 16px 0; font-size: 14px; }
+.callout.info { background: var(--sky-bg); border: 1px solid var(--sky); }
+.callout.warn { background: rgba(217,119,87,0.06); border: 1px solid var(--clay); }
+.callout.good { background: var(--olive-bg); border: 1px solid var(--olive); }
+
+blockquote {
+  border-left: 3px solid var(--sky); padding-left: 16px; margin: 20px 0;
+  font-size: 14px; color: var(--gray-500); font-style: italic;
+}
+
+.badge { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 4px; }
+.badge.ali { background: rgba(255,106,0,0.15); color: var(--ali); }
+.badge.tencent { background: rgba(0,110,255,0.15); color: var(--tencent); }
+.badge.gray { background: var(--gray-150); color: var(--gray-500); }
+
+.verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 20px 0; }
+.verdict-card { border-radius: var(--radius-row); padding: 24px; }
+.verdict-card.ali { background: var(--ali-bg); border: 1px solid rgba(255,106,0,0.25); }
+.verdict-card.tencent { background: var(--tencent-bg); border: 1px solid rgba(0,110,255,0.25); }
+.verdict-card h4 { font-size: 16px; margin-bottom: 10px; }
+.verdict-card ul { padding-left: 18px; font-size: 13px; }
+.verdict-card ul li { margin-bottom: 6px; }
+
+.bar-wrap { margin: 12px 0; display: flex; align-items: center; gap: 10px; }
+.bar-label { font-size: 11px; min-width: 80px; text-align: right; color: var(--gray-500); }
+.bar-track { flex: 1; height: 6px; background: var(--gray-150); border-radius: 3px; overflow: hidden; display: flex; }
+.bar-a { background: var(--ali); height: 100%; }
+.bar-t { background: var(--tencent); height: 100%; }
+
+.back-link { display: inline-block; margin-top: 48px; font-size: 14px;
+  color: var(--gray-500); text-decoration: none; }
+.back-link:hover { color: var(--slate); }
+
+@media (max-width: 768px) {
+  body { padding: 20px 12px 80px; }
+  .card { padding: 16px; }
+  h1 { font-size: 22px; }
+  .verdict-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">CLOUD AI · COMPETITIVE COMPARISON · 2026-07-08</div>
+<h1>阿里云 AgentRun vs 腾讯云 Agent Runtime<br>全维度对比分析</h1>
+<p class="subtitle">产品定位、技术架构、沙箱能力、生态开放性、可替代性判断</p>
+<p class="meta">
+  数据来源：<strong>阿里云 help.aliyun.com</strong>、<strong>docs.agent.run</strong>、<strong>腾讯云开发者社区</strong> (2026.04.05 Agent Infra 文章)、
+  <strong>tencent.com 官方公告</strong> (2026.05.28)、<strong>Forrester</strong> (2025.09)、
+  <strong>PR Newswire</strong> (2026.04.23 Cube Sandbox)、<strong>GitHub TencentCloud/CubeSandbox</strong>
+  <br>所有关键数据点交叉验证 | 截止 2026-07-08
+</p>
+
+<!-- ═══════════ 1. OVERVIEW ═══════════ -->
+<div class="card">
+<h2>一、产品定位对照</h2>
+
+<table>
+<thead><tr>
+  <th style="width:14%">维度</th>
+  <th style="width:43%;color:var(--ali)">阿里云 AgentRun</th>
+  <th style="width:43%;color:var(--tencent)">腾讯云 Agent Runtime<br><span style="font-weight:400;font-size:11px;">（Agent Infra）</span></th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>产品全称</strong></td>
+  <td>函数计算 AgentRun（FC AgentRun）</td>
+  <td>腾讯云智能体基础设施 Agent Runtime（Agent Infra）</td>
+</tr>
+<tr class="win-draw">
+  <td><strong>产品阶段</strong></td>
+  <td>✅ <strong>GA（正式商用）</strong> — 2025.12 发布</td>
+  <td>⚠️ <strong>开放内测</strong> — 执行引擎与云沙箱组件内测中</td>
+</tr>
+<tr class="win-ali">
+  <td><strong>定位</strong></td>
+  <td><span class="hl-a">高代码</span>一站式 Agentic AI 基础设施平台<br>面向开发者的 Serverless Agent 运行底座</td>
+  <td><span class="hl-t">低代码 + 高代码</span>智能体基础设施<br>面向"生产执行"阶段的开发团队与企业</td>
+</tr>
+<tr>
+  <td><strong>底层基座</strong></td>
+  <td>函数计算 FC 3.0（Serverless）</td>
+  <td>Serverless 弹性计算环境（Cloud-Hypervisor + KVM）</td>
+</tr>
+<tr>
+  <td><strong>一句话定义</strong></td>
+  <td>AgentRun = 云原生运行底座 + 沙箱平台 + 模型治理与工具生态 + 安全与可观测能力</td>
+  <td>Agent Infra = 执行引擎 + 云沙箱 + 上下文服务 + 网关 + 可观测</td>
+</tr>
+<tr class="win-tencent">
+  <td><strong>目标场景</strong></td>
+  <td>编程、数据科学、Web 自动化、舆情分析、多 Agent 协同</td>
+  <td><strong>Coding Agent、Deep Research、GUI Agent、RL（强化学习）</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 2. ARCHITECTURE ═══════════ -->
+<div class="card">
+<h2>二、架构模块对照（逐层拆解）</h2>
+
+<table>
+<thead><tr>
+  <th style="width:16%">架构层</th>
+  <th style="width:42%;color:var(--ali)">阿里云 AgentRun</th>
+  <th style="width:42%;color:var(--tencent)">腾讯云 Agent Runtime</th>
+</tr></thead>
+<tbody>
+
+<tr>
+  <td><strong>运行时</strong></td>
+  <td>AgentRuntime — 多模式（无码/低码/高码），Python 3.10/3.12, Node.js 18/20, Java 8/11/17，会话亲和，版本管理，灰度发布</td>
+  <td>执行引擎 — 底层计算资源极速启动 + 高并发，"运行时快照"跳过 GuestOS 初始化，资源预创建池化</td>
+</tr>
+
+<tr>
+  <td><strong>沙箱</strong></td>
+  <td>Code Interpreter（多语言）+ Browser（CDP/Puppeteer/Playwright）+ AllInOne<br>逻辑隔离 + 动态挂载 + 三层次隔离</td>
+  <td><strong>Cube Sandbox</strong> — Rust + KVM 硬件级隔离，60ms 冷启动，E2B 兼容，Apache 2.0 全面开源<br>三层安全防线 + 毫秒级事件快照状态回滚</td>
+</tr>
+
+<tr>
+  <td><strong>模型层</strong></td>
+  <td>模型管理 — 通义千问/DeepSeek + vLLM/SGLang/Ollama/LMDeploy 自托管<br>多模型负载代理、Fallback、并发控制、Token 限流、成本监控<br>算力解耦（CPU/GPU 细粒度组合）</td>
+  <td>网关层模型接入 — 混元/Youtu/DeepSeek + TI-ONE Hosted<br>模型同步授权（TI-ONE 平台一键拉取）<br>MCP/Functioncall 协议</td>
+</tr>
+
+<tr>
+  <td><strong>工具层</strong></td>
+  <td>MCP 标准化封装 + Functioncall 双协议<br>集成 AgentScope/LangChain/LangGraph/CrewAI/Mastra/PydanticAI/Google ADK<br>内置代码/浏览器工具</td>
+  <td>MCP 兼容 + Skills 广场<br>兼容主流 Agent 开发框架<br>四种标准化接入工具（Agent SDK / Model SDK / CLI / API）</td>
+</tr>
+
+<tr>
+  <td><strong>记忆/知识库</strong></td>
+  <td>内置记忆存储（Mem0 集成）+ 向量知识库检索</td>
+  <td>上下文服务 — 长期记忆管理与检索 + 私域数据中枢</td>
+</tr>
+
+<tr>
+  <td><strong>可观测</strong></td>
+  <td>Agent 决策路径、耗时与状态全链路可视化</td>
+  <td>机密计算 + 日志服务 + 全链路安全与可观测</td>
+</tr>
+
+<tr>
+  <td><strong>企业级安全</strong></td>
+  <td>三层多租户权限体系、SSO 集成、凭证统一管理、Token 配额、沙箱隔离与审计</td>
+  <td>会话级强安全隔离、双层权限控制（解耦数据/功能权限）、内容安全/模型运行安全</td>
+</tr>
+
+<tr>
+  <td><strong>分发渠道</strong></td>
+  <td>FunAgent 开放平台：钉钉/飞书/企业微信/个人微信</td>
+  <td>ADP 平台：API/Web 接口 → 企微/微信 + ADP 国际版</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 3. SANDBOX (KEY BATTLEFIELD) ═══════════ -->
+<div class="card">
+<h2>三、沙箱对比（核心战场）</h2>
+
+<p>沙箱是 Agent 基础设施最关键的差异化组件——它决定了 Agent 能否<strong>安全地执行不可信代码</strong>和<strong>操作浏览器</strong>。</p>
+
+<table>
+<thead><tr>
+  <th style="width:16%">维度</th>
+  <th style="width:42%;color:var(--ali)">AgentRun 沙箱</th>
+  <th style="width:42%;color:var(--tencent)">Cube Sandbox</th>
+</tr></thead>
+<tbody>
+
+<tr class="win-tencent">
+  <td><strong>冷启动速度</strong></td>
+  <td>约 100ms（基于 FC 弹性）</td>
+  <td><span class="hl-t">60ms</span>（单并发），50 并发平均 67ms，P95=90ms<br><span class="source-tag">（来源：GitHub README + PR Newswire + 腾讯云开发者社区，3 源一致）</span></td>
+</tr>
+
+<tr class="win-tencent">
+  <td><strong>隔离级别</strong></td>
+  <td>容器级 + 逻辑隔离（动态挂载 + /workspace 独享）</td>
+  <td><span class="hl-t">硬件级 KVM 隔离</span>（Rust VMM + MicroVM）<br><span class="source-tag">（来源：PR Newswire + GitHub README）</span></td>
+</tr>
+
+<tr class="win-tencent">
+  <td><strong>内存开销</strong></td>
+  <td>未公开具体数字</td>
+  <td><span class="hl-t">&le;5MB</span>（≤32GB 规格沙箱实测）<br><span class="source-tag">（来源：GitHub README）</span></td>
+</tr>
+
+<tr class="win-tencent">
+  <td><strong>开源</strong></td>
+  <td>❌ 闭源</td>
+  <td>✅ <span class="hl-t">Apache 2.0 全面开源</span>（非 SDK only，整套生产级沙箱即服务栈）<br><span class="source-tag">（来源：PR Newswire + GitHub + Morningstar + HPCwire，5 源一致）</span></td>
+</tr>
+
+<tr class="win-tencent">
+  <td><strong>兼容性</strong></td>
+  <td>CDP over WebSocket（Puppeteer/Playwright）</td>
+  <td><span class="hl-t">E2B SDK Drop-in 兼容</span> + OpenAI Python SDK 原生支持<br>不修改业务代码即可迁移<br><span class="source-tag">（来源：PR Newswire + GitHub README）</span></td>
+</tr>
+
+<tr class="win-tencent">
+  <td><strong>安全特色</strong></td>
+  <td>租户级文件系统隔离</td>
+  <td>三层防线 + <span class="hl-t">毫秒级事件快照状态回滚</span>（Agent 不可预测行为的"撤销"机制）<br>eBPF 网络隔离</td>
+</tr>
+
+<tr class="win-ali">
+  <td><strong>沙箱类型丰富度</strong></td>
+  <td><span class="hl-a">Code Int + Browser + AllInOne</span>（3 种开箱即用模板）</td>
+  <td>代码执行 + 浏览器（具体模板数未在公开文档中展开）</td>
+</tr>
+
+<tr class="win-ali">
+  <td><strong>并发能力</strong></td>
+  <td><span class="hl-a">单集群百万级沙箱实例</span>，单 Agent 百万 QPS<br><span class="source-tag">（来源：cnblogs Serverless 2025.10）</span></td>
+  <td>数十万实例秒级并发扩容，10 万+ 实例突发调度<br><span class="source-tag">（来源：腾讯云开发者社区 2026.04）</span></td>
+</tr>
+
+</tbody>
+</table>
+
+<div class="callout info">
+<strong>沙箱结论：</strong>Cube Sandbox 在<strong>开源、冷启动速度、隔离级别、E2B 兼容性</strong>四个维度全面领先 AgentRun 沙箱，是腾讯在 Agent 基础设施赛道最锋利的武器。AgentRun 沙箱在<strong>内置模板丰富度</strong>和<strong>百万级并发</strong>声明上有优势，但闭源 + 非硬件隔离是硬伤。
+</div>
+</div>
+
+<!-- ═══════════ 4. PERFORMANCE ═══════════ -->
+<div class="card">
+<h2>四、硬核性能指标对照</h2>
+
+<table>
+<thead><tr><th>指标</th><th style="color:var(--ali)">阿里云 AgentRun</th><th style="color:var(--tencent)">腾讯云 Agent Runtime</th><th>胜出</th></tr></thead>
+<tbody>
+<tr><td>沙箱冷启动</td><td>~100ms</td><td><span class="hl-t">60ms</span></td><td class="win-tencent">腾讯 ✓</td></tr>
+<tr><td>热切换</td><td><span class="hl-a">1ms 极速热切</span></td><td>运行时快照跳过 GuestOS 初始化</td><td class="win-ali">阿里 ✓</td></tr>
+<tr><td>沙箱并发</td><td><span class="hl-a">百万级实例/集群</span></td><td>数十万实例秒级并发</td><td class="win-ali">阿里 ✓</td></tr>
+<tr><td>单 Agent QPS</td><td><span class="hl-a">百万 QPS</span></td><td>未公开</td><td class="win-ali">阿里 ✓</td></tr>
+<tr><td>实例生命周期</td><td>无固定上限（缩容到 0）</td><td>最长 24h，暂停最长 7d</td><td class="win-ali">阿里 ✓</td></tr>
+<tr><td>GPU 弹性</td><td><span class="hl-a">低峰缩 0，算力解耦降 40% 成本</span></td><td>TACO AI 加速引擎 + FlexKV 缓存</td><td class="win-ali">阿里 ✓</td></tr>
+</tbody>
+</table>
+
+<div class="callout warn">
+<strong>⚠️ 注意：</strong>上述数据全部来自厂商自我报告，均未经独立第三方基准测试验证。AgentRun 的"百万级"和 Cube Sandbox 的"60ms"均是在各自定义条件下的最优值，实际表现取决于工作负载特征。
+</div>
+</div>
+
+<!-- ═══════════ 5. PRICING ═══════════ -->
+<div class="card">
+<h2>五、计费模型对照</h2>
+
+<table>
+<thead><tr><th>维度</th><th style="color:var(--ali)">AgentRun</th><th style="color:var(--tencent)">Agent Runtime</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>计费方式</strong></td>
+  <td>按量付费（CU 使用量）+ 预付费资源包 + 常驻资源池</td>
+  <td>未公开（内测阶段，未公布定价）</td>
+</tr>
+<tr class="win-ali">
+  <td><strong>差异化计费</strong></td>
+  <td><span class="hl-a">忙/闲独立计费</span>：Agent 等待模型/工具响应时算力免费，仅收内存费<br>宣称 <strong>TCO 降低 60%</strong></td>
+  <td>未公布</td>
+</tr>
+<tr class="win-ali">
+  <td><strong>GPU 成本优化</strong></td>
+  <td><span class="hl-a">算力解耦</span>：CPU/GPU 细粒度组合，宣称 GPU 成本降低 40%</td>
+  <td>TACO 推理加速 + FlexKV 缓存优化（性能优化而非直接降价）</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════ 6. TOTAL COMPARISON ═══════════ -->
+<div class="card">
+<h2>六、全维度胜负手总结</h2>
+
+<table>
+<thead><tr>
+  <th style="width:16%">维度</th>
+  <th style="width:12%">胜出</th>
+  <th>详析</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td>产品成熟度</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>AgentRun 已在 2025.12 正式商用，文档完善、7 个内置模板可用。Agent Runtime 处于内测阶段。</td>
+</tr>
+<tr>
+  <td>沙箱性能</td>
+  <td><span class="badge tencent">腾讯</span></td>
+  <td>Cube Sandbox 的 60ms 冷启动 + ≤5MB 内存 + KVM 硬件隔离组合，业界领先。</td>
+</tr>
+<tr>
+  <td>沙箱开放性</td>
+  <td><span class="badge tencent">腾讯</span></td>
+  <td>Apache 2.0 全栈开源 + E2B 兼容 + OpenAI SDK 原生支持。AgentRun 沙箱完全闭源。</td>
+</tr>
+<tr>
+  <td>沙箱安全级别</td>
+  <td><span class="badge tencent">腾讯</span></td>
+  <td>硬件级 KVM 隔离 > 容器级隔离。事件快照状态回滚是独有功能。</td>
+</tr>
+<tr>
+  <td>弹性规模</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>百万级实例声明压倒数十万级。AgentRun 的 FC 底座经过多年双 11 验证。</td>
+</tr>
+<tr>
+  <td>模型治理</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>统一模型管理 + 多模型负载代理 + 并发控制 + Token 限流，企业级治理完整度高。</td>
+</tr>
+<tr>
+  <td>成本模型</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>忙闲独立计费是 Agent 场景的精确成本优化。Agent Runtime 未公布定价。</td>
+</tr>
+<tr>
+  <td>开发者生态</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>集成 7+ 框架（AgentScope/LangChain/CrewAI/Mastra/PydanticAI/ADK），更全面的框架覆盖。</td>
+</tr>
+<tr>
+  <td>开源社区影响力</td>
+  <td><span class="badge tencent">腾讯</span></td>
+  <td>Cube Sandbox 开源是重磅炸弹——直接对标 E2B，能吸引全球开发者。AgentRun 在开源侧无对等布局。</td>
+</tr>
+<tr>
+  <td>分发渠道</td>
+  <td><span class="badge ali">阿里</span></td>
+  <td>FunAgent 覆盖钉钉/飞书/企微/微信四端。腾讯通过 ADP 覆盖企微/微信。</td>
+</tr>
+</tbody>
+</table>
+
+<div style="margin-top:20px;">
+<h3>综合实力条</h3>
+<div class="bar-wrap"><span class="bar-label">产品成熟度</span><div class="bar-track"><div class="bar-a" style="width:85%"></div><div class="bar-t" style="width:40%"></div></div></div>
+<div class="bar-wrap"><span class="bar-label">沙箱技术力</span><div class="bar-track"><div class="bar-a" style="width:65%"></div><div class="bar-t" style="width:90%"></div></div></div>
+<div class="bar-wrap"><span class="bar-label">开源影响力</span><div class="bar-track"><div class="bar-a" style="width:10%"></div><div class="bar-t" style="width:95%"></div></div></div>
+<div class="bar-wrap"><span class="bar-label">弹性规模</span><div class="bar-track"><div class="bar-a" style="width:90%"></div><div class="bar-t" style="width:60%"></div></div></div>
+<div class="bar-wrap"><span class="bar-label">生态开放性</span><div class="bar-track"><div class="bar-a" style="width:80%"></div><div class="bar-t" style="width:70%"></div></div></div>
+<div class="bar-wrap"><span class="bar-label">企业治理</span><div class="bar-track"><div class="bar-a" style="width:85%"></div><div class="bar-t" style="width:55%"></div></div></div>
+</div>
+</div>
+
+<!-- ═══════════ 7. THE CORE QUESTION ═══════════ -->
+<div class="card" style="border: 2px solid var(--slate);">
+<h2>七、核心问题：两者可以互相替代吗？</h2>
+
+<div class="callout warn" style="font-size:16px; border-left: 4px solid var(--slate); background: var(--gray-150); padding: 20px;">
+<strong>结论：SHORT-TERM NO, LONG-TERM DEPENDS.</strong><br>
+<span style="font-size:14px;">短期内不能直接替代，长期趋同但路径不同。现阶段的选型决策取决于你的团队画像和业务需求。</span>
+</div>
+
+<div class="verdict-grid">
+  <div class="verdict-card ali">
+    <h4 style="color:var(--ali)">选 AgentRun 的场景</h4>
+    <ul>
+      <li>需要 <strong>生产就绪</strong>、文档完善、GA 状态的平台</li>
+      <li>团队偏向阿里云生态（FC + 百炼 + OSS）</li>
+      <li><strong>多模型统一治理</strong>是刚需（Fallback、限流、成本监控）</li>
+      <li>需要 <strong>忙闲计费</strong>来优化 Agent 长会话的成本</li>
+      <li>Agent 任务的并发规模预期达到 <strong>百万级</strong></li>
+      <li>需要集成 <strong>LangChain / CrewAI / PydanticAI</strong> 等特定框架</li>
+      <li>要求 <strong>无代码 / 低代码</strong> 入口并存</li>
+    </ul>
+  </div>
+  <div class="verdict-card tencent">
+    <h4 style="color:var(--tencent)">选 Agent Runtime 的场景</h4>
+    <ul>
+      <li><strong>安全敏感场景</strong>：金融、政务、医疗——硬件级 KVM 隔离是硬需求</li>
+      <li>团队使用 <strong>E2B / Manus / OpenAI Agents SDK</strong> 技术栈——Drop-in 迁移零代码</li>
+      <li><strong>开源优先策略</strong>：不想被云厂商锁定，想自己掌控沙箱层</li>
+      <li><strong>强化学习（RL）</strong>场景：腾讯明确将 RL 列为核心场景</li>
+      <li>需要 <strong>事件快照回滚</strong>——Agent 行为不可预测时的"撤销"机制</li>
+      <li>已在腾讯云生态（TI-ONE + 混元 + 企微）中</li>
+    </ul>
+  </div>
+</div>
+
+<h3>为什么短期不能互相替代？</h3>
+
+<table>
+<thead><tr><th style="width:5%">#</th><th>障碍</th><th>影响</th></tr></thead>
+<tbody>
+<tr>
+  <td>1</td>
+  <td><strong>成熟度差</strong></td>
+  <td>AgentRun 已 GA，Agent Runtime 仍在内测。生产环境选内测产品风险大。</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><strong>沙箱架构不同</strong></td>
+  <td>AgentRun 沙箱 = 容器级/逻辑隔离；Cube = KVM 硬件级。安全策略完全不同，代码不可直接迁移。</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><strong>模型生态绑定</strong></td>
+  <td>AgentRun 深度集成通义千问 + 百炼模型治理；Agent Runtime 绑定混元 + TI-ONE。模型切换有适配成本。</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><strong>框架集成不同</strong></td>
+  <td>AgentRun 集成 AgentScope/LangChain/CrewAI（阿里系开源为主）；Agent Runtime 通过 ADP 和 ADP 国际版走另一套集成路径。</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><strong>成本模型不明</strong></td>
+  <td>Agent Runtime 未公布定价，无法做 TCO 对比。AgentRun 的忙闲计费优势可能是暂时的。</td>
+</tr>
+</tbody>
+</table>
+
+<h3>为什么长期会趋同？</h3>
+
+<ol style="margin-top:12px; padding-left:18px;">
+  <li><strong>Serverless 是共同方向</strong>：两者都基于 Serverless 弹性架构，底层的资源调度模式趋同。</li>
+  <li><strong>MCP 协议标准化</strong>：两者都支持 MCP，工具层的互操作性会越来越高。</li>
+  <li><strong>沙箱接口兼容</strong>：Cube Sandbox 已兼容 E2B SDK；AgentRun 如未来也拥抱 E2B，迁移成本将大幅降低。</li>
+  <li><strong>A2A 多 Agent 协议</strong>：Google A2A 等协议正在标准化 Agent 间通信，降低框架锁定。</li>
+</ol>
+</div>
+
+<!-- ═══════════ 8. STRATEGIC IMPLICATIONS ═══════════ -->
+<div class="card">
+<h2>八、对腾讯生态的战略启示</h2>
+
+<div class="callout good">
+<strong>对"腾讯生态产品打包方案"的意义：</strong>
+<ol style="margin:6px 0 0 18px;">
+  <li><strong>Cube Sandbox 是王牌</strong>：开源 + E2B 兼容 + 60ms + KVM 隔离，这是腾讯在 Agent 基础设施赛道最强的差异化武器。在打包方案中，应把 Cube 定位为"企业级安全 Agent 底座"，而非仅仅是一个沙箱组件。</li>
+  <li><strong>Agent Runtime 与 ADP 的协同</strong>：Agent Runtime 是底层基座，ADP 是上层低代码平台。打包方案可以用 "ADP（低代码构建）+ Agent Runtime（生产执行）= 端到端企业 Agent 方案" 的叙事。</li>
+  <li><strong>利用开源优势</strong>：Cube Sandbox 的 Apache 2.0 开源是对比 AgentRun 闭源的最大卖点——"不被锁定、可审计、社区驱动"。</li>
+  <li><strong>补足 AgentRun 的短板</strong>：AgentRun 有而腾讯暂时落后的——多模型统一治理面板、忙闲计费模式——这些是产品层面可以快速追赶的。</li>
+  <li><strong>当前时机</strong>：Agent Runtime 仍在<strong>内测</strong>，在对外打包方案中应如实标注产品成熟度，避免过度承诺。</li>
+</ol>
+</div>
+</div>
+
+<div class="card">
+<h2>九、关键数据来源交叉验证</h2>
+
+<table>
+<thead><tr><th>数据点</th><th>来源 A</th><th>来源 B</th><th>来源 C</th><th>可信度</th></tr></thead>
+<tbody>
+<tr>
+  <td>Tencent Agent Runtime 五大模块</td>
+  <td>Forrester 2025.09</td>
+  <td>tencent.com 2026.05.28</td>
+  <td>腾讯云开发者社区 2026.04.05</td>
+  <td><span class="badge" style="background:rgba(120,140,93,0.18);color:var(--olive)">高 ✓✓✓</span></td>
+</tr>
+<tr>
+  <td>Cube Sandbox 60ms 冷启动</td>
+  <td>GitHub README</td>
+  <td>PR Newswire 2026.04.23</td>
+  <td>腾讯云开发者社区 2026.05.12</td>
+  <td><span class="badge" style="background:rgba(120,140,93,0.18);color:var(--olive)">高 ✓✓✓</span></td>
+</tr>
+<tr>
+  <td>Cube Sandbox Apache 2.0 开源</td>
+  <td>GitHub TencentCloud/CubeSandbox</td>
+  <td>PR Newswire</td>
+  <td>Morningstar / HPCwire / StreetInsider</td>
+  <td><span class="badge" style="background:rgba(120,140,93,0.18);color:var(--olive)">高 ✓✓✓✓✓</span></td>
+</tr>
+<tr>
+  <td>Agent Infra 内测阶段</td>
+  <td>腾讯云开发者社区 2026.04.05</td>
+  <td>-</td>
+  <td>-</td>
+  <td><span class="badge" style="background:rgba(91,141,184,0.18);color:var(--sky)">中 ✓</span></td>
+</tr>
+<tr>
+  <td>AgentRun 忙闲计费</td>
+  <td>cnblogs Serverless 2025.10</td>
+  <td>segmentfault 2025.09</td>
+  <td>-</td>
+  <td><span class="badge" style="background:rgba(91,141,184,0.18);color:var(--sky)">中 ✓✓</span></td>
+</tr>
+<tr>
+  <td>Cube Sandbox ≤5MB 内存开销</td>
+  <td>GitHub README</td>
+  <td>txtmix.com 2026.04.22</td>
+  <td>-</td>
+  <td><span class="badge" style="background:rgba(91,141,184,0.18);color:var(--sky)">中 ✓✓</span></td>
+</tr>
+<tr>
+  <td>Cube Sandbox E2B兼容</td>
+  <td>GitHub README</td>
+  <td>PR Newswire</td>
+  <td>腾讯云开发者社区</td>
+  <td><span class="badge" style="background:rgba(120,140,93,0.18);color:var(--olive)">高 ✓✓✓</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<a class="back-link" href="./">← 返回首页</a>
+
+</div>
+</body>
+</html>
