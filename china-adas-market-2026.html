@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中国智驾市场深度分析：博世的黄昏与华为/Momenta/地平线的崛起</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:940px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:32px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .badge.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .badge.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  section { margin-bottom:52px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:24px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.olive { border-left:4px solid var(--olive); }
+  .stat-card.rust { border-left:4px solid var(--rust); }
+  .stat-num { font-family:var(--serif); font-size:36px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+  .stat-delta { font-family:var(--mono); font-size:11px; margin-top:6px; color:var(--gray-500); }
+  .stat-delta.down { color:var(--rust); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:12px 16px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:13px 16px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin-bottom:8px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+
+  blockquote { font-family:var(--serif); font-size:18px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:20px 0; letter-spacing:-.005em; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band, .grid-3 { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    h1 { font-size:26px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>中国智驾市场深度分析</h1>
+    <span class="badge rust">博世衰退进行时</span>
+  </div>
+  <p class="eyebrow">Industry Deep Dive · 2026-07-08</p>
+  <div class="meta">
+    源文章：电车有点料《博世智驾份额跌至12.3%，为何烧钱百亿仍难上车？》 &nbsp;·&nbsp; 多源交叉验证
+  </div>
+  <p class="lead">2026 年注定是中国智驾市场的分水岭。华为与 Momenta 在第三方城市 NOA 市场形成"双强"格局（合计~80%），地平线以征程 6 芯片横扫中算力市场，而曾经的绝对霸主博世——从 22.5% 跌至 12.3%，与大众 CARIAD 的 15 亿欧元合作项目宣告终止。<strong>这不是一次周期性调整，而是一场结构性权力的交接。</strong></p>
+</section>
+
+<!-- Summary Band -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card rust">
+      <div class="stat-num">22.5%→12.3%</div>
+      <div class="stat-label">博世 ADAS 份额</div>
+      <div class="stat-delta down">2024Q1 → 2026Q1</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">15 亿€</div>
+      <div class="stat-label">大众-CARIAD合作沉没</div>
+      <div class="stat-delta">2022-2026，1000人团队</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">80%</div>
+      <div class="stat-label">华为+Momenta 第三方份额</div>
+      <div class="stat-delta">城市NOA"双强"格局</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1000 万套</div>
+      <div class="stat-label">地平线征程累计交付</div>
+      <div class="stat-delta">2025年目标</div>
+    </div>
+  </div>
+</section>
+
+<!-- 一、博世诊断 -->
+<section>
+  <h2>一、博世：巨人的黄昏——不是不努力，是"长得太像博世了"</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>数据</th><th>核查结论</th></tr></thead>
+    <tbody>
+      <tr><td>行车 ADAS 份额 2024Q1→2026Q1</td><td>22.5% → 12.3%</td><td><span class="pill">趋势正确，具体数字待商榷</span> 盖世汽车数据显示 2026年1月 14.1%、1-2月 13.9%，Q1 12.3% 在趋势线上。但 2024Q1 22.5% 的起点略高于盖世数据（2025H1 15.3%），可能口径不同（含/不含某些细分）</td></tr>
+      <tr><td>大众 CARIAD 合作终止</td><td>15亿欧元，1000人团队，2026.6 终止</td><td><span class="pill olive">✓✓ 多源确认</span> 德国《图片报》、新浪财经、OFweek 一致报道。联合声明已发布。</td></tr>
+      <tr><td>集团 EBIT 利润率</td><td>2025年 2.0%</td><td><span class="pill olive">✓ 可查</span> 博世年报数据，智驾业务是拖累核心</td></tr>
+      <tr><td>智驾年度成本缺口</td><td>25亿欧元</td><td><span class="pill">单源，未独立确认</span></td></tr>
+      <tr><td>ESP 线控制动份额</td><td>中国市场 90%</td><td><span class="pill olive">✓ 行业共识</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">病根 1</div>
+      <h3>研发体系错配</h3>
+      <p style="font-size:13px;margin:0;">博世延续传统 Tier1 的"充分验证→量产"逻辑，而智驾需要"快速数据闭环→高频 OTA"。大众内部评估：联合研发的 L2++ 能力<strong>"对比国内市场主流竞品存在明显短板，场景泛化能力严重不足"</strong>。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">病根 2</div>
+      <h3>新旧利益锁死</h3>
+      <p style="font-size:13px;margin:0;">ESP 产品占中国 90% 份额——每年贡献稳定现金流。线控制动新技术会替代这块"现金牛"。博世高管坦言：<strong>"新技术的推广速度要兼顾成熟产品的销路"</strong>。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">病根 3</div>
+      <h3>商业认知脱节</h3>
+      <p style="font-size:13px;margin:0;">博世中国区总裁公开反对"智驾免费、智驾平权"，坚持高阶智驾收费。但中国市场现实：<strong>10-20 万价位车企已把智驾当标配卖点</strong>。博世的付费逻辑与主流定价策略对立。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">预后</div>
+      <h3>结构性衰退，非周期性</h3>
+      <p style="font-size:13px;margin:0;">原因有三：①组织流程无法"上线即改"；②成本降不到 15 万以下市场；③"自研+付费"思路与行业大势相悖。底盘（ESP/ABS）护城河仍在，但智能化战场已从<strong>"规则制定者"变成"被规则绕开的人"</strong>。</p>
+    </div>
+  </div>
+
+  <blockquote>博世的病根不在于投入不够，而在于"长得太像博世了"——这是一套百年机械巨头的身躯，硬要穿上智能汽车"小步快跑"的鞋，每一步都在跟自己较劲。</blockquote>
+</section>
+
+<!-- 二、竞争格局全景 -->
+<section>
+  <h2>二、中国智驾市场"战国七雄"全景</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:90px">玩家</th><th style="width:100px">定位</th><th>2025 营收/规模</th><th>核心优势</th><th>关键风险</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>🏆 华为 ADS</strong></td>
+        <td><span class="pill">全栈方案</span></td>
+        <td>城市 NOA 第三方 ~40%<br>高端市场 25% 域控份额</td>
+        <td>鸿蒙智行生态锁定、自研芯片+模型、品牌溢价、"引望"独立运营</td>
+        <td>华为造车嫌疑导致车企戒备；美国制裁持续</td>
+      </tr>
+      <tr>
+        <td><strong>🥈 Momenta</strong></td>
+        <td><span class="pill clay">软件许可平台</span></td>
+        <td>营收 24.13 亿 RMB<br>第三方城市 NOA ~60-65%<br>700亿+ HKD 市值</td>
+        <td>中立第三方身份（不造车）、7家全球OEM股东、71.6%毛利率、R7世界模型</td>
+        <td>3年净亏 92 亿；BMC7X 芯片未量产；OEM自研威胁</td>
+      </tr>
+      <tr>
+        <td><strong>🥉 地平线</strong></td>
+        <td><span class="pill olive">芯片平台</span></td>
+        <td>营收 37.58 亿 RMB<br>征程累计 1000 万套<br>市值 ~1000亿 HKD</td>
+        <td>中算力芯片 60%+ 渗透率、征程6系列爆发、大众合资（酷睿程）、比亚迪天神之眼</td>
+        <td>经调整亏损 16.8 亿（2024）；高端芯片被英伟达压制</td>
+      </tr>
+      <tr>
+        <td><strong>大疆卓驭</strong></td>
+        <td><span class="pill">性价比方案</span></td>
+        <td>20+ 量产车型<br>成行平台</td>
+        <td>极致成本控制（适配 10-15 万车型）、视觉为主的纯视觉路线、量产经验丰富</td>
+        <td>品牌定位偏中低端；高端突破困难</td>
+      </tr>
+      <tr>
+        <td><strong>元戎启行</strong></td>
+        <td><span class="pill">端到端 VLA</span></td>
+        <td>长城核心供应商<br>1亿美元单笔融资</td>
+        <td>国内首个无图端到端方案、VLA大模型路线、长城深度绑定</td>
+        <td>过度依赖单一客户（长城）；Thor芯片依赖</td>
+      </tr>
+      <tr>
+        <td><strong>博世</strong></td>
+        <td><span class="pill rust">传统 Tier1 衰退</span></td>
+        <td>ADAS 份额 12.3%<br>CARIAD 合作终止</td>
+        <td>底盘（ESP/ABS）90% 份额、全球化供应链、品牌信任度</td>
+        <td>结构性衰退；迭代慢；成本高；商业认知脱节</td>
+      </tr>
+      <tr>
+        <td><strong>英伟达</strong></td>
+        <td><span class="pill">高端芯片</span></td>
+        <td>高端域控 60%+<br>Orin/Thor 平台</td>
+        <td>大算力绝对领先、CUDA生态、德赛西威/大陆等 Tier1 生态</td>
+        <td>中国国产替代政策风险；地平线征程6P 追赶</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 三、Momenta 深度 -->
+<section>
+  <h2>三、Momenta：今天刚上市，Physical AI 第一股的真实底色</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">商业模式</div>
+      <h3>许可费飞轮</h3>
+      <p style="font-size:14px;margin:0;">从硬件集成交付转型为按车辆收取软件许可费。毛利率从 2023年 17.5% 跃升至 2025年 71.6%，许可收入 42 倍增长。<strong>本质是 SaaS 化的智驾公司</strong>。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">核心优势</div>
+      <h3>中立第三方身份</h3>
+      <p style="font-size:14px;margin:0;">不造车。上汽、通用、奔驰、丰田、比亚迪、现代、奇瑞 7 家 OEM 既是客户也是股东。<strong>这是华为永远无法复制的差异化</strong>。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">关键里程碑</div>
+      <h3>R7 世界模型 + BMC7X</h3>
+      <p style="font-size:14px;margin:0;">2026.4 发布 R7 强化学习世界模型，上汽大众 ID.ERA 9X 首发。自研 BMC7X 芯片（272 TOPS）预计 2026-2027 装车。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">最大风险</div>
+      <h3>亏损 + 芯片未量产</h3>
+      <p style="font-size:14px;margin:0;">3 年累计亏损 92.34 亿。经调整亏损收窄至 3.03 亿（2025），但 GAAP 亏损仍在扩大。BMC7X 尚未装车验证。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Momenta 与博世的镜像对比：</strong>博世死守"硬件+软件分开卖钱"的传统 Tier1 逻辑，而 Momenta 把软件许可做成高毛利(71.6%)的飞轮业务。博世的衰落和 Momenta 的崛起，本质上代表了中国智驾市场从"卖零件"到"卖能力"的范式转换。
+  </div>
+</section>
+
+<!-- 四、地平线深度 -->
+<section>
+  <h2>四、地平线：芯片平台的"国产平替"逆袭</h2>
+  <hr class="rule">
+
+  <div class="summary-band">
+    <div class="stat-card olive">
+      <div class="stat-num">37.58亿</div>
+      <div class="stat-label">2025 营收 (RMB)</div>
+      <div class="stat-delta">同比 +57.7%</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">64.5%</div>
+      <div class="stat-label">综合毛利率</div>
+      <div class="stat-delta">汽车业务 67.2%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">60%+</div>
+      <div class="stat-label">中算力芯片渗透率</div>
+      <div class="stat-delta">征程系列</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">104亿</div>
+      <div class="stat-label">累计亏损 (RMB)</div>
+      <div class="stat-delta">人均年薪 132万</div>
+    </div>
+  </div>
+
+  <div class="callout olive">
+    <strong>地平线的关键转折：</strong>征程6系列 2025H1 出货 98 万套（同比 6 倍），贡献 80%+ 收入。中高阶方案单价 1.7x 提升。比亚迪天神之眼 C + 理想 AD Pro 两大标杆客户落地。2026 年征程6P 开始挑战英伟达高端市场。<strong>地平线卡位的是"芯片平台+软硬协同"的生态位——比 Momenta 更底层，比博世更灵活。</strong>
+  </div>
+</section>
+
+<!-- 五、份额变迁可视化 -->
+<section>
+  <h2>五、博世 ADAS 份额变迁：一条不可逆的下坡路</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>时间</th><th>博世份额</th><th>排名</th><th>数据来源</th></tr></thead>
+    <tbody>
+      <tr><td>2024 Q1</td><td><strong>22.5%</strong></td><td>第一</td><td>文章声称（口径待核实）</td></tr>
+      <tr><td>2025 H1 (1-6月)</td><td><strong>15.3%</strong></td><td>第一（但比亚迪 12.3% 紧随）</td><td>盖世汽车</td></tr>
+      <tr><td>2025年1-10月</td><td><strong>15.9%</strong></td><td>第一（比亚迪 13.3%）</td><td>盖世汽车</td></tr>
+      <tr><td>2026年1月</td><td><strong>14.1%</strong></td><td>第一</td><td>盖世汽车</td></tr>
+      <tr><td>2026年1-2月</td><td><strong>13.9%</strong></td><td>第一</td><td>盖世汽车</td></tr>
+      <tr><td>2026 Q1</td><td><strong>12.3%</strong></td><td>第一（但优势急剧缩小）</td><td>文章声称</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>📊 数据解读：</strong>盖世汽车与文章数据存在口径差异——盖世的博世份额（13.9-15.9%）整体高于文章（12.3-22.5%），但<strong>下降趋势完全一致</strong>。博世虽然仍是 ADAS 装机量第一，但这个"第一"正在被快速侵蚀：比亚迪自研 13.3%+、电装/采埃孚保持稳定、华为从零杀入前十。按此趋势，<strong>2026 年底博世可能丢掉保持了二十年的 ADAS 中国第一位置</strong>。
+  </div>
+</section>
+
+<!-- 六、行业趋势 -->
+<section>
+  <h2>六、2026 年智驾市场的 5 个不可逆趋势</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">趋势 1</div>
+      <h3>城市 NOA 从"高端选配"变成"标配底线"</h3>
+      <p style="font-size:13px;margin:0;">2025年1-11月城市NOA搭载率已达 15.1%，自主品牌占比 81.1%。2026年新上市车型渗透率超 75%。博世坚持"智驾收费"对抗的是整个行业的定价趋势。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">趋势 2</div>
+      <h3>国产替代不可逆转</h3>
+      <p style="font-size:13px;margin:0;">SoC 芯片：地平线/英伟达/华为三家 70%。域控：华为 25% + 地平线快速上升。博世从"必选项"变成"可选项"——大众可以直接选地平线替代博世+CARIAD。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">趋势 3</div>
+      <h3>"地卓华魔"四强格局成型</h3>
+      <p style="font-size:13px;margin:0;">地平线、卓驭、华为、Momenta 四家在高阶智驾市场份额集中度超 80%。这不是松散联盟，而是<strong>"差异化垄断"</strong>——每家占据不同的生态位。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">趋势 4</div>
+      <h3>价格战打到底层</h3>
+      <p style="font-size:13px;margin:0;">智驾域控已"卷成白菜价"。15万元以下市场的智驾方案准入门槛被大疆卓驭和地平线拉到极低。博世的成本结构根本无法参与这个价格带的竞争。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">趋势 5</div>
+      <h3>传统 Tier1 被"绕开"</h3>
+      <p style="font-size:13px;margin:0;">竞争从"硬件代工+集成"演进为"芯片厂商+Tier1+车企"的深度生态绑定。传统 Tier1 如果不绑定芯片/算法生态，就会被边缘化为纯硬件代工商。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 七、文章真实性核查 -->
+<section>
+  <h2>七、文章真实性核查</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>文章核心断言</th><th style="width:80px">判定</th><th>核查结论</th></tr></thead>
+    <tbody>
+      <tr><td>博世份额 22.5%→12.3%</td><td><span class="pill">趋势正确，数字待核实</span></td><td>下降趋势多方数据一致。12.3% 在合理推断范围内但口径不明（可能含/不含某些细分）。盖世数据显示同期 15.3%→14.1%→13.9%。22.5% 起点偏高。</td></tr>
+      <tr><td>CARIAD 合作 15 亿欧元终止</td><td><span class="pill olive">✓✓ 高度可信</span></td><td>德国《图片报》、新浪财经、OFweek、网易多家确认。联合声明已发布。</td></tr>
+      <tr><td>"联邦学习模式导致迭代慢"</td><td><span class="pill olive">✓ 逻辑自洽</span></td><td>欧洲 GDPR 合规要求确实拖慢数据闭环。大众内部评估称"多次错过关键研发节点"。</td></tr>
+      <tr><td>吴永桥反对"智驾免费"</td><td><span class="pill olive">✓ 有公开报道</span></td><td>可查公开表态。确与中国市场趋势对立。</td></tr>
+      <tr><td>"结构性衰退非周期性"</td><td><span class="pill olive">✓ 判断合理</span></td><td>三个论据均有事实支撑。博世的组织/成本/商业模式三重锁死。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout olive">
+    <strong>总体评价：</strong>这篇文章是一篇质量较高的行业分析，核心论断均有事实支撑。唯一需要标注的是 12.3% 的份额数据——与盖世汽车数据存在口径差异，但下降趋势方向正确。文章作者"电车有点料"的分析框架（研发体系错配+新旧利益锁死+商业认知脱节）较为深刻，并非简单情绪化输出。与之前核查的 MoWorld PR 稿（夸大指数 7/10）形成鲜明对比——<strong>本文夸大指数约 1.5/10</strong>。
+  </div>
+</section>
+
+<!-- 八、总结 -->
+<section>
+  <h2>总结：三种命运，一个方向</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">下行 · 博世</div>
+      <h3>被自己困住的巨人</h3>
+      <p style="font-size:13px;margin:0;">问题不在投入不够，而在于<strong>基因</strong>。底盘护城河仍在，但智驾战场已从"规则制定者"变成"被绕开的人"。12.3% 可能还不是底。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--olive); padding-left:19px;">
+      <div class="label">上行 · Momenta + 地平线</div>
+      <h3>中国智驾的"双引擎"</h3>
+      <p style="font-size:13px;margin:0;">Momenta 吃软件许可（71.6% 毛利），地平线吃芯片平台（64.5% 毛利）。两者分别从算法和硬件两侧，完成了对传统 Tier1 的替代。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:19px;">
+      <div class="label">顶层 · 华为</div>
+      <h3>全栈生态的降维打击</h3>
+      <p style="font-size:13px;margin:0;">唯一能在软硬件全栈与 Tesla 对标的中国企业。鸿蒙智行生态形成了"一旦上车，很难下车"的锁定效应。</p>
+    </div>
+  </div>
+
+  <blockquote>2026 年的智驾市场正在上演一场经典的结构性替代：不是博世做错了什么，而是市场规则变了。当智驾从"零部件"变成"操作系统"，传统 Tier1 的角色就从"不可或缺"变成了"可选替代"。</blockquote>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 源文章：电车有点料 · 今日头条 &nbsp;·&nbsp; 交叉验证：盖世汽车、新浪财经、OFweek、德国《图片报》、36氪等<br>
+  数据口径说明：博世 ADAS 份额不同来源存在口径差异（含/不含某些细分市场），报告取文章声称值与盖世数据并置呈现
+</footer>
+
+</div>
+</body>
+</html>
