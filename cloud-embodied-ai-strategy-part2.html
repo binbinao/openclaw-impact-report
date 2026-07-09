@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>云厂商具身智能战略：更多可选方向</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.65; padding:56px 24px 120px; }
+  .page { max-width:1000px; margin:0 auto; }
+  header { margin-bottom:40px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:28px; color:var(--slate); }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); margin-top:4px; }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:14px; line-height:1.75; }
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; color:var(--slate); margin-bottom:8px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:18px; color:var(--slate); margin:24px 0 10px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 20px; }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:16px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:12px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:16px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.sky { background:rgba(91,139,160,.08); border-left-color:var(--sky); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:16px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:0 0 8px; }
+  .insight-card .score { font-family:var(--mono); font-size:13px; color:var(--clay); margin-top:8px; }
+
+  .pill { display:inline-block; border-radius:999px; padding:3px 12px;
+          font-family:var(--mono); font-size:11px; margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+
+  .matrix-row { display:flex; align-items:stretch; margin-bottom:12px; border-radius:var(--radius-panel); overflow:hidden; border:var(--border); }
+  .matrix-label { width:200px; background:var(--white); padding:14px 16px; display:flex; align-items:center; font-weight:600; font-size:14px; color:var(--slate); line-height:1.3; }
+  .matrix-items { flex:1; display:flex; background:var(--white); }
+  .matrix-cell { flex:1; padding:12px 14px; text-align:center; font-size:13px; border-left:1px solid var(--gray-100); line-height:1.4; }
+  .matrix-cell.top { font-weight:600; color:var(--slate); }
+  .matrix-cell.win { background:rgba(120,140,93,.06); }
+  .matrix-cell.lose { background:rgba(176,74,63,.04); }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .grid-2 { grid-template-columns:1fr; }
+    .matrix-row { flex-direction:column; }
+    .matrix-label { width:100%; }
+    .matrix-items { flex-direction:column; }
+    h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>云厂商具身智能战略：不止数据飞轮——六个可选方向</h1>
+  <p class="eyebrow">Cloud Strategy for Embodied AI · Part 2 · 2026-07-08</p>
+  <p class="lead">上一份报告的核心结论是"数据飞轮基础设施"——做大厂不屑做但离不开的事。但如果有更大的野心、更多的资源，或者想走一条完全不同的路，还有五个方向值得考虑。<strong>这六个方向的共同逻辑是：不做模型、不做机器人，只做"让模型和机器人更好用"的事。</strong></p>
+</header>
+
+<!-- 全景视图 -->
+<section>
+  <h2>全景视图：六个方向的定位矩阵</h2>
+  <hr class="rule">
+
+  <div class="matrix-row">
+    <div class="matrix-label">方向</div>
+    <div class="matrix-items">
+      <div class="matrix-cell top">A · 数据飞轮<br><span style="font-weight:400;color:var(--gray-500);font-size:11px;">(上一篇)</span></div>
+      <div class="matrix-cell top">B · 垂直行业<br>Robo-Cloud</div>
+      <div class="matrix-cell top">C · 机器人<br>可观测平台</div>
+      <div class="matrix-cell top">D · 边缘-云<br>混合推理</div>
+      <div class="matrix-cell top">E · 机器人<br>DevEx</div>
+      <div class="matrix-cell top">F · 具身技能<br>市场</div>
+    </div>
+  </div>
+  <div class="matrix-row">
+    <div class="matrix-label">大厂替代性</div>
+    <div class="matrix-items">
+      <div class="matrix-cell win">低<br><span style="font-size:11px;color:var(--gray-500);">大厂不屑做</span></div>
+      <div class="matrix-cell win">中低<br><span style="font-size:11px;color:var(--gray-500);">需要行业know-how</span></div>
+      <div class="matrix-cell">中<br><span style="font-size:11px;color:var(--gray-500);">Datadog可能做</span></div>
+      <div class="matrix-cell lose">高<br><span style="font-size:11px;color:var(--gray-500);">华为主场</span></div>
+      <div class="matrix-cell">中<br><span style="font-size:11px;color:var(--gray-500);">Vercel式打法</span></div>
+      <div class="matrix-cell">中<br><span style="font-size:11px;color:var(--gray-500);">大厂可能做</span></div>
+    </div>
+  </div>
+  <div class="matrix-row">
+    <div class="matrix-label">收入天花板</div>
+    <div class="matrix-items">
+      <div class="matrix-cell">中<br><span style="font-size:11px;color:var(--gray-500);">按存储+算力</span></div>
+      <div class="matrix-cell win">高<br><span style="font-size:11px;color:var(--gray-500);">按行业解决方案</span></div>
+      <div class="matrix-cell">中<br><span style="font-size:11px;color:var(--gray-500);">SaaS订阅</span></div>
+      <div class="matrix-cell win">高<br><span style="font-size:11px;color:var(--gray-500);">按推理量</span></div>
+      <div class="matrix-cell">低-中<br><span style="font-size:11px;color:var(--gray-500);">按开发者数量</span></div>
+      <div class="matrix-cell win">高<br><span style="font-size:11px;color:var(--gray-500);">按交易抽成</span></div>
+    </div>
+  </div>
+  <div class="matrix-row">
+    <div class="matrix-label">进入时机</div>
+    <div class="matrix-items">
+      <div class="matrix-cell win">现在<br><span style="font-size:11px;color:var(--gray-500);">行业刚起步</span></div>
+      <div class="matrix-cell win">现在<br><span style="font-size:11px;color:var(--gray-500);">仓储物流已成熟</span></div>
+      <div class="matrix-cell win">现在<br><span style="font-size:11px;color:var(--gray-500);">机器人公司急需</span></div>
+      <div class="matrix-cell">6-12个月<br><span style="font-size:11px;color:var(--gray-500);">需等模型成熟</span></div>
+      <div class="matrix-cell">现在<br><span style="font-size:11px;color:var(--gray-500);">开发者生态先行</span></div>
+      <div class="matrix-cell lose">2-3年<br><span style="font-size:11px;color:var(--gray-500);">需等硬件标准化</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- B: 垂直行业 -->
+<section>
+  <h2>方向 B：垂直行业 Robo-Cloud——深耕一个行业，端到端全栈</h2>
+  <hr class="rule">
+
+  <p>不和华为、阿里在"通用平台"上竞争。而是<strong>选一个行业，做深做透</strong>。这个行业必须满足三个条件：机器人已有实际部署、数据闭环需求明确、行业定制化程度高（大厂不愿做）。</p>
+
+  <table class="data-table">
+    <thead><tr><th style="width:100px">行业</th><th>机器人类型</th><th>市场规模</th><th>云平台需求</th><th>适配度</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>仓储物流</strong></td>
+        <td>AMR、无人叉车、分拣机器人、码垛机器人</td>
+        <td>2026年中国智能仓储市场 > 2000亿</td>
+        <td>WMS集成 + 多机调度 + 路径优化 + 异常检测</td>
+        <td><span class="pill olive">★★★★★</span></td>
+      </tr>
+      <tr>
+        <td><strong>医疗手术</strong></td>
+        <td>手术机器人、康复机器人、配药机器人</td>
+        <td>全球手术机器人市场 2026年 > 200亿美元</td>
+        <td>HIPAA/CFDA合规 + 手术数据记录 + 远程手术</td>
+        <td><span class="pill">★★★★☆</span></td>
+      </tr>
+      <tr>
+        <td><strong>农业</strong></td>
+        <td>采摘机器人、植保无人机、自动驾驶拖拉机</td>
+        <td>中国智慧农业市场 > 500亿</td>
+        <td>作物模型集成 + 田间路径规划 + 产量预测</td>
+        <td><span class="pill">★★★☆☆</span></td>
+      </tr>
+      <tr>
+        <td><strong>建筑施工</strong></td>
+        <td>3D打印机器人、砌墙机器人、测量机器人</td>
+        <td>中国建筑机器人市场 > 300亿</td>
+        <td>BIM集成 + 施工进度数字孪生 + 安全监控</td>
+        <td><span class="pill">★★★☆☆</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout olive">
+    <strong>✅ 最推荐：仓储物流 Robo-Cloud。</strong><br>
+    ① 这是唯一已经有<strong>规模化部署</strong>的具身智能场景——极智嘉、快仓、海柔等公司已经管理着数万台机器人<br>
+    ② WMS（仓库管理系统）的接口相对标准化，云平台可以直接嵌入现有IT架构<br>
+    ③ 仓储机器人的动作空间有限（在仓库地面二维移动+固定高度的抓取），训练和推理的复杂度远低于通用人形机器人——<strong>在技术上更可控</strong><br>
+    ④ 产品形态：<strong>WMS + 机器人调度 + 异常检测 + 预测性维护</strong> 的一体化 SaaS——按管理的机器人数量收费
+  </div>
+</section>
+
+<!-- C: 可观测 -->
+<section>
+  <h2>方向 C：机器人可观测平台——机器人的 Datadog</h2>
+  <hr class="rule">
+
+  <p>现代软件工程有 Datadog / Grafana / Prometheus——但机器人领域没有对应的产品。一个部署了 1000 台机器人的仓库，没有一个统一的平台可以看到：</p>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">软件世界有</div>
+      <h3>Datadog / Grafana</h3>
+      <p style="font-size:13px;margin:0;">CPU使用率、内存、请求延迟、错误率、日志聚合、告警、APM追踪……</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">机器人世界缺</div>
+      <h3>"RoboDog"</h3>
+      <p style="font-size:13px;margin:0;">电机温度、关节扭矩、电池健康度、任务成功率、碰撞事件、抓取力曲线、整机能耗、预测性维护、OTA部署状态……</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>产品形态：</strong><br>
+    ① <strong>机器人 Agent</strong>——部署在每台机器人上，采集 200+ 维度实时指标（关节温度、电机电流、IMU 抖动、电池循环次数、任务成功率、抓取力矩曲线……）<br>
+    ② <strong>云端仪表板</strong>——按舰队、按型号、按任务类型聚合展示，异常检测（"这个电机温度在过去 24 小时偏离基线 2σ"）<br>
+    ③ <strong>AI 驱动的预测性维护</strong>——"你 37 号机器人的右腕关节在接下来 72 小时内故障概率 78%"<br>
+    ④ <strong>计费：</strong>按监控的机器人数量 + 数据保留时长——纯 SaaS 模型，不需要 IaaS 绑定<br><br>
+    <strong>一个被低估的细节：</strong>机器人公司的软件工程团队通常很小（几十人），他们没有精力自己搭建全套可观测基础设施。一个开箱即用的产品，比任何"大厂平台"都更有吸引力——因为大厂平台不解决机器人特有的问题（比如"抓取力矩异常"和"CPU使用率高"是完全不同的信号）。
+  </div>
+</section>
+
+<!-- D: 混合推理 -->
+<section>
+  <h2>方向 D：边缘-云混合推理——VLA 模型的分层计算调度</h2>
+  <hr class="rule">
+
+  <p>具身智能面临一个根本性的计算矛盾：<strong>VLA 模型太大，边缘设备太小，但实时控制要求毫秒级延迟。</strong>唯一的解是边缘-云混合推理——把模型拆成两层：</p>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">边缘层（100ms 内）</div>
+      <h3>System0 · 实时运动控制</h3>
+      <p style="font-size:13px;margin:0;">模型：轻量策略网络（几百万参数），运行在 Jetson Orin / 高通 RB6<br>功能：力控闭环、碰撞避免、轨迹跟踪<br>延迟要求：< 5ms</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:19px;">
+      <div class="label">云端层（100ms-1s）</div>
+      <h3>System1+2 · 规划与推理</h3>
+      <p style="font-size:13px;margin:0;">模型：大语言/视觉模型（数十亿参数），运行在云端 GPU 集群<br>功能：任务规划、场景理解、异常处理<br>延迟要求：< 500ms</p>
+    </div>
+  </div>
+
+  <div class="callout olive">
+    <strong>云厂商的独特价值在这里：</strong><br>
+    不是提供一个"GPU 实例让客户跑模型"——是做<strong>分层推理调度引擎</strong>。自动根据任务复杂度、网络延迟、边缘算力来决定：<br>
+    · "叠衣服"这个动作 → 边缘侧执行（低延迟闭环）<br>
+    · "这个陌生物体是什么？我该怎么拿？" → 云端大模型推理<br>
+    · 网络不好时 → 自动降级到边缘模型<br>
+    · 模型更新时 → 云端训练 → 压缩 → OTA 推送边缘<br><br>
+    <strong>但最大的挑战：</strong>这高度依赖与芯片厂商的合作（推理延迟取决于硬件）。华为有昇腾，阿里有平头哥——纯云厂商在这个方向上缺乏硬件锚点。<strong>所以这不是最优先推荐的方向，但如果能绑定高通/英伟达生态，有机会。</strong>
+  </div>
+</section>
+
+<!-- E: DevEx -->
+<section>
+  <h2>方向 E：机器人 DevEx——让极客爱上你的平台</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">Web 开发有</div>
+      <h3>Vercel / Netlify</h3>
+      <p style="font-size:13px;margin:0;"><code>git push</code> → 自动构建 → 自动部署 → 自动SSL → 全球CDN。开发者只需要写代码，其它全部自动。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">机器人开发缺</div>
+      <h3>"Robot Vercel"</h3>
+      <p style="font-size:13px;margin:0;"><code>git push</code> → 自动在仿真里跑100个测试场景 → 生成报告 → 如果通过 → 自动OTA推送到测试机器人 → 自动采集运行数据 → 反馈到下一次迭代。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>具体产品形态：</strong><br>
+    ① <strong>Robot Sandbox</strong>——一键启动云端仿真环境（Isaac Sim + ROS2 + 客户自己的模型），按使用时长计费。不需要自己买 GPU 工作站<br>
+    ② <strong>Robot CI</strong>——Git 集成，push 代码 → 自动启动 N 个并行仿真场景 → 对比基准 → 生成可视化报告 → PR 审批<br>
+    ③ <strong>Robot Registry</strong>——模型版本管理 + OTA 部署编排 + 回滚。不是简单的"文件存储"——需要理解模型的输入/输出签名、依赖的 ROS 版本、兼容的硬件平台<br>
+    ④ <strong>收入模型：</strong>免费给个人开发者和学生 → 付费给企业团队（类似 GitHub 的模型）
+  </div>
+
+  <div class="callout sky">
+    <strong>💡 这个方向一个被低估的价值：人才漏斗。</strong><br>
+    当学生在学校就用你的 Robot Sandbox 做毕业设计，当他们进入企业后，你的付费方案是他们的默认选择。<strong>Vercel 能从 Netlify 和 AWS Amplify 中胜出，靠的不是功能——是在开发者心中建立的"默认工具"心智。</strong>
+  </div>
+</section>
+
+<!-- F: 技能市场 -->
+<section>
+  <h2>方向 F：具身技能市场——机器人时代的 App Store</h2>
+  <hr class="rule">
+
+  <p>这是六个方向中<strong>天花板最高但时机最远</strong>的一个。逻辑很简单：如果每个机器人都需要从零训练"叠衣服""洗碗""拧螺丝"，行业永远无法规模化。技能的复用和交易是规模化前提。</p>
+
+  <table class="data-table">
+    <thead><tr><th>角色</th><th>提供什么</th><th>获得什么</th></tr></thead>
+    <tbody>
+      <tr><td><strong>技能开发者</strong></td><td>上传训练好的"叠衣服"技能模型（VLA checkpoint + 仿真验证结果 + 适配的机器人型号列表）</td><td>按下载/调用次数分成</td></tr>
+      <tr><td><strong>机器人厂商</strong></td><td>认证技能在自己平台上的兼容性</td><td>生态丰富度 → 更多客户买机器人</td></tr>
+      <tr><td><strong>终端客户</strong></td><td>下载技能 → 一键部署到自己的机器人</td><td>不需要从零训练，即插即用</td></tr>
+      <tr><td><strong>云平台</strong></td><td>技能托管 + 仿真验证 + 兼容性测试 + 交易撮合</td><td>抽成 15-30%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>⚠ 为什么现在不能做：</strong><br>
+    ① 硬件还没标准化——一个在宇树 H1 上训练的技能，迁移到智元 A2 需要额外工作<br>
+    ② 基础模型还没收敛——没有一个"机器人界的 LLM"可以作为技能训练的基础层<br>
+    ③ 部署标准化程度不够——没有统一的 OTA、模型格式、运行时环境<br><br>
+    <strong>前面五个方向（A-E）都是在为解决这个问题铺路。</strong>当你做好了数据标准（A）、行业解决方案（B）、可观测（C）、混合推理（D）、DevEx（E），技能市场（F）就是所有这些基础设施之上的<strong>自然涌现的应用层</strong>。
+  </div>
+</section>
+
+<!-- 优先级 -->
+<section>
+  <h2>综合推荐优先级</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>优先级</th><th>方向</th><th>为什么</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="pill olive">P0 · 现在就做</span></td>
+        <td><strong>A · 数据飞轮</strong></td>
+        <td>大厂不屑做、飞轮锁定效应强、多云中立占位。风险最低，壁垒最高。</td>
+      </tr>
+      <tr>
+        <td><span class="pill olive">P0 · 现在就做</span></td>
+        <td><strong>C · 可观测平台</strong></td>
+        <td>每家有机器人的公司都需要，但没人自己搭。纯SaaS模型不依赖IaaS。可独立于数据飞轮商业化。</td>
+      </tr>
+      <tr>
+        <td><span class="pill sky">P1 · 12个月内启动</span></td>
+        <td><strong>B · 垂直行业</strong></td>
+        <td>仓库机器人已有规模化部署。做重型SaaS（WMS+调度+运维），客户单价高，替换成本高。</td>
+      </tr>
+      <tr>
+        <td><span class="pill sky">P1 · 12个月内启动</span></td>
+        <td><strong>E · DevEx</strong></td>
+        <td>人才漏斗价值长期但见效慢。可作为社区运营+开源项目的组合，成本低，品牌溢出大。</td>
+      </tr>
+      <tr>
+        <td><span class="pill">P2 · 24个月后</span></td>
+        <td><strong>D · 混合推理</strong></td>
+        <td>需要等模型成熟和芯片合作，而且华为在这个方向上有天然优势。</td>
+      </tr>
+      <tr>
+        <td><span class="pill">P3 · 行业成熟后</span></td>
+        <td><strong>F · 技能市场</strong></td>
+        <td>终极形态，但需要前面五个方向的标准化基础设施作为前提。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <blockquote>
+    如果只能选两个方向同时推进：<strong>A（数据飞轮）+ C（可观测平台）</strong>。这两个方向互不依赖、可以并行开发，但最终能互相增强——数据平台上的机器人越多，可观测的价值越大；可观测的指标越丰富，数据平台上的飞轮越有价值。
+  </blockquote>
+</section>
+
+<footer>
+  报告生成：2026-07-08 &nbsp;·&nbsp; 续接上一篇 <em>云厂商具身智能战略布局：架构师视角</em><br>
+  所有战略推演基于系统架构第一性原理分析，不包含非公开商业策略信息。
+</footer>
+
+</div>
+</body>
+</html>
