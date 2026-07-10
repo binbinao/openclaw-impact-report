@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中国智驾五巨头横向对比：谁会出局？谁能成为巨头？</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:14px; line-height:1.65; padding:56px 24px 120px; }
+  .page { max-width:1120px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:28px; color:var(--slate); line-height:1.3; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray-500); margin-top:6px; }
+  .meta { color:var(--gray-500); font-size:13px; margin-top:4px; }
+  .lead { font-size:16px; color:var(--gray-700); margin-top:14px; line-height:1.75; }
+
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; color:var(--slate); margin:0 0 6px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:20px 0 10px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 18px; }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:14px 0; font-size:13px; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:10px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:8px 12px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:10px 12px; border-bottom:1px solid var(--gray-100);
+      vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+  .data-table tbody tr.row-top { background:rgba(120,140,93,.04); }
+  .data-table tbody tr.row-risk { background:rgba(176,74,63,.03); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:14px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:14px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:14px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:16px; }
+  .insight-card .label { font-family:var(--mono); font-size:10px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:15px; color:var(--slate); margin:0 0 6px; }
+
+  .pill { display:inline-block; border-radius:999px; padding:2px 10px;
+          font-family:var(--mono); font-size:10px; margin:2px 3px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+
+  .rank-badge { display:inline-block; width:24px; height:24px; border-radius:50%;
+                text-align:center; line-height:24px; font-family:var(--mono); font-size:12px;
+                font-weight:600; color:var(--white); }
+  .rank-badge.g1 { background:var(--clay); }
+  .rank-badge.g2 { background:var(--sky); }
+  .rank-badge.g3 { background:var(--purple); }
+  .rank-badge.g4 { background:var(--gray-500); }
+  .rank-badge.g5 { background:var(--gray-500); }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+  @media (max-width:860px) {
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>中国智驾五巨头横向对比：谁会出局？谁能成为巨头？</h1>
+  <p class="eyebrow">Cross-Comparison Report · 2026-07-10</p>
+  <p class="meta">5 个 subagent 并行调研 · 整合自 Momenta / 华为引望 / 地平线 / 千里科技 / 萝卜快跑 深度报告</p>
+  <p class="lead">2026 年 7 月 8 日，Momenta 港股上市，市值 696 亿港元。至此，中国智驾五巨头——<strong>华为引望、Momenta、地平线、千里科技、萝卜快跑</strong>——全部完成资本化或正在路上。但正如原文所说：<strong>"最终能剩下来的可能就是两家，多一点就是三家。"</strong> 这份报告用数据告诉你：谁会留下，谁会出局。</p>
+</header>
+
+<!-- 总览 -->
+<section>
+  <h2>一、五巨头核心数据一览</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>维度</th><th style="width:120px">华为引望</th><th style="width:120px">Momenta</th><th style="width:120px">地平线</th><th style="width:120px">千里科技</th><th style="width:120px">萝卜快跑</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>定位</strong></td>
+        <td><span class="pill rust">全栈封闭</span> 苹果路线</td>
+        <td><span class="pill sky">软件开放</span> 安卓路线</td>
+        <td><span class="pill purple">芯片底座</span> 高通+博世</td>
+        <td><span class="pill clay">吉利嫡系</span> 整车厂自研</td>
+        <td><span class="pill">Robotaxi</span> 出行运营商</td>
+      </tr>
+      <tr>
+        <td><strong>核心产品</strong></td>
+        <td>ADS 5.0 + 昇腾 + 鸿蒙座舱</td>
+        <td>一段式端到端 + CLA数据飞轮</td>
+        <td>征程芯片 + HSD系统</td>
+        <td>千里浩瀚ASD + 域控</td>
+        <td>Apollo ADFM + RT6无人车</td>
+      </tr>
+      <tr>
+        <td><strong>搭载量</strong></td>
+        <td>170万辆 → 2026目标300万</td>
+        <td>100万台 + 100+车型</td>
+        <td>1000万+套芯片</td>
+        <td>70%来自吉利体系</td>
+        <td>2300台车队</td>
+      </tr>
+      <tr>
+        <td><strong>2025营收</strong></td>
+        <td>~450亿（车BU）</td>
+        <td>24.13亿</td>
+        <td>37.58亿</td>
+        <td>98.76亿</td>
+        <td>Q1订单320万单</td>
+      </tr>
+      <tr>
+        <td><strong>毛利率</strong></td>
+        <td>首次盈利</td>
+        <td><strong>71.6%</strong></td>
+        <td>64.5%（下行中）</td>
+        <td>车业务11.7%</td>
+        <td>武汉单车盈亏平衡</td>
+      </tr>
+      <tr>
+        <td><strong>盈亏状态</strong></td>
+        <td><span class="pill olive">2025首次盈利</span></td>
+        <td><span class="pill sky">经调整亏3亿</span> 接近平衡</td>
+        <td><span class="pill rust">经营亏损23.7亿</span> 仍在扩大</td>
+        <td>连亏三年</td>
+        <td><span class="pill rust">整体仍亏损</span></td>
+      </tr>
+      <tr>
+        <td><strong>市值/估值</strong></td>
+        <td>~2000亿（引望独立）</td>
+        <td>696亿港元（港股）</td>
+        <td>~1000亿港元（港股）</td>
+        <td>推进赴港上市</td>
+        <td>80-120亿美元</td>
+      </tr>
+      <tr>
+        <td><strong>客户结构</strong></td>
+        <td>五界深度绑定 + 阿维塔/岚图</td>
+        <td>全球前10车企9家客户</td>
+        <td>40+车企，310+定点</td>
+        <td>吉利系（极氪/领克/几何）</td>
+        <td>C端消费者</td>
+      </tr>
+      <tr>
+        <td><strong>最大优势</strong></td>
+        <td>全栈自研不可复制</td>
+        <td>第三方NOA市占率64.5%</td>
+        <td>芯片国产替代刚需</td>
+        <td>吉利基本盘稳健</td>
+        <td>唯一规模化全无人运营</td>
+      </tr>
+      <tr>
+        <td><strong>最大风险</strong></td>
+        <td>芯片制裁，封闭生态受限</td>
+        <td>客户自研替代，持续亏损</td>
+        <td>亏损扩大，毛利率下行</td>
+        <td>对外拓展受限</td>
+        <td>重资产天花板，安全事件</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 商业模式对比 -->
+<section>
+  <h2>二、商业模式对比：五条完全不同的路</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:15px;">
+      <div class="label">华为 · 苹果路线</div>
+      <h3>全栈封闭，软硬一体</h3>
+      <p style="font-size:12px;margin:0;">芯片→OS→算法→域控→座舱→云，全部自研。车企"交钥匙"：整车电子电气架构要适配华为方案。五界深度绑定，赛力斯三年半付了750亿。优势：体验极致统一，落地速度最快。劣势：整车厂"灵魂上缴"抗拒，芯片出口受限，海外市场被封。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:15px;">
+      <div class="label">Momenta · 安卓路线</div>
+      <h3>纯软件开放，适配多芯片</h3>
+      <p style="font-size:12px;margin:0;">只做上层智驾软件算法，不自研主控芯片。适配10+种芯片，车企保留"灵魂"。许可收入从0.23亿→9.68亿(2023→2025)，毛利率71.6%。优势：全球车企覆盖最广，合资品牌接受度最高。劣势：纯软件天花板低，客户也是潜在对手。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:15px;">
+      <div class="label">地平线 · 高通路线</div>
+      <h3>芯片底座 + 向上延伸</h3>
+      <p style="font-size:12px;margin:0;">征程芯片出货1000万+套，硬件收入增速144%。但也在做HSD全栈系统，与Momenta从互补变竞争。毛利率从77.3%→64.5%，因为低毛利的硬件占比上升。优势：国产替代刚需，千万套验证。劣势：两面作战——既要守芯片，又要攻系统。</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--clay); padding-left:15px;">
+      <div class="label">千里科技 · 整车厂嫡系</div>
+      <h3>吉利全栈自研，对标华为</h3>
+      <p style="font-size:12px;margin:0;">2000-3000人团队(吉利研究院+极氪+迈驰智行合并)。对标华为全栈模式，适配第三方芯片但自研域控和算法。70%装车量来自吉利，车业务毛利率仅11.7%。优势：吉利年销300万+基本盘。劣势：对外拓展难，其他车企不会用"竞品"的智驾方案。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--gray-500); padding-left:15px;">
+      <div class="label">萝卜快跑 · 完全不同的赛道</div>
+      <h3>Robotaxi重资产运营商</h3>
+      <p style="font-size:12px;margin:0;">不卖方案给车企——自己买车、自己运营。全球27城2300台车队，Q1 320万单。武汉单车盈亏平衡。但Robotaxi是重资产线性扩张，天花板远低于ADAS供应商(年9000万辆新车)。百度Apollo在L2+智驾供应商赛道几乎缺位，只剩萝卜快跑这根独苗。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 死亡清单 -->
+<section>
+  <h2>三、谁会先出局？——五家各自的"死亡条件"</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>排名</th><th>公司</th><th>各自的"死亡条件"</th><th>出局概率</th></tr></thead>
+    <tbody>
+      <tr class="row-risk">
+        <td><span class="rank-badge g5">5</span></td>
+        <td><strong>萝卜快跑</strong></td>
+        <td>① 一次重大安全事故 → 监管全面收紧 → 全无人许可被撤销；② 百度集团自身财务恶化(2025净利-76%) → 停止输血 → 现金流断裂；③ Robotaxi商业化周期远超预期，分拆IPO受阻。<strong>它不是被竞争对手打败的——是被自己的商业模式拖垮的。</strong></td>
+        <td><span class="pill rust">高</span></td>
+      </tr>
+      <tr class="row-risk">
+        <td><span class="rank-badge g4">4</span></td>
+        <td><strong>地平线</strong></td>
+        <td>① 经营亏损持续扩大(2025年23.7亿且仍在扩大) → 现金流断裂；② 车企自研芯片成熟(小鹏已上车，蔚来/比亚迪推进中) → 中高端芯片市场被蚕食；③ 做HSD系统与Momenta正面竞争失败 → 两面都不讨好。<strong>商业模式上"两头吃"正变成"两头被吃"。</strong></td>
+        <td><span class="pill rust">中高</span></td>
+      </tr>
+      <tr>
+        <td><span class="rank-badge g3">3</span></td>
+        <td><strong>千里科技</strong></td>
+        <td>① 吉利自身销量下滑 → 基本盘动摇；② 对外拓展完全失败 → 永远是"吉利内供"；③ 吉利内部战略摇摆(是否继续自研 vs 采购第三方)。<strong>它是五家中最"被动"的——命运完全取决于吉利的战略选择。</strong></td>
+        <td><span class="pill clay">中</span></td>
+      </tr>
+      <tr class="row-top">
+        <td><span class="rank-badge g2">2</span></td>
+        <td><strong>Momenta</strong></td>
+        <td>① 核心客户(上汽/比亚迪/奔驰)自研成熟 → 许可收入断崖下跌；② 软件定价权被车企议价压缩；③ 一次重大安全事件 → 信任危机。但 Momenta 的数据飞轮(100万台+100款车型)形成了一定壁垒，<strong>短期出局概率低，但长期价值取决于能否在车企自研成熟前建立足够深的护城河。</strong></td>
+        <td><span class="pill sky">中低</span></td>
+      </tr>
+      <tr class="row-top">
+        <td><span class="rank-badge g1">1</span></td>
+        <td><strong>华为引望</strong></td>
+        <td>唯一的"死亡条件"是芯片制裁彻底锁死——昇腾制程无法突破7nm，而英伟达Thor已到4nm。其他风险(车企排斥封闭生态、头部车企自研)是"增长天花板"问题而非"生存"问题。<strong>华为有中国最强大的研发投入(180亿+)、最完整的软硬一体栈、最确定性的L3路线图。它是五家中最不可能出局的。</strong></td>
+        <td><span class="pill olive">极低</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 巨头可能性 -->
+<section>
+  <h2>四、谁能成为行业巨头？——三个维度的评分</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>评分维度</th><th style="width:80px">华为</th><th style="width:80px">Momenta</th><th style="width:80px">地平线</th><th style="width:80px">千里科技</th><th style="width:80px">萝卜快跑</th></tr></thead>
+    <tbody>
+      <tr><td><strong>技术壁垒</strong></td><td>★★★★★</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
+      <tr><td><strong>商业模型天花板</strong></td><td>★★★★★</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>★★☆☆☆</td></tr>
+      <tr><td><strong>财务可持续性</strong></td><td>★★★★★</td><td>★★★★☆</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>★★☆☆☆</td></tr>
+      <tr><td><strong>客户绑定深度</strong></td><td>★★★★★</td><td>★★★★☆</td><td>★★★★☆</td><td>★★★☆☆</td><td>—</td></tr>
+      <tr><td><strong>国际化能力</strong></td><td>★★☆☆☆</td><td>★★★★★</td><td>★★★☆☆</td><td>★★★☆☆</td><td>★★★★☆</td></tr>
+      <tr><td><strong>赛道天花板</strong></td><td>★★★★★</td><td>★★★★★</td><td>★★★★☆</td><td>★★★☆☆</td><td>★★★☆☆</td></tr>
+      <tr style="font-weight:600; background:var(--gray-100);">
+        <td><strong>综合巨头潜力</strong></td>
+        <td><span class="pill olive">★★★★★</span><br>最确定</td>
+        <td><span class="pill sky">★★★★☆</span><br>有条件</td>
+        <td><span class="pill">★★★☆☆</span><br>需拐点</td>
+        <td><span class="pill">★★☆☆☆</span><br>天花板低</td>
+        <td><span class="pill">★☆☆☆☆</span><br>不同赛道</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:15px;">
+      <div class="label">最可能成为巨头</div>
+      <h3>华为引望</h3>
+      <p style="font-size:13px;margin:0;">全栈自研+数据飞轮(170万辆/102亿公里)+L3 2026底商用+2500亿估值+首次盈利。前提是芯片制裁不锁死。如果能突破芯片瓶颈，华为引望有望成为<strong>智能汽车时代的"高通+安卓"合体</strong>——不仅做Tier 1，更做标准制定者。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--sky); padding-left:15px;">
+      <div class="label">有条件的巨头候选</div>
+      <h3>Momenta</h3>
+      <p style="font-size:13px;margin:0;">市占率64.5%+全球化客户覆盖+毛利率71.6%+数据飞轮壁垒。前提是：①在车企自研成熟前建立足够深的不可替代性；②BMC芯片大规模上车形成软硬一体；③Robotaxi海外跑通商业模式。<strong>窗口期：2-3年。</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 最终答案 -->
+<section>
+  <h2>五、回答原文的问题：谁会率先出局？</h2>
+  <hr class="rule">
+
+  <blockquote>
+    如果最终会有两家掉队，最大的概率是<strong>萝卜快跑和地平线</strong>——前者是因为赛道天花板太低，后者是因为商业模式上"两头作战"且亏损仍在扩大。<br><br>
+    留下的三家（华为、Momenta、千里科技）中，千里科技是"最安全但最不性感"的存在——有吉利300万年销量的基本盘，但永远无法成为独立平台型巨头。<br><br>
+    <strong>真正的终局对决是华为 vs Momenta——苹果 vs 安卓的智驾版。</strong>华为赢在"深"（全栈自研+软硬一体），Momenta赢在"广"（全球车企覆盖+开放生态）。<strong>最终胜负取决于一个变量：车企在多大程度上愿意"上缴灵魂"。</strong>如果主流车企选择自研（像比亚迪、蔚小理），则Momenta的开放生态更有价值；如果主流车企选择交钥匙（像赛力斯、北汽），则华为的全栈方案更优。
+  </blockquote>
+
+  <div class="callout olive">
+    <strong>💡 一个被原文忽略的变量：特斯拉 FSD 入华。</strong><br>
+    如果特斯拉 FSD 在中国获批并实现技术领先，五巨头的竞争格局可能被完全改写——因为 FSD 是"自研芯片+自研算法+自有车队"的终极纵向整合，比华为更封闭、比 Momenta 数据更多、比萝卜快跑更轻资产。但这一变量目前不在任何一家的控制范围内。
+  </div>
+</section>
+
+<footer>
+  报告生成：2026-07-10 &nbsp;·&nbsp; 5 个 subagent 并行调研 · 整合自 Momenta / 华为引望 / 地平线 / 千里科技 / 萝卜快跑 独立深度报告<br>
+  数据来源：各公司招股书/年报/官方公告、灼识咨询、佐思汽研、中汽协、盖世汽车、36氪、钛媒体、新浪财经、晚点LatePost、21财经 等
+</footer>
+
+</div>
+</body>
+</html>
