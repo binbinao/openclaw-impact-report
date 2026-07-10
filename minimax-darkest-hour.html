@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniMax 深度调研：初创大模型公司的最优工作模式</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.65; padding:56px 24px 120px; }
+  .page { max-width:1000px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:28px; color:var(--slate); line-height:1.3; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray-500); margin-top:6px; }
+  .meta { color:var(--gray-500); font-size:13px; margin-top:4px; }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:14px; line-height:1.75; }
+
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; color:var(--slate); margin:0 0 6px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:20px 0 10px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 18px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:18px 20px; }
+  .stat-card.rust { border-left:4px solid var(--rust); }
+  .stat-num { font-family:var(--serif); font-size:26px; font-weight:500; color:var(--slate); }
+  .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); margin-top:4px; }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:14px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:11px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:14px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.sky { background:rgba(91,139,160,.08); border-left-color:var(--sky); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:14px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:14px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:18px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:16px; color:var(--slate); margin:0 0 8px; }
+
+  .pill { display:inline-block; border-radius:999px; padding:3px 10px;
+          font-family:var(--mono); font-size:11px; margin:2px 4px 2px 0; }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band, .grid-3 { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>MiniMax 深度调研：初创大模型公司的最优工作模式</h1>
+  <p class="eyebrow">Organizational Culture Analysis · 2026-07-10</p>
+  <p class="meta">源文章：虎嗅/硅星人Pro《我见证了 MiniMax 的"至暗时刻"》&nbsp;·&nbsp; 作者：王兆洋</p>
+  <p class="lead">2026 年 6 月，MiniMax 发布了 M3 模型（428B 总参/23B 激活/1M 上下文/原生多模态），当天股价涨超 7%。但仅仅半天后，因定价方案切换缺乏沟通，用户反弹、股价暴跌 15.71%。<strong>这篇文章的作者在 M3 发布前后潜入 MiniMax 内部，获得了极高权限，记录了一场"至暗时刻"的全过程——以及一家初创大模型公司在危机中暴露出的全部特质。</strong></p>
+</header>
+
+<!-- 事件 -->
+<section>
+  <div class="summary-band">
+    <div class="stat-card rust">
+      <div class="stat-num">+7% → -15.7%</div>
+      <div class="stat-label">M3发布当日股价波动</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">1小时</div>
+      <div class="stat-label">争吵→定价方案完成更新</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">100人</div>
+      <div class="stat-label">M3发布"作战群"</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4年</div>
+      <div class="stat-label">公司成立→最快上市</div>
+    </div>
+  </div>
+
+  <h2>事件还原：一次"至暗时刻"的 48 小时</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:80px">时间</th><th>事件</th></tr></thead>
+    <tbody>
+      <tr><td><strong>6月1日 凌晨</strong></td><td>M3 发布前夜。全员聚在上海总部。几十个光标同时在同一个文档里闪烁——整家公司挤在同一张纸上。IO（创始人闫俊杰）也在里面，大部分时间只是听着，最后给出决策。</td></tr>
+      <tr><td><strong>6月1日 早盘</strong></td><td>M3 正式发布。股价涨超 7%。</td></tr>
+      <tr><td><strong>6月1日 中午</strong></td><td>定价争议爆发。新的 Token Plan 替代了旧的订阅制 Coding Plan，用户发现消耗速度远超预期，但官方没有任何解释。不满开始发酵。</td></tr>
+      <tr><td><strong>6月1日 下午</strong></td><td>100人作战群里，技术负责人公开质问开放平台同事。"你怎么设计的这个定价？"两人在群里吵了起来。但就在争吵的同一小时内，套餐设计完成了更新。</td></tr>
+      <tr><td><strong>6月1日 晚间</strong></td><td>道歉公告发出——承认"是我们工作不到位"。</td></tr>
+      <tr><td><strong>6月1日 收盘</strong></td><td>股价收跌 15.71%。</td></tr>
+      <tr><td><strong>后续</strong></td><td>一场全员闭门复盘会。IO 向所有人道歉。"效果没有达到预期，为此付出的同事，对不住。"然后分享全部思考：哪里判断错了，哪里没准备好，接下来怎么改。没有甩锅，只有就事论事。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 七个特质 -->
+<section>
+  <h2>MiniMax 的七个组织特质</h2>
+  <hr class="rule">
+
+  <div class="grid-3">
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 1</div>
+      <h3>Context 是唯一信仰</h3>
+      <p style="font-size:13px;margin:0;">不是按部门或层级组织——谁有一件事的 context，谁就进同一个群。CEO 也不例外。IO 经常被拉进群里，大部分时间只是听着，充分理解 context 后才做决策。<strong>"他缺的是 context，这是所有人的责任。"</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 2</div>
+      <h3>当众吵架，吵完干活</h3>
+      <p style="font-size:13px;margin:0;">技术负责人和开放平台同事在 100 人群里公开争吵。事后两人坐在一起："我觉得他当时说的是对的。""吵完架后没有什么个人恩怨。"两个联合创始人也会直接吵起来——然后下一个会继续正常干活。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 3</div>
+      <h3>全员 ego 极小</h3>
+      <p style="font-size:13px;margin:0;">"ego 大，没什么用。"——研发负责人。CEO 没有独立办公室，坐在角落工位。员工可以直接否决 IO 的方案。氛围不是"设计"出来的——是双向筛选：ego 大的人自己待不下去。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 4</div>
+      <h3>就事论事，不甩锅</h3>
+      <p style="font-size:13px;margin:0;">大厂逻辑："这事谁没做好？责任是谁的？" MiniMax："这件事里哪些做得好、哪些做得不好。"<strong>"当他说的是客观事实时，客观事实是不会给人额外压力的。"</strong></p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 5</div>
+      <h3>安全感保护做事的人</h3>
+      <p style="font-size:13px;margin:0;">不用担心项目突然被砍、不用防隔壁部门甩锅、不用担心 KPI 冲突。但前提是你得想清楚："如果你一直 get 不到大家在说什么，也会受到非常严厉的批评。"</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 6</div>
+      <h3>AI Native 不是口号</h3>
+      <p style="font-size:13px;margin:0;">去年9月就在内部开发了"AI实习生"——把 agent 接入 IM，写文档、抓反馈、排查日志。比 OpenClaw 早了大半年。不是强制推广，靠"看到别人用也跟着用"自发扩散。</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--rust); padding-left:19px;">
+      <div class="label">特质 7</div>
+      <h3>Scale = 终极优化函数</h3>
+      <p style="font-size:13px;margin:0;">内部共识：<strong>优化目标 = Scaling。规模 = 智能上限 × 可动员的资源。</strong>ResNet 式的简洁可复用是追求。每个决策的判断标准："这事能不能 scale？"</p>
+    </div>
+  </div>
+</section>
+
+<!-- 创始人 -->
+<section>
+  <h2>创始人 IO（闫俊杰）：不是"管公司"——是"做判断"</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">IO 的工作方式</div>
+      <h3>听得多，说得少，判断不摇摆</h3>
+      <p style="font-size:13px;margin:0;">① 大部分时间听着——在群里、在会议上，充分吸收 context<br>② 会一个人"想想"，然后定期全员会同步<br>③ 当判断做出后，就不会摇摆<br>④ 想明白了会直接找负责人对思路，没理解就直接打电话讲明白<br>⑤ 很多电话是为了<strong>获得更多 context</strong>来帮他做判断</p>
+    </div>
+    <div class="insight-card" style="border-left:4px solid var(--purple); padding-left:19px;">
+      <div class="label">IO 的价值观</div>
+      <h3>务实、不 bragging、技术锚定</h3>
+      <p style="font-size:13px;margin:0;">① 对技术的理解：像 ResNet——简洁、可解释、可被复用<br>② 关掉没意义的产品："如果这个东西已经没有意义了，没有必要让它苟延残喘"<br>③ 喜欢的人才：实力强、自信、判断有逻辑能说服大家——<strong>这不叫 ego</strong><br>④ 不喜欢的人才：判断没有匹配实力和证据，硬要大家服从——<strong>这叫 ego</strong></p>
+    </div>
+  </div>
+
+  <blockquote>
+    "一家公司的气质，基本上 99.9% 由这家公司的创始人来决定。IO 就是一个很务实的人，不太 bragging。如果 IO 的 ego 都不是很大、都很务实，那很显然，如果你的 ego 很大、不是很务实，你可能就待不下去。"<br>
+    <span style="font-family:var(--mono);font-size:12px;color:var(--gray-500);display:block;margin-top:8px;">—— MiniMax 核心技术研究员</span>
+  </blockquote>
+</section>
+
+<!-- 七个特质 -->
+<section>
+  <h2>定价灾难暴露的深层问题：初创公司 vs 上市公司的撕裂</h2>
+  <hr class="rule">
+
+  <p>MiniMax 的定价危机的本质不是"定价错了"——是<strong>一家还在用创业公司模式运转的企业，面对的是上市公司的资本市场审视</strong>。</p>
+
+  <div class="callout">
+    <strong>定价方案的起源（来自内部员工的回忆）：</strong><br>
+    ① 旧订阅方案太复杂——每加一个模型就要配对应的次数，次数和套餐之间又是复杂换算。用户经常指着配置问："这个是什么？我不知道是什么。"<br>
+    ② 内部判断：未来模型会像水电煤，token 变成服务本身<br>
+    ③ 既然迟早要改，不如早点改——<strong>"不改，用户可能都没法用好我们新的模型"</strong><br>
+    ④ 但改了之后——<strong>没有用户短信、没有站内信、官方页面解释不清</strong>。用户登录后发现规则变了，不知道发生了什么。<br><br>
+    <strong>根本原因：</strong>这家公司太习惯"把模型做好是最重要的"——所有注意力都放在智能本身。但作为一家上市公司，<strong>用户的 context 和市场的 context 是同样重要的</strong>。他们用"追求极致技术"的创业公司逻辑，去处理了一件需要"精细商业化沟通"的上市公司的任务。
+  </div>
+</section>
+
+<!-- 最优模式 -->
+<section>
+  <h2>初创大模型公司的最优工作模式</h2>
+  <hr class="rule">
+
+  <p>从 MiniMax 的案例中，可以提炼出<strong>一套适用于初创大模型公司的组织原则</strong>。这不是"照搬 MiniMax"——而是理解它为什么有效，然后适配到自己的上下文。</p>
+
+  <h3>原则一：最大化 Context 流速</h3>
+
+  <div class="callout sky">
+    <strong>大模型行业的特殊性：</strong>模型能力每 3 个月迭代一代，竞争对手每周发布新模型。任何信息延迟都意味着决策建立在过时的 context 上。<br><br>
+    <strong>具体做法：</strong><br>
+    · 按 context 而非按部门组织群组——谁有相关信息，谁就在群里<br>
+    · 创始人必须在核心技术和产品群中，不是"了解情况"而是"获得 context 以便做判断"<br>
+    · 重要信息在群里同时被所有人看到——没有"逐级传达"的信息衰减<br>
+    · 警惕：Context 透明不等于信息轰炸——需要有人提炼和总结
+  </div>
+
+  <h3>原则二：解耦 Ego 和 Idea</h3>
+
+  <div class="callout sky">
+    <strong>为什么至关重要：</strong>大模型行业的技术路线选择是高度不确定的——MoE vs Dense、多模态融合时机、开源 vs 闭源。如果讨论变成了"谁对谁错"的身份之争，而不是"什么对什么错"的事实之争，决策质量会断崖式下降。<br><br>
+    <strong>具体做法：</strong><br>
+    · 创始人以身作则——被人挑战时不防御，被证明错了就改<br>
+    · 鼓励公开争吵，但事后零个人恩怨——"吵的是非常细的内部参数"<br>
+    · 评价标准：你对问题的理解是否足够深、足够专业，而不是你的职级<br>
+    · 警惕：如果创始人做不到低 ego，整个组织都无法做到
+  </div>
+
+  <h3>原则三：创始人必须是技术锚点，不是纯 CEO</h3>
+
+  <div class="callout sky">
+    <strong>大模型行业的特殊性：</strong>这个行业没有"职业经理人型 CEO"的生存空间。技术路线选择（MoE 架构、训练数据配比、RLHF 策略）直接决定公司生死。一个不懂这些的 CEO 无法做出正确判断。<br><br>
+    <strong>具体做法：</strong><br>
+    · 创始人在技术讨论中"听得多，说得少"——但最后做出判断<br>
+    · 判断做出后不摇摆——但前提是判断基于充分的 context<br>
+    · 定期向全员同步自己的思考（对竞争、对技术、对方向）<br>
+    · 警惕：创始人"什么都管"和"什么都不管"都是灾难。关键是"只在有足够 context 的事上做判断"
+  </div>
+
+  <h3>原则四：安全感给做事的人，压力给不思考的人</h3>
+
+  <div class="callout sky">
+    <strong>为什么至关重要：</strong>大模型研发是高不确定性工作——探索性实验失败率极高。如果员工害怕失败，就不会尝试冒险的方向，而大模型进步恰恰来自那些"不太可能成功但一旦成功就是突破"的方向。<br><br>
+    <strong>具体做法：</strong><br>
+    · 项目失败 ≠ 人的失败——就事论事复盘<br>
+    · 但对"想不清楚就占用大家时间"的行为零容忍<br>
+    · 褒奖"想得足够清楚"的人，无论对错<br>
+    · 警惕：安全感不是"你好我好大家好"——是"把事情做对的人不会被惩罚"
+  </div>
+
+  <h3>原则五：AI Native 不是 KPI，是文化</h3>
+
+  <div class="callout sky">
+    <strong>为什么不能是 KPI：</strong>当 AI 使用变成"命题作文"——"你得用 AI 做出业务增量和创新点，还要服务转化指标"——员工会为了满足 KPI 而强行使用 AI，而不是在真正需要的地方用。<br><br>
+    <strong>具体做法：</strong><br>
+    · 给员工最大的 AI 工具权限——比任何其他公司都彻底<br>
+    · 不强制推广，靠"有人用了好用，别人跟着用"扩散<br>
+    · 内部交流群分享最佳实践<br>
+    · 警惕：不要搞 token 排行榜——"公司甚至会提醒大家不要乱花 token"
+  </div>
+
+  <h3>原则六：Scale 是唯一的北极星</h3>
+
+  <div class="callout sky">
+    <strong>什么是 Scale：</strong>不是"公司规模做大"——是<strong>"智能上限 × 可动员的资源"</strong>。每个决策的判断标准：这事能不能让这个乘积变大？<br><br>
+    <strong>具体做法：</strong><br>
+    · 技术路线选择：选那些能 scale 的（简洁、可复用、可解释）<br>
+    · 产品策略：如果产品不能随模型能力 scale，果断关掉<br>
+    · 资源投入：持续投入"最大、最不确定、但一旦突破就是质变"的方向<br>
+    · 警惕：Scale 不是"什么都做"——MiniMax 一直在做减法，关掉过好几个文本产品
+  </div>
+</section>
+
+<!-- 反模式 -->
+<section>
+  <h2>对照：大模型创业公司常见的反模式</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>反模式</th><th>表现</th><th>为什么致命</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1. 大厂式管理</strong></td>
+        <td>按部门划分 KPI，逐级汇报，跨部门协作需要"对齐"</td>
+        <td>Context 衰减每层 30%，三层汇报后决策已经基于完全错误的信息</td>
+      </tr>
+      <tr>
+        <td><strong>2. 天才叙事</strong></td>
+        <td>造神某个技术负责人，所有决策依赖"天才的直觉"</td>
+        <td>模型进步是系统工程，不是个人英雄主义。造神意味着压制其他人的贡献和挑战</td>
+      </tr>
+      <tr>
+        <td><strong>3. 安全感的缺失</strong></td>
+        <td>山头林立、抢资源、甩锅、服从性测试</td>
+        <td>最好的研究员会离开。留下的都是"政治正确"而非"技术正确"的人</td>
+      </tr>
+      <tr>
+        <td><strong>4. 纯商业 CEO</strong></td>
+        <td>CEO 不懂技术，靠"战略"和"融资"驱动</td>
+        <td>在技术路线选择上无法做出正确判断，要么被 CTO 绑架，要么被投资人绑架</td>
+      </tr>
+      <tr>
+        <td><strong>5. 过早商业化</strong></td>
+        <td>模型还没收敛就追求收入和利润</td>
+        <td>把资源从"把模型做好"转移到"把产品卖好"——在模型能力竞赛中掉队</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 总结 -->
+<section>
+  <h2>总结：大模型创业公司的组织公式</h2>
+  <hr class="rule">
+
+  <blockquote>
+    一家大模型创业公司的成功概率 ≈ <strong>Context 流速 × 就事论事的文化 × 创始人的技术判断力 × Scale 的追求</strong> —— 除以 <strong>Ego 总量 × 安全感的缺失 × 商业化的过早</strong>。<br><br>
+    这不是一个可以"设计"出来的公式——它需要创始人用<strong>自己的行为</strong>来定义。MiniMax 的 IO 没有独立办公室、在大群里被员工挑战、当众为失败道歉。这些不是"管理技巧"——是<strong>一个技术人对"什么是好组织"的诚实回答</strong>。
+  </blockquote>
+</section>
+
+<footer>
+  报告生成：2026-07-10 &nbsp;·&nbsp; 源文章：虎嗅/硅星人Pro《我见证了 MiniMax 的"至暗时刻"》(2026.07.10) &nbsp;·&nbsp; 作者：王兆洋<br>
+  所有组织特质描述均来自原文中的员工直接引语和作者的第一手观察，非二手转述。
+</footer>
+
+</div>
+</body>
+</html>
