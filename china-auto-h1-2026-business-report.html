@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中国汽车行业 2026 H1 市场分析报告</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:1000px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:30px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  nav.toc { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+            padding:16px 20px; margin-bottom:40px; }
+  nav.toc h3 { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+               letter-spacing:.08em; color:var(--gray-500); margin-bottom:10px; }
+  nav.toc ol { list-style:none; display:grid; grid-template-columns:repeat(2,1fr); gap:4px 20px; }
+  nav.toc a { color:var(--gray-700); text-decoration:none; font-size:14px; }
+  nav.toc a:hover { color:var(--clay); }
+  nav.toc li { padding:2px 0; }
+
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:20px 0 8px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 20px; }
+  p { margin:8px 0; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.rust { border-left:4px solid var(--rust); }
+  .stat-card.olive { border-left:4px solid var(--olive); }
+  .stat-num { font-family:var(--serif); font-size:32px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:16px 0; font-size:14px; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:11px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+  .data-table tbody tr.row-rust { background:rgba(176,74,63,.04); }
+  .data-table tbody tr.row-olive { background:rgba(120,140,93,.04); }
+  .data-table tbody tr.row-clay { background:rgba(217,119,87,.04); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:16px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout.sky { background:rgba(91,139,160,.06); border-left-color:var(--sky); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:16px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:18px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:16px; color:var(--slate); margin:0 0 8px; }
+  .insight-card p { font-size:14px; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+
+  .bar-track { width:100%; height:8px; background:var(--gray-100); border-radius:4px; margin:4px 0; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; }
+  .bar-label { font-family:var(--mono); font-size:10px; color:var(--gray-500); }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+  blockquote.olive { border-left-color:var(--olive); }
+  blockquote.rust { border-left-color:var(--rust); }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band { grid-template-columns:repeat(2,1fr); }
+    .grid-2 { grid-template-columns:1fr; }
+    nav.toc ol { grid-template-columns:1fr; }
+    h1 { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="header-top">
+    <h1>中国汽车行业 2026 H1 市场分析报告</h1>
+  </div>
+  <p class="eyebrow">Industry Report · 2026-07-11</p>
+  <div class="meta">
+    受众：业务团队 &amp; 管理层 &nbsp;·&nbsp; 报告周期：2026 Q1–Q2 &nbsp;·&nbsp;
+    数据来源：CAAM · CPCA · 上市公司财报 · 华金证券 · 国海证券 · CIC灼识咨询 · MarkLines · 公开新闻
+  </div>
+  <p class="lead">2026 年上半年中国汽车行业可以用三个词概括：<strong>内冷</strong>（国内 -20%）、<strong>外热</strong>（出口 +63%）、<strong>质变</strong>（NEV 渗透率突破 60%）。燃油车进入加速退出周期，出口成为第一增长引擎，智驾正复制 2023 年新能源的渗透率曲线。车企股价产业登顶、估值坠地——择时比择股重要。</p>
+</header>
+
+<!-- ===================== TOC ===================== -->
+<nav class="toc">
+  <h3>报告目录</h3>
+  <ol>
+    <li><a href="#sec1">核心摘要 &amp; 投资判断</a></li>
+    <li><a href="#sec2">大盘走势分析</a></li>
+    <li><a href="#sec3">新能源 vs 燃油车结构性变化</a></li>
+    <li><a href="#sec4">商用车 &amp; 城市细分市场</a></li>
+    <li><a href="#sec5">汽车出海专题</a></li>
+    <li><a href="#sec6">智能驾驶 &amp; 智能座舱趋势</a></li>
+    <li><a href="#sec7">政策影响分析</a></li>
+    <li><a href="#sec8">车企财务、股价 &amp; 投融资</a></li>
+    <li><a href="#sec9">投资建议与结论</a></li>
+    <li><a href="#sec10">风险提示</a></li>
+  </ol>
+</nav>
+
+<!-- ===================== 1. 核心摘要 ===================== -->
+<section id="sec1">
+  <h2>一、核心摘要 &amp; 投资判断</h2>
+  <hr class="rule">
+
+  <div class="summary-band">
+    <div class="stat-card rust">
+      <div class="stat-num">1,501.7<span style="font-size:14px">万</span></div>
+      <div class="stat-label">H1 汽车销量 · ↓~20%</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">63.6%</div>
+      <div class="stat-label">6月 NEV 渗透率 · 新高</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">405.9<span style="font-size:14px">万</span></div>
+      <div class="stat-label">H1 出口 · +63%</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-num">-55%</div>
+      <div class="stat-label">比亚迪 Q1 净利同比</div>
+    </div>
+  </div>
+
+  <h3>投资判断摘要</h3>
+  <table class="data-table">
+    <thead><tr><th style="width:140px">维度</th><th>判断</th></tr></thead>
+    <tbody>
+      <tr><td><strong>行业整体</strong></td>
+          <td><span class="pill rust">🔴 承压</span> 内需下行但出口+新能源双轮驱动仍有增长叙事</td></tr>
+      <tr class="row-olive"><td><strong>新能源产业链</strong></td>
+          <td><span class="pill olive">🟢 看好</span> 渗透率突破 60% 拐点，不可逆替代周期确认</td></tr>
+      <tr class="row-rust"><td><strong>燃油车</strong></td>
+          <td><span class="pill rust">🔴 回避</span> 加速退出，合资品牌首当其冲</td></tr>
+      <tr class="row-olive"><td><strong>出海</strong></td>
+          <td><span class="pill olive">🟢 长期看好</span> 全年出口有望破千万辆，短期贸易摩擦风险升</td></tr>
+      <tr class="row-olive"><td><strong>智驾</strong></td>
+          <td><span class="pill olive">🟢 重点配置</span> 城市 NOA 从 15%→22%，激光雷达+大模型双主线</td></tr>
+      <tr><td><strong>智座</strong></td>
+          <td><span class="pill clay">🟡 逢低关注</span> 高通 8295 下沉至 10-15 万，国产替代窗口期</td></tr>
+      <tr class="row-rust"><td><strong>车企股价</strong></td>
+          <td><span class="pill rust">🔴 极度分化</span> 港股汽车 H1 普跌 20-50%，择时比择股重要</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===================== 2. 大盘走势 ===================== -->
+<section id="sec2">
+  <h2>二、大盘走势分析</h2>
+  <hr class="rule">
+
+  <h3>2.1 H1 总体表现：内冷外热</h3>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>H1 2026</th><th>同比</th><th>信号</th></tr></thead>
+    <tbody>
+      <tr class="row-rust"><td>乘用车零售</td><td>870.1 万辆</td><td>-20.2%</td><td>内需深度下行</td></tr>
+      <tr><td>汽车产量</td><td>1,499.3 万辆</td><td>↓</td><td>车企主动控产</td></tr>
+      <tr class="row-olive"><td>整车出口</td><td>405.9 万辆</td><td>+63%</td><td>核心增长引擎</td></tr>
+      <tr class="row-olive"><td>NEV 出口</td><td>235.5 万辆</td><td>+120%</td><td>翻倍增长</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.2 Q1 vs Q2 对比</h3>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>Q1</th><th>Q2</th><th>趋势</th></tr></thead>
+    <tbody>
+      <tr><td>国内销量（万辆）</td><td>482.3</td><td>~870（推算）</td><td>环比修复</td></tr>
+      <tr><td>同比降幅</td><td>-20.3%</td><td>约 -20%</td><td>底部企稳</td></tr>
+      <tr><td>出口（万辆）</td><td>222.6</td><td>~183</td><td>月均 &gt;90 万</td></tr>
+      <tr class="row-olive"><td>NEV 渗透率</td><td>&lt;50%</td><td>61%–64%</td><td>🏆 历史性突破</td></tr>
+      <tr><td>市场情绪</td><td>政策透支、深度观望</td><td>结构转折确认</td><td>渐进改善</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.3 Q1 月度终端零售</h3>
+  <table class="data-table">
+    <thead><tr><th>月份</th><th>终端销量（万台）</th><th>同比</th></tr></thead>
+    <tbody>
+      <tr><td>1 月</td><td>55.47</td><td>-15.0%</td></tr>
+      <tr><td>2 月</td><td>114.25</td><td>-12.8%</td></tr>
+      <tr class="row-rust"><td>3 月</td><td>147.08</td><td>-21.5%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>Q1 下行归因：</strong>
+    ① 2025 年底购置税免征→减半（最高减免从 3 万降至 1.5 万），年末抢购透支 Q1 需求；
+    ② 以旧换新新版细则 2025.12.30 才发布，传导滞后；
+    ③ 高基数效应（2025 年初「加力」政策推高基数）；
+    ④ 智驾/电池技术快速迭代，消费者持币观望。
+  </div>
+</section>
+
+<!-- ===================== 3. NEV vs 燃油车 ===================== -->
+<section id="sec3">
+  <h2>三、新能源 vs 燃油车结构性变化</h2>
+  <hr class="rule">
+
+  <h3>3.1 新能源产销</h3>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>H1 2026</th><th>同比</th></tr></thead>
+    <tbody>
+      <tr><td>NEV 产量</td><td>743.8 万辆</td><td>+6.7%</td></tr>
+      <tr><td>NEV 销量</td><td>744.6 万辆</td><td>+7.3%</td></tr>
+      <tr><td>纯电占比</td><td>~67%</td><td>↑</td></tr>
+      <tr><td>6 月单月产销</td><td>159.8 / 164.3 万辆</td><td>+20%+</td></tr>
+      <tr><td>6 月 NEV 占新车比</td><td>58.5%</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 渗透率历史性突破</h3>
+  <table class="data-table">
+    <thead><tr><th>月份</th><th>NEV 零售渗透率</th><th>历史意义</th></tr></thead>
+    <tbody>
+      <tr class="row-olive"><td>4 月</td><td><strong>61.4%</strong></td><td>🏆 首次突破 60%，全球主要市场历史纪录</td></tr>
+      <tr class="row-olive"><td>5 月</td><td><strong>62.9%</strong></td><td>再创新高</td></tr>
+      <tr class="row-olive"><td>6 月</td><td><strong>~63.6%</strong></td><td>持续攀升</td></tr>
+      <tr><td>H1 整体</td><td><strong>49.6%</strong></td><td>跨过 50% 门槛在即</td></tr>
+    </tbody>
+  </table>
+
+  <div class="bar-track"><div class="bar-fill" style="width:63.6%;background:var(--olive)"></div></div>
+  <div class="bar-label">6 月 NEV 渗透率 63.6% — 燃油车份额已不足 37%</div>
+
+  <h3>3.3 燃油车崩塌轨迹</h3>
+  <ul style="margin:8px 0 8px 20px; font-size:14px; line-height:1.8;">
+    <li>4 月燃油车零售同比 <strong style="color:var(--rust)">-36%</strong>，加速崩塌</li>
+    <li>燃油车份额从年初 ~50% 缩窄至 Q2 末 <strong>不足 37%</strong></li>
+    <li>合资品牌燃油车基本盘遭受新能源替代 + 价格战双重挤压</li>
+    <li>进口新能源 H1 仅 2,100 辆（-56.7%），国产高端强力替代</li>
+  </ul>
+
+  <blockquote class="rust">
+    拐点已过，不可逆。中国新车市场已成为全球首个 NEV 渗透率突破 60% 的主要市场。燃油车进入加速退出周期——这不是周期性波动，而是结构性替代。发动机/变速箱产能价值快速归零，三电、热管理、线控底盘赛道持续扩容。
+  </blockquote>
+</section>
+
+<!-- ===================== 4. 商用车 & 城市细分 ===================== -->
+<section id="sec4">
+  <h2>四、商用车 &amp; 城市细分市场</h2>
+  <hr class="rule">
+
+  <h3>4.1 商用车整体</h3>
+  <table class="data-table">
+    <thead><tr><th>指标</th><th>H1 2026</th><th>同比</th></tr></thead>
+    <tbody>
+      <tr><td>商用车销量</td><td>~230 万辆</td><td><span class="pill olive">↑</span></td></tr>
+      <tr><td>重卡销量</td><td>~66 万辆</td><td>+~20%</td></tr>
+      <tr><td>轻卡销量</td><td>破百万</td><td>增长</td></tr>
+      <tr class="row-olive"><td>新能源商用车（国内）</td><td>49.6 万辆</td><td><strong>+40.2%</strong></td></tr>
+      <tr><td>NEV 商用车占比</td><td>30.4%</td><td>↑</td></tr>
+      <tr><td>NEV 商用车出口</td><td>5.4 万辆</td><td>+9.9%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">重卡格局</div>
+      <h3>福田领先，三足鼎立</h3>
+      <p>福田（上半年超 9 万辆，+30%+）、重汽、解放三足鼎立。重卡受基建+出口双驱动。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">轻卡格局</div>
+      <h3>福田领跑，份额约 20%</h3>
+      <p>福田以 23.44 万辆领跑，市场份额约 20%；东风第二。城市物流配送电动化是主力场景。</p>
+    </div>
+  </div>
+
+  <h3>4.2 城市/区域细分</h3>
+  <table class="data-table">
+    <thead><tr><th>城市层级</th><th>NEV 渗透特征</th><th>增长态势</th></tr></thead>
+    <tbody>
+      <tr><td>一线城市</td><td>渗透率最高，接近饱和</td><td>增速放缓，存量替换为主</td></tr>
+      <tr class="row-olive"><td>二线城市</td><td>渗透率快速攀升</td><td>核心增量市场</td></tr>
+      <tr class="row-olive"><td>三线及以下</td><td>较一二线低 ~10pct</td><td><strong>🔥 下沉市场是未来增长引擎</strong></td></tr>
+      <tr><td>东部沿海</td><td>基本盘，保有量大</td><td>稳健</td></tr>
+      <tr><td>中西部/北方</td><td>渗透率较低</td><td>增量蓝海，基建+政策推动</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>关键判断：</strong>2026 年新能源增长重心正从一线向二三线及以下城市下沉。三四线城市将是 H2 及 2027 年的核心增量来源，但下沉速度取决于充电基建跟进速度。
+  </div>
+</section>
+
+<!-- ===================== 5. 出海 ===================== -->
+<section id="sec5">
+  <h2>五、汽车出海专题</h2>
+  <hr class="rule">
+
+  <div class="summary-band">
+    <div class="stat-card olive">
+      <div class="stat-num">405.9<span style="font-size:14px">万</span></div>
+      <div class="stat-label">H1 出口 · +63%</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">235.5<span style="font-size:14px">万</span></div>
+      <div class="stat-label">NEV 出口 · +120%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">728<span style="font-size:14px">亿$</span></div>
+      <div class="stat-label">出口金额</div>
+    </div>
+    <div class="stat-card olive">
+      <div class="stat-num">&gt;100<span style="font-size:14px">万</span></div>
+      <div class="stat-label">6月单月 · 历史新高</div>
+    </div>
+  </div>
+
+  <h3>全年展望</h3>
+  <ul style="margin:8px 0 8px 20px; font-size:14px; line-height:1.8;">
+    <li>2026 年全年出口预测可达 <strong>1,000 万辆</strong>（+41%）</li>
+    <li>将成为全球首个出口突破千万辆的国家</li>
+    <li>约为第二大出口国日本的 <strong>2.5 倍</strong></li>
+  </ul>
+
+  <h3>出口驱动因素 &amp; 风险</h3>
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">驱动因素</div>
+      <h3>产品力 + 品牌 + 产能外溢</h3>
+      <p>① 中国 NEV 在智能化、三电、成本上全面领先；② 比亚迪/奇瑞/上汽 MG 品牌力积累；③ 海外利润率更高；④ 比亚迪（匈牙利/泰国/巴西）、奇瑞（西班牙）加速海外建厂。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">主要风险</div>
+      <h3>贸易壁垒全面升温</h3>
+      <p>① 欧盟反补贴关税已落地；② 东南亚多国设非关税壁垒；③ 美国市场 100% 关税基本封闭；④ 汇率波动影响出口利润。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. 智驾 & 智座 ===================== -->
+<section id="sec6">
+  <h2>六、智能驾驶 &amp; 智能座舱趋势</h2>
+  <hr class="rule">
+
+  <h3>6.1 智能驾驶：城市 NOA 快速渗透</h3>
+  <table class="data-table">
+    <thead><tr><th>年份</th><th>城市 NOA 销量</th><th>渗透率</th></tr></thead>
+    <tbody>
+      <tr><td>2025 年</td><td>312.9 万辆</td><td>15.1%</td></tr>
+      <tr class="row-olive"><td>2026 年（预计）</td><td>—</td><td><strong>~22%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--sky)"></div></div>
+  <div class="bar-label">2026 城市 NOA 渗透率 ~22% — 正处于 2023 年 NEV 渗透率阶段</div>
+
+  <h3>2026 H1 智驾核心趋势</h3>
+  <table class="data-table">
+    <thead><tr><th style="width:120px">趋势</th><th>详情</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NOA 下沉</strong></td><td>多家车企将城区 NOA 下放至 10-20 万级车型，智驾不再是豪华专属</td></tr>
+      <tr><td><strong>传感器融合</strong></td><td>激光雷达 + 高清摄像头 + 毫米波雷达「三重保险」成主流方案</td></tr>
+      <tr><td><strong>技术路线</strong></td><td>VLA（视觉-语言-行动模型）与世界模型走向融合统一</td></tr>
+      <tr><td><strong>责任边界</strong></td><td>比亚迪率先承诺为城市领航事故全额赔付 1 年，行业呼吁车企承担更多兜底责任</td></tr>
+      <tr class="row-rust"><td><strong>安全争议</strong></td><td>当前所有家用车智驾均为 L2 级，事故责任 100% 由驾驶员承担</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout sky">
+    <strong>智驾产业链投资逻辑：</strong>
+    ① <strong>激光雷达</strong>——从万元级降至千元级，搭载量快速攀升；
+    ② <strong>智驾芯片</strong>——英伟达 Orin/Thor、地平线 J6 系列竞争激烈；
+    ③ <strong>算法公司</strong>——Momenta、大疆车载、华为 ADS 获头部车企订单；
+    ④ <strong>数据闭环</strong>——影子模式 + 仿真训练成能力分水岭。
+  </div>
+
+  <h3>6.2 智能座舱</h3>
+  <table class="data-table">
+    <thead><tr><th>配置</th><th>搭载率/趋势</th></tr></thead>
+    <tbody>
+      <tr><td>中控屏</td><td>100%（标配）</td></tr>
+      <tr class="row-olive"><td>高通 8295P 芯片</td><td>已下放至 10-15 万级，算力 30TOPS（8155 的 3 倍）</td></tr>
+      <tr><td>副驾屏</td><td>6.7%（2025H1），快速提升中</td></tr>
+      <tr><td>后排屏</td><td>4.5%（2025H1）</td></tr>
+      <tr><td>AI 语音大模型</td><td>头部车企已量产交付，从指令式→对话式</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">座舱核心趋势 ①</div>
+      <h3>SoC 换代 + AI 大模型上车</h3>
+      <p>高通 8295 全面替代 8155，10-20 万价格段（占乘用车销量近 50%）成主战场。AI 大模型驱动座舱语音从「指令执行」进化为「主动交互」。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">座舱核心趋势 ②</div>
+      <h3>座舱即空间 + 国产替代</h3>
+      <p>新能源车主每周非驾驶时间达 5.4 小时（充电/午休/等人），座舱娱乐价值凸显。芯擎、瑞芯微等国产座舱芯片有望在高通垄断格局中分一杯羹。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. 政策 ===================== -->
+<section id="sec7">
+  <h2>七、政策影响分析</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:130px">政策</th><th>内容</th><th style="width:100px">影响评估</th></tr></thead>
+    <tbody>
+      <tr class="row-rust"><td><strong>购置税减半</strong></td>
+          <td>NEV 购置税从全免→减半，最高减免 1.5 万元</td>
+          <td><span class="pill rust">⚠️ 负面</span><br>透支 Q1</td></tr>
+      <tr class="row-olive"><td><strong>以旧换新（置换）</strong></td>
+          <td>换购 NEV 按车价 8% 补贴，最高 1.5 万元；燃油车 6%，最高 1.3 万元</td>
+          <td><span class="pill olive">🟢 正面</span><br>Q2 逐步发力</td></tr>
+      <tr class="row-olive"><td><strong>以旧换新（报废）</strong></td>
+          <td>报废旧车购 NEV 按车价 12% 补贴，最高 2 万元</td>
+          <td><span class="pill olive">🟢 正面</span><br>强刺激</td></tr>
+      <tr><td><strong>新能源下乡</strong></td>
+          <td>推动 NEV 向农村市场下沉</td>
+          <td><span class="pill clay">🟡 长期利好</span></td></tr>
+      <tr class="row-rust"><td><strong>出口贸易</strong></td>
+          <td>欧盟反补贴关税、多国贸易壁垒</td>
+          <td><span class="pill rust">🔴 风险</span></td></tr>
+    </tbody>
+  </table>
+
+  <blockquote class="rust">
+    H1 政策效果偏负面（购置税退坡透支 &gt; 以旧换新刺激），H2 政策净效应转正。以旧换新从「定额」改为「按比例」对中高端车型更有利，利好单车价值高的头部车企。但补贴力度较 2025 年收窄，难以完全对冲购置税退坡影响。
+  </blockquote>
+</section>
+
+<!-- ===================== 8. 车企财务/股价/投融资 ===================== -->
+<section id="sec8">
+  <h2>八、车企财务、股价 &amp; 投融资</h2>
+  <hr class="rule">
+
+  <h3>8.1 头部车企 Q1 财报对比</h3>
+  <table class="data-table">
+    <thead><tr><th>车企</th><th>Q1 营收（亿元）</th><th>同比</th><th>归母净利（亿元）</th><th>同比</th><th>毛利率</th><th>单车均价</th></tr></thead>
+    <tbody>
+      <tr class="row-rust"><td><strong>比亚迪</strong></td><td>1,502.25</td><td>-11.82%</td><td>40.85</td><td><strong style="color:var(--rust)">-55.38%</strong></td><td>—</td><td>~16 万</td></tr>
+      <tr class="row-olive"><td><strong>吉利汽车</strong></td><td>838</td><td><strong>+15%</strong></td><td>45.6（核心）</td><td><strong style="color:var(--olive)">+31%</strong></td><td><strong>17.5%</strong></td><td>~12 万</td></tr>
+      <tr><td><strong>长城汽车</strong></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><strong>16.7 万</strong>（最高）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>比亚迪：</strong>营收/净利双降，净利腰斩（-55%），价格战严重侵蚀利润。但销量断层领先（6 月单月 40 万辆），以量换利策略明确。
+  </div>
+  <div class="callout olive">
+    <strong>吉利：</strong>Q1 最亮眼——营收创历史新高（+15%），核心净利大增 31%，毛利率 17.5%（+1.8pct），是自主五强中唯一营收利润双增的车企。
+  </div>
+
+  <h3>8.2 新势力财务：集体亏损</h3>
+  <table class="data-table">
+    <thead><tr><th>新势力</th><th>Q1 表现</th><th>H1 交付</th><th>完成率</th></tr></thead>
+    <tbody>
+      <tr class="row-olive"><td><strong>零跑</strong></td><td>✅ 新势力销冠</td><td>35.65 万辆（+60.82%）</td><td>领跑</td></tr>
+      <tr><td><strong>蔚来</strong></td><td>小幅盈利/微亏</td><td>—</td><td>~42%</td></tr>
+      <tr><td><strong>理想</strong></td><td>稳定</td><td>—</td><td>~40%</td></tr>
+      <tr class="row-rust"><td><strong>小米</strong></td><td>亏损</td><td>—</td><td>~33%</td></tr>
+      <tr class="row-rust"><td><strong>小鹏</strong></td><td>亏损</td><td>—</td><td>~30%</td></tr>
+      <tr class="row-rust"><td><strong>鸿蒙智行</strong></td><td>亏损</td><td>—</td><td>~24%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>新势力 Q1 合计亏损接近 80 亿元</strong>（除蔚来外全部录得大幅亏损），直接抹平多家 2025 年全年利润。造车新势力短暂盈利周期终结，淘汰赛加速。
+  </div>
+
+  <h3>8.3 股价：产业登顶、估值坠地</h3>
+  <table class="data-table">
+    <thead><tr><th>车企</th><th>YTD 股价</th><th>备注</th></tr></thead>
+    <tbody>
+      <tr class="row-olive"><td><strong>吉利汽车（港股）</strong></td><td><strong style="color:var(--olive)">✅ 正收益</strong></td><td>港股汽车板块「独苗」</td></tr>
+      <tr class="row-rust"><td><strong>比亚迪（港股）</strong></td><td>-23.5%</td><td>H 股较 A 股折价 19.5%</td></tr>
+      <tr class="row-rust"><td><strong>赛力斯</strong></td><td>A股 ~-50%, H股 ~-60%</td><td>跌幅最大</td></tr>
+      <tr class="row-rust"><td><strong>江淮汽车</strong></td><td>-46%+</td><td>—</td></tr>
+      <tr class="row-rust"><td><strong>广汽集团</strong></td><td>创 2015 年以来新低</td><td>—</td></tr>
+      <tr class="row-rust"><td><strong>上汽集团</strong></td><td>创 2015 年以来新低</td><td>—</td></tr>
+      <tr class="row-rust"><td><strong>零跑（港股）</strong></td><td>~-30%</td><td>—</td></tr>
+      <tr class="row-rust"><td><strong>小鹏（港股）</strong></td><td>-30%+</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>板块整体：</strong>6 月港股汽车板块市值环比降 18%（同比 -43%），A 股环比降 19%（同比 -34%）。核心矛盾：<strong>产业在登顶（销量/渗透率创新高），但估值在坠地（利润率/预期在恶化）</strong>。
+  </div>
+
+  <h3>8.4 投融资动态</h3>
+  <table class="data-table">
+    <thead><tr><th style="width:140px">事件</th><th>详情</th></tr></thead>
+    <tbody>
+      <tr><td><strong>车规芯片涨价潮</strong></td><td>恩智浦 +5-15%、瑞萨跟涨、德州仪器 +8-12%，意法/英飞凌/威世先后涨价。贵金属+航运成本推升</td></tr>
+      <tr><td><strong>新势力融资分化</strong></td><td>头部（零跑/小米）融资能力强，尾部现金流紧张</td></tr>
+      <tr><td><strong>供应链整合</strong></td><td>头部车企垂直整合加速（比亚迪全自研），中小企业生存空间收窄</td></tr>
+      <tr><td><strong>出海建厂投资</strong></td><td>比亚迪/奇瑞/上汽加速海外建厂，资本开支高企</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===================== 9. 投资建议 ===================== -->
+<section id="sec9">
+  <h2>九、投资建议与结论</h2>
+  <hr class="rule">
+
+  <h3>9.1 分维度投资建议</h3>
+  <table class="data-table">
+    <thead><tr><th style="width:130px">维度</th><th style="width:60px">判断</th><th>建议</th><th>标的方向</th></tr></thead>
+    <tbody>
+      <tr class="row-olive"><td><strong>整车-自主头部</strong></td><td>🟢</td><td>核心配置</td><td>吉利（盈利最优）、比亚迪（规模领先，需关注利润修复）</td></tr>
+      <tr><td><strong>整车-新势力</strong></td><td>🟡</td><td>精选个股</td><td>零跑（性价比+出海）、理想（增程稳健）；回避尾部</td></tr>
+      <tr class="row-rust"><td><strong>整车-合资/外资</strong></td><td>🔴</td><td>回避</td><td>中国市场份额持续缩水，奔驰中国 -30%</td></tr>
+      <tr class="row-rust"><td><strong>燃油车重资产</strong></td><td>🔴</td><td>坚决回避</td><td>发动机/变速箱产能价值快速归零</td></tr>
+      <tr class="row-olive"><td><strong>新能源供应链</strong></td><td>🟢</td><td>超配</td><td>三电（电池/电机/电控）、热管理、线控底盘</td></tr>
+      <tr class="row-olive"><td><strong>智驾产业链</strong></td><td>🟢</td><td>重点配置</td><td>激光雷达（降本放量）、智驾芯片、算法方案商</td></tr>
+      <tr><td><strong>智座产业链</strong></td><td>🟡</td><td>逢低关注</td><td>座舱 SoC（国产替代）、AI 语音、车载显示</td></tr>
+      <tr class="row-olive"><td><strong>商用车</strong></td><td>🟢</td><td>配置</td><td>重卡（基建+出口）、新能源商用车（+40% 增速）</td></tr>
+      <tr class="row-olive"><td><strong>出海标的</strong></td><td>🟢</td><td>长期超配</td><td>有海外建厂能力、品牌力积累的头部车企</td></tr>
+    </tbody>
+  </table>
+
+  <h3>9.2 五条核心结论</h3>
+
+  <blockquote>
+    <strong>① 燃油车的故事已经结束。</strong>NEV 渗透率突破 60% 不是顶点而是起点，燃油车份额将以每年 5-8 个百分点的速度缩窄。
+  </blockquote>
+
+  <blockquote class="olive">
+    <strong>② 出口是中国汽车行业未来 3 年最大的 alpha。</strong>全年有望破千万辆，改写全球汽车贸易格局。但有出口能力 + 海外建厂能力的车企才有定价权。
+  </blockquote>
+
+  <blockquote class="olive">
+    <strong>③ 智驾是下一个「渗透率故事」。</strong>城市 NOA 从 15%→22%→60%（预测），正处于 2023 年 NEV 渗透率的阶段。
+  </blockquote>
+
+  <blockquote class="rust">
+    <strong>④ 车企股价已计入大量悲观预期，但底部尚未确认。</strong>港股汽车 H1 普跌 20-50%，估值接近历史底部。但利润率仍在恶化，建议等待 Q3 财报确认利润修复信号后再加仓。
+  </blockquote>
+
+  <blockquote class="olive">
+    <strong>⑤ 吉利是 H1 最值得关注的标的。</strong>唯一营收利润双增的头部车企，毛利率 17.5% 持续改善，港股唯一上涨的汽车股。估值合理，基本面扎实。
+  </blockquote>
+</section>
+
+<!-- ===================== 10. 风险提示 ===================== -->
+<section id="sec10">
+  <h2>十、风险提示</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th style="width:160px">风险</th><th style="width:60px">等级</th><th>影响</th></tr></thead>
+    <tbody>
+      <tr class="row-rust"><td><strong>贸易摩擦升级</strong></td><td><span class="pill rust">⚠️ 高</span></td><td>欧盟/东南亚关税壁垒扩大，出口增速边际放缓</td></tr>
+      <tr class="row-rust"><td><strong>价格战持续</strong></td><td><span class="pill rust">⚠️ 高</span></td><td>行业利润率已降至十年低点（4.1%），持续亏损可能引发系统性风险</td></tr>
+      <tr><td><strong>购置税政策不确定</strong></td><td><span class="pill clay">⚠️ 中</span></td><td>2026 年减半政策到期后是否延续未知</td></tr>
+      <tr><td><strong>车规芯片涨价</strong></td><td><span class="pill clay">⚠️ 中</span></td><td>上游成本推升挤压中下游利润</td></tr>
+      <tr><td><strong>产能过剩</strong></td><td><span class="pill clay">⚠️ 中</span></td><td>新能源产能快速扩张，尾部品牌产能利用率极低</td></tr>
+      <tr><td><strong>智驾安全事故</strong></td><td><span class="pill clay">⚠️ 中</span></td><td>重大事故可能引发监管收紧</td></tr>
+      <tr><td><strong>地缘政治</strong></td><td><span class="pill clay">⚠️ 中</span></td><td>关键矿产（锂/钴/镍）供应链不确定性</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  本报告基于公开数据整理分析，仅供内部参考，不构成投资建议。数据截至 2026 年 7 月上旬。
+  &nbsp;·&nbsp; Generated by Hermes Agent · 2026-07-11
+</footer>
+
+</div>
+</body>
+</html>
