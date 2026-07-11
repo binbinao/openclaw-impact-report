@@ -1,435 +1,474 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>调研报告集</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif; font-size: 15px; line-height: 1.6; color: #1a1a1a; background: #f5f5f5; }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 36px; color: #003d5c; margin-bottom: 10px; }
-        .header p { color: #666; font-size: 16px; }
-        .report-list { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
-        .report-item { padding: 25px 30px; border-bottom: 1px solid #e5e7eb; transition: background 0.2s; }
-        .report-item:last-child { border-bottom: none; }
-        .report-item:hover { background: #f8f9fa; }
-        .report-item a { color: #003d5c; text-decoration: none; font-size: 20px; font-weight: 600; display: block; margin-bottom: 8px; }
-        .report-item a:hover { text-decoration: underline; }
-        .report-meta { color: #666; font-size: 14px; }
-        .report-meta span { margin-right: 15px; }
-        .tag { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 5px; }
-        .footer { text-align: center; margin-top: 40px; color: #999; font-size: 14px; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>纪多斌 · 调研报告集</title>
+<style>
+  :root {
+    --bg:#F8F7F4; --card:#FFFFFF; --text:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#EEECE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius:12px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+         font-size:15px; line-height:1.6; padding:48px 20px 80px; }
+  .page { max-width:960px; margin:0 auto; }
+
+  header { text-align:center; margin-bottom:40px; }
+  h1 { font-size:32px; font-weight:600; color:var(--text); margin-bottom:6px; }
+  .subtitle { color:var(--gray-500); font-size:14px; }
+
+  .nav { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:36px; }
+  .nav a { text-decoration:none; padding:6px 14px; border-radius:20px; font-size:13px;
+           background:var(--card); border:1px solid var(--gray-300); color:var(--gray-700); transition:all .2s; }
+  .nav a:hover { background:var(--gray-100); border-color:var(--clay); color:var(--clay); }
+
+  section { margin-bottom:36px; }
+  .cat-title { font-size:20px; font-weight:600; color:var(--text); margin-bottom:14px; padding-bottom:6px; border-bottom:2px solid var(--gray-100); }
+  .cat-title .count { font-size:13px; font-weight:400; color:var(--gray-500); margin-left:8px; }
+
+  .report-list { display:grid; gap:8px; }
+  .report { background:var(--card); border:var(--border); border-radius:var(--radius);
+            padding:14px 18px; display:flex; align-items:center; gap:14px; transition:all .15s; }
+  .report:hover { border-color:var(--clay); box-shadow:0 2px 6px rgba(0,0,0,.04); }
+  .report .icon { font-size:20px; flex-shrink:0; width:32px; text-align:center; }
+  .report .info { flex:1; min-width:0; }
+  .report .info a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; }
+  .report .info a:hover { color:var(--clay); }
+  .report .info .desc { color:var(--gray-500); font-size:12px; margin-top:2px; }
+  .report .date { flex-shrink:0; font-size:11px; color:var(--gray-500); font-family:monospace; }
+
+  .tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; margin-right:4px; }
+  .tag.auto { background:rgba(91,139,160,.12); color:var(--sky); }
+  .tag.econ { background:rgba(176,74,63,.1); color:var(--rust); }
+  .tag.ai { background:rgba(139,107,158,.1); color:var(--purple); }
+  .tag.people { background:rgba(217,119,87,.1); color:var(--clay); }
+  .tag.tech { background:rgba(120,140,93,.1); color:var(--olive); }
+  .tag.chain { background:rgba(91,139,160,.1); color:var(--sky); }
+
+  footer { text-align:center; margin-top:48px; color:var(--gray-500); font-size:13px; }
+
+  @media (max-width:600px) {
+    .report { flex-direction:column; align-items:flex-start; gap:6px; }
+    .report .date { align-self:flex-end; }
+    h1 { font-size:24px; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📊 调研报告集</h1>
-            <p>深度调研报告 · 多源验证 · 专业分析</p>
-        </div>
-        
-        <div class="report-list">
-            <div class="report-item">
-                <a href="reports/2026-05-29-zhang-yansheng-east-asia-production/report.html">🏭 深度调研张燕生专访：中国转型与东亚生产方式系统性修正</a>
-                <div class="report-meta">
-                    <span>📅 2026-05-29</span>
-                    <span>🎯 宏观经济</span>
-                    <span>📊 多源验证 + 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">张燕生</span>
-                    <span class="tag">东亚生产方式</span>
-                    <span class="tag">逆全球化</span>
-                    <span class="tag">产业政策</span>
-                    <span class="tag">中国企业出海</span>
-                    <span class="tag">经济转型</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-16-internet-giants-auto-sales/report.html">🚗 从外卖大战到车圈对垒：美团、京东、阿里的新竞逐</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-16</span>
-                    <span>🎯 互联网+汽车</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">美团</span>
-                    <span class="tag">京东</span>
-                    <span class="tag">阿里</span>
-                    <span class="tag">线上卖车</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-16-japanese-automakers-china/report.html">🚗 日系三强在华分化：智能电动化转型下的"适者生存"</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-16</span>
-                    <span>🎯 汽车行业</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">丰田</span>
-                    <span class="tag">日产</span>
-                    <span class="tag">本田</span>
-                    <span class="tag">电动化转型</span>
-                    <span class="tag">本土化</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-14-mythos-cybersecurity/report.html">⚡ Mythos风暴：AI驱动的网络安全范式转变深度调研</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-14</span>
-                    <span>🎯 网络安全</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">Claude Mythos</span>
-                    <span class="tag">零日漏洞</span>
-                    <span class="tag">系统性风险</span>
-                    <span class="tag">AI安全</span>
-                    <span class="tag">金融安全</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-06-openclaw-security/report.html">🦞 完整权限交给AI，你在冒什么险？OpenClaw安全指南</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-06</span>
-                    <span>🎯 普通用户</span>
-                    <span>📊 安全风险 + 防护指南</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">OpenClaw</span>
-                    <span class="tag">安全风险</span>
-                    <span class="tag">权限控制</span>
-                    <span class="tag">用户指南</span>
-                    <span class="tag">AI Agent</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-06-bci-china-us/report.html">🧠 侵入式脑机接口技术路线与产业格局分析</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-06</span>
-                    <span>🎯 科技爱好者</span>
-                    <span>📊 技术路线 + 产业格局</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">脑机接口</span>
-                    <span class="tag">博睿康NEO</span>
-                    <span class="tag">Neuralink</span>
-                    <span class="tag">全球首证</span>
-                    <span class="tag">中美竞争</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-02-ai-employment/index.html">🤖 AI为何至今未引发就业末日？深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-02</span>
-                    <span>🎯 就业影响</span>
-                    <span>📊 数据分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AI就业</span>
-                    <span class="tag">耶鲁研究</span>
-                    <span class="tag">技术变革</span>
-                    <span class="tag">数据追踪</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-04-01-information-poisoning/index.html">🚨 警惕系统性信息投毒：台湾对大陆硬科技的认知战</a>
-                <div class="report-meta">
-                    <span>📅 2026-04-01</span>
-                    <span>🎯 认知战</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AI投毒</span>
-                    <span class="tag">信息战</span>
-                    <span class="tag">半导体</span>
-                    <span class="tag">量化交易</span>
-                    <span class="tag">认知战</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-29-us-ai-strategy/report.html">🇺🇸 美国AI战略深度解析报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-29</span>
-                    <span>🎯 AI战略</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">大分流</span>
-                    <span class="tag">特朗普政策</span>
-                    <span class="tag">中美竞争</span>
-                    <span class="tag">GDP预测</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-29-information-warfare-semiconductor/report.html">🎯 半导体产业信息战深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-29</span>
-                    <span>🎯 信息战</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AI投毒</span>
-                    <span class="tag">认知战</span>
-                    <span class="tag">半导体</span>
-                    <span class="tag">信息主权</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-27-qcraft-research/report.html">🚗 轻舟智航（QCraft）深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-27</span>
-                    <span>🎯 自动驾驶</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">L4自动驾驶</span>
-                    <span class="tag">无人小巴</span>
-                    <span class="tag">龙舟系列</span>
-                    <span class="tag">独角兽</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-27-ai-agent-trends-2026/report.html">🤖 AI Agent 2026发展趋势深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-27</span>
-                    <span>🎯 行业趋势</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AI Agent</span>
-                    <span class="tag">OpenClaw</span>
-                    <span class="tag">Manus</span>
-                    <span class="tag">Claude Code</span>
-                    <span class="tag">多Agent协作</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-26-karpathy-autoresearch/report.html">🚀 Karpathy AutoResearch 深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-26</span>
-                    <span>🎯 新手友好</span>
-                    <span>📊 深度分析 + 上手指南</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AutoResearch</span>
-                    <span class="tag">Karpathy</span>
-                    <span class="tag">AI自动化</span>
-                    <span class="tag">机器学习</span>
-                    <span class="tag">科研自动化</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-25-wey-v9x-ai-agent/report.html">魏牌V9X与AI智能体汽车深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-25</span>
-                    <span>🎯 个人学习</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">魏牌V9X</span>
-                    <span class="tag">AI智能体</span>
-                    <span class="tag">长城汽车</span>
-                    <span class="tag">智能驾驶</span>
-                    <span class="tag">混动技术</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-24-bytedance-chip/report.html">字节跳动芯片投资与研发调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-24</span>
-                    <span>⚠️ 信息受限</span>
-                    <span>📊 对比分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">字节跳动</span>
-                    <span class="tag">芯片</span>
-                    <span class="tag">火山引擎</span>
-                    <span class="tag">对比分析</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-24-pingtougo-chip/report.html">平头哥半导体深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-24</span>
-                    <span>🎯 个人学习</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">平头哥</span>
-                    <span class="tag">阿里巴巴</span>
-                    <span class="tag">RISC-V</span>
-                    <span class="tag">AI芯片</span>
-                    <span class="tag">倚天710</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-21-karpathy-interview/report.html">Karpathy万字访谈深度解读：AI时代的焦虑与希望</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-21</span>
-                    <span>🎯 公开发布</span>
-                    <span>📊 深度访谈分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">Karpathy</span>
-                    <span class="tag">AI成瘾</span>
-                    <span class="tag">AGI</span>
-                    <span class="tag">职业建议</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-21-nvidia-gtc/report.html">黄仁勋GTC 2026深度解读：Token时代的新秩序</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-21</span>
-                    <span>🎯 个人学习</span>
-                    <span>📊 行业趋势 + 投资参考</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">NVIDIA</span>
-                    <span class="tag">GTC2026</span>
-                    <span class="tag">黄仁勋</span>
-                    <span class="tag">Token</span>
-                    <span class="tag">AI芯片</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-21-honda-loss/report.html">本田"万亿跌落"深度分析：日本汽车帝国的黄昏</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-21</span>
-                    <span>🎯 个人学习</span>
-                    <span>📊 行业趋势 + 投资参考</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">本田</span>
-                    <span class="tag">亏损</span>
-                    <span class="tag">电动车</span>
-                    <span class="tag">比亚迪</span>
-                    <span class="tag">日本汽车</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-20-cloud-price-hike/report.html">中国云厂商集体涨价深度分析：Token时代的新逻辑</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-20</span>
-                    <span>🎯 公开发布</span>
-                    <span>📊 行业趋势 + 投资参考</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">云计算</span>
-                    <span class="tag">涨价</span>
-                    <span class="tag">Token</span>
-                    <span class="tag">阿里云</span>
-                    <span class="tag">腾讯云</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-20-huang-jensen-gtc/report.html">黄仁勋 GTC 2026 发言深度分析：OpenClaw 堪比 Windows</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-20</span>
-                    <span>🎯 个人学习</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">黄仁勋</span>
-                    <span class="tag">GTC 2026</span>
-                    <span class="tag">OpenClaw</span>
-                    <span class="tag">NemoClaw</span>
-                    <span class="tag">AI Agent</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-12-llm-business-models/report.html">大模型商业模式深度调研报告：Tokens vs Coding Plan</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-12</span>
-                    <span>🎯 个人学习 + 投资决策</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">大模型</span>
-                    <span class="tag">商业模式</span>
-                    <span class="tag">Tokens计费</span>
-                    <span class="tag">投资机会</span>
-                </div>
-            </div>
-            
-            <!-- 新增报告入口 -->
-        <div class="report-item">
-            <a href="china-auto-h1-2026-business-report.html">🚗 中国汽车行业 2026 H1 市场分析报告（业务版）</a>
-            <div class="report-meta">
-                <span>📅 2026-07-11</span>
-                <span>🎯 汽车行业</span>
-                <span>📊 业务汇报级深度研报</span>
-            </div>
-            <div style="margin-top: 10px;">
-                <span class="tag">新能源</span>
-                <span class="tag">燃油车退出</span>
-                <span class="tag">汽车出海</span>
-                <span class="tag">智能驾驶</span>
-                <span class="tag">智能座舱</span>
-                <span class="tag">政策分析</span>
-                <span class="tag">车企财报</span>
-                <span class="tag">投资建议</span>
-            </div>
-        </div>
+<div class="page">
 
-        <div class="report-item">
-                <a href="reports/2026-03-12-lsdyna/report.html">LS-DYNA 软件深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-12</span>
-                    <span>🎯 团队和客户</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">CAE软件</span>
-                    <span class="tag">汽车碰撞仿真</span>
-                    <span class="tag">有限元分析</span>
-                    <span class="tag">市场调研</span>
-                </div>
-            </div>
-            
-            <div class="report-item">
-                <a href="reports/2026-03-11-openclaw-impact/report.html">OpenClaw 爆火影响深度调研报告</a>
-                <div class="report-meta">
-                    <span>📅 2026-03-11</span>
-                    <span>🎯 投资人</span>
-                    <span>📊 深度分析</span>
-                </div>
-                <div style="margin-top: 10px;">
-                    <span class="tag">AI Agent</span>
-                    <span class="tag">云厂商布局</span>
-                    <span class="tag">社区分析</span>
-                    <span class="tag">市场趋势</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>由 nanobot 深度调研生成 | 报告持续更新中</p>
-        </div>
+<header>
+  <h1>📊 纪多斌 · 调研报告集</h1>
+  <p class="subtitle">深度调研 · 多源交叉验证 · 持续更新</p>
+</header>
+
+<nav class="nav">
+  <a href="#auto">🚗 汽车&amp;智驾</a>
+  <a href="#econ">📈 宏观经济</a>
+  <a href="#ai">🤖 AI&amp;科技</a>
+  <a href="#people">👤 人物档案</a>
+  <a href="#tech">⚙️ 技术&amp;基础架构</a>
+  <a href="#chain">🏭 供应链&amp;产业</a>
+  <a href="#daily">📰 每日简报</a>
+</nav>
+
+<!-- ====== 汽车 & 智驾 ====== -->
+<section id="auto">
+  <h2 class="cat-title">🚗 汽车 &amp; 智驾 <span class="count">12 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">🏆</span>
+      <div class="info">
+        <a href="adas-five-giants-comparison.html">中国智驾五巨头横向对比：谁会出局？谁能成为巨头？</a>
+        <div class="desc"><span class="tag auto">智驾</span>华为/Momenta/地平线/千里/萝卜快跑 全维度对比</div>
+      </div>
+      <span class="date">07-10</span>
     </div>
+    <div class="report">
+      <span class="icon">🚗</span>
+      <div class="info">
+        <a href="auto-sales-h1-2026.html">2026上半年车企销量深度评估</a>
+        <div class="desc"><span class="tag auto">销量</span>传统车企+新势力 H1 完成率/出口/收益评估</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🔬</span>
+      <div class="info">
+        <a href="momenta-tech-stack-deep-dive.html">Momenta 技术栈深度拆解</a>
+        <div class="desc"><span class="tag auto">智驾</span>一段式端到端、数据飞轮、R7世界模型、BMC7X芯片</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🏦</span>
+      <div class="info">
+        <a href="momenta-ipo-physical-ai-analysis.html">Momenta IPO："Physical AI 第一股"深度分析</a>
+        <div class="desc"><span class="tag auto">智驾</span>营收24.13亿/毛利71.6%/三层叙事分析</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">📊</span>
+      <div class="info">
+        <a href="china-adas-market-2026.html">中国 ADAS 市场深度分析：博世份额12.3%</a>
+        <div class="desc"><span class="tag auto">智驾</span>博世→华为/Momenta/地平线 格局重塑</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🔍</span>
+      <div class="info">
+        <a href="moworld-fact-check.html">魔芯科技 MoWorld 事实核查</a>
+        <div class="desc"><span class="tag auto">AI</span>夸大指数7/10——"全球首个超高帧世界模型"深度核查</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🚛</span>
+      <div class="info">
+        <a href="commercial-vehicle-margin.html">商用车行业毛利率全景分析</a>
+        <div class="desc"><span class="tag auto">商用车</span>重卡8-10% vs 斯堪尼亚22-25% 差距分析</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+    <div class="report">
+      <span class="icon">🤖</span>
+      <div class="info">
+        <a href="hesai-consolidated-report.html">禾赛科技深度调研：三个人，12年不散</a>
+        <div class="desc"><span class="tag auto">激光雷达</span>六特质+五洞察</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🦾</span>
+      <div class="info">
+        <a href="hesai-sharpa-consolidated.html">禾赛 × Sharpa 双生调研：同一个大脑，两个身体</a>
+        <div class="desc"><span class="tag auto">机器人</span>禾赛感知+Sharpa灵巧手/North人形/CraftNet模型</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="scania-idps-supplier-due-diligence.html">斯堪尼亚 IDPS 供应商尽职调查</a>
+        <div class="desc"><span class="tag auto">商用车</span>斯堪尼亚中国本土化供应链评估</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+    <div class="report">
+      <span class="icon">🚗</span>
+      <div class="info">
+        <a href="china-auto-h1-2026-business-report.html">中国汽车行业 2026 H1 市场分析报告（业务版）</a>
+        <div class="desc"><span class="tag auto">综合</span>新能源/燃油车退出/出海/智驾/政策</div>
+      </div>
+      <span class="date">07-11</span>
+    </div>
+    <div class="report">
+      <span class="icon">🐟</span>
+      <div class="info">
+        <a href="competitor-analysis-2026-07-07.html">竞争对手分析 2026-07-07</a>
+        <div class="desc"><span class="tag auto">竞对</span>行业竞争格局分析</div>
+      </div>
+      <span class="date">07-07</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 宏观经济 ====== -->
+<section id="econ">
+  <h2 class="cat-title">📈 宏观经济 <span class="count">3 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">🏗️</span>
+      <div class="info">
+        <a href="china-economy-root-cause.html">中国经济困境的根因分析</a>
+        <div class="desc"><span class="tag econ">宏观</span>五层嵌套根因：房地产→地方债→通缩→就业→出口</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">💰</span>
+      <div class="info">
+        <a href="china-capital-flows-2026.html">中国资本流向深度调研：钱在往哪里跑？</a>
+        <div class="desc"><span class="tag econ">资本</span>五大吸金赛道：AI/机器人/半导体/新能源/航天</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🏭</span>
+      <div class="info">
+        <a href="dexterous-hand-supply-chain-report.html">灵巧手供应链图谱</a>
+        <div class="desc"><span class="tag econ">产业</span>Sharpa/舞肌/帕西尼等15家公司交叉验证</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== AI & 科技 ====== -->
+<section id="ai">
+  <h2 class="cat-title">🤖 AI &amp; 科技 <span class="count">10 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">💡</span>
+      <div class="info">
+        <a href="huawei-optical-chip-strategy.html">华为光芯片战略深度解读</a>
+        <div class="desc"><span class="tag ai">光芯片</span>126页PPT + OPEN NPO：电芯片被制裁后的"换道超车"</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+    <div class="report">
+      <span class="icon">🔥</span>
+      <div class="info">
+        <a href="minimax-darkest-hour.html">MiniMax"至暗时刻"深度调研</a>
+        <div class="desc"><span class="tag ai">组织</span>七个特质：Context信仰/低ego/当众吵架/就事论事</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+    <div class="report">
+      <span class="icon">☁️</span>
+      <div class="info">
+        <a href="cloud-embodied-ai-strategy.html">云厂商具身智能战略：架构师视角</a>
+        <div class="desc"><span class="tag ai">云战略</span>竞对分析+数据飞轮战略</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">🧭</span>
+      <div class="info">
+        <a href="cloud-embodied-ai-strategy-part2.html">云厂商具身智能战略：六个可选方向</a>
+        <div class="desc"><span class="tag ai">云战略</span>定位矩阵+优先级排序</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">🛠️</span>
+      <div class="info">
+        <a href="cloud-embodied-ai-implementation.html">云厂商具身智能：可执行方案与落地路径</a>
+        <div class="desc"><span class="tag ai">云战略</span>云产品选型+架构+18个月路线图</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">🤖</span>
+      <div class="info">
+        <a href="embodied-ai-landscape-2026.html">具身智能产业全景图 2026</a>
+        <div class="desc"><span class="tag ai">机器人</span>产业链/技术路线/核心玩家</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">🖥️</span>
+      <div class="info">
+        <a href="agentrun-vs-tencent-agent-runtime.html">AgentRun vs 腾讯 Agent Runtime 对比</a>
+        <div class="desc"><span class="tag ai">Agent</span>阿里云AgentRun与腾讯云Agent Runtime技术对比</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">☁️</span>
+      <div class="info">
+        <a href="aliyun-agentrun-deep-dive.html">阿里云 AgentRun 深度调研</a>
+        <div class="desc"><span class="tag ai">Agent</span>技术架构/商业模式/竞争定位</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🔗</span>
+      <div class="info">
+        <a href="tencent-ecosystem-workflow.html">腾讯生态系统工作流调研</a>
+        <div class="desc"><span class="tag ai">平台</span>腾讯云生态集成与工作流引擎</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🌪️</span>
+      <div class="info">
+        <a href="graphcast-bavi-guide.html">GraphCast 台风巴威仿真实战指南</a>
+        <div class="desc"><span class="tag ai">AI天气</span>ERA5/GFS数据下载+预处理+推理全流程</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 人物档案 ====== -->
+<section id="people">
+  <h2 class="cat-title">👤 人物档案 <span class="count">4 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">🔧</span>
+      <div class="info">
+        <a href="li-yifan-profile.html">李一帆：The Builder CEO</a>
+        <div class="desc"><span class="tag people">禾赛</span>UIUC机器人博士→2025年还在发arXiv论文的CEO</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🏗️</span>
+      <div class="info">
+        <a href="xiang-shaoqing-profile.html">向少卿：The Architect</a>
+        <div class="desc"><span class="tag people">禾赛</span>清华精密仪器第一名→斯坦福→Apple→禾赛CTO→Sharpa</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🔬</span>
+      <div class="info">
+        <a href="sun-kai-profile.html">孙恺：The Physicist</a>
+        <div class="desc"><span class="tag people">禾赛</span>交大→斯坦福机械+电子双修→harmitford2007传奇</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🌟</span>
+      <div class="info">
+        <a href="feifei-li-initiative-report.html">李飞飞倡议调研报告</a>
+        <div class="desc"><span class="tag people">AI</span>李飞飞AI教育与社会影响倡议</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 技术 & 基础架构 ====== -->
+<section id="tech">
+  <h2 class="cat-title">⚙️ 技术 &amp; 基础架构 <span class="count">3 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">💻</span>
+      <div class="info">
+        <a href="intel-vs-amd-architecture.html">Intel vs AMD 架构深度对比</a>
+        <div class="desc"><span class="tag tech">CPU</span>微架构/缓存/互联/能效比全维度分析</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">⚡</span>
+      <div class="info">
+        <a href="amd-epyc-numa-tuning.html">AMD EPYC NUMA 调优实战</a>
+        <div class="desc"><span class="tag tech">HPC</span>NUMA拓扑/内存带宽/进程绑定优化</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">🌊</span>
+      <div class="info">
+        <a href="intel-amd-hpc-cfd.html">Intel vs AMD HPC/CFD 性能对比</a>
+        <div class="desc"><span class="tag tech">HPC</span>计算流体力学场景下的实际性能测试</div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 供应链 & 产业 ====== -->
+<section id="chain">
+  <h2 class="cat-title">🏭 供应链 &amp; 产业 <span class="count">2 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">✋</span>
+      <div class="info">
+        <a href="dexterous-hand-supply-chain-report.html">灵巧手供应链图谱</a>
+        <div class="desc"><span class="tag chain">机器人</span>15家核心零部件/成品企业交叉验证</div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">🚛</span>
+      <div class="info">
+        <a href="scania-idps-supplier-due-diligence.html">斯堪尼亚 IDPS 供应商尽职调查</a>
+        <div class="desc"><span class="tag chain">供应链</span>斯堪尼亚中国本土化供应商评估</div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 每日简报 ====== -->
+<section id="daily">
+  <h2 class="cat-title">📰 每日简报 <span class="count">50+ 篇</span></h2>
+  <div class="report-list">
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="evolution-brief-2026-07-11.html">2026-07-11 每日简报</a>
+        <div class="desc"><span class="tag tech">简报</span>最新</div>
+      </div>
+      <span class="date">07-11</span>
+    </div>
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="evolution-brief-2026-07-10.html">2026-07-10 每日简报</a>
+        <div class="desc"><span class="tag tech">简报</span></div>
+      </div>
+      <span class="date">07-10</span>
+    </div>
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="evolution-brief-2026-07-09.html">2026-07-09 每日简报</a>
+        <div class="desc"><span class="tag tech">简报</span></div>
+      </div>
+      <span class="date">07-09</span>
+    </div>
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="evolution-brief-2026-07-08.html">2026-07-08 每日简报</a>
+        <div class="desc"><span class="tag tech">简报</span></div>
+      </div>
+      <span class="date">07-08</span>
+    </div>
+    <div class="report">
+      <span class="icon">📋</span>
+      <div class="info">
+        <a href="evolution-brief-2026-07-07.html">2026-07-07 每日简报</a>
+        <div class="desc"><span class="tag tech">简报</span></div>
+      </div>
+      <span class="date">07-07</span>
+    </div>
+    <div class="report">
+      <span class="icon">📁</span>
+      <div class="info">
+        <span style="color:var(--gray-500);font-size:13px;">6月完整简报（30篇）</span>
+        <div class="desc">
+          <a href="evolution-brief-2026-06-30.html" style="font-size:12px;">06-30</a> ·
+          <a href="evolution-brief-2026-06-29.html" style="font-size:12px;">06-29</a> ·
+          <a href="evolution-brief-2026-06-28.html" style="font-size:12px;">06-28</a> ·
+          <a href="evolution-brief-2026-06-01.html" style="font-size:12px;">...</a> ·
+          <a href="evolution-brief-2026-06-01.html" style="font-size:12px;">06-01</a>
+        </div>
+      </div>
+      <span class="date">06月</span>
+    </div>
+    <div class="report">
+      <span class="icon">📁</span>
+      <div class="info">
+        <span style="color:var(--gray-500);font-size:13px;">5月简报</span>
+        <div class="desc">
+          <a href="evolution-brief-2026-05-31.html" style="font-size:12px;">05-31</a> ·
+          <a href="evolution-brief-2026-05-30.html" style="font-size:12px;">05-30</a> ·
+          <a href="evolution-brief-2026-05-29.html" style="font-size:12px;">05-29</a> ·
+          <a href="evolution-brief-2026-05-17.html" style="font-size:12px;">05-17</a>
+        </div>
+      </div>
+      <span class="date">05月</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>由 Hermes Agent 深度调研生成 · 报告持续更新中</p>
+  <p style="margin-top:6px;">Source: <a href="https://github.com/binbinao/openclaw-impact-report" style="color:var(--gray-500);">github.com/binbinao/openclaw-impact-report</a></p>
+</footer>
+
+</div>
 </body>
 </html>
