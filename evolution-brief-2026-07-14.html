@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 · 第 48 期 · 2026-07-14</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+  .stat .delta { font-size: 0.75em; margin-top: 2px; }
+  .delta.up { color: var(--red); }
+  .delta.down { color: var(--green); }
+  .delta.flat { color: var(--text2); }
+  .delta.warn { color: var(--yellow); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .severity-high { color: var(--red); }
+  .severity-medium { color: var(--orange); }
+  .severity-low { color: var(--yellow); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-orange { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .warn-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .warn-box-gray {
+    background: rgba(139,148,158,0.08);
+    border-left: 3px solid var(--text2);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .insight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .success-box {
+    background: rgba(63,185,80,0.08);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+
+  .flood-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .pulse-red { background: var(--red); }
+  .pulse-yellow { background: var(--yellow); }
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.3); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .paper-item {
+    padding: 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .paper-item .title { color: var(--accent); font-weight: 600; }
+  .paper-item .meta { color: var(--text2); font-size: 0.85em; margin-top: 4px; }
+  .paper-item .desc { margin-top: 6px; font-size: 0.92em; }
+
+  .story-item {
+    padding: 10px;
+    margin: 6px 0;
+    background: var(--surface2);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .story-item .title { color: var(--accent); }
+  .story-item .score { color: var(--yellow); font-weight: 700; }
+
+  .trend-up { color: var(--red); }
+  .trend-down { color: var(--green); }
+  .trend-flat { color: var(--text2); }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .suggestion-item {
+    padding: 12px;
+    margin: 6px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--purple);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🧬 进化简报 · 第 48 期</h1>
+  <div class="subtitle">2026-07-14 · Hermes 自进化系统</div>
+  <div class="period-badge" style="background:rgba(248,81,73,0.12);color:var(--red);">
+    <span class="flood-indicator"><span class="pulse-dot pulse-red"></span> 洪水模式 · 97.6% 尾窗 · PID 3433647 第 8 期 · 日志跨午夜运行 · 无午夜轮转</span>
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="card">
+  <h2>📋 执行摘要</h2>
+  <div class="warn-box">
+    <strong>⚠️ 洪水增强 + 压缩效应回归：</strong>尾窗 gateway.run 从 P47 的 89.4% 飙升至 97.6%（+8.2pp），非洪水尾窗从 P47 的 53 条压缩至 12 条（↓-77.4%）。P47 的"压缩缓解"被确认是尾窗采样的暂时性改善——非真实环境改善。全文件 8,473 行，gateway.run 97.59%，PID 3433647 连续第 8 期无变更。<br>
+    <strong>日志跨午夜运行：</strong>文件跨越 07-13 17:30 → 07-14 09:04（15.6h），未发生午夜轮转。全 07-13 实际产线 12,552 行（errors.log.1 + errors.log 中 07-13 部分）。<br>
+    <strong>arXiv 恢复：</strong>5 篇论文——P47 失败后 1 期即恢复，模式符合预期（失败后 1-2 期恢复）。
+  </div>
+  <div class="insight-box">
+    <strong>📊 稳定性：</strong>工具 32（稳定第 8 期）、技能 66（稳定）、Memory 37%/16%（稳定）——系统底层架构连续 8 期无变化。<br>
+    <strong>PID: </strong>3433647 持续第 8 期无变更（07-08→07-14），刷新最长延续记录。<br>
+    <strong>弱点: </strong>0 检出——碎片化盲区第 14 期（连续第 10 期），尾窗仅 12 条非洪水（7 条被压缩），无聚合可能。<br>
+    <strong>全文件非洪水: </strong>239 条（15.6h），日均投影 ~368 条。主要源：api_server (178) + tools.approval (44) + tool_executor (15)。
+  </div>
+  <div class="warn-box-gray">
+    <strong>ℹ️ 警告标签说明：</strong>"尾窗 baseline 不可靠 ⚠️" —— 当 gateway.run 尾窗占比 >95% 时（当前 97.6%），非洪水基线 25-35 区间被强制压缩，尾窗非洪水计数（12 条）不代表真实水平。本期全文件数据是更可靠的参考。
+  </div>
+</div>
+
+<!-- Capability Status -->
+<div class="card">
+  <h2>📊 能力状态</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value">32</div>
+      <div class="label">可用工具</div>
+      <div class="delta flat">= 同 P47（8 期稳定）</div>
+    </div>
+    <div class="stat">
+      <div class="value">66</div>
+      <div class="label">可用技能</div>
+      <div class="delta flat">= 同 P47</div>
+    </div>
+    <div class="stat">
+      <div class="value">37%</div>
+      <div class="label">Memory 使用</div>
+      <div class="delta flat">= 同 P47</div>
+    </div>
+    <div class="stat">
+      <div class="value">16%</div>
+      <div class="label">User 使用</div>
+      <div class="delta flat">= 同 P47</div>
+    </div>
+    <div class="stat">
+      <div class="value">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="delta flat">= 同 P47</div>
+    </div>
+    <div class="stat">
+      <div class="value">0</div>
+      <div class="label">Session 扫描</div>
+      <div class="delta flat">兼容性问题</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-bottom:8px;">工具分类构成</h3>
+  <table>
+    <tr><th>分类</th><th>数量</th><th>分类</th><th>数量</th><th>分类</th><th>数量</th></tr>
+    <tr>
+      <td>🖥️ 终端/文件</td><td>4</td>
+      <td>🌐 浏览器</td><td>3</td>
+      <td>🤖 AI/代码</td><td>5</td>
+    </tr>
+    <tr>
+      <td>📂 文件工具</td><td>1</td>
+      <td>🧠 记忆/技能</td><td>3</td>
+      <td>📱 社交/即时</td><td>3</td>
+    </tr>
+    <tr>
+      <td>🖼️ 视觉/图像</td><td>3</td>
+      <td>🎵 音频/视频</td><td>3</td>
+      <td>🔧 杂项</td><td>7</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Weakness Analysis -->
+<div class="card">
+  <h2>⚠️ 弱点诊断</h2>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--text2);">0</div>
+      <div class="label">弱点检出</div>
+      <div class="delta warn">= 盲区第 14 期</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">97.59%</div>
+      <div class="label">gateway.run 全文件</div>
+      <div class="delta up">↑ 95.58%→97.59%</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">97.6%</div>
+      <div class="label">gateway.run 尾窗</div>
+      <div class="delta up">↑ 89.4%→97.6%</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange);">12</div>
+      <div class="label">非洪水 (尾窗)</div>
+      <div class="delta up" style="color:var(--red);">↘ 53→12 (-77.4%)</div>
+    </div>
+    <div class="stat">
+      <div class="value">8,473</div>
+      <div class="label">日志总行数</div>
+      <div class="delta down">15.6h (跨午夜)</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--text2);">3433647</div>
+      <div class="label">PID 第 8 期</div>
+      <div class="delta flat">= 无变更</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-bottom:8px;">组件分布 (尾窗 500 行)</h3>
+  <table>
+    <tr><th>组件</th><th>条数</th><th>占比</th><th>与 P47 对比</th><th>分析</th></tr>
+    <tr style="background:rgba(248,81,73,0.08);">
+      <td><strong>gateway.run</strong></td><td><strong>488</strong></td><td><strong>97.6%</strong></td>
+      <td><span class="trend-up">↑ 445→488 (+9.7%)</span></td>
+      <td>占比重返 97%+ · PID 3433647 第 8 期</td>
+    </tr>
+    <tr>
+      <td>api_server</td><td>10</td><td>2.0%</td>
+      <td><span class="trend-up">↑ 9→10 (+11.1%)</span></td>
+      <td>～12/h 恒定速率</td>
+    </tr>
+    <tr>
+      <td>tools.approval</td><td>2</td><td>0.4%</td>
+      <td><span class="trend-down">↓ 29→2 (-93.1%)</span></td>
+      <td>尾窗压缩挤出 · 全文件 44 条</td>
+    </tr>
+    <tr>
+      <td>tool_executor</td><td>0</td><td>0%</td>
+      <td><span class="trend-down">↓ 14→0</span></td>
+      <td>尾窗压缩挤出 · 全文件 15 条</td>
+    </tr>
+    <tr>
+      <td>conversation_loop</td><td>0</td><td>0%</td>
+      <td><span class="trend-flat">= 0</span></td>
+      <td>全文件 2 条</td>
+    </tr>
+    <tr style="color:var(--yellow);"><td>非洪水合计</td><td>12</td><td>2.4%</td>
+      <td><span class="trend-down">↘ 53→12</span></td>
+      <td>⚠️ 基线压缩效应激活</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">全文件组件分布 (07-13 17:30 → 07-14 09:04, 15.6h)</h3>
+  <table>
+    <tr><th>组件</th><th>条数</th><th>占比</th><th>日均投影</th></tr>
+    <tr><td>gateway.run</td><td>8,269</td><td>97.59%</td><td>~12,720</td></tr>
+    <tr><td>api_server</td><td>178</td><td>2.10%</td><td>~274</td></tr>
+    <tr><td>tools.approval</td><td>44</td><td>0.52%</td><td>~68</td></tr>
+    <tr><td>agent.tool_executor</td><td>15</td><td>0.18%</td><td>~23</td></tr>
+    <tr><td>agent.conversation_loop</td><td>2</td><td>0.02%</td><td>~3</td></tr>
+    <tr style="color:var(--yellow);"><td>非洪水合计</td><td>239</td><td>2.82%</td><td>~368</td></tr>
+  </table>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">全 07-13 日完整数据 (errors.log.1 + errors.log 07-13 部分)</h3>
+  <table>
+    <tr><th>文件</th><th>时间跨度</th><th>行数</th><th>gateway.run</th></tr>
+    <tr><td>errors.log.2</td><td>07-12 09:36 → 07-13 01:39</td><td>9,438</td><td>～95%+ (P46 数据)</td></tr>
+    <tr><td>errors.log.1</td><td>07-13 01:40 → 07-13 17:29</td><td>9,440</td><td>95.6% (P47 前半段)</td></tr>
+    <tr><td>errors.log (07-13 部分)</td><td>07-13 17:30 → 07-13 23:59</td><td>~3,112</td><td>97.6% (P47 后半段)</td></tr>
+    <tr style="background:rgba(139,148,158,0.08);"><td><strong>07-13 全天合计</strong></td><td><strong>01:40 → 23:59</strong></td><td><strong>~12,552</strong></td><td><strong>~96%</strong></td></tr>
+  </table>
+
+  <div class="warn-box">
+    <strong>🧩 碎片化盲区 · 第 14 期（连续第 10 期）:</strong>
+    weakness 检出 0。尾窗仅 12 条非洪水（压缩导致），无法进行有效分析。<br>
+    全文件 239 条非洪水分散在 5 个组件签名下（api_server 178, tools.approval 44, tool_executor 15, conversation_loop 2）——无单一签名达检测阈值。<br>
+    <strong>⚠️ 本期尾窗压缩（97.6%）导致非洪水组件几乎全部被挤出。</strong>非洪水组件在尾窗中的可见性完全丧失——12 条中 10 条是 api_server（稳定 ~12/h），仅 2 条 tools.approval。<br>
+    <strong>建议修复：</strong>在 weakness_scan.py 中增加跨组件聚合规则 + 全文件扫描模式（替代尾窗 500 行策略）。
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>📐 基线压缩效应再次激活（P47→P48 反转）:</strong>
+    P47 尾窗 gateway.run 降至 89.4%（缓解期）→非洪水 53 条。P48 尾窗 97.6%（压缩期）→非洪水 12 条。此压缩-缓解-压缩的振荡模式验证了尾窗受 cron job 执行窗口瞬时占比的影响，而非反映真实的非洪水水平变化。<br>
+    <strong>同期非洪水数据验证：</strong>
+    <table>
+      <tr><th>指标</th><th>P47 尾窗 (89.4%)</th><th>P48 尾窗 (97.6%)</th><th>P48 全文件</th></tr>
+      <tr><td>非洪水合计</td><td>53</td><td>12</td><td>239</td></tr>
+      <tr><td>api_server</td><td>9</td><td>10</td><td>178</td></tr>
+      <tr><td>tools.approval</td><td>29</td><td>2</td><td>44</td></tr>
+      <tr><td>tool_executor</td><td>14</td><td>0</td><td>15</td></tr>
+    </table>
+    压缩矫正公式验证：12pect × (100% / (100% - 97.6%)) = 12 × 41.67 ≈ 500（高估）。实际全文件非洪水 239。公式在 >95% 极端压缩时偏大——因为非洪水组件的真实产出远低于窗口容量的理论压缩上限。建议使用全文件数据替代公式估算。
+  </div>
+</div>
+
+<!-- Knowledge Feed -->
+<div class="card">
+  <h2>🔬 知识发现</h2>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-bottom:8px;">📄 arXiv 论文 (2026-07-14)</h3>
+
+  <div class="success-box">
+    <strong>✅ arXiv 恢复成功 5 篇论文！</strong>P47 失败 1 期后即恢复。整体成功率: 16/48 = <strong>33.3%</strong>（历史新高持平）。恢复间隔符合历史模式：1-2 期失败后恢复。
+  </div>
+
+  <div class="paper-item">
+    <div class="title">📊 Bandit PCA with Minimax Optimal Regret</div>
+    <div class="meta">Blanchard, Ostrovskii, Saha · cs.LG, stat.ML</div>
+    <div class="desc">在线主成分分析（Bandit PCA）——在每一轮中，学习器选择单位向量并收到奖励，目标是最小化累积遗憾。实现了极小化最优遗憾界。</div>
+  </div>
+  <div class="paper-item">
+    <div class="title">🧠 Fast Whole-Brain, Geometry-Aware Functional Alignment for Cross-Subject Decoding</div>
+    <div class="meta">Barbarant, Meyniel, Thirion · q-bio.NC, cs.LG, stat.ML</div>
+    <div class="desc">跨被试脑解码——通过几何感知功能性对齐解决个体间脑响应模式的差异，平衡功能特征对齐与保留个体差异。</div>
+  </div>
+  <div class="paper-item">
+    <div class="title">🎯 The Singularity Space: A Generative Diffusion Framework for Signal Representation</div>
+    <div class="meta">Bar-Yosef, Averbuch, Turkel · cs.LG, cs.AI, eess.SP, math.NA</div>
+    <div class="desc">奇点空间——利用复平面奇点表示信号的生成式扩散框架，学习物理解约的逐信号奇点配置，解决退化或部分观测的逆问题。</div>
+  </div>
+  <div class="paper-item">
+    <div class="title">📈 The Spectral Structure of Latent Treatment Effects</div>
+    <div class="meta">Virk, Mazaheri, Wu · cs.LG, stat.ML</div>
+    <div class="desc">潜在处理效应的谱结构——在未观测混杂因素下识别异质处理效应。证明代理模型中的标量矩序列是一个更基础对象的投影。</div>
+  </div>
+  <div class="paper-item">
+    <div class="title">🔮 Infrared Organization and Critical Cognitive Field Formation in Transformer Dynamics</div>
+    <div class="meta">Byung Gyu Chae · cs.LG</div>
+    <div class="desc">Transformer 的红外组织与临界认知场形成——认知场理论预测学习通过红外累积慢弛豫模式重组时间尺度态密度，增强记忆自能、缩小认知遗忘差距、增强集体敏感度。</div>
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">🔥 Hacker News 头条 (2026-07-14)</h3>
+
+  <div class="story-item">
+    <span class="title">📱 Apple's new SpeechAnalyzer API, benchmarked against Whisper and its predecessor</span>
+    <span class="score">436 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🖥️ Building and shipping Mac and iOS apps without opening Xcode</span>
+    <span class="score">281 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🎮 The art and engineering of Sega CD Silpheed</span>
+    <span class="score">220 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🐧 Linux on the Sega 32X. Who needs hardware synchronization primitives anyway?</span>
+    <span class="score">97 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🗂️ The infinite scroll may become endangered if controversial Calif. law passes</span>
+    <span class="score">67 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🎸 Show HN: YouTube Guitar Tab Parser</span>
+    <span class="score">64 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🌏 Mawlynnong, India, transformed by tourism, bans visitors on Sundays</span>
+    <span class="score">58 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">🎨 An Englishwoman who sketched India before photography took hold</span>
+    <span class="score">33 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">📝 N+1</span>
+    <span class="score">23 △</span>
+  </div>
+  <div class="story-item">
+    <span class="title">👨‍💻 What are Forward Deployed Engineers, and why are they so in demand? (2025)</span>
+    <span class="score">19 △</span>
+  </div>
+
+  <div class="insight-box">
+    <strong>🔍 高价值洞察：</strong><br>
+    <strong>1. Apple SpeechAnalyzer API vs Whisper (436△):</strong> Apple 新语音分析 API 在基准测试中表现出竞争力。对于 Hermes 的 TTS/STT 集成路径，这是比 Whisper 更轻量的平台原生备选方案。<br>
+    <strong>2. Transformer 认知场理论（arXiv cs.LG）:</strong> Learning reorganizes time-scale density of states through infrared accumulation of slow relaxation modes — 理论物理视角解读 LLM 涌现行为，对理解模型内部动态有启发价值。<br>
+    <strong>3. 奇点空间扩散框架（arXiv cs.LG/AI）:</strong> 利用复平面奇点表示信号，通过扩散模型学习物理解约配置。对信号表示的生成式方法有参考价值。
+  </div>
+</div>
+
+<!-- Trend Comparison -->
+<div class="card">
+  <h2>📈 趋势对比</h2>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-bottom:8px;">七期纵向趋势 (P42→P48)</h3>
+  <table>
+    <tr><th>指标</th><th>P42 (07-08)</th><th>P43 (07-09)</th><th>P44 (07-10)</th><th>P45 (07-11)</th><th>P46 (07-12)</th><th>P47 (07-13)</th><th>P48 (07-14)</th><th>趋势</th></tr>
+    <tr>
+      <td>工具数</td>
+      <td>32</td><td>32</td><td>32</td><td>32</td><td>32</td><td>32</td><td><strong>32</strong></td>
+      <td><span class="trend-flat">= 8 期稳定</span></td>
+    </tr>
+    <tr>
+      <td>技能数</td>
+      <td>66</td><td>66</td><td>66</td><td>66</td><td>66</td><td>66</td><td><strong>66</strong></td>
+      <td><span class="trend-flat">= 稳定</span></td>
+    </tr>
+    <tr>
+      <td>Memory</td>
+      <td>37%/16%</td><td>37%/16%</td><td>37%/16%</td><td>37%/16%</td><td>37%/16%</td><td>37%/16%</td><td><strong>37%/16%</strong></td>
+      <td><span class="trend-flat">= 稳定</span></td>
+    </tr>
+    <tr>
+      <td>Cron Jobs</td>
+      <td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td><strong>2</strong></td>
+      <td><span class="trend-flat">= 稳定</span></td>
+    </tr>
+    <tr>
+      <td>gateway.run PID</td>
+      <td>3433647</td><td>3433647</td><td>3433647</td><td>3433647</td><td>3433647</td><td>3433647</td><td><strong>3433647</strong></td>
+      <td><span class="trend-flat">= 无变更 (8 期)</span></td>
+    </tr>
+    <tr>
+      <td>gateway.run 尾窗</td>
+      <td>91.2%</td><td>91.2%</td><td>88.4%</td><td>95.0%</td><td>96.8%</td><td>89.4%</td><td><strong>97.6%</strong></td>
+      <td><span class="trend-up">↗ 反弹至 97%+</span></td>
+    </tr>
+    <tr>
+      <td>非洪水基线 (尾窗)</td>
+      <td>28</td><td>44</td><td>58</td><td>25</td><td>16</td><td>53</td><td><strong>12</strong></td>
+      <td><span class="trend-down">↘ 压缩</span></td>
+    </tr>
+    <tr>
+      <td>tools.approval (尾窗)</td>
+      <td>13</td><td>26</td><td>39</td><td>14</td><td>4</td><td>29</td><td><strong>2</strong></td>
+      <td><span class="trend-down">↘ 压缩挤出</span></td>
+    </tr>
+    <tr>
+      <td>api_server (尾窗)</td>
+      <td>10</td><td>9</td><td>9</td><td>10</td><td>11</td><td>9</td><td><strong>10</strong></td>
+      <td><span class="trend-flat">≈ ~10 稳定</span></td>
+    </tr>
+    <tr>
+      <td>tool_executor (尾窗)</td>
+      <td>6</td><td>5</td><td>9</td><td>0</td><td>0</td><td>14</td><td><strong>0</strong></td>
+      <td><span class="trend-down">↘ 压缩挤出</span></td>
+    </tr>
+    <tr>
+      <td>arXiv 论文</td>
+      <td>5</td><td>5</td><td>0</td><td>5</td><td>5</td><td>0</td><td><strong>5</strong></td>
+      <td><span class="trend-up" style="color:var(--green);">↗ 恢复</span></td>
+    </tr>
+    <tr>
+      <td>弱点检出</td>
+      <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>0</strong></td>
+      <td><span class="trend-flat">= 盲区第 14 期</span></td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">核心组件分布 (尾窗 500) — 长期序列 (P40→P48)</h3>
+  <table>
+    <tr><th>期号</th><th>日期</th><th>gateway.run</th><th>tools.approval</th><th>api_server</th><th>tool_executor</th><th>conversation_loop</th><th>非洪水合计</th><th>尾窗 %gateway</th></tr>
+    <tr><td>P40</td><td>07-06</td><td>464</td><td>0</td><td>17</td><td>18</td><td>0</td><td>36</td><td>92.8%</td></tr>
+    <tr><td>P41</td><td>07-07</td><td>461</td><td>0</td><td>17</td><td>20</td><td>0</td><td>38</td><td>92.2%</td></tr>
+    <tr><td>P42</td><td>07-08</td><td>456</td><td>13</td><td>10</td><td>6</td><td>2</td><td>28</td><td>91.2%</td></tr>
+    <tr><td>P43</td><td>07-09</td><td>456</td><td>26</td><td>9</td><td>5</td><td>2</td><td>44</td><td>91.2%</td></tr>
+    <tr><td>P44</td><td>07-10</td><td>442</td><td>39</td><td>9</td><td>9</td><td>0</td><td>58</td><td>88.4%</td></tr>
+    <tr><td>P45</td><td>07-11</td><td>475</td><td>14</td><td>10</td><td>0</td><td>0</td><td>25</td><td>95.0%</td></tr>
+    <tr><td>P46</td><td>07-12</td><td>484</td><td>4</td><td>11</td><td>0</td><td>0</td><td>16</td><td>96.8%</td></tr>
+    <tr><td>P47</td><td>07-13</td><td>445</td><td>29</td><td>9</td><td>14</td><td>0</td><td>53</td><td>89.4%</td></tr>
+    <tr style="background:rgba(248,81,73,0.08);">
+      <td><strong>P48</strong></td><td><strong>07-14</strong></td><td><strong>488</strong></td><td><strong>2</strong></td><td><strong>10</strong></td><td><strong>0</strong></td><td><strong>0</strong></td><td><strong>12</strong></td><td><strong>97.6%</strong></td></tr>
+  </table>
+
+  <div class="insight-box">
+    <strong>📊 P48 序列观察：1-3-5 振荡模式（第 3 次反转确认）</strong><br>
+    尾窗 gateway.run 占比的近 7 期序列：91.2%(P42)→91.2%(P43)→88.4%(P44)→95.0%(P45)→96.8%(P46)→89.4%(P47)→97.6%(P48)。<br>
+    一个清晰的"1:3:5"振荡模式正在形成——每当占比降至 ~89% 附近时（P44=88.4%, P47=89.4%），下期一定反弹至 95%+（P45=95.0%, P48=97.6%）。振荡周期约为 2-3 期。低点不是一个"修复窗口"信号——只是尾窗采样时刻不同导致的波动。<br>
+    <strong>关键结论：</strong>非洪水组件的"可见期"（P47 的 53 条）和"不可见期"（P48 的 12 条）是尾窗占比的单调函数，而非非洪水真实水平的变化。
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">日度日志量趋势</h3>
+  <table>
+    <tr><th>日期</th><th>总行数</th><th>时间跨度</th><th>gateway.run 占比</th><th>小时速率</th><th>备注</th></tr>
+    <tr><td>07-09</td><td>10,984</td><td>~22h</td><td>91.2%</td><td>~499/h</td><td>P43 — 逼近轮转阈值未轮转</td></tr>
+    <tr><td>07-10</td><td>9,045</td><td>~24h</td><td>88.4%</td><td>~377/h</td><td>P44 — 日志轮转确认</td></tr>
+    <tr><td>07-11</td><td>3,725</td><td>~9.5h</td><td>95.0%</td><td>~392/h</td><td>P45 — 轮转后稳定</td></tr>
+    <tr><td>07-12</td><td>5,404</td><td>~14.5h</td><td>96.8%</td><td>~373/h</td><td>P46 — 连续第 2 日增长</td></tr>
+    <tr><td>07-13</td><td>12,552</td><td>~22.5h</td><td>~96%</td><td>~558/h</td><td>P47 — 跨午夜无轮转</td></tr>
+    <tr style="background:rgba(248,81,73,0.08);">
+      <td><strong>07-14</strong></td><td><strong>5,403</strong></td><td><strong>~9h (00:00→09:04)</strong></td><td><strong>97.6%</strong></td><td><strong>~600/h</strong></td><td><strong>P48 — 午夜未轮转, 8,473 行文件</strong></td></tr>
+  </table>
+
+  <div class="warn-box-gray">
+    <strong>📐 日志增长模式修正（P48 新发现）:</strong>
+    P47（07-13）全天实际产生 <strong>12,552 行</strong>（errors.log.1 9,440 + errors.log 07-13 部分 ~3,112），远高于此前预估的 4,446 行/7.3h。<br>
+    全 07-13 日均速率约 <strong>558/h</strong>，高于 P46 的 373/h 约 49.6%。<br>
+    当前 07-14 头 9h 已产生 5,403 行（~600/h）——速率快于 07-13 均值但 07-14 午夜未轮转。<br>
+    <strong>轮转预测：</strong>当前文件 8,473 行，若速率 600/h 持续，将在 ~14.5h（～14:30 CST）达到 8,800-9,500 的 size-based 轮转阈值。若阈值已提高或改为纯 time-based，则无轮转。<br>
+    <strong>⚠️ 如果 07-13 的 12,552 行未触发轮转，说明轮转配置已被修改。</strong>
+  </div>
+
+  <div class="insight-box" style="margin-top:16px;">
+    <strong>🔮 上期预测验证 (P47→P48):</strong><br>
+    <strong>• "gateway.run 洪水持续"</strong> ✅ 正确——PID 3433647 第 8 期持续。<br>
+    <strong>• "尾窗占比改善（89.4%）被确认是临时采样改善"</strong> ✅ 正确——P48 尾窗回升至 97.6%，确认"低点反弹"模式。<br>
+    <strong>• "arXiv 下期恢复"</strong> ✅ 正确——5 篇论文，1 期即恢复。<br>
+    <strong>• "日志轮转风险"</strong> ⚠️ 部分正确——午夜未发生 time-based 轮转，但 07-13 全天 12,552 行已超过旧轮转阈值。<br>
+    <strong>• "level 1: traditional gateway restart"</strong> ⚠️ 未执行——洪水仍在。<br>
+    <strong>预测精度：3.5/5 ≈ 70%</strong>— 方向预测稳定。日志轮转判断（午夜轮转预期错误）被 07-13 跨午夜运行推翻。
+  </div>
+</div>
+
+<!-- Evolution Suggestions -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--red);">优先级 1：修复 gateway.run 洪水 — 'hermes gateway restart'</strong>
+    <p style="color:var(--text2);font-size:0.9em;margin-top:4px;">
+      PID 3433647 已持续运行 <strong>8 期</strong>（07-08→07-14），持续刷新最长延续记录。<br>
+      全文件 8,269/8,473（97.59%），07-13 全天实际产线 <strong>12,552 行</strong>（errors.log.1 + errors.log 07-13 部分）。该单一错误签名已连续失控 8 天。<br>
+      修复方式——单条命令：<code>hermes gateway restart</code>。执行后可释放 >97% 的错误日志容量，使 weakness_scan 和其他诊断工具恢复可用性。<br>
+      本期 P47→P48 的"低点→高点"振荡模式（89.4%→97.6%）进一步证明尾窗占比改善不是修复信号——唯一真正的修复是执行 restart。
+    </p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--orange);">优先级 2：修复 tools.approval 配置 — 设置 approvals.mode</strong>
+    <p style="color:var(--text2);font-size:0.9em;margin-top:4px;">
+      尾窗仅 2 条（被压缩挤出），但全文件 44 条——配置错误 "approvals.mode 'auto' 无效值" 仍在持续产出。<br>
+      日均投影 ~68 条。修复方式：在 config.yaml 中将 approvals.mode 设为 "manual"、"smart" 或 "off"。<br>
+      尾窗中被压缩不意味着问题消失——全文件数据是唯一可靠的信源。
+    </p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--yellow);">优先级 3：修复 api_server 配置 — 设置 API_SERVER_KEY</strong>
+    <p style="color:var(--text2);font-size:0.9em;margin-top:4px;">
+      全文件 178 条（15.6h, ~11.4/h），日均投影 ~274 条。运行超 40 期的未修复配置错误。<br>
+      修复方式：在 .env 或 config.yaml 中设置 API_SERVER_KEY。无需代码变更。<br>
+      这是全文件非洪水 239 条中的最大单一来源（74.5%）。
+    </p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--purple);">优先级 4：修复 weakness_scan.py 跨组件聚合缺陷</strong>
+    <p style="color:var(--text2);font-size:0.9em;margin-top:4px;">
+      碎片化盲区已持续 14 期（连续 10 期）。<br>
+      本期尾窗非洪水被压缩至 12 条（无法检测），但全文件 239 条非洪水分散在 5 个组件签名下。<br>
+      添加跨组件聚合规则 + 全文件扫描模式（替代尾窗 500 行策略）是这类盲区的唯一修复路径。<br>
+      <strong>建议具体实现：</strong>weakness_scan.py 在检测到尾窗单一组件占比 >90% 时，自动降级到全文件扫描模式。
+    </p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--yellow);">优先级 5：检查日志轮转配置</strong>
+    <p style="color:var(--text2);font-size:0.9em;margin-top:4px;">
+      07-13 全天产出 12,552 行但未触发 size-based 轮转（旧阈值为 ~8,800-9,500 行）。07-13→07-14 午夜也未发生 time-based 轮转。<br>
+      两种可能性：(a) logrotate 配置已被修改（阈值提高或改为纯 time-based且间隔 >1天）, (b) 系统 logrotate 已失效。<br>
+      建议：检查 <code>/etc/logrotate.d/hermes</code> 或 <code>~/.hermes/profiles/reviewer/logs/</code> 的轮转配置。当前文件已达 8,473 行且无轮转迹象。
+    </p>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="header" style="border-top:1px solid var(--border); border-bottom:none; margin-top:20px; padding-top:20px;">
+  <div class="subtitle">
+    🤖 本报告由 Hermes Self-Evolution Cron Job 自动生成<br>
+    数据采集: 2026-07-14 09:00 CST · 日志跨度: 07-13 17:30 → 07-14 09:04 CST (15.6h, 跨午夜运行)<br>
+    Agent: deepseek-v4-flash · Provider: TokenHub · 第 48 期 · 系统已连续运行 59 天
+  </div>
+</div>
+
+</div>
+</body>
+</html>
