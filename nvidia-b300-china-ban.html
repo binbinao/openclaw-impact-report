@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NVIDIA B300 禁令与检查令 · 2026年7月深度调研</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #3B7EBF; --sky-bg: rgba(59,126,191,0.08);
+  --clay-bg: rgba(217,119,87,0.06); --olive-bg: rgba(120,140,93,0.08);
+  --rust-bg: rgba(176,74,63,0.08);
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300); --radius-panel: 12px; --radius-row: 8px; --radius-pill: 999px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 920px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 28px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  color: var(--slate); margin: 48px 0 16px; }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 24px 0 12px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 32px; }
+
+.card {
+  background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 24px; margin-bottom: 24px;
+}
+.card.intel { border-left: 4px solid var(--sky); }
+.card.amd   { border-left: 4px solid var(--clay); }
+.card.summary { border-left: 4px solid var(--olive); }
+.card.warning { border-left: 4px solid var(--rust); }
+
+table { width: 100%; border-collapse: collapse; }
+th {
+  font-family: var(--mono); font-size: 11px; color: var(--gray-500);
+  text-align: left; padding: 10px 14px; background: var(--gray-150);
+  border-bottom: var(--border);
+}
+td {
+  font-size: 14px; padding: 10px 14px; border-bottom: 1px solid var(--gray-150);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+
+.callout {
+  background: var(--clay-bg); border-left: 3px solid var(--clay);
+  border-radius: var(--radius-row); padding: 14px 18px; margin: 20px 0;
+  font-size: 15px;
+}
+
+.badge { border-radius: 6px; padding: 2px 10px; font-family: var(--mono); font-size: 11px; }
+.badge.blue { background: rgba(59,126,191,0.18); color: var(--sky); }
+.badge.orange { background: rgba(217,119,87,0.18); color: var(--clay); }
+.badge.green { background: rgba(120,140,93,0.18); color: var(--olive); }
+.badge.red { background: rgba(176,74,63,0.18); color: var(--rust); }
+
+.pill { border-radius: var(--radius-pill); padding: 2px 12px;
+  font-family: var(--mono); font-size: 11px; background: var(--oat); }
+
+ul { padding-left: 20px; font-size: 14px; line-height: 2; }
+li::marker { color: var(--gray-500); }
+
+.timeline-item {
+  position: relative; padding-left: 24px; margin-bottom: 16px;
+  border-left: 2px solid var(--gray-300);
+}
+.timeline-item::before {
+  content: ''; position: absolute; left: -5px; top: 6px;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--clay);
+}
+.timeline-item .date { font-family: var(--mono); font-size: 11px;
+  color: var(--gray-500); margin-right: 8px; }
+
+.footnote {
+  font-family: var(--mono); font-size: 10px; color: var(--gray-500);
+  border-top: var(--border); padding-top: 18px; margin-top: 48px;
+}
+strong { color: var(--slate); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="eyebrow">GPU Export Control · Deep Dive</p>
+<h1>NVIDIA B300 禁令与检查令</h1>
+<p class="subtitle">从 BIS 三道禁令到中国反向封锁：英伟达中国市场的结构性退出 · 2026 年 7 月</p>
+
+<div class="callout">
+<strong>一句话概括：</strong>2026 年 7 月，英伟达在中国市场的训练端算力基本清零。这不是阶段性制裁，是结构性退出。美国不让卖，中国不让买，企业用不了——三道 BIS 禁令叠加中国反向封锁，加上 Approved IC Designer 申请截止日 2026.12.31，是中国国产替代的最后窗口期。
+</div>
+
+<!-- ===== 时间线 ===== -->
+<h2><span class="badge orange">时间线</span> 关键事件（2025.04 — 2026.07）</h2>
+
+<div class="card">
+
+<div class="timeline-item">
+  <span class="date">2025.04</span> <strong>拜登政府禁令：H20 全面禁售中国</strong>。英伟达计提 45 亿美元损失。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.01.15</span> <strong>BIS 最终规则</strong>：H200、AMD MI325X 从"推定拒绝"改为"逐案审查"，加征 25% 关税。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.04.07</span> <strong>BIS 延长豁免期至 2026.12.31</strong>——Approved IC Designer 申请截止日。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.05.06</span> 黄仁勋表态："中国绝不能获得 NVIDIA 最先进、最高端的 AI GPU"，中国市场份额已降至 <strong>0%</strong>。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.05.13</span> <strong>黄仁勋随特朗普访华</strong>，试图推动 H200 解禁，<strong>但中方拒绝采购</strong>。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.05.20</span> 🔴 <strong>中国海关禁止 RTX 5090 D v2 进口</strong>——中方首次主动发起芯片禁令（之前都是美国发起）。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.05.31</span> <strong>BIS 确认</strong>：Blackwell、Rubin 系列芯片出口中国，任何母公司实体都需许可证。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.06.01</span> 🔴 <strong>BIS 关闭"海外子公司"漏洞</strong>——新加坡/马来西亚中转路线彻底封堵。
+</div>
+
+<div class="timeline-item">
+  <span class="date">2026.07.15</span> <strong>H200 已开始对华少量出货</strong>，美国官员证实——涉嫌违反 BIS 规则，灰色地带。
+</div>
+
+</div>
+
+<!-- ===== BIS 三道禁令 ===== -->
+<h2><span class="badge red">BIS</span> 三道禁令核心要点</h2>
+
+<div class="card intel">
+<h3>🔴 禁令 1：基础禁令</h3>
+<table>
+<tr><th>维度</th><th>内容</th></tr>
+<tr><td>覆盖芯片</td><td>B100 / B200 / <strong>B300</strong>（Blackwell 系列）、R100 / R200（Rubin 系列）、AMD MI350x</td></tr>
+<tr><td>触发条件</td><td>TPP（Total Processing Power）> 4800</td></tr>
+<tr><td>门槛</td><td>任何 TPP > 4800 芯片必须单独申请许可证</td></tr>
+<tr><td>许可证审批</td><td>"逐案审查"——本质仍是事实上的禁售</td></tr>
+</table>
+</div>
+
+<div class="card amd">
+<h3>🔴 禁令 2：海外子公司封堵（2026.06.01）</h3>
+
+<p>之前很多中国公司通过<strong>在新加坡、马来西亚设立子公司</strong>绕道买美国芯片。BIS 新规：</p>
+
+<ul>
+  <li>出口管制适用于<strong>任何最终母公司为中国 / 中国总部的公司</strong></li>
+  <li>不管子公司在哪里注册，<strong>母公司是中国实体 → 必须许可证</strong></li>
+  <li>直接打掉了"新加坡中转"这条灰色通道</li>
+</ul>
+
+<p style="margin-top:12px;"><span class="badge red">影响</span> 这一条是 2026 年最具杀伤力的禁令，把过去几年中国 AI 公司走的"出海再绕回"路径完全切断。</p>
+</div>
+
+<div class="card warning">
+<h3>🔴 禁令 3：游戏卡禁令（中方发起，2026.05.20）</h3>
+
+<ul>
+  <li><strong>中国海关禁止 RTX 5090 D v2 进口</strong></li>
+  <li>中方首次主动发起芯片禁令——之前都是美国不让卖</li>
+  <li>信号：中国对"阉割版"也不接受</li>
+</ul>
+</div>
+
+<!-- ===== 英伟达实际状况 ===== -->
+<h2><span class="badge orange">英伟达</span> 在中国市场的实际状况</h2>
+
+<div class="card summary">
+<table>
+<tr><th>维度</th><th>数据</th></tr>
+<tr><td>历史峰值（2023）</td><td><span class="badge green">~95% 市占</span></td></tr>
+<tr><td>当前（2026.05）</td><td><span class="badge red">0%</span>（黄仁勋自承）</td></tr>
+<tr><td>2026 财年 Q1 损失</td><td>因 H20 禁令计提 <strong>45 亿美元</strong></td></tr>
+<tr><td>2026 财年 Q2 预计损失</td><td><strong>80 亿美元</strong>营收</td></tr>
+<tr><td>现役产品</td><td>仅剩 H20（中国特供版）勉强能卖，但中方已拒绝采购 H200</td></tr>
+<tr><td>黄仁勋访华</td><td>2026.05.13 随特朗普访华，未取得突破</td></tr>
+</table>
+</div>
+
+<div class="callout">
+<strong>黄仁勋本人表态</strong>（2026.05.06）："中国绝不能获得 NVIDIA 最先进、最高端的 AI GPU。美国必须第一、必须最强。" —— 这是英伟达第一次公开承认"中国市场已经被彻底放弃"的姿态。
+</div>
+
+<!-- ===== 检查令与调查 ===== -->
+<h2><span class="badge red">检查令</span> 与重大调查案件</h2>
+
+<div class="card">
+
+<h3>已知重大调查</h3>
+<table>
+<tr><th>案件</th><th>时间</th><th>详情</th></tr>
+<tr><td><strong>高善文案</strong></td><td>2026.07</td><td>华尔街日报披露：习近平下令彻查，中纪委蔡奇负责执行</td></tr>
+<tr><td><strong>H200 走私案</strong></td><td>2026.07</td><td>美国官员证实 H200 已开始对华出货，数量极少——涉嫌违反 BIS 规则</td></tr>
+<tr><td><strong>海外子公司规避</strong></td><td>2026.06</td><td>BIS 关闭漏洞后，多个新加坡/马来西亚子公司面临审查</td></tr>
+</table>
+
+<h3 style="margin-top:24px;">BIS 检查令执行机制</h3>
+<table>
+<tr><th>机制</th><th>说明</th></tr>
+<tr><td><strong>Approved IC Designer</strong></td><td>BIS 认证芯片设计公司可申请豁免，截止 <span class="badge red">2026.12.31</span></td></tr>
+<tr><td><strong>EAL（End-User Authorization List）</strong></td><td>白名单——可以直接卖，无需逐案审查</td></tr>
+<tr><td><strong>Entity List</strong></td><td>黑名单——任何理由都拒绝</td></tr>
+<tr><td><strong>Validated End User (VEU)</strong></td><td>验证终端用户——可批量授权</td></tr>
+<tr><td><strong>Section 744.11</strong></td><td>"Know Your Customer" 规则——经销商必须确认买家真实身份</td></tr>
+</table>
+</div>
+
+<!-- ===== 中国市场影响 ===== -->
+<h2><span class="badge green">中国</span> 国内能买到的英伟达产品</h2>
+
+<div class="card intel">
+<table>
+<tr><th>产品</th><th>状态</th><th>备注</th></tr>
+<tr><td>H100 / H200 / B100 / B200 / <strong>B300</strong></td><td><span class="badge red">禁售</span></td><td>BIS 限制 + 中方拒绝</td></tr>
+<tr><td>H20</td><td><span class="badge orange">半禁</span></td><td>中国基本不买</td></tr>
+<tr><td>RTX 5090 D v2</td><td><span class="badge red">中国海关禁</span></td><td>中方反制</td></tr>
+<tr><td>RTX 5090 D（非 v2）</td><td><span class="badge orange">灰色</span></td><td>算力阈值刚好压在 4800 边缘</td></tr>
+<tr><td>RTX 4090 / 4080</td><td><span class="badge orange">受限</span></td><td>算力强但游戏卡</td></tr>
+<tr><td>RTX 6000 Ada / Blackwell 工作站</td><td><span class="badge green">可买</span></td><td>严格审查</td></tr>
+<tr><td>A100 / A800</td><td><span class="badge orange">老款</span></td><td>已停产，新货极少</td></tr>
+</table>
+</div>
+
+<div class="callout">
+<strong>结论</strong>：训练用 AI 卡几乎清零，推理用卡仅剩 H20（但已无市场），游戏卡被中方反向封锁。
+</div>
+
+<!-- ===== 反向影响 ===== -->
+<h2><span class="badge orange">反向影响</span> 国产芯片受益与厂商转向</h2>
+
+<div class="card amd">
+<h3>国内市场（国产芯片受益）</h3>
+<table>
+<tr><th>厂商</th><th>受益情况</th></tr>
+<tr><td><strong>华为昇腾</strong></td><td>910B/910C 推理端出货暴增，市占率达 <span class="badge green">~50%</span></td></tr>
+<tr><td><strong>寒武纪</strong></td><td>训练端芯片进入车企和大模型厂商短名单</td></tr>
+<tr><td><strong>海光信息</strong></td><td>兼容 x86 + DCU 推理芯片</td></tr>
+<tr><td><strong>摩尔线程 / 壁仞</strong></td><td>国产替代加速，估值暴涨</td></tr>
+</table>
+
+<h3 style="margin-top:20px;">云厂商被迫转向</h3>
+<ul>
+  <li><strong>腾讯云</strong>：扩大 AMD MI300X + 国产昇腾混合部署</li>
+  <li><strong>阿里云</strong>：押注平头哥 + 国产替代</li>
+  <li><strong>百度云</strong>：昆仑芯二代规模部署</li>
+</ul>
+</div>
+
+<!-- ===== 企业用户 ===== -->
+<h2><span class="badge blue">企业</span> 实操影响</h2>
+
+<div class="card summary">
+<table>
+<tr><th>角色</th><th>影响</th></tr>
+<tr><td><strong>大模型公司</strong></td><td>转向昇腾 + 国产卡 + NPU 混合训练</td></tr>
+<tr><td><strong>车企（智驾）</strong></td><td>NVIDIA DRIVE Orin 受限（Orin 算力 < 阈值），Thor 受限</td></tr>
+<tr><td><strong>云厂商</strong></td><td>必须提供"国产替代方案"，否则丢政府/国企订单</td></tr>
+<tr><td><strong>科研机构</strong></td><td>高校被列入 Entity List 增加，TOP500 算力受限</td></tr>
+<tr><td><strong>AI for CAE</strong></td><td>仿真训练用 B300 已不可能，国产替代方案（昇腾 + 框架适配）是唯一路径</td></tr>
+</table>
+</div>
+
+<!-- ===== 综合判断 ===== -->
+<h2><span class="badge green">总结</span> 综合判断</h2>
+
+<div class="card">
+<h3>短期（1 年内）</h3>
+<ul>
+  <li>训练端算力成本上升，训练迭代速度下降</li>
+  <li>推理端还有 <strong>12-18 个月</strong> 窗口（H20、老库存、灰色渠道）</li>
+  <li>Approved IC Designer 截止 <span class="badge red">2026.12.31</span> 是布局国产替代的最后窗口期</li>
+</ul>
+
+<h3>中期（2-3 年）</h3>
+<ul>
+  <li>国产替代基本完成，昇腾成为主流</li>
+  <li>英伟达中国市场份额长期承压</li>
+</ul>
+
+<h3>长期（3-5 年）</h3>
+<ul>
+  <li>中国 AI 芯片可能反向出口——昇腾已在中东、东南亚试点</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>核心结论</strong>：英伟达在中国市场的"训练端"已经彻底清零——这不是阶段性制裁，是结构性退出。美国不让卖，中国不让买，企业用不了。<br><br>
+推理端还有 12-18 个月窗口，但昇腾、寒武纪的替代速度超过预期，窗口期可能更短。<br><br>
+<strong>对企业的实操建议</strong>：2026 年 12 月 31 日之前，必须完成国产替代方案的 PoC，否则在 2027 年面临供应链断裂风险。
+</div>
+
+<div class="footnote">
+Published via GitHub Pages · openclaw-impact-report · July 2026<br>
+Sources: BIS 官方公告（2026.01, 04, 05, 06）、Reuters、Bloomberg、新浪财经、电子工程专辑、National Security News、华尔街日报
+</div>
+
+</div>
+</body>
+</html>
