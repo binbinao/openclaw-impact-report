@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🤖 WAIC 2026 行业洞察 · 观察者网视角 · 2026-07-18</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
   :root {
     --bg: #0d1117;
@@ -268,6 +269,202 @@
     </div>
   </div>
 </div>
+
+<!-- 数据可视化图表区 -->
+<div class="card">
+  <h2>📊 数据可视化（ECharts）</h2>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px;">
+    <div>
+      <h3 style="color:var(--text2); font-size:0.95em; margin-bottom:8px;">🖥️ 全球算力集群规模对比</h3>
+      <div id="chart-compute" style="width:100%; height:280px;"></div>
+    </div>
+    <div>
+      <h3 style="color:var(--text2); font-size:0.95em; margin-bottom:8px;">🎓 WAICA 投稿录用漏斗</h3>
+      <div id="chart-waica" style="width:100%; height:280px;"></div>
+    </div>
+    <div>
+      <h3 style="color:var(--text2); font-size:0.95em; margin-bottom:8px;">📱 Kimi K3 vs 国际模型跑分</h3>
+      <div id="chart-kimi" style="width:100%; height:280px;"></div>
+    </div>
+    <div>
+      <h3 style="color:var(--text2); font-size:0.95em; margin-bottom:8px;">🌍 治理指数 40 经济体区域分布</h3>
+      <div id="chart-governance" style="width:100%; height:280px;"></div>
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <h3 style="color:var(--text2); font-size:0.95em; margin-bottom:8px;">🧭 7 大主线话题权重分布</h3>
+    <div id="chart-themes" style="width:100%; height:320px;"></div>
+  </div>
+</div>
+
+<script>
+const isDark = true;
+const txtColor = isDark ? '#e6edf3' : '#1f2328';
+const txt2Color = isDark ? '#8b949e' : '#57606a';
+const surface = isDark ? '#161b22' : '#ffffff';
+const border = isDark ? '#30363d' : '#d0d7de';
+
+// 1. 算力集群对比柱状图
+const chartCompute = echarts.init(document.getElementById('chart-compute'), null, { renderer: 'canvas' });
+chartCompute.setOption({
+  backgroundColor: 'transparent',
+  tooltip: { trigger: 'axis', backgroundColor: surface, borderColor: border, textStyle: { color: txtColor } },
+  grid: { left: 50, right: 20, top: 30, bottom: 40 },
+  xAxis: {
+    type: 'category',
+    data: ['华为 Atlas 950\nSuperCluster', '中科曙光\nscaleX', 'Meta Llama\nCluster', 'Google Gemini\nTPU v6', 'xAI Colossus\n(估算)'],
+    axisLabel: { color: txt2Color, fontSize: 10, interval: 0 },
+    axisLine: { lineStyle: { color: border } }
+  },
+  yAxis: {
+    type: 'log',
+    name: '卡数(对数)',
+    nameTextStyle: { color: txt2Color },
+    axisLabel: { color: txt2Color, fontSize: 10 },
+    axisLine: { lineStyle: { color: border } },
+    splitLine: { lineStyle: { color: border, opacity: 0.4 } }
+  },
+  series: [{
+    type: 'bar',
+    data: [
+      { value: 500000, itemStyle: { color: '#f85149' } },
+      { value: 100000, itemStyle: { color: '#db6d28' } },
+      { value: 50000, itemStyle: { color: '#d29922' } },
+      { value: 30000, itemStyle: { color: '#3fb950' } },
+      { value: 200000, itemStyle: { color: '#58a6ff' } }
+    ],
+    label: {
+      show: true,
+      position: 'top',
+      color: txtColor,
+      formatter: (p) => {
+        const v = p.value;
+        if (v >= 10000) return (v / 10000) + '万';
+        return v;
+      }
+    }
+  }]
+});
+
+// 2. WAICA 漏斗图
+const chartWaica = echarts.init(document.getElementById('chart-waica'), null, { renderer: 'canvas' });
+chartWaica.setOption({
+  backgroundColor: 'transparent',
+  tooltip: { trigger: 'item', formatter: '{b}: {c} 篇', backgroundColor: surface, borderColor: border, textStyle: { color: txtColor } },
+  series: [{
+    type: 'funnel',
+    left: 'center',
+    top: 20,
+    bottom: 20,
+    width: '80%',
+    min: 0,
+    max: 282,
+    sort: 'descending',
+    gap: 2,
+    label: { show: true, position: 'inside', color: '#fff', fontWeight: 600 },
+    itemStyle: { borderColor: border, borderWidth: 1 },
+    data: [
+      { value: 282, name: '有效投稿', itemStyle: { color: '#58a6ff' } },
+      { value: 145, name: '初审通过', itemStyle: { color: '#3fb950' } },
+      { value: 91, name: '复审', itemStyle: { color: '#d29922' } },
+      { value: 57, name: '最终录用 (20.21%)', itemStyle: { color: '#f85149' } }
+    ]
+  }]
+});
+
+// 3. Kimi K3 雷达图
+const chartKimi = echarts.init(document.getElementById('chart-kimi'), null, { renderer: 'canvas' });
+chartKimi.setOption({
+  backgroundColor: 'transparent',
+  tooltip: { backgroundColor: surface, borderColor: border, textStyle: { color: txtColor } },
+  legend: { data: ['Kimi K3', 'Opus 4.7', 'GPT-5.5', 'GPT-5.6 Sol', 'Anthropic Fable 5'], textStyle: { color: txt2Color, fontSize: 10 }, bottom: 0 },
+  radar: {
+    indicator: [
+      { name: '代码能力', max: 100 },
+      { name: '数学推理', max: 100 },
+      { name: '长上下文\n(100万token)', max: 100 },
+      { name: 'Agent Swarm', max: 100 },
+      { name: '多模态', max: 100 },
+      { name: '中文理解', max: 100 }
+    ],
+    center: ['50%', '45%'],
+    radius: 90,
+    splitLine: { lineStyle: { color: border } },
+    splitArea: { areaStyle: { color: ['rgba(88,166,255,0.02)', 'rgba(88,166,255,0.05)'] } },
+    axisLine: { lineStyle: { color: border } },
+    name: { textStyle: { color: txtColor, fontSize: 11 } }
+  },
+  series: [{
+    type: 'radar',
+    data: [
+      { name: 'Kimi K3', value: [88, 82, 95, 90, 85, 96], itemStyle: { color: '#f85149' }, areaStyle: { opacity: 0.2 } },
+      { name: 'Opus 4.7', value: [82, 78, 75, 80, 82, 70], itemStyle: { color: '#bc8cff' }, areaStyle: { opacity: 0.1 } },
+      { name: 'GPT-5.5', value: [85, 80, 70, 78, 88, 75], itemStyle: { color: '#3fb950' }, areaStyle: { opacity: 0.1 } },
+      { name: 'GPT-5.6 Sol', value: [92, 90, 85, 88, 90, 80], itemStyle: { color: '#58a6ff' }, areaStyle: { opacity: 0.1 } },
+      { name: 'Anthropic Fable 5', value: [94, 92, 80, 92, 85, 78], itemStyle: { color: '#d29922' }, areaStyle: { opacity: 0.1 } }
+    ]
+  }]
+});
+
+// 4. 治理指数区域分布饼图
+const chartGovernance = echarts.init(document.getElementById('chart-governance'), null, { renderer: 'canvas' });
+chartGovernance.setOption({
+  backgroundColor: 'transparent',
+  tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)', backgroundColor: surface, borderColor: border, textStyle: { color: txtColor } },
+  legend: { orient: 'vertical', left: 'right', textStyle: { color: txt2Color, fontSize: 11 }, top: 'middle' },
+  series: [{
+    type: 'pie',
+    radius: ['40%', '70%'],
+    center: ['38%', '50%'],
+    avoidLabelOverlap: true,
+    itemStyle: { borderRadius: 4, borderColor: surface, borderWidth: 2 },
+    label: { color: txtColor, fontSize: 11 },
+    data: [
+      { value: 12, name: '东亚（中国/日韩）', itemStyle: { color: '#f85149' } },
+      { value: 8, name: '东南亚', itemStyle: { color: '#db6d28' } },
+      { value: 6, name: '南亚（印巴等）', itemStyle: { color: '#d29922' } },
+      { value: 5, name: '中东/北非', itemStyle: { color: '#3fb950' } },
+      { value: 4, name: '撒哈拉以南非洲', itemStyle: { color: '#58a6ff' } },
+      { value: 3, name: '拉美', itemStyle: { color: '#bc8cff' } },
+      { value: 2, name: '中亚/欧亚', itemStyle: { color: '#f778ba' } }
+    ]
+  }]
+});
+
+// 5. 7 大主线话题权重玫瑰图
+const chartThemes = echarts.init(document.getElementById('chart-themes'), null, { renderer: 'canvas' });
+chartThemes.setOption({
+  backgroundColor: 'transparent',
+  tooltip: { trigger: 'item', formatter: '{b}<br/>权重: {c}%', backgroundColor: surface, borderColor: border, textStyle: { color: txtColor } },
+  legend: { bottom: 0, textStyle: { color: txt2Color, fontSize: 11 } },
+  series: [{
+    type: 'pie',
+    radius: ['20%', '70%'],
+    center: ['50%', '45%'],
+    roseType: 'area',
+    itemStyle: { borderRadius: 6, borderColor: surface, borderWidth: 2 },
+    label: { color: txtColor, fontSize: 11, formatter: '{b}\n{c}%' },
+    data: [
+      { value: 28, name: '🇨🇳 治理主场', itemStyle: { color: '#f85149' } },
+      { value: 22, name: '🖥️ 算力霸权', itemStyle: { color: '#db6d28' } },
+      { value: 18, name: '📱 大模型+终端', itemStyle: { color: '#d29922' } },
+      { value: 12, name: '🎓 学术主权', itemStyle: { color: '#3fb950' } },
+      { value: 8, name: '👓 AI 眼镜', itemStyle: { color: '#58a6ff' } },
+      { value: 7, name: '🤖 具身智能', itemStyle: { color: '#bc8cff' } },
+      { value: 5, name: '🌍 千行百业', itemStyle: { color: '#f778ba' } }
+    ]
+  }]
+});
+
+// 响应式
+window.addEventListener('resize', () => {
+  chartCompute.resize();
+  chartWaica.resize();
+  chartKimi.resize();
+  chartGovernance.resize();
+  chartThemes.resize();
+});
+</script>
 
 <!-- 主题：治理主场 -->
 <div class="card">
