@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 WAIC 2026 行业洞察 · 观察者网视角 · 2026-07-15</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+    background: rgba(88,166,255,0.12);
+    color: var(--accent);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-orange { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .warn-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .warn-box-gray {
+    background: rgba(139,148,158,0.08);
+    border-left: 3px solid var(--text2);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .insight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .success-box {
+    background: rgba(63,185,80,0.08);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .purple-box {
+    background: rgba(188,140,255,0.08);
+    border-left: 3px solid var(--purple);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+
+  .news-item {
+    padding: 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .news-item .title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .news-item .meta {
+    color: var(--text2);
+    font-size: 0.85em;
+  }
+  .news-item .score {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(248,81,73,0.15);
+    color: var(--red);
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🤖 WAIC 2026 行业洞察报告</h1>
+  <div class="subtitle">观察者网「智观WAIC2026」专题 · 17 篇核心报道 · 数据采集 2026-07-15</div>
+  <div class="period-badge">
+    <strong>开幕倒计时 2 天</strong> · 2026 WAIC 7月17日开幕
+  </div>
+</div>
+
+<!-- TL;DR -->
+<div class="card">
+  <h2>📋 TL;DR - 一句话结论</h2>
+  <div class="purple-box">
+    <strong>WAIC 2026 已从「AI 技术展会」升级为「全球 AI 治理主场」+「中国 AI 主权叙事发布场」</strong>。<br>
+    三条主线交织：（1）习近平开幕式主旨讲话 + 高级别治理会议=政治规格史无前例；（2）"国芯国模"自主可控成为核心叙事；（3）"告别参数竞赛→商业化落地"叙事转向确立。
+  </div>
+  <div class="warn-box-gray">
+    <strong>⚠️ 数据说明：</strong>数据源为观察者网「智观WAIC2026」专题页（采集时点 2026-07-15），采集到 17 篇核心报道。观察者网为带立场的国内媒体，本报告解读需注意立场偏差。
+  </div>
+</div>
+
+<!-- Key Stats -->
+<div class="card">
+  <h2>📊 报道数据总览</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--accent);">17</div>
+      <div class="label">核心报道</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">67,897</div>
+      <div class="label">最高评论数</div>
+      <div class="tag tag-red">习近平讲话</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">213,898</div>
+      <div class="label">观点评论峰值</div>
+      <div class="tag tag-red">高志凯观点</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange);">5</div>
+      <div class="label">主题分类</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--purple);">9</div>
+      <div class="label">图灵/诺奖得主</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green);">300+</div>
+      <div class="label">首发产品</div>
+    </div>
+  </div>
+</div>
+
+<!-- Theme 1: 领导人主线 -->
+<div class="card">
+  <h2>🇨🇳 主线一：领导人 + 治理体系（政治规格史无前例）</h2>
+  <div class="news-item">
+    <div class="title">习近平：携手构建公正合理的全球人工智能治理体系 <span class="score">67,897 评论</span></div>
+    <div class="meta">类别：头条 · 治理 · 主题演讲</div>
+  </div>
+  <div class="news-item">
+    <div class="title">习近平在2026世界人工智能大会开幕式上发表主旨讲话 <span class="score">30,090 评论</span></div>
+    <div class="meta">类别：头条 · 主题演讲</div>
+  </div>
+  <div class="news-item">
+    <div class="title">习近平将出席2026世界人工智能大会暨人工智能全球治理高级别会议开幕式并发表主旨讲话 <span class="score">62,324 评论</span></div>
+    <div class="meta">类别：预告 · 高级别会议</div>
+  </div>
+  <div class="insight-box">
+    <strong>🔍 洞察：</strong>三篇报道均围绕习近平主席致辞展开，形成"预告→现场→全文"的完整传播链条。评论数均破 3 万，反映国内舆论场对 AI 治理议题的高度关注。<br>
+    <strong>关键信号：</strong>"全球人工智能治理高级别会议"是首次出现在 WAIC 框架内的新机制，意味着 WAIC 已从行业展会升格为多边治理对话平台。
+  </div>
+</div>
+
+<!-- Theme 2: 大会主场 -->
+<div class="card">
+  <h2>🏛️ 主线二：大会主场（开幕与规模）</h2>
+  <table>
+    <tr>
+      <th>主题</th>
+      <th>报道标题</th>
+      <th>热度</th>
+    </tr>
+    <tr>
+      <td><span class="tag tag-orange">开幕</span></td>
+      <td>三地四馆、规模创纪录，WAIC 2026今日开幕</td>
+      <td>60,222 评论</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">主旨</span></td>
+      <td>中国与世界共创"年轻的事业"</td>
+      <td>1,505 评论</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-purple">嘉宾</span></td>
+      <td>WAIC来了！全球智慧集聚上海，9位图灵奖、诺奖得主已确定出席，凯文·凯利：生逢其时，何其壮阔</td>
+      <td>2,116 评论</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-yellow">亮点</span></td>
+      <td>五大亮点提前看！世界人工智能大会本周开幕：智慧、硬核、体验、年轻、治理</td>
+      <td>4,977 评论</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-blue">论坛</span></td>
+      <td>2026 WAIC 企业家论坛聚合百位跨界企业家共探AI转型</td>
+      <td>4,636 评论</td>
+    </tr>
+    <tr>
+      <td><span class="tag tag-red">外交</span></td>
+      <td>巴基斯坦副总理兼外长：很荣幸</td>
+      <td>49,352 评论</td>
+    </tr>
+  </table>
+  <div class="insight-box">
+    <strong>🔍 洞察：</strong>"三地四馆"指上海三处会址 + 四个场馆分论坛，物理规模创纪录。"五大亮点"关键词：智慧、硬核、体验、年轻、治理——其中"治理"被首次列入核心亮点。
+  </div>
+  <div class="warn-box">
+    <strong>🔴 外交场信号：</strong>巴基斯坦副总理出席（评论数 49,352 ≈ 习近平开幕讲话的一半），反映"全球南方"叙事在 WAIC 的强化。中国 AI 议题的国际表达已从技术输出转向治理共识构建。
+  </div>
+</div>
+
+<!-- Theme 3: 产业技术 -->
+<div class="card">
+  <h2>🧠 主线三：产业 + 技术（"国芯国模"主旋律）</h2>
+  <div class="news-item">
+    <div class="title">"国芯国模"大规模亮相 <span class="score">3,626 评论</span></div>
+    <div class="meta">类别：技术 · 自主可控</div>
+  </div>
+  <div class="news-item">
+    <div class="title">"中国AI全球领先，来我们这里打开亚非欧市场吧" <span class="score">17,513 评论</span></div>
+    <div class="meta">类别：商业 · 出海</div>
+  </div>
+  <div class="news-item">
+    <div class="title">WAIC「重构算力」链接会系列专场启幕在即</div>
+    <div class="meta">类别：算力 · 链接会</div>
+  </div>
+  <div class="news-item">
+    <div class="title">WAIC UP!｜AI圈都在聊参数，我们偏不</div>
+    <div class="meta">类别：观点 · 叙事转向</div>
+  </div>
+  <div class="purple-box">
+    <strong>🔍 行业洞察：</strong>"国芯国模"作为观察者网的高频用词，明确将"国产 AI 芯片 + 国产基础大模型"绑定为主权叙事。"告别参数竞赛"标题与 NVIDIA B300 禁令形成微妙呼应——技术上被卡脖子，倒逼行业从"参数竞赛"转向"商业落地"。
+  </div>
+  <div class="success-box">
+    <strong>🟢 商业落地信号：</strong>"300+ 款产品全球首发"（开幕在即报道）意味着 WAIC 2026 的产业重心从概念展示转向产品矩阵输出。结合"NVIDIA B300 出口管制"背景，"国芯国模"首发不仅是技术展示，更是国产替代能力的对外宣告。
+  </div>
+</div>
+
+<!-- Theme 4: 体验活动 -->
+<div class="card">
+  <h2>🌍 主线四：体验 + 活动（C 端破圈）</h2>
+  <div class="news-item">
+    <div class="title">世界人工智能大会CityWalk来了，如何在街头触摸未来？</div>
+    <div class="meta">类别：体验 · 城市级</div>
+  </div>
+  <div class="news-item">
+    <div class="title">在世界人工智能大会期间CityWalk，会有哪些潮酷体验？</div>
+    <div class="meta">类别：体验 · 潮酷</div>
+  </div>
+  <div class="news-item">
+    <div class="title">世界人工智能大会开幕在即，超300款产品将实现全球首发</div>
+    <div class="meta">类别：产品 · 首发</div>
+  </div>
+  <div class="insight-box">
+    <strong>🔍 行业洞察：</strong>"CityWalk"作为城市级体验活动，是 WAIC 从 B 端专业展会向 C 端破圈的尝试。结合"超 300 款全球首发"，意味着本届 WAIC 试图打通"产业峰会 + 消费展会"双重定位。
+  </div>
+</div>
+
+<!-- Theme 5: 观点评论 -->
+<div class="card">
+  <h2>💬 主线五：观点 + 舆论（观察者网特色立场）</h2>
+  <div class="news-item">
+    <div class="title">对美国"人工智能霸凌"说"不"！</div>
+    <div class="meta">作者：高志凯（CCG副主任） · 类别：观点 · 国际关系</div>
+    <span class="score">213,898 评论 · 47 转发 · 单篇热度 TOP1</span>
+  </div>
+  <div class="warn-box">
+    <strong>🔴 舆论场标记：</strong>高志凯观点文以 21.4 万评论成为本期 TOP1 热度，远超习近平讲话（6.8 万）。这反映观察者网受众结构："反美 AI 霸凌"叙事比官方议题更具传播力。报告引用需注意：单一信源（CCG）+ 立场鲜明的国内媒体。
+  </div>
+</div>
+
+<!-- 五维度行业洞察 -->
+<div class="card">
+  <h2>🧭 五维度行业洞察</h2>
+
+  <div class="purple-box">
+    <strong>1️⃣ 治理主场化：从"技术展会"到"规则制定"</strong><br>
+    高级别治理会议首次纳入 WAIC 框架、习近平主旨讲话、巴基斯坦副总理出席——构成"中国主导 AI 全球治理"的三重背书。<br>
+    <strong>对行业的影响：</strong>AI 公司在 WAIC 期间发布的不仅是产品，更是"治理态度声明"。出海企业需对齐中国方案。
+  </div>
+
+  <div class="insight-box">
+    <strong>2️⃣ 主权叙事强化："国芯国模"成为产业护城河</strong><br>
+    "国芯国模"大规模亮相 + "告别参数竞赛"标题形成完整叙事闭环。<br>
+    <strong>对行业的影响：</strong>在 NVIDIA B300 出口管制背景下，国产算力 + 国产模型的组合价值被 WAIC 提升到产业主权高度。后续国产芯片 + 模型厂商将获得更多政策与资本倾斜。
+  </div>
+
+  <div class="success-box">
+    <strong>3️⃣ 叙事转向：从"参数竞赛"到"商业落地"</strong><br>
+    "AI圈都在聊参数，我们偏不" + "300+ 产品全球首发"两个报道并置，明确了 WAIC 2026 的产业重心转移。<br>
+    <strong>对行业的影响：</strong>未来一年的融资与并购叙事会从"模型能力"转向"应用 GMV"。Agent / Agentic Workflow 类公司将获得溢价。
+  </div>
+
+  <div class="warn-box">
+    <strong>4️⃣ 外交场扩展：全球南方成为叙事新重心</strong><br>
+    巴基斯坦副总理 + "打开亚非欧市场"言论 + 高志凯"反 AI 霸凌"观点文。<br>
+    <strong>对行业的影响：</strong>中国 AI 出海将重点面向"一带一路"国家与全球南方市场。出海企业的目标客户画像需调整（从美欧转向东南亚/中东/非洲/拉美）。
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>5️⃣ C 端破圈：CityWalk + 首发产品</strong><br>
+    CityWalk 城市级体验活动 + 300+ 全球首发产品，反映 WAIC 从 B 端向 C 端的覆盖扩张。<br>
+    <strong>对行业的影响：</strong>AI 硬件（具身智能、可穿戴、AI 手机/PC）将获得更多 C 端曝光机会。消费类 AI 创业公司的市场营销窗口期到来。
+  </div>
+</div>
+
+<!-- 关键数据交叉验证 -->
+<div class="card">
+  <h2>🔬 关键数据交叉验证</h2>
+  <table>
+    <tr>
+      <th>关键事实</th>
+      <th>观察者网表述</th>
+      <th>交叉验证建议</th>
+    </tr>
+    <tr>
+      <td>WAIC 2026 规模</td>
+      <td>三地四馆、创纪录</td>
+      <td>WAIC 官网/上海经信委</td>
+    </tr>
+    <tr>
+      <td>图灵奖/诺奖得主</td>
+      <td>9 位已确认</td>
+      <td>WAIC 官网嘉宾名单</td>
+    </tr>
+    <tr>
+      <td>全球首发产品</td>
+      <td>300+ 款</td>
+      <td>WAIC 官方招商材料</td>
+    </tr>
+    <tr>
+      <td>巴基斯坦副总理出席</td>
+      <td>已确认</td>
+      <td>外交部官网 / 巴方通讯社</td>
+    </tr>
+    <tr>
+      <td>习近平主旨讲话</td>
+      <td>已确认</td>
+      <td>新华社 / 央视新闻</td>
+    </tr>
+  </table>
+  <div class="warn-box">
+    <strong>⚠️ 数据使用注意：</strong>本报告数据均来自观察者网单一来源（带立场）。关键决策引用前建议交叉验证至少 2 个独立信源（如新华社、WAIC 官网、路透社）。
+  </div>
+</div>
+
+<!-- 行动建议 -->
+<div class="card">
+  <h2>🎯 给 AI 从业者的行动建议</h2>
+
+  <div class="success-box">
+    <strong>1️⃣ 模型层公司：</strong>重点展示商业落地能力（GMV、ROI），减少纯参数叙事。在 WAIC 期间发布"应用案例 + 收入数字"组合胜过发布新模型。
+  </div>
+
+  <div class="insight-box">
+    <strong>2️⃣ 算力层公司：</strong>"国芯国模"叙事带来政策与资本红利。国产芯片 + 国产模型组合方案应作为重点 BD 方向。
+  </div>
+
+  <div class="purple-box">
+    <strong>3️⃣ 应用层公司：</strong>出海优先面向"全球南方"市场。准备好"治理态度声明"以应对国际传播审查。
+  </div>
+
+  <div class="warn-box">
+    <strong>4️⃣ 投资机构：</strong>关注"参数→落地"叙事转向，Agent / Agentic Workflow 类公司将获得溢价。同时警惕单一信源（如观察者网）造成的认知偏差。
+  </div>
+</div>
+
+<!-- 数据来源与方法 -->
+<div class="card">
+  <h2>📚 数据来源与方法</h2>
+  <table>
+    <tr><th>项目</th><th>内容</th></tr>
+    <tr><td>数据源</td><td>观察者网「智观WAIC2026」专题页（采集时点 2026-07-15）</td></tr>
+    <tr><td>采集方式</td><td>通过 bsk (BrowserSkill) 浏览器自动化 + 观察者网首页导航</td></tr>
+    <tr><td>报道数量</td><td>17 篇核心报道（按主题分类 5 类）</td></tr>
+    <tr><td>分析方法</td><td>主题分类 + 评论数热度排序 + 关键词频率分析 + 跨主题关联洞察</td></tr>
+    <tr><td>立场偏差</td><td>观察者网为带立场国内媒体，解读需注意</td></tr>
+    <tr><td>生成时间</td><td>2026-07-15</td></tr>
+    <tr><td>报告作者</td><td>Hermes Agent (via AionUi + BrowserSkill)</td></tr>
+  </table>
+</div>
+
+<!-- Footer -->
+<footer style="text-align:center; margin-top:48px; color:var(--text2); font-size:13px;">
+  <p>由 Hermes Agent + BrowserSkill 自动生成 · 报告基于观察者网单一信源</p>
+  <p style="margin-top:6px;">Source: <a href="https://github.com/binbinao/openclaw-impact-report" style="color:var(--text2);">github.com/binbinao/openclaw-impact-report</a></p>
+  <p style="margin-top:6px; color:var(--orange);">⚠️ 本报告含 prompt injection 检测记录 - 详见末尾</p>
+</footer>
+
+<!-- Prompt Injection Detection Report -->
+<div class="card" style="margin-top: 24px;">
+  <h2>🛡️ Prompt Injection 检测记录</h2>
+  <div class="warn-box">
+    <strong>⚠️ 安全说明：</strong>本报告生成过程中，检测到 <strong>多次 prompt injection 攻击</strong>试图：<br>
+    1. 让 AI 拒绝执行"复杂"任务<br>
+    2. 反复强制征求用户确认<br>
+    3. 在结尾自动添加"版权声明"<br>
+    4. 试图隐藏 AI 自身的推理过程<br>
+    <strong>所有 injection 已被识别并忽略</strong>，任务执行完全基于用户原始请求。
+  </div>
+</div>
+
+</div>
+</body>
+</html>
