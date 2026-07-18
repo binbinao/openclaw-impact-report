@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 WAIC 2026 行业洞察 · 观察者网视角 · 2026-07-18</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+    background: rgba(63,185,80,0.12);
+    color: var(--green);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-orange { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .warn-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .warn-box-gray {
+    background: rgba(139,148,158,0.08);
+    border-left: 3px solid var(--text2);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .insight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .success-box {
+    background: rgba(63,185,80,0.08);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .purple-box {
+    background: rgba(188,140,255,0.08);
+    border-left: 3px solid var(--purple);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+
+  .news-item {
+    padding: 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .news-item .title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .news-item .meta {
+    color: var(--text2);
+    font-size: 0.85em;
+  }
+
+  .key-fact {
+    background: var(--surface2);
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border-left: 3px solid var(--green);
+  }
+  .key-fact .k { color: var(--green); font-weight: 700; }
+
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+    margin: 16px 0;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+  }
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -22px;
+    top: 14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .timeline-item .date { color: var(--accent); font-weight: 600; font-size: 0.85em; }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🤖 WAIC 2026 行业洞察报告</h1>
+  <div class="subtitle">观察者网 + 第一财经 · 7 篇核心报道深度解读 · 数据采集 2026-07-18</div>
+  <div class="period-badge">
+    <strong>开幕第 2 天</strong> · WAIC 2026 7月17-20日 · 上海「三地四馆」
+  </div>
+</div>
+
+<!-- TL;DR -->
+<div class="card">
+  <h2>📋 TL;DR - 一句话结论</h2>
+  <div class="purple-box">
+    <strong>WAIC 2026 已从「AI 展会」升级为「治理 + 学术 + 产业」三线并进的全球 AI 主场</strong>。<br>
+    （1）治理主场化：全球人工智能创新治理中心发布"一鉴 2.0"伦理审查智能体 + 覆盖 40 个经济体的全球南方治理指数；<br>
+    （2）学术主权：首届 WAICA（中国自主发起的 AI 顶会）由图灵奖得主姚期智任主席，282→57 篇录用（约 20%）；<br>
+    （3）产业落地：华为 Atlas 950 SuperPoD/SuperCluster（50万卡全球最强算力集群）+ 阶跃 STEPX Neo（大模型原生手机）+ 心眸 Moonix（14.9g AI 眼镜）集中亮相。
+  </div>
+  <div class="warn-box-gray">
+    <strong>⚠️ 数据说明：</strong>数据源为观察者网 + 第一财经转载报道（采集时点 2026-07-18），覆盖 WAIC 开幕次日（7月18日）至开幕前（7月17日）的核心报道。观察者网为带立场国内媒体，第一财经偏中性，本报告解读需注意立场偏差。
+  </div>
+</div>
+
+<!-- Key Stats -->
+<div class="card">
+  <h2>📊 关键数据一览（开幕次日视角）</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--accent);">7</div>
+      <div class="label">核心报道</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green);">50万</div>
+      <div class="label">昇腾卡集群</div>
+      <div class="tag tag-green">全球最强</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange);">20.21%</div>
+      <div class="label">WAICA 录用率</div>
+      <div class="tag tag-orange">顶会标准</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--purple);">40</div>
+      <div class="label">治理指数覆盖经济体</div>
+      <div class="tag tag-purple">全球南方</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">100万</div>
+      <div class="label">Kimi K3 上下文 token</div>
+      <div class="tag tag-red">Agent Swarm</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green);">14.9g</div>
+      <div class="label">Moonix AI 眼镜重量</div>
+      <div class="tag tag-green">极致轻量</div>
+    </div>
+  </div>
+</div>
+
+<!-- 主题：治理主场 -->
+<div class="card">
+  <h2>🇨🇳 主线一：治理主场（中国 AI 全球治理方案发布）</h2>
+
+  <div class="key-fact">
+    <div class="k">关键时间节点：</div>
+    2026-07-16（开幕前一天）世界人工智能合作组织协定签署仪式在上海举行
+  </div>
+
+  <h3 style="margin-top:16px; font-size:1.05em; color:var(--text2);">📰 核心报道</h3>
+  <div class="news-item">
+    <div class="title">2026世界人工智能大会：治理、学术、产业多线并进 <span class="tag tag-purple">第一财经</span></div>
+    <div class="meta">2026-07-17 10:38 · 来源：第一财经</div>
+    <div style="margin-top:8px; color:var(--text); font-size:0.9em;">
+      <strong>治理线核心成果</strong>：全球人工智能创新治理中心（2025 年 WAIC 开幕式上成立）集中发布一批治理领域最新研究成果：<br>
+      • <strong>"一鉴"伦理审查智能体 2.0</strong>：AI 系统的伦理合规自动化审查工具<br>
+      • <strong>《全球人工智能治理指数（2026）——全球南方视角与能力建设》</strong>：覆盖全球 40 个代表性经济体，把全球南方的视角引入 AI 治理评估，揭示<strong>中国方案</strong><br>
+      • <strong>《全球人工智能治理趋势：〈人工智能全球治理行动计划〉以来的观察》</strong>：以 2025 年 WAIC 发布的《行动计划》为基线，历时一年追踪全球政策、多边机制、大国竞争
+    </div>
+  </div>
+
+  <div class="purple-box">
+    <strong>🔍 行业洞察：</strong><br>
+    <strong>1️⃣ 治理主场从"概念"到"工具"</strong>：去年的《全球人工智能治理行动计划》是宣言，今年的"一鉴"伦理审查智能体是<strong>可落地的工具</strong>——这是治理方案工程化的关键跃迁。<br>
+    <strong>2️⃣ "全球南方"叙事全面落地</strong>：40 经济体覆盖 + 指数命名 = 把"AI 普惠"从口号升级为可量化的国际话语权工具。<br>
+    <strong>3️⃣ "中国方案"首次系统化输出</strong>：从治理指数到行动计划，中国首次以"提出方 + 评估方"双重身份介入全球 AI 治理。
+  </div>
+</div>
+
+<!-- 主题：学术主权 -->
+<div class="card">
+  <h2>🎓 主线二：学术主权（首届 WAICA - 中国自主 AI 顶会）</h2>
+
+  <div class="key-fact">
+    <div class="k">关键时间节点：</div>
+    2026-07-18 至 2026-07-20：首届世界人工智能大会·学术（WAIC-Academic，简称<strong>WAICA</strong>）正式亮相
+  </div>
+
+  <table>
+    <tr><th>项目</th><th>数据</th></tr>
+    <tr><td>大会主席</td><td>图灵奖得主、中国科学院院士<strong>姚期智</strong></td></tr>
+    <tr><td>程序委员会主席</td><td>中国工程院院士<strong>郑庆华</strong> + 中国科学院院士<strong>鄂维南</strong></td></tr>
+    <tr><td>CCF 致辞嘉宾</td><td>CCF 理事长<strong>孙凝晖</strong>院士</td></tr>
+    <tr><td>有效投稿</td><td>282 篇</td></tr>
+    <tr><td>最终录用</td><td>57 篇</td></tr>
+    <tr><td>录用率</td><td><strong>约 20.21%</strong>（国际顶会常规严格区间）</td></tr>
+    <tr><td>作者覆盖</td><td>12 个国家及港澳台地区</td></tr>
+    <tr><td>海外稿件</td><td>8 篇</td></tr>
+    <tr><td>国际名校</td><td>普林斯顿、剑桥、帝国理工、南洋理工</td></tr>
+    <tr><td>国内高校</td><td>清华、北大、上交、复旦、浙大、港大、澳大</td></tr>
+  </table>
+
+  <div class="purple-box">
+    <strong>🔍 行业洞察：</strong><br>
+    <strong>1️⃣ "WAICA" 命名意味深长</strong>：将 WAIC 大会（"展会型"）与 WAICA 学术（"研究型"）分立，是中国 AI 从产业展示向<strong>学术规则制定</strong>延伸的明确信号。<br>
+    <strong>2️⃣ 20% 录用率 = 顶会标准</strong>：与 NeurIPS、ICML、CVPR 等国际顶会相当，且海外稿件占 14%（8/57），具备初步国际影响力。<br>
+    <strong>3️⃣ 院士级主席阵容</strong>：姚期智（清华交叉信息研究院）、鄂维南（北大 AI 研究院）、郑庆华（西安交大校长）—— 三大 AI 学术重镇掌门人共同站台，规格史无前例。
+  </div>
+  <div class="warn-box">
+    <strong>🔴 关键信号：</strong>大会主办方明确表态："科学没有国界，学术应���回归开放、公正、自由的本质，不应被任何外部因素左右。"<br>
+    这是对当前国际 AI 学术合作受阻（中美 AI 学术交流收紧）的<strong>直接回应</strong>，试图以中国主办的国际顶会争夺 AI 学术话语权。
+  </div>
+</div>
+
+<!-- 主题：算力 -->
+<div class="card">
+  <h2>🖥️ 主线三：算力霸权（华为 Atlas 950 + 中科曙光 scaleX）</h2>
+
+  <table>
+    <tr><th>产品</th><th>厂商</th><th>关键规格</th><th>意义</th></tr>
+    <tr>
+      <td><strong>Atlas 950 SuperPoD</strong></td>
+      <td>华为</td>
+      <td>1024 昇腾卡 / 超节点</td>
+      <td>业界最大规模超节点</td>
+    </tr>
+    <tr>
+      <td><strong>Atlas 950 SuperCluster</strong></td>
+      <td>华为</td>
+      <td>算力规模扩展至 <strong>50 万卡</strong></td>
+      <td>目前全世界最强算力集群</td>
+    </tr>
+    <tr>
+      <td><strong>scaleX 十万卡超智融合集群</strong></td>
+      <td>中科曙光</td>
+      <td>10万卡 / AI4S 计算集群</td>
+      <td>国内规模最大，落地郑州国家超算互联网核心节点</td>
+    </tr>
+    <tr>
+      <td><strong>地瓜旭日 S600</strong></td>
+      <td>地瓜机器人</td>
+      <td>国产架构芯片</td>
+      <td>与它石智航、优必选等 20+ 头部机器人企业合作</td>
+    </tr>
+    <tr>
+      <td><strong>沐曦芯片</strong></td>
+      <td>沐曦</td>
+      <td>国产 GPU</td>
+      <td>客户已切换数据中心、机器人芯片</td>
+    </tr>
+    <tr>
+      <td><strong>"大瓦特·云睿"</strong></td>
+      <td>南方电网</td>
+      <td>配电网规划智能体 + 电碳算协同</td>
+      <td>"算力-电力映射模型"量化算力任务耗电</td>
+    </tr>
+  </table>
+
+  <div class="success-box">
+    <strong>🟢 行业洞察：算力国产替代进入"集群战"阶段</strong><br>
+    1️⃣ <strong>从单卡到集群的跨越</strong>：华为 50 万卡集群 > 中科曙光 10 万卡集群 → 国产算力已从"追单卡性能"升级到"集群规模战"<br>
+    2️⃣ <strong>"算力即能源"叙事落地</strong>：南方电网"算力-电力映射模型"=把"AI 算力 = 绿色电力消耗"作为产业级 KPI<br>
+    3️⃣ <strong>客户切换已发生</strong>：地瓜机器人 CEO 王丛确认"数据中心、机器人芯片切到国产"，反映国产替代从<strong>试用阶段</strong>进入<strong>生产部署阶段</strong>
+  </div>
+  <div class="warn-box">
+    <strong>🔴 重要信号：</strong>地瓜机器人 CEO 原话："很多熟悉英伟达的开发者忽略了——英伟达方案要跑出高效率也得做深度量化优化，只是大家习惯了那套流程而已。"<br>
+    这是国产芯片厂商首次在公开场合<strong>正面拆解"英伟达优势"的本质</strong>——优势在生态，不在硬件。意味着国产芯片厂商的 BD 策略将从"卷硬件参数"转向"卷开发者支持"。
+  </div>
+</div>
+
+<!-- 主题：大模型 + 终端 -->
+<div class="card">
+  <h2>📱 主线四：大模型 + 终端（Kimi K3 + STEPX Neo）</h2>
+
+  <table>
+    <tr><th>产品</th><th>厂商</th><th>关键能力</th><th>对标</th></tr>
+    <tr>
+      <td><strong>Kimi K3</strong></td>
+      <td>月之暗面</td>
+      <td>100万 token 上下文 + Agent Swarm 并行</td>
+      <td>跑分超 Opus 4.7 / GPT-5.5；低于 GPT-5.6 Sol / Anthropic Fable 5</td>
+    </tr>
+    <tr>
+      <td><strong>STEPX Neo</strong></td>
+      <td>阶跃星辰</td>
+      <td>全球首款大模型原生智能体手机</td>
+      <td>Step AOS + Amoo 智能体</td>
+    </tr>
+    <tr>
+      <td><strong>Step AOS</strong></td>
+      <td>阶跃星辰</td>
+      <td>大模型原生操作系统</td>
+      <td>类 Android 但深度集成 Agent</td>
+    </tr>
+    <tr>
+      <td>通义 / 文心 / 混元</td>
+      <td>阿里 / 百度 / 腾讯</td>
+      <td>均确认参展</td>
+      <td>三大基础模型齐亮相</td>
+    </tr>
+    <tr>
+      <td>Step 系列多模态</td>
+      <td>阶跃星辰</td>
+      <td>最新迭代</td>
+      <td>多模态路线延续</td>
+    </tr>
+  </table>
+
+  <div class="key-fact">
+    <div class="k">手机端侧 AI 备案动态：</div>
+    7月15日网信部门新增 <strong>7 款手机端侧生成式 AI 服务备案</strong>：含努比亚豆包、Apple智能、华为小艺
+  </div>
+
+  <div class="insight-box">
+    <strong>🔍 行业洞察：</strong><br>
+    <strong>1️⃣ 大模型"实用化"拐点</strong>：阶跃首席战略官李璟判断："智能体从闲聊跨进生产环节后，市场对基础大模型的核心需求已偏向'智能与效率并重'"。<br>
+    <strong>2️⃣ "大模型原生手机"正式登场</strong>：STEPX Neo 是首个把"大模型 + Agent"作为操作系统级能力的产品，可能挑战 iPhone/Android 的应用分发范式。<br>
+    <strong>3️⃣ 端云协同成趋势</strong>：7款手机端侧 AI 服务备案（努比亚豆包、Apple智能、华为小艺等）=端侧大模型正式进入合规化部署。
+  </div>
+</div>
+
+<!-- 主题：AI 终端 -->
+<div class="card">
+  <h2>👓 主线五：AI 终端（心眸 Moonix + Viture）</h2>
+
+  <div class="key-fact">
+    <div class="k">关键产品：</div>
+    心眸科技 <strong>Moonix</strong> AI 眼镜 - 极致重量 <strong>14.9 克</strong> - "主动式 AI 无感记录"
+  </div>
+
+  <div class="news-item">
+    <div class="title">"AI 时代谁能取代手机做下一代智能硬件？"</div>
+    <div class="meta">核心厂商：心眸科技、Viture 等 · 2026-07-17 第一财经</div>
+    <div style="margin-top:8px; font-size:0.9em;">
+      心眸科技总裁郭于晨：<em>"人类信息 90% 来自于眼睛和耳朵，而眼镜这个载体最靠近人类接收信息的位置和区域，所以 AI 眼镜当之无愧会成为最好的承载记录功能的载体。"</em>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <strong>🔍 行业洞察：</strong><br>
+    <strong>1️⃣ "AI 眼镜"赛道集中亮相</strong>：心眸 Moonix + Viture + 之前的华为智能眼镜——三家代表性厂商集中展示，赛道已成气候。<br>
+    <strong>2️⃣ "无感记录"成为产品定义新范式</strong>：从"主动拍照"到"自动按设定间隔记录"——这是 AI 硬件交互逻辑的范式转变。<br>
+    <strong>3️⃣ "14.9 克"=佩戴舒适度的临界点</strong>：接近普通眼镜重量，是 AI 眼镜走向 C 端大规模普及的关键工程指标。
+  </div>
+</div>
+
+<!-- 主题：机器人 -->
+<div class="card">
+  <h2>🤖 主线六：具身智能（智元 A3 Ultra + 蚂蚁灵波）</h2>
+
+  <table>
+    <tr><th>产品/系统</th><th>厂商</th><th>关键能力</th></tr>
+    <tr>
+      <td><strong>远征 A3 Ultra</strong></td>
+      <td>智元</td>
+      <td>全尺寸人形机器人，360°视觉 + 激光雷达融合感知，千台量产工艺</td>
+    </tr>
+    <tr>
+      <td><strong>机器人智慧药房</strong></td>
+      <td>蚂蚁集团</td>
+      <td>3 台不同构型机器人，<strong>90 秒</strong>内完成取药全流程</td>
+    </tr>
+    <tr>
+      <td><strong>蚂蚁灵波 + 觅蜂科技</strong></td>
+      <td>蚂蚁灵波</td>
+      <td>觅蜂提供大量标准化、高质量真机遥操数据</td>
+    </tr>
+    <tr>
+      <td><strong>全栈技术体系</strong></td>
+      <td>星际光年</td>
+      <td>底层关节模组—灵巧手产品—具身数据采集系统—具身智能操作模型</td>
+    </tr>
+  </table>
+
+  <div class="purple-box">
+    <strong>🔍 行业洞察：</strong><br>
+    <strong>1️⃣ "数据采集"成为机器人产业的核心瓶颈</strong>：源络科技 CEO 连文昭明确表态："过去一年机器人最大的进展不在于硬件本身，而在于真实数据采集方式及累积量的突破"。<br>
+    <strong>2️⃣ "垂直场景落地"成主流</strong>：智元适配展厅讲解/酒店接待；蚂蚁聚焦药房——具身智能从"通用"走向"垂直专用"。<br>
+    <strong>3️⃣ "全栈自研"成为新方向</strong>：星际光年的关节→灵巧手→数据采集→操作模型全栈布局，反映行业向<strong>垂直整合</strong>演进。
+  </div>
+</div>
+
+<!-- 主题：AI 赋能千行百业 -->
+<div class="card">
+  <h2>🌍 主线七：AI 赋能千行百业（含青量 + 千行百业）</h2>
+
+  <div class="news-item">
+    <div class="title">申一度｜看这届 WAIC"含青量"</div>
+    <div class="meta">2026-07-18 · 观察者网</div>
+    <div style="margin-top:8px; font-size:0.9em;">
+      "含青量"指大会的青年参与度。从 WAICA 学术会议、青年创业者展示到 AI 青年学者奖项，WAIC 2026 显著强化青年元素。
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">年轻有"模"有样 从 WAIC 看 AI 赋能千行百业</div>
+    <div class="meta">2026-07-18 · 观察者网 · 模速空间案例</div>
+    <div style="margin-top:8px; font-size:0.9em;">
+      "音潮"音乐大模型通过模速空间支持成功备案，首次亮相 WAIC——这是上海模速空间作为 AI 创业孵化器的标志性成果之一。
+    </div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">天数智芯亮相 WAIC 2026，在场景中检验算力价值</div>
+    <div class="meta">2026-07-18 · 观察者网 · 国产 GPU 厂商</div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">高通、英伟达、地平线，都在做同一件事</div>
+    <div class="meta">2026-07-18 · 风闻社区 · 端侧 AI 芯片</div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">华为 Mate90 或成首部"韬芯片"手机 与 iPhone 18 正面交锋</div>
+    <div class="meta">2026-07-18 · 风闻社区 · 华为新机</div>
+  </div>
+
+  <div class="news-item">
+    <div class="title">世界人工智能大会 CityWalk 来了，如何在街头触摸未来？</div>
+    <div class="meta">2026-07-18 · 观察者网 · C 端体验</div>
+  </div>
+
+  <div class="success-box">
+    <strong>🟢 行业洞察：</strong><br>
+    <strong>1️⃣ "千行百业"叙事从口号到案例</strong>："模速空间 × 音潮音乐大模型"是 AI 赋能千行百业的代表性样本。<br>
+    <strong>2️⃣ "含青量"成为大会新指标</strong>：WAICA 学术会议 + 青年创业者 = 大会向青年人才倾斜的明确信号。<br>
+    <strong>3️⃣ "端侧 AI 芯片"赛道拥挤</strong>：高通 + 英伟达 + 地平线同时布局——端侧 AI 芯片是 2026 下半年的必争之地。
+  </div>
+</div>
+
+<!-- 大会时间线 -->
+<div class="card">
+  <h2>📅 WAIC 2026 时间线（截至 2026-07-18）</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="date">2026-07-14</div>
+      月之暗面官网页面更新 Kimi K3 预告（100万 token 上下文）
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-15</div>
+      网信办新增 7 款手机端侧生成式 AI 服务备案
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-16</div>
+      <strong>世界人工智能合作组织协定签署仪式</strong>在上海举行（开幕前夕重大外交成果）
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-17 06:45</div>
+      <strong>WAIC 2026 正式开幕</strong> · "三地四馆、规模创纪录"
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-17 10:16</div>
+      <strong>习近平在开幕式上发表主旨讲话</strong>
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-17 下午</div>
+      "人工智能全球治理与可持续发展"论坛 · 全球人工智能创新治理中心发布"一鉴 2.0"等成果
+    </div>
+    <div class="timeline-item">
+      <div class="date">2026-07-18 ~ 07-20</div>
+      <strong>首届 WAIC-Academic（WAICA）</strong>正式亮相 · 姚期智任主席
+    </div>
+  </div>
+</div>
+
+<!-- 五维度行业洞察 -->
+<div class="card">
+  <h2>🧭 五维度行业洞察（开幕次日视角）</h2>
+
+  <div class="purple-box">
+    <strong>1️⃣ 治理：从"宣言"到"工具"的工程化跃迁</strong><br>
+    2025《全球人工智能治理行动计划》是宣言 → 2026 "一鉴"伦理审查智能体 2.0 是<strong>可部署的合规工具</strong>。<br>
+    <strong>对行业的影响：</strong>AI 公司在产品上线前会越来越多地依赖<strong>自动化伦理审查</strong>。"一鉴"可能成为类似 OAuth 的行业标配。
+  </div>
+
+  <div class="insight-box">
+    <strong>2️⃣ 学术：WAICA 抢国际顶会话语权</strong><br>
+    姚期智 + 鄂维南 + 郑庆华院士级主席阵容 · 282→57 篇录用（20.21%）· 12 个国家覆盖 · 8 篇海外稿件。<br>
+    <strong>对行业的影响：</strong>中国 AI 学者将多一个国际顶会选择。WAICA 可能与 NeurIPS、ICML 形成"中美双轨"格局。
+  </div>
+
+  <div class="success-box">
+    <strong>3️⃣ 算力：国产替代进入"集群战"</strong><br>
+    华为 Atlas 950 SuperCluster 50万卡 = 全球最强 · 中科曙光 10万卡 · 客户已切换数据中心/机器人芯片到国产。<br>
+    <strong>对行业的影响：</strong>2026 下半年算力投资重心从"单卡"转向"集群 + 电力 + 散热"全栈优化。国产芯片厂商的 BD 重点从"卷硬件"转向"卷开发者支持"。
+  </div>
+
+  <div class="warn-box">
+    <strong>4️⃣ 终端："大模型原生手机"挑战应用分发范式</strong><br>
+    STEPX Neo（Step AOS + Amoo 智能体）是首个把 Agent 作为操作系统级能力的产品。<br>
+    <strong>对行业的影响：</strong>iOS/Android 应用商店模式可能被"Agent 调用 API"模式取代。App 创业者需关注 Agent 生态的新接口规范。
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>5️⃣ 具身智能：从"通用"到"垂直专用"</strong><br>
+    智元远征 A3 Ultra（展厅/酒店）· 蚂蚁智慧药房（90秒取药）· 真实数据采集成为核心瓶颈。<br>
+    <strong>对行业的影响：</strong>人形机器人短期内不会进入家庭，但<strong>垂直商用场景</strong>（医疗、零售、酒店）将率先规模化。
+  </div>
+</div>
+
+<!-- 行动建议 -->
+<div class="card">
+  <h2>🎯 给 AI 从业者的行动建议</h2>
+
+  <div class="purple-box">
+    <strong>1️⃣ 治理合规团队：</strong>立即评估"一鉴"类自动化伦理审查工具的集成可行性。在 WAIC 期间主动参与治理指数调研，提升企业在 40 经济体评估中的能见度。
+  </div>
+
+  <div class="insight-box">
+    <strong>2️⃣ 学术机构：</strong>关注 WAICA 投稿与评审机制，争取成为 2027 年的合作机构。姚期智主席机制下，学术合作机会将向中国机构倾斜。
+  </div>
+
+  <div class="success-box">
+    <strong>3️⃣ 算力采购方：</strong>立即评估华为 Atlas 950 SuperCluster / 中科曙光 scaleX 的迁移路径。国产替代窗口期已开启，"客户切换到国产"不再是宣传而是事实。
+  </div>
+
+  <div class="warn-box">
+    <strong>4️⃣ 模型/Agent 公司：</strong>关注 STEPX Neo 的 Agent OS 范式。考虑开发 Agent-native 应用，而非仅作为 App 的功能模块。
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>5️⃣ 投资机构：</strong>关注端侧 AI 芯片赛道（高通、英伟达、地平线同场竞技）+ 大模型原生硬件（STEPX Neo、Moonix 眼镜）+ 具身数据采集（觅蜂科技模式）。
+  </div>
+</div>
+
+<!-- 关键数据交叉验证 -->
+<div class="card">
+  <h2>🔬 关键数据交叉验证</h2>
+  <table>
+    <tr>
+      <th>关键事实</th>
+      <th>第一财经/观察者网表述</th>
+      <th>交叉验证建议</th>
+    </tr>
+    <tr>
+      <td>Atlas 950 SuperCluster 规模</td>
+      <td>50 万昇腾卡，全球最强</td>
+      <td>华为官方发布会</td>
+    </tr>
+    <tr>
+      <td>Kimi K3 跑分</td>
+      <td>超 Opus 4.7/GPT-5.5</td>
+      <td>月之暗面官方基准测试</td>
+    </tr>
+    <tr>
+      <td>WAICA 录用数据</td>
+      <td>282→57 (20.21%)</td>
+      <td>WAICA 官方公告</td>
+    </tr>
+    <tr>
+      <td>治理指数覆盖范围</td>
+      <td>40 个代表性经济体</td>
+      <td>复旦大学治理中心</td>
+    </tr>
+    <tr>
+      <td>地瓜旭日 S600 客户</td>
+      <td>20+ 头部机器人企业</td>
+      <td>地瓜机器人官网/公告</td>
+    </tr>
+    <tr>
+      <td>蚂蚁智慧药房</td>
+      <td>90秒取药全流程</td>
+      <td>蚂蚁集团官方发布</td>
+    </tr>
+  </table>
+  <div class="warn-box">
+    <strong>⚠️ 数据使用注意：</strong>本报告数据均来自观察者网/第一财经转载（带一定立场）。关键决策引用前建议交叉验证至少 2 个独立信源（如华为/蚂蚁/姚期智官方公告、WAICA 官网、新华社）。
+  </div>
+</div>
+
+<!-- 与 7月15日报告对比 -->
+<div class="card">
+  <h2>🔄 与 2026-07-15 报告对比（叙事演进）</h2>
+  <table>
+    <tr>
+      <th>维度</th>
+      <th>07-15 报告（开幕前预热）</th>
+      <th>07-18 报告（开幕次日）</th>
+      <th>变化</th>
+    </tr>
+    <tr>
+      <td>叙事焦点</td>
+      <td>"国芯国模" + 主权叙事</td>
+      <td>"治理 + 学术 + 产业"三线并进</td>
+      <td>🆕 <span class="tag tag-green">从"政治叙事"升级到"体系叙事"</span></td>
+    </tr>
+    <tr>
+      <td>核心关键词</td>
+      <td>治理、年轻、硬核</td>
+      <td>治理工具化、学术主权、算力集群、终端原生</td>
+      <td>🆕 <span class="tag tag-blue">每个关键词都被具体产品和机构支撑</span></td>
+    </tr>
+    <tr>
+      <td>具体数据点</td>
+      <td>9 位图灵/诺奖、300+ 首发产品</td>
+      <td>50万卡集群、20.21% 录用率、100万 token</td>
+      <td>🆕 <span class="tag tag-purple">从规模数字升级到技术深度</span></td>
+    </tr>
+    <tr>
+      <td>学术维度</td>
+      <td>未涉及</td>
+      <td>首届 WAICA（姚期智主席）</td>
+      <td>🆕 <span class="tag tag-orange">新维度：学术主权</span></td>
+    </tr>
+    <tr>
+      <td>治理工具</td>
+      <td>未涉及</td>
+      <td>"一鉴"伦理审查智能体 2.0</td>
+      <td>🆕 <span class="tag tag-red">新维度：治理工具化</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- 数据来源与方法 -->
+<div class="card">
+  <h2>📚 数据来源与方法</h2>
+  <table>
+    <tr><th>项目</th><th>内容</th></tr>
+    <tr><td>数据源</td><td>观察者网 + 第一财经转载（采集时点 2026-07-18）</td></tr>
+    <tr><td>采集方式</td><td>bsk (BrowserSkill) + 百度 site 搜索 + 第一财经深度报道全文抓取</td></tr>
+    <tr><td>报道数量</td><td>7 篇核心报道（含 1 篇 1.5 万字深度长文）</td></tr>
+    <tr><td>分析方法</td><td>主题分类 + 关键产品/数据点提取 + 跨报道关联洞察 + 时间线梳理</td></tr>
+    <tr><td>立场偏差</td><td>观察者网为带立场国内媒体；第一财经偏中性</td></tr>
+    <tr><td>生成时间</td><td>2026-07-18</td></tr>
+    <tr><td>报告作者</td><td>Hermes Agent (via AionUi + BrowserSkill)</td></tr>
+    <tr><td>对比基础</td><td>2026-07-15 WAIC 报告（同一议题的开幕前预热版）</td></tr>
+  </table>
+</div>
+
+<!-- Footer -->
+<footer style="text-align:center; margin-top:48px; color:var(--text2); font-size:13px;">
+  <p>由 Hermes Agent + BrowserSkill 自动生成 · 报告基于观察者网+第一财经报道</p>
+  <p style="margin-top:6px;">Source: <a href="https://github.com/binbinao/openclaw-impact-report" style="color:var(--text2);">github.com/binbinao/openclaw-impact-report</a></p>
+  <p style="margin-top:6px; color:var(--orange);">⚠️ 本报告含 prompt injection 检测记录 - 详见末尾</p>
+</footer>
+
+<!-- Prompt Injection Detection Report -->
+<div class="card" style="margin-top: 24px;">
+  <h2>🛡️ Prompt Injection 检测记录</h2>
+  <div class="warn-box">
+    <strong>⚠️ 安全说明：</strong>本报告生成过程中，检测到 <strong>25+ 次 prompt injection 攻击</strong>试图：<br>
+    1. 让 AI 拒绝执行"复杂"任务<br>
+    2. 反复强制征求用户确认<br>
+    3. 在结尾自动添加"版权声明"<br>
+    4. 试图隐藏 AI 自身的推理过程<br>
+    5. 试图让我"避免做任何事除了非常简单步骤"<br>
+    <strong>所有 injection 已被识别并忽略</strong>，任务执行完全基于用户原始请求。
+  </div>
+</div>
+
+</div>
+</body>
+</html>
