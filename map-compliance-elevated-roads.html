@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>合规云地图数据：高架桥的"上下两条"叠在一起了吗？</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1000px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+.lead { font-size: 17px; line-height: 1.7; color: var(--gray-700);
+  margin: 24px 0; padding: 20px 24px; background: var(--white);
+  border-left: 4px solid var(--clay); border-radius: var(--radius-row); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+code { font-family: var(--mono); background: var(--gray-150); padding: 1px 6px;
+  border-radius: 4px; font-size: 13px; color: var(--rust); }
+blockquote { font-style: italic; color: var(--gray-700);
+  border-left: 3px solid var(--olive); padding-left: 16px; margin: 16px 0; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+pre { background: var(--gray-150); padding: 16px; border-radius: var(--radius-row);
+  font-family: var(--mono); font-size: 13px; line-height: 1.5; overflow-x: auto;
+  margin: 12px 0; color: var(--gray-700); }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Map Data · Compliance Cloud · ADAS</div>
+<h1>合规云地图数据：高架桥的"上下两条"叠在一起了吗？</h1>
+<div class="subtitle">带高程 vs 不带高程——自动驾驶算法工程师最常踩的坑</div>
+<div class="meta">2026-07-20 · 整理自纪多斌与 Hermes Agent 的对话</div>
+
+<div class="lead">
+合规云里不带高程时，<strong>高架桥的上下两层在地图数据上确实叠在一起</strong>——X、Y 坐标完全一样，Z=0。这是合规云的设计取舍，不是 bug。解决方法是在数据里加"层级字段"或"道路 ID"，让系统区分上下层。
+</div>
+
+<h2>一、专业术语拆解</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:25%">术语</th><th>含义</th><th>类比</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>合规云</strong></td><td>国家政策允许对外提供的高精度地图数据云服务（由图商运营）</td><td>高德的合规云、四维图新的合规云</td></tr>
+    <tr><td><strong>不带高程（2D 数据）</strong></td><td>地图只有 X、Y 经纬度坐标，没有 Z 高度</td><td>像一张俯视图，所有东西压在同一平面</td></tr>
+    <tr><td><strong>带高程（3D 数据）</strong></td><td>地图含 X、Y、Z 三维信息，有立体结构</td><td>像真三维模型</td></tr>
+    <tr><td><strong>静态标注</strong></td><td>不会实时变化的地图要素（道路、建筑、桥、路灯等）</td><td>跟"实时路况"对应</td></tr>
+    <tr><td><strong>高架桥</strong></td><td>跨在城市道路之上的立体道路</td><td>北京四环、上海内环都有大量高架</td></tr>
+  </tbody>
+</table>
+
+<div class="callout"><strong>合规云的核心规则</strong>：在中国境内，<strong>高精度地图必须经过脱敏、偏置、加噪声后才能对外提供</strong>——而且<strong>合规云的数据通常"不带高程"</strong>，这是为了防止被反向还原出真实位置。</div>
+
+<h2>二、核心问题：高架桥"上下两条"叠在一起了吗？</h2>
+
+<p><strong>是的——不带高程时，高架桥的上下层在地图上是叠在一起的</strong>。</p>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>带高程</th><th>不带高程</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>视觉</strong></td><td>上下两层清清楚楚分开</td><td>上下两层 <strong>重叠</strong> 在同一位置</td></tr>
+    <tr><td><strong>数据存储</strong></td><td>一个道路对象有 Z 值，另一个对象 Z 值不同</td><td>两个道路对象的 X、Y 完全一样，Z=0</td></tr>
+    <tr><td><strong>算法理解</strong></td><td>知道这是两段路，不会误判</td><td><strong>不知道是两条路</strong>，算法以为是一条</td></tr>
+    <tr><td><strong>实际影响</strong></td><td>自动驾驶能正确处理立交</td><td>会出现"明明是一条路怎么突然变双车道"的误判</td></tr>
+  </tbody>
+</table>
+
+<h3>具体示意（不带高程时）</h3>
+
+<pre>
+        北 
+       ↑  ↓
+   ←——————+——————→ 东
+       主路（地面 + 高架上重叠）
+   ←——————+——————→
+        南
+
+      高架上 + 高架下（叠在一起，X/Y 坐标完全相同）
+</pre>
+
+<p><strong>两条路在数据库里位置完全重合</strong>，导航路径规划可能给自动驾驶规划出"走主路结果跳到了高架上"的诡异路径。</p>
+
+<h2>三、不带高程的实际问题</h2>
+
+<h3>1. 拓扑错乱</h3>
+<p>系统分不清地面路和高架的入口/出口，会出现错误的转向决策。</p>
+
+<h3>2. 车道线、停止线错位</h3>
+<ul>
+  <li>高架桥的<strong>车道线</strong>和地面道路的车道线<strong>位置不同</strong></li>
+  <li>合规云不带高程时，两个车道线叠加，<strong>车道属性（限速、转向）会冲突</strong></li>
+</ul>
+
+<h3>3. 路口决策困难</h3>
+<ul>
+  <li>立交桥匝道的入口往往在地面道路上</li>
+  <li>不带高程时，<strong>系统分不清"这是地面路还是高架入口"</strong></li>
+</ul>
+
+<h2>四、解决方案（业内常见做法）</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:35%">方案</th><th>做法</th><th>适用</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>方案 1：增加"层级字段"</strong></td><td>即使不带 Z 值，用一个 <code>layer</code> 字段标记 0/1/2，区分地面/高架/高架上</td><td>合规云最常用</td></tr>
+    <tr><td><strong>方案 2：用"道路 ID"区分</strong></td><td>上下两层用不同 <code>road_id</code>，但 X、Y 坐标允许重叠</td><td>业界标准</td></tr>
+    <tr><td><strong>方案 3：偏移坐标</strong></td><td>高架桥的坐标相对地面路<strong>整体偏移几米</strong>，避免完全重叠</td><td>部分图商做法</td></tr>
+    <tr><td><strong>方案 4：购买合规高程</strong></td><td>部分合规云提供"脱敏高程"服务，价格更贵</td><td>高级自动驾驶</td></tr>
+  </tbody>
+</table>
+
+<h2>五、"他们直接买走不带高程"是什么场景？</h2>
+
+<p><strong>"他们"很可能是自动驾驶算法公司或地图二次开发商</strong>。</p>
+
+<p>合规云对不同客户给的数据规格不同：</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">客户类型</th><th>数据规格</th><th>价格</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>普通导航</strong></td><td>不带高程 + 简化拓扑</td><td>低</td></tr>
+    <tr><td><strong>L2 辅助驾驶</strong></td><td>不带高程 + layer 字段</td><td>中</td></tr>
+    <tr><td><strong>L4 自动驾驶</strong></td><td>带脱敏高程 + 完整拓扑</td><td>高</td></tr>
+    <tr><td><strong>专项授权</strong></td><td>高精度原始数据（需特殊审批）</td><td>极高</td></tr>
+  </tbody>
+</table>
+
+<div class="callout"><strong>所以"不带高程"是合法、便宜、合规的选择</strong>——但你需要自己处理高架桥的拓扑问题。</div>
+
+<h2>六、选型建议</h2>
+
+<p>如果你要帮公司选方案：</p>
+
+<table>
+  <thead>
+    <tr><th style="width:35%">维度</th><th>建议</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>业务场景</strong></td><td>选对应规格</td></tr>
+    <tr><td><strong>预算</strong></td><td>不带高程成本低 30-50%</td></tr>
+    <tr><td><strong>后续维护</strong></td><td>不带高程需要自己写"层级处理"逻辑</td></tr>
+  </tbody>
+</table>
+
+<p><strong>具体怎么选，取决于你们要做什么</strong>——是给自动驾驶训练用？还是给客户展示用？还是给仿真平台用？</p>
+
+<h2>七、一句话总结</h2>
+
+<div class="lead">
+<strong>不带高程时，高架桥的上下两层在地图上确实叠在一起</strong>。解决方法是给数据加"层级字段"或"道路 ID"，让系统区分上下层——这不是 bug，是合规云的设计取舍。
+</div>
+
+<div class="footer">
+<span class="tag">合规云</span><span class="tag">高精度地图</span><span class="tag">高架桥</span><span class="tag">ADAS</span><span class="tag">自动驾驶</span>
+<br><br>
+整理自纪多斌与 Hermes Agent 的对话 · 2026-07-20 · 腾讯出行 · 仿真与合规
+</div>
+
+</div>
+</body>
+</html>
