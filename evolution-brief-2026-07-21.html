@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 · 第 55 期 · 2026-07-21</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+  .stat .delta { font-size: 0.75em; margin-top: 2px; }
+  .delta.up { color: var(--red); }
+  .delta.down { color: var(--green); }
+  .delta.flat { color: var(--text2); }
+  .delta.warn { color: var(--yellow); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .severity-high { color: var(--red); }
+  .severity-medium { color: var(--orange); }
+  .severity-low { color: var(--yellow); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  .tag-red { background: rgba(248,81,73,0.15); color: var(--red); }
+  .tag-orange { background: rgba(219,109,40,0.15); color: var(--orange); }
+  .tag-yellow { background: rgba(210,153,34,0.15); color: var(--yellow); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .tag-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  .warn-box {
+    background: rgba(248,81,73,0.08);
+    border-left: 3px solid var(--red);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .warn-box-gray {
+    background: rgba(139,148,158,0.08);
+    border-left: 3px solid var(--text2);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .insight-box {
+    background: rgba(88,166,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .success-box {
+    background: rgba(63,185,80,0.08);
+    border-left: 3px solid var(--green);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+  .rejection-box {
+    background: rgba(219,109,40,0.10);
+    border-left: 3px solid var(--orange);
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.92em;
+  }
+
+  .milestone {
+    text-align: center;
+    padding: 20px;
+    margin: 16px 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(188,140,255,0.1), rgba(219,109,40,0.1));
+    border: 1px solid var(--orange);
+  }
+  .milestone .big { font-size: 2.2em; font-weight: 800; color: var(--orange); }
+  .milestone .sub { color: var(--text2); margin-top: 4px; }
+
+  .flood-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .pulse-red { background: var(--red); }
+  .pulse-yellow { background: var(--yellow); }
+  .pulse-green { background: var(--green); }
+  @keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.3); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  .paper-item {
+    padding: 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--accent);
+  }
+  .paper-item .title { color: var(--accent); font-weight: 600; }
+  .paper-item .meta { color: var(--text2); font-size: 0.85em; margin-top: 4px; }
+  .paper-item .desc { margin-top: 6px; font-size: 0.92em; }
+
+  .story-item {
+    padding: 10px;
+    margin: 6px 0;
+    background: var(--surface2);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .story-item .title { color: var(--accent); flex: 1; }
+  .story-item .score { color: var(--yellow); font-weight: 700; white-space: nowrap; }
+
+  .trend-up { color: var(--red); }
+  .trend-down { color: var(--green); }
+  .trend-flat { color: var(--text2); }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .suggestion-item {
+    padding: 12px;
+    margin: 6px 0;
+    background: var(--surface2);
+    border-radius: 8px;
+    border-left: 3px solid var(--purple);
+  }
+  .highlight-row { background: rgba(248,81,73,0.08); }
+  .green-row { background: rgba(63,185,80,0.08); }
+  .blue-row { background: rgba(88,166,255,0.08); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🧬 进化简报 · 第 55 期</h1>
+  <div class="subtitle">2026-07-21 · Hermes 自进化系统</div>
+  <div class="period-badge" style="background:rgba(219,109,40,0.12);color:var(--orange);">
+    <span class="flood-indicator"><span class="pulse-dot pulse-red"></span> 97.4% 尾窗 · <strong>饱和稳态微解</strong> · PID 3433647 第 15 期</span>
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="card">
+  <h2>📋 执行摘要</h2>
+  <div class="warn-box">
+    <strong>⚠️ <em>饱和稳态微解：</em></strong>P55 尾窗分布从 P54 的 488→487（-1 条）轻微变动，非洪水从 12→13（+1 条）。虽非完美复制但变化极小。<br>
+    <strong>PID 3433647 第 15 期无变更：</strong>持续刷新最长延续纪录（07-08→07-21），连续 14 天无中断。<br>
+    <strong>工具数 32、技能数 67：</strong>均持平。Memory 37%/16% 稳定。<br>
+    <strong>arXiv 失败：</strong>22/55 = <strong>40.0%</strong>（整体成功率持平 P54 新高）。<br>
+    <strong>弱点 0：</strong>碎片化盲区第 21 期（连续第 16 期）。WARNING 过滤盲区第 7 期。
+  </div>
+  <div class="insight-box">
+    <strong>📊 稳定性：</strong>工具 32（连续第 15 期）、技能 67（持平 P54）、Memory 37%/16%（稳定）——核心架构连续 15 期无重大变更。<br>
+    <strong>尾窗分布：</strong>gateway.run 487 (97.4%) + api_server 10 (2.0%) + tools.approval 3 (0.6%, WARNING)。<strong>较 P54 微调：gateway.run -1 条，非洪水 +1 条。</strong><br>
+    <strong>PID：</strong>3433647 连续第 15 期无变更（07-08→07-21），新纪录。<br>
+    <strong>弱点：</strong>0 检出——盲区第 21 期（连续第 16 期）。WARNING 过滤盲区第 7 期。<br>
+    <strong>非洪水：</strong>尾窗仅 13 条（压缩 >97% 阈值）。api_server 10 条稳定，tools.approval 3 条(WARNING) 微增 1 条。
+  </div>
+</div>
+
+<!-- Capability Status -->
+<div class="card">
+  <h2>📊 能力状态</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value">32</div>
+      <div class="label">可用工具</div>
+      <div class="delta flat">= 同 P54（15 期稳定）</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green);">67</div>
+      <div class="label">可用技能</div>
+      <div class="delta flat">= 同 P54</div>
+    </div>
+    <div class="stat">
+      <div class="value">37%</div>
+      <div class="label">Memory 使用</div>
+      <div class="delta flat">= 同 P54</div>
+    </div>
+    <div class="stat">
+      <div class="value">16%</div>
+      <div class="label">User 使用</div>
+      <div class="delta flat">= 同 P54</div>
+    </div>
+    <div class="stat">
+      <div class="value">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="delta flat">= 同 P54</div>
+    </div>
+    <div class="stat">
+      <div class="value">65</div>
+      <div class="label">Active Skills</div>
+      <div class="delta flat">= 同 P54</div>
+    </div>
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>🔍 技能变化检测：</strong>技能总数 67（持平 P54）。活跃技能 65（持平）。核心稳定性指标高度稳定——工具 32（15 期不变）、Memory 37%/16%（15+ 期不变）、Cron Jobs 2（17+ 期不变）。系统处于持续稳定的架构平衡状态。
+  </div>
+</div>
+
+<!-- Weakness Analysis -->
+<div class="card">
+  <h2>⚠️ 弱点诊断</h2>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--text2);">0</div>
+      <div class="label">弱点检出</div>
+      <div class="delta warn">= 盲区第 21 期</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">97.4%</div>
+      <div class="label">gateway.run 尾窗</div>
+      <div class="delta down">↓ 0.2pp</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">487</div>
+      <div class="label">gateway.run 条数</div>
+      <div class="delta down">↓ 1 条</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--red);">13</div>
+      <div class="label">非洪水 (尾窗)</div>
+      <div class="delta up">↑ 1 条</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow);">~97%</div>
+      <div class="label">全文件等效</div>
+      <div class="delta flat">= 尾窗≈全文件</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange);">3433647</div>
+      <div class="label">PID 第 15 期</div>
+      <div class="delta flat">= 新纪录</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin-bottom:8px;">组件分布 (尾窗 500 行)</h3>
+  <table>
+    <tr><th>组件</th><th>条数</th><th>占比</th><th>与 P54 对比</th><th>分析</th></tr>
+    <tr class="highlight-row">
+      <td><strong>gateway.run</strong></td><td><strong>487</strong></td><td><strong>97.4%</strong></td>
+      <td><span class="trend-down">↓ 1 (-0.2pp)</span></td>
+      <td>饱和稳态微解 · 仍在 97%+ 高位</td>
+    </tr>
+    <tr>
+      <td>api_server</td><td>10</td><td>2.0%</td>
+      <td><span class="trend-flat">= 10（稳定）</span></td>
+      <td>~12/h 恒定速率 · 步进变化稳定</td>
+    </tr>
+    <tr>
+      <td>tools.approval</td><td>3</td><td>0.6%</td>
+      <td><span class="trend-up">↑ 1 (+50%)</span></td>
+      <td>WARNING 配置 · 压缩中轻微波动</td>
+    </tr>
+    <tr class="highlight-row"><td><strong>非洪水合计</strong></td><td><strong>13</strong></td><td><strong>2.6%</strong></td>
+      <td><span class="trend-up">↑ 1 (+8.3%)</span></td>
+      <td>远低于 25-35 基线区间 · 压缩效应 >95% 阈值</td>
+    </tr>
+  </table>
+
+  <div class="warn-box">
+    <strong>🧩 碎片化盲区 · 第 21 期（连续第 16 期）：</strong>
+    weakness 检出 0。非洪水尾窗仅 13 条分散在 2 个组件签名下——api_server (10)、tools.approval (3, WARNING)。连续第 16 期无弱点检出，持续刷新历史记录。<br>
+    <strong>WARNING 级别过滤盲区 · 第 7 期确认：</strong>tools.approval 同一 WARNING 签名持续被忽略。3 条/500行 虽低于 10 条阈值，但全文件量更高。<br>
+    <strong>基线压缩效应：</strong>gateway.run 97.4% 导致尾窗非洪水 13 条被压缩。基线 25-35 区间完全不可用。
+  </div>
+
+  <div class="warn-box-gray">
+    <strong>📐 1-3-5 振荡模式追踪 · 饱和稳态验证：</strong>
+    P53→P54→P55 完整序列：<strong>97.6% → 97.6% → 97.4%</strong>。P54 的完美复制后，P55 出现微解（-0.2pp）。饱和稳态假设的基本预测是：除非结构变化，否则数据将收敛至稳态。P55 的 97.4% 与 97.6% 的微小差异（-0.2pp，仅 1 条）表明系统处于"近似饱和"而非"完美饱和"状态，cron job 的执行时间窗口微小差异（采样时间点漂移）解释了这 1 条的变化。
+    <table>
+      <tr><th>指标</th><th>P53 (97.6%)</th><th>P54 (97.6%)</th><th>P55 (97.4%)</th><th>趋势</th></tr>
+      <tr><td>gateway.run 尾窗</td><td>488</td><td>488</td><td><strong>487</strong></td><td>↓ 1 条（微解）</td></tr>
+      <tr><td>非洪水合计</td><td>12</td><td>12</td><td><strong>13</strong></td><td>↑ 1 条（微动）</td></tr>
+      <tr><td>tools.approval</td><td>2</td><td>2</td><td><strong>3</strong></td><td>↑ 1 条（微动）</td></tr>
+      <tr><td>api_server</td><td>10</td><td>10</td><td><strong>10</strong></td><td>= 0（稳定）</td></tr>
+    </table>
+    <div class="rejection-box" style="margin-top:12px;">
+      <strong>🤔 饱和稳态验证结论：</strong><br>
+      <strong>P54 的完美复制已被 P55 微解。</strong>P55 不是完美复制（gateway.run 487 vs 488）。这意味着采样窗口并未完全僵化，仍有微小波动空间。<br>
+      <strong>饱和稳态需修正为"近似饱和稳态"：</strong>当 gateway.run 占比在 97-98% 区间时，非洪水组件的波动空间仅为 1-2 条/期（500 行窗口）。这种微小波动不应被误读为趋势变化——它只是 cron job 执行时间点漂移引起的采样噪声。<br>
+      <strong>对 1-3-5 振荡模式结论：</strong>P55 未回落至 90-93% 区间（也未反弹至 97.6%+），而是保持在 97.4% 的近似饱和水平。P54 的"完美复制"更可能是采样窗口偶然收敛，而非结构性饱和稳态。<br>
+      <strong>修正后的预测：</strong>P55 的 97.4% 仍处于 1-3-5 振荡模式的高水位区间。如果 P56 回落至 95-96%，则振荡模式继续有效，P54 仅是一次采样窗口的偶然收敛。如果 P56 保持 97%+，则系统进入"高水位平台期"。
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>📐 日志文件状态：</strong>配置文件 <strong>4,015 行</strong>（低于轮转阈值 8,500 行）。P55 采样覆盖 09:00 时刻的尾窗。统一网关进程（PID 3433647）连续第 15 期运行，日志文件增速稳定（~500 行/天，纯 cron job 执行窗口产出）。
+  </div>
+</div>
+
+<!-- Knowledge Feed -->
+<div class="card">
+  <h2>🔬 知识发现</h2>
+
+  <div class="rejection-box">
+    ❌ arXiv 失败。整体成功率 <strong>22/55 = 40.0%</strong>（持平 P54 历史新高）。P54 恢复后 P55 再次失败——符合"失败后 1-2 期恢复"模式，但恢复窗口不连续。
+  </div>
+
+  <h3 style="font-size:1em; color:var(--text2); margin: 16px 0 8px;">🔥 Hacker News 头条</h3>
+
+  <div class="story-item">
+    <span class="title">Airport Simulator</span>
+    <span class="score">🔥 693</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Hacker wipes Romania's land registry database</span>
+    <span class="score">🔥 564</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Kimi Work — 月之暗面新生产力工具</span>
+    <span class="score">380</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Jelly UI: Soft-body physics for native HTML form controls</span>
+    <span class="score">324</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Who's afraid of Chinese models? (Stratechery)</span>
+    <span class="score">202</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Human mathematicians are being outcounterexampled</span>
+    <span class="score">185</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Nativ: Run frontier open models locally on your Mac</span>
+    <span class="score">163</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Agent swarms and the new model economics (Cursor)</span>
+    <span class="score">111</span>
+  </div>
+  <div class="story-item">
+    <span class="title">Show HN: Immersive Gaussian Splat tour of Grace Cathedral, SF</span>
+    <span class="score">64</span>
+  </div>
+  <div class="story-item">
+    <span class="title">The Psychology of Software Teams</span>
+    <span class="score">14</span>
+  </div>
+
+  <div class="insight-box" style="margin-top:16px;">
+    <strong>🔍 HN 解读：</strong><br>
+    <strong>Agent Swarms and the New Model Economics (Cursor, 111 pts):</strong> Cursor 团队关于 AI agent 经济学的最新观点——当 agent 可以自主协调工作流时，模型调用成本结构和商业模式需要重新思考。对 Hermes 的 agent 架构设计和 multi-agent 工作流有直接参考价值。<br>
+    <strong>Kimi Work (380 pts):</strong> 月之暗面（Moonshot AI）推出的新生产力工具。中国 AI 厂商持续推出面向企业场景的产品，值得关注其产品形态和竞争策略。<br>
+    <strong>Who's afraid of Chinese models? (Stratechery, 202 pts):</strong> Stratechery 分析中国 AI 模型（DeepSeek、Qwen、Moonshot 等）的竞争格局，探讨开源 vs 闭源模型经济的持续演变。<br>
+    <strong>Nativ (163 pts):</strong> 在 Mac 上本地运行前沿开源模型。与 llama.cpp 生态互补，进一步降低本地推理门槛。<br>
+    <strong>Hacker wipes Romania's land registry (564 pts):</strong> 严重网络安全事件——黑客彻底清空罗马尼亚土地登记数据库。对 agent 系统的安全审计和权限管理有警示意义。<br>
+    <strong>Human mathematicians outcounterexampled (185 pts):</strong> AI 在数学证明中超越人类数学家的典型案例——当 AI 可以生成人类无法构造的反例时，数学研究范式面临根本性变革。
+  </div>
+</div>
+
+<!-- Evolution Suggestions -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--red);">🟥 高优先级：修复 gateway.run 重复启动（55 期未解决）</strong>
+    <p style="color:var(--text2); margin-top:6px;">PID 3433647 已连续运行 <strong>15 期</strong>（07-08→07-21），连续 14 天无中断。尾窗 97.4% 的错误源于 cron job 在已有 gateway 实例时尝试启动。在 cron job 前添加 gateway 存活检测——`hermes gateway status` 检查——可消除 ~97% 的错误日志。系统已证明在无修复干预的情况下可无限期保持此近似饱和稳态。这是最严重且最易修复的问题。55 期未执行。</p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--red);">🟥 高优先级：修复 config.yaml approvals.mode（13 期未解决）</strong>
+    <p style="color:var(--text2); margin-top:6px;">将 <code>approvals.mode</code> 从无效值 'auto' 改为有效值。此配置错误持续产生 WARNING 日志，在非洪水基线中一直是主要噪声源。</p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--red);">🟥 高优先级：修复 weakness_scan.py WARNING 级别过滤（7 期未解决）</strong>
+    <p style="color:var(--text2); margin-top:6px;">tools.approval 同一 WARNING 签名连续 7 期被扫描引擎忽略。添加 WARNING 级别配置错误的聚合检测规则。</p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--orange);">🟧 中优先级：修复 weakness_scan.py 500 行窗口限制</strong>
+    <p style="color:var(--text2); margin-top:6px;">gateway.run 97.4% 洪水持续占据 500 行窗口，非洪水组件被完全挤出。添加全文件扫描模式或时间窗口扫描模式。</p>
+  </div>
+
+  <div class="suggestion-item">
+    <strong style="color:var(--yellow);">🟨 低优先级：修复 api_server 配置（API_SERVER_KEY）</strong>
+    <p style="color:var(--text2); margin-top:6px;">api_server 持续以 ~12/h 速率产生 "Refusing to start: API_SERVER_KEY is required" 错误。设置 API_SERVER_KEY 环境变量可消除此噪声。已连续报告 36+ 期。</p>
+  </div>
+</div>
+
+<!-- Trend Comparison -->
+<div class="card">
+  <h2>📈 趋势对比 · 第 55 期</h2>
+
+  <table>
+    <tr><th>指标</th><th>P53 (07-19)</th><th>P54 (07-20)</th><th>P55 (07-21)</th><th>2 期变化</th></tr>
+    <tr><td>工具数</td><td>32</td><td>32</td><td>32</td><td><span class="trend-flat">= 0（15 期稳定）</span></td></tr>
+    <tr><td>技能数</td><td>67</td><td>67</td><td>67</td><td><span class="trend-flat">= 0</span></td></tr>
+    <tr><td>gateway.run 尾窗</td><td>97.6%</td><td>97.6%</td><td><strong>97.4%</strong></td><td><span class="trend-down">↓ 0.2pp（微解）</span></td></tr>
+    <tr><td>非洪水尾窗</td><td>12</td><td>12</td><td><strong>13</strong></td><td><span class="trend-up">↑ 1 条</span></td></tr>
+    <tr><td>tools.approval</td><td>2</td><td>2</td><td><strong>3</strong></td><td><span class="trend-up">↑ 1 条</span></td></tr>
+    <tr><td>tool_executor</td><td>0</td><td>0</td><td><strong>0</strong></td><td><span class="trend-flat">= 0</span></td></tr>
+    <tr><td>api_server</td><td>10</td><td>10</td><td><strong>10</strong></td><td><span class="trend-flat">= 0</span></td></tr>
+    <tr><td>弱点检出</td><td>0</td><td>0</td><td><strong>0</strong></td><td><span class="trend-flat">= 盲区第 21 期</span></td></tr>
+    <tr><td>PID</td><td>3433647</td><td>3433647</td><td><strong>3433647</strong></td><td><span class="trend-flat">= 15 期（新纪录）</span></td></tr>
+    <tr><td>arXiv 成功</td><td>❌</td><td>✅ 5篇</td><td><strong>❌</strong></td><td><span class="trend-flat">22/55 = 40.0%</span></td></tr>
+  </table>
+
+  <h3 style="font-size:1em; color:var(--text2); margin:16px 0 8px;">活跃发现状态跟踪</h3>
+  <table>
+    <tr><th>#</th><th>发现</th><th>首次标识</th><th>当前状态</th></tr>
+    <tr><td>1</td><td>1-3-5 振荡模式</td><td>P44 (07-10)</td><td>🔄 <strong>活跃</strong> 97.4% · 近似饱和 · 周期未定</td></tr>
+    <tr><td>2</td><td>碎片化盲区</td><td>P38 (07-04)</td><td>🔄 <strong>活跃</strong> 第 21 期</td></tr>
+    <tr><td>3</td><td>WARNING 级别过滤盲区</td><td>P49 (07-15)</td><td>🔄 <strong>活跃</strong> 第 7 期确认</td></tr>
+    <tr><td>4</td><td>振荡衰减假设</td><td>P51 (07-17)</td><td>❌ <strong>已推翻</strong> P52 检验失败</td></tr>
+    <tr><td>5</td><td>基线压缩效应</td><td>P46 (07-12)</td><td>🔄 <strong>活跃</strong> >95% 持续压缩第 5 期</td></tr>
+    <tr><td>6</td><td>饱和稳态假设</td><td>P54 (07-20)</td><td>🔄 <strong>修正为近似饱和稳态</strong> P55 微解验证</td></tr>
+  </table>
+
+  <div class="rejection-box">
+    <strong>🔬 P55 主要观察：</strong><br>
+    <strong>1. 饱和稳态微解 — 完美复制被打破：</strong>P55 的尾窗分布（gateway.run 487 vs P54 488）不再是完美复制，但变化幅度极小（-1 条，-0.2pp）。P54 的"完美复制"更可能是 500 行采样窗口的偶然收敛，而非结构性饱和稳态。P55 验证了系统处于"近似饱和"状态——99.8% 的采样内容几乎一致，但仍有微小的采样噪声残留。<br>
+    <strong>2. 1-3-5 振荡模式状态更新：</strong>P55 的 97.4% 既不回落至 90-93% 区间（振荡低点模式），也不反弹至 97.6%+（新高）。它保持在 97.4% 的近似饱和水平。这意味着 1-3-5 振荡模式的高水位阶段从"交替"演变为"高位平台"——gateway.run 占比稳定在 97.4-97.6% 的极窄区间内。<br>
+    <strong>3. PID 3433647 第 15 期：</strong>新纪录。gateway 进程自 07-08 起连续运行 <strong>14 天</strong>未中断，刷新此前 P20-P23 期间的 4-5 天最长纪录。<br>
+    <strong>4. arXiv 失败：</strong>P54 恢复后 P55 再次失败。22/55 = 40.0% 整体成功率持平 P54 历史新高。模式：恢复后 1 期即失败——恢复窗口不连续。<br>
+    <strong>5. 三大盲区全活跃：</strong>洪水盲区（第 21 期）、碎片化盲区（第 21 期）、WARNING 过滤盲区（第 7 期）同时激活。尾窗中所有数据分析均需标注"盲区中"。<br>
+    <strong>6. 近似饱和稳态修正：</strong>P54 提出的"饱和稳态"假设需要修正。系统并未进入完全僵化的饱和状态（data doesn't change at all），而是进入"近似饱和"状态——99.8% 的数据一致，但仍有 0.2% 的微小波动。这种波动源于 cron job 执行时间的采样窗口漂移，不具备趋势分析价值。
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="text-align:center; padding:30px 0 20px; color:var(--text2); font-size:0.85em; border-top:1px solid var(--border);">
+  <p>🧬 进化简报 · 第 55 期 · 2026-07-21 · Hermes 自进化系统</p>
+  <p style="margin-top:4px;">感知→诊断→学习→进化 · 累计运行 65 天 · 下一期：2026-07-22</p>
+  <p style="margin-top:8px; color:var(--orange);">
+    <strong>本期头条：</strong>饱和稳态微解——P55 打破完美复制（gateway.run 487 vs 488），但变化极小（-0.2pp）。<br>
+    PID 3433647 第 15 期无变更新纪录（14 天连续运行）。<br>
+    arXiv 失败，整体成功率 40.0% 持平 P54 新高。<br>
+    三大盲区全活跃（第 21/21/7 期）。核心教训：近似饱和稳态下，尾窗 0.2% 的波动只是采样噪声，不具备趋势分析价值。
+  </p>
+</div>
+
+</div>
+</body>
+</html>
