@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大型商用货车 13 个核心设计点（3/4）</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1100px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+.lead { font-size: 17px; line-height: 1.7; color: var(--gray-700);
+  margin: 24px 0; padding: 20px 24px; background: var(--white);
+  border-left: 4px solid var(--clay); border-radius: var(--radius-row); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+code { font-family: var(--mono); background: var(--gray-150); padding: 1px 6px;
+  border-radius: 4px; font-size: 13px; color: var(--rust); }
+blockquote { font-style: italic; color: var(--gray-700);
+  border-left: 3px solid var(--olive); padding-left: 16px; margin: 16px 0; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+.callout-good { background: rgba(120,140,93,0.08); border-left: 4px solid var(--olive); }
+.callout-warn { background: rgba(176,74,63,0.08); border-left: 4px solid var(--rust); }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.series-nav { background: var(--gray-150); padding: 16px 20px; border-radius: var(--radius-row);
+  margin: 24px 0; font-size: 13px; }
+.series-nav h4 { margin-bottom: 8px; color: var(--slate); font-size: 13px; }
+.series-nav ol { margin: 4px 0 0 18px; }
+.series-nav li { margin: 3px 0; }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Commercial Truck · Cab Design · 13 Key Points</div>
+<h1>大型商用货车座舱需求调研（三）</h1>
+<div class="subtitle">13 个核心设计点——从平地板到 ADAS，每一点都决定商用车的销量</div>
+<div class="meta">2026-07-22 · 纪多斌调研 · 系列报告 3/4</div>
+
+<div class="lead">
+大型商用货车座舱设计有 <strong>13 个核心设计点</strong>——按优先级分三档：<br>
+🔴 <strong>P0 刚需</strong>（不做就别卖）：平地板、卧铺、座椅、视野<br>
+🟡 <strong>P1 差异化</strong>（不做就掉队）：HMI、ADAS、车居化、NVH<br>
+🟢 <strong>P2 增值</strong>（锦上添花）：智能座舱、OTA、健康管理
+</div>
+
+<div class="series-nav">
+<h4>📚 本系列 4 篇报告</h4>
+<ol>
+  <li><a href="truck-cab-user-scenarios.html">用户画像 × 典型场景</a></li>
+  <li><a href="truck-cab-oem-needs.html">主机厂需求对比</a></li>
+  <li>13 个核心设计点（本篇）</li>
+  <li><a href="truck-cab-fatigue-future.html">驾驶疲劳 × 智能座舱趋势</a></li>
+</ol>
+</div>
+
+<h2>🔴 P0 刚需（不做就别卖）</h2>
+
+<h3>设计点 1：平地板驾驶室</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>现状痛点</strong></td><td>传统商用车传动轴从中间穿过，地板凸起 200-300mm</td></tr>
+    <tr><td><strong>突破路径</strong></td><td>✅ 电动化平台（无传动轴）/ ✅ 中央通道卧铺设计</td></tr>
+    <tr><td><strong>关键参数</strong></td><td>地板凸起 ≤ 50mm（理想状态完全平）</td></tr>
+    <tr><td><strong>代表车型</strong></td><td>徐工 P9 / 解放 J7 鹰途 / Volvo FH / Mercedes Actros</td></tr>
+    <tr><td><strong>司机价值</strong></td><td>上下车方便 / 副驾与卧铺打通 / 整体空间感提升 30%</td></tr>
+  </table>
+</div>
+
+<div class="callout callout-good">
+<strong>行业判断</strong>：2026-2028 是重卡平地板<strong>井喷期</strong>。电动化 + 主机厂竞争已经把"平地板"从豪华配置变为"主流配置"。
+</div>
+
+<h3>设计点 2：超宽卧铺（车居化）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>卧铺尺寸标准</strong></td><td>长度 2000-2200mm × 宽度 800-900mm</td></tr>
+    <tr><td><strong>行业领先</strong></td><td>徐工 P9 下卧铺宽 <strong>900mm</strong>（行业最宽）</td></tr>
+    <tr><td><strong>上下铺设计</strong></td><td>双司机轮班必需，上铺 700-750mm，下铺 850-900mm</td></tr>
+    <tr><td><strong>车居化设施</strong></td><td>✅ 阅读灯 / ✅ 充电口 / ✅ 挂衣钩 / ✅ 鞋柜 / ✅ 储物分格</td></tr>
+    <tr><td><strong>舒适性</strong></td><td>床垫硬度可调 / 卧铺区域独立空调</td></tr>
+  </table>
+</div>
+
+<h3>设计点 3：人体工学座椅</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>主驾</strong></td><td>气悬浮 + 多向调节 + 腰部支撑 + 加热通风 + 按摩</td></tr>
+    <tr><td><strong>副驾</strong></td><td>可旋转 180°（与卧铺拼床）/ 可折叠（变成工作台）</td></tr>
+    <tr><td><strong>材质</strong></td><td>耐磨皮革 / 织物 / 高回弹海绵</td></tr>
+    <tr><td><strong>健康功能</strong></td><td>久坐提醒 / 体重自适应 / 智能坐姿检测</td></tr>
+    <tr><td><strong>法规</strong></td><td>符合 GB 15083《商用车辆驾驶室座椅》</td></tr>
+  </table>
+</div>
+
+<h3>设计点 4：全方位视野（A 柱 / 后视镜 / 流媒体）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>A 柱小窗</strong></td><td>消除 A 柱盲区（行业新趋势）</td></tr>
+    <tr><td><strong>电动后视镜</strong></td><td>电加热 + 电动折叠 + 360° 摄像头</td></tr>
+    <tr><td><strong>流媒体后视镜</strong></td><td>替代传统镜面，雨天 / 夜间可视性提升</td></tr>
+    <tr><td><strong>下视野辅助</strong></td><td>车头盲区摄像头（自卸车装卸场景）</td></tr>
+    <tr><td><strong>360° 环视</strong></td><td>AVM 全景影像（标准配置）</td></tr>
+    <tr><td><strong>法规</strong></td><td>符合 GB 15084《机动车辆 间接视野装置》</td></tr>
+  </table>
+</div>
+
+<h2>🟡 P1 差异化（不做就掉队）</h2>
+
+<h3>设计点 5：HMI 人机交互</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>仪表盘</strong></td><td>12.3"+ 全液晶 + 多模式（标准 / 经济 / 越野）</td></tr>
+    <tr><td><strong>中控屏</strong></td><td>10.4"-15.6" 触控 + 物理按键冗余</td></tr>
+    <tr><td><strong>HUD 抬头显示</strong></td><td>10-15" 投影（导航 / 限速 / 跟车距离）</td></tr>
+    <tr><td><strong>方向盘</strong></td><td>多功能 + 加热 + 振动提醒</td></tr>
+    <tr><td><strong>语音交互</strong></td><td>免唤醒词 + 多方言 + 强噪声识别（≥ 75 dB 环境）</td></tr>
+    <tr><td><strong>关键设计原则</strong></td><td>⚠️ 司机戴手套操作 / ⚠️ 颠簸路面防误触 / ⚠️ 阳光直射可视</td></tr>
+  </table>
+</div>
+
+<div class="callout">
+<strong>差异化关键</strong>：商用车 HMI 不是"大屏就好"——<strong>强噪声识别 + 防误触 + 戴手套操作</strong>是核心。
+</div>
+
+<h3>设计点 6：NVH 噪音振动控制</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>驾驶室 NVH 目标</strong></td><td>≤ 60 dB（行业领先）/ 65 dB（合格）/ 68 dB（合格边缘）</td></tr>
+    <tr><td><strong>主要噪声源</strong></td><td>发动机 / 传动 / 轮胎 / 风噪</td></tr>
+    <tr><td><strong>隔振设计</strong></td><td>✅ 四气囊悬浮驾驶室 / ✅ 发动机悬置优化</td></tr>
+    <tr><td><strong>隔音材料</strong></td><td>夹胶玻璃 / 双层防火墙 / 吸音棉 / 阻尼板</td></tr>
+    <tr><td><strong>验证手段</strong></td><td>半消声室测试 + 实车路试</td></tr>
+  </table>
+</div>
+
+<h3>设计点 7：L2 / L3 辅助驾驶</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>L2 必备功能</strong></td><td>ACC 自适应巡航 / LCC 车道居中 / AEB 自动紧急制动</td></tr>
+    <tr><td><strong>L2+ 进阶</strong></td><td>NOA 导航辅助驾驶 / 拨杆变道 / 智能限速识别</td></tr>
+    <tr><td><strong>L3 有条件</strong></td><td>法规 2025 已部分开放，但商业化进度慢</td></tr>
+    <tr><td><strong>传感器配置</strong></td><td>前视摄像头 + 毫米波雷达 + 角雷达 + 驾驶员监测 DMS</td></tr>
+    <tr><td><strong>代表车型</strong></td><td>解放 J7 鹰途 / 陕汽德龙 X6000 / 东风天龙 KL</td></tr>
+  </table>
+</div>
+
+<h3>设计点 8：DMS 驾驶员监测</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>监测指标</strong></td><td>疲劳（闭眼 / 打哈欠）/ 分心（看手机）/ 异常姿态 / 抽烟 / 接打电话</td></tr>
+    <tr><td><strong>硬件</strong></td><td>红外摄像头 + 方向盘传感器</td></tr>
+    <tr><td><strong>报警方式</strong></td><td>声光 + 振动方向盘 + 平台上报（监管）</td></tr>
+    <tr><td><strong>法规要求</strong></td><td>2025 年起，<strong>新出厂营运车辆强制安装</strong>（GB/T 26982）</td></tr>
+    <tr><td><strong>代表方案</strong></td><td>海康 / 锐明 / 智驾大陆 / 中科创达</td></tr>
+  </table>
+</div>
+
+<div class="callout callout-warn">
+<strong>关键监管</strong>：DMS 是 <strong>法规强制 + 安全刚需 + 平台上报</strong> 三重压力——不装就不能上路。
+</div>
+
+<h3>设计点 9：车居化设施（长途车核心）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>冰箱</strong></td><td>12V/24V 压缩机冰箱 10-30L（卧铺下方）</td></tr>
+    <tr><td><strong>220V 逆变器</strong></td><td>500-2000W（笔记本 / 电热饭盒 / 小家电）</td></tr>
+    <tr><td><strong>微波炉</strong></td><td>嵌入式（解放鹰途标配）</td></tr>
+    <tr><td><strong>饮水机</strong></td><td>5L 桶装水固定位</td></tr>
+    <tr><td><strong>晾衣绳</strong></td><td>可拉伸 + 卧铺顶部挂钩</td></tr>
+    <tr><td><strong>空气净化</strong></td><td>PM2.5 + 负离子 + 香氛</td></tr>
+  </table>
+</div>
+
+<h3>设计点 10：空调与暖风系统</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>驻车空调</strong></td><td>怠速停车也能制冷（电瓶供电）</td></tr>
+    <tr><td><strong>驻车暖风</strong></td><td>燃油暖风 + 电加热（北方刚需）</td></tr>
+    <tr><td><strong>独立分区</strong></td><td>主驾 / 副驾 / 卧铺独立温控</td></tr>
+    <tr><td><strong>适应极端</strong></td><td>-30℃ 至 +50℃（西部 / 中东出口）</td></tr>
+    <tr><td><strong>新能源车</strong></td><td>热泵空调 + PTC 加热（电动化趋势）</td></tr>
+  </table>
+</div>
+
+<h3>设计点 11：储物空间（高频使用）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>总储物量</strong></td><td>≥ 50L（行业领先）/ 30L（合格）</td></tr>
+    <tr><td><strong>分类</strong></td><td>证件 / 工具 / 衣物 / 食物 / 雨具 / 反光衣</td></tr>
+    <tr><td><strong>位置</strong></td><td>主驾上方 / 副驾下方 / 卧铺下方 / 车门板</td></tr>
+    <tr><td><strong>设计原则</strong></td><td>高频用前置 / 防滑设计 / 防尘防水</td></tr>
+  </table>
+</div>
+
+<h3>设计点 12：安全冗余</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>主被动安全</strong></td><td>ABS + EBD + ESP + LDWS + AEBS + 360° 环视</td></tr>
+    <tr><td><strong>驾驶室结构</strong></td><td>碰撞吸能 + 整体式钢制 + 高强度钢占比 ≥ 70%</td></tr>
+    <tr><td><strong>安全气囊</strong></td><td>主驾气囊 + 安全带预警</td></tr>
+    <tr><td><strong>应急系统</strong></td><td>eCall 紧急呼叫 / 自动定位 / 平台上报</td></tr>
+    <tr><td><strong>合规</strong></td><td>符合 GB 17691《重型柴油车排放》+ GB 26512《商用车驾驶室乘员保护》</td></tr>
+  </table>
+</div>
+
+<h2>🟢 P2 增值（锦上添花）</h2>
+
+<h3>设计点 13：智能座舱（软件定义）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:30%">维度</th><th>详情</th></tr>
+    <tr><td><strong>OTA 升级</strong></td><td>整车 OTA（FOTA）+ 控制器 OTA（SOTA）</td></tr>
+    <tr><td><strong>AI 助手</strong></td><td>语音 + 多模态（基于大模型）</td></tr>
+    <tr><td><strong>车队管理</strong></td><td>车机与平台数据互通（位置 / 油耗 / 工时）</td></tr>
+    <tr><td><strong>司机健康管理</strong></td><td>血压监测 / 心率监测 / 疲劳预警</td></tr>
+    <tr><td><strong>娱乐 / 车居</strong></td><td>音响 / 视频 / 卡拉 OK（解放鹰途已配）</td></tr>
+    <tr><td><strong>代表车型</strong></td><td>解放 J7 鹰途 / 陕汽德龙 X6000 / 东风天龙 KL</td></tr>
+  </table>
+</div>
+
+<div class="callout callout-good">
+<strong>趋势</strong>：智能座舱是<strong>下一阶段差异化</strong>——2026-2028 是软件定义商用车的关键窗口。
+</div>
+
+<h2>13 个设计点优先级矩阵</h2>
+
+<table>
+  <thead>
+    <tr><th>优先级</th><th>设计点</th><th>门槛</th><th>差异价值</th><th>腾讯云 AI 机会</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>🔴 P0</td><td>平地板 / 卧铺 / 座椅 / 视野</td><td>高</td><td>中</td><td>🟡 仿真验证</td></tr>
+    <tr><td>🟡 P1</td><td>HMI / NVH / 辅助驾驶 / DMS / 车居化 / 空调 / 储物 / 安全冗余</td><td>中</td><td>高</td><td>🟢 多场景</td></tr>
+    <tr><td>🟢 P2</td><td>智能座舱 / OTA / AI 助手 / 健康管理</td><td>低</td><td>高</td><td>🟢 核心机会</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-good">
+<strong>腾讯云核心机会</strong>：P2 智能座舱是腾讯云 AI 能力（语音 / 大模型 / IoT / 地图）最适合切入的环节。
+</div>
+
+<div class="series-nav">
+<h4>📚 本系列 4 篇报告</h4>
+<ol>
+  <li><a href="truck-cab-user-scenarios.html">用户画像 × 典型场景</a></li>
+  <li><a href="truck-cab-oem-needs.html">主机厂需求对比</a></li>
+  <li>13 个核心设计点（本篇）</li>
+  <li><a href="truck-cab-fatigue-future.html">驾驶疲劳 × 智能座舱趋势</a></li>
+</ol>
+</div>
+
+<div class="footer">
+<span class="tag">13 设计点</span><span class="tag">平地板</span><span class="tag">卧铺</span><span class="tag">HMI</span><span class="tag">DMS</span><span class="tag">智能座舱</span>
+<br><br>
+整理：纪多斌 · Hermes Agent · 2026-07-22
+<br>
+来源：大型商用货车座舱需求调研报告（内部稿）
+</div>
+
+</div>
+</body>
+</html>
