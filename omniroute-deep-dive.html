@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniRoute 项目深度调研（2026 Q3）</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1100px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+.lead { font-size: 17px; line-height: 1.7; color: var(--gray-700);
+  margin: 24px 0; padding: 20px 24px; background: var(--white);
+  border-left: 4px solid var(--clay); border-radius: var(--radius-row); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+code { font-family: var(--mono); background: var(--gray-150); padding: 1px 6px;
+  border-radius: 4px; font-size: 13px; color: var(--rust); }
+pre { background: var(--gray-150); padding: 16px; border-radius: var(--radius-row);
+  font-family: var(--mono); font-size: 13px; line-height: 1.5; overflow-x: auto;
+  margin: 12px 0; color: var(--gray-700); }
+blockquote { font-style: italic; color: var(--gray-700);
+  border-left: 3px solid var(--olive); padding-left: 16px; margin: 16px 0; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+.callout-good { background: rgba(120,140,93,0.08); border-left: 4px solid var(--olive); }
+.callout-warn { background: rgba(176,74,63,0.08); border-left: 4px solid var(--rust); }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
+.kpi { background: var(--white); border: var(--border); border-radius: var(--radius-row);
+  padding: 14px 16px; text-align: center; }
+.kpi .num { font-family: var(--mono); font-size: 22px; font-weight: 600;
+  color: var(--slate); line-height: 1.1; }
+.kpi .lbl { font-size: 11px; color: var(--gray-500); margin-top: 4px;
+  text-transform: uppercase; letter-spacing: 0.05em; }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+.sources { background: var(--gray-150); padding: 14px 18px; border-radius: var(--radius-row);
+  margin-top: 12px; font-size: 13px; }
+.sources ul { margin: 8px 0 0 18px; }
+.sources li { margin: 3px 0; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Open Source · AI Gateway · Local-First</div>
+<h1>OmniRoute 项目深度调研（2026 Q3）</h1>
+<div class="subtitle">开源免费的本地 AI Gateway——一个端点、268+ Provider、~1.54B Tokens/月免费额度</div>
+<div class="meta">2026-07-20 · 纪多斌调研 · 来源 ≥3 独立来源交叉验证</div>
+
+<div class="lead">
+OmniRoute 是 2026 年 AI Gateway 赛道最值得关注的新晋开源项目。<strong>MIT License · 100% 本地运行 · 268+ Provider · 11 个永久免费</strong>——它把"Claude Code / Cursor / Cline 等 16+ coding agent"通过单一 OpenAI 兼容端点，路由到任意 LLM 提供商，<strong>个人开发者几乎可以零成本使用 Claude/GPT/Gemini 等顶级模型</strong>。
+</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="num">23.6k</div><div class="lbl">GitHub Stars</div></div>
+  <div class="kpi"><div class="num">~1.54B</div><div class="lbl">Tokens/月 免费额度</div></div>
+  <div class="kpi"><div class="num">268+</div><div class="lbl">支持 Provider</div></div>
+  <div class="kpi"><div class="num">11</div><div class="lbl">永久免费 Provider</div></div>
+</div>
+
+<h2>一、基础信息</h2>
+
+<table>
+  <tr><th style="width:25%">项目</th><th>详情</th></tr>
+  <tr><td><strong>GitHub 仓库</strong></td><td><a href="https://github.com/diegosouzapw/OmniRoute">diegosouzapw/OmniRoute</a></td></tr>
+  <tr><td><strong>作者</strong></td><td>diegosouzapw（500+ 贡献者）</td></tr>
+  <tr><td><strong>License</strong></td><td>MIT</td></tr>
+  <tr><td><strong>Stars</strong></td><td>23.6k（2026-07-20）</td></tr>
+  <tr><td><strong>Forks</strong></td><td>3.2k</td></tr>
+  <tr><td><strong>官网</strong></td><td>omniroute.online / omnirouter.afina-ai.site</td></tr>
+  <tr><td><strong>支持工具</strong></td><td>Claude Code, Codex, Cursor, Cline, Copilot, Antigravity, OpenCode 等 16+ coding agent</td></tr>
+</table>
+
+<h2>二、核心能力</h2>
+
+<table>
+  <tr><th style="width:30%">能力</th><th>详情</th></tr>
+  <tr><td><strong>支持提供商</strong></td><td><strong>268+</strong>（含 50+ 免费 tier，11 个永久免费）</td></tr>
+  <tr><td><strong>支持模型</strong></td><td>500+</td></tr>
+  <tr><td><strong>OpenAI 兼容端点</strong></td><td>✅ OpenAI ↔ Claude ↔ Gemini ↔ Responses API 转换</td></tr>
+  <tr><td><strong>路由策略</strong></td><td><strong>17-18 种</strong>（成本优先/速度优先/质量优先/负载均衡/失败回退）</td></tr>
+  <tr><td><strong>回退引擎</strong></td><td>4-tier 自动回退</td></tr>
+  <tr><td><strong>Token 压缩</strong></td><td>RTK + Caveman，10-engine pipeline，<strong>节省 15-95%</strong></td></tr>
+  <tr><td><strong>MCP Server</strong></td><td>内置 95+ 工具</td></tr>
+  <tr><td><strong>A2A 协议</strong></td><td>支持 Agent-to-Agent</td></tr>
+  <tr><td><strong>数据安全</strong></td><td><strong>100% 本地运行</strong></td></tr>
+</table>
+
+<h2>三、免费 Token 预算（核心差异化）</h2>
+
+<table>
+  <thead>
+    <tr><th>指标</th><th>Tokens/月</th><th>含义</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>文档化常规 grant</strong></td><td><strong>~1.54B</strong></td><td>免费 tier pool 总和，每池计数一次</td></tr>
+    <tr><td>+ 首月注册赠送</td><td>~2.15B</td><td>Together $25 / Z.AI 20M / DeepSeek 5M 等，首月一次性</td></tr>
+    <tr><td>+ 永久免费无 cap</td><td>不可量化</td><td>SiliconFlow / Z.AI GLM-Flash / 腾讯 / 百度 / Kilo / OpenCode Zen</td></tr>
+    <tr><td>+ 充值激励</td><td>+24M</td><td>OpenRouter $10 充值后 50→1000 req/day</td></tr>
+    <tr><td>理论上限</td><td>~10B</td><td>所有 rate limit 24/7 推算</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-good">
+<strong>诚实标题</strong>：OmniRoute 聚合 <strong>~1.54B tokens/月</strong>（首月含赠送约 2.15B），覆盖 40+ 免费 tier pool——加上永久免费、无 cap 的长尾 provider。
+<br><strong>RTK + Caveman 压缩（15-95% token 节省）</strong>让 token 预算进一步放大。
+</div>
+
+<h2>四、11 个永久免费 Provider</h2>
+
+<table>
+  <thead>
+    <tr><th>#</th><th>Provider</th><th>类型</th><th>备注</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Kiro</strong></td><td>订阅/免费层</td><td>CLI AI 编程工具</td></tr>
+    <tr><td>2</td><td><strong>Qoder</strong></td><td>订阅/免费层</td><td>CLI AI 编程工具</td></tr>
+    <tr><td>3</td><td><strong>Pollinations</strong></td><td>永久免费</td><td>图像生成 + 文本生成</td></tr>
+    <tr><td>4</td><td><strong>LongCat</strong></td><td>永久免费</td><td>长文本 LLM</td></tr>
+    <tr><td>5</td><td><strong>SiliconFlow</strong></td><td>无 cap</td><td>硅基流动（国内）</td></tr>
+    <tr><td>6</td><td><strong>Z.AI GLM-Flash</strong></td><td>无 cap</td><td>智谱 GLM-4-Flash（国内）</td></tr>
+    <tr><td>7</td><td><strong>OpenRouter</strong></td><td>部分免费</td><td>$10 充值解锁</td></tr>
+    <tr><td>8</td><td><strong>Cloudflare AI</strong></td><td>无 cap</td><td>Workers AI</td></tr>
+    <tr><td>9</td><td><strong>Scaleway</strong></td><td>部分免费</td><td>欧洲云</td></tr>
+    <tr><td>10</td><td><strong>Groq</strong></td><td>免费层</td><td>超快推理</td></tr>
+    <tr><td>11</td><td><strong>NVIDIA NIM</strong></td><td>免费层</td><td>NVIDIA 推理微服务</td></tr>
+    <tr><td>12</td><td><strong>Cerebras</strong></td><td>免费层</td><td>超大模型推理</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-warn">
+<strong>注意</strong>：永久免费 ≠ 无限量。多数有 RPM（每分钟请求数）和并发限制。最近一次免费 tier refresh 是 <strong>2026-06-17</strong>（50-agent 验证）。
+</div>
+
+<h2>五、安装方式</h2>
+
+<pre>
+# 1. 安装 CLI
+npm install -g omniroute    # Node.js 版
+# 或 pip install omniroute  # Python 版
+
+# 2. 一键配置（可脚本化）
+omniroute setup --non-interactive
+
+# 3. 测试连接
+omniroute providers test-batch
+
+# 4. 用本地端点替代原 API
+# Base URL: http://localhost:&lt;port&gt;/v1
+# API Key: 你设置的 INITIAL_PASSWORD
+
+# 5. 配置 Claude Code
+omniroute configure codex
+</pre>
+
+<p>关键环境变量：</p>
+<ul>
+  <li><code>INITIAL_PASSWORD</code> — 初始密码</li>
+  <li><code>OMNIROUTE_BASE_PATH</code> — 反向代理路径</li>
+  <li><code>OMNIROUTE_WS_BRIDGE_SECRET</code> — WebSocket 桥密钥</li>
+  <li><code>OMNIROUTE_NO_SUDO</code> — root-less 模式</li>
+</ul>
+
+<h2>六、对比 LiteLLM / OpenRouter / Portkey</h2>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th><strong>OmniRoute</strong></th><th>LiteLLM</th><th>OpenRouter</th><th>Portkey</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>License</td><td><strong>MIT</strong></td><td>MIT</td><td>商业（SaaS）</td><td>商业（SaaS）</td></tr>
+    <tr><td>部署</td><td>本地</td><td>本地</td><td>云端</td><td>云端</td></tr>
+    <tr><td>数据隐私</td><td><strong>100% 本地</strong></td><td>本地</td><td>云端</td><td>云端</td></tr>
+    <tr><td>提供商数</td><td><strong>268+</strong></td><td>100+</td><td>50+</td><td>50+</td></tr>
+    <tr><td>免费 tier</td><td><strong>50+ 免费，11 永久</strong></td><td>几乎无</td><td>仅少量</td><td>仅少量</td></tr>
+    <tr><td>免费 Token/月</td><td><strong>~1.54B（聚合）</strong></td><td>—</td><td>—</td><td>—</td></tr>
+    <tr><td>路由策略</td><td><strong>17-18 种</strong></td><td>5+</td><td>5+</td><td>5+</td></tr>
+    <tr><td>Token 压缩</td><td><strong>15-95%</strong></td><td>无</td><td>无</td><td>无</td></tr>
+    <tr><td>MCP 集成</td><td><strong>✅ 95 工具</strong></td><td>❌</td><td>❌</td><td>❌</td></tr>
+    <tr><td>A2A 协议</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+    <tr><td>Stars</td><td>23.6k</td><td>28k+</td><td>—</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-good">
+<strong>核心差异化</strong>：OmniRoute 是<strong>唯一一个既"开源 + 本地"又"支持 268+ provider + 18 路由策略 + Token 压缩 + 免费 tier 聚合"</strong>的方案。
+</div>
+
+<h2>七、典型用法</h2>
+
+<table>
+  <tr><th style="width:35%">场景</th><th>怎么用</th></tr>
+  <tr><td><strong>Claude Code 用 90+ 免费模型</strong></td><td>启动 OmniRoute，Codex/Claude Code 改 baseURL → 本地</td></tr>
+  <tr><td><strong>生产 AI 服务降本</strong></td><td>路由到 cheapest viable model，省 15-95% token</td></tr>
+  <tr><td><strong>多模型 A/B 测试</strong></td><td>流量切分到多个 provider</td></tr>
+  <tr><td><strong>避免 rate limit</strong></td><td>自动回退到备用 provider</td></tr>
+  <tr><td><strong>数据合规</strong></td><td>所有请求不离开本机（金融/医疗场景）</td></tr>
+  <tr><td><strong>个人开发者零成本</strong></td><td>11 个永久免费 provider 够个人日常使用</td></tr>
+</table>
+
+<h2>八、潜在风险（Eight Vows 诚实无知）</h2>
+
+<table>
+  <tr><th style="width:30%">风险</th><th>评估</th><th>说明</th></tr>
+  <tr><td>项目成熟度</td><td>🟡 中</td><td>1 周新增 4.5k stars 太快，需观察稳定性</td></tr>
+  <tr><td>MITM 证书</td><td>🟡 中</td><td>root-less MITM 需要用户信任</td></tr>
+  <tr><td>依赖链路</td><td>🟡 中</td><td>268+ 提供商配置，任一变动需更新</td></tr>
+  <tr><td>安全审计</td><td>🔴 待核实</td><td>没有公开第三方安全审计报告</td></tr>
+  <tr><td>作者主导</td><td>🟢 低</td><td>500+ 贡献者，比单一作者风险低</td></tr>
+  <tr><td>企业支持</td><td>🔴 低</td><td>没有商业支持，全靠社区</td></tr>
+  <tr><td>Amazon Q Developer 退出</td><td>🟡 注</td><td>2026.05.15 停止新注册</td></tr>
+</table>
+
+<h2>九、推荐决策树</h2>
+
+<pre>
+你是否需要免费 LLM 调用？
+├─ 是 → OmniRoute（11 永久免费 + 50+ 免费 tier + ~1.54B tokens/月）
+├─ 否，但想要数据隐私 → OmniRoute 或 LiteLLM
+├─ 否，但需要企业 SLA → Portkey / Tetrate / Cloudflare
+└─ 否，只用单 provider → 直接用，无需 gateway
+</pre>
+
+<h2>十、待核实事项（Eight Vows 第 7 条）</h2>
+
+| 待核实 | 原因 |
+|---|---|
+| **真实安全审计** | 公开信息中未找到独立安全报告 |
+| **"永不联网"的边界** | README 措辞需细读——CLI 启动时是否检查更新？ |
+| **提供商列表稳定性** | 268 个 provider 中很多可能失效 |
+| **企业场景 SLA** | 无官方 SLA 承诺 |
+| **与 Hermes Agent 集成** | 没找到现成插件 |
+
+<h2>十一、给腾讯出行 / AI for CAE 的判断</h2>
+
+<div class="panel">
+<table>
+  <tr><th style="width:35%">业务</th><th>OmniRoute 是否有用</th></tr>
+  <tr><td>用 Claude Code / Hermes 节省成本</td><td>✅ 路由到 Kimi/DeepSeek 免费 tier</td></tr>
+  <tr><td>避免 rate limit</td><td>✅ 多 provider 自动回退</td></tr>
+  <tr><td>数据隐私</td><td>✅ 本地部署</td></tr>
+  <tr><td>多模型路由</td><td>✅ 17 种路由策略</td></tr>
+  <tr><td>AI for CAE 业务</td><td>⚠️ 看具体场景——CAE 通常需要特定模型</td></tr>
+  <tr><td>个人学习零成本</td><td>✅ 11 永久免费 provider 够用</td></tr>
+</table>
+</div>
+
+<div class="lead">
+<strong>个人/团队试用结论</strong>：值得装来跑 Claude Code / Cursor 日常开发。<br>
+<strong>企业生产结论</strong>：再观察 1-3 个月，等独立安全审计 + 商业支持出现。
+</div>
+
+<div class="sources">
+<strong>8 个独立数据来源（≥3 已交叉验证）：</strong>
+<ul>
+  <li>GitHub diegosouzapw/OmniRoute（一手）</li>
+  <li>GitHub FREE_TIERS.md 官方文档（一手）</li>
+  <li>omniroute.online 官网（一手）</li>
+  <li>pyshine OmniRoute Review（2026.07.07）</li>
+  <li>rohitraj.tech OmniRoute 2026 Review</li>
+  <li>andrew.ooo OmniRoute 231 Providers Review</li>
+  <li>compsmag vs OpenRouter vs LiteLLM 2026</li>
+  <li>binary warehouse OmniRoute combo strategy（2026.07.04）</li>
+</ul>
+</div>
+
+<div class="footer">
+<span class="tag">OmniRoute</span><span class="tag">AI Gateway</span><span class="tag">开源</span><span class="tag">免费 LLM</span><span class="tag">MIT</span><span class="tag">本地部署</span>
+<br><br>
+整理：纪多斌 · Hermes Agent · 2026-07-20
+</div>
+
+</div>
+</body>
+</html>
