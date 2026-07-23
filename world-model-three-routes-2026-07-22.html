@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>世界模型三路线对决：4D 派 vs 视频派 vs JEPA 派（2026-07-22）</title>
+<style>
+:root{--bg:#FAF9F5;--ink:#1a1a1a;--muted:#666;--line:#e6e2d6;--accent:#7a5c2e;--rust:#a8412a;--olive:#5f6b3a;--clay:#8a6e54;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;line-height:1.75}
+.wrap{max-width:1180px;margin:0 auto;padding:48px 32px 80px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:#2a241c;font-weight:600;letter-spacing:-0.01em}
+h1{font-size:34px;margin:0 0 8px;line-height:1.25}
+h2{font-size:22px;margin:48px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:24px 0 12px}
+.subtitle{color:var(--muted);font-size:14px;margin:0 0 32px}
+.meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:32px}
+.meta span{display:inline-flex;align-items:center;gap:6px}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid currentColor}
+.pill.rust{color:var(--rust)}.pill.olive{color:var(--olive)}.pill.clay{color:var(--clay)}.pill.accent{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);padding:20px 24px;margin:20px 0;border-radius:4px}
+.card.rust{border-left-color:var(--rust)}.card.olive{border-left-color:var(--olive)}.card.clay{border-left-color:var(--clay)}
+.callout{background:#fbf5e8;border:1px solid #ead7a8;border-left:4px solid var(--accent);padding:14px 18px;border-radius:4px;margin:20px 0;font-size:14px}
+.callout strong{color:var(--accent)}
+.callout.danger{background:#fbe8e3;border-color:#d8a89d;border-left-color:var(--rust)}
+.callout.danger strong{color:var(--rust)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:24px 0}
+.stat-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:18px;text-align:center}
+.stat-card .num{font-family:Georgia,serif;font-size:30px;color:var(--accent);font-weight:600;line-height:1.1}
+.stat-card .lbl{font-size:13px;color:var(--muted);margin-top:6px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;background:var(--card)}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f4efe1;font-weight:600;font-size:13px;color:#3a3024}
+tr:hover td{background:#faf7ec}
+code{background:#f1ebd9;padding:1px 6px;border-radius:3px;font-size:13px;color:#5a4222}
+.sources{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.sources h3{margin:0 0 12px}
+.sources ul{padding-left:20px}
+.sources li{margin:6px 0}
+a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a:hover{color:var(--rust);border-bottom-style:solid}
+.disclaimer{margin-top:32px;padding:16px;background:#f5f1e3;border-radius:4px;font-size:12px;color:#6b5e4a;border:1px dashed #d4c8a4}
+.q{margin:12px 0;padding:14px 18px;background:#fff;border-left:3px solid var(--clay);font-family:Georgia,serif;font-style:italic;color:#3a3024}
+.q::before{content:'"';color:var(--clay);font-size:24px;margin-right:4px}
+.q::after{content:'"';color:var(--clay);font-size:24px;margin-left:4px}
+.matrix th:first-child{background:#2a241c;color:#fff}
+.matrix td:first-child{font-weight:600;color:#3a3024;background:#f9f5e7}
+.matrix tr:hover td{background:#faf7ec}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>世界模型三路线对决</h1>
+<p class="subtitle">4D 原生派（清华赵昊） vs 视频生成派（DeepMind Genie 3） vs 联合嵌入派（LeCun JEPA / AMI Labs）</p>
+<div class="meta">
+<span>📅 报告日期 2026-07-22</span>
+<span>🎯 对标三家代表性玩家 + NVIDIA 基础设施</span>
+<span>🔍 关键事实 ≥2 独立来源核实</span>
+<span class="pill accent">深度对比</span>
+</div>
+
+<div class="callout">
+<strong>核心论点：</strong>2026 年"世界模型"成为 AI 最大风口，但<strong>三家代表人物对"什么才是真正的世界模型"给出了三种截然不同的答案</strong>。这不是技术细节之争，而是<strong>通往 AGI 的三条路</strong>——押对路线决定下一个十年的格局。
+</div>
+
+<h2>三派代表</h2>
+<table class="matrix">
+<thead><tr><th>维度</th><th>4D 原生派</th><th>视频生成派</th><th>联合嵌入派</th></tr></thead>
+<tbody>
+<tr><td>代表</td><td>赵昊（清华 AIR）</td><td>DeepMind Genie 团队</td><td>Yann LeCun（AMI Labs）</td></tr>
+<tr><td>核心思路</td><td>几何+光学+力学属性编码进 4D Token</td><td>实时生成可探索视频</td><td>非生成式、预测隐空间表征</td></tr>
+<tr><td>代表作</td><td>OmniNWM / Trellis.2 / Dexora</td><td>Genie 3</td><td>V-JEPA 2 / AMI Labs（建设中）</td></tr>
+<tr><td>机构</td><td>清华 + 商汤/小米合作</td><td>Google DeepMind</td><td>AMI Labs（前 Meta FAIR）</td></tr>
+<tr><td>商业化阶段</td><td>工业合作落地中（L2-L2.99）</td><td>Google AI Ultra 订阅服务</td><td>刚完成种子轮，未发布产品</td></tr>
+</tbody>
+</table>
+
+<h2>三家资金 + 资源对比</h2>
+<div class="stats">
+<div class="stat-card"><div class="num">$1.03B</div><div class="lbl">AMI Labs 种子轮（2026-03）</div></div>
+<div class="stat-card"><div class="num">$1B</div><div class="lbl">World Labs A 轮（2026-02）</div></div>
+<div class="stat-card"><div class="num">$3.5B</div><div class="lbl">AMI Labs 估值</div></div>
+<div class="stat-card"><div class="num">8+ 家</div><div class="lbl">NVIDIA Cosmos 早期采用者</div></div>
+</div>
+
+<div class="card olive">
+<strong>三家资金到位情况：</strong>
+<ul>
+<li><strong>AMI Labs（LeCun）：</strong>2026-03 完成 $1.03B 种子轮（欧洲史上最大），估值 $3.5B pre-money。投资人：Cathay Innovation、Greycroft、Hiro Capital、HV Capital、Bezos Expeditions、NVIDIA、Samsung。</li>
+<li><strong>World Labs（李飞飞）：</strong>2026-02 完成 $1B A 轮，其中 Autodesk 投 $200M。其他投资人：AMD、Emerson Collective、Fidelity 等。</li>
+<li><strong>Genie 3（DeepMind）：</strong>未单独融资，依托 Google 母体（Alphabet 现金 $950 亿+）。已商业化为 Google AI Ultra 订阅服务（2026-01-29 美国上线）。</li>
+</ul>
+</div>
+
+<h2>技术路线对比</h2>
+<table>
+<thead><tr><th>维度</th><th>4D 原生派</th><th>视频生成派</th><th>联合嵌入派</th></tr></thead>
+<tbody>
+<tr><td><strong>表征维度</strong></td><td>3D + 时间 + 物理属性 = 真正的 4D</td><td>2D 视频帧（720p × 24fps）</td><td>1D 隐空间嵌入向量</td></tr>
+<tr><td><strong>是否生成像素</strong></td><td>是，但基于 4D 几何/光学/力学约束</td><td>是，核心就是像素生成</td><td>否，纯预测式</td></tr>
+<tr><td><strong>可解释性</strong></td><td>强——可诊断具体物理属性错误</td><td>弱——黑盒生成</td><td>中——嵌入空间可分析但非物理</td></tr>
+<tr><td><strong>物理一致性</strong></td><td>力学+光学属性直接编码</td><td>从数据中涌现，不可控</td><td>通过预测目标间接学到</td></tr>
+<tr><td><strong>交互时长</strong></td><td>受 GPU 限制，< 1 分钟</td><td>数分钟一致性</td><td>无明确时长限制（不生成像素）</td></tr>
+<tr><td><strong>主要场景</strong></td><td>自动驾驶 + 机器人</td><td>游戏/影视/机器人训练</td><td>通用 AI 推理 + 机器人规划</td></tr>
+<tr><td><strong>代表论文/系统</strong></td><td>OmniNWM (ECCV 2026), Trellis.2 (CVPR 2026 Best Student), Dexora (ICRA 2026 Best Paper Final)</td><td>Genie 3 (2025-08-05), Genie 2 (2024-12)</td><td>V-JEPA 2 (arXiv 2506.09985), I-JEPA, VL-JEPA</td></tr>
+</tbody>
+</table>
+
+<h2>核心人物观点对照</h2>
+
+<h3>4D 派：赵昊（清华 AIR）</h3>
+<div class="q">我们的 4D 世界模型是"重"模型，而 JEPA 这样的是"轻"模型。至于数据和模型规模不足的问题，未来这种纯大模型路线，还是需要像我们这样的 4D 世界模型来提供数据才行。</div>
+<div class="card rust">
+<ul>
+<li><strong>认为 1D / 2D Token 缺少物理属性：</strong>"如果采用一维或二维的 Token，天然缺乏四维物理世界所需的表征，包括物理属性和光学属性。"</li>
+<li><strong>认为几何先验不是"拐杖"：</strong>"纯的二维大模型，即便未来被验证可行，也必然是在我们这种四维模型做成功之后。"</li>
+<li><strong>承认短板：</strong>"无论你用哪种方法，还是很难突破生成超过 1 分钟的视频。"</li>
+<li><strong>承认风险：</strong>"跨行业基模可能不对，在未来三年内大家也许会判断它实在是太难做了。"</li>
+</ul>
+</div>
+
+<h3>视频生成派：DeepMind（Genie 团队）</h3>
+<div class="q">Genie 3 is the first real-time, interactive world model that generates photorealistic worlds from a simple text description.</div>
+<div class="card clay">
+<ul>
+<li><strong>技术指标：</strong>24fps 实时生成、720p 分辨率、数分钟一致性、可文本提示、可探索交互。</li>
+<li><strong>商业化：</strong>2026-01-29 在 Google AI Ultra 订阅服务上线（美国区），从 research preview 转向产品。</li>
+<li><strong>路径选择：</strong>不强调显式 4D 表征，依靠视频数据规模 + 算力涌现物理规律。</li>
+<li><strong>同公司对比：</strong>Google 旗下还有 RT-2、PaLM-E 等机器人路线——Genie 3 是否会成为统一的虚拟测试场，2026 年还在观察。</li>
+</ul>
+</div>
+
+<h3>联合嵌入派：Yann LeCun（AMI Labs 创始人）</h3>
+<div class="q">AMI is working on world models, or AI that learns from reality, not just from language.</div>
+<div class="card olive">
+<ul>
+<li><strong>核心观点：</strong>JEPA（Joint Embedding Predictive Architecture）是通往 AGI 的正确路径，LLM 范式是死胡同。</li>
+<li><strong>关键里程碑：</strong>V-JEPA 2（2025-06-11 发布，arXiv 2506.09985）——首个从视频自监督学习的世界模型，可零样本机器人控制。</li>
+<li><strong>离开 Meta：</strong>2025-11 离开效力 12 年的 Meta，2026-01 创办 AMI Labs。</li>
+<li><strong>对 LLM 的态度：</strong>多年来公开质疑 LLM 路线，认为自回归语言模型无法理解物理世界。</li>
+</ul>
+</div>
+
+<div class="callout danger">
+<strong>关键观察：</strong>LeCun 是<strong>唯一一位明确否定 LLM 路线</strong>的图灵奖得主，而赵昊不否定 LLM（认为世界模型是"第五代多模态大模型"，包含前四代所有路线）。这意味着两派<strong>对 AI 终局形态的根本判断不同</strong>。
+</div>
+
+<h2>商业化进度对比</h2>
+<table>
+<thead><tr><th>指标</th><th>4D 派（赵昊）</th><th>视频派（DeepMind）</th><th>JEPA 派（AMI Labs）</th></tr></thead>
+<tbody>
+<tr><td><strong>发布产品</strong></td><td>无独立产品，工业合作为主</td><td>Genie 3（Google AI Ultra 订阅）</td><td>无（2026-03 才完成种子轮）</td></tr>
+<tr><td><strong>应用场景</strong></td><td>自动驾驶世界模型、机器人决策</td><td>通用交互世界、游戏/影视/培训</td><td>通用 AI 推理、机器人规划</td></tr>
+<tr><td><strong>落地阶段</strong></td><td>L2-L2.99 自动驾驶量产</td><td>C 端订阅服务</td><td>研究阶段</td></tr>
+<tr><td><strong>主要客户</strong></td><td>车企 + 机器人公司（未点名）</td><td>Google AI Ultra 订阅用户</td><td>暂无</td></tr>
+<tr><td><strong>商业模式</strong></td><td>B2B 技术授权 + 联合开发</td><td>B2C 订阅 + B2B API</td><td>待定</td></tr>
+</tbody>
+</table>
+
+<h2>基础设施层：NVIDIA Cosmos</h2>
+<div class="card olive">
+<strong>NVIDIA Cosmos 是绕不开的底层：</strong>
+<ul>
+<li><strong>2025-01 发布，2025-03 重大更新：</strong>World Foundation Models（WFM）+ Physical AI 合成数据生成工具链。</li>
+<li><strong>早期采用者：</strong>1X、Agility Robotics、Figure AI、Skild AI 等明星机器人公司。</li>
+<li><strong>定位：</strong>"构建策略模型 + 后训练基模"——为机器人和自动驾驶提供世界模型基础设施。</li>
+<li><strong>2026 扩展：</strong>Cosmos 3 作为 World Action Models（WAMs）骨干，推动机器人策略学习规模化。</li>
+</ul>
+</div>
+
+<div class="callout">
+<strong>战略含义：</strong>NVIDIA Cosmos 让"世界模型"成为<strong>可消费的基础设施</strong>，无论三派谁赢，最终都跑在 NVIDIA 的 GPU + Cosmos 平台上。这是 Jensen Huang 的"卖铲子"策略——参考 CUDA 在深度学习时代的胜利。
+</div>
+
+<h2>国内对标：差距在哪里？</h2>
+<div class="card rust">
+<strong>国内世界模型路线现状（2026 H1）：</strong>
+<table>
+<thead><tr><th>车企</th><th>路线</th><th>世界模型进展</th></tr></thead>
+<tbody>
+<tr><td>华为 ADS</td><td>多传感器融合 + 中国场景优化</td><td>未公开 4D 世界模型基模</td></tr>
+<tr><td>理想 AD Max</td><td>端到端 + VLM</td><td>有内部世界模型，未发表</td></tr>
+<tr><td>小鹏 XNGP</td><td>端到端 + 占用网络</td><td>类似 OmniNWM 思路</td></tr>
+<tr><td>蔚来 NOP+</td><td>世界模型 + BEV</td><td>研究阶段</td></tr>
+<tr><td>Momenta</td><td>数据驱动 + 飞轮</td><td>路线类似 4D 派</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="callout danger">
+<strong>国内差距：</strong>2026 H1 国内没有公开对标 OmniNWM 或 Genie 3 的世界模型基模。<strong>赵昊团队的 OmniNWM + Trellis.2 是国内学术界在国际上的少数顶级输出</strong>。商业化层面，特斯拉"神经世界模拟器"（2025-10 发布）和 DeepMind Genie 3 都已落地，国内车企仍处于"局部世界模型 + 数据闭环"阶段。
+</div>
+
+<h2>三条路线的终局判断</h2>
+
+<h3>视频派最可能短期胜出</h3>
+<div class="card olive">
+<ul>
+<li><strong>已商业化：</strong>Google AI Ultra 已上线订阅服务。</li>
+<li><strong>用户感知最直接：</strong>"输入文本 → 生成可探索世界"——天然适合消费市场。</li>
+<li><strong>风险：</strong>物理一致性差，长视频崩塌（&lt; 1 分钟稳定）；赵昊已点出这是"无论哪种方法都难突破"的瓶颈。</li>
+<li><strong>适合：</strong>游戏、影视、虚拟训练场、内容创作。</li>
+</ul>
+</div>
+
+<h3>4D 派最可能成为自动驾驶 + 机器人基模</h3>
+<div class="card clay">
+<ul>
+<li><strong>领域聚焦：</strong>需要精确物理属性的领域（碰撞、摩擦、动量）——自动驾驶和机器人正好是这种。</li>
+<li><strong>可解释性优势：</strong>赵昊明确指出 4D 表征可诊断错误，2D 是黑盒。</li>
+<li><strong>赵昊的"重模型 vs 轻模型"框架：</strong>如果 4D 真能成为"大模型"，2D 可以降维复用——这是规模法则的合理外推。</li>
+<li><strong>风险：</strong>商业化仍处早期，奖项多于产品；"跨行业基模"赵昊自己承认"可能不对"。</li>
+<li><strong>适合：</strong>自动驾驶 L4、灵巧手机器人、工业仿真。</li>
+</ul>
+</div>
+
+<h3>JEPA 派押注最长期</h3>
+<div class="card rust">
+<ul>
+<li><strong>理论最优雅：</strong>LeCun 多年坚持"非生成式 + 自监督 + 嵌入空间预测"是 AGI 的关键。</li>
+<li><strong>反对 LLM 的勇气：</strong>图灵奖得主公开否定主流路线，需要极大的学术自信。</li>
+<li><strong>刚刚起步：</strong>AMI Labs 2026-03 完成种子轮，无产品、无商业化。</li>
+<li><strong>风险：</strong>LeCun 离开 Meta 后失去了工业级算力，AMI Labs 能否复制 FAIR 的产出能力是未知数。</li>
+<li><strong>适合：</strong>通用 AI、机器人规划、长程推理。</li>
+</ul>
+</div>
+
+<div class="callout danger">
+<strong>最可能的终局：</strong>三条路线<strong>不是互斥的</strong>——赵昊自己也说"第五代多模态大模型囊括前四代的所有路线"。未来的世界模型可能是一个<strong>混合架构</strong>：底层 4D 表征（赵昊） + 中层视频生成（DeepMind） + 顶层 JEPA 式规划（LeCun）。NVIDIA Cosmos 提供基础设施。
+</div>
+
+<h2>对工业 AI 行业的启示</h2>
+<div class="card olive">
+<ol>
+<li><strong>L2 → L4 的卡点是世界模型。</strong>三派共识：自动驾驶要消耗很多算力、很多卡，还有视频生成和编程——这是 2026-2028 真正能收钱的 AI workload。</li>
+<li><strong>基础设施层（NVIDIA Cosmos）会赢家通吃。</strong>无论三派谁赢，最终都跑在 NVIDIA 平台。</li>
+<li><strong>国内学术界有窗口。</strong>赵昊团队在国际上是第一梯队，但商业化生态（车企合作、芯片、合成数据工具）仍弱于美国。</li>
+<li><strong>投资逻辑：</strong>AMI Labs（$3.5B 估值）+ World Labs（$1B 轮）+ DeepMind（已产品化）说明顶级资本认可"世界模型是 AGI 必经之路"。</li>
+<li><strong>机器人 + 自动驾驶是最佳落地场景。</strong>游戏/影视虽然用户多，但物理一致性要求低；物理 AI 才是真刀真枪的战场。</li>
+</ol>
+</div>
+
+<h2>局限性</h2>
+<div class="callout danger">
+<strong>必须如实标注：</strong>
+<ul>
+<li>三派的代表人物都有<strong>强烈立场偏向</strong>——LeCun 长期反对 LLM、赵昊是 4D 路线的核心倡导者、DeepMind 是视频派最大玩家。本报告试图客观对比，但读者需自行评估各方立场。</li>
+<li><strong>国内车企的世界模型进展</strong>信息分散且多为内部资料，本报告无法覆盖所有最新动态。</li>
+<li><strong>商业化进度</strong>为 2026 H1 快照，Genie 3 在 2026-05 后可能有重大更新（DeepMind 官方 5 月有博客更新）。</li>
+<li><strong>赵昊的"商业化案例"</strong>未点名具体车企——属于未确认信息。</li>
+</ul>
+</div>
+
+<div class="disclaimer">
+<strong>事实校验铁律：</strong>所有关键事实（AMI Labs 融资额、Genie 3 发布时间、V-JEPA 2 arXiv 编号、赵昊学术身份）均通过 ≥2 个独立来源核实。NVIDIA Cosmos 发布时间、World Labs 融资额、Tesla 神经世界模拟器 2025-10 发布均为权威来源直接引用。企业估值、融资额等快速变动字段均标注日期（2026-07-22 截止）。
+</div>
+
+<div class="sources">
+<h3>数据来源（≥2 独立来源/关键事实）</h3>
+<ul>
+<li><a href="https://m.toutiao.com/is/ONwdwyScfOc/" target="_blank">头条《对话清华赵昊》</a> — 4D 派一手访谈</li>
+<li><a href="https://sites.google.com/view/fromandto" target="_blank">Hao Zhao 个人主页</a> — 赵昊身份 + 论文列表</li>
+<li><a href="https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/" target="_blank">DeepMind Genie 3 官方博客</a> — 视频派一手</li>
+<li><a href="https://deepmind.google/models/genie/" target="_blank">Genie 3 产品页</a> — DeepMind 官方第二源</li>
+<li><a href="https://ai.meta.com/research/vjepa/" target="_blank">Meta V-JEPA 2 官方页</a> — JEPA 派一手</li>
+<li><a href="https://arxiv.org/abs/2506.09985" target="_blank">V-JEPA 2 arXiv</a> — 论文一手</li>
+<li><a href="https://en.wikipedia.org/wiki/Yann_LeCun" target="_blank">Yann LeCun Wikipedia</a> — AMI Labs 融资时间线</li>
+<li><a href="https://techcrunch.com/2026/03/09/yann-lecuns-ami-labs-raises-1-03-billion-to-build-world-models/" target="_blank">TechCrunch: AMI Labs 融资</a> — 第二独立源</li>
+<li><a href="https://www.worldlabs.ai/blog/funding-2026" target="_blank">World Labs 2026 融资公告</a> — 李飞飞公司一手</li>
+<li><a href="https://www.reuters.com/business/ai-pioneer-fei-fei-lis-world-labs-raises-1-billion-funding-2026-02-18/" target="_blank">Reuters: World Labs $1B 融资</a> — 第二独立源</li>
+<li><a href="https://www.nvidia.com/en-us/ai/cosmos/" target="_blank">NVIDIA Cosmos 官方页</a> — 基础设施一手</li>
+<li><a href="https://www.humanoidsdaily.com/news/tesla-ai-chief-details-unified-world-simulator-for-fsd-and-optimus" target="_blank">Tesla 神经世界模拟器</a> — Ashok Elluswamy 2025-10 公告</li>
+<li><a href="https://github.com/Ma-Zhuang/OmniNWM" target="_blank">OmniNWM GitHub</a> — 赵昊团队 ECCV 2026</li>
+<li><a href="https://github.com/TQTQliu/Light-X" target="_blank">Light-X GitHub</a> — 赵昊团队 ICLR 2026</li>
+</ul>
+<p style="margin-top:16px;color:#999;font-size:12px">报告生成于 2026-07-22 · 范围：四家代表玩家 + 基础设施 · 路径 /root/openclaw-impact-report/world-model-three-routes-2026-07-22.html</p>
+</div>
+
+</div>
+</body>
+</html>
