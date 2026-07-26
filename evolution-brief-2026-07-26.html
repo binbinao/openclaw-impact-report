@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 · 第 60 期 · 2026-07-26</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+  }
+  .badge-green { background: #132e1e; color: var(--green); border: 1px solid #1a4a2a; }
+  .badge-yellow { background: #2e250e; color: var(--yellow); border: 1px solid #4a3a14; }
+  .badge-red { background: #2e1313; color: var(--red); border: 1px solid #4a1a1a; }
+  .badge-purple { background: #1e1330; color: var(--purple); border: 1px solid #2e1a4a; }
+  .badge-blue { background: #0e2e4a; color: var(--accent); border: 1px solid #1a4a6a; }
+  .badge-pink { background: #2e0e1e; color: var(--pink); border: 1px solid #4a1a2e; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+  .stat .delta { font-size: 0.75em; margin-top: 2px; }
+  .delta.up { color: var(--red); }
+  .delta.down { color: var(--green); }
+  .delta.flat { color: var(--text2); }
+  .delta.warn { color: var(--yellow); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .alert-box {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 0.9em;
+    border-left: 4px solid;
+  }
+  .alert-box.red { background: #2e1313; border-color: var(--red); }
+  .alert-box.green { background: #132e1e; border-color: var(--green); }
+  .alert-box.yellow { background: #2e250e; border-color: var(--yellow); }
+  .alert-box.blue { background: #0e2e4a; border-color: var(--accent); }
+  .alert-box.purple { background: #1e1330; border-color: var(--purple); }
+  .alert-box.pink { background: #2e0e1e; border-color: var(--pink); }
+
+  .paper-item, .story-item {
+    padding: 10px 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 6px;
+    font-size: 0.88em;
+  }
+  .paper-item a, .story-item a { color: var(--accent); text-decoration: none; }
+  .paper-item a:hover, .story-item a:hover { text-decoration: underline; }
+  .paper-item .meta, .story-item .meta { color: var(--text2); font-size: 0.85em; margin-top: 4px; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+  .tag-high { background: #2e1313; color: var(--red); }
+  .tag-medium { background: #2e250e; color: var(--yellow); }
+  .tag-low { background: #0e2e1a; color: var(--green); }
+
+  .progress-bar { background: #21262d; border-radius: 8px; height: 20px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; border-radius: 8px; text-align: right; padding-right: 8px; line-height: 20px; font-size: 0.75em; color: #000; font-weight: 600; }
+
+  .section-divider { text-align: center; padding: 20px 0; color: var(--text2); font-size: 0.85em; }
+
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    body { padding: 16px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🧬 进化简报 · 第 60 期</h1>
+  <div class="subtitle">Hermes 自进化系统 · 感知 → 诊断 → 学习 → 进化</div>
+  <div>
+    <span class="period-badge badge-blue">📅 2026-07-26</span>
+    <span class="period-badge badge-purple">🔬 第 60 期</span>
+    <span class="period-badge badge-pink">⏰ 01:00 UTC</span>
+    <span class="period-badge badge-green">🎯 60 期里程碑</span>
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="card">
+  <h2>📋 本期摘要</h2>
+  <div class="alert-box blue">
+    <strong>P60 核心特征：</strong>尾窗洪水占比从 97.6%（P59）降至 <strong>89.2%</strong>（↓-8.4pp），1-3-5 振荡模式进入新一轮低点（P59 高→P60 低）。非洪水尾窗从 12 条释放至 <strong>54 条</strong>（↑+350%），压缩效应大幅缓解。tools.approval 29 条（5.8%）和 api_server 15 条（3.0%）成为非洪水主体。<strong>工具数突破 34 ↑+2</strong>（自 P42 以来首次增长！），技能 67 稳定。PID 3433647 续写纪录至 <strong>第 20 期</strong>（19 天连续运行）。<strong>arXiv 失败</strong>——25/60=41.7%。弱点 0 检出——碎片化盲区第 23 期连续。
+  </div>
+  <div class="alert-box yellow">
+    <strong>⚠️ 关键信号：</strong>1-3-5 振荡低点确认（97.6%→89.2%）。P58 的 94.4% 低点被 P59 的 97.6% 反弹覆盖，P60 的 89.2% 是首个低于 P58 低点的采样——振荡幅度扩大（从 ~3pp 至 ~8pp）。<strong>工具数 34 是自 P42 以来首次增长</strong>（从 32 稳定 18 期后跃升），新增工具包括 xai_video、yuanbao 等。非洪水 54 条显示压缩解除后的真实水平——25-35 基线区间在此窗口下有效（54 条略高于区间上限，主要受 tools.approval 29 条驱动）。
+  </div>
+</div>
+
+<!-- Capability Status -->
+<div class="card">
+  <h2>📊 能力状态</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--green)">34</div>
+      <div class="label">可用工具</div>
+      <div class="delta up">↑ +2 首增</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">67</div>
+      <div class="label">技能总数</div>
+      <div class="delta flat">12 活跃 · 55 过期</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--purple)">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="delta flat">816 / 2,200 字符</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--pink)">16%</div>
+      <div class="label">User 使用率</div>
+      <div class="delta flat">231 / 1,400 字符</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="delta flat">2 活跃 · 0 暂停</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">500</div>
+      <div class="label">日志文件尾窗</div>
+      <div class="delta flat">238 ERROR · 262 WARNING</div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px;font-size:0.9em;color:var(--text2);">
+    <strong>技能状态：</strong>12 活跃 + 55 过期（stale）。3 由 agent 创建。内存使用率健康。<strong>工具数 34 ↑+2</strong>——自 P42（07-08）的 32→32 稳定 18 期后首次增长。新增工具包括 xai_video_tools、yuanbao_tools 等。技能数 67 连续 8 期稳定。日志文件仅含 07-26 当日数据（滚转后新基线）。
+  </div>
+</div>
+
+<!-- Weakness Alert -->
+<div class="card">
+  <h2>⚠️ 弱点诊断</h2>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">弱点检出</div>
+      <div class="delta flat">连续 23 期盲区</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange)">446</div>
+      <div class="label">gateway 合计</div>
+      <div class="delta down">↓ 89.2% 尾窗</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">54</div>
+      <div class="label">非洪水尾窗</div>
+      <div class="delta up">↑ +350% 释放</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">29</div>
+      <div class="label">tools.approval</div>
+      <div class="delta warn">5.8% 非洪水主导</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">尾窗错误组件分布 (500 行)</h3>
+  <table>
+    <tr><th>组件</th><th>计数</th><th>占比</th><th>趋势</th></tr>
+    <tr>
+      <td>gateway.run</td>
+      <td style="color:var(--red);font-weight:700;">223</td>
+      <td>44.6%</td>
+      <td class="delta flat">同源 (PID 3433647)</td>
+    </tr>
+    <tr>
+      <td>hermes_cli.gateway</td>
+      <td style="color:var(--orange);">223</td>
+      <td>44.6%</td>
+      <td class="delta flat">同源 (respaw storm)</td>
+    </tr>
+    <tr>
+      <td>tools.approval</td>
+      <td>29</td>
+      <td>5.8%</td>
+      <td class="delta down">↓ 压缩释放</td>
+    </tr>
+    <tr>
+      <td>gateway.platforms.api_server</td>
+      <td>15</td>
+      <td>3.0%</td>
+      <td class="delta flat">→ 步进稳定</td>
+    </tr>
+    <tr>
+      <td>agent.tool_executor</td>
+      <td>9</td>
+      <td>1.8%</td>
+      <td class="delta warn">↑ 重新出现</td>
+    </tr>
+    <tr>
+      <td>cron.scheduler</td>
+      <td>1</td>
+      <td>0.2%</td>
+      <td class="delta flat">→ 恒定</td>
+    </tr>
+    <tr style="border-top:2px solid var(--border);">
+      <td><strong>gateway 合计</strong></td>
+      <td><strong>446</strong></td>
+      <td><strong>89.2%</strong></td>
+      <td class="delta down">↓ -8.4pp vs P59</td>
+    </tr>
+    <tr>
+      <td><strong>非洪水合计</strong></td>
+      <td><strong>54</strong></td>
+      <td><strong>10.8%</strong></td>
+      <td class="delta up">↑ +350% vs P59</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">TOP 错误签名</h3>
+  <table>
+    <tr><th>#</th><th>签名</th><th>计数</th><th>级别</th></tr>
+    <tr>
+      <td>1</td>
+      <td>Another gateway instance is already running (PID 3433647)</td>
+      <td>223</td>
+      <td><span class="tag tag-high">ERROR</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Gateway (re)started 6 times in 120s — backing off 10s</td>
+      <td>160</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Gateway (re)started 7 times in 120s — backing off 20s</td>
+      <td>63</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Unknown approvals.mode 'auto' — defaulting to 'manual'</td>
+      <td>29</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>[Api_Server] API_SERVER_KEY is required for the API server</td>
+      <td>15</td>
+      <td><span class="tag tag-high">ERROR</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Tool terminal returned error (exit_code=-1)</td>
+      <td>3</td>
+      <td><span class="tag tag-high">ERROR</span></td>
+    </tr>
+  </table>
+
+  <div class="alert-box red" style="margin-top:12px;">
+    <strong>🟥 三重盲区叠加（第 23 期连续）：</strong>洪水盲区（gateway 89.2% >70% 阈值）+ 碎片化盲区（非洪水 54 条分散在 4 个组件签名下）+ WARNING 过滤盲区（tools.approval 29 条 WARNING 无检出）→ weakness_scan.py 全面失明。P60 是连续第 <strong>23 期</strong> weakness 检出为 0。非洪水 54 条尾窗中，tools.approval 29 条（54%）单一 WARNING 签名应足以触发检测——过滤盲区确认。PID 3433647 已连续运行 <strong>19 天</strong>（20 期），持续刷新纪录。
+  </div>
+</div>
+
+<!-- Knowledge Feed -->
+<div class="card">
+  <h2>🔬 知识发现</h2>
+
+  <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+    <span class="period-badge badge-red">❌ arXiv 失败</span>
+    <span class="period-badge badge-blue">📰 HN 10 条故事</span>
+    <span class="period-badge badge-purple">25/60 = 41.7%</span>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">📄 arXiv 论文</h3>
+  <div class="alert-box yellow">
+    <strong>arXiv API 不可用</strong>——连续第 1 期失败。P58→P59 连续 2 期成功后中断。总成功率 25/60 = 41.7%。历史模式显示：失败后 1-2 期内恢复概率高。
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">📰 Hacker News 头条</h3>
+
+  <div class="story-item">
+    <a href="https://anatolyzenkov.com/stolen-buttons"><strong>Stolen Buttons</strong></a>
+    <div class="meta">🔥 556 分 · 128 评论 · 个人博客关于按钮设计的创意故事</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models"><strong>The new rules of context engineering for Claude 5 generation models</strong></a>
+    <div class="meta">🔥 145 分 · 92 评论 · Anthropic 发布 Claude 5 上下文工程新规则，<strong>与 Hermes 的提示工程和上下文管理直接相关</strong></div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://fly.io/blog/kurt-scott-money-sprites/"><strong>Turn And Face The Strange</strong></a>
+    <div class="meta">🔥 130 分 · 96 评论 · fly.io 关于 Kurt Scott 和未来的博文</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://brandonli.net/semisim/animations"><strong>Show HN: I made some transistor animations</strong></a>
+    <div class="meta">🔥 125 分 · 12 评论 · 晶体管动画演示</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://spectrum.ieee.org/sodium-ion-battery-peak-energy"><strong>GM Backs Sodium Ion Batteries for U.S. Grid Storage</strong></a>
+    <div class="meta">🔥 107 分 · 34 评论 · GM 支持钠离子电池用于美国电网储能</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://ammoniaenergy.org/articles/flexible-renewable-ammonia-demonstrator-now-operational-in-minnesota/"><strong>Producing ammonia and fertiliser using wind power in Morris, Minnesota</strong></a>
+    <div class="meta">85 分 · 59 评论 · 风能制氨和化肥示范项目</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://box2d.org/posts/2026/07/simd-for-collision/"><strong>SIMD for Collision</strong></a>
+    <div class="meta">44 分 · 10 评论 · Box2D 物理引擎 SIMD 碰撞检测优化</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.apalrd.net/posts/2026/isp_mcast/"><strong>Multicast TV Distribution on My Home Network</strong></a>
+    <div class="meta">34 分 · 8 评论 · 家庭网络组播电视分发方案</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.science.org/content/blog-post/clinical-failure-rates-over-decades-yikes"><strong>Clinical Failure Rates over the Decades: Yikes</strong></a>
+    <div class="meta">27 分 · 16 评论 · 数十年临床失败率趋势分析</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://github.com/demo-zexuan/liang-wenfeng-investor-meeting-2026-7-22/blob/master/梁文锋投资者交流会-文字稿_1_18_translate_20260723201651.pdf"><strong>DeepSeek pause fundraise after comments on compute gap to US leaked</strong></a>
+    <div class="meta">24 分 · 13 评论 · DeepSeek 梁文锋投资者交流会泄露，暂停融资，提及算力差距</div>
+  </div>
+</div>
+
+<!-- Evolution Suggestions -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">🔴 优先级 1：修复 gateway.run 洪水（已持续 40 期）</h3>
+  <div class="alert-box red">
+    <strong>PID 3433647 已连续运行 19 天（20 期）。</strong>每次 cron job 执行时尝试启动新 gateway 实例失败，产生 89.2% 的错误日志。修复命令：<code>cd /root/.hermes/profiles/reviewer && hermes gateway stop && hermes gateway start</code>。此修复估计可消除 90%+ 的错误日志，恢复系统健康度。<strong>60 期未修复 —— 系统最严重的单一问题。</strong>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">🟡 优先级 2：修复两个配置错误</h3>
+  <div class="alert-box yellow">
+    <strong>1. api_server 配置（15 条/尾窗）：</strong><code>API_SERVER_KEY</code> 缺失。在 <code>config.yaml</code> 中配置 API 密钥或禁用 API 服务器。<br>
+    <strong>2. tools.approval 配置（29 条/尾窗）：</strong><code>approvals.mode: 'auto'</code> 无效。设为 <code>manual</code>、<code>smart</code> 或 <code>off</code>。此配置错误修复后，非洪水基线可降至 ~15 条/天。
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">🔵 优先级 3：weakness_scan.py 修复</h3>
+  <div class="alert-box blue">
+    <strong>三重盲区已连续 23 期。</strong>建议修复：
+    <ol style="margin-left:20px;margin-top:8px;">
+      <li>添加全文件扫描模式（遍历整个日志文件而非仅尾部 500 行）</li>
+      <li>添加 WARNING 级别聚合检测（同一签名 ≥10 次视为 medium 弱点）</li>
+      <li>添加跨组件签名聚合规则（配置错误类错误跨组件求和）</li>
+    </ol>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">🟢 优先级 4：利用新工具扩展能力</h3>
+  <div class="alert-box green">
+    <strong>工具数 34 ↑+2（自 P42 以来首次增长）。</strong>新增 xai_video 和 yuanbao 工具。建议探索这些新工具的能力边界，并更新相关技能文档。同时考虑清理 55 个过期技能释放资源。
+  </div>
+</div>
+
+<!-- Trend Comparison -->
+<div class="card">
+  <h2>📈 趋势对比</h2>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">P58 → P59 → P60 纵向对比</h3>
+  <table>
+    <tr><th>指标</th><th>P58 (07-24)</th><th>P59 (07-25)</th><th>P60 (07-26)</th><th>趋势</th></tr>
+    <tr>
+      <td>尾窗洪水占比</td>
+      <td style="color:var(--green);">94.4%</td>
+      <td style="color:var(--red);">97.6%</td>
+      <td style="color:var(--green);">89.2%</td>
+      <td class="delta down">↓ 低点</td>
+    </tr>
+    <tr>
+      <td>非洪水尾窗</td>
+      <td style="color:var(--green);">28</td>
+      <td style="color:var(--red);">12</td>
+      <td style="color:var(--green);font-weight:700;">54</td>
+      <td class="delta up">↑ +350%</td>
+    </tr>
+    <tr>
+      <td>PID 续期</td>
+      <td>18</td>
+      <td>19</td>
+      <td style="color:var(--yellow);font-weight:700;">20 🏆</td>
+      <td class="delta up">↑ 新纪录</td>
+    </tr>
+    <tr>
+      <td>工具数</td>
+      <td>32</td>
+      <td>32</td>
+      <td style="color:var(--green);font-weight:700;">34 ↑+2</td>
+      <td class="delta up">↑ 首次增长</td>
+    </tr>
+    <tr>
+      <td>技能数</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td class="delta flat">→ 8 期稳定</td>
+    </tr>
+    <tr>
+      <td>arXiv 成功率</td>
+      <td style="color:var(--green);font-weight:700;">24/58=41.4%</td>
+      <td style="color:var(--green);font-weight:700;">25/59=42.4%</td>
+      <td>25/60=41.7%</td>
+      <td class="delta flat">→ 回落</td>
+    </tr>
+    <tr>
+      <td>弱点检出</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td class="delta flat">→ 23 期盲区</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);margin-top:20px;">里程碑对比 (P50 → P55 → P60)</h3>
+  <table>
+    <tr><th>指标</th><th>P50 (07-16)</th><th>P55 (07-21)</th><th>P60 (07-26)</th><th>变化</th></tr>
+    <tr>
+      <td>工具数</td>
+      <td>32</td>
+      <td>32</td>
+      <td style="color:var(--green);font-weight:700;">34</td>
+      <td class="delta up">↑ +2（10 期首增）</td>
+    </tr>
+    <tr>
+      <td>技能数</td>
+      <td>66</td>
+      <td>67</td>
+      <td>67</td>
+      <td class="delta flat">→ 稳定</td>
+    </tr>
+    <tr>
+      <td>PID 续期</td>
+      <td>10</td>
+      <td>15</td>
+      <td style="color:var(--yellow);font-weight:700;">20</td>
+      <td class="delta up">↑ +10 期</td>
+    </tr>
+    <tr>
+      <td>arXiv 成功率</td>
+      <td>18/50=36.0%</td>
+      <td>22/55=40.0%</td>
+      <td>25/60=41.7%</td>
+      <td class="delta up">↑ +5.7pp</td>
+    </tr>
+    <tr>
+      <td>弱点盲区</td>
+      <td>16 期</td>
+      <td>20 期</td>
+      <td>23 期</td>
+      <td class="delta up">↑ +7 期</td>
+    </tr>
+  </table>
+
+  <div class="alert-box purple" style="margin-top:16px;">
+    <strong>📊 1-3-5 振荡模式更新（P54→P60）：</strong>97.6%→<strong>97.4%</strong>→97.6%→97.6%→<strong>94.4%</strong>→<strong>97.6%</strong>→<strong>89.2%</strong><br>
+    P60 的 89.2% 是自 P47（07-13, 89.4%）以来最低的尾窗洪水占比。振荡幅度从 ~3pp（P54→P55）扩大至 ~8pp（P59→P60），表明采样窗口漂移幅度增大。P60 的低点超过 P58 的 94.4%——这是 1-3-5 振荡低点的新低。<br><br>
+    <strong>🏆 60 期里程碑追踪：</strong>
+    <ul style="margin-left:20px;margin-top:8px;">
+      <li>PID 3433647 连续运行：<strong>19 天</strong>（20 期）— 新纪录</li>
+      <li>Weakness 连续盲区：<strong>23 期</strong>— 持续中</li>
+      <li>arXiv 总成功率：<strong>41.7%</strong>（25/60）— 回落</li>
+      <li>工具数：<strong>34 ↑+2</strong>— 首次增长</li>
+      <li>技能数稳定：<strong>8 期</strong>— 持续中</li>
+      <li>简报总期数：<strong>60 期</strong> 🎯</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="section-divider">— · —</div>
+<div style="text-align:center;color:var(--text2);font-size:0.8em;padding:20px 0;">
+  🧬 进化简报 · 第 60 期 · 2026-07-26 · 数据采集 01:00 UTC<br>
+  Hermes 自进化系统 · 感知 → 诊断 → 学习 → 进化
+</div>
+
+</div>
+</body>
+</html>
