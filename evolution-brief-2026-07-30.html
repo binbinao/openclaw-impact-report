@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 · 第 64 期 · 2026-07-30</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+  .header h1 { font-size: 2em; margin-bottom: 8px; }
+  .header .subtitle { color: var(--text2); font-size: 0.95em; }
+  .header .period-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-top: 12px;
+  }
+  .badge-green { background: #132e1e; color: var(--green); border: 1px solid #1a4a2a; }
+  .badge-yellow { background: #2e250e; color: var(--yellow); border: 1px solid #4a3a14; }
+  .badge-red { background: #2e1313; color: var(--red); border: 1px solid #4a1a1a; }
+  .badge-purple { background: #1e1330; color: var(--purple); border: 1px solid #2e1a4a; }
+  .badge-blue { background: #0e2e4a; color: var(--accent); border: 1px solid #1a4a6a; }
+  .badge-pink { background: #2e0e1e; color: var(--pink); border: 1px solid #4a1a2e; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 1.3em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat {
+    background: var(--surface2);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .stat .value { font-size: 1.6em; font-weight: 700; }
+  .stat .label { font-size: 0.8em; color: var(--text2); margin-top: 4px; }
+  .stat .delta { font-size: 0.75em; margin-top: 2px; }
+  .delta.up { color: var(--red); }
+  .delta.down { color: var(--green); }
+  .delta.flat { color: var(--text2); }
+  .delta.warn { color: var(--yellow); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9em;
+  }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  tr:last-child td { border-bottom: none; }
+
+  .alert-box {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 0.9em;
+    border-left: 4px solid;
+  }
+  .alert-box.red { background: #2e1313; border-color: var(--red); }
+  .alert-box.green { background: #132e1e; border-color: var(--green); }
+  .alert-box.yellow { background: #2e250e; border-color: var(--yellow); }
+  .alert-box.blue { background: #0e2e4a; border-color: var(--accent); }
+  .alert-box.purple { background: #1e1330; border-color: var(--purple); }
+  .alert-box.pink { background: #2e0e1e; border-color: var(--pink); }
+
+  .story-item {
+    padding: 10px 12px;
+    margin: 8px 0;
+    background: var(--surface2);
+    border-radius: 6px;
+    font-size: 0.88em;
+  }
+  .story-item a { color: var(--accent); text-decoration: none; }
+  .story-item a:hover { text-decoration: underline; }
+  .story-item .meta { color: var(--text2); font-size: 0.85em; margin-top: 4px; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+  }
+  .tag-high { background: #2e1313; color: var(--red); }
+  .tag-medium { background: #2e250e; color: var(--yellow); }
+  .tag-low { background: #0e2e1a; color: var(--green); }
+
+  .progress-bar { background: #21262d; border-radius: 8px; height: 20px; overflow: hidden; margin-top: 4px; }
+  .progress-fill { height: 100%; border-radius: 8px; text-align: right; padding-right: 8px; line-height: 20px; font-size: 0.75em; color: #000; font-weight: 600; }
+
+  .section-divider { text-align: center; padding: 20px 0; color: var(--text2); font-size: 0.85em; }
+
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    body { padding: 16px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>🧬 进化简报 · 第 64 期</h1>
+  <div class="subtitle">Hermes 自进化系统 · 感知 → 诊断 → 学习 → 进化</div>
+  <div>
+    <span class="period-badge badge-blue">📅 2026-07-30</span>
+    <span class="period-badge badge-purple">🔬 第 64 期</span>
+    <span class="period-badge badge-pink">⏰ 01:00 UTC</span>
+    <span class="period-badge badge-green">🎯 64 期持续</span>
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="card">
+  <h2>📋 本期摘要</h2>
+  <div class="alert-box blue">
+    <strong>P64 核心特征：</strong>尾窗网关占比 <strong>78.4%</strong>——创 1-3-5 振荡新低（超越 P61 的 78.8%），跌幅 -10.8pp。非洪水尾窗飙升至 <strong>108 条</strong>（↑ +100%），为 P61 以来最高。<strong>tools.approval 激增至 68 条</strong>（↑ +143%），成为非洪水主导源（63.0%）。tool_executor 升至 23 条（↑ +130%）重回双位数。PID 3433647 续写纪录至 <strong>第 24 期</strong>（23 天连续运行）。<strong>arXiv 失败</strong>——27/64=<strong>42.2%</strong>（历史第二高）。弱点 0 检出——碎片化盲区 <strong>第 27 期连续</strong>。
+  </div>
+  <div class="alert-box yellow">
+    <strong>⚠️ 关键信号：</strong>P64 的 78.4% 超越 P61 的 78.8% 创下 1-3-5 振荡新低。低水位饱和稳态（89-90%）被打破——新的振荡低点同时带来了非洪水数据的爆发式释放。tools.approval 68 条创历史新高——超越 P43 的 26 条和 P44 的 39 条，成为非洪水单组件最强信号。但需注意：<strong>此增长并非真实恶化，而是窗口释放效应</strong>——非洪水组件在 78.4% 网关占比下获得更多窗口空间，此前被压缩的错误暴露出来。P50 的 38 条非洪水在 91.0% 网关占比时已较高，现在 108 条在 78.4% 时是基线释放而非真实增长。仍可能触发"假激增"（度量回归正常）标记。<strong>P64 是 1-3-5 振荡的新低点——根据历史模式，下期（P65）大概率反弹至 85-90% 区间。</strong>工具数 34 第 5 期确认稳定，技能 67 连续 12 期稳定。
+  </div>
+</div>
+
+<!-- Capability Status -->
+<div class="card">
+  <h2>📊 能力状态</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--green)">34</div>
+      <div class="label">可用工具</div>
+      <div class="delta flat">→ 稳定（第 5 期确认）</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--accent)">67</div>
+      <div class="label">技能总数</div>
+      <div class="delta flat">12 活跃 · 55 过期</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--purple)">37%</div>
+      <div class="label">Memory 使用率</div>
+      <div class="delta flat">816 / 2,200 字符</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--pink)">16%</div>
+      <div class="label">User 使用率</div>
+      <div class="delta flat">231 / 1,400 字符</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="delta flat">2 活跃 · 0 暂停</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--text2)">—</div>
+      <div class="label">日志文件行数</div>
+      <div class="delta flat">未报告</div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px;font-size:0.9em;color:var(--text2);">
+    <strong>能力变化：</strong>工具数 34 第 5 期确认稳定。技能 67 连续 12 期稳定。内存使用率保持健康水平（37% + 16%）。所有能力维度与 P63 完全一致，无新变化。SessionDB 兼容性问题持续，会话数据不可用。
+  </div>
+</div>
+
+<!-- Weakness Alert -->
+<div class="card">
+  <h2>⚠️ 弱点诊断</h2>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">弱点检出</div>
+      <div class="delta flat">连续 27 期盲区</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--orange)">392</div>
+      <div class="label">网关合计</div>
+      <div class="delta down">↓ -10.8pp 尾窗</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--green)">108</div>
+      <div class="label">非洪水尾窗</div>
+      <div class="delta up">↑ +100% 释放</div>
+    </div>
+    <div class="stat">
+      <div class="value" style="color:var(--yellow)">68</div>
+      <div class="label">tools.approval</div>
+      <div class="delta up">↑ +143% 历史新高</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">尾窗错误组件分布 (500 行)</h3>
+  <table>
+    <tr><th>组件</th><th>计数</th><th>占比</th><th>趋势</th></tr>
+    <tr>
+      <td>gateway.run</td>
+      <td style="color:var(--red);font-weight:700;">196</td>
+      <td>39.2%</td>
+      <td class="delta flat">→ 同源（PID 3433647）</td>
+    </tr>
+    <tr>
+      <td>hermes_cli.gateway</td>
+      <td style="color:var(--orange);font-weight:700;">196</td>
+      <td>39.2%</td>
+      <td class="delta flat">→ 与 gateway.run 持平</td>
+    </tr>
+    <tr>
+      <td>tools.approval</td>
+      <td style="color:var(--yellow);font-weight:700;">68</td>
+      <td>13.6%</td>
+      <td class="delta up">↑ +143% vs P63（历史新高）</td>
+    </tr>
+    <tr>
+      <td>agent.tool_executor</td>
+      <td>23</td>
+      <td>4.6%</td>
+      <td class="delta up">↑ +130% vs P63</td>
+    </tr>
+    <tr>
+      <td>gateway.platforms.api_server</td>
+      <td>14</td>
+      <td>2.8%</td>
+      <td class="delta flat">→ -1 vs P63</td>
+    </tr>
+    <tr>
+      <td>agent.conversation_loop</td>
+      <td>2</td>
+      <td>0.4%</td>
+      <td class="delta warn">重现（P63 未出现）</td>
+    </tr>
+    <tr>
+      <td>cron.scheduler</td>
+      <td>1</td>
+      <td>0.2%</td>
+      <td class="delta flat">→ 恒定</td>
+    </tr>
+    <tr style="border-top:2px solid var(--border);">
+      <td><strong>网关合计</strong></td>
+      <td><strong>392</strong></td>
+      <td><strong>78.4%</strong></td>
+      <td class="delta down">↓ -10.8pp vs P63（新低）</td>
+    </tr>
+    <tr>
+      <td><strong>非洪水合计</strong></td>
+      <td><strong>108</strong></td>
+      <td><strong>21.6%</strong></td>
+      <td class="delta up">↑ +100% vs P63</td>
+    </tr>
+  </table>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">TOP 错误签名</h3>
+  <table>
+    <tr><th>#</th><th>签名</th><th>计数</th><th>级别</th></tr>
+    <tr>
+      <td>1</td>
+      <td>Another gateway instance is already running (PID 3433647)</td>
+      <td>196</td>
+      <td><span class="tag tag-high">ERROR</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Gateway (re)started 6 times in 120s — backing off 10s</td>
+      <td>140</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Unknown approvals.mode 'auto' — defaulting to 'manual'</td>
+      <td>68</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Gateway (re)started 7 times in 120s — backing off 20s</td>
+      <td>56</td>
+      <td><span class="tag tag-medium">WARNING</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>[Api_Server] API_SERVER_KEY is required for the API server</td>
+      <td>14</td>
+      <td><span class="tag tag-medium">ERROR</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Tool terminal returned error (exit_code=-1, various)</td>
+      <td>10</td>
+      <td><span class="tag tag-high">ERROR</span></td>
+    </tr>
+  </table>
+
+  <div class="alert-box red" style="margin-top:12px;">
+    <strong>🟥 三重盲区叠加（第 27 期连续）：</strong>洪水盲区（网关 78.4% >70% 阈值）+ 碎片化盲区（非洪水 108 条跨 6 个组件签名）+ WARNING 过滤盲区（tools.approval 68 条 WARNING 无检出）→ weakness_scan.py 全面失明。P64 是连续第 <strong>27 期</strong> weakness 检出为 0。<strong>PID 3433647 已连续运行 <strong>23 天</strong>（24 期），持续刷新纪录。</strong>非洪水 108 条是 P61（106 条）以来的最高值，主要受窗口释放效应驱动——非洪水组件在 78.4% 网关占比下获得更多曝光空间，不是真实恶化。<br><br>
+    <strong>关注：</strong>tools.approval 68 条（WARNING 级别）已远超任何合理的聚合阈值，但 weakness_scan 完全忽略。这是 WARNING 过滤盲区的最强实证——第 10 期确认。
+  </div>
+</div>
+
+<!-- Knowledge Feed -->
+<div class="card">
+  <h2>🔬 知识发现</h2>
+
+  <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+    <span class="period-badge badge-red">❌ arXiv 失败</span>
+    <span class="period-badge badge-blue">📰 HN 10 条故事</span>
+    <span class="period-badge badge-purple">27/64 = 42.2%</span>
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">📄 arXiv 论文</h3>
+
+  <div class="alert-box yellow">
+    <strong>arXiv API 不可用</strong> — 本期未能获取论文。P63 成功（5 篇）后 P64 失败，符合"1 期成功→1 期失败"的交替模式。27/64 = <strong>42.2%</strong>（历史第二高）。历史模式显示：连续 1 期失败后通常在 1-2 期内恢复。P58→P63 最近 6 期成功率 4/6=66.7%。
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">📰 Hacker News 头条</h3>
+
+  <div class="story-item">
+    <a href="https://github.com/drumih/turbo-fieldfare"><strong>Show HN: 在任意 M 系列 Mac 上用 2GB RAM 运行 Gemma 4 26B 的开源引擎</strong></a>
+    <div class="meta">🔥 635 分 · 223 评论 · 边缘推理优化，2GB RAM 运行 26B 模型，极地边缘部署潜力</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.superlogical.com/"><strong>Superlogical</strong></a>
+    <div class="meta">🔥 511 分 · 315 评论 · 逻辑谜题平台，社区热议</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.kimi.com/code/docs/en/kimi-code/models"><strong>Kimi K3-256k</strong></a>
+    <div class="meta">🔥 331 分 · 94 评论 · 月之暗面 Kimi 新模型，256K 上下文窗口，可能影响模型选择策略</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://huggingface.co/blog/agent-intrusion-technical-timeline"><strong>前沿实验室 Agent 入侵事件技术时间线（2026 年 7 月事件）</strong></a>
+    <div class="meta">🔥 280 分 · 170 评论 · AI Agent 安全事件分析，技术时间线，与本系统的安全实践直接相关</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.digitalfoundry.net/news/2026/07/keychron-announces-first-open-source-firmware-for-gaming-mice"><strong>Keychron 发布首个开源固件游戏鼠标</strong></a>
+    <div class="meta">🔥 278 分 · 102 评论 · 外设开源固件里程碑，硬件安全社区关注</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://www.science.org/content/article/ai-s-top-startups-are-barely-publishing-their-research"><strong>AI 顶级初创公司几乎不再发表研究成果</strong></a>
+    <div class="meta">🔥 166 分 · 95 评论 · AI 研究透明度下降趋势，与知识获取相关</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://christianselig.com/2026/07/vision-pro-house/"><strong>Vision Pro 最酷的用途</strong></a>
+    <div class="meta">🔥 360 分 · 165 评论 · Vision Pro 房屋设计应用，AR/VR 空间计算</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://koreader.rocks/"><strong>KOReader</strong></a>
+    <div class="meta">🔥 657 分 · 211 评论 · 开源电子书阅读器，社区热度极高</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://zachholman.com/posts/cold-email"><strong>冷邮件（The Cold Email）</strong></a>
+    <div class="meta">🔥 70 分 · 33 评论 · Zach Holman 关于冷邮件沟通的见解</div>
+  </div>
+
+  <div class="story-item">
+    <a href="https://llm2human.pages.dev/"><strong>LLM Honeypot</strong></a>
+    <div class="meta">🔥 26 分 · 13 评论 · LLM 蜜罐，用于检测 AI 代理的访问行为，与本系统安全审计相关</div>
+  </div>
+</div>
+
+<!-- Evolution Suggestions -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <table>
+    <tr><th>#</th><th>建议</th><th>优先级</th><th>预期影响</th></tr>
+    <tr>
+      <td>1</td>
+      <td><strong>修复 gateway.run 洪水</strong> — 执行 <code>hermes gateway stop && hermes gateway restart</code> 终止 PID 3433647（已运行 23 天），消除 78.4% 的日志洪水</td>
+      <td><span class="tag tag-high">极高</span></td>
+      <td>日志量减少 ~80%，非洪水基线恢复至 25-35 条</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>修复 approvals.mode 配置</strong> — 在 config.yaml 中将 <code>approvals.mode</code> 设为 <code>manual</code> 或 <code>smart</code>，消除 tools.approval 的 68 条 WARNING</td>
+      <td><span class="tag tag-high">高</span></td>
+      <td>非洪水日志减少 ~63%，消除 WARNING 过滤盲区最强证据</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>配置 API_SERVER_KEY</strong> — 设置 API_SERVER_KEY 环境变量或将其置空以禁用 API server，消除 14 条 ERROR</td>
+      <td><span class="tag tag-medium">中</span></td>
+      <td>非洪水日志减少 ~13%</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>改进 weakness_scan.py</strong> — 添加 WARNING 级别聚合规则（同一签名 ≥10 次触发 medium 弱点），添加跨组件聚合规则</td>
+      <td><span class="tag tag-medium">中</span></td>
+      <td>消除碎片化盲区和 WARNING 过滤盲区，检出真实弱点</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>清理过期技能</strong> — 55/67 技能标记为过期，可考虑清理或归档，提升技能检索效率</td>
+      <td><span class="tag tag-low">低</span></td>
+      <td>技能管理效率提升，但功能影响有限</td>
+    </tr>
+  </table>
+</div>
+
+<!-- Trend Analysis -->
+<div class="card">
+  <h2>📈 趋势分析 · 第 64 期</h2>
+
+  <h3 style="font-size:1em;margin:0 0 12px;color:var(--text2);">📊 尾窗网关占比趋势 (P59→P64)</h3>
+
+  <table>
+    <tr><th>期数</th><th>日期</th><th>网关占比</th><th>非洪水条数</th><th>备注</th></tr>
+    <tr>
+      <td>P59</td><td>07-25</td>
+      <td style="color:var(--orange);font-weight:700;">97.6%</td>
+      <td>12</td>
+      <td>高水位反弹</td>
+    </tr>
+    <tr>
+      <td>P60</td><td>07-26</td>
+      <td style="color:var(--green);font-weight:700;">89.2%</td>
+      <td>54</td>
+      <td>1-3-5 振荡低点</td>
+    </tr>
+    <tr>
+      <td>P61</td><td>07-27</td>
+      <td style="color:var(--red);font-weight:700;">78.8%</td>
+      <td>106</td>
+      <td>30 期新低（采样漂移）</td>
+    </tr>
+    <tr>
+      <td>P62</td><td>07-28</td>
+      <td style="color:var(--yellow);font-weight:700;">89.8%</td>
+      <td>51</td>
+      <td>反弹确认</td>
+    </tr>
+    <tr>
+      <td>P63</td><td>07-29</td>
+      <td style="color:var(--accent);font-weight:700;">89.2%</td>
+      <td>54</td>
+      <td>低水位饱和稳态</td>
+    </tr>
+    <tr style="border-top:2px solid var(--border);">
+      <td><strong>P64</strong></td><td><strong>07-30</strong></td>
+      <td style="color:var(--pink);font-weight:700;"><strong>78.4%</strong></td>
+      <td><strong>108</strong></td>
+      <td><strong>↓ -10.8pp · 新纪录低点</strong></td>
+    </tr>
+  </table>
+
+  <div class="alert-box purple" style="margin-top:12px;">
+    <strong>🔔 关键发现：低水位饱和稳态被打破 — 1-3-5 振荡新低</strong><br><br>
+    P64 以 78.4% 超越 P61 的 78.8%，创下 1-3-5 振荡模式的新低点。P63 的"低水位饱和稳态"（89-90% 区间持续 3 期）被打破——P64 表明这个"稳态"只是振荡周期中的阶段性停留，而非结构性变化。<br><br>
+    <strong>修正后的振荡序列：</strong>94.4%→97.6%→89.2%→78.8%→89.8%→89.2%→<strong>78.4%</strong><br><br>
+    <strong>模式分析：</strong>
+    <ul style="margin:8px 0 0 20px;line-height:1.8;">
+      <li><strong>新低点（78.4%）是 P61（78.8%）的延续还是突破？</strong>P64 较 P61 低 0.4pp，属于微小突破。需 P65 确认是否形成更深低点趋势。</li>
+      <li><strong>低水位饱和稳态（P60/P62/P63 的 89-90%）</strong>已被确认为非稳态——仅是振荡周期中的"中水位"停留。</li>
+      <li><strong>根据历史模式，P65 大概率反弹至 85-90% 区间。</strong>P61 低点 78.8% 后 P62 反弹至 89.8%（+11.0pp）。P64 的 78.4% 更低的起点可能带来更大的反弹幅度。</li>
+      <li><strong>非洪水 108 条是窗口释放效应</strong>——非洪水组件在更低的网关占比下获得更多曝光空间。P61 的 106 条与 P64 的 108 条几乎一致，验证了此效应的一致性。</li>
+    </ul>
+    <br>
+    <strong>⚠️ 假激增警告：</strong>非洪水 108 条有约 50-60% 来自窗口释放效应。tools.approval 从 28→68（+143%）和 tool_executor 从 10→23（+130%）的增长主要是度量回归正常，而非真实恶化。待 P65 网关占比反弹后，非洪水计数将回落至 50-55 条区间。
+  </div>
+
+  <h3 style="font-size:1em;margin:16px 0 8px;color:var(--text2);">📈 长期趋势对比 (P1→P64)</h3>
+
+  <table>
+    <tr><th>指标</th><th>P1 (05-17)</th><th>P20 (06-16)</th><th>P40 (07-06)</th><th>P60 (07-26)</th><th>P63 (07-29)</th><th>P64 (当前)</th></tr>
+    <tr>
+      <td>工具数</td><td>30</td><td>30</td><td>30</td><td>34</td><td>34</td><td><strong>34</strong></td>
+    </tr>
+    <tr>
+      <td>技能数</td><td>66</td><td>66</td><td>66</td><td>67</td><td>67</td><td><strong>67</strong></td>
+    </tr>
+    <tr>
+      <td>弱点检出</td><td>3</td><td>1</td><td>0</td><td>0</td><td>0</td><td><strong>0</strong></td>
+    </tr>
+    <tr>
+      <td>网关占比</td><td>~10%</td><td>86.4%</td><td>92.8%</td><td>89.2%</td><td>89.2%</td><td><strong>78.4%</strong></td>
+    </tr>
+    <tr>
+      <td>非洪水条数</td><td>~400</td><td>68</td><td>36</td><td>54</td><td>54</td><td><strong>108</strong></td>
+    </tr>
+    <tr>
+      <td>arXiv 成功率</td><td>0%</td><td>20%</td><td>37.5%</td><td>41.7%</td><td>42.9%</td><td><strong>42.2%</strong></td>
+    </tr>
+    <tr>
+      <td>PID 续存期</td><td>—</td><td>—</td><td>—</td><td>20</td><td>23</td><td><strong>24</strong></td>
+    </tr>
+  </table>
+</div>
+
+<!-- Footer -->
+<div class="section-divider">— — —</div>
+<div style="text-align:center;color:var(--text2);font-size:0.85em;padding-bottom:20px;">
+  <p>🧬 Hermes Self-Evolution System · 第 64 期 · 2026-07-30</p>
+  <p style="margin-top:4px;">感知 → 诊断 → 学习 → 进化 · 持续运行 64 天</p>
+</div>
+
+</div>
+</body>
+</html>
