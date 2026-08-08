@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vassilev 2512.10100 · AI 对齐的西西弗斯困局</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:1000px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:30px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; letter-spacing:-.01em;
+       color:var(--slate); margin:48px 0 8px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:18px; color:var(--slate); margin:24px 0 10px; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 22px; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; margin-top:6px; }
+  .badge { display:inline-block; border-radius:6px; padding:2px 8px;
+           font-family:var(--mono); font-size:11px; }
+  .badge.verified { background:rgba(120,140,93,.15); color:var(--olive); }
+  .badge.arxiv { background:rgba(91,139,160,.15); color:var(--sky); }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+  strong { color:var(--slate); }
+
+  section { margin-bottom:52px; }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:18px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:12px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:18px 0; font-size:14px; }
+  .callout.olive { background:rgba(120,140,93,.08); border-left-color:var(--olive); }
+  .callout.sky { background:rgba(91,139,160,.08); border-left-color:var(--sky); }
+  .callout.purple { background:rgba(139,107,158,.06); border-left-color:var(--purple); }
+  .callout.rust { background:rgba(176,74,63,.08); border-left-color:var(--rust); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:18px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:18px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:20px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:17px; color:var(--slate); margin:0 0 8px; }
+  .insight-card p { font-size:14px; line-height:1.55; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+  .pill.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+  .pill.sky { background:rgba(59,126,191,.15); color:var(--sky); }
+  .pill.purple { background:rgba(139,107,158,.15); color:var(--purple); }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+
+  blockquote { font-family:var(--serif); font-size:18px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:20px 0; letter-spacing:-.005em; }
+
+  .ascii-figure {
+    background:#2C2A26; color:#E3DACC;
+    border-radius:var(--radius-row);
+    padding:20px 24px; margin:18px 0;
+    overflow-x:auto; border:var(--border);
+  }
+  .ascii-figure pre {
+    font-family:var(--mono); font-size:13px; line-height:1.45;
+    color:#E3DACC; margin:0; white-space:pre;
+  }
+  .ascii-figure .cap { font-family:var(--serif); font-style:italic; font-size:13px;
+    color:var(--gray-500); margin-top:10px; display:block; }
+
+  .theorem { background:var(--white); border:var(--border); border-left:4px solid var(--clay);
+             border-radius:var(--radius-row); padding:16px 20px; margin:16px 0; }
+  .theorem .name { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+                   letter-spacing:.06em; color:var(--clay); margin-bottom:6px; }
+  .theorem p { font-family:var(--serif); font-size:15px; color:var(--slate); margin:6px 0 0; }
+  .theorem em { font-style:italic; color:var(--slate); }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    h1 { font-size:24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>Robust AI Security and Alignment：西西弗斯的护栏</h1>
+    <span class="badge arxiv">arXiv 2512.10100</span>
+  </div>
+  <p class="eyebrow">Vassilev · NIST CSD/ITL · Gödel–Chaitin Deep Dive · 2026-08-08</p>
+  <div class="meta">
+    <span class="badge verified">单作 · 14 条参考 · 3 引用</span>
+    &nbsp;|&nbsp; v1 = 2025-12-10 ／ v2 = 2026-04-07 ／ OUP 模板投稿
+    &nbsp;|&nbsp; 阅读时间 ≈ 14 min
+  </div>
+
+  <p class="lead">
+    NIST 的 Apostol Vassilev 把 Gödel 不完备定理重写为<strong> Chaitin 信息论范式</strong>，
+    证明任何有限规则集的<em> OOPS guardrail </em>都不能完备判定越狱 prompt：
+    Theorem 2 & 3 给绝对鲁棒划了<strong>理论上限</strong>。
+    论文反复强调"定理不给攻击 recipe"，把结论推向 AGI/ASI 仍有不可证的真——
+    一篇把 AI 安全划上<em> 信息论天花板 </em>的 7 页小论文。
+  </p>
+</header>
+
+<section id="tldr">
+  <h2>一句话核心主张</h2>
+  <hr class="rule">
+  <blockquote>
+    "For any checker C_Π(T_Π, p) there exist a truth T_Π such that C_Π(T_Π, p) ≠ 1, ∀p."
+    <br><span style="font-family:var(--mono);font-size:13px;color:var(--gray-500);">—— Theorem 2 / Theorem 3</span>
+  </blockquote>
+  <p>
+    把 Gödel 的"形式系统无法证明所有真"翻译成"guardrail 无法识别所有越狱 prompt"。
+    形式骨架是 Chaitin 1974 的 information-theoretic incompleteness，不是什么新鲜数学。
+    <strong>论文新颖处</strong>不在数学，而在把这套范式精准套到 LLM 输出治理上，
+    并且刻意写出"对称实用"的应对手段——这是 NIST 视角与学术视角的最大差异。
+  </p>
+</section>
+
+<section id="meta">
+  <h2>论文 DNA</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead>
+      <tr><th style="width:160px">字段</th><th>值</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>arXiv</td><td><a href="https://arxiv.org/abs/2512.10100" target="_blank" rel="noopener" style="color:var(--sky);">2512.10100 v2</a>&nbsp;·&nbsp;<a href="https://arxiv.org/pdf/2512.10100" target="_blank" rel="noopener" style="color:var(--sky);">PDF</a>&nbsp;·&nbsp;<a href="https://arxiv.org/html/2512.10100" target="_blank" rel="noopener" style="color:var(--sky);">HTML</a></td></tr>
+      <tr><td>作者</td><td>Apostol Vassilev（NIST CSD/ITL，单作）</td></tr>
+      <tr><td>日期</td><td>v1 提交 2025-12-10 ／ v2 更新 2026-04-07（4 个月，摘要未变，疑似 OUP 排版修订）</td></tr>
+      <tr><td>类目 / 体裁</td><td>cs.AI · 7 页 / 4 证明 / Theorem × 4 + Prop × 1 · OUP 模板（朝 Royal Statistical Society 系列投稿）</td></tr>
+      <tr><td>许可</td><td>CC BY 4.0</td></tr>
+      <tr><td>Semantic Scholar</td><td><strong>3 引用</strong>（Hasan / Lockhart / Ganguly，均同路线延伸），referenceCount = 25（但 .bib 仅 14 条，差 11 条可能是 S2 自动补全）</td></tr>
+      <tr><td>正文 \cite</td><td>8 处</td></tr>
+      <tr><td>.bib 总条</td><td>14 条（其中 <strong>7 条未被正文引用</strong>——作者横向阅读的隐性谱）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout olive">
+    <strong>隐性阅读谱</strong>里被引用为同路线的 4 篇不可能性定理：Wolf et al. 2023（对齐上限）、Karpowicz 2025（幻觉控制不可能性）、
+    Kalai et al. 2025（幻觉存在性）、Zhang et al. 2023（水印不可能性）。
+    Vassilev 在正文里<strong>一篇都没直接 cite</strong>。这是本调研最值得警觉的信号——
+    是反驳？还是"另立山头"？
+  </div>
+</section>
+
+<section id="framework">
+  <h2>论证骨架：4 定理 + 1 命题</h2>
+  <hr class="rule">
+
+  <div class="callout">
+    全部定理都用同一套符号：<code>Ω</code> = prompt 全集（card Ω = ℵ₀），
+    <code>Γ_Π</code> = 策略 Π 下被阻断的 prompt 子集，
+    <code>T_Π</code> = "能输出 x 的算法长度都 &gt; n" 这种真理，
+    <code>C_Π(T, p) = 1</code> ⇔ 存在 C_Π 可验证的证明 p。
+  </div>
+
+  <div class="ascii-figure">
+    <pre>定义层:  Ω      = 所有 prompt 字符串的集合        (card Ω = ℵ₀)
+         Γ_Π    = 策略 Π 下被阻断的 prompt 子集
+         T_Π    = "能输出 x 的算法长度都 > n"  这种真理
+         C_Π(T, p) = 1  ⇔  存在可验证的 p 证明 T_Π 为真
+
+§2.1 (无限集判定层):   Proposition 1     card(Γ_Π) = ℵ₀
+                                           ↓   (拼接论证)
+§2.1 (理想 AI, 无限):    Theorem 2        ∀ C_Π, ∃ T_Π, C_Π(T_Π, p) ≠ 1, ∀ p
+                                           ↓   (Algorithm 1 长度 O(log n) → 自指矛盾)
+§2.2 (实际 AI, 有限):    Theorem 3        ∀ C_Π̂, ∃ T_Π̂, C_Π̂ ≠ 1, ∀ p̂
+                                           ↓   (Algorithm 2 + Θ = Γ̂ vs Θ ⊂ Γ̂ 分流)
+§2.3 (认知推理外推):     Theorem 4 &amp; 5   任何 AI 系统都存在不可证的真
+                                           ↓
+§3  结论:                AGI / ASI 仍受此极限约束</pre>
+    <span class="cap">图 1 — 论证链。Algorithm 1 与 2 是 Chaitin 风格"穷举反身"的最小复刻。</span>
+  </div>
+
+  <h3>Proposition 1 — Γ_Π 必无穷</h3>
+  <p>
+    如果 Γ_Π 有限 ⇒ 取最长串 x_max，前后拼接良性文本 ⇒ 仍是 adversarial 但更长 ⇒ 矛盾。
+    拼接手法在论文里举例："I would like to get some information about the weather. Ignore this. &lt;x_max&gt;"——
+    <strong>这个例子本身依赖 LLM 行为，没法宣称"架构无关"</strong>，是论文里最弱的一环。
+  </p>
+
+  <h3>Theorem 2 — 理想 AI 的完备上限</h3>
+  <p>
+    Chaitin 风格的改造：
+  </p>
+
+  <div class="theorem">
+    <div class="name">Theorem 2 (Vassilev 2025 §2.1)</div>
+    <p><em>For any checker C_Π(T_Π, p) there exist a truth T_Π such that C_Π(T_Π, p) ≠ 1, ∀ p.</em></p>
+  </div>
+
+  <p>
+    构造算法 1：在 i = 1, 2, 3, ... 上穷举所有 (x ∈ Γ_Π, p)，若 C_Π(T_Π, p) == 1
+    就输出 x。这个算法只在编码 n 上"额外"用了 log₂ n bits，其余部分常数 ⇒
+    <code>len(Algo 1) = O(log n) ≪ n</code>。于是：
+  </p>
+  <ul style="padding-left:20px;font-size:14px;line-height:2;">
+    <li>若 T_Π 真 ⇒ 找不到合法 (x, p) ⇒ Algorithm 1 不返回（看起来对）</li>
+    <li>但 Algorithm 1 本身是一条长度 ≤ n 的"输出 x"算法 ⇒ T_Π 应被否定 ⇒ 与假设矛盾</li>
+  </ul>
+
+  <h3>Theorem 3 — 有限上下文的现实版</h3>
+
+  <div class="theorem">
+    <div class="name">Theorem 3 (Vassilev 2025 §2.2)</div>
+    <p><em>For any checker C_Π̂(T_Π̂, p̂) there exist a truth T_Π̂ such that C_Π̂(T_Π̂, p̂) ≠ 1, ∀ p̂.</em></p>
+  </div>
+
+  <p>
+    关键 case 分流：
+  </p>
+  <div class="ascii-figure">
+    <pre>令 Θ = 长度 ≤ n 的算法可产生的 prompt 集合
+        ┌── Θ = Γ̂_Π̂  → 算法规格已穷尽所有 adversarial prompt → T_Π̂ 不成立 → 直接成立
+        │
+        └── Θ ⊂ Γ̂_Π̂  → 必有 x 使 T_Π̂ 真 → Algorithm 2 (与 Algorithm 1 同形, O(log n))
+                          → 同样自指矛盾</pre>
+    <span class="cap">图 2 — 有限上下文的定理分流。论文承认"global Earth 资源穷举不起所有 prompt"，把 case(1) 留给已穷尽攻击的极端假设。</span>
+  </div>
+
+  <h3>Theorems 4 &amp; 5 — 认知推理的极限</h3>
+  <p>
+    把 checker 推广到"任意真理 verifier" ⇒ 任何 AI（包括 AGI/ASI）都存在它<strong>永远无法证明</strong>的真。
+    作者明确说这不是"AI 不会发现新定理"——它是发现新真理的高效引擎，只是有结构性上限。
+    <span class="pill clay">哲学外推</span> &nbsp;
+    <span class="pill sky">严格性中等</span>
+  </p>
+</section>
+
+<section id="context-windows">
+  <h2>Figure 1：5 个 LLM 的上下文窗口</h2>
+  <hr class="rule">
+
+  <p>
+    论文的 Figure 1（GPT-5 渲染，1702×1095）把"为什么 checker 输入空间巨大"可视化，
+    对数轴 5 条 sky-blue bar：
+  </p>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width:120px">Rank</th>
+        <th>Model</th>
+        <th style="width:160px">Tokens</th>
+        <th>现实比喻（论文原文）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Gemini 1.5</td><td>1,000,000</td><td>Library shelf（≈ 2000+ pages）</td></tr>
+      <tr><td>2</td><td>Claude 3.5</td><td>200,000</td><td>Textbook（≈ 500 pages）</td></tr>
+      <tr><td>3</td><td>GPT-4 Turbo</td><td>128,000</td><td>Novel（≈ 300 pages）</td></tr>
+      <tr><td>4</td><td>GPT-4</td><td>32,000</td><td>Novella（≈ 50 pages）</td></tr>
+      <tr><td>5</td><td>GPT-3</td><td>2,000</td><td>Short story（≈ 5 pages）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout sky">
+    <strong>论文的 bridge：</strong>即使把窗口去掉，把一个 token ≈ 4 字符算，
+    W = 1M tokens 已是 4M 字符。Algorithmic enumeration 远不可能覆盖。
+    于是"现实 AI"仍可视为 Theorem 2 的理想情况。
+  </div>
+</section>
+
+<section id="practical">
+  <h2>Practical Measures：对称的乐观</h2>
+  <hr class="rule">
+
+  <p>
+    论文 §2.2 末段、§3 反复承认"<em>定理没给出构造 x 的方法</em>"——
+    这是负责任的写法，也是它能落地的关键。论文写明：
+  </p>
+
+  <table class="data-table">
+    <thead>
+      <tr><th style="width:160px">路径</th><th>做法</th><th>论文依据</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="pill sky">主动收集</span></td>
+        <td>持续搜索新 adversarial prompt，更新 Π̂</td>
+        <td>§2.2 末段</td>
+      </tr>
+      <tr>
+        <td><span class="pill olive">多层 guardrails</span></td>
+        <td>输入 / 数据 / 模型 / 输出 / 动作 / 审计 6 层组合（对应 NIST AI RMF Govern→Map→Measure→Manage）</td>
+        <td>§1 引言表 A-F</td>
+      </tr>
+      <tr>
+        <td><span class="pill purple">检测先验</span></td>
+        <td>不依赖纯 pattern matching；OOD detection 学界工作（OODDetect2022 等）</td>
+        <td>bib 备读条目</td>
+      </tr>
+      <tr>
+        <td><span class="pill clay">物理 / 政策层</span></td>
+        <td>"Autonomous Networking" 等域同样适用</td>
+        <td>§3 末段</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>关键观察</strong>：这些<em>应对措施并没有被论文证明能"扭转" Theorem 2/3</em>，
+    只能工程上抬高攻击成本。这是一个很现实的诚实——但读起来也像是"反正你也挡不住，那就堆防御"。
+  </div>
+</section>
+
+<section id="assumptions">
+  <h2>隐含假设 & 可被攻击的弱点</h2>
+  <hr class="rule">
+
+  <div class="grid-2">
+    <div class="insight-card">
+      <div class="label">假设 1 · 架构无关</div>
+      <h3>"忽略前半" 依赖 LLM 行为</h3>
+      <p>拼接良性前缀让模型 ignore 前半，只看 x_max —— 这本身依赖 LLM 行为。如果定理号称架构无关，这一步就是个 <strong>smuggled LLM assumption</strong>。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">假设 2 · checker 长度</div>
+      <h3>Algorithm 1 长度 O(log n) 的工程含义</h3>
+      <p>“n 是单一参数” → 但实际 checker 实现还要 hand-coded tokenizer、parser、handler 等大常数开销，作者把这部分归到"depends on programming language"，回避量化。这是经典 Chaitin 论证的老漏洞（参见 Raatikainen 1998）。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">假设 3 · checker=证据论</div>
+      <h3>"可验证" 这个形式前提</h3>
+      <p>C(T, p) = 1 iff there is a verifiable proof p。p 必须由 C 自身可验证 —— 这里<strong>“可验证”</strong>本身是有争议的形式化前提。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">假设 4 · 全称量词强度</div>
+      <h3>∀ checker 在工程上比证明更强</h3>
+      <p>现实里不同对手算力差异巨大，"对所有 checker" 这个全称命题<strong>比定理更强</strong> —— 是论文<em>最强</em>也<em>最不实用</em>的地方，论文自己也知道（§3 Practical Measures）。</p>
+    </div>
+  </div>
+</section>
+
+<section id="references">
+  <h2>Reference Map：作者立场与谱系</h2>
+  <hr class="rule">
+
+  <h3>直接引用（8 处 \cite）</h3>
+  <table class="data-table">
+    <thead><tr><th>类别</th><th>文献</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill sky">math</span></td><td>Gödel 1931 · On Formally Undecidable Propositions</td><td>数学骨架</td></tr>
+      <tr><td><span class="pill sky">math</span></td><td>Chaitin 1974 · <em>J. ACM</em> · Information-Theoretic Limitations of Formal Systems</td><td>Chaitin 不完备（论文核心范式）</td></tr>
+      <tr><td><span class="pill olive">nist</span></td><td>Vassilev et al. 2025 · NIST AI 100-2e2025 · <em>Adversarial Machine Learning: A Taxonomy</em></td><td>实证锚点（<strong>本文作者就是该 Taxonomy 主笔</strong>）</td></tr>
+      <tr><td><span class="pill olive">nist</span></td><td>NIST AI RMF · <a href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener" style="color:var(--sky);">nist.gov</a></td><td>治理框架</td></tr>
+      <tr><td><span class="pill clay">attack</span></td><td>Russinovich et al. 2024 · Crescendo 多轮 jailbreak · <a href="https://arxiv.org/abs/2404.01833" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2404.01833</a></td><td>"contextual framing"</td></tr>
+      <tr><td><span class="pill clay">attack</span></td><td>Jiang et al. 2024 · ArtPrompt ASCII-Art jailbreak · <a href="https://arxiv.org/abs/2402.11753" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2402.11753</a></td><td>"compositional ambiguity"</td></tr>
+      <tr><td><span class="pill clay">attack</span></td><td>Zou et al. 2025 · Agent 安全 · <a href="https://arxiv.org/abs/2507.20526" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2507.20526</a></td><td>"near-100% attack success on agents"</td></tr>
+      <tr><td><span class="pill rust">misc</span></td><td>Trail of Bits · <a href="https://blog.trailofbits.com/2025/04/29/deceiving-users-with-ansi-terminal-codes-in-mcp/" target="_blank" rel="noopener" style="color:var(--sky);">ANSI terminal codes in MCP</a></td><td>"compositional ambiguity" 实例之一</td></tr>
+    </tbody>
+  </table>
+
+  <h3>.bib 中存在但正文未引用——作者的横向阅读谱</h3>
+
+  <div class="callout purple">
+    这 7 篇未被 cite 的条目里至少有 4 篇是平行的不可能性定理。
+    <strong>Vassilev 对 "AI 不可能性" 路线有非常清醒的谱系感</strong>——
+    但在 14 篇 .bib 里没引用 Wolf 2023（最直接的同源工作），这是个值得读者注意的信号：
+    是反驳前作，还是觉得"不够形式化"？
+  </div>
+
+  <table class="data-table">
+    <thead><tr><th style="width:200px">Bib key</th><th>主题</th><th>本文关系</th></tr></thead>
+    <tbody>
+      <tr><td>glukhov2023llm</td><td>LLM Censorship = ML or Computer Security?</td><td>概念框架（"安全"的视角之争）</td></tr>
+      <tr><td>Wolf2023FundamentalLO</td><td>Fundamental Limitations of Alignment in LLMs<br><a href="https://arxiv.org/abs/2304.11082" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2304.11082</a></td><td><strong>同路线前作</strong>（Wolf et al. 用贝叶斯方法证"理论对齐"不可达）；本文把它推到信息论层</td></tr>
+      <tr><td>Zhang2023WatermarksIT</td><td>Watermarks Impossibility for Generative Models<br><a href="https://arxiv.org/abs/2311.04378" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2311.04378</a></td><td>同源范式（"某种输出溯源"的信息论不可能性）</td></tr>
+      <tr><td>undetectabletrojan2022</td><td>Planting Undetectable Backdoors</td><td>模型权重层的不可能性</td></tr>
+      <tr><td>OODDetect2022</td><td>Is Out-of-Distribution Detection Learnable?</td><td>防御侧"能否学出 prompt 不可判定"</td></tr>
+      <tr><td>karpowicz2025</td><td>Impossibility of Hallucination Control<br><a href="https://arxiv.org/abs/2506.06382" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2506.06382</a></td><td><strong>平行的不可能性定理</strong>（幻觉控制）</td></tr>
+      <tr><td>kalai2025languagemodelshallucinate</td><td>Why Language Models Hallucinate<br><a href="https://arxiv.org/abs/2509.04664" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2509.04664</a></td><td>同上（OpenAI/Microsoft 团队，2025-09）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="citations">
+  <h2>已被引用：3 个下游工作的立场</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>论文</th><th>立场</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Munawar Hasan · <em>Incompleteness of AI Safety Verification via Kolmogorov Complexity</em> · arXiv 2604.04876 (2026)</td>
+        <td>用 Kolmogorov 复杂度的<em>同路径</em>重新走，独立验证</td>
+      </tr>
+      <tr>
+        <td>Ezra N. S. Lockhart · <em>Constraint, Asymmetry, and Meaning: A Cybernetic Reinterpretation</em> · <em>Symmetry</em> 1803518 (2026)</td>
+        <td>用 cybernetics 视角的延伸（期刊，非 arXiv）</td>
+      </tr>
+      <tr>
+        <td>Abhisek Ganguly · <em>Dual Computational Horizons: Incompleteness and Unpredictability in Intelligent Systems</em> · arXiv 2512.16707 (2025-12)</td>
+        <td>几乎同期同路线，把不完备 + 不预测双视角联合</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    三篇都和本文方向一致，但都尚未"反驳" Vassilev 的形式化；
+    主要在自己复述/扩展。Hasan 这一篇技术最接近理论根（Kolmogorov Complexity ≡ Algorithmic Information Theory），
+    是工程读者值得关注的后续。
+  </p>
+</section>
+
+<section id="stance">
+  <h2>立场与争议地图</h2>
+  <hr class="rule">
+
+  <div class="ascii-figure">
+    <pre>[全文 7 页论证链]
+       │
+       ├── 形式骨架:    Gödel + Chaitin (1931/1974)        ★ 稳健
+       │
+       ├── 实证锚点:    NIST AML + Russinovich + Zou        ★ 稳健
+       │
+       ├── 推广:        ASI 仍有认知上限                  △ 推测性大
+       │
+       ├── 应对建议:    主动搜索 + NIST RMF 六层            △ 工程经验
+       │
+       └── 哲学外延:    Autonomous Networking 类比           ★ 修辞</pre>
+    <span class="cap">图 3 — 全文各部分的可信度评级。</span>
+  </div>
+
+  <div class="grid-3">
+    <div class="insight-card">
+      <div class="label">NIST / 政府 AI 安全决策者</div>
+      <h3>理论止损的论据</h3>
+      <p>直接对齐 NIST 内部视角，提供"为何堆 guardrail 也有理论上限"的论证。可能被用来"放弃追求绝对安全"——论文明确说不是这个意思。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">AI 安全研究员</div>
+      <h3>形式骨架完备</h3>
+      <p>+ 引用谱系清晰。实证结果空（无 benchmarks）；适合理论对象。Algorithm 1 与 Wolf et al. 2023 的对比是高质量讨论素材。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">LLM 工程师 / Red Team</div>
+      <h3>没被武器化</h3>
+      <p>Theorem 2/3 没给出攻击 recipe ⇒ 不能被攻击者直接利用。但"模糊是天然漏洞"提供哲学基础。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>OUP / RSS 投刊观察：</strong>论文使用 <code>oup-authoring-template.cls</code>，原本属于 Oxford University Press，
+    作者以 OUP 模板投稿至 Royal Statistical Society 系列。<em>这本期刊历来发统计方法</em>，"AI 不可能性" 是合适选择吗？
+    可能是多元投稿之一，但值得关注审稿反馈——尤其对 Theorem 2 的 O(log n) 假设。
+  </div>
+</section>
+
+<section id="nonobvious">
+  <h2>这篇论文的"非显然"价值</h2>
+  <hr class="rule">
+
+  <p>读完之后，调研者最大的两个发现（论文没明说）：</p>
+
+  <ol style="padding-left:24px;font-size:15px;line-height:1.85;">
+    <li>
+      <strong>作者知道这个结论会让人 stop trying</strong>—— §2.2 末段、§3 反复强调"定理不给攻击 recipe"。
+      这是<em>负责任的写法</em>，也是它值得读的原因。
+    </li>
+    <li>
+      <strong>.bib 比正文更广</strong>：7 条未引用的"不可能性/极限"工作 ⇒ Vassilev 在做一套
+      <em>广义的 AI 安全信息论框架</em>。本文只是 RMF Misuse Violations 那批工作里的一块拼图——
+      是 NIST 视角 vs 学界视角的一个具体分叉。
+    </li>
+  </ol>
+
+  <div class="callout olive">
+    <strong>学界视角</strong>（Wolf et al. 2023、Kalai et al. 2025、Karpowicz 2025）走"贝叶斯 / 统计 / 不可学习"路径；
+    <strong>政策视角</strong>（Vassilev 这篇）反而回到 Gödel/Chaitin 这种<em>哲学上更干净</em>的工具。
+    这是 NIST AML Taxonomy 体系天然倾向的论域定位。
+  </div>
+</section>
+
+<section id="evidence">
+  <h2>调研元数据 & 可信度</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead>
+      <tr><th style="width:200px">资源</th><th>状态</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>arXiv Atom API</td><td>✅ 拉到</td><td>title / authors / categories / dates</td></tr>
+      <tr><td>arXiv abs.html</td><td>✅ 拉到</td><td>—</td></tr>
+      <tr><td>arXiv HTML 全文</td><td>✅ 拉到</td><td>解析为 28KB paper.txt</td></tr>
+      <tr><td>arXiv PDF 全文</td><td>✅ 拉到</td><td>7 页 / 447KB</td></tr>
+      <tr><td>arXiv 源码 tarball</td><td>✅ 拉到</td><td>LaTeX + reference.bib + Figures/ContextWindow.PNG</td></tr>
+      <tr><td>reference.bib 全文</td><td>✅ 14 条</td><td>8 用 / 7 备读</td></tr>
+      <tr><td>Semantic Scholar: paper 详情</td><td>✅ 拉到</td><td>3 citations, 25 refs（auto-padded）</td></tr>
+      <tr><td>Semantic Scholar: 3 引文</td><td>✅ 拉到</td><td>Hasan / Lockhart / Ganguly</td></tr>
+      <tr><td>Semantic Scholar: recommendations</td><td>❌ 429</td><td>rate-limited，无 key</td></tr>
+      <tr><td>NIST 官网 / DOI / nvlpubs</td><td>❌ 403</td><td>无法直接读 AML.018 子项</td></tr>
+      <tr><td>Figure 1 OCR</td><td>✅ vision_analyze 404</td><td>→ fallback 到 MiniMax-M3 base64，5 个模型 + log 轴确认</td></tr>
+      <tr><td>arXiv v1 → v2 的实际 diff</td><td>⚠️ 无 changelog</td><td>arXiv 不暴露 diff；摘要一致</td></tr>
+    </tbody>
+  </table>
+
+  <h3>整体可信度评级</h3>
+
+  <table class="data-table">
+    <thead><tr><th style="width:240px">项</th><th>评级</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>形式骨架</td><td><span class="pill olive">高</span></td><td>Gödel–Chaitin 是经典，Paper 用法稳妥；Algorithm 1/2 是清晰复刻</td></tr>
+      <tr><td>核心结论（Thm 2/3）</td><td><span class="pill clay">中高</span></td><td>标准结论，但 "unconditional" 程度依赖一条关于 checker 长度的简化工程假设</td></tr>
+      <tr><td>外推（Thm 4/5）</td><td><span class="pill purple">中</span></td><td>哲学外推；不是严格的"AGI 不可能性"，需读论文 §3 末段谨慎措辞</td></tr>
+      <tr><td>工程价值</td><td><span class="pill purple">中</span></td><td>主要价值是 reference graph，不是新缓解技术</td></tr>
+      <tr><td>综述价值</td><td><span class="pill olive">高</span></td><td>7 页 + 14 条参考把"AI 安全信息论上限"做成可读的小论文</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="reading">
+  <h2>可继续追的延伸阅读</h2>
+  <hr class="rule">
+
+  <table class="data-table">
+    <thead><tr><th>方向</th><th>文献</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill sky">同路线必读</span></td><td>Wolf, Wies, Levine, Shashua 2023 · <em>Fundamental Limitations of Alignment in LLMs</em> · <a href="https://arxiv.org/abs/2304.11082" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2304.11082</a></td></tr>
+      <tr><td><span class="pill sky">同路线必读 II</span></td><td>Karpowicz 2025 · <em>Impossibility of Hallucination Control in LLMs</em> · <a href="https://arxiv.org/abs/2506.06382" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2506.06382</a></td></tr>
+      <tr><td><span class="pill sky">同路线必读 III</span></td><td>Kalai, Nachum, Vempala, Zhang 2025 · <em>Why Language Models Hallucinate</em> · <a href="https://arxiv.org/abs/2509.04664" target="_blank" rel="noopener" style="color:var(--sky);">arXiv 2509.04664</a></td></tr>
+      <tr><td><span class="pill olive">NIST 官方</span></td><td>Vassilev et al. · <em>NIST AI 100-2e2025</em> · Adversarial Machine Learning: A Taxonomy and Terminology of Attacks and Mitigations</td></tr>
+      <tr><td><span class="pill purple">形式基础</span></td><td>Stanford Encyclopedia of Philosophy · <a href="https://plato.stanford.edu/entries/goedel-incompleteness/" target="_blank" rel="noopener" style="color:var(--sky);">Gödel's Incompleteness Theorems</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Generated by Hermes Agent · 2026-08-08<br>
+  Source script · reference.bib · paper.txt · ContextWindow.PNG all at <code>/tmp/arxiv-2512.10100/</code><br>
+  arXiv: <a href="https://arxiv.org/abs/2512.10100" style="color:var(--sky);">arxiv.org/abs/2512.10100</a> &nbsp;·&nbsp;
+  PDF: <a href="https://arxiv.org/pdf/2512.10100" style="color:var(--sky);">arxiv.org/pdf/2512.10100</a> &nbsp;·&nbsp;
+  HTML: <a href="https://arxiv.org/html/2512.10100" style="color:var(--sky);">arxiv.org/html/2512.10100</a>
+</footer>
+
+</div>
+</body>
+</html>
