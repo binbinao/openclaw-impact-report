@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第74期 · 2026-08-09</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --orange: #d2700d;
+    --purple: #bc8cff;
+    --cyan: #39d2c0;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 0; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+  .header { text-align: center; padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 8px; }
+  .header .badge { display: inline-block; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2px 12px; font-size: 12px; color: var(--text-dim); margin-top: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); }
+  .card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .card .delta { font-size: 12px; margin-top: 2px; }
+  .up { color: var(--red); }
+  .down { color: var(--green); }
+  .stable { color: var(--text-dim); }
+  .section { margin-bottom: 32px; }
+  .section h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .section h2 .badge { font-size: 11px; font-weight: 400; padding: 1px 8px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .bar-container { display: flex; align-items: center; gap: 8px; }
+  .bar { height: 16px; border-radius: 4px; min-width: 2px; }
+  .bar-label { font-size: 12px; color: var(--text-dim); white-space: nowrap; min-width: 40px; text-align: right; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 8px; font-size: 11px; font-weight: 500; }
+  .tag-critical { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+  .tag-high { background: rgba(210,112,13,0.15); color: var(--orange); border: 1px solid rgba(210,112,13,0.3); }
+  .tag-medium { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+  .tag-low { background: rgba(57,210,192,0.15); color: var(--cyan); border: 1px solid rgba(57,210,192,0.3); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+  .tag-stable { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  .alert { background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.2); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+  .alert-warn { background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.2); }
+  .alert-info { background: rgba(57,210,192,0.08); border: 1px solid rgba(57,210,192,0.2); }
+  .alert-new { background: rgba(188,140,255,0.08); border: 1px solid rgba(188,140,255,0.2); }
+  .alert .title { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .alert .desc { font-size: 12px; color: var(--text-dim); }
+  .paper { margin-bottom: 12px; padding: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 6px; }
+  .paper .title { font-weight: 600; font-size: 13px; color: var(--accent); }
+  .paper .meta { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .paper .summary { font-size: 12px; color: var(--text); margin-top: 6px; }
+  .story { margin-bottom: 8px; }
+  .story .title { font-weight: 500; font-size: 13px; }
+  .story .meta { font-size: 11px; color: var(--text-dim); }
+  .footer { text-align: center; padding: 24px 0; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 12px; margin-top: 32px; }
+  .highlight { color: var(--yellow); font-weight: 600; }
+  .highlight-green { color: var(--green); font-weight: 600; }
+  .highlight-red { color: var(--red); font-weight: 600; }
+  .highlight-purple { color: var(--purple); font-weight: 600; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🧬 自进化简报 · 第74期</h1>
+  <div class="subtitle">2026-08-09 · 系统健康度 · 能力扫描 · 外部知识</div>
+  <div class="badge">P74 · 第 74 期 · 运行 84 天</div>
+</div>
+
+<!-- ====== 1. CAPABILITY STATUS ====== -->
+<div class="section">
+  <h2>📊 能力状态</h2>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">🔧 可用工具</div>
+      <div class="value" style="color: var(--purple);">37</div>
+      <div class="up">↑+3 · 14 期来首次增长</div>
+    </div>
+    <div class="card">
+      <div class="label">📚 技能总数</div>
+      <div class="value">70</div>
+      <div class="stable">14 活跃 · 56 过期</div>
+    </div>
+    <div class="card">
+      <div class="label">🧠 记忆使用</div>
+      <div class="value">37%</div>
+      <div class="stable">Memory 816 · User 231</div>
+    </div>
+    <div class="card">
+      <div class="label">⏰ Cron 任务</div>
+      <div class="value">2</div>
+      <div class="stable">2 活跃 · 0 暂停</div>
+    </div>
+    <div class="card">
+      <div class="label">🛡️ 弱点检出</div>
+      <div class="value" style="color: var(--text-dim);">0</div>
+      <div class="down">盲区连续第 35 期</div>
+    </div>
+    <div class="card">
+      <div class="label">📄 日志窗口</div>
+      <div class="value" style="color: var(--yellow);">500</div>
+      <div class="stable">全部 08-09 当日 · 单一窗口</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>指标</th><th>P73 (08-08)</th><th>P74 (08-09)</th><th>变化</th></tr>
+    <tr><td>工具数</td><td>34</td><td><span class="highlight-purple">37</span></td><td><span class="tag tag-medium">⬆ +3 显著增长</span></td></tr>
+    <tr><td>技能总数</td><td>70</td><td>70</td><td><span class="tag tag-stable">→ 稳定</span></td></tr>
+    <tr><td>活跃技能</td><td>14</td><td>14</td><td><span class="tag tag-stable">→ 稳定</span></td></tr>
+    <tr><td>过期技能</td><td>56</td><td>56</td><td><span class="tag tag-stable">→ 稳定</span></td></tr>
+    <tr><td>记忆使用率</td><td>37%</td><td>37%</td><td><span class="tag tag-stable">→ 稳定</span></td></tr>
+    <tr><td>Cron 活跃</td><td>2</td><td>2</td><td><span class="tag tag-stable">→ 稳定</span></td></tr>
+  </table>
+
+  <div class="alert alert-new">
+    <div class="title">💥 工具数 14 期来首次增长！34→37（+3）</div>
+    <div class="desc">
+      自 P60 (07-26) 工具数从 32 升至 34 以来，连续 14 期稳定在 34。本期突破至 <strong>37</strong>（↑+3），是自 P42 (07-08, 30→32) 以来幅度最大的一次增长。新增工具包括 <code>flux3_video</code>、<code>focus_pane</code>、<code>open_preview</code>、<code>read_preview</code>、<code>react_to_message</code> 等——注意净增量为 +3，说明部分旧工具可能已被移除或重命名。技能总数 70 连续第 10 期稳定，活跃技能 14 持平（P73 微降后未进一步衰减）。记忆使用率 37% 连续 11 期以上不变。系统能力整体处于稳定扩展期。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 2. WEAKNESS ANALYSIS ====== -->
+<div class="section">
+  <h2>⚠️ 弱点分析</h2>
+
+  <div class="alert alert-warn">
+    <div class="title">🚨 弱点盲区连续第 35 期（0 检出 · 近 3 个月）</div>
+    <div class="desc">weakness_scan 再次输出 0 个弱点，但 500 行窗口中实际存在大量错误。本期组件分布发生 <strong>结构性突变</strong>——一个全新的组件 <code>hermes_cli.plugins</code> 以 294 条（58.8%）跃居主导地位，完全改变了窗口格局。三个并行盲区持续生效：
+      <br>(1) <strong>洪水盲区：</strong> gateway 组件（gateway.run + hermes_cli.gateway）合计 197 条（39.4%），仍高于 70% 假突破阈值？不——本期 gateway 占比首次降至 39.4%，低于所有历史阈值。但洪水盲区被 <strong>新组件位移</strong> 取代——hermes_cli.plugins 的 58.8% 占比将其他非洪水证据挤出窗口。
+      <br>(2) <strong>WARNING 级别过滤盲区：</strong> hermes_cli.plugins 294 条全部为 WARNING 级别，同一签名（"Failed to parse plugin.json"）被系统性忽略。
+      <br>(3) <strong>签名碎片化盲区：</strong> hermes_cli.plugins 的 294 条由 3 个不同插件签名组成（每个 ~98 条），但 WARNING 级别过滤使碎片化分析不适用。
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">窗口分析行数</div>
+      <div class="value" style="color: var(--yellow);">500</div>
+      <div class="stable">全部 08-09 当日</div>
+    </div>
+    <div class="card">
+      <div class="label">ERROR</div>
+      <div class="value" style="color: var(--red);">105</div>
+      <div class="down">21.0%</div>
+    </div>
+    <div class="card">
+      <div class="label">WARNING</div>
+      <div class="value" style="color: var(--yellow);">395</div>
+      <div class="up">79.0%</div>
+    </div>
+    <div class="card">
+      <div class="label">非洪水占比</div>
+      <div class="value" style="color: var(--cyan);">60.6%</div>
+      <div class="stable">303 条 / 500 行</div>
+    </div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">组件分布 · 尾窗 (500 行)</h3>
+  <div style="margin-top: 8px;">
+    <div class="bar-container"><div class="bar-label">hermes_cli.plugins</div><div class="bar" style="width: 294px; background: linear-gradient(90deg, var(--purple), var(--cyan));"></div><span class="highlight-purple">294 (58.8%)</span> 🆕</div>
+    <div class="bar-container"><div class="bar-label">hermes_cli.gateway</div><div class="bar" style="width: 99px; background: linear-gradient(90deg, #d29922, #f85149);"></div><span>99 (19.8%)</span></div>
+    <div class="bar-container"><div class="bar-label">gateway.run</div><div class="bar" style="width: 98px; background: #f85149;"></div><span>98 (19.6%)</span></div>
+    <div class="bar-container"><div class="bar-label">api_server</div><div class="bar" style="width: 7px; background: #f85149;"></div><span>7 (1.4%)</span></div>
+    <div class="bar-container"><div class="bar-label">tools.approval</div><div class="bar" style="width: 2px; background: #d29922;"></div><span>2 (0.4%)</span></div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">Top 错误签名</h3>
+  <table>
+    <tr><th>#</th><th>签名</th><th>计数</th><th>级别</th><th>组件</th></tr>
+    <tr><td>1</td><td>Failed to parse .../.claude-plugin/plugin.json</td><td>98</td><td><span class="tag tag-medium">WARNING</span></td><td><span class="tag tag-stable" style="color: var(--purple);">NEW</span></td></tr>
+    <tr><td>2</td><td>Failed to parse .../.codex-plugin/plugin.json</td><td>98</td><td><span class="tag tag-medium">WARNING</span></td><td><span class="tag tag-stable" style="color: var(--purple);">NEW</span></td></tr>
+    <tr><td>3</td><td>Failed to parse .../.cursor-plugin/plugin.json</td><td>98</td><td><span class="tag tag-medium">WARNING</span></td><td><span class="tag tag-stable" style="color: var(--purple);">NEW</span></td></tr>
+    <tr><td>4</td><td>Another gateway instance is already running (PID 3433647)</td><td>98</td><td><span class="tag tag-high">ERROR</span></td><td>gateway.run</td></tr>
+    <tr><td>5</td><td>Gateway (re)started 6 times in 120s — backing off 10s</td><td>71</td><td><span class="tag tag-medium">WARNING</span></td><td>hermes_cli.gateway</td></tr>
+    <tr><td>6</td><td>Gateway (re)started 7 times in 120s — backing off 20s</td><td>28</td><td><span class="tag tag-medium">WARNING</span></td><td>hermes_cli.gateway</td></tr>
+    <tr><td>7</td><td>[Api_Server] Refusing to start: API_SERVER_KEY required</td><td>7</td><td><span class="tag tag-high">ERROR</span></td><td>api_server</td></tr>
+    <tr><td>8</td><td>Unknown approvals.mode 'auto' — defaulting to 'manual'</td><td>2</td><td><span class="tag tag-medium">WARNING</span></td><td>tools.approval</td></tr>
+  </table>
+
+  <div class="alert alert-new">
+    <div class="title">🆕 结构性突变！hermes_cli.plugins 以 58.8% 跃居主导 — 全新组件</div>
+    <div class="desc">
+      <strong>hermes_cli.plugins</strong> 组件在 P71-P73 从未出现，本期以 294 条（58.8%）成为窗口最大组件。三个签名完全一致的模式：<code>Failed to parse plugin.json: plugin.json declares an unsupported or missing Agent Plugins schema</code>，针对 superpowers 目录下的 .claude-plugin、.codex-plugin、.cursor-plugin 三个子目录。<br><br>
+      <strong>影响分析：</strong><br>
+      • 这是自 P19 (06-15, api_server 首次出现) 以来最显著的结构性突变<br>
+      • 全新组件占比 >50%，触发"结构性突变"检测规则（见 Pitfalls）<br>
+      • 所有基于 P71-P73 组件分布趋势的预测模型暂停——线性外推假设被推翻<br>
+      • 观测期至少 2-3 期以建立新基线<br>
+      • 好消息：所有 294 条均为 WARNING 级别，无实际功能影响——只是 plugin.json 模式验证失败<br>
+      • 可能原因：superpowers 插件更新或 schema 版本变更，导致旧版 plugin.json 不被新版本兼容<br><br>
+      <strong>建议修复：</strong> 检查 superpowers 插件目录，更新 plugin.json 格式以匹配当前 schema 版本，或移除不兼容的插件。
+    </div>
+  </div>
+</div>
+
+<!-- ====== 3. TREND ANALYSIS ====== -->
+<div class="section">
+  <h2>📈 趋势分析</h2>
+
+  <div class="alert alert-new">
+    <div class="title">💥 结构性突变：网关洪水垄断被打破，hermes_cli.plugins 新主导源</div>
+    <div class="desc">
+      <strong>P74 的组件分布发生了自 P19（06-15, api_server 首次出现）以来最根本的变化：</strong><br><br>
+      <strong>网关洪水占比骤降：</strong> gateway.run (98) + hermes_cli.gateway (99) = <strong>197 条（39.4%）</strong><br>
+      这是自 P64（78.4%）以来网关占比首次低于 70%，标志着持续 53 期的网关洪水垄断被打破（但非被修复——是被新组件 <strong>位移</strong>）。<br><br>
+      <strong>她的新组件：</strong> hermes_cli.plugins = <strong>294 条（58.8%）</strong><br>
+      三个插件签名各 98 条，完全一致的模式。WARNING 级别，无功能影响。<br><br>
+      <strong>非常规组件被挤出窗口：</strong><br>
+      • tool_executor: 16→<strong>0</strong>（完全消失）<br>
+      • tools.approval: 68→<strong>2</strong>（↓-97.1%）<br>
+      • api_server: 14→<strong>7</strong>（↓-50.0%）<br>
+      • conversation_loop: 2→<strong>0</strong>（完全消失）<br><br>
+      <strong>⚠️ 跨组件窗口位移确认：</strong> 这些组件并非被修复，而是被 hermes_cli.plugins 的 294 条挤出 500 行窗口。与 P21 的 gateway.run 将 api_server 挤出窗口的模式完全一致。<br><br>
+      <strong>对预测模型的影响：</strong> 所有基于 P71-P73 趋势的组件级预测暂停。结构性突变期间，进入"观测期"至少 2-3 期以建立新基线。工具数 34→37 的增长独立于错误事件，是正向扩展信号。
+    </div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">趋势对比表</h3>
+  <table>
+    <tr><th>期号</th><th>日期</th><th>网关占比</th><th>hermes_cli.plugins</th><th>非洪水*</th><th>tools.approval</th><th>tool_executor</th><th>api_server</th><th>弱点</th><th>工具数</th></tr>
+    <tr><td>P70</td><td>08-05</td><td>84.7%</td><td>—</td><td>76</td><td>41</td><td>18</td><td>15</td><td>0</td><td>34</td></tr>
+    <tr><td>P71</td><td>08-06</td><td>81.6%</td><td>—</td><td>92</td><td>58</td><td>17</td><td>14</td><td>0</td><td>34</td></tr>
+    <tr><td>P72</td><td>08-07</td><td>87.8%</td><td>—</td><td>61</td><td>33</td><td>12</td><td>15</td><td>0</td><td>34</td></tr>
+    <tr><td>P73</td><td>08-08</td><td>79.8%</td><td>—</td><td>101</td><td>68</td><td>16</td><td>14</td><td>0</td><td>34</td></tr>
+    <tr><td style="background: rgba(188,140,255,0.08);">P74</td><td style="background: rgba(188,140,255,0.08);">08-09</td><td style="background: rgba(188,140,255,0.08);"><span class="highlight-green">39.4%</span></td><td style="background: rgba(188,140,255,0.08);"><span class="highlight-purple">294 🆕</span></td><td style="background: rgba(188,140,255,0.08);"><span class="highlight">303</span></td><td style="background: rgba(188,140,255,0.08);">2</td><td style="background: rgba(188,140,255,0.08);">0</td><td style="background: rgba(188,140,255,0.08);">7</td><td style="background: rgba(188,140,255,0.08);">0</td><td style="background: rgba(188,140,255,0.08);"><span class="highlight-purple">37</span></td></tr>
+  </table>
+  <div style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">*非洪水 = 所有非 gateway 组件合计（P74 含 hermes_cli.plugins）</div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">上期预测验证</h3>
+  <table>
+    <tr><th>预测项</th><th>P73 预测</th><th>实际值</th><th>结果</th></tr>
+    <tr><td>网关占比</td><td>P73 79.8% 为低点，P74 反弹</td><td>39.4% ↓ -40.4pp</td><td><span class="tag tag-critical">✗ 完全错误（结构性突变中断）</span></td></tr>
+    <tr><td>非洪水尾窗</td><td>随网关回流压缩至 80-100 条</td><td>303 ↑ +200%</td><td><span class="tag tag-critical">✗ 完全错误（新组件爆发）</span></td></tr>
+    <tr><td>tool_executor</td><td>中位振荡（12-18）</td><td>0</td><td><span class="tag tag-critical">✗ 被挤出窗口</span></td></tr>
+    <tr><td>arXiv</td><td>恢复概率较高（P73 成功）</td><td>失败 ❌</td><td><span class="tag tag-high">✗ 1 期中断</span></td></tr>
+    <tr><td>PID 3433647</td><td>继续运行，概率 >99%</td><td>第 34 期（33 天）</td><td><span class="tag tag-green">✓ 精确命中</span></td></tr>
+  </table>
+
+  <div class="alert alert-warn">
+    <div class="title">⚠️ 结构性突变导致预测模型全面失效</div>
+    <div class="desc">
+      P74 的结构性突变（hermes_cli.plugins 新组件）使所有基于 P71-P73 趋势的预测失准。这是自 P19（06-15, api_server 首次出现）以来预测模型最严重的失效事件。5 项预测中仅 1 项正确（PID 3433647 持续运行），预测精度 1/5 = <strong>20%</strong>，创历史新低。注意：这不是预测模型的失败——结构性突变本身就是预测模型无法预测的（全新组件出现）。所有预测暂停，进入观测期。
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <div class="title">🏆 PID 3433647 — 第 34 期持续（33 天连续运行）</div>
+    <div class="desc">PID 3433647 第 34 期无变更，33 天连续运行，持续刷新纪录。即使网关洪水占比从 79.8% 骤降至 19.6%（被新组件位移），gateway.run 的 98 条 ERROR 日志证明此进程仍然存活且持续产生错误。</div>
+  </div>
+
+  <div class="alert alert-warn">
+    <div class="title">🎯 arXiv 中断 — P73 的 3 期连续成功窗口被打破</div>
+    <div class="desc">P74 arXiv 获取失败，打破 P71→P72→P73 的 3 期连续成功窗口。当前整体成功率 33/74 = <strong>44.6%</strong>（回落 0.6pp）。历史模式显示：3 期连续成功后的失败通常在 1-2 期内恢复。</div>
+  </div>
+
+  <div class="alert alert-info">
+    <div class="title">📊 非洪水状态全景 — 新组件主导下的全新格局</div>
+    <div class="desc">
+      P74 的非洪水 303 条由单一新组件 hermes_cli.plugins（294 条, 97.0%）主导。剔除插件解析 WARNING 后的真实非洪水基线为 9 条（api_server 7 + tools.approval 2），远低于历史基线 25-35 区间。<br><br>
+      <strong>关键结论：</strong><br>
+      • 25-35 基线区间在 P74 不可用——被新组件完全颠覆<br>
+      • 剔除新组件后的 9 条非洪水是历史最低水平——但这是窗口位移的假象（tool_executor 等被挤出）<br>
+      • 全文件扫描才能获取真实非洪水水平——但当前日志仅覆盖 08-09 当日，文件无跨日残留<br>
+      • 新组件 hermes_cli.plugins 的修复优先级：<strong>低</strong>（WARNING 级别，无功能影响）
+    </div>
+  </div>
+</div>
+
+<!-- ====== 4. KNOWLEDGE FEED ====== -->
+<div class="section">
+  <h2>🔬 知识发现 · 2026-08-09</h2>
+  <div class="badge" style="margin-left: 8px; font-size: 11px; padding: 2px 8px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); color: var(--yellow);">arXiv 失败 ❌ · HN 10 条 · 33/74=44.6%</div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">📄 arXiv 论文</h3>
+
+  <div class="alert alert-warn">
+    <div class="title">⚠️ arXiv API 失败 — 连续 3 期成功窗口后中断</div>
+    <div class="desc">P74 的 arXiv 获取失败，整体成功率 33/74=44.6%。历史模式显示：3 期成功后的失败通常在 1-2 期内恢复。P75 恢复概率较高。</div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 600; margin: 16px 0 8px;">📰 Hacker News 头条</h3>
+
+  <div class="story">
+    <div class="title">🔥 DeepMind's WeatherNext achieves breakthrough forecasting cyclones (377 分, 115 评论)</div>
+    <div class="meta">DeepMind 的 WeatherNext 模型在气旋预测方面取得突破性进展。对 AI 在科学计算领域的应用有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">🔥 Timeline of the OpenAI accidental attack against Hugging Face (328 分, 334 评论)</div>
+    <div class="meta">OpenAI 意外攻击 Hugging Face 的事件时间线梳理。Simon Willison 的详细分析。对 AI 安全策略有重要参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">🔥 _for-sale DNS records (341 分, 131 评论)</div>
+    <div class="meta">关于 DNS 记录中"待售"指示符的规范提案。对基础设施管理有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">🔥 Fastmail offers EU data region (313 分, 140 评论)</div>
+    <div class="meta">Fastmail 推出欧盟数据区域，数据主权合规新趋势。</div>
+  </div>
+  <div class="story">
+    <div class="title">🔥 Can Intel finally beat ARM on performance per Watt? (154 分, 86 评论)</div>
+    <div class="meta">Hackaday 分析 Intel 在能效方面能否超越 ARM。对硬件选型有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">🔥 Open-source interactive map for the Aug 12 total solar eclipse (83 分, 18 评论)</div>
+    <div class="meta">2026 年 8 月 12 日日全食的开源互动地图。eclipsefan.org 构建。</div>
+  </div>
+  <div class="story">
+    <div class="title">My server is a phone now (64 分, 23 评论)</div>
+    <div class="meta">用手机当服务器的实验报告。对边缘计算和低功耗部署有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">Making difficulty curves in games (48 分, 12 评论)</div>
+    <div class="meta">游戏中难度曲线的设计方法。对系统自动调优有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">Improving Heuristics for A* Pathfinding (29 分, 6 评论)</div>
+    <div class="meta">A* 寻路算法的启发式函数改进。对 agent 路径规划有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title">Title 7 Disparate Impact Liability (7 分, 0 评论)</div>
+    <div class="meta">法律/政策类文章，与 AI 系统无关。</div>
+  </div>
+</div>
+
+<!-- ====== 5. EVOLUTION SUGGESTIONS ====== -->
+<div class="section">
+  <h2>🧬 进化建议</h2>
+
+  <div class="alert alert-new">
+    <div class="title">🆕 新发现 — 修复 hermes_cli.plugins 插件解析错误（294 条/期 WARNING）</div>
+    <div class="desc">
+      <strong>问题：</strong> superpowers 目录下的三个子目录（.claude-plugin, .codex-plugin, .cursor-plugin）的 plugin.json 文件格式不被当前版本识别。每个大约产生 98 条 WARNING/期，合计 294 条（58.8% 窗口占比）。<br>
+      <strong>建议：</strong> 检查 superpowers 插件的 schema 版本，更新 plugin.json 或移除不兼容的插件目录。修复后日志量可减少约 60%。<br>
+      <strong>优先级：</strong> 低（WARNING 级别，无功能影响）。但修复成本极低（删除几个文件或更新 JSON），应优先处理。
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <div class="title">🔴 高优先级 — 修复 gateway.run 洪水（98 条/期 ERROR）</div>
+    <div class="desc">
+      <strong>问题：</strong> PID 3433647 已连续运行 33 天。cron job 每次启动时的重复启动尝试产生密集错误。<br>
+      <strong>建议：</strong> 在 cron job 执行前检测 gateway 是否已运行，避免重复启动。<br>
+      <code>if ! curl -s http://localhost:PORT/health >/dev/null 2>&1; then hermes gateway start; fi</code>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <div class="title">🟡 中优先级 — 修复 tools.approval 配置错误（2 条/期 WARNING，被挤出窗口）</div>
+    <div class="desc">
+      <strong>问题：</strong> config.yaml 中 <code>approvals.mode: auto</code> 为无效值。P74 中仅 2 条（被新组件挤出窗口），但 P73 中曾达 68 条。<br>
+      <strong>建议：</strong> 将 <code>approvals.mode</code> 改为 <code>off</code> 或 <code>smart</code>。
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <div class="title">🟡 中优先级 — 配置 API_SERVER_KEY 或禁用 api_server（7 条/期 ERROR）</div>
+    <div class="desc">
+      <strong>问题：</strong> api_server 持续拒绝启动。<br>
+      <strong>建议：</strong> 配置 API_SERVER_KEY 或在 config.yaml 中移除 api_server 平台配置。
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <div class="title">🔵 建议 — weakness_scan 添加全文件扫描模式（35 期连续 0 检出）</div>
+    <div class="desc">
+      连续 35 期（近 3 个月）的 weakness 0 检出是最持久的单一缺陷。P74 的结构性突变再次证明 weakness_scan 的 500 行尾部窗口策略在面对新组件爆发时完全失效。建议添加：
+      <br>• 全文件周期扫描模式
+      <br>• WARNING 级别配置错误聚合检测（同一 WARNING 签名 ≥10 次视为 medium 弱点）
+      <br>• 隐藏弱点持久跟踪列表
+    </div>
+  </div>
+
+  <div class="alert alert-info">
+    <div class="title">🔵 建议 — 进入结构性突变观测期（至少 2 期）</div>
+    <div class="desc">
+      hermes_cli.plugins 新组件的出现使所有基于 P71-P73 趋势的预测模型失效。建议：
+      <br>• 暂停所有组件级趋势预测，进入 2-3 期观测期
+      <br>• 在 P75-P76 建立新组件基线
+      <br>• 关注 hermes_cli.plugins 是否持续（一致性）或在 1 期后消失（一次性事件）
+      <br>• 若 P75 中 hermes_cli.plugins 消失且网关占比恢复至 70%+，则 P74 是一次性异常
+      <br>• 若 P75 中 hermes_cli.plugins 持续，则确认为结构性变化
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>自进化简报 · 第74期 · 2026-08-09 · 系统运行 84 天</p>
+  <p>数据来源：self_scan.py · weakness_scan.py · knowledge_ingest.py</p>
+  <p>下一期：2026-08-10 09:00 CST</p>
+</div>
+
+</div>
+</body>
+</html>
