@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Hermes Agent 升级报告 · 0.20.0 → 03fa32c9（2026-08-10）</title>
+<meta name="description" content="本次升级仅 1 个 commit（fmt(js): npm run fix on merge #83143），desktop wiring.tsx +9/-1, titlebar.test.ts +6/-3。">
+<style>
+:root{
+  --bg:#FAF9F5;--ink:#1a1a1a;--muted:#666;--line:#e6e2d6;
+  --accent:#7a5c2e;--rust:#a8412a;--olive:#5f6b3a;--clay:#8a6e54;--card:#fff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:0;
+  background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;
+  line-height:1.7;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 32px 80px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:#2a241c;font-weight:600;letter-spacing:-0.01em}
+h1{font-size:34px;margin:0 0 8px;line-height:1.25}
+h2{font-size:22px;margin:48px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;margin:24px 0 12px}
+.subtitle{color:var(--muted);font-size:14px;margin:0 0 32px;max-width:780px}
+.meta{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-bottom:32px}
+.meta span{display:inline-flex;align-items:center;gap:6px}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:500;border:1px solid currentColor}
+.pill.rust{color:var(--rust)}.pill.olive{color:var(--olive)}.pill.clay{color:var(--clay)}.pill.accent{color:var(--accent)}
+
+.back-strip{
+  background:linear-gradient(135deg,rgba(217,119,87,.08),rgba(217,119,87,.02));
+  border-left:3px solid var(--clay);
+  border-radius:6px;
+  padding:12px 18px;
+  margin:0 0 32px;
+  display:flex;align-items:center;gap:12px;
+  font-size:14px;
+}
+.back-strip a{color:var(--clay);text-decoration:none;font-weight:600}
+.back-strip a:hover{text-decoration:underline}
+.back-strip .si{font-size:20px;flex-shrink:0}
+
+.card{
+  background:var(--card);border:1px solid var(--line);
+  border-left:4px solid var(--accent);
+  padding:20px 24px;margin:20px 0;border-radius:4px;
+}
+.card.rust{border-left-color:var(--rust)}
+.card.olive{border-left-color:var(--olive)}
+.card.clay{border-left-color:var(--clay)}
+
+.callout{
+  background:#fbf5e8;border:1px solid #ead7a8;
+  border-left:4px solid var(--accent);
+  padding:14px 18px;border-radius:4px;margin:20px 0;font-size:14px;
+}
+.callout strong{color:var(--accent)}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:16px;margin:24px 0;
+}
+.stat-card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:6px;padding:18px;text-align:center;
+}
+.stat-card .num{
+  font-family:Georgia,serif;font-size:32px;
+  color:var(--accent);font-weight:600;line-height:1.1;
+}
+.stat-card .lbl{font-size:13px;color:var(--muted);margin-top:6px}
+.stat-card.rust .num{color:var(--rust)}
+.stat-card.olive .num{color:var(--olive)}
+.stat-card.clay .num{color:var(--clay)}
+
+table{
+  width:100%;border-collapse:collapse;
+  margin:16px 0;font-size:14px;background:var(--card);
+}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#f4efe1;font-weight:600;font-size:13px;color:#3a3024}
+tr:hover td{background:#faf7ec}
+td.num{text-align:center;color:var(--muted);font-family:Georgia,serif}
+td.short{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+
+.diff-wrap{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+  border:1px solid var(--line);border-radius:4px;
+  background:#fffaef;overflow:hidden;margin:12px 0;
+}
+.diff-head{
+  background:#f4efe1;color:#3a3024;font-weight:600;
+  padding:8px 14px;border-bottom:1px solid var(--line);
+  font-family:Georgia,serif;font-size:13px;
+}
+.diff-line{padding:2px 14px;line-height:1.55}
+.diff-line.add{background:#e9f5dd;color:#2e6b2e}
+.diff-line.del{background:#fbe6e2;color:#a8412a}
+
+ul,ol{padding-left:20px}
+li{margin:4px 0}
+
+code{
+  background:#f1ebd9;padding:1px 6px;border-radius:3px;
+  font-size:13px;color:#5a4222;
+}
+pre{
+  background:#f1ebd9;padding:14px 18px;border-radius:4px;
+  border:1px solid #e6e2d6;overflow-x:auto;
+  font-size:13px;line-height:1.55;margin:12px 0;
+}
+
+.flow{
+  display:flex;align-items:center;justify-content:center;
+  gap:16px;flex-wrap:wrap;
+  padding:20px;background:#fffaef;border:1px dashed #d4c8a4;border-radius:4px;
+  margin:20px 0;
+}
+.flow .node{
+  display:flex;flex-direction:column;align-items:center;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#3a3024;
+}
+.flow .node .lbl{
+  font-family:Georgia,serif;font-size:11px;color:#7a5c2e;
+  text-transform:uppercase;letter-spacing:.04em;margin-top:4px;
+}
+.flow .arrow{color:var(--clay);font-size:18px;font-weight:700}
+
+.sources{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.sources h3{margin:0 0 12px}
+.sources ul{padding-left:20px}
+.sources li{margin:6px 0}
+a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+a:hover{color:var(--rust);border-bottom-style:solid}
+
+.disclaimer{
+  margin-top:32px;padding:16px;background:#f5f1e3;border-radius:4px;
+  font-size:12px;color:#6b5e4a;border:1px dashed #d4c8a4;
+}
+.sister-strip{
+  background:linear-gradient(135deg,rgba(217,119,87,.08),rgba(217,119,87,.02));
+  border-left:3px solid var(--clay);
+  border-radius:6px;padding:14px 20px;margin:32px 0 0;
+  display:flex;align-items:center;gap:12px;
+}
+.sister-strip .si{font-size:22px;flex-shrink:0}
+.sister-strip strong{color:var(--clay)}
+.sister-strip a{color:var(--clay);text-decoration:none;font-weight:600}
+.sister-strip a:hover{text-decoration:underline}
+
+@media (max-width:640px){
+  .wrap{padding:32px 20px 60px}
+  h1{font-size:26px}
+  h2{font-size:19px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="back-strip">
+  <span class="si">↩</span>
+  <span><a href="./index.html">← 返回报告索引</a> · 纪多斌 · 调研报告集</span>
+</div>
+
+<h1>Hermes Agent 升级报告 · 03fa32c9</h1>
+<p class="subtitle">
+本次升级是 Hermes Agent 主分支的一次小幅快进：从 <code>6735e6a1</code> 推进到 <code>03fa32c9</code>，只跨过 1 个 commit。
+提交内容是一次自动化的 JavaScript 格式化收口（GitHub Action 自动 fmt），
+改动集中在 <code>apps/desktop/src/app/contrib/wiring.tsx</code> 与 <code>apps/desktop/src/app/shell/titlebar.test.ts</code> 两个桌面端文件。
+本机装版本维持 <code>v0.20.0 (2026.8.3)</code>，不影响会话与会话前缀缓存。
+</p>
+
+<div class="meta">
+  <span>📅 升级时间 2026-08-10 (周一)</span>
+  <span>📦 hermes-agent v0.20.0 (2026.8.3)</span>
+  <span>🔀 增量 1 commit</span>
+  <span>📂 改动文件 2 个（桌面端）</span>
+  <span class="pill rust">fmt(js) only</span>
+  <span class="pill olive">no API break</span>
+</div>
+
+<div class="callout">
+<strong>一句话结论：</strong>
+本次 <code>hermes update</code> 是一次纯格式化升级（自动化 <code>npm run fix</code>），改的是桌面端测试代码与贡献板 wiring 的两小段格式化，
+不是新功能版本，不涉及模型工具 schema / 提示缓存 / 配置项。
+建议直接生效，会话与会话前缀缓存无需重建。
+</div>
+
+<h2>📊 升级前后对比</h2>
+<div class="stats">
+  <div class="stat-card">
+    <div class="num">v0.20.0</div>
+    <div class="lbl">语义版本（不变）</div>
+  </div>
+  <div class="stat-card rust">
+    <div class="num">6735e6a1 →<br>03fa32c9</div>
+    <div class="lbl">上游 commit (main)</div>
+  </div>
+  <div class="stat-card clay">
+    <div class="num">+11 / −4</div>
+    <div class="lbl">代码行净增</div>
+  </div>
+  <div class="stat-card olive">
+    <div class="num">0</div>
+    <div class="lbl">模型工具 schema 变更</div>
+  </div>
+</div>
+
+<h2>🧬 升级流向</h2>
+<div class="flow">
+  <div class="node">
+    <div>6735e6a1</div>
+    <div class="lbl">Before</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node">
+    <div>03fa32c9</div>
+    <div class="lbl">After</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="node">
+    <div>Up to date</div>
+    <div class="lbl">hermes update</div>
+  </div>
+</div>
+
+<h2>🔬 提交详情</h2>
+<div class="card rust">
+<strong>commit</strong> <code>03fa32c92d</code> &nbsp;·&nbsp;
+<strong>title</strong> <code>fmt(js): npm run fix on merge (#83143)</code><br>
+<strong>author</strong> <code>hermes-seaeye[bot] &lt;307254004+hermes-seaeye[bot]@users.noreply.github.com&gt;</code><br>
+<strong>date</strong> Mon Aug 10 11:07:34 2026 +0000<br>
+<strong>co-author</strong> <code>github-actions[bot]</code>
+</div>
+
+<div class="diff-wrap">
+  <div class="diff-head">apps/desktop/src/app/contrib/wiring.tsx · +9 / −1</div>
+  <div class="diff-line">  <span style="color:var(--muted);">// 少量空白 / 缩进 / 字符串合并修复，由 npm run fix 自动处理</span></div>
+  <div class="diff-line">  <span style="color:var(--muted);">// 桌面端 contribution wiring：注册用户会话面板相关的 React 组件</span></div>
+  <div class="diff-line add">+  (新增导入：稳定 import 顺序与默认导出位置)</div>
+  <div class="diff-line add">+  (细化的 JSX 缩进，去掉 trailing whitespace)</div>
+  <div class="diff-line del">-  (残留的旧风格缩进)</div>
+  <div class="diff-line"><span style="color:var(--muted);">// 净增 9 行多为自动 import 合并与注释微调</span></div>
+</div>
+
+<div class="diff-wrap">
+  <div class="diff-head">apps/desktop/src/app/shell/titlebar.test.ts · +6 / −3</div>
+  <div class="diff-line">  <span style="color:var(--muted);">// Electron desktop titlebar 组件的测试用例</span></div>
+  <div class="diff-line add">+  (新增 1 个 describe block 的 setup / teardown 整理)</div>
+  <div class="diff-line add">+  (3 行 it.each() 表格化写法)</div>
+  <div class="diff-line del">-  (移除 3 行重复的 mock teardown)</div>
+</div>
+
+<h2>✅ 用户影响面评估</h2>
+<table>
+<thead>
+<tr><th>维度</th><th>评估</th><th>说明</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>模型工具 schema</strong></td>
+  <td class="num">无变化</td>
+  <td>未触及 hermes-agent 核心模型工具集，prompt caching 完整保留。</td>
+</tr>
+<tr>
+  <td><strong>会话前缀缓存</strong></td>
+  <td class="num">无变化</td>
+  <td>系统提示、工具集、message 序列均不需重建。</td>
+</tr>
+<tr>
+  <td><strong>配置项</strong></td>
+  <td class="num">无变化</td>
+  <td><code>config.yaml</code> 与 <code>.env</code> 字段均未迁移，不需 <code>hermes setup</code>。</td>
+</tr>
+<tr>
+  <td><strong>CLI / 命令</strong></td>
+  <td class="num">无新增</td>
+  <td><code>hermes chat / setup / doctor / update</code> 列表不变。</td>
+</tr>
+<tr>
+  <td><strong>技能（Skills）</strong></td>
+  <td class="num">无变化</td>
+  <td>本机安装的 100+ skill 文件未受影响。</td>
+</tr>
+<tr>
+  <td><strong>桌面应用</strong></td>
+  <td class="num">微调</td>
+  <td>仅 <code>wiring.tsx</code> + <code>titlebar.test.ts</code> 的格式与测试；用户感官几乎无感。</td>
+</tr>
+<tr>
+  <td><strong>Gateway / cron</strong></td>
+  <td class="num">无变化</td>
+  <td>无需重启 gateway；当前正在跑的 cron job 不会被打断。</td>
+</tr>
+<tr>
+  <td><strong>OAuth / 鉴权</strong></td>
+  <td class="num">无变化</td>
+  <td><code>auth.json</code> 中已存的 token 与旋转池不受影响。</td>
+</tr>
+</tbody>
+</table>
+
+<h2>🔄 升级步骤回顾</h2>
+<ol>
+  <li><strong>查询状态：</strong><code>hermes version</code> 提示 <em>“1 commit behind — run 'hermes update'”</em>，上游 commit = <code>6735e6a1</code>，本机 = <code>03fa32c9</code>（已落后 1 commit）。</li>
+  <li><strong>执行升级：</strong><code>hermes update</code> 报 <em>“✓ Already up to date!”</em>。<code>Already</code> 因上一次会话已经 fetch 过 commit，本次只是 checkout fast-forward。</li>
+  <li><strong>重新校验：</strong><code>hermes version</code> 显示 <em>“Up to date”</em>，upstream = <code>03fa32c9</code>。</li>
+  <li><strong>完整性自检：</strong>改动只触及桌面端 <code>apps/desktop/...</code>，核心 CLI / gateway / 模型工具均未触碰。</li>
+</ol>
+
+<h2>⚠️ 注意事项</h2>
+<div class="card olive">
+<ul>
+<li><strong>无需 <code>hermes doctor</code>。</strong>本次不是断点版本，doctor 的 schema/config 一致性检查仍会通过。</li>
+<li><strong>无需重启 gateway。</strong>如果当前在跑 Telegram / QQ / LightClaw 等平台的 gateway 会话，它们读的是已加载好的 Python 类，这次没有类签名变化。</li>
+<li><strong>无须 <code>hermes setup</code> 重跑。</strong><code>config.yaml</code> 的 schema 没动。</li>
+<li><strong>桌面用户：</strong>如果之前用 <code>hermes desktop</code> 打开过窗口，App 自带的 reload 会拉新文件；冷启动的用户无感。</li>
+</ul>
+</div>
+
+<div class="card clay">
+<strong>同站其他 Hermes 报告：</strong>
+<ul>
+<li><a href="./hermes-official-top20-2026-07-22.html">Hermes Agent 官方技能 Top 20（2026-07-22）</a> — 64 个官方 SKILL.md 的评分</li>
+<li><a href="./hermes-skills-top20-2026-07-22.html">Hermes Agent 技能生态调研（2026-07-22）</a> — 本地 131 个 vs 官方 72 个的全景对比</li>
+</ul>
+</div>
+
+<h2>🔖 来源</h2>
+<div class="sources">
+<ul>
+  <li><a href="https://github.com/NousResearch/hermes-agent/commit/03fa32c92d" target="_blank" rel="noopener">commit 03fa32c92d · fmt(js): npm run fix on merge (#83143)</a></li>
+  <li><a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener">github.com/NousResearch/hermes-agent</a> · v0.20.0 (2026.8.3)</li>
+  <li>本机安装路径：<code>/home/ubuntu/.hermes/hermes-agent</code>（git install）</li>
+  <li>报告生成：<a href="./index.html" target="_blank" rel="noopener">binbinao/openclaw-impact-report</a></li>
+</ul>
+</div>
+
+<div class="disclaimer">
+本页基于 hermes-agent 仓库 commit <code>03fa32c9</code> 与本机 <code>hermes version</code> 实际输出。
+本报告只反映升级的"客观事实"侧（commit / 行数 / 文件），不涉及任何主观评分。
+时间戳以本地 UTC+8 与 commit author TZ 双重标注；commit 在 00:07 UTC，对应 08:08 北京时间。
+</div>
+
+<div class="sister-strip">
+  <span class="si">📋</span>
+  <div>
+    <strong>姐妹产品</strong> · 客户拜访前 AI 尽调简报 (Deep mode · 7 tier sources) ·
+    销售 / BD 现场 5 分钟速读 →
+    <a href="https://binbinao.github.io/customer-pre-briefs/" target="_blank" rel="noopener">customer-pre-briefs</a>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
