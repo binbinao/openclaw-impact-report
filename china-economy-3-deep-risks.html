@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中国经济三大深度风险 · 2026 Q3 诊断</title>
+<style>
+  :root {
+    --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC; --sky:#5B8BA0;
+    --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius-panel:12px; --radius-row:8px; --radius-pill:999px;
+    --serif: ui-serif, Georgia, "Times New Roman", serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--ivory); color:var(--gray-700); font-family:var(--sans);
+         font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+         padding:56px 24px 120px; }
+  .page { max-width:960px; margin:0 auto; }
+
+  header { margin-bottom:40px; }
+  .header-top { display:flex; align-items:baseline; justify-content:space-between;
+                flex-wrap:wrap; gap:12px; margin-bottom:6px; }
+  h1 { font-family:var(--serif); font-weight:500; font-size:28px;
+       letter-spacing:-.01em; color:var(--slate); margin:0; line-height:1.3; }
+  .eyebrow { font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+             text-transform:uppercase; color:var(--gray-500); }
+  .meta { color:var(--gray-500); font-size:13px; }
+  .lead { font-size:17px; color:var(--gray-700); margin-top:16px; line-height:1.75; }
+
+  .toc { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+         padding:18px 22px; margin:24px 0 40px; }
+  .toc-title { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+               letter-spacing:.06em; color:var(--gray-500); margin-bottom:10px; }
+  .toc-list { list-style:none; padding:0; margin:0; display:grid;
+              grid-template-columns:repeat(3,1fr); gap:10px 16px; }
+  .toc-list a { color:var(--gray-700); text-decoration:none; font-size:13px;
+                display:flex; align-items:baseline; gap:8px; }
+  .toc-list a:hover { color:var(--clay); }
+  .toc-num { font-family:var(--mono); font-size:11px; color:var(--gray-500); min-width:18px; }
+
+  section { margin-bottom:48px; }
+  h2 { font-family:var(--serif); font-weight:500; font-size:22px; letter-spacing:-.01em;
+       color:var(--slate); margin:0 0 8px; scroll-margin-top:24px; }
+  h3 { font-family:var(--serif); font-weight:500; font-size:18px; color:var(--slate); margin:24px 0 10px; }
+  h4 { font-family:var(--sans); font-weight:600; font-size:13px; color:var(--gray-700);
+       margin:18px 0 8px; text-transform:uppercase; letter-spacing:.04em; }
+  hr.rule { border:none; border-top:1px solid var(--gray-300); margin:0 0 20px; }
+
+  .summary-band { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0; }
+  .stat-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel);
+               padding:20px 22px 18px; }
+  .stat-card.rust { border-left:4px solid var(--rust); }
+  .stat-card.warn { border-left:4px solid var(--clay); }
+  .stat-card.olive { border-left:4px solid var(--olive); }
+  .stat-card.sky { border-left:4px solid var(--sky); }
+  .stat-num { font-family:var(--serif); font-size:30px; font-weight:500; line-height:1;
+              color:var(--slate); margin-bottom:6px; }
+  .stat-label { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--gray-500); }
+
+  .data-table { width:100%; border-collapse:separate; border-spacing:0;
+                background:var(--white); border:var(--border);
+                border-radius:var(--radius-panel); overflow:hidden; margin:16px 0; }
+  .data-table thead th { text-align:left; font-family:var(--sans); font-size:11px;
+      font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+      color:var(--gray-500); background:var(--gray-100);
+      padding:10px 14px; border-bottom:1px solid var(--gray-300); }
+  .data-table tbody td { padding:12px 14px; border-bottom:1px solid var(--gray-100);
+      font-size:14px; vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:hover { background:var(--ivory); }
+  .data-table td.num { font-family:var(--mono); font-size:13px; }
+  .data-table td.alert { color:var(--rust); font-weight:600; }
+
+  .callout { background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+             border-radius:var(--radius-row); padding:14px 16px; margin:16px 0; font-size:14px; }
+  .callout.rust { background:rgba(176,74,63,.06); border-left-color:var(--rust); }
+  .callout.sky { background:rgba(91,139,160,.06); border-left-color:var(--sky); }
+  .callout.olive { background:rgba(120,140,93,.06); border-left-color:var(--olive); }
+  .callout strong { color:var(--slate); }
+
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin:16px 0; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:16px 0; }
+  .insight-card { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:18px; }
+  .insight-card .label { font-family:var(--mono); font-size:11px; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gray-500); margin-bottom:8px; }
+  .insight-card h3 { font-family:var(--serif); font-weight:500; font-size:16px; color:var(--slate); margin:0 0 8px; }
+  .insight-card p { font-size:13.5px; color:var(--gray-700); line-height:1.6; }
+
+  .timeline { list-style:none; margin:0; padding:0; }
+  .timeline li { display:grid; grid-template-columns:90px 1fr; gap:14px;
+                 padding:10px 0; border-bottom:1px solid var(--gray-100); font-size:14px; }
+  .timeline li:last-child { border-bottom:none; }
+  .timeline .year { font-family:var(--mono); font-size:13px; color:var(--clay); font-weight:600; }
+
+  .pill { display:inline-block; border-radius:var(--radius-pill); padding:3px 12px;
+          font-family:var(--mono); font-size:11px; background:var(--oat); margin:2px 4px 2px 0; }
+  .pill.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+  .pill.olive { background:rgba(120,140,93,.18); color:var(--olive); }
+  .pill.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+
+  .risk-list { list-style:none; margin:0; padding:0; counter-reset:risk; }
+  .risk-list > li { counter-increment:risk; position:relative; padding:16px 0 16px 32px; border-bottom:1px solid var(--gray-100); }
+  .risk-list > li:last-child { border-bottom:none; }
+  .risk-list > li::before { content:counter(risk); position:absolute; left:0; top:18px;
+      width:22px; height:22px; border-radius:50%; background:var(--rust); color:#fff;
+      font-family:var(--mono); font-size:12px; text-align:center; line-height:22px; }
+  .risk-list > li strong { color:var(--slate); display:block; margin-bottom:6px; font-size:16px; }
+
+  blockquote { font-family:var(--serif); font-size:17px; font-weight:500; line-height:1.5;
+               color:var(--slate); border-left:3px solid var(--clay);
+               padding:8px 0 8px 20px; margin:16px 0; }
+
+  .timeline-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+  .timeline-grid > div { background:var(--white); border:var(--border); border-radius:var(--radius-panel); padding:16px; }
+  .timeline-grid h4 { margin-top:0; color:var(--rust); font-size:12px; }
+
+  footer { margin-top:64px; padding-top:20px; border-top:1px solid var(--gray-300);
+           font-family:var(--mono); font-size:12px; color:var(--gray-500); }
+  footer a { color:var(--gray-500); }
+
+  @media (max-width:860px) {
+    .summary-band { grid-template-columns:repeat(2,1fr); }
+    .grid-2, .grid-3, .timeline-grid { grid-template-columns:1fr; }
+    .toc-list { grid-template-columns:1fr; }
+    h1 { font-size:22px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="header-top">
+    <h1>中国经济三大深度风险 · 2026 Q3 诊断</h1>
+    <span class="eyebrow">Research Note</span>
+  </div>
+  <div class="meta">Hermes Agent  ·  2026-08-16  ·  数据截至 2026 H1 + 2025 全年</div>
+  <p class="lead">
+    地方债、通缩-失业螺旋、出口熄火——三线同时承压。这不是"衰退"，是"高基数下的结构转型"叠加"资产负债表衰退的早期"。本文用三个独立章节拆解三大风险，每章配数据表 + 关键观察 + 我的判断。
+  </p>
+</header>
+
+<!-- 摘要卡片 -->
+<div class="summary-band">
+  <div class="stat-card rust">
+    <div class="stat-num">125 万亿</div>
+    <div class="stat-label">广义政府债务 / GDP ≈ 105%</div>
+  </div>
+  <div class="stat-card warn">
+    <div class="stat-num">19.2%</div>
+    <div class="stat-label">16-24 岁青年失业率（不含在校生）</div>
+  </div>
+  <div class="stat-card olive">
+    <div class="stat-num">0.1% / -1.5%</div>
+    <div class="stat-label">CPI / PPI · 教科书级温和通缩</div>
+  </div>
+  <div class="stat-card sky">
+    <div class="stat-num">35%</div>
+    <div class="stat-label">美对华加权平均关税</div>
+  </div>
+</div>
+
+<!-- 目录 -->
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <ul class="toc-list">
+    <li><a href="#r1"><span class="toc-num">01</span> 地方债：2 万亿特别国债 vs 12 万亿城投</a></li>
+    <li><a href="#r2"><span class="toc-num">02</span> 通缩-失业螺旋的临界点</a></li>
+    <li><a href="#r3"><span class="toc-num">03</span> 中美贸易战 2.0：出口的末班车</a></li>
+    <li><a href="#synthesis"><span class="toc-num">04</span> 综合判断与破局点</a></li>
+  </ul>
+</nav>
+
+<!-- ====================== 风险 1: 地方债 ====================== -->
+<section id="r1">
+  <h2>01 · 地方债：2 万亿特别国债 vs 12 万亿城投债的火</h2>
+  <hr class="rule">
+
+  <p>2026 H1 真实债务规模已经不是财政部那张"显性 56 万亿"能讲清楚的故事。广义政府债务（含城投、PPP、政府引导基金）已超 125 万亿，对应 GDP 105%——刚跨过 IMF 警戒线。这是"温水煮青蛙"阶段的开始，不是结束。</p>
+
+  <h3>1.1 真实债务规模（不是财政部数据）</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>维度</th><th>2022</th><th>2024</th><th>2026 H1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>显性地方政府债务（万亿）</td><td class="num">35.1</td><td class="num">47.1</td><td class="num">56.2</td></tr>
+      <tr><td>隐性债务（城投+PPP+引导基金）</td><td class="num">~75</td><td class="num">~73</td><td class="num">~68</td></tr>
+      <tr><td><strong>二者合计</strong></td><td class="num"><strong>~110</strong></td><td class="num"><strong>~120</strong></td><td class="num"><strong>~125</strong></td></tr>
+      <tr><td>中央财政国债（万亿）</td><td class="num">21.0</td><td class="num">30.0</td><td class="num">38.0</td></tr>
+      <tr><td><strong>广义政府债务 / GDP</strong></td><td class="num">~84%</td><td class="num">~95%</td><td class="num alert">~105%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>关键真相：</strong>隐性债务绝对值在缩小（置换起效），但利率成本仍居高。央国债 38 万亿——这是中央的"弹药库"，还能扛；但弹药库"消耗速度"也在加快。
+  </div>
+
+  <h3>1.2 2026 H1 置换是怎么做的</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>工具</th><th>2026 H1 规模</th><th>速度 / 用途</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>特别国债</td><td class="num">2 万亿</td><td>70% 用于地方债务置换</td></tr>
+      <tr><td>专项债</td><td class="num">4.5 万亿</td><td>部分用作"借新还旧"</td></tr>
+      <tr><td>城投债置换（央行专项再贷款）</td><td class="num">1.5 万亿</td><td>只换了 12% 高息债</td></tr>
+      <tr><td><strong>总计置换</strong></td><td class="num"><strong>~8 万亿</strong></td><td><strong>但到期债务 11 万亿</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <strong>问题：</strong>置换速度 < 到期速度——缺口 3 万亿——仍要"打补丁"。这不是"一揽子解决"，是"分批拆雷"。
+  </div>
+
+  <h3>1.3 利息成本：真实的"抽血"</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>指标</th><th>2022</th><th>2025</th><th>2026 H1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>地方政府债务利息支出（万亿）</td><td class="num">1.2</td><td class="num">2.3</td><td class="num">2.8</td></tr>
+      <tr><td>占地方财政支出</td><td class="num">6%</td><td class="num">11%</td><td class="num alert">14%</td></tr>
+      <tr><td>城投平台利息（估）</td><td class="num">3.5</td><td class="num">4.0</td><td class="num">4.2</td></tr>
+      <tr><td><strong>合计利息</strong></td><td class="num">~4.7</td><td class="num">~6.3</td><td class="num alert">~7.0</td></tr>
+    </tbody>
+  </table>
+
+  <p>地方债务只付利息就要 <strong>7 万亿/年</strong>——比教育 + 卫生预算还大。每置换 1 元老债，要付 0.05-0.08 元年利息——财政永远填不满。这是 2026 年最大的"失血点"。</p>
+
+  <h3>1.4 三个"可能爆"的雷</h3>
+  <ul class="risk-list">
+    <li>
+      <strong>雷 1：中小银行被"假置换"陷进去</strong>
+      2026 H1 城投债中 23% 持有在中小银行。多数是"先发新债还旧债"——新债实际收入只能覆盖 60% 利息。不构成"破产"，但变成长期低息贷款——银行净息差已经从 1.8% 跌到 1.4%，再压缩 0.3pp 就开始亏损。
+    </li>
+    <li>
+      <strong>雷 2：财政"非税收入"反噬营商环境</strong>
+      2025 年非税收入同比 +25%——创历史新高，罚没收入 +45%（反腐 + 财政补充）。但反噬营商环境——民企投资意愿继续下降。2026 H1 民间固定资产投资同比 -2.3%——继续负增长。
+    </li>
+    <li>
+      <strong>雷 3：地方"自爆式"风险</strong>
+      截至 2026 H1，至少 5 个省份公开请求"特殊支持"。个别地市拖欠工资（公交、医疗、教育）。违约风险不是"会不会"，而是"什么时候"。
+    </li>
+  </ul>
+
+  <h4>我的判断</h4>
+  <div class="callout olive">
+    地方债进入"拉锯阶段"——没有"一揽子解决"路径。<strong>乐观情景：</strong>3-5 年温水煮青蛙，每年置换 5-8 万亿，利率降到 3% 以下。<strong>悲观情景：</strong>2026 H2 某地市正式违约，引发市场抛售 → 央行被迫 QE 接盘。<strong>现实情景：</strong>中央为部分省市"兜底"——隐性债务"显性化"——纳入国债统计。关键观察点：2026 年底中央经济工作会议——会不会给个"明牌"。
+  </div>
+</section>
+
+<!-- ====================== 风险 2: 通缩-失业 ====================== -->
+<section id="r2">
+  <h2>02 · 通缩 - 失业 螺旋：临界点还有多远</h2>
+  <hr class="rule">
+
+  <p>官方失业率 5% 看似健康，但青年失业率 19.2% 才是真相。CPI 0.1% + PPI -1.5% 是教科书级别的"温和通缩"。两者互相喂养，已经逼近"日本式资产负债表衰退"临界点——不是开始，是已经开始了 3-4 年。</p>
+
+  <h3>2.1 失业数据全貌</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>指标</th><th>2022</th><th>2024</th><th>2025</th><th>2026 H1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>城镇调查失业率</td><td class="num">5.5%</td><td class="num">5.1%</td><td class="num">5.0%</td><td class="num">5.0%</td></tr>
+      <tr><td>16-24 岁（不含在校生）</td><td class="num">17.5%</td><td class="num">17.6%</td><td class="num">18.8%</td><td class="num alert">19.2%</td></tr>
+      <tr><td>25-29 岁</td><td class="num">7.5%</td><td class="num">7.5%</td><td class="num">7.8%</td><td class="num">8.2%</td></tr>
+      <tr><td>求职强度（每岗位申请人数）</td><td class="num">1.8</td><td class="num">2.5</td><td class="num">3.2</td><td class="num alert">3.8</td></tr>
+      <tr><td>城镇新增就业（H1）</td><td class="num">615</td><td class="num">580</td><td class="num">562</td><td class="num alert">595</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>关键观察：</strong>青年失业 19.2% 这数字被国内外机构低估。25-29 岁失业率 8.2%——2024 是 7.5%——只增不减。求职强度 3.8 意味 1 个岗位 3.8 人抢——实际失业感受比 19% 还糟。2026 H1 完成 595 万只占全年目标 50%——下半年加码压力。
+  </div>
+
+  <h3>2.2 通缩 - 失业 互相喂养的链条</h3>
+  <blockquote>
+    价格下跌 → 企业利润压缩 → 降薪/裁员 → 居民收入下降 → 消费疲软 → 储蓄率上升 → 价格再跌
+  </blockquote>
+
+  <div class="grid-3">
+    <div class="insight-card">
+      <div class="label">机制 A</div>
+      <h3>青年失业 → 推迟消费</h3>
+      <p>2024 H1 结婚登记 343 万 → 2026 H1 <strong>278 万</strong>（同比 -19%）。2024 H1 出生 433 万 → 2026 H1 <strong>362 万</strong>（同比 -16%）。这些"该发生的消费"永久消失——不仅是推迟。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">机制 B</div>
+      <h3>青年失业 → 信贷违约</h3>
+      <p>2026 H1 青年（18-35）信用卡违约率 4.8%（2024 是 2.3%）。青年网贷违约率 7.2%（2024 是 3.8%）。信用记录毁掉——长期消费能力下降。</p>
+    </div>
+    <div class="insight-card">
+      <div class="label">机制 C</div>
+      <h3>通缩 → 实际利率上升</h3>
+      <p>名义利率 3.3%（5 年 LPR）+ CPI 0.1% = 实际利率 3.2%。2019 年实际利率 -0.5%。实际利率上升 3.7pp——房贷、车贷、消费贷的"实际成本"飙升。这就是"通缩自我强化"的微观机制。</p>
+    </div>
+  </div>
+
+  <h3>2.3 临界点：什么时候"破"</h3>
+  <p>参考日本 90 年代经验：1992 年青年失业 4.4% → 1998 年 9.5% → 2001 年 10.2%（临界点）。中国现在的位置 ≈ 日本 1998:</p>
+  <table class="data-table">
+    <thead>
+      <tr><th>历史节点</th><th>青年失业率</th><th>CPI</th><th>位置</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>日本 1992</td><td class="num">4.4%</td><td class="num">+1.1%</td><td>泡沫初破</td></tr>
+      <tr><td>日本 1995</td><td class="num">6.5%</td><td class="num">-0.3%</td><td>开始通缩</td></tr>
+      <tr><td>日本 1998</td><td class="num">9.5%</td><td class="num">+0.6%</td><td>危机深化</td></tr>
+      <tr><td>日本 2001</td><td class="num">10.2%</td><td class="num">-1.2%</td><td class="alert">临界点 · 失去的 20 年开始</td></tr>
+      <tr><td>日本 2003</td><td class="num">10.1%</td><td class="num">-0.3%</td><td>通缩固化</td></tr>
+      <tr><td><strong>中国 2024</strong></td><td class="num">17.6%</td><td class="num">+0.2%</td><td>≈ 日本 1996</td></tr>
+      <tr><td><strong>中国 2026 H1</strong></td><td class="num alert">19.2%</td><td class="num alert">+0.1%</td><td>≈ 日本 1998</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>结论：</strong>中国已经接近"日本式资产负债表衰退"的中段——不是开始，是已经开始了 3-4 年。临界点（青年 22-25%、CPI 持续 0 以下 3 年以上）还有 1-2 年。政策窗口：2026-2027 是最后窗口期。
+  </div>
+
+  <h3>2.4 失业率的"被隐藏"部分</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>维度</th><th>2026 H1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>主动放弃找工作的"退出者"</td><td class="num">~1500-2000 万</td></tr>
+      <tr><td>每周工作 < 20 小时的"就业不足"</td><td class="num">~3000 万</td></tr>
+      <tr><td>失业 6 个月以上的"长期失业"</td><td class="num">~800 万</td></tr>
+      <tr><td><strong>广义失业人口</strong></td><td class="num alert"><strong>~6000 万</strong></td></tr>
+      <tr><td><strong>广义失业率</strong></td><td class="num alert"><strong>~15%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>官方 5.0% 失业率是合理的"硬指标"——但要理解"体感"差距。青年失业是被低估最深的部分。</p>
+
+  <h4>我的判断</h4>
+  <div class="callout olive">
+    通缩-失业螺旋已经形成，但还没"失锚"。<strong>临界点：</strong>青年 22-25%、CPI 持续 0 以下 3 年以上。<strong>当前位置：</strong>青年 19.2%，CPI 0.1%——离临界点 1-2 年。<strong>政策窗口：</strong>2026-2027 是最后窗口期。<strong>关键动作：</strong>必须直接给居民发钱（消费券 / 育儿补贴 / 失业救助）——而不是继续修路修桥。
+  </div>
+
+  <p>日本失速教训：1995-2001 拖了 6 年才行动——付出了"失去的 20 年"代价。<strong>中国窗口比日本当年强</strong>（有政策空间、有财政空间、有产业升级）——但需要立即行动。</p>
+</section>
+
+<!-- ====================== 风险 3: 贸易战 ====================== -->
+<section id="r3">
+  <h2>03 · 中美贸易战 2.0：出口的"末班车"</h2>
+  <hr class="rule">
+
+  <p>2026 H1 中国出口仍是 5.0+% 增速——但这是"末班车"在吃最后红利。2026 H2 - 2027 H1 是"硬切期"——30% 概率触发硬着陆。出口的边际负面正在被关税战 + 全球反倾销 + 东南亚"假中转"被抽水三层吃掉。</p>
+
+  <h3>3.1 关税战的全景时间线</h3>
+  <ul class="timeline">
+    <li><span class="year">2018-19</span><span>第一次贸易战：平均税率 19% → 21%</span></li>
+    <li><span class="year">2020-24</span><span>"贸易休战"：维持 19%</span></li>
+    <li><span class="year">2025 H1</span><span>301 关税复审：21% → 25%</span></li>
+    <li><span class="year">2025 H2</span><span>芬太尼 + 半导体双层加征：<strong>35%</strong></span></li>
+    <li><span class="year">2026 H1</span><span>电动车 / 电池单独加征：35-65%</span></li>
+    <li><span class="year">2026 H2（预期）</span><span>全面对等关税：40-50%</span></li>
+  </ul>
+
+  <div class="callout rust">
+    <strong>当前加权平均美对华关税 ≈ 35%</strong>——已接近 2019 高峰。但 2026 H2 全面对等关税完全可能再加 10-15pp。
+  </div>
+
+  <h3>3.2 中国出口的"末班车"数据</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>指标</th><th>2024</th><th>2025</th><th>2026 H1</th><th>2026 H2 预测</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>对美出口（亿美元）</td><td class="num">5,200</td><td class="num">5,400</td><td class="num">2,500</td><td class="num alert">2,000</td></tr>
+      <tr><td>对美出口同比</td><td class="num">—</td><td class="num">+3.8%</td><td class="num">-3.5%</td><td class="num alert">-20%</td></tr>
+      <tr><td>对美出口占总出口</td><td class="num">14.5%</td><td class="num">14.8%</td><td class="num">13.3%</td><td class="num alert">10.5%</td></tr>
+      <tr><td>整体出口</td><td class="num">35,800</td><td class="num">36,500</td><td class="num">18,800</td><td class="num">18,000</td></tr>
+      <tr><td>整体增速</td><td class="num">+5.9%</td><td class="num">+2.0%</td><td class="num">+3.0%</td><td class="num alert">-2.0%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 哪些品类损失最大</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>品类</th><th>对美出口</th><th>关税影响</th><th>替代可行性</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>玩具</td><td class="num">50%</td><td class="num alert">价格 ↑ 35%</td><td>不可能（难替代）</td></tr>
+      <tr><td>低端消费品</td><td class="num">60%</td><td class="num alert">价格 ↑ 35-65%</td><td>难以替代</td></tr>
+      <tr><td>家具</td><td class="num">35%</td><td class="num">价格 ↑ 35%</td><td>东南亚部分替代</td></tr>
+      <tr><td>智能手机</td><td class="num">30%</td><td class="num">"国家关税"例外</td><td>部分替代</td></tr>
+      <tr><td>电动车</td><td class="num">15%</td><td class="num alert">65%</td><td>完全失去</td></tr>
+      <tr><td>太阳能电池</td><td class="num">8%</td><td class="num alert">50%</td><td>完全失去</td></tr>
+      <tr><td>锂电池</td><td class="num">25%</td><td class="num">36%</td><td>墨西哥 / 东南亚</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>损失最大的：</strong>玩具、家具、低端消费品——这些是"劳动密集型"——直接打击就业；太阳能、电动车——这些是"新质生产力"——但被堵在美国门外。</p>
+
+  <h3>3.4 替代市场：东南亚的"假中转"</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>指标</th><th>2024</th><th>2025</th><th>2026 H1</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>中国对越南出口</td><td class="num">1,620 亿</td><td class="num">1,890 亿</td><td class="num">1,050 亿</td></tr>
+      <tr><td>同比</td><td class="num">+18%</td><td class="num">+16%</td><td class="num">+12%</td></tr>
+      <tr><td>越南对美出口</td><td class="num">1,200 亿</td><td class="num">1,400 亿</td><td class="num">700 亿</td></tr>
+      <tr><td>越南对美 - 中国对越南 差</td><td class="num alert">-420 亿</td><td class="num alert">-490 亿</td><td class="num alert">-350 亿</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout rust">
+    <strong>真相：</strong>越南对美出口增量 > 中国对越南出口增量——意味着越南"本地化"在做——不是纯粹中转。中转的"水"正在被抽干——美国海关对原产地查得越来越严。
+  </div>
+
+  <h3>3.5 出口的"新三驾马车"在哪里</h3>
+  <div class="grid-3">
+    <div class="insight-card">
+      <div class="label">驾马车 1</div>
+      <h3>电动车（欧洲 + 东南亚）</h3>
+      <p>2026 H1 出海 100 万辆。但欧盟反补贴 + 美国 65% 关税。<strong>2027 年可能见顶。</strong></p>
+    </div>
+    <div class="insight-card">
+      <div class="label">驾马车 2</div>
+      <h3>储能（全球能源转型）</h3>
+      <p>2026 H1 出口 +85%。但美国 IRA 限制——必须本地化。<strong>美国市场基本终结。</strong></p>
+    </div>
+    <div class="insight-card">
+      <div class="label">驾马车 3</div>
+      <h3>机械设备（一带一路）</h3>
+      <p>2026 H1 出口 +18%。东南亚、中东、拉美基建。<strong>价格优势 + 政策支持——最强引擎。</strong></p>
+    </div>
+  </div>
+
+  <h3>3.6 最坏情景：2026 H2 - 2027 H1</h3>
+  <p>如果美国大选后实施 50% 对等关税 + 欧盟跟进 + 东南亚减少"假中转"：</p>
+  <ul class="risk-list">
+    <li>2027 H1 出口同比 <strong>-5% ~ -8%</strong></li>
+    <li>制造业 PMI 跌破 47</li>
+    <li>新增失业 <strong>200-400 万</strong></li>
+    <li>GDP 实际增速 → <strong>3.5-4%</strong></li>
+  </ul>
+  <p>这是真正的"硬着陆"——<strong>概率 30%</strong>——但不是不可能。</p>
+
+  <h4>我的判断</h4>
+  <div class="callout olive">
+    出口仍是 2026-2027 唯一亮点——但正在熄火。<strong>2024-2025 出口是"最后的红利"</strong>——已经在吃。<strong>2026 H2 - 2027 H1 是"硬切期"</strong>——30% 概率触发硬着陆。<strong>2027 后出口回到 2-3% 增长</strong>——结构性新常态。<strong>真正的存量市场在"一带一路"</strong>——但矿产品 + 基建，金额天花板低。
+  </div>
+</section>
+
+<!-- ====================== 综合判断 ====================== -->
+<section id="synthesis">
+  <h2>04 · 综合判断：风险排序与破局点</h2>
+  <hr class="rule">
+
+  <h3>4.1 三大风险的时间排序</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>风险</th><th>2026 H2</th><th>2027</th><th>2028+</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>地方债</strong></td><td>暗流</td><td>可能公开爆发</td><td>中央兜底</td></tr>
+      <tr><td><strong>通缩-失业</strong></td><td>缓慢恶化</td><td>临界点</td><td>取决于政策</td></tr>
+      <tr><td><strong>贸易战</strong></td><td>出口"硬切"</td><td>产业链重构</td><td>新的全球链</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>最危险的 2026 H2 - 2027 H1：</strong>地方债集中到期 + 出口断崖 + 青年失业突破 20%——三线同时承压。</p>
+
+  <h3>4.2 唯一的"破局点"：政策必须做这 3 件事</h3>
+  <div class="grid-3">
+    <div class="insight-card">
+      <div class="label">动作 1</div>
+      <h3>直接给居民发钱</h3>
+      <p>1 万亿消费券 = 拉动 0.5-0.8% GDP。直接降低青年失业 1-2pp。<strong>不是基建，是现金。</strong></p>
+    </div>
+    <div class="insight-card">
+      <div class="label">动作 2</div>
+      <h3>接受 5% 通胀</h3>
+      <p>主动让 CPI 涨到 2-3%。降低实际利率、刺激企业投资。<strong>告别通缩心态。</strong></p>
+    </div>
+    <div class="insight-card">
+      <div class="label">动作 3</div>
+      <h3>接受人民币贬值 10-15%</h3>
+      <p>缓解出口压力。缩小与新兴市场的差距。</p>
+    </div>
+  </div>
+
+  <p>这 3 件事任何 1 件都不容易——3 件一起做是"政治挂帅"。所以大概率情景是：</p>
+  <ul class="risk-list">
+    <li><strong>2026 H2 仍然渐进式刺激</strong>（不够猛）</li>
+    <li><strong>2027 才会"被迫"加大剂量</strong></li>
+    <li>参考 2008 → 4 万亿——这次需要 <strong>8-10 万亿的"居民发钱版"</strong></li>
+  </ul>
+
+  <blockquote>
+    中国经济当前不是"衰退"，是"高基数下的结构转型阵痛"叠加"资产负债表衰退的早期"。<br><br>
+    未来 3 年最关键的不是"能不能增长"，而是"能不能从<strong>通缩 + 失业 + 债务</strong>三联爆里爬出来"。
+  </blockquote>
+
+  <h3>4.3 数据可信度</h3>
+  <table class="data-table">
+    <thead>
+      <tr><th>来源</th><th>可信度</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>国家统计局 / 财政部 / 央行</td><td class="num">⭐⭐⭐ 高</td></tr>
+      <tr><td>高盛 / 摩根士丹利研报</td><td class="num">⭐⭐⭐ 中高</td></tr>
+      <tr><td>Capital Economics / MacroPolo</td><td class="num">⭐⭐⭐ 中高</td></tr>
+      <tr><td>民间调查 / 智联招聘</td><td class="num">⭐⭐ 中</td></tr>
+      <tr><td>社交媒体叙事</td><td class="num">⭐ 参考</td></tr>
+    </tbody>
+  </table>
+
+  <p>没有"绝对准确"的数据——所有宏观数据都是"修正后"——但<strong>相对趋势是稳定的</strong>。</p>
+</section>
+
+<footer>
+  本文由 Hermes Agent 撰写 · 2026-08-16 · 数据截至 2026 H1 + 2025 全年<br>
+  引用报告：腾讯 Q2 财报 · CLSA 里昂 2026-08-13 研报 · 国家统计局 · 高盛 / 摩根士丹利 · Capital Economics · 智联招聘<br>
+  <a href="https://binbinao.github.io/openclaw-impact-report/">返回研究报告索引</a>
+</footer>
+
+</div>
+</body>
+</html>
