@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NASA 17流程 → CAE/MBSE/A3 映射手册</title>
+<style>
+  :root {
+    --titanium-black: #1C1C1E;
+    --titanium-silver: #A1A1AA;
+    --titanium-light: #F4F4F5;
+    --titanium-paper: #FAFAFA;
+    --warm-gold: #F59E0B;
+    --warm-gold-dim: #D97706;
+    --sky-blue: #0EA5E9;
+    --sky-light: #E0F2FE;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --border: #E4E4E7;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(180deg, #FAFAFA 0%, #F4F4F5 100%);
+    color: var(--titanium-black);
+    line-height: 1.6;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+  .header {
+    background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 40px 36px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .header .subtitle {
+    font-size: 15px;
+    color: var(--titanium-silver);
+    margin-bottom: 20px;
+  }
+  .header .meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--titanium-silver);
+  }
+  .header .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .header .meta strong { color: var(--warm-gold); font-weight: 600; }
+
+  .toc {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+  .toc h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--titanium-black);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .toc-grid a {
+    color: var(--titanium-black);
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .toc-grid a:hover {
+    background: var(--titanium-light);
+    border-color: var(--border);
+  }
+  .toc-grid a .num {
+    display: inline-block;
+    width: 24px; height: 24px;
+    line-height: 24px;
+    text-align: center;
+    background: var(--titanium-black);
+    color: var(--warm-gold);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 8px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+
+  .filter-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .filter-bar label {
+    font-size: 12px;
+    color: var(--titanium-silver);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+    color: var(--titanium-black);
+  }
+  .filter-btn:hover { border-color: var(--titanium-black); }
+  .filter-btn.active {
+    background: var(--titanium-black);
+    color: white;
+    border-color: var(--titanium-black);
+  }
+  .filter-btn.active.cae { background: var(--warm-gold); border-color: var(--warm-gold); }
+  .filter-btn.active.mbse { background: var(--sky-blue); border-color: var(--sky-blue); }
+  .filter-btn.active.a3 { background: var(--success); border-color: var(--success); }
+
+  .flow-card {
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--titanium-black);
+    transition: box-shadow 0.2s;
+  }
+  .flow-card:hover { box-shadow: var(--shadow-hover); }
+  .flow-card.system-design { border-left-color: var(--warm-gold); }
+  .flow-card.product-impl { border-left-color: var(--sky-blue); }
+  .flow-card.tech-mgmt { border-left-color: var(--success); }
+
+  .flow-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .flow-num {
+    width: 44px; height: 44px;
+    background: var(--titanium-black);
+    color: var(--warm-gold);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    flex-shrink: 0;
+  }
+  .flow-card.system-design .flow-num { background: var(--warm-gold); color: white; }
+  .flow-card.product-impl .flow-num { background: var(--sky-blue); color: white; }
+  .flow-card.tech-mgmt .flow-num { background: var(--success); color: white; }
+  .flow-title { flex: 1; min-width: 200px; }
+  .flow-title h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--titanium-black);
+    margin-bottom: 4px;
+  }
+  .flow-title .eng {
+    font-size: 12px;
+    color: var(--titanium-silver);
+    font-family: 'SF Mono', 'Monaco', monospace;
+    font-weight: 500;
+  }
+  .flow-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tag-design { background: #FEF3C7; color: var(--warm-gold-dim); }
+  .tag-impl { background: var(--sky-light); color: #0369A1; }
+  .tag-mgmt { background: #D1FAE5; color: #047857; }
+
+  .flow-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--border);
+  }
+  .flow-section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+  .flow-section h3 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--titanium-silver);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .flow-section h3::before {
+    content: '';
+    display: inline-block;
+    width: 3px; height: 14px;
+    background: var(--warm-gold);
+    border-radius: 2px;
+  }
+  .flow-section.cae h3::before { background: var(--warm-gold); }
+  .flow-section.mbse h3::before { background: var(--sky-blue); }
+  .flow-section.a3 h3::before { background: var(--success); }
+  .flow-section.pitfalls h3::before { background: var(--danger); background: var(--titanium-silver); }
+
+  .flow-list {
+    list-style: none;
+    padding: 0;
+  }
+  .flow-list li {
+    padding: 8px 0 8px 20px;
+    position: relative;
+    font-size: 13.5px;
+    color: var(--titanium-black);
+  }
+  .flow-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--warm-gold);
+    font-weight: bold;
+  }
+  .flow-section.mbse .flow-list li::before { color: var(--sky-blue); }
+  .flow-section.a3 .flow-list li::before { color: var(--success); }
+
+  .tool-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .chip {
+    background: var(--titanium-light);
+    color: var(--titanium-black);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .chip.cae { background: #FEF3C7; color: var(--warm-gold-dim); border-color: #FCD34D; }
+  .chip.mbse { background: var(--sky-light); color: #0369A1; border-color: #BAE6FD; }
+  .chip.a3 { background: #D1FAE5; color: #047857; border-color: #6EE7B7; }
+
+  .quote-box {
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-left: 3px solid var(--warm-gold);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #78350F;
+    font-style: italic;
+  }
+
+  .summary-box {
+    background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+    color: white;
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 32px;
+    box-shadow: var(--shadow);
+  }
+  .summary-box h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--warm-gold);
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .summary-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .summary-item h4 {
+    font-size: 12px;
+    color: var(--warm-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .summary-item p {
+    font-size: 13px;
+    color: var(--titanium-silver);
+    line-height: 1.5;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 24px;
+    color: var(--titanium-silver);
+    font-size: 12px;
+  }
+  .footer code {
+    background: var(--titanium-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    font-size: 11px;
+  }
+
+  @media (max-width: 768px) {
+    .container { padding: 16px 12px 60px; }
+    .header { padding: 24px 20px; }
+    .header h1 { font-size: 22px; }
+    .flow-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>NASA 系统工程 17 流程 → CAE/MBSE/A3 映射手册</h1>
+    <div class="subtitle">把 NASA/SP-2007-6105 的系统工程引擎落到 CAE 工程、MBSE 方法论、PBOM→作业指导书 AI 自动化的实战场景</div>
+    <div class="meta">
+      <span>📐 <strong>17</strong> 流程</span>
+      <span>🛰️ <strong>3</strong> 大类（系统设计 / 产品实现 / 技术管理）</span>
+      <span>🏭 <strong>3</strong> 场景映射（CAE / MBSE / A3）</span>
+      <span>📅 2026-08-20</span>
+    </div>
+  </div>
+
+  <div class="toc">
+    <h3>📑 17 个流程速查</h3>
+    <div class="toc-grid">
+      <a href="#f01"><span class="num">01</span>利益相关者期望</a>
+      <a href="#f02"><span class="num">02</span>技术需求定义</a>
+      <a href="#f03"><span class="num">03</span>逻辑分解</a>
+      <a href="#f04"><span class="num">04</span>设计方案定义</a>
+      <a href="#f05"><span class="num">05</span>产品实施执行</a>
+      <a href="#f06"><span class="num">06</span>产品集成</a>
+      <a href="#f07"><span class="num">07</span>产品验证</a>
+      <a href="#f08"><span class="num">08</span>产品确认</a>
+      <a href="#f09"><span class="num">09</span>产品交付</a>
+      <a href="#f10"><span class="num">10</span>技术规划</a>
+      <a href="#f11"><span class="num">11</span>需求管理</a>
+      <a href="#f12"><span class="num">12</span>接口管理</a>
+      <a href="#f13"><span class="num">13</span>技术风险管理</a>
+      <a href="#f14"><span class="num">14</span>技术状态管理</a>
+      <a href="#f15"><span class="num">15</span>技术数据管理</a>
+      <a href="#f16"><span class="num">16</span>技术评估</a>
+      <a href="#f17"><span class="num">17</span>决策分析</a>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <label>🔍 筛选映射场景：</label>
+    <button class="filter-btn active" data-filter="all">全部</button>
+    <button class="filter-btn cae" data-filter="cae">CAE 工程</button>
+    <button class="filter-btn mbse" data-filter="mbse">MBSE 方法</button>
+    <button class="filter-btn a3" data-filter="a3">A3 智能制造</button>
+  </div>
+
+  <!-- 系统设计 -->
+  <div class="flow-card system-design" id="f01">
+    <div class="flow-header">
+      <div class="flow-num">01</div>
+      <div class="flow-title">
+        <h2>明确利益相关者期望</h2>
+        <div class="eng">Stakeholder Expectations Definition</div>
+      </div>
+      <span class="flow-tag tag-design">系统设计</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>识别上游设计师 / 强度工程师 / 试验工程师 / 适航审查方 / 客户（OEM）— 拿到载荷谱、工况清单、试验大纲、适航条款</li>
+        <li>形成"运行使用构想（ConOps）"：每个分析工况的边界条件、初始/约束条件、求解精度要求、报告交付物</li>
+        <li>业主期望示例：碰撞仿真在 5ms 内完成、座椅鞭打工况加速度误差 ±2g、热仿真 30 万网格 4h 内出解</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">LS-DYNA</span>
+        <span class="chip cae">ANSYS Workbench</span>
+        <span class="chip cae">iSight</span>
+        <span class="chip cae">HyperStudy</span>
+        <span class="chip cae">工况矩阵</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>SysML 用例图（Use Case Diagram）识别系统利益相关者：飞行员、维修技师、调度、空管</li>
+        <li>需求图（Req Diagram）建立 Stakeholder → Need → System Requirement 的追溯链</li>
+        <li>运行使用构想（OV-1 Operational Viewpoint）使用 Capella / Cameo / Rhapsody 建模</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Cameo Systems Modeler</span>
+        <span class="chip mbse">Capella</span>
+        <span class="chip mbse">Rhapsody</span>
+        <span class="chip mbse">SysML v2</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>利益相关者：车间主任（要可执行的作业指导）、工艺工程师（要符合 PFMEA）、QA（要可追溯）、合规官（要符合 ISO 9001/IATF 16949）</li>
+        <li>运行使用构想：作业员拿着平板在工位上一边看图一边作业，每步扫码防错，发现异常立即上报</li>
+        <li>关键期望拆解：换型时间 ≤15min / 关键工序防错率 100% / 视觉化覆盖率 ≥95%</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">PBOM</span>
+        <span class="chip a3">PFMEA</span>
+        <span class="chip a3">SOP</span>
+        <span class="chip a3">MES</span>
+        <span class="chip a3">天枢大模型</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：利益相关者识别必须"先于"项目启动。冲突的处置权要在阶段 A 前明确（手册 4.1 节）。<br>
+      🎯 A3 落地建议：把"业主期望"做成一页《智能制造作业指导书期望清单》，列出 8-12 个关键 KPO（关键业主期望），每条对应一个质量门。
+    </div>
+  </div>
+
+  <div class="flow-card system-design" id="f02">
+    <div class="flow-header">
+      <div class="flow-num">02</div>
+      <div class="flow-title">
+        <h2>技术需求定义</h2>
+        <div class="eng">Technical Requirements Definition</div>
+      </div>
+      <span class="flow-tag tag-design">系统设计</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>把"强度足够"翻译成："最大米塞斯应力 ≤σs/1.5，安全系数 SF ≥1.5，疲劳寿命 ≥10⁶ 循环"</li>
+        <li>需求完整性：可验证、可追溯、无歧义、单一可测性（遵循附录 C 的"好需求"五原则）</li>
+        <li>与设计需求的上下游关系：顶层需求 → 仿真需求 → 模型验收准则 → 报告模板</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">需求规格书</span>
+        <span class="chip cae">Acceptance Criteria</span>
+        <span class="chip cae">DOE 矩阵</span>
+        <span class="chip cae">SN 比</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>SysML Requirement 图：需求 ID、文本、source、rationale、verify 方法、risk 级别</li>
+        <li>需求分层：Stakeholder Need → System Requirement → Subsystem Requirement → Component Spec</li>
+        <li>追溯矩阵：每条需求可向前追溯到设计、向后追溯到验证测试（验证矩阵见附录 D）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">SysML Requirement</span>
+        <span class="chip mbse">DOORS</span>
+        <span class="chip mbse">Polarion</span>
+        <span class="chip mbse">Jama Connect</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>把 PBOM 变更通知转译为"作业指导书变更需求"：影响工序 / 修改工艺参数 / 调整工具 / 增删步骤</li>
+        <li>需求语法："在 X 工序，使用 Y 工具，按 Z 参数（扭矩 N·m、转速 rpm、时间 s）执行，关键特性 SPC 控制"</li>
+        <li>天枢大模型 prompt 模板：把 PBOM 变更 + 历史工艺 + PFMEA + 作业标准 → 生成"作业步骤-工时-工具-物料-SPC"四元组</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">PBOM 变更通知</span>
+        <span class="chip a3">PFMEA 库</span>
+        <span class="chip a3">SPC 控制计划</span>
+        <span class="chip a3">火箭班自研</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：需求必须满足 5 个特征（必要、无歧义、可验证、可追溯、可修改）—— 见附录 C "如何写好需求"。<br>
+      🎯 A3 落地建议：建立"作业指导书需求卡"模板，每张卡含 (PBOM项 | 工序 | 工具/参数 | SPC点 | 验证方法 | 应急)，便于 LLM 结构化抽取。
+    </div>
+  </div>
+
+  <div class="flow-card system-design" id="f03">
+    <div class="flow-header">
+      <div class="flow-num">03</div>
+      <div class="flow-title">
+        <h2>逻辑分解</h2>
+        <div class="eng">Logical Decomposition</div>
+      </div>
+      <span class="flow-tag tag-design">系统设计</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>功能分解：B 白车身 → 车门 → 内板/外板/加强板；载荷分解：弯曲 + 扭转 + 侧碰 + 顶压</li>
+        <li>物理分解：1D 梁单元 → 2D 壳单元 → 3D 实体单元；模型层级总成 → 子系统 → 组件 → 网格</li>
+        <li>建立"系统-子系统-组件-参数"四级结构树，每层有对应的 DOE 任务和分析目标</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">功能树</span>
+        <span class="chip cae">PBS（产品分解结构）</span>
+        <span class="chip cae">WBS（工作分解结构）</span>
+        <span class="chip cae">Ansys Workbench Project Schematic</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>SysML Block Definition Diagram (BDD)：系统 → 子系统 → 组件 → 部件</li>
+        <li>Internal Block Diagram (IBD)：接口 + 端口 + 流向</li>
+        <li>功能分析 (Activity Diagram) + 状态机 (State Machine) + 时序 (Sequence)</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">BDD</span>
+        <span class="chip mbse">IBD</span>
+        <span class="chip mbse">Activity Diagram</span>
+        <span class="chip mbse">Sequence Diagram</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>产品树：PBOM → 装配体 → 部件 → 工序 → 工步 → 操作 → 关键特性</li>
+        <li>16 业务对象：A3 系统把 PBOM 拆为"工序/工步/工具/物料/参数/SPC/防错/工时"等业务对象</li>
+        <li>分解逻辑：先按装配序列（Order of Operations），再按工艺路线（Routing），最后按工序内工步细分</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">PBOM 结构树</span>
+        <span class="chip a3">Routing</span>
+        <span class="chip a3">16 业务对象</span>
+        <span class="chip a3">PFMEA</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：分解必须"迭代+递归"——一个组件可能向下 5 层，另一个只需 2 层，依据是复杂度与风险（手册 4.3 节）。<br>
+      🎯 A3 落地建议：业务对象枚举是关键——把 16 个对象列成矩阵（PBOM → 作业指导书 → MES 输入），每个对象写明字段、来源、消费者、验证方法。
+    </div>
+  </div>
+
+  <div class="flow-card system-design" id="f04">
+    <div class="flow-header">
+      <div class="flow-num">04</div>
+      <div class="flow-title">
+        <h2>设计方案定义</h2>
+        <div class="eng">Design Solution Definition</div>
+      </div>
+      <span class="flow-tag tag-design">系统设计</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>设计备选方案：拓扑优化 vs 尺寸优化 vs 形貌优化；铸造 vs 锻造 vs 冲压；钢 vs 铝 vs 复材</li>
+        <li>权衡研究（Trade Study）：加权矩阵评估重量 / 成本 / 性能 / 制造性 / 维修性，每项赋权重打分</li>
+        <li>baseline 锁定：选定方案后冻结设计参数，作为 PDM 中的"baseline part"，进入后续 CAE 与图纸迭代</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">Topology Opt</span>
+        <span class="chip cae">Altair Inspire</span>
+        <span class="chip cae">Genesis Design</span>
+        <span class="chip cae">加权评分矩阵</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>Parametric Diagram (SysML) + Trade Study 工具：方案库 → 评估准则 → 评分 → 选定</li>
+        <li>把设计准则 (Design Constraint) 写成 Constraint Block，自动校验设计参数</li>
+        <li>设计包：含 3D 模型、2D 图、仿真报告、试验大纲、PFMEA、SPC 计划</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Parametric Diagram</span>
+        <span class="chip mbse">Constraint Block</span>
+        <span class="chip mbse">Trade Study</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>作业指导书方案选择：纯文字版 / 图文版 / 视频版 / AR 辅助版 / AI 实时问答版</li>
+        <li>权衡：新手作业员（要图文配视频）vs 熟手（要快查表）vs 异常处理（要 AI 问答）</li>
+        <li>AI 生成方案：天枢 LLM 输入 PBOM + 历史作业指导书 → 输出图文步骤 + 关键参数 + 报警条件</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">A3 方案矩阵</span>
+        <span class="chip a3">图文+视频</span>
+        <span class="chip a3">AR 辅助</span>
+        <span class="chip a3">AI 问答</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：设计方案的验证是"持续迭代+递归"——选完后还会回头被验证（手册 4.4 节）。<br>
+      🎯 A3 落地建议：方案锁定的标志是"三可"——可生成 / 可审批 / 可下发。三可没满足前不进 D 阶段。
+    </div>
+  </div>
+
+  <!-- 产品实现 -->
+  <div class="flow-card product-impl" id="f05">
+    <div class="flow-header">
+      <div class="flow-num">05</div>
+      <div class="flow-title">
+        <h2>产品实施执行</h2>
+        <div class="eng">Product Implementation</div>
+      </div>
+      <span class="flow-tag tag-impl">产品实现</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>三种实现方式：购买（标准件库） / 制造（自建模型） / 重用（历史项目模板）</li>
+        <li>网格划分策略：关键区域细化（边、孔、焊点）+ 远场粗化 + 过渡区渐变；网格收敛验证 ≥ 3 套网格</li>
+        <li>求解器选择：隐式（线性/非线性静力）vs 显式（冲击、碰撞）vs 模态（NVH）vs CFD</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">ANSYS Meshing</span>
+        <span class="chip cae">HyperMesh</span>
+        <span class="chip cae">ABAQUS</span>
+        <span class="chip cae">Star-CCM+</span>
+        <span class="chip cae">Fluent</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>设计模型（MBSE）→ 物理实现（CAD/CAE/MBD）的"模型桥"：SysML 仿真包 + FMI/FMU 联合仿真</li>
+        <li>采购标准件（COTS）→ 在 MBSE 模型中用 Stereotype 标注 + 引用外部库</li>
+        <li>重用历史模型：在 Teamcenter/3DExperience 中按"成熟度（TRL）"分层管理</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">FMU/FMI</span>
+        <span class="chip mbse">3DExperience</span>
+        <span class="chip mbse">Teamcenter</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>实施执行：购买（标准工艺） / 制造（自研工序） / 重用（历史作业指导书）三种模式</li>
+        <li>AI 生成：天枢 LLM 把 PBOM 变更通知 + PFMEA + 历史工艺 → 生成作业指导书初稿（火箭班自研多模态输出）</li>
+        <li>质量门：初稿 → 工艺工程师审核 → 车间试运行 → 主管签字 → 入库</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">天枢 LLM</span>
+        <span class="chip a3">火箭班</span>
+        <span class="chip a3">LLM Agent</span>
+        <span class="chip a3">知识库 RAG</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：重用产品必须重新验证——"出生于其他系统的验证，不能依赖"（手册 5.1 关键点）。<br>
+      🎯 A3 落地建议：AI 生成的作业指导书必须经过"四步质量门"——自动校验 / 工艺审核 / 车间试运行 / 异常样本抽检。
+    </div>
+  </div>
+
+  <div class="flow-card product-impl" id="f06">
+    <div class="flow-header">
+      <div class="flow-num">06</div>
+      <div class="flow-title">
+        <h2>产品集成</h2>
+        <div class="eng">Product Integration</div>
+      </div>
+      <span class="flow-tag tag-impl">产品实现</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>自底向上集成：单焊点 → 拼焊板 → 副车架 → 白车身 → 整车；每层做集成验证（一致性 + 边界耦合）</li>
+        <li>子模型（sub-model）边界传递：圣维南原理 + 焊接/螺栓连接刚度提取</li>
+        <li>多物理耦合：碰撞-约束系统耦合（C-NCAP）、热-结构耦合（焊接残余应力）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">Submodeling</span>
+        <span class="chip cae">Coupled Field</span>
+        <span class="chip cae">Craig-Bampton</span>
+        <span class="chip cae">超单元</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>集成计划（Integration Plan）：硬件/软件/数据/服务的集成顺序、责任、资源、里程碑</li>
+        <li>集成层次：组件 → 子系统 → 系统 → 系统之系统（SoS）；每层有 ICD（接口控制文档）</li>
+        <li>SysML Internal Block Diagram 标注接口与端口类型</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Integration Plan</span>
+        <span class="chip mbse">ICD</span>
+        <span class="chip mbse">SysML IBD</span>
+        <span class="chip mbse">Interface Block</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>作业指导书集成：单工序指引 → 工步脚本 → 工序卡 → 装配总票 → 装配作业包（多工序集成）</li>
+        <li>系统集成：作业指导书 + 物料齐套检查 + 工具校验 + 工时分配 + 质量门 → 装配作业包</li>
+        <li>MES 集成：实时拉取 PBOM、工位状态、ANDON 信号，AI 实时推送作业步骤</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">工序卡</span>
+        <span class="chip a3">装配作业包</span>
+        <span class="chip a3">MES</span>
+        <span class="chip a3">ANDON</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：集成越早发现失误，越省成本（手册 5.2 反复强调）。<br>
+      🎯 A3 落地建议：作业指导书必须"按工位集成"而非"按工序堆叠"——工位是 MES 的最小执行单元。
+    </div>
+  </div>
+
+  <div class="flow-card product-impl" id="f07">
+    <div class="flow-header">
+      <div class="flow-num">07</div>
+      <div class="flow-title">
+        <h2>产品验证</h2>
+        <div class="eng">Product Verification</div>
+      </div>
+      <span class="flow-tag tag-impl">产品实现</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>验证 = "建造正确"：仿真结果 vs 设计规范（应力 ≤ 允许值、模态 ≥ 目标频率、NVH ≤ 限值）</li>
+        <li>验证方法：分析（CAE 仿真） / 试验（台架） / 检查（图纸） / 演示（Demo）</li>
+        <li>网格无关性验证：3 套网格（粗/中/细）关键响应误差 < 5%</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">网格收敛</span>
+        <span class="chip cae">DOE</span>
+        <span class="chip cae">台架试验</span>
+        <span class="chip cae">证书签署</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>验证矩阵（Verification Matrix）：每条需求 → 验证方法（Analysis/Test/Inspection/Demo）→ 接受准则</li>
+        <li>模型基测试：SysML 仿真执行（Simulation Toolbox）→ 自动跑参数化场景</li>
+        <li>独立验证：测试工程师不是建模工程师（避免"自己验证自己"）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Verification Matrix</span>
+        <span class="chip mbse">Modelica</span>
+        <span class="chip mbse">Simulink</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>验证 = "作业指导书是否准确描述了工艺"：文本 vs 现场工艺规范、参数对、关键控制点对</li>
+        <li>验证手段：自动校验（LLM 自检关键参数） / 工艺审核（人工） / 试运行（小批量）</li>
+        <li>关键防错：扭矩、焊点、压装、注液——必须 100% SPC 覆盖、SPC 规则触发报警</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">LLM 自检</span>
+        <span class="chip a3">工艺审核</span>
+        <span class="chip a3">SPC</span>
+        <span class="chip a3">试运行</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：验证 vs 确认 -- 验证是"建造正确"，确认是"建造正确的"（手册 5.3-5.4 反复强调）。<br>
+      🎯 A3 落地建议：验收准则量化——"扭矩 80±5 N·m"，而不是"扭矩合适"。
+    </div>
+  </div>
+
+  <div class="flow-card product-impl" id="f08">
+    <div class="flow-header">
+      <div class="flow-num">08</div>
+      <div class="flow-title">
+        <h2>产品确认</h2>
+        <div class="eng">Product Validation</div>
+      </div>
+      <span class="flow-tag tag-impl">产品实现</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>确认 = "建造正确的"：仿真结果 vs 真实试验数据、vs 用户实际使用场景</li>
+        <li>典型场景：仿真碰撞波形 vs 真实气囊点爆波形、仿真 NVH vs 实车路试、仿真热管理 vs 实车高温试验</li>
+        <li>确认偏差 > 10% 必须回溯建模假设（材料模型、边界条件、网格）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">试验相关性</span>
+        <span class="chip cae">Model Correlation</span>
+        <span class="chip cae">Corner Case</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>确认矩阵（Validation Matrix）：每条需求 → 模拟/真实场景下的运行试验</li>
+        <li>用户参与（User in the Loop）：飞行员/操作员在 VR/HIL 环境下真实操作</li>
+        <li>运行剖面（Mission Profile）覆盖：高频关键场景 + 极端工况</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Validation Matrix</span>
+        <span class="chip mbse">HIL</span>
+        <span class="chip mbse">VR/XR</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>确认 = "作业指导书能否真的让作业员在真实工位完成作业"：现场试制 + 异常情况下可读性</li>
+        <li>真实场景验证：老员工 / 新员工 / 多语种 / 异常情况（漏件、错件、工具失效）</li>
+        <li>AI 作业问答：作业员现场提问，AI 给出可执行步骤（能否覆盖 95% 异常？）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">现场试制</span>
+        <span class="chip a3">多语种</span>
+        <span class="chip a3">AI 问答</span>
+        <span class="chip a3">异常路径</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：确认试验必须在"真实环境或模拟环境"下进行（手册 5.4）。<br>
+      🎯 A3 落地建议：作业指导书必须经过"新员工盲测"——给新人使用 AI 作业指导书独立完成作业，统计成功率。
+    </div>
+  </div>
+
+  <div class="flow-card product-impl" id="f09">
+    <div class="flow-header">
+      <div class="flow-num">09</div>
+      <div class="flow-title">
+        <h2>产品交付</h2>
+        <div class="eng">Product Transition</div>
+      </div>
+      <span class="flow-tag tag-impl">产品实现</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>交付物：CAE 报告（工况、模型、结果、结论、建议）、3D 模型、网格文件、求解器输入卡、试验大纲</li>
+        <li>交付评审：CAE 主管 / 强度主管 / 试验工程师 / 客户代表签字</li>
+        <li>交付后归档：PDM/PLM 链路可追溯（报告 ID ↔ 工件号 ↔ 项目号 ↔ 阶段）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">CAE 报告模板</span>
+        <span class="chip cae">Teamcenter</span>
+        <span class="chip cae">签字流程</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>交付物：MBSE 模型（SysML）+ 设计文档 + 接口文档 + 验证报告 + 确认报告</li>
+        <li>业主验收：基线锁定（Baseline） + 数字签名 + 持续维护责任人</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Baseline Lock</span>
+        <span class="chip mbse">Digital Signature</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>交付物：作业指导书（图文/视频/AR）+ 关键参数表 + 防错规则 + 异常 SOP + AI 问答知识库</li>
+        <li>交付给：MES（执行端）+ 培训系统（学习端）+ 异常处理系统（应急端）</li>
+        <li>交付门：作业员扫码上岗试运行 → 主管验收 → 入库分发</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">MES</span>
+        <span class="chip a3">培训系统</span>
+        <span class="chip a3">异常 SOP</span>
+        <span class="chip a3">AI 知识库</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：交付不是终点——开始运行后任何新增能力或升级都"作为新项目"重新走引擎（手册 5.5）。<br>
+      🎯 A3 落地建议：建立作业指导书"版本号 + MD5"机制，每次 PBOM 变更生成新版本号，AI 自动比对差异。
+    </div>
+  </div>
+
+  <!-- 技术管理 -->
+  <div class="flow-card tech-mgmt" id="f10">
+    <div class="flow-header">
+      <div class="flow-num">10</div>
+      <div class="flow-title">
+        <h2>技术规划</h2>
+        <div class="eng">Technical Planning</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>SEMP（系统工程管理计划）：仿真工作量、求解器许可、网格划分工时、计算资源（HPC 核时）、评审节点</li>
+        <li>关键路径：几何清理 → 网格 → 求解 → 后处理 → 报告；任意环节延期触发应急计划</li>
+        <li>资源冲突：HPC 排队、求解器 license 不足、新人培训曲线——必须提前锁资源</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">SEMP 模板</span>
+        <span class="chip cae">HPC 调度</span>
+        <span class="chip cae">License Manager</span>
+        <span class="chip cae">Gantt</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>MBSE 实施路线图：选定工具 → 培训 → 试点项目 → 全面推广 → 与 PLM/CAE 集成</li>
+        <li>组织变革：建立"MBSE 中心" + 嵌入式 MBSE 工程师 + 工具链资产管理员</li>
+        <li>基线管理：MBSE 模型版本、协作审查、变更控制</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">MBSE Roadmap</span>
+        <span class="chip mbse">MBSE Center</span>
+        <span class="chip mbse">Change Control</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>项目规划：16 业务对象建模、LLM 选型、数据准备（历史作业指导书库）、试点产品线、推广计划</li>
+        <li>目标口径：效率 ≥ 100%（对标现状）、自动化 ≥ 90%、准确率 ≥ 85%</li>
+        <li>关键路径：PBOM 集成 → 工艺知识库 → LLM Agent → 审核流 → MES 集成 → 试点 → 推广</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">项目 SEMP</span>
+        <span class="chip a3">16 业务对象</span>
+        <span class="chip a3">天枢/火箭班</span>
+        <span class="chip a3">KPI 三指标</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：技术规划必须"实际历史经验" + "留出应急"，不能只看 best case（手册 6.1）。<br>
+      🎯 A3 落地建议：每个阶段定一个"如做不到则熔断"的回滚条件——比如试点发现准确率 < 60% 必须暂停，重新训练。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f11">
+    <div class="flow-header">
+      <div class="flow-num">11</div>
+      <div class="flow-title">
+        <h2>需求管理</h2>
+        <div class="eng">Requirements Management</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>需求 ID 规则：REQ-SYS-001、REQ-SUB-001、REQ-VEH-001；每条带 verifyMethod、source、owner</li>
+        <li>变更控制：所有需求变更走 CCB（Change Control Board）；影响分析 → 批准 → 实施</li>
+        <li>追溯矩阵：每条需求 ↔ 仿真任务 ↔ 报告 ↔ 验证证据，双向可追溯</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">DOORS</span>
+        <span class="chip cae">Polarion</span>
+        <span class="chip cae">CCB</span>
+        <span class="chip cae">追溯矩阵</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>SysML Requirement 包：需求 ID + 文本 + 来源 + 验证方法 + 风险等级</li>
+        <li>需求变更自动影响分析：哪些设计、哪些接口、哪些测试需要同步变更</li>
+        <li>双向追溯：向上 → 上层需求/法规；向下 → 设计 → 实现 → 测试 → 验证</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">SysML Requirement</span>
+        <span class="chip mbse">Traceability</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>需求 ID 规则：PBOM-CHG-2026-08-001 ↔ WI-2026-08-001（作业指导书 ID）↔ SOP-...</li>
+        <li>变更触发：PBOM 变更 → 自动评估影响工序 → 自动生成"需求变更草案" → 工艺工程师审核</li>
+        <li>追溯：PBOM 变更 → 工序 → 步骤 → 工具 → 物料 → PFMEA → SPC → 培训材料，全链路</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">PBOM 变更 ID</span>
+        <span class="chip a3">WI 文档</span>
+        <span class="chip a3">PFMEA 链接</span>
+        <span class="chip a3">变更流</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：追溯性是"成功确认产品需求的关键"（手册 4.0 关键点）。<br>
+      🎯 A3 落地建议：建立"作业指导书需求图谱"——每张 WI 卡上能看到：来自哪个 PBOM 变更、关联哪些 PFMEA、对应哪些 SPC 规则、培训过哪些人。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f12">
+    <div class="flow-header">
+      <div class="flow-num">12</div>
+      <div class="flow-title">
+        <h2>接口管理</h2>
+        <div class="eng">Interface Management</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>接口类型：几何（装配关系） / 载荷（边界条件传递） / 数据（CAD-CAE 文件格式） / 工具（求解器耦合）</li>
+        <li>接口控制文档（ICD）：源系统、目标系统、文件格式、版本、单位、责任人、变更通知机制</li>
+        <li>典型翻车：单位不一致（mm vs in）、坐标系错位、材料 model 名不匹配、装配关系漏定义</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">ICD</span>
+        <span class="chip cae">STEP/IGES</span>
+        <span class="chip cae">螺栓连接属性</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>SysML Interface Block：端口类型（Flow Port / Standard Port）+ 协议 + 数据类型</li>
+        <li>ICD 直接生成：MBSE 模型导出 ICD 文档（自动化）</li>
+        <li>跨模型集成：MBSE 模型 ↔ CAD 装配树 ↔ CAE 接口树 ↔ 控制系统模型</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Interface Block</span>
+        <span class="chip mbse">ICD Generator</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>北向接口：PBOM/PLM → A3 系统（变更通知、工件号、版本）</li>
+        <li>南向接口：A3 → MES（作业步骤、参数、防错规则）</li>
+        <li>侧向接口：PFMEA 库、SPC 控制计划、培训系统、ANDON 系统</li>
+        <li>关键翻车案例：PBOM 工件号变更未同步 → MES 仍按旧件号装配 → 错装</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">PLM 接口</span>
+        <span class="chip a3">MES 接口</span>
+        <span class="chip a3">PFMEA 接口</span>
+        <span class="chip a3">ANDON</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示："要尽早分析所有潜在的接口不兼容性"（手册 5.2 关键点）。<br>
+      🎯 A3 落地建议：建立"接口契约测试"——每次 PBOM/MES 升级前，用历史数据回归测试对应接口仍能正常生成作业指导书。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f13">
+    <div class="flow-header">
+      <div class="flow-num">13</div>
+      <div class="flow-title">
+        <h2>技术风险管理</h2>
+        <div class="eng">Technical Risk Management</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>5×5 风险矩阵：可能性 × 严重性；典型风险：材料模型不准、网格发散、求解器不收敛、license 不足</li>
+        <li>缓解：网格收敛验证、材料试验校准、Preliminary 试算、license 提前锁</li>
+        <li>风险登记册（Risk Register）：每月更新、CCB 评审、关闭验证</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">5×5 矩阵</span>
+        <span class="chip cae">Risk Register</span>
+        <span class="chip cae">FMEA</span>
+        <span class="chip cae">Monte Carlo</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>MBSE 实施风险：组织接受度、工具成熟度、模型维护成本、人员流失</li>
+        <li>技术风险：模型保真度不足、跨域模型语义不一致、版本管理混乱</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Risk Register</span>
+        <span class="chip mbse">MBSE Maturity</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>AI 风险：幻觉（关键参数编造）、上下文遗忘（漏工序）、合规风险（违规工艺）</li>
+        <li>缓解：四步质量门（自检/审核/试运行/抽检）+ 关键参数 100% 人工复核 + 黑名单关键词</li>
+        <li>业务风险：用户抵触（不愿用 AI 生成）、变革管理、试错成本</li>
+        <li>合规风险：AI 生成内容是否可作为正式工艺文件？合规官职责边界？</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">AI 幻觉</span>
+        <span class="chip a3">合规边界</span>
+        <span class="chip a3">变革管理</span>
+        <span class="chip a3">黑名单</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：风险"5 个特征"——识别/分析/缓解/接受/沟通/监测（手册 6.4）。<br>
+      🎯 A3 落地建议：AI 生成作业指导书必须"先人工、后 AI、再人工"——工艺工程师构造 prompt → AI 生成 → 工艺工程师复核。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f14">
+    <div class="flow-header">
+      <div class="flow-num">14</div>
+      <div class="flow-title">
+        <h2>技术状态管理</h2>
+        <div class="eng">Configuration Management</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>CM 基线：Functional Baseline（FCB）→ Allocated Baseline（ABL）→ Product Baseline（PCB）→ Operational Baseline</li>
+        <li>变更控制：所有变更走 ECN（Engineering Change Notice）→ 影响分析 → CCB → 批准 → 实施</li>
+        <li>基线审计：定期对比实际 vs 基线（设计冻结 vs 仿真状态）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">ECN</span>
+        <span class="chip cae">CCB</span>
+        <span class="chip cae">Baseline</span>
+        <span class="chip cae">Audit</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>MBSE 模型版本管理：基线 + Branch + Tag + Diff；每次评审前冻结基线</li>
+        <li>模型组件库：可重用 Block 库 + Library Version + 跨项目导入</li>
+        <li>模型-CAD-CAE 一致性：MBSE Master / CAD Slave / CAE Slave 同步机制</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Git/SVN</span>
+        <span class="chip mbse">Model Library</span>
+        <span class="chip mbse">Baseline</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>作业指导书版本：V1.0（首次发布）→ V1.1（PBOM 微调）→ V2.0（重大工艺变更）</li>
+        <li>变更控制：PBOM EC → 作业指导书 EC → 培训材料 EC → MES 配置 EC</li>
+        <li>现场版本：在用工位版本 vs 仓库版本 vs 培训版本，必须明确标识</li>
+        <li>历史归档：所有历史版本可查、不可删（合规要求）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">WI 版本</span>
+        <span class="chip a3">EC 流程</span>
+        <span class="chip a3">MES 配置</span>
+        <span class="chip a3">历史归档</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：CM 是"理解变更如何影响系统的关键"（手册 6.5 关键点）。<br>
+      🎯 A3 落地建议：AI 生成作业指导书版本必须"机器可追溯"——每次生成记录 prompt / 模型版本 / 输入数据 / 输出 diff。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f15">
+    <div class="flow-header">
+      <div class="flow-num">15</div>
+      <div class="flow-title">
+        <h2>技术数据管理</h2>
+        <div class="eng">Technical Data Management</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>数据资产：3D 模型、网格文件、求解器输入、结果文件、报告、试验数据；总规模 TB 级</li>
+        <li>存储：HPC Lustre 高速存储 + 归档磁带；命名规范 / 元数据 / 检索</li>
+        <li>元数据：项目号 / 工件号 / 阶段 / 求解器版本 / 物理场 / 工况 / 责任工程师</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">Lustre</span>
+        <span class="chip cae">PDM</span>
+        <span class="chip cae">元数据</span>
+        <span class="chip cae">归档</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>模型库：参数化 Block + 模板 + 标准接口；可复用度量</li>
+        <li>模型-文档-代码双向链接：SysML 元素 ↔ 需求文档 ↔ 设计文档 ↔ 代码模块</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Model Library</span>
+        <span class="chip mbse">Trace Link</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>数据资产：历史作业指导书（万级）、PBOM 历史变更（千级）、PFMEA 库、SPC 库、培训视频、异常案例</li>
+        <li>存储：RAG 向量库（Milvus/Qdrant）+ 文档库（MinIO）+ 关系库（PostgreSQL）</li>
+        <li>质量：PBOM 变更向量索引、异常案例分类、PFMEA 关联规则</li>
+        <li>关键：数据治理——历史作业指导书是否当前仍合规？必须打标签</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">RAG 向量库</span>
+        <span class="chip a3">Milvus</span>
+        <span class="chip a3">MinIO</span>
+        <span class="chip a3">数据治理</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：技术数据是"技术状态管理 + 变更追溯"的物理基础（手册 6.6）。<br>
+      🎯 A3 落地建议：建立"作业指导书 RAG 质量评估"——指标含命中率、引用准确率、生成质量分；每周评估。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f16">
+    <div class="flow-header">
+      <div class="flow-num">16</div>
+      <div class="flow-title">
+        <h2>技术评估</h2>
+        <div class="eng">Technical Assessment</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>里程碑评审：PDR（初步设计评审）→ CDR（关键设计评审）→ TRR（试验就绪评审）→ FRR（飞行就绪评审）</li>
+        <li>评审输入：仿真报告 / 试验大纲 / 风险清单 / 偏差清单；评审输出：行动项 + 责任人 + 截止日期</li>
+        <li>独立评审：非项目组内外部专家；保 view 独立性</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">PDR/CDR</span>
+        <span class="chip cae">TRR</span>
+        <span class="chip cae">评审清单</span>
+        <span class="chip cae">同行评审</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>MBSE 成熟度评估：模型保真度、追溯完整度、跨学科覆盖度、复用率、维护成本</li>
+        <li>技术评估：MBSE 模型 vs 实际系统的一致性、缺口分析</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">MBSE Maturity</span>
+        <span class="chip mbse">Gap Analysis</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>评估节点：试点产品线 → 推广产品线 → 全面推广；每节点有 KPI 评估</li>
+        <li>AI 质量评估：抽样生成作业指导书 → 人工评分 → 准确率统计 → 偏差分析</li>
+        <li>业务价值评估：效率提升（工时减少）、自动化率（AI 生成占比）、准确率（合规通过）</li>
+        <li>独立评估：跨部门评审（工艺 + IT + 车间 + 合规）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">试点评审</span>
+        <span class="chip a3">KPI 评估</span>
+        <span class="chip a3">准确率</span>
+        <span class="chip a3">跨部门</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：评估不是"走流程"，而是"知晓偏见、假设、约束"（手册 6.7 关键点）。<br>
+      🎯 A3 落地建议：AI 准确率评估必须分层——技术准确率（参数对） / 业务准确率（流程对） / 异常准确率（边界处理）。
+    </div>
+  </div>
+
+  <div class="flow-card tech-mgmt" id="f17">
+    <div class="flow-header">
+      <div class="flow-num">17</div>
+      <div class="flow-title">
+        <h2>决策分析</h2>
+        <div class="eng">Decision Analysis</div>
+      </div>
+      <span class="flow-tag tag-mgmt">技术管理</span>
+    </div>
+    <div class="flow-section cae">
+      <h3>🛠️ CAE 工程场景</h3>
+      <ul class="flow-list">
+        <li>决策类型：购买/自研/重用、新材料采用、求解器选型、建模保真度、风险接受</li>
+        <li>决策方法：加权评分矩阵、Pairwise 对比、Cost-Benefit、Monetary Value</li>
+        <li>决策文件：决策简报（Decision Memo）→ 决策审查（DAR）→ 决策记录（Decision Log）</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip cae">加权评分</span>
+        <span class="chip cae">AHP</span>
+        <span class="chip cae">决策矩阵</span>
+        <span class="chip cae">DAR</span>
+      </div>
+    </div>
+    <div class="flow-section mbse">
+      <h3>📐 MBSE 方法论场景</h3>
+      <ul class="flow-list">
+        <li>MBSE 工具选型决策：Cameo vs Capella vs Rhapsody；依据：标准支持、成本、生态、本地化</li>
+        <li>MBSE 范围决策：哪些子系统建模、哪些用文档、哪些用 CAD——保 ROI</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip mbse">Tool Selection</span>
+        <span class="chip mbse">MBSE Scope</span>
+      </div>
+    </div>
+    <div class="flow-section a3">
+      <h3>🏭 A3 智能制造场景</h3>
+      <ul class="flow-list">
+        <li>关键决策：购买商业 LLM vs 自研模型 vs 私有化部署；天枢 vs 开源 vs 国产替代</li>
+        <li>范围决策：先做装配作业指导 vs 先做关键工序 vs 全面铺开；试点产品线选择</li>
+        <li>接受准则：自动化率 ≥ 90%、准确率 ≥ 85%、效率 ≥ 100%——三达标才算项目成功</li>
+        <li>拒绝决策：发现 ROI 不达标就熔断、保全年预算</li>
+      </ul>
+      <div class="tool-chips">
+        <span class="chip a3">LLM 选型</span>
+        <span class="chip a3">试点范围</span>
+        <span class="chip a3">接受准则</span>
+        <span class="chip a3">熔断机制</span>
+      </div>
+    </div>
+    <div class="quote-box">
+      💡 NASA 关键提示：决策必须"记录在案"——谁、什么决策、依据、备选、影响（手册 6.8）。<br>
+      🎯 A3 落地建议：所有决策走"决策简报"流程——一页纸说清问题/选项/评估/推荐/风险，避免 PPT 黑洞。
+    </div>
+  </div>
+
+  <div class="summary-box">
+    <h2>📊 17 流程 × 3 场景 对照速查表</h2>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <h4>系统设计（4 流程）</h4>
+        <p>重点：利益相关者期望识别 + 需求定义 + 逻辑分解 + 设计方案。A3 场景差表现为：PBOM 变更通知没及时识别业主期望 → 作业指导书偏差。</p>
+      </div>
+      <div class="summary-item">
+        <h4>产品实现（5 流程）</h4>
+        <p>重点：验证 vs 确认区分、A3 场景落地为"作业指导书自检 vs 试运行确认"。AI 不能跳过验证门。</p>
+      </div>
+      <div class="summary-item">
+        <h4>技术管理（8 流程）</h4>
+        <p>重点：需求/接口/风险/CM/数据管理，是 A3 项目的"软基础设施"。忽视任一环节，AI 生成作业指导书会失控。</p>
+      </div>
+      <div class="summary-item">
+        <h4>CAE 工程</h4>
+        <p>工具链：ANSYS / ABAQUS / Fluent / Star-CCM+ / HyperMesh / LS-DYNA / Altair。CAE 强证据来自试验验证与 corner case 覆盖。</p>
+      </div>
+      <div class="summary-item">
+        <h4>MBSE 方法</h4>
+        <p>工具链：Cameo / Capella / Rhapsody / DOORS / Polarion / Modelica。MBSE 是系统工程流程的"机器可执行"实现。</p>
+      </div>
+      <div class="summary-item">
+        <h4>A3 智能制造</h4>
+        <p>工具链：天枢 LLM / 火箭班 / PBOM / PLM / MES / PFMEA / SPC。AI 是放大器，流程纪律决定放大方向。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>📐 NASA 系统工程 17 流程 → CAE/MBSE/A3 映射手册</p>
+    <p>基于 NASA/SP-2007-6105 Rev 1（原版）· 电子工业出版社 2012 中译本</p>
+    <p style="margin-top: 8px;">📁 路径：<code>projects/nasa-seh-to-cae-mapping/mapping.html</code> · 📅 2026-08-20</p>
+  </div>
+
+</div>
+
+<script>
+  // 筛选交互
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      // 更新按钮状态
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn.classList.contains('cae')) btn.classList.add('cae','active');
+      else if (btn.classList.contains('mbse')) btn.classList.add('mbse','active');
+      else if (btn.classList.contains('a3')) btn.classList.add('a3','active');
+      else btn.classList.add('active');
+      // 筛选卡片
+      document.querySelectorAll('.flow-card').forEach(card => {
+        if (filter === 'all') {
+          card.style.display = '';
+        } else {
+          const sections = card.querySelectorAll('.flow-section.' + filter);
+          card.style.display = sections.length > 0 ? '' : 'none';
+          // 同时高亮匹配的分区
+          card.querySelectorAll('.flow-section').forEach(sec => {
+            if (filter === 'all') {
+              sec.style.opacity = '1';
+            } else {
+              sec.style.opacity = sec.classList.contains(filter) ? '1' : '0.35';
+            }
+          });
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
