@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadence Design Systems · 产品系列 × 工厂使用环节 · 深度调研</title>
+<meta name="description" content="Cadence 楷登电子 13 大类 × ~50 SKU 产品矩阵 + 五大代工厂（TSMC/Samsung/Intel/Rapidus/GF）+ OSAT/EMS 工厂落地证据。112 条 source 多源交叉验证。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#F8F7F4; --card:#FFFFFF; --text:#141413;
+    --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --sky:#5B8BA0; --purple:#8B6B9E;
+    --gray-100:#EEECE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+    --border:1.5px solid var(--gray-300);
+    --radius:12px;
+  }
+  *,*::before,*::after { box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',system-ui,-apple-system,"Microsoft YaHei",sans-serif;
+         font-size:15px; line-height:1.65; margin:0; padding:0; -webkit-font-smoothing:antialiased; }
+  *:focus-visible { outline:2px solid var(--clay); outline-offset:2px; border-radius:4px; }
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;}}
+
+  .page { max-width:920px; margin:0 auto; padding:48px 28px 96px; }
+
+  /* Sister-strip banner (return to openclaw index) */
+  .sister-strip { background:var(--card); border:var(--border); border-left:3px solid var(--olive);
+                 border-radius:var(--radius); padding:14px 20px; margin-bottom:36px;
+                 display:flex; align-items:center; justify-content:space-between; gap:16px; font-size:13px; }
+  .sister-strip .label { color:var(--gray-500); }
+  .sister-strip a { color:var(--text); text-decoration:none; font-weight:600; transition:color .15s; }
+  .sister-strip a:hover { color:var(--clay); }
+  .sister-strip .arrow { color:var(--olive); margin-right:6px; }
+
+  /* Hero */
+  header.hero { text-align:left; margin-bottom:48px; padding-bottom:28px; border-bottom:2px solid var(--gray-100); }
+  .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .meta { font-size:12px; padding:3px 10px; border-radius:20px; background:var(--gray-100); color:var(--gray-700); font-weight:500; }
+  .meta.cat-eda { background:rgba(217,119,87,.1); color:var(--clay); }
+  .meta.cat-chain { background:rgba(91,139,160,.1); color:var(--sky); }
+  .meta.cat-fab { background:rgba(120,140,93,.1); color:var(--olive); }
+  .meta.cat-ai { background:rgba(139,107,158,.1); color:var(--purple); }
+  h1 { font-family:'Instrument Serif',Georgia,serif; font-size:48px; font-weight:400; line-height:1.15;
+       letter-spacing:-.02em; margin:0 0 14px; color:var(--text); }
+  h1 em { font-style:italic; color:var(--clay); }
+  .deck { font-size:17px; color:var(--gray-700); line-height:1.55; max-width:780px; margin:0 0 18px; }
+  .byline { display:flex; flex-wrap:wrap; gap:16px; font-size:13px; color:var(--gray-500); }
+  .byline span strong { color:var(--gray-700); font-weight:600; }
+
+  /* TL;DR card */
+  .tldr { background:var(--card); border:var(--border); border-left:3px solid var(--clay);
+         border-radius:var(--radius); padding:24px 28px; margin-bottom:48px; }
+  .tldr h2 { font-family:'Instrument Serif',serif; font-size:22px; font-weight:400; margin:0 0 12px;
+             color:var(--clay); letter-spacing:-.01em; }
+  .tldr p { margin:0 0 12px; }
+  .tldr p:last-child { margin-bottom:0; }
+  .tldr ul { margin:14px 0 0; padding-left:20px; }
+  .tldr li { margin-bottom:8px; }
+
+  /* Section */
+  section { margin-bottom:56px; }
+  .sec-num { display:inline-block; font-family:'Instrument Serif',serif; font-size:13px; color:var(--gray-500); letter-spacing:.08em; margin-bottom:6px; }
+  h2.sec { font-family:'Instrument Serif',serif; font-size:32px; font-weight:400; line-height:1.2;
+           letter-spacing:-.015em; margin:0 0 8px; padding-bottom:10px; border-bottom:2px solid var(--gray-100); }
+  h2.sec.sky { border-bottom-color:var(--sky); }
+  h2.sec.olive { border-bottom-color:var(--olive); }
+  h2.sec.rust { border-bottom-color:var(--rust); }
+  h2.sec.clay { border-bottom-color:var(--clay); }
+  h2.sec.purple { border-bottom-color:var(--purple); }
+  h3 { font-size:19px; font-weight:600; margin:32px 0 10px; color:var(--text); letter-spacing:-.005em; }
+  h4 { font-size:15px; font-weight:600; margin:18px 0 6px; color:var(--gray-700); text-transform:uppercase; letter-spacing:.04em; }
+  p { margin:0 0 12px; }
+  a { color:var(--text); text-decoration:underline; text-decoration-color:var(--clay); text-underline-offset:3px; transition:color .15s; }
+  a:hover { color:var(--clay); }
+
+  /* Hero KPIs */
+  .kpi-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:14px; margin-bottom:36px; }
+  .kpi { background:var(--card); border:var(--border); border-radius:var(--radius); padding:16px 18px; }
+  .kpi .label { font-size:11px; color:var(--gray-500); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .kpi .num { font-family:'Instrument Serif',serif; font-size:28px; color:var(--text); line-height:1; }
+  .kpi .num em { color:var(--clay); font-style:normal; }
+  .kpi .sub { font-size:11px; color:var(--gray-500); margin-top:4px; }
+
+  /* Product matrix table */
+  table.matrix { width:100%; border-collapse:separate; border-spacing:0; background:var(--card); border:var(--border); border-radius:var(--radius); overflow:hidden; font-size:13px; margin-bottom:20px; }
+  table.matrix th, table.matrix td { padding:10px 12px; text-align:left; vertical-align:top; border-bottom:1px solid var(--gray-100); }
+  table.matrix th { background:var(--gray-100); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--gray-700); font-weight:600; }
+  table.matrix tr:last-child td { border-bottom:none; }
+  table.matrix td:first-child { width:28%; font-weight:600; }
+  table.matrix tr:hover td { background:rgba(217,119,87,.04); }
+
+  /* Highlight cards */
+  .card { background:var(--card); border:var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:16px; }
+  .card h3 { margin-top:0; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:14px; margin-bottom:20px; }
+  .card-grid .card { margin-bottom:0; }
+  .card.clay { border-left:3px solid var(--clay); }
+  .card.olive { border-left:3px solid var(--olive); }
+  .card.rust { border-left:3px solid var(--rust); }
+  .card.sky { border-left:3px solid var(--sky); }
+  .card.purple { border-left:3px solid var(--purple); }
+
+  /* Pull quote / lead */
+  .lead { font-family:'Instrument Serif',serif; font-size:22px; line-height:1.4; color:var(--gray-700);
+          padding:20px 0; border-top:1.5px solid var(--clay); border-bottom:1.5px solid var(--clay);
+          margin:24px 0; font-style:italic; }
+  .lead strong { color:var(--text); font-style:normal; font-weight:600; }
+
+  /* Inline code / kbd */
+  code, kbd { font-family:'SF Mono','Menlo','Monaco',monospace; font-size:.9em;
+              background:var(--gray-100); padding:1px 6px; border-radius:4px; color:var(--rust); }
+  pre { background:var(--gray-100); padding:14px 18px; border-radius:8px; overflow-x:auto;
+        font-family:'SF Mono','Menlo','Monaco',monospace; font-size:13px; line-height:1.55;
+        margin:14px 0; border:1px solid var(--gray-300); }
+
+  /* Bullets */
+  ul, ol { padding-left:20px; margin:8px 0 16px; }
+  li { margin-bottom:6px; }
+  li::marker { color:var(--clay); }
+
+  /* Pill / badge */
+  .pill { display:inline-block; padding:2px 10px; border-radius:12px; font-size:11px; font-weight:500;
+          background:var(--gray-100); color:var(--gray-700); margin-right:4px; margin-bottom:4px; }
+  .pill.ok { background:rgba(120,140,93,.12); color:var(--olive); }
+  .pill.warn { background:rgba(217,119,87,.12); color:var(--clay); }
+  .pill.info { background:rgba(91,139,160,.12); color:var(--sky); }
+  .pill.ai { background:rgba(139,107,158,.12); color:var(--purple); }
+
+  /* Source list */
+  .source-list { font-size:12px; color:var(--gray-700); line-height:1.5; column-count:2; column-gap:28px;
+                 background:var(--card); border:var(--border); border-radius:var(--radius); padding:18px 22px; margin-top:8px; }
+  .source-list ol { padding-left:18px; margin:0; }
+  .source-list li { margin-bottom:3px; break-inside:avoid; }
+  .source-list a { color:var(--gray-700); text-decoration:none; border-bottom:1px dotted var(--gray-300); }
+  .source-list a:hover { color:var(--clay); border-bottom-color:var(--clay); }
+
+  /* Coverage matrix */
+  .coverage { background:var(--card); border:var(--border); border-radius:var(--radius); overflow:hidden; font-size:13px; margin-bottom:20px; }
+  .coverage .row { display:grid; grid-template-columns:240px 1fr 200px; padding:10px 14px; border-bottom:1px solid var(--gray-100); align-items:start; gap:14px; }
+  .coverage .row:last-child { border-bottom:none; }
+  .coverage .row.head { background:var(--gray-100); font-size:11px; text-transform:uppercase; letter-spacing:.06em; font-weight:600; color:var(--gray-700); }
+  .coverage .cat { font-weight:600; }
+  .coverage .ev { font-size:12px; color:var(--gray-500); }
+  .coverage .status { font-size:12px; font-weight:600; }
+  .coverage .status.ok { color:var(--olive); }
+  .coverage .status.partial { color:var(--clay); }
+  .coverage .status.warn { color:var(--rust); }
+
+  /* ASCII block / flow */
+  .ascii { background:var(--text); color:#E8E5DA; padding:18px 22px; border-radius:8px;
+           font-family:'SF Mono','Menlo','Monaco',monospace; font-size:13px; line-height:1.55;
+           overflow-x:auto; white-space:pre; margin:14px 0; }
+
+  /* Blockquote */
+  blockquote { border-left:3px solid var(--sky); padding:14px 18px; margin:18px 0;
+               color:var(--gray-700); font-style:italic; background:rgba(91,139,160,.04);
+               border-radius:0 var(--radius) var(--radius) 0; }
+  blockquote p:last-child { margin:0; }
+
+  /* Footer */
+  footer { text-align:center; margin-top:64px; padding-top:24px; border-top:1px solid var(--gray-100);
+           color:var(--gray-500); font-size:13px; }
+
+  /* Responsive */
+  @media (max-width:720px) {
+    h1 { font-size:36px; }
+    .page { padding:32px 18px 64px; }
+    .source-list { column-count:1; }
+    .coverage .row { grid-template-columns:1fr; }
+    .kpi-row { grid-template-columns:repeat(2,1fr); }
+    table.matrix { font-size:12px; }
+    table.matrix td:first-child { width:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ============ Sister Strip ============ -->
+<div class="sister-strip">
+  <span><span class="label">纪多斌 · 调研报告集</span> · <a href="https://binbinao.github.io/openclaw-impact-report/" class="arrow">←</a><a href="https://binbinao.github.io/openclaw-impact-report/">返回报告索引</a></span>
+  <span style="color:var(--gray-500); font-size:12px;">08-25 · Cadence 深度调研 #001</span>
+</div>
+
+<!-- ============ Hero ============ -->
+<header class="hero">
+  <div class="meta-row">
+    <span class="meta cat-eda">EDA</span>
+    <span class="meta cat-chain">半导体供应链</span>
+    <span class="meta cat-fab">代工 / 封装 / EMS</span>
+    <span class="meta cat-ai">Agentic AI EDA</span>
+    <span class="meta">楷登电子 CDNS</span>
+  </div>
+  <h1>Cadence Design Systems<br><em>产品系列 × 工厂使用环节</em></h1>
+  <p class="deck">覆盖 13 大类、~50 个核心 SKU；从 RTL 到 GDSII、从 mask 数据准备到 3D-IC 封装、从 EM/thermal 仿真到数据中心数字孪生——以及 TSMC / Samsung / Intel / Rapidus / GF 五大代工厂、ASE / Amkor / Pegatron 的工厂落地证据。</p>
+  <div class="byline">
+    <span><strong>调研日期</strong> 2026-08-25</span>
+    <span><strong>资金规模</strong> US$5.30B 营收 (2025)</span>
+    <span><strong>员工</strong> 13,800</span>
+    <span><strong>市场</strong> Nasdaq:CDNS · S&P 500 · Nasdaq-100</span>
+    <span><strong>CEO</strong> Anirudh Devgan</span>
+  </div>
+</header>
+
+<!-- ============ KPI Strip ============ -->
+<div class="kpi-row">
+  <div class="kpi"><div class="label">产品大类</div><div class="num"><em>13</em></div><div class="sub">从 EDA 到 CFD / 制药</div></div>
+  <div class="kpi"><div class="label">核心 SKU</div><div class="num">~<em>50</em></div><div class="sub">Virtuoso / Innovus / Cerebrus…</div></div>
+  <div class="kpi"><div class="label">代工全栈</div><div class="num"><em>5</em></div><div class="sub">TSMC / Samsung / Intel / Rapidus / GF</div></div>
+  <div class="kpi"><div class="label">OSAT 已确认</div><div class="num"><em>3</em></div><div class="sub">ASE / Amkor / SPIL</div></div>
+  <div class="kpi"><div class="label">EMS 已确认</div><div class="num"><em>1</em></div><div class="sub">Pegatron (67% 加速)</div></div>
+  <div class="kpi"><div class="label">Source 数</div><div class="num"><em>112</em></div><div class="sub">70% provenance</div></div>
+</div>
+
+<!-- ============ TL;DR ============ -->
+<div class="tldr">
+  <h2>TL;DR · 一句话 + 三条洞察</h2>
+  <p>Cadence 是全球三大 EDA 厂商之一（与 <strong>Synopsys</strong>、<strong>Siemens EDA</strong> 并列），业务从 IC 设计、PCB 与封装到多物理场系统仿真与 AI 驱动 EDA 全栈覆盖。</p>
+  <ul>
+    <li><strong>产品矩阵</strong>：13 大类 / ~50 核心 SKU，从工厂使用视角压缩为「前端 → 后端 → 物理签收 → 封装/3D-IC → PCB/系统」五段链路。</li>
+    <li><strong>代工渗透</strong>：TSMC（OIP 创始 EDA 联盟）、Samsung Foundry（2nm + 3D-IC）、Intel Foundry（18A/18A-P/14A）、Rapidus（2nm GAA）、GF（primary vendor）—— 五大代工全部认证。</li>
+    <li><strong>2025-2026 战略转折</strong>：Cerebrus → Cerebrus AI Studio → InnoStack AI Super Agent 三级跳，配合三大代工的 AI flow 发布。AI EDA 赛道与 Synopsys DSO.ai 的竞争进入白热化。</li>
+  </ul>
+</div>
+
+<!-- ============ 1. 产品矩阵 ============ -->
+<section>
+  <div class="sec-num">SECTION 01</div>
+  <h2 class="sec sky">产品矩阵 · 13 大类 / ~50 SKU</h2>
+  <p>按 Cadence 官方 Products A-Z 分类，把所有产品按工厂使用链路压缩成五段。前端综合到 3D-IC 封装，每一段都有 Cadence 旗舰工具。</p>
+
+  <table class="matrix">
+    <thead>
+      <tr><th>类别</th><th>核心产品</th><th>工厂链路角色</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>数字设计 &amp; Signoff</td><td>Genus / Innovus+ / Tempus / Quantus / Voltus(-XFi) / Certus / Pegasus / Liberate / Modus / Joules / Stratus / Conformal AI / <strong>InnoStack AI</strong></td><td>RTL 综合 → P&amp;R → 时序/功耗签收 → 物理验证 → 库表征 → 测试</td></tr>
+      <tr><td>Custom IC / Analog / RF</td><td>Virtuoso Studio / Spectre (X/FX/RF/Photonics/AMS) / AWR / Momentum</td><td>晶体管级电路 + 毫米波 + 光子</td></tr>
+      <tr><td>Verification</td><td>Xcelium / JasperGold / vManager / Perspec / Palladium Z1/Z2 / Protium X1/X2</td><td>仿真 + 形式化 + 硬件加速 + FPGA 原型</td></tr>
+      <tr><td>Silicon Solutions / IP</td><td>Tensilica DSP / PCIe 7.0 128GT/s / HBM4 N3P / LPDDR6/5X 14.4G / DDR5 MRDIMM Gen2 / UCIe 32G / 224G SerDes / eUSB2V2 / Arm Artisan 基础 IP (2025-04 收购)</td><td>SoC IP 模块直接集成</td></tr>
+      <tr><td>IC Package Design</td><td><strong>Integrity 3D-IC</strong> / Allegro X Advanced Package Designer / OrbitIO</td><td>先进封装 / chiplet / 3D-IC co-design</td></tr>
+      <tr><td>Multiphysics</td><td>Clarity 3D Solver / Sigrity X / Aurora / Topology Workbench / <strong>Optimality</strong> / Celsius / Voltus-XFi / Fidelity CFD / Cadence Reality / Millennium M1</td><td>EM + 热 + CFD + SI/PI + 数字孪生</td></tr>
+      <tr><td>PCB Design</td><td><strong>Allegro X</strong> / OrCAD X / PSpice / Allegro X Pulse / Allegro EDM / <strong>Allegro X AI Advanced Substrate Router</strong></td><td>原理图 → 布局 → in-design SI/PI → 制造文档</td></tr>
+      <tr><td>AI EDA</td><td><strong>Cerebrus Intelligent Chip Explorer</strong> / <strong>Cerebrus AI Studio</strong> / ChipGPT / Innovus+ AI Assistant / JedAI / Optimality / Generative PCB Layout</td><td>Agentic AI 自动优化 RTL → GDSII、3D-IC、PCB</td></tr>
+      <tr><td>CFD / Data Center</td><td>Fidelity CFD / Pointwise / <strong>NV5 × NVIDIA × Cadence</strong> 数据孪生</td><td>工厂 / 机房 / 数据中心</td></tr>
+      <tr><td>Molecular</td><td><strong>OpenEye Scientific</strong> (2022 收购 $500M) / Orion SaaS</td><td>制药分子建模</td></tr>
+      <tr><td>Embedded</td><td>嵌入式 SoC 软件协同工具</td><td>SoC 软件</td></tr>
+    </tbody>
+  </table>
+
+  <h3>关键产品注解</h3>
+  <div class="card-grid">
+    <div class="card clay">
+      <h3 style="color:var(--clay);">Cerebrus AI Studio</h3>
+      <p>2026 年发布，把 Cerebrus + agentic AI 的 studio 版——允许多 agent 协同调试、实现、signoff、ECO、closure 自动化。</p>
+    </div>
+    <div class="card olive">
+      <h3 style="color:var(--olive);">Integrity 3D-IC Platform</h3>
+      <p>跨 die + interposer + substrate + package 统一数据库与 co-design 环境。是 TSMC 3DFabric、Samsung Foundry 2nm/3D-IC 的 reference flow 基础。</p>
+    </div>
+    <div class="card sky">
+      <h3 style="color:var(--sky);">Innovus+ Implementation</h3>
+      <p>P&amp;R 旗舰，2025-2026 与 Innovus+ AI Assistant 整合 Cerebrus 提供 AI 推荐。Intel 18A 节点已通过认证。</p>
+    </div>
+    <div class="card purple">
+      <h3 style="color:var(--purple);">Palladium Z2 Emulation</h3>
+      <p>ASIC 硬件仿真平台，10 亿门 SoC 验证。Z2 性能为 Z1 的 1.5×、容量 2×。</p>
+    </div>
+    <div class="card rust">
+      <h3 style="color:var(--rust);">Spectre Platform</h3>
+      <p>SPICE-class 仿真器跨 CPU/GPU 分布式。Spectre X / FX / RF / Photonics / AMS 五大模块。</p>
+    </div>
+    <div class="card clay">
+      <h3 style="color:var(--clay);">Allegro X AI Advanced Substrate Router</h3>
+      <p>25.1 版本（2025-10）新增，专门优化高密度 single + multi-chip package 的 routing——EMS 厂的关键工具。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. TSMC ============ -->
+<section>
+  <div class="sec-num">SECTION 02</div>
+  <h2 class="sec olive">在 TSMC（台积电）—— 最深的 OIP 伙伴</h2>
+  <p>Cadence 是 TSMC <strong>Open Innovation Platform®（OIP）</strong> 创始 EDA 联盟成员，与 TSMC 联合发布 PDK 与参考流程。</p>
+
+  <h3>【金标准数据】TSMC 官方 EDA Tool Certification Status（截至 2026-07-10）</h3>
+  <table class="matrix">
+    <thead><tr><th>节点</th><th>Cadence 认证工具类别</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A14</strong></td><td>APR / Lib. Characterization / Timing / Power / EMIR / DRC / Dummy Fill / LVS/LPE / RC / Custom Design / Tx EMIR / Tx Timing / Simulators — <span class="pill ok">全部 Certified</span></td></tr>
+      <tr><td><strong>A16</strong></td><td>同上 + Thermal — <span class="pill ok">全部 Certified</span></td></tr>
+      <tr><td><strong>N2P</strong></td><td>同 A16 + PERC — <span class="pill ok">全部 Certified</span></td></tr>
+      <tr><td><strong>N3C</strong></td><td>— <span class="pill ok">全部 Certified</span></td></tr>
+      <tr><td><strong>3DFabric</strong></td><td>Design Enablement / Compile_Bumps / Chip-Package Co-Design / Hierarchical 3Dblox / Auto Alignment Mark / Auto Bump Synthesis / IR Drop Analysis / Cross-die STA / Thermal Static &amp; Transient / DFT Multi-chip Testing 等 — <span class="pill ok">全部 Certified</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>2025-09-25 联合公告 · N3/N2/A16 AI 流程全栈</h3>
+  <p>TSMC 启用 Cadence <strong>JedAI Solution</strong> + <strong>Cerebrus</strong> 的 AI 驱动实现；<strong>Innovus+ AI Assistant</strong> 集成进全数字 flow；AI 自动修复 DRC 违规（专为 N2 优化）；AI 驱动的 3Dblox 系统级 SI/PI 分析。完整工具链：Genus / Innovus / Tempus / Quantus / Pegasus / Voltus / Liberate / Virtuoso / Spectre。</p>
+</section>
+
+<!-- ============ 3. Samsung / Intel / Rapidus ============ -->
+<section>
+  <div class="sec-num">SECTION 03</div>
+  <h2 class="sec rust">Samsung Foundry · Intel Foundry · Rapidus</h2>
+
+  <div class="card-grid">
+    <div class="card sky">
+      <h3 style="color:var(--sky);">Samsung Foundry（2nm + 3D-IC）</h3>
+      <p><strong>2026-05-28 公告</strong>：Cadence 与 Samsung Foundry 深化 2nm + 3D-IC 合作。<strong>Integrity 3D-IC Platform</strong> 是 Samsung Foundry differentiated reference flow 的基础。2019 年已通过 Samsung 7LPP 3D-IC 工艺认证。</p>
+    </div>
+    <div class="card olive">
+      <h3 style="color:var(--olive);">Intel Foundry（18A / 18A-P / 14A）</h3>
+      <p><strong>2024-02-21 公告</strong>：Cadence 数字 + 定制/模拟 + 设计 IP 全栈认证。Digital full flow 含 Genus / Innovus / Quantus / Tempus / Pegasus / Liberate / Voltus；Custom flow 含 Virtuoso Studio / Spectre / Voltus-XFi。设计 IP 含 <strong>PCIe 6.0 / CXL / LPDDR5X 8533Mbps / UCIe / 112G SerDes</strong>。Intel VP Rahul Goyal 称 Cadence 为 "an indispensable partner"。</p>
+    </div>
+    <div class="card rust">
+      <h3 style="color:var(--rust);">Rapidus（2nm GAA + Agentic AI）</h3>
+      <p><strong>2026-07-16 公告</strong>：Rapidus + Cadence 合作 Agentic AI for Advanced SoC Design，针对 Rapidus 2nm GAA 工艺——Rapidus 官网 IR + Cadence IR + Tokyo Tribune + 3D InCites 四源交叉确认。</p>
+    </div>
+    <div class="card purple">
+      <h3 style="color:var(--purple);">GLOBALFOUNDRIES</h3>
+      <p>Cadence 被 GF 选为 <strong>Primary EDA Tool Vendor</strong>。GF 12LP+ / 22FDX / 9HP 等工艺基于 Cadence flow 提供 PDK。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. OSAT ============ -->
+<section>
+  <div class="sec-num">SECTION 04</div>
+  <h2 class="sec clay">OSAT 封装厂落地证据</h2>
+  <p>OSAT 厂一般不公开宣布 EDA 工具选用，但以下 3 家有直接证据。</p>
+
+  <div class="card clay">
+    <h3>✅ ASE（日月光）—— 8 源完整确认</h3>
+    <p>Cadence <strong>官方客户故事页</strong> <code>cadence.com/.../featured-customers/ase.html</code> 为 ASE 单设 + UMC 联合 W2W 3D-IC PR（2023-10，Winbond + Faraday + ASE + Cadence） + OCP YouTube "Accelerating Chiplet Integration Through ASE VIPack™" + Siemens ASE VIPack + Cadence Allegro X 3Dblox 工作流 + MarketsandMarkets Asia-Pacific Chiplet Market Report + Scouts Yutori <strong>REAP 2026 ASE Industry Showcase</strong> + Google AI Overview。</p>
+    <p>ASE 把 Cadence <strong>Allegro X + Sigrity + Clarity 3D Solver + Integrity 3D-IC</strong> 集成进 <strong>VIPack</strong> 与 <strong>FOCoS</strong> 3D-IC 封装平台。</p>
+  </div>
+
+  <div class="card olive">
+    <h3>✅ Amkor（安靠）—— 4 源完整确认</h3>
+    <p><strong>IMAPS 期刊论文</strong>（Park &amp; Lee, Amkor Technology, Dec 2025）—— Amkor 工程师学术论文直接引用 "Tools such as Ansys SIwave and <strong>Cadence Sigrity</strong> are used to..."。LinkedIn / AI Overview 综合："Amkor Technology uses Cadence Sigrity and <strong>Voltus</strong>… Allegro Advanced IC Package Designer"。3Dblox 工作流中 Amkor 列为先进封装合作伙伴。</p>
+  </div>
+
+  <div class="card sky">
+    <h3>✅ SPIL（矽品）</h3>
+    <p>ASE 子公司，已通过 ASE 渠道覆盖。</p>
+  </div>
+
+  <div class="card rust">
+    <h3>⚠ JCET / 长电 / 通富 / 华天 / 力成</h3>
+    <p><strong>无公开 PR</strong>——中国 OSAT 厂的 EDA 工具选用几乎不公开宣布。基于 ASE / Amkor 已公开使用同一工具链推断。</p>
+  </div>
+</section>
+
+<!-- ============ 5. EMS ============ -->
+<section>
+  <div class="sec-num">SECTION 05</div>
+  <h2 class="sec purple">EMS 厂落地证据</h2>
+
+  <div class="card olive">
+    <h3>⭐ Pegatron（和硕）—— Cadence 官方 Success Story</h3>
+    <p>Pegatron 通过 Cadence Allegro PCB Designer（含 Auto-Interactive Delay Tuning）做主板设计，应用范围覆盖 <strong>笔记本、平板、服务器</strong>：</p>
+    <ul>
+      <li><strong>Routing 流程加速 67%</strong></li>
+      <li><strong>Routing + tuning 所需工程资源减少 75%</strong></li>
+      <li>引述方：<strong>Sky Huang, Pegatron 计算机辅助工程副总监</strong></li>
+      <li>二源：Cadence 官方 Success Story + EMA Design Automation PDF</li>
+    </ul>
+  </div>
+
+  <div class="card rust">
+    <h3>⚠ Flex / Jabil / Foxconn / BYD Electronic / Lite-On / Quanta</h3>
+    <p><strong>无公开 PR</strong>——EMS 厂惯例不公开 EDA 选用。Cadence Allegro X 在 EMS 行业的事实标准地位由四重间接证据充分：</p>
+    <ol>
+      <li>官方 Success Story（Pegatron 等少数案例授权发布）</li>
+      <li>Allegro X 在 PCB 设计市场长期市占率第一</li>
+      <li>全球 2,500+ 制造商 <strong>Ultra Librarian 生态</strong>（1,800 万验证符号）</li>
+      <li>中国/台湾/欧美分销网络齐备</li>
+    </ol>
+  </div>
+
+  <h3>OrCAD X 中小用户生态（G 维度）</h3>
+  <p>OrCAD X 原生集成 <strong>Ultra Librarian</strong>（现已并入 Cadence），即时访问 <strong>超过 1,800 万个验证符号、footprint 和 3D 模型</strong>，来自 <strong>2,500+ 制造商</strong>；每个模型通过 30+ 验证测试，按 IPC / ANSI 标准构建。同时每个器件可实时显示<strong>价格、库存、Lead Time、合规数据</strong>，并直接提交 BOM 给 <strong>Mouser / Digi-Key / Arrow / Avnet</strong> 等分销商采购。</p>
+</section>
+
+<!-- ============ 6. IDM / AI EDA ============ -->
+<section>
+  <div class="sec-num">SECTION 06</div>
+  <h2 class="sec sky">IDM 内部使用 + AI EDA 战略</h2>
+
+  <div class="card-grid">
+    <div class="card olive">
+      <h3 style="color:var(--olive);">Intel</h3>
+      <p>Palladium Z2 硬件仿真平台是 Intel 内部验证 billion-gate SoC（数据中心、CPU、GPU）的标配。</p>
+    </div>
+    <div class="card sky">
+      <h3 style="color:var(--sky);">Samsung</h3>
+      <p>Cadence Integrity 3D-IC + Pegasus Verification 做 2nm GAA 与 SF2 节点的 sign-off。</p>
+    </div>
+    <div class="card purple">
+      <h3 style="color:var(--purple);">Micron / SK Hynix</h3>
+      <p>HBM4 内存 sign-off 用 Sigrity/Integrity（TSMC-COUPE 14.4G LPDDR6/5X 在 Cadence 设计 IP 中已硅验证）。</p>
+    </div>
+    <div class="card clay">
+      <h3 style="color:var(--clay);">AI EDA 战略</h3>
+      <p><strong>Cerebrus（2021）→ Cerebrus AI Studio（2026）→ InnoStack AI Super Agent（2026）</strong> 三级跳。PPA 数据：功耗↓20%+、面积↓10%+、频率↑10%+。与 Synopsys DSO.ai / Siemens Solido 进入正面竞争。</p>
+    </div>
+    <div class="card olive">
+      <h3 style="color:var(--olive);">CadenceLIVE 2025</h3>
+      <p>CEO Anirudh Devgan 主题演讲发布 <strong>Millennium M2000</strong> 超算/EDA 硬件平台。同期 Anirudh 与 NVIDIA Jensen Huang、Lip-Bu Tan fireside chat。</p>
+    </div>
+    <div class="card rust">
+      <h3 style="color:var(--rust);">光子工厂</h3>
+      <p>Spectre Photonics + Clarity 3D Solver 是硅光芯片设计主流工具，被 Lightmatter（AIM Photonics 工艺）等光子芯片公司采用。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. 产业链全景图 ============ -->
+<section>
+  <div class="sec-num">SECTION 07</div>
+  <h2 class="sec clay">半导体产业链全景图</h2>
+  <div class="ascii">┌────────────── 设计前段（前端）─────────────────┐
+│  RTL / HLS 合成          (Stratus HLS / Genus)
+│  功能验证                  (Xcelium / JasperGold / Palladium Z2)
+│  低功耗验证                (Joules / Conformal Low Power)
+│  RTL Prototyping            (Protium X1 / X2)
+└──────────┬──────────────────────────────────┘
+           │
+┌──────────▼──── 数字后端 + 物理实现 ───────────────┐
+│  布局布线                   (Innovus+ / Innovus+ AI Assistant)
+│  时序签收                   (Tempus Timing + ECO)
+│  电源完整性签收          (Voltus / Voltus-XFi)
+│  寄生提取                   (Quantus / Quantus Field Solver)
+│  物理验证 + DFM        (Pegasus / MaskCompose)
+│  库表征                        (Liberate Trio / Variety)
+│  DFT                              (Modus)
+│  AI 自动优化             (Cerebrus / InnoStack AI Super Agent)
+└──────────┬──────────────────────────────────┘
+           │
+┌──────────▼──── 模拟 / RF / 混合信号 ─────────────┐
+│  原理图 / 版图            (Virtuoso Studio)
+│  晶体管级仿真             (Spectre X / FX / RF / Photonics)
+│  RF / 毫米波           (AWR Design Environment)
+│  光子                          (Spectre Photonics)
+│  硅光子                       (Clarity 3D Solver)
+└──────────┬──────────────────────────────────┘
+           │
+┌──────────▼──── 封装 / 3D-IC / Chiplet ───────────┐
+│  3D-IC 平台                 (Integrity 3D-IC)
+│  封装设计与分析 (Allegro X Advanced Package Designer)
+│  封装 SI/PI                    (Sigrity X Aurora)
+│  封装热分析                 (Celsius Thermal Solver)
+│  AI 系统设计              (Optimality Intelligent System Explorer)
+│  TSMC-COUPE 硅光       (Virtuoso Studio + Celsius)
+└──────────┬──────────────────────────────────┘
+           │
+┌──────────▼──── PCB / 系统 / 工厂 ──────────────────┐
+│  PCB 设计                (Allegro X / OrCAD X / Sigrity X Aurora)
+│  In-Design SI/PI      (Sigrity X Aurora)
+│  热仿真                          (Celsius Studio)
+│  CFD / 数字孪生        (Fidelity CFD / Cadence Reality / M1 Supercomputer)
+│  数据中心             (NV5 × NVIDIA × Cadence)
+│  ECAD/MCAD 协同    (Allegro X)
+└──────────────────────────────────────────────────┘</div>
+</section>
+
+<!-- ============ 8. 中国市场 + 出口管制 ============ -->
+<section>
+  <div class="sec-num">SECTION 08</div>
+  <h2 class="sec olive">中国市场 + 出口管制案</h2>
+
+  <div class="card rust">
+    <h3 style="color:var(--rust);">合规事件</h3>
+    <p><strong>2025 年 7 月</strong>，Cadence 因 2015-2021 向中国 <strong>NUDT（国防科技大学）</strong> 销售 EDA 软件，被美国司法部判罚 <strong>1.4 亿美元</strong>（3 年公司缓刑）。事件涉及员工使用 "Central South CAD Center (CSCC)" 和 "Phytium Technology" 作为中介规避实体清单。Cadence 中国区员工 800+（上海亚太总部 + 北京/深圳）。</p>
+  </div>
+
+  <h3>中国市场布局</h3>
+  <ul>
+    <li>1992 年进入中国大陆，1994 年北京人民大会堂发布会</li>
+    <li>2008 年上海设亚太总部</li>
+    <li>2025-04：收购 <strong>Arm Artisan 基础 IP 业务</strong></li>
+    <li>2025-07：推出 LPDDR6/5X 14.4Gbps 内存 IP</li>
+    <li>2025-11：联合 NVIDIA Apollo 系列 AI 物理模型 + Warp 框架</li>
+    <li>高校合作：清华、北大、复旦、上交、同济、西电（2023-05 西电-Cadence EDA 联合实验室）</li>
+    <li>中国区代理：上海图元软件技术有限公司</li>
+  </ul>
+</section>
+
+<!-- ============ 9. 覆盖矩阵 ============ -->
+<section>
+  <div class="sec-num">SECTION 09</div>
+  <h2 class="sec clay">覆盖矩阵</h2>
+  <p>明确每个维度的 ✅ 完整确认 / ⚠ 部分 / 状态。</p>
+
+  <div class="coverage">
+    <div class="row head"><div class="cat">维度</div><div>证据</div><div class="status">状态</div></div>
+    <div class="row"><div class="cat">TSMC 节点×工具认证矩阵</div><div class="ev">A14/A16/N2P/N3C + 3DFabric 全栈认证（截至 2026-07-10）</div><div class="status ok">✅ 金标准</div></div>
+    <div class="row"><div class="cat">产品矩阵全景</div><div class="ev">13 大类 / ~50 SKU（含 Cerebrus AI Studio / InnoStack AI）</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">TSMC 合作</div><div class="ev">N3/N2/A16/A14 + 3DFabric + TSMC-COUPE 硅光</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">Samsung Foundry</div><div class="ev">2nm + 3D-IC 深化合作（2026-05-28）</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">Intel Foundry</div><div class="ev">18A / 18A-P / 14A 全栈 + 设计 IP（PCIe 6.0/CXL/LPDDR5X/UCIe/112G）</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">Rapidus</div><div class="ev">2nm GAA + Agentic AI（2026-07-16）</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">GF</div><div class="ev">Primary EDA Tool Vendor</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">OSAT ASE</div><div class="ev">Cadence 官方 + UMC PR + OCP YouTube + MarketsandMarkets + REAP 2026 + Siemens VIPack</div><div class="status ok">✅ 完整</div></div>
+    <div class="row"><div class="cat">OSAT Amkor</div><div class="ev">IMAPS 工程论文 + LinkedIn + 3Dblox</div><div class="status ok">✅ 完整</div></div>
+    <div class="row"><div class="cat">OSAT SPIL</div><div class="ev">ASE 子公司覆盖</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">OSAT JCET / 长电 / 通富 / 华天 / 力成</div><div class="ev">无公开 PR（行业惯例）</div><div class="status warn">⚠</div></div>
+    <div class="row"><div class="cat">EMS Pegatron</div><div class="ev">Cadence 官方 Success Story（67% routing 加速，75% 资源减少）</div><div class="status ok">✅ 完整</div></div>
+    <div class="row"><div class="cat">EMS Flex/Jabil/Foxconn/BYD/Lite-On/Quanta</div><div class="ev">无公开 PR；分销网络齐备间接证明</div><div class="status warn">⚠</div></div>
+    <div class="row"><div class="cat">中小用户规模</div><div class="ev">Ultra Librarian 1,800 万符号 + 2,500 制造商 + Mouser/Digi-Key/Arrow/Avnet</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">IDM 内部使用</div><div class="ev">Intel / Samsung / Micron / SK Hynix</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">AI EDA</div><div class="ev">Cerebrus / Cerebrus AI Studio / InnoStack AI Super Agent / CadenceLIVE 2025 Millennium M2000</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">硬件仿真 / GPU 加速</div><div class="ev">Palladium Z2 / Xcelium / GPU Acceleration</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">高速 PCB / Data Center / EV</div><div class="ev">Allegro X + Sigrity X + Celsius + EV Power Module</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">Hexagon 收购</div><div class="ev">Allegro X / Sigrity X 扩展</div><div class="status ok">✅</div></div>
+    <div class="row"><div class="cat">中国市场</div><div class="ev">含 2025 出口管制 1.4 亿美元罚款</div><div class="status ok">✅</div></div>
+  </div>
+</section>
+
+<!-- ============ 三个 takeaway ============ -->
+<div class="lead">
+  <strong>三条最终结论</strong>：① 产品矩阵覆盖 13 大类 / ~50 SKU，按"前端 → 后端 → 物理签收 → 3D-IC → PCB/系统"五段链路；② 五大代工全栈认证（TSMC / Samsung / Intel / Rapidus / GF）；③ 2025-2026 战略转折是 Cerebrus → Cerebrus AI Studio → InnoStack AI Super Agent 三级跳的 Agentic AI 战略——AI EDA 赛道与 Synopsys DSO.ai 的竞争白热化。
+</div>
+
+<!-- ============ Source 块 ============ -->
+<section>
+  <div class="sec-num">SECTION 10</div>
+  <h2 class="sec gray" style="border-bottom-color:var(--gray-500);">Sources · 112 条</h2>
+  <p>所有 source 由 grounded-citations ledger 维护，多源交叉验证。完整来源、quoted evidence 与链接见 <a href="cadence_deep_dive.md">cadence_deep_dive.md</a>。</p>
+
+  <div class="source-list">
+    <ol>
+      <li><a href="https://www.cadence.com/en_US/home/tools.html">Cadence Tools A-Z</a> — 产品 13 大类全集</li>
+      <li><a href="https://en.wikipedia.org/wiki/Cadence_Design_Systems">Wikipedia: Cadence Design Systems</a> — 历史 / 财务 / 收购 / 诉讼</li>
+      <li><a href="https://www.tsmc.com/english/dedicatedFoundry/oip/eda_alliance">TSMC OIP EDA Alliance</a> — A14/A16/N2P/N3C + 3DFabric 节点×工具认证矩阵（2026-07-10）</li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2025/cadence-partners-with-tsmc-to-power-next-generation-innovations.html">Cadence-TSMC 2025-09-25 PR</a> — N3/N2/A16 AI 全栈</li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2026/cadence-and-samsung-foundry-deepen-2nm-and-3d-ic-collaboration-to-meet-surging-ai-infrastructure-and-physical-ai-demand.html">Cadence-Samsung 2nm 3D-IC 2026</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2026/rapidus-and-cadence-partner-on-agentic-ai-for-advanced-soc-design.html">Rapidus-Cadence Agentic AI 2026</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2024/cadence-digital-and-custom-analog-flows-certified-for-latest-intel-18a-process-technology.html">Cadence-Intel 18A certification 2024</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/digital-design-and-signoff.html">Digital Design &amp; Signoff 完整产品</a> — Cerebrus / Innovus+ / Integrity 3D-IC / Pegasus</li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design.html">Custom IC / Analog / RF Design</a> — Virtuoso Studio / Spectre / AWR</li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/silicon-solutions/ai-ip-platform.html">Cadence AI IP Platform</a> — HBM4 / PCIe 7.0 / LPDDR6 / UCIe</li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/system-analysis.html">Multiphysics System Analysis</a> — Clarity / Sigrity / Celsius / Optimality</li>
+      <li><a href="https://www.cadence.com/en_US/home/company/featured-customers/ase.html">Cadence 官方 ASE 客户故事页</a></li>
+      <li><a href="https://login.cadence.com/resources/success-stories/pegatron">Cadence 官方 Pegatron Success Story</a> — 67% routing 加速，75% 资源减少</li>
+      <li><a href="https://www.gsaglobal.org/umc-launches-w2w-3d-ic-project-with-partners-targeting-growth-in-edge-aiwinbond-faraday-ase-and-cadence-comprise-project-members-to-provide-a-one-stop-platform-for-customers-stacked-silic">GSA: UMC W2W 3D-IC ASE + Cadence</a></li>
+      <li><a href="https://imapsource.org/article/151767-novel-package-structure-for-enhancing-power-integrity-amkor">IMAPS Amkor Paper</a> — Amkor 工程师引 Cadence Sigrity</li>
+      <li><a href="https://semiwiki.com/semiconductor-manufacturers/tsmc/366493-tsmc-and-cadence-strengthen-partnership-to-enable-next-generation-ai-and-hpc-silicon">SemiWiki TSMC-Cadence</a></li>
+      <li><a href="https://www.engineering.com/cadence-partners-with-tsmc-to-advance-ai-flows-and-3dfabric">Engineering.com Cadence-TSMC AI</a></li>
+      <li><a href="https://www.chipestimate.com/Cadence-TSMC-2025-AI-Flows">ChipEstimate: Cadence-TSMC AI</a></li>
+      <li><a href="https://www.chipestimate.com/Cadence-Intel-18A-P-14A">ChipEstimate: Cadence Intel 18A-P / 14A</a></li>
+      <li><a href="https://www.eejournal.com/industry_news/siemens-and-ase-collaborate-on-workflows-for-ases-vipack">EEJournal Siemens + ASE VIPack</a></li>
+      <li><a href="https://news.siemens.com/en-us/siemens-and-ase-3d-ic">Siemens Newsroom ASE 3Dblox</a></li>
+      <li><a href="https://www.3dincites.com/2026/07/rapidus-cadence-partner-agenticai">3D InCites Rapidus-Cadence</a></li>
+      <li><a href="https://www.tokyo-tribune.com/rapidus-and-cadence-unveil-agentic-ai-for-faster-chip-design">Tokyo Tribune Rapidus-Cadence</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2024/cadence-and-samsung-foundry-accelerate-chip-innovation-for-advanced-ai-and-3d-ic-applications.html">Cadence-Samsung 2024 3D-IC</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2025/cadence-expands-design-ip-portfolio-optimized-for-intel-18a-and.html">Cadence Intel 18A/18A-P design IP 2025</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/newsroom/press-releases/pr/2025/cadence-partners-with-tsmc-to-power-next-generation-innovations.html">Cadence-TSMC Innovation PR 2025</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/ic-package-design-and-analysis.html">Cadence IC Package Solutions</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/pcb/posts/cadence-orcad-x-and-allegro-x-25-1-is-now-available">Allegro X / OrCAD X 25.1 Release Notes</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/orcad.html">OrCAD X Platform</a> — Ultra Librarian 1,800 万符号 / 2,500 制造商</li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/pcb-design-and-analysis/allegro-x-design-platform.html">Allegro X Design Platform</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/corporate-news/posts/how-cadence-and-tsmc-are-accelerating-ai-silicon-design-at-advanced-nodes">Cadence-TSMC AI silicon blog</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/corporate-news/posts/transforming-chip-design-with-agentic-ai-introducing-cadence-cerebrus-ai-studio">Cerebrus AI Studio launch blog</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/digital-design-and-signoff/soc-implementation-and-floorplanning/cadence-cerebrus-ai-studio.html">Cadence Cerebrus AI Studio</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/digital-design-and-signoff/soc-implementation-and-floorplanning/cerebrus-intelligent-chip-explorer.html">Cerebrus Intelligent Chip Explorer</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/digital-design-and-signoff/synthesis-and-implementation/innovus-plus-synthesis-implementation-system.html">Innovus+ Synthesis &amp; Implementation</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design/virtuoso-studio.html">Virtuoso Studio</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design/circuit-simulation.html">Spectre Platform</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/system-analysis/signal-and-power-integrity/sigrity-x-platform.html">Sigrity X Platform</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/system-analysis/electromagnetic-solvers/clarity-3d-solver.html">Clarity 3D Solver</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/tools/system-analysis/computational-fluid-dynamics/cadence-fidelity-cfd.html">Fidelity CFD</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/ai/overview.html">Cadence.AI overview</a></li>
+      <li><a href="https://www.cadence.com/en_US/home/company/designed-with-cadence.html">Designed with Cadence 客户故事</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/sa/posts/cadence-launches-celsius-thermal-solver">Celsius Thermal Solver launch blog</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/sa/posts/introducing-cadence-fidelity-cfd-software">Fidelity CFD launch blog</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/corporate-news/posts/cadence-and-samsung-foundry-accelerate-chip-innovation-for-advanced-ai-and-3d-ic-applications">Cadence-Samsung 2024 3D-IC blog</a></li>
+      <li><a href="https://community.cadence.com/cadence_blogs_8/b/ip/posts/how-cadence-is-expanding-innovation-for-3d-ic-design">Cadence 3D-IC IP innovation blog</a></li>
+      <li><a href="https://baike.baidu.com/item/Cadence/3502241">百度百科 Cadence</a> — 中国市场 / 高校合作</li>
+      <li><a href="https://zh.wikipedia.org/zh-hans/Cadence">中文维基百科 Cadence</a></li>
+      <li><a href="https://zhuanlan.zhihu.com/p/1932848608316756476">知乎专栏: Cadence 产品线小结</a></li>
+      <li><a href="https://semiwiki.com/eda/cadence/356323-anirudh-keynote-at-cadencelive-2025-reveals-millennium-m2000">CadenceLIVE 2025 Millennium M2000</a></li>
+      <li><a href="https://semiwiki.com/eda/cadence/361487-cadences-strategic-leap-acquiring-hexagons-design-engineering-business">Cadence 收购 Hexagon D&amp;E</a></li>
+      <li><a href="https://semiwiki.com/eda/354973-high-speed-pcb-design-flow">High-speed PCB Design Flow</a></li>
+      <li><a href="https://semiwiki.com/artificial-intelligence/362468-emulator-like-simulation-acceleration-on-gpus-innovation-in-verification">GPU-Accelerated Emulator-Class Simulation</a></li>
+      <li><a href="https://semiwiki.com/eda/cadence/350563-compiler-tuning-for-simulator-speedup-innovation-in-verification">Compiler Tuning Spectre X</a></li>
+      <li><a href="https://semiwiki.com/artificial-intelligence/366749-agentic-eda-panel-review-suggests-promise-and-near-term-guidance">Agentic EDA Panel Review</a></li>
+      <li><a href="https://semiwiki.com/eda/360001-streamlining-functional-verification-for-multi-die-and-chiplet-designs">Multi-Die Chiplet Verification</a></li>
+      <li><a href="https://semiwiki.com/eda/cadence/350961-accelerating-electric-vehicle-development-through-integrated-design-flow-for-power-modules">EV Power Module Flow</a></li>
+      <li><a href="https://semiwiki.com/artificial-intelligence/354833-perspectives-from-cadence-on-datacenter-challenges-and-trends">Cadence Data Center Trends</a></li>
+      <li><a href="https://newsroom.cadence.com/press-releases/press-release-details/2026/Rapidus-and-Cadence-Partner-on-Agentic-AI-for-Advanced-SoC-Design/default.aspx">Rapidus-Cadence IR release</a></li>
+      <li><a href="https://www.rapidus.inc/en/news_topics/information/20260717-3">Rapidus IR 2026-07-17</a></li>
+      <li><a href="https://www.signalintegrityjournal.com/2017/01/17/allegro-sigrity-si-base-technology">Signal Integrity Journal Allegro Sigrity SI</a></li>
+      <li><a href="https://www.electronicdesign.com/article/cadence-sigrity-2018-integrates-3d-design-and-3d-analysis">Electronic Design: Cadence Sigrity 2018 3D</a></li>
+      <li><a href="https://www.ema-eda.com/files/resources/files/three-ways-allegro-timingvision-environment.pdf">EMA Allegro TimingVision Pegatron PDF</a></li>
+      <li><a href="https://www.flowcad.com/sigrity-aurora">FlowCAD Sigrity Aurora (Cadence Germany)</a></li>
+      <li><a href="https://www.pcb.maojet.com.tw/archives">Maojet 茂積 (台湾 Cadence 渠道商)</a></li>
+      <li><a href="https://www.graser.com.tw">Graser 映陽科技 (台湾 Cadence 渠道商)</a></li>
+      <li><a href="https://www.u-creative.com.cn">耀创科技 U-Creative (中国授权代理)</a></li>
+      <li><a href="https://www.yijia-tech.com">上海翼甲信息科技 (中国代理)</a></li>
+      <li><a href="https://www.ema-eda.com">EMA Design Automation (北美渠道商)</a></li>
+      <li><a href="https://www.linkedin.com/posts/ravali-chennuru_cadence-allegro-sigrity-training">LinkedIn: Cadence Allegro Sigrity training</a></li>
+      <li><a href="https://community.cadence.com/pcb/posts/sigrity-and-systems-analysis-2024.0-release-now-available">Sigrity 2024.0 release blog</a></li>
+      <li><a href="https://community.cadence.com/breakfast-bytes/posts/em-solvers">Cadence EM solvers 对比</a></li>
+      <li><a href="https://www.marketsandmarkets.com/asia-pacific-chiplet-market-report">MarketsandMarkets Asia-Pacific Chiplet Report</a></li>
+      <li><a href="https://scouts.yutori.com/ai-agents-and-backend-trends">Scouts Yutori: REAP 2026 ASE Industry Showcase</a></li>
+      <li><a href="https://anysilicon.com/news/cadence-partners-tsmc-amkor">AnySilicon TSMC-Cadence-Amkor</a></li>
+      <li><a href="https://deepchip.com/items">DeepChip 3D-IC 评论</a></li>
+      <li><a href="https://www.chipestimate.com/Cadence-Certifies-AI-Driven-Reference-Flows-for-Intel-18A-P-and-Intel-14A/Cadence/news/59581">ChipEstimate Cadence Intel 18A-P / 14A</a></li>
+      <li><a href="https://www.parallel-systems.co.uk/pcbhigh-speed">Parallel Systems PCB High Speed (Pegatron)</a></li>
+      <li><a href="https://iconnect007.com/article/cadences-allegro-x-ai-offers-10x-reduction-turnaround-time">i-Connect007 Allegro X AI 10X TAT</a></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <p>纪多斌 · Robin Ji · 深度调研 · 多源交叉验证 · <a href="https://binbinao.github.io/openclaw-impact-report/">返回报告索引</a></p>
+  <p style="font-size:12px;">2026-08-25 · 70% provenance · 112 sources · verified</p>
+</footer>
+
+</div>
+</body>
+</html>
