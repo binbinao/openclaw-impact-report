@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="OMP 命令小白实战手册：敲哪个命令、看到什么效果、适合什么场景。">
+<title>OMP 命令小白实战手册</title>
+<style>
+:root {
+  --accent: #c8753f;
+  --accent-soft: #e0a070;
+  --accent-faint: #f7ede3;
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --text: #3d3833;
+  --text-soft: #7a736b;
+  --line: #e8e0d5;
+  --code-bg: #f5efe6;
+  --code-text: #5b4a3a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.9;
+  font-size: 16px;
+}
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 28px 80px;
+}
+header.hero {
+  background: linear-gradient(135deg, #fff 0%, var(--accent-faint) 100%);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 40px 36px;
+  margin-bottom: 36px;
+}
+header.hero h1 {
+  font-size: 30px;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+header.hero .subtitle {
+  color: var(--text-soft);
+  font-size: 15px;
+}
+header.hero .badge {
+  display: inline-block;
+  margin-top: 16px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  padding: 4px 14px;
+  border-radius: 999px;
+  letter-spacing: 1px;
+}
+h2 {
+  font-size: 23px;
+  margin: 52px 0 18px;
+  padding-left: 14px;
+  border-left: 5px solid var(--accent);
+  color: var(--text);
+}
+h3 {
+  font-size: 18px;
+  margin: 30px 0 12px;
+  color: #6b4a2e;
+}
+p { margin: 12px 0; }
+strong { color: #a05a28; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 20px 0;
+  padding: 14px 20px;
+  background: var(--accent-faint);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  color: #6b5a48;
+  font-size: 15px;
+}
+code {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  background: var(--code-bg);
+  color: var(--code-text);
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 0.88em;
+}
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-soft);
+  border-radius: 10px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  margin: 16px 0;
+  line-height: 1.7;
+}
+pre code {
+  background: none;
+  padding: 0;
+  color: var(--code-text);
+  font-size: 14px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 14.5px;
+}
+th {
+  background: var(--accent-faint);
+  color: #8a5527;
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--accent-soft);
+}
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) { background: #fdfbf7; }
+tbody tr:hover { background: var(--accent-faint); }
+.toc {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 28px;
+  margin-bottom: 8px;
+}
+.toc .toctitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+.toc ul { list-style: none; padding-left: 4px; }
+.toc > ul > li {
+  margin: 6px 0;
+  font-weight: 600;
+}
+.toc ul ul { padding-left: 22px; font-weight: 400; font-size: 14px; }
+.toc ul ul li { margin: 3px 0; }
+footer {
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--text-soft);
+  font-size: 13px;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .page { padding: 24px 16px 60px; }
+  header.hero { padding: 28px 22px; }
+  h1 { font-size: 24px; }
+  table { font-size: 13px; display: block; overflow-x: auto; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="hero">
+    <h1>OMP 命令小白实战手册</h1>
+    <div class="subtitle">敲哪个命令 → 看到什么效果 → 适合什么场景 · 基于 omp v18.0.7</div>
+    <span class="badge">CLI 实战指南</span>
+  </header>
+  <div class="toc"><span class="toctitle">目录</span><ul>
+<li><a href="#omp">OMP 命令小白实战手册</a><ul>
+<li><a href="#_1">🧭 三秒钟选命令</a></li>
+<li><a href="#1-omp">1️⃣ 启动类：怎么把 OMP 跑起来</a></li>
+<li><a href="#2-ai">2️⃣ 模型类：换 AI 大脑</a></li>
+<li><a href="#3-ai">3️⃣ 思考类：让 AI 多想 / 少想</a></li>
+<li><a href="#4-ai">4️⃣ 工具类：让 AI 能不能动你的电脑</a></li>
+<li><a href="#5-tui">5️⃣ 内置斜杠命令（TUI 内输入 / 自动补全）</a></li>
+<li><a href="#6-omp-config">6️⃣ omp config：改配置的万能入口</a></li>
+<li><a href="#7-tui">7️⃣ 常用子命令（不是 TUI 内的命令,是终端直接敲的）</a></li>
+<li><a href="#8-10">8️⃣ 必背的 10 个键</a></li>
+<li><a href="#9-5-flag">9️⃣ 5 个让生活变简单的 flag</a></li>
+<li><a href="#d2l">🔟 D2L 项目里的实际玩法</a></li>
+<li><a href="#_12">❓ 卡住了怎么办</a></li>
+<li><a href="#_13">📚 想再深入看</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+  <h1 id="omp">OMP 命令小白实战手册</h1>
+<blockquote>
+<p>目标：看完这一篇,你应该知道 <strong>敲哪个命令 → 看到什么效果 → 适合什么场景</strong>。
+文档基于 <code>omp v18.0.7</code>(本地 <code>~/.bun/bin/omp</code>)。</p>
+</blockquote>
+<h2 id="_1">🧭 三秒钟选命令</h2>
+<table>
+<thead>
+<tr>
+<th>我想做的事</th>
+<th>用这个命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>打开 AI 终端,边聊边改代码</td>
+<td><code>omp</code></td>
+</tr>
+<tr>
+<td>一次问完就退出,把答案喂给脚本</td>
+<td><code>omp -p "问题"</code></td>
+</tr>
+<tr>
+<td>接上次没问完的会话</td>
+<td><code>omp -c</code></td>
+</tr>
+<tr>
+<td>换模型 / 换思考深度</td>
+<td><code>Ctrl+P</code> 或 <code>--model</code></td>
+</tr>
+<tr>
+<td>列出全部可用模型</td>
+<td><code>omp models</code></td>
+</tr>
+<tr>
+<td>改默认配置(审批、模型角色、思考)</td>
+<td><code>omp config set ...</code></td>
+</tr>
+<tr>
+<td>装插件 / 扩展</td>
+<td><code>omp plugin install ...</code></td>
+</tr>
+<tr>
+<td>把会话导出成 HTML 给同事看</td>
+<td><code>omp --export &lt;id&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>下面把每一类都展开讲。</p>
+<hr />
+<h2 id="1-omp">1️⃣ 启动类：怎么把 OMP 跑起来</h2>
+<h3 id="omp-launch"><code>omp</code>（默认 launch）</h3>
+<p><strong>效果</strong>：进入一个全屏交互终端(TUI),你打字,AI 回话,中间会自动读文件、改代码、跑命令。
+<strong>适合</strong>：所有"和 AI 一起写代码"的场景。</p>
+<pre><code class="language-sh">omp
+</code></pre>
+<p>进入后屏幕长这样：
+- 顶部：会话标题 + 当前模型
+- 中部：对话流（你的消息、AI 思考、AI 回复、工具调用结果）
+- 底部：输入框（提示符&gt;）</p>
+<p>直接输入问题回车就开始;<code>/</code> 开头的会被识别为内置命令。</p>
+<h3 id="omp_1"><code>omp "问题"</code>（带初始提示）</h3>
+<p><strong>效果</strong>：直接开始会话,并把第一个问题塞进去。
+<strong>适合</strong>：你想跳过"先打招呼",直接进入正题。</p>
+<pre><code class="language-sh">omp &quot;列出 pytorch/ 下所有 chapter_* 目录&quot;
+</code></pre>
+<h3 id="omp-p-print"><code>omp -p "问题"</code>（print 模式 / 无头）</h3>
+<p><strong>效果</strong>：AI 答完 → 退出。<strong>不进</strong> TUI,纯命令行。
+<strong>适合</strong>：脚本、CI、子代理调用。</p>
+<pre><code class="language-sh">omp -p &quot;总结 README.md 的前 3 条要点&quot;
+</code></pre>
+<p>常见搭配：</p>
+<pre><code class="language-sh">omp -p --mode json &quot;列出所有 TODO&quot; &gt; todos.json   # 输出 JSON
+omp -p --print-thoughts &quot;解释这段代码&quot;             # 把思考过程也打出来
+omp -p --max-time 10m &quot;分析整个目录&quot;              # 超过 10 分钟就强退
+</code></pre>
+<h3 id="omp-c-omp-continue"><code>omp -c</code> / <code>omp --continue</code></h3>
+<p><strong>效果</strong>：把<strong>上一次</strong>的会话原样恢复(包含之前的对话、模型、思考级别)。
+<strong>适合</strong>：上次聊到一半被打断,接着聊。</p>
+<pre><code class="language-sh">omp -c &quot;上次说到的那个 bug 修了吗?&quot;
+</code></pre>
+<h3 id="omp-resume-omp-resume-id"><code>omp --resume</code> / <code>omp --resume &lt;id&gt;</code></h3>
+<p><strong>效果</strong>：打开一个会话选择器(列出最近 N 个会话),选一个接着聊。
+<strong>适合</strong>：跨项目恢复、找上次聊的那个会话。</p>
+<pre><code class="language-sh">omp --resume            # 打开选择器
+omp --resume 1f9d       # 按 ID 前缀直接打开
+</code></pre>
+<h3 id="omp-fork-id"><code>omp --fork &lt;id&gt;</code></h3>
+<p><strong>效果</strong>：从已有会话复制一份,<strong>新 ID、新分支</strong>,改动不影响原会话。
+<strong>适合</strong>：想"如果当时走了另一条路会怎样"。</p>
+<pre><code class="language-sh">omp --fork 1f9d &quot;换个方案,试试用 numpy 实现&quot;
+</code></pre>
+<h3 id="omp-export-id"><code>omp --export &lt;id&gt;</code></h3>
+<p><strong>效果</strong>：把某个会话转成独立 HTML 文件,<strong>然后退出</strong>(不进入 TUI)。
+<strong>适合</strong>：把 AI 协作过程分享给没装 omp 的同事。</p>
+<pre><code class="language-sh">omp --export 1f9d
+# 生成的 HTML 默认在 ~/.omp/agent/sessions/.../1f9d.html
+</code></pre>
+<h3 id="omp-from-claude-omp-from-codex"><code>omp --from-claude</code> / <code>omp --from-codex</code></h3>
+<p><strong>效果</strong>：把别的工具(Claude Code / Codex)的历史会话导入 omp。
+<strong>适合</strong>：换工具时不丢上下文。</p>
+<hr />
+<h2 id="2-ai">2️⃣ 模型类：换 AI 大脑</h2>
+<h3 id="omp-model-id"><code>omp --model &lt;id&gt;</code></h3>
+<p><strong>效果</strong>：本次会话用指定模型(临时覆盖)。
+<strong>适合</strong>：临时想试一下更强的模型 / 便宜模型。</p>
+<pre><code class="language-sh">omp --model claude-sonnet-4-5          # 模糊匹配
+omp --model openai/gpt-5.2             # 精确 provider/model
+omp --model @slow                      # 用配置里的 slow 角色
+</code></pre>
+<h3 id="omp-smol-slow-plan"><code>omp --smol</code> / <code>--slow</code> / <code>--plan</code></h3>
+<p><strong>效果</strong>：分别设置"快/便宜"、"慢/强"、"规划专用"三个角色的模型。
+<strong>适合</strong>：和 <code>--thinking</code> 配合,搭出"规划用强模型,执行用便宜模型"的工作流。</p>
+<pre><code class="language-sh">omp --slow anthropic/claude-opus-4-5:high --thinking xhigh -p &quot;重构这个模块&quot;
+</code></pre>
+<h3 id="omp-models"><code>omp models</code></h3>
+<p><strong>效果</strong>：列出<strong>当前能用的所有模型</strong>(按 provider 分组)。
+<strong>适合</strong>：选模型前先看有哪些。</p>
+<pre><code class="language-sh">omp models                       # 人类可读
+omp models --json                # 机器可读
+omp models openai-codex          # 只看 openai-codex 提供方
+omp models find claude           # 模糊搜索
+omp models refresh               # 刷新可用模型缓存
+</code></pre>
+<h3 id="tui">TUI 内的快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+P</code></td>
+<td>循环到下一个模型</td>
+</tr>
+<tr>
+<td><code>Shift+Ctrl+P</code></td>
+<td>循环到上一个</td>
+</tr>
+<tr>
+<td><code>Alt+P</code></td>
+<td>临时选个模型,只这次有效</td>
+</tr>
+<tr>
+<td><code>Alt+M</code></td>
+<td>打开模型选择器,改默认</td>
+</tr>
+<tr>
+<td><code>Alt+A</code></td>
+<td>打开 Agent Hub(管理 subagent)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-ai">3️⃣ 思考类：让 AI 多想 / 少想</h2>
+<h3 id="omp-thinking-level"><code>omp --thinking &lt;level&gt;</code></h3>
+<p><strong>效果</strong>：控制 AI 每步思考的深入程度。
+<strong>适合</strong>：复杂任务开高,简单任务开低省 token。</p>
+<p>可选值:<code>off / minimal / low / medium / high / xhigh / max / auto</code></p>
+<pre><code class="language-sh">omp --thinking high -p &quot;解释这段代码&quot;
+omp --thinking max  -p &quot;给一个金融系统的安全方案&quot;
+</code></pre>
+<h3 id="ctrlt"><code>Ctrl+T</code></h3>
+<p><strong>效果</strong>：在 TUI 内切换"显示/隐藏思考块"。
+<strong>适合</strong>：想看 AI 怎么想的 → 显示;嫌屏幕乱 → 隐藏。</p>
+<h3 id="shifttab"><code>Shift+Tab</code></h3>
+<p><strong>效果</strong>：循环切换思考级别。</p>
+<h3 id="omp-hide-thinking"><code>omp --hide-thinking</code></h3>
+<p><strong>效果</strong>：本次启动默认不显示思考块。
+<strong>适合</strong>：录屏 / 分享时屏幕干净点。</p>
+<h3 id="magic-keywordultrathink">magic keyword：<code>ultrathink</code></h3>
+<p><strong>效果</strong>：在 prompt 里直接写这个词,触发"本轮最深度思考"。
+<strong>适合</strong>：偶尔一道难题,不想改全局配置。</p>
+<pre><code class="language-text">ultrathink 帮我设计一个能扛住双十一的订单系统
+</code></pre>
+<hr />
+<h2 id="4-ai">4️⃣ 工具类：让 AI 能不能动你的电脑</h2>
+<h3 id="omp-tools-abc"><code>omp --tools a,b,c</code></h3>
+<p><strong>效果</strong>：本次会话<strong>只允许</strong>用列表里的工具。
+<strong>适合</strong>：不放心?先限制 AI 只能读不能改。</p>
+<pre><code class="language-sh">omp --tools read,grep,glob &quot;先分析,别改文件&quot;
+omp --tools &quot;&quot; --no-tools -p &quot;纯聊天,什么都别调&quot;   # 完全禁用工具
+</code></pre>
+<h3 id="omp-approval-mode-yolo"><code>omp --approval-mode yolo</code></h3>
+<p><strong>效果</strong>：AI 做的所有操作自动放行,<strong>不再询问</strong>。
+<strong>适合</strong>：跑批 / CI / 自动化任务,无人值守。</p>
+<pre><code class="language-sh">omp --yolo -p &quot;把这个目录里所有 .py 文件加 type hint&quot;
+</code></pre>
+<h3 id="omp-approval-mode-always-ask"><code>omp --approval-mode always-ask</code></h3>
+<p><strong>效果</strong>：每个工具调用都问一遍。
+<strong>适合</strong>：第一次跑 AI 操作、不熟悉的环境。</p>
+<h3 id="write">默认模式 <code>write</code></h3>
+<p><strong>效果</strong>：读类操作默认放行,写类(bash、edit、write)每次问。
+<strong>适合</strong>：日常使用,够安全也不烦。</p>
+<h3 id="omp-config">配置化审批（<code>omp config</code>）</h3>
+<p><strong>效果</strong>：写进配置,持久生效,所有会话默认遵守。</p>
+<pre><code class="language-sh"># 让 git 命令默认放行,但 rm -rf 永远拒绝
+omp config set tools.approval '{&quot;bash&quot;:&quot;prompt&quot;}'
+omp config set bash.patterns '[
+  {&quot;match&quot;:&quot;git *&quot;,&quot;approval&quot;:&quot;allow&quot;},
+  {&quot;match&quot;:&quot;rm -rf *&quot;,&quot;approval&quot;:&quot;deny&quot;},
+  {&quot;match&quot;:&quot;*&quot;,&quot;approval&quot;:&quot;allow&quot;}
+]'
+</code></pre>
+<hr />
+<h2 id="5-tui">5️⃣ 内置斜杠命令（TUI 内输入 <code>/</code> 自动补全）</h2>
+<p>输入 <code>/</code> 会弹出菜单,以下是<strong>最常用的 20 条</strong>：</p>
+<h3 id="_2">会话管理</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>你看到的效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/help</code></td>
+<td>列出当前可用命令 + 工具清单</td>
+</tr>
+<tr>
+<td><code>/init</code></td>
+<td>扫当前目录,生成项目上下文(AGENTS.md 等)</td>
+</tr>
+<tr>
+<td><code>/new</code></td>
+<td>开一个全新会话(丢掉当前)</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>清空当前会话的实时对话流,历史保留</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>打开会话选择器,选旧的</td>
+</tr>
+<tr>
+<td><code>/fork</code></td>
+<td>从当前位置派生一个新分支会话</td>
+</tr>
+<tr>
+<td><code>/tree</code></td>
+<td>可视化当前会话的分支树</td>
+</tr>
+<tr>
+<td><code>/status</code></td>
+<td>显示当前 provider / 模型 / token 用量 / 工具</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">模型与模式</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/model</code></td>
+<td>切换模型</td>
+</tr>
+<tr>
+<td><code>/plan</code></td>
+<td>切换 plan 模式(只读、不动代码)</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>手动触发上下文压缩,腾出空间</td>
+</tr>
+<tr>
+<td><code>/agents</code></td>
+<td>打开 Agent Hub,管理 subagents</td>
+</tr>
+<tr>
+<td><code>/skill:&lt;name&gt;</code></td>
+<td>加载指定 skill</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">输出 / 协作</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/copy</code></td>
+<td>复制最后一条 AI 回复</td>
+</tr>
+<tr>
+<td><code>/share</code></td>
+<td>生成加密分享链接(同 <code>omp share</code>)</td>
+</tr>
+<tr>
+<td><code>/join</code></td>
+<td>加入协作会话</td>
+</tr>
+<tr>
+<td><code>/usage</code></td>
+<td>显示各 provider 账户的用量限额</td>
+</tr>
+<tr>
+<td><code>/update</code></td>
+<td>检查 / 安装 omp 自身更新</td>
+</tr>
+<tr>
+<td><code>/settings</code></td>
+<td>打开设置面板(交互式,带搜索)</td>
+</tr>
+<tr>
+<td><code>/hotkeys</code></td>
+<td>列出当前所有键绑定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">退出 / 暂停</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/pause</code></td>
+<td><strong>只 TUI</strong>:暂停所有代理,Esc 恢复</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>中断当前 AI 输出</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-omp-config">6️⃣ <code>omp config</code>：改配置的万能入口</h2>
+<h3 id="_6">列出全部设置</h3>
+<pre><code class="language-sh">omp config list                  # 按 tab 分组,带默认值和类型
+omp config list --json           # 机器可读
+</code></pre>
+<p><strong>效果</strong>：一张表,所有可调旋钮一目了然。</p>
+<h3 id="_7">查看单个设置</h3>
+<pre><code class="language-sh">omp config get defaultThinkingLevel
+omp config get tools.approvalMode --json
+</code></pre>
+<h3 id="_8">修改单个设置</h3>
+<pre><code class="language-sh">omp config set defaultThinkingLevel high
+omp config set theme.dark titanium
+omp config set compaction.enabled false
+omp config set tools.approval '{&quot;bash&quot;:&quot;allow&quot;,&quot;read&quot;:&quot;allow&quot;}'   # 对象用 JSON
+omp config set enabledModels '[&quot;claude-sonnet-4-5&quot;]'              # 数组用 JSON
+</code></pre>
+<p><strong>效果</strong>：立刻写入 <code>~/.omp/agent/config.yml</code>,下次启动生效。</p>
+<h3 id="_9">重置</h3>
+<pre><code class="language-sh">omp config reset steeringMode    # 写回 schema 默认值
+</code></pre>
+<h3 id="_10">找配置文件在哪</h3>
+<pre><code class="language-sh">omp config path                  # 打印当前 agent 目录
+</code></pre>
+<h3 id="_11">配置文件位置（优先级从低到高）</h3>
+<pre><code class="language-text">builtin defaults  &lt;  ~/.omp/agent/config.yml  &lt;  &lt;cwd&gt;/.omp/config.yml  &lt;  --config &lt;file&gt;  &lt;  CLI flag/env
+</code></pre>
+<p>简单说：<strong>项目级配置会盖掉全局,CLI flag 会盖掉项目级</strong>。</p>
+<h3 id="yaml">常用 YAML 片段</h3>
+<pre><code class="language-yaml"># ~/.omp/agent/config.yml
+
+modelRoles:                       # 角色 → 模型 映射
+  default: anthropic/claude-sonnet-4-5
+  smol: openai/gpt-4.1-mini
+  slow: anthropic/claude-opus-4-5:high
+
+defaultThinkingLevel: high        # off|minimal|low|medium|high|xhigh|max|auto
+
+tools:
+  approvalMode: write             # always-ask|write|yolo
+  approval:
+    bash: prompt
+    read: allow
+
+compaction:
+  strategy: snapcompact
+  thresholdPercent: 80
+
+theme:
+  dark: titanium
+</code></pre>
+<hr />
+<h2 id="7-tui">7️⃣ 常用子命令（不是 TUI 内的命令,是终端直接敲的）</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>你输入后会发生什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>omp models</code></td>
+<td>列出全部模型</td>
+</tr>
+<tr>
+<td><code>omp config ...</code></td>
+<td>配置管理</td>
+</tr>
+<tr>
+<td><code>omp setup</code></td>
+<td>首次配置向导 / 装可选依赖(如 <code>omp setup python</code> 装 Python 内核)</td>
+</tr>
+<tr>
+<td><code>omp agents unpack</code></td>
+<td>把内置 subagents 导出到 <code>~/.omp/agent/agents/</code></td>
+</tr>
+<tr>
+<td><code>omp agents unpack --project</code></td>
+<td>导出到 <code>./.omp/agents/</code></td>
+</tr>
+<tr>
+<td><code>omp plugin install &lt;name&gt;</code></td>
+<td>从市场装插件</td>
+</tr>
+<tr>
+<td><code>omp plugin list</code></td>
+<td>列出已装插件</td>
+</tr>
+<tr>
+<td><code>omp install &lt;pkg&gt;</code></td>
+<td>安装 / 链接本地扩展包</td>
+</tr>
+<tr>
+<td><code>omp usage</code></td>
+<td>各 provider 账户的限额 / 余额</td>
+</tr>
+<tr>
+<td><code>omp stats</code></td>
+<td>用量统计</td>
+</tr>
+<tr>
+<td><code>omp update</code></td>
+<td>检查 / 安装 omp 自身更新</td>
+</tr>
+<tr>
+<td><code>omp gc</code></td>
+<td>跑存储垃圾回收</td>
+</tr>
+<tr>
+<td><code>omp ps</code></td>
+<td>列出 omp 管理的后台进程</td>
+</tr>
+<tr>
+<td><code>omp share</code></td>
+<td>加密分享当前会话</td>
+</tr>
+<tr>
+<td><code>omp completions bash</code></td>
+<td>打印 bash 补全脚本</td>
+</tr>
+<tr>
+<td><code>omp token &lt;provider&gt;</code></td>
+<td>取 provider 的 API key / OAuth token</td>
+</tr>
+<tr>
+<td><code>omp ssh</code></td>
+<td>管理 SSH host 配置</td>
+</tr>
+<tr>
+<td><code>omp read &lt;path&gt;</code></td>
+<td>CLI 测 read 工具(可读 URL、内部 URI)</td>
+</tr>
+<tr>
+<td><code>omp grep &lt;pattern&gt;</code></td>
+<td>CLI 测 grep 工具</td>
+</tr>
+<tr>
+<td><code>omp search "&lt;query&gt;"</code></td>
+<td>CLI 测 web_search</td>
+</tr>
+<tr>
+<td><code>omp say "hello"</code></td>
+<td>本地 TTS 播放</td>
+</tr>
+<tr>
+<td><code>omp bench</code></td>
+<td>给模型跑 TTFT / 吞吐基准</td>
+</tr>
+<tr>
+<td><code>omp --version</code></td>
+<td>看版本</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-10">8️⃣ 必背的 10 个键</h2>
+<p>TUI 里这些键会让你效率翻倍：</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+P</code></td>
+<td>下一个模型</td>
+</tr>
+<tr>
+<td><code>Alt+P</code></td>
+<td>临时选个模型</td>
+</tr>
+<tr>
+<td><code>Alt+M</code></td>
+<td>打开模型选择器</td>
+</tr>
+<tr>
+<td><code>Alt+Shift+P</code></td>
+<td>切换 plan 模式</td>
+</tr>
+<tr>
+<td><code>Ctrl+T</code></td>
+<td>显示/隐藏思考块</td>
+</tr>
+<tr>
+<td><code>Shift+Tab</code></td>
+<td>循环思考级别</td>
+</tr>
+<tr>
+<td><code>Ctrl+O</code></td>
+<td>展开/折叠工具输出</td>
+</tr>
+<tr>
+<td><code>Ctrl+R</code></td>
+<td>搜 prompt 历史</td>
+</tr>
+<tr>
+<td><code>Ctrl+Q</code> 或 <code>Ctrl+Enter</code></td>
+<td>排一条 follow-up 消息(等当前 AI 输出完才发)</td>
+</tr>
+<tr>
+<td><code>Ctrl+L</code></td>
+<td>开/关 live 语音模式</td>
+</tr>
+<tr>
+<td><code>Alt+A</code></td>
+<td>打开 Agent Hub</td>
+</tr>
+</tbody>
+</table>
+<p>想看完整列表 → <code>omp --help</code> 或 TUI 内 <code>/hotkeys</code>。</p>
+<hr />
+<h2 id="9-5-flag">9️⃣ 5 个让生活变简单的 flag</h2>
+<p>只记这 5 个,90% 场景够用：</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>一句话作用</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--model &lt;id&gt;</code></td>
+<td>换模型</td>
+<td><code>--model gpt-5.2</code></td>
+</tr>
+<tr>
+<td><code>--thinking &lt;lv&gt;</code></td>
+<td>控制思考深度</td>
+<td><code>--thinking high</code></td>
+</tr>
+<tr>
+<td><code>--yolo</code></td>
+<td>全自动,啥也别问</td>
+<td>跑批任务</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>无头模式,答完退出</td>
+<td><code>omp -p "..."</code></td>
+</tr>
+<tr>
+<td><code>-c</code> / <code>--continue</code></td>
+<td>接上次会话</td>
+<td><code>omp -c</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="d2l">🔟 D2L 项目里的实际玩法</h2>
+<h3 id="a">A. 扫一遍项目,生成阅读路线</h3>
+<pre><code class="language-sh">cd /Users/duobinji/Documents/GitHub/d2l
+omp -p &quot;扫描 pytorch/,列出所有 chapter_* 目录,按官方推荐顺序输出&quot;
+</code></pre>
+<p><strong>你会看到</strong>：一个排序好的目录列表 + 每个目录的一句话简介。</p>
+<h3 id="b-issue-ai">B. 找一个 issue,让 AI 排查</h3>
+<pre><code class="language-sh"># 先开个交互会话
+omp
+# 在 TUI 里输入：
+&gt; @pytorch/chapter_multilayer-perceptrons/mlp.ipynb 这个 notebook 第 3 个 cell 报错,
+&gt; 帮我看一下原因并修复
+</code></pre>
+<p><strong>你会看到</strong>：AI 读文件 → 看代码 → 跑命令复现 → 给出修复。</p>
+<h3 id="c-docstring">C. 批量翻译 docstring</h3>
+<pre><code class="language-sh">omp --slow claude-opus-4-5:high --thinking high -p \
+  &quot;把 pytorch/chapter_preliminaries/ndarray.py 里所有英文 docstring 翻译成中文,代码和签名保持不变&quot;
+</code></pre>
+<p><strong>你会看到</strong>：diff 视图 + 修改后的文件(默认要你确认才落盘)。</p>
+<h3 id="d-readme">D. 并行给每章生成 README 摘要</h3>
+<pre><code class="language-sh">omp -p &quot;orchestrate:为 pytorch/ 下每个 chapter_* 目录并行生成 README 摘要,写入 _mydocs/summaries/&lt;chapter&gt;.md&quot;
+</code></pre>
+<p><strong>你会看到</strong>：多个 subagent 同时开干,各自认领不同章节,最后合并结果。</p>
+<h3 id="e">E. 项目内单独开一份配置</h3>
+<p>在仓库根新建 <code>.omp/config.yml</code>：</p>
+<pre><code class="language-yaml">modelRoles:
+  default: anthropic/claude-sonnet-4-5
+  smol: openai/gpt-4.1-mini
+tools:
+  approval:
+    bash: allow       # 这个项目里允许任意 bash
+    notebook: prompt  # 改 notebook 前问一声
+</code></pre>
+<p>之后在该目录跑 <code>omp</code>,自动加载这份配置。</p>
+<h3 id="f-ai">F. 给同事发一份"我和 AI 协作的完整记录"</h3>
+<pre><code class="language-sh">omp --resume             # 选要导出的会话
+omp --export &lt;id&gt;        # 生成 HTML
+open ~/.omp/agent/sessions/&lt;encoded&gt;/&lt;id&gt;.html
+</code></pre>
+<hr />
+<h2 id="_12">❓ 卡住了怎么办</h2>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>试试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>命令不存在 / 行为不对</td>
+<td><code>omp &lt;command&gt; --help</code> 或 <code>omp --help</code></td>
+</tr>
+<tr>
+<td>想看某个设置当前值</td>
+<td><code>omp config get &lt;key&gt;</code></td>
+</tr>
+<tr>
+<td>改坏了想回到默认</td>
+<td><code>omp config reset &lt;key&gt;</code></td>
+</tr>
+<tr>
+<td>AI 不听指挥</td>
+<td><code>/clear</code> 或 <code>/new</code> 开新会话;或者 <code>/compact</code> 压缩上下文</td>
+</tr>
+<tr>
+<td>上下文太满、AI 变笨</td>
+<td><code>/compact</code>,或在配置里调 <code>compaction.thresholdPercent</code></td>
+</tr>
+<tr>
+<td>看不到模型列表</td>
+<td><code>omp models refresh</code>,检查 API key</td>
+</tr>
+<tr>
+<td>当前快捷键是啥</td>
+<td>TUI 内 <code>/hotkeys</code></td>
+</tr>
+<tr>
+<td>装了插件没生效</td>
+<td><code>/reload-plugins</code></td>
+</tr>
+<tr>
+<td>想看底层文档</td>
+<td>官方文档:<code>omp://cli-reference.md</code>、<code>omp://settings.md</code> 等</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_13">📚 想再深入看</h2>
+<table>
+<thead>
+<tr>
+<th>想了解</th>
+<th>看哪里</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完整 CLI flag</td>
+<td><code>omp --help</code> / <code>omp://cli-reference.md</code></td>
+</tr>
+<tr>
+<td>所有设置项</td>
+<td><code>omp config list</code> / <code>omp://settings.md</code></td>
+</tr>
+<tr>
+<td>模型与自定义 provider</td>
+<td><code>omp://models.md</code></td>
+</tr>
+<tr>
+<td>斜杠命令怎么实现的</td>
+<td><code>omp://slash-command-internals.md</code></td>
+</tr>
+<tr>
+<td>会话怎么存的</td>
+<td><code>omp://session.md</code></td>
+</tr>
+<tr>
+<td>键盘绑定怎么改</td>
+<td><code>omp://keybindings.md</code></td>
+</tr>
+<tr>
+<td>Magic keywords</td>
+<td><code>omp://magic-keywords.md</code></td>
+</tr>
+<tr>
+<td>装扩展 / 插件</td>
+<td><code>omp://extensions.md</code> / <code>omp://marketplace.md</code></td>
+</tr>
+<tr>
+<td>环境变量全表</td>
+<td><code>omp://environment-variables.md</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话总结</strong>：日常就是 <code>omp</code> 进 TUI、用 <code>/</code> 命令、<code>Ctrl+P</code> 换模型、<code>Ctrl+T</code> 看思考;要自动化就 <code>omp -p</code>;要改全局行为就 <code>omp config</code>。</p>
+</blockquote>
+  <footer><a href="index.html">← 返回调研报告集</a> · OMP Command Tutorial · 基于 omp v18.0.7</footer>
+</div>
+</body>
+</html>
