@@ -181,7 +181,6 @@ footer {
   <div class="toc"><span class="toctitle">目录</span><ul>
 <li><a href="#omp">OMP 命令小白实战手册</a><ul>
 <li><a href="#_1">🧭 三秒钟选命令</a></li>
-<li><a href="#0-macos-linux-ide">0️⃣ 安装篇：macOS / Linux 安装 + IDE 搭配</a></li>
 <li><a href="#1-omp">1️⃣ 启动类：怎么把 OMP 跑起来</a></li>
 <li><a href="#2-ai">2️⃣ 模型类：换 AI 大脑</a></li>
 <li><a href="#3-ai">3️⃣ 思考类：让 AI 多想 / 少想</a></li>
@@ -192,8 +191,8 @@ footer {
 <li><a href="#8-10">8️⃣ 必背的 10 个键</a></li>
 <li><a href="#9-5-flag">9️⃣ 5 个让生活变简单的 flag</a></li>
 <li><a href="#d2l">🔟 D2L 项目里的实际玩法</a></li>
-<li><a href="#_15">❓ 卡住了怎么办</a></li>
-<li><a href="#_16">📚 想再深入看</a></li>
+<li><a href="#_12">❓ 卡住了怎么办</a></li>
+<li><a href="#_13">📚 想再深入看</a></li>
 </ul>
 </li>
 </ul>
@@ -248,111 +247,6 @@ footer {
 </tbody>
 </table>
 <p>下面把每一类都展开讲。</p>
-<hr />
-<h2 id="0-macos-linux-ide">0️⃣ 安装篇：macOS / Linux 安装 + IDE 搭配</h2>
-<blockquote>
-<p>前置要求：Bun 安装方式需要 <strong>bun ≥ 1.3.14</strong>；官方支持 macOS / Linux / Windows。</p>
-</blockquote>
-<h3 id="bun">方式一：Bun 全局安装（官方推荐 ⭐）</h3>
-<p><strong>效果</strong>：以 npm 包形式装进 bun 全局目录（<code>~/.bun/bin/omp</code>），升级、卸载都是一条命令。
-<strong>适合</strong>：绝大多数人，尤其想持续跟进新版本的。</p>
-<pre><code class="language-sh"># 1. 先装 bun（macOS / Linux，已装可跳过）
-curl -fsSL https://bun.sh/install | bash
-
-# 2. 重开终端（或 source ~/.zshrc）后安装 omp
-bun install -g @oh-my-pi/pi-coding-agent
-
-# 3. 验证
-omp --version        # 输出 omp/18.x.x 即成功
-</code></pre>
-<p>之后升级只需 <code>bun update -g @oh-my-pi/pi-coding-agent</code>。</p>
-<h3 id="macos-linux">方式二：一键脚本（macOS / Linux）</h3>
-<p><strong>效果</strong>：下载预编译二进制到本地，<strong>不依赖 bun</strong>。
-<strong>适合</strong>：不想装额外运行时、只想快速试用的。</p>
-<pre><code class="language-sh">curl -fsSL https://omp.sh/install | sh
-</code></pre>
-<p>⚠️ Alpine（musl）用户注意：先补动态库依赖 <code>apk add libstdc++ libgcc</code>，再跑安装脚本。</p>
-<h3 id="homebrewmacos-linux">方式三：Homebrew（macOS / Linux）</h3>
-<p><strong>效果</strong>：走 brew 第三方 tap，跟随 <code>brew upgrade</code> 统一管理。
-<strong>适合</strong>：所有软件都用 brew 管的人。</p>
-<pre><code class="language-sh">brew install can1357/tap/omp
-</code></pre>
-<h3 id="_2">其他方式速览</h3>
-<table>
-<thead>
-<tr>
-<th>方式</th>
-<th>命令</th>
-<th>适合谁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Nix</td>
-<td><code>nix profile install github:can1357/oh-my-pi</code></td>
-<td>NixOS / 声明式配置党</td>
-</tr>
-<tr>
-<td>mise</td>
-<td><code>mise use -g github:can1357/oh-my-pi</code></td>
-<td>需要在多版本间固定/切换</td>
-</tr>
-<tr>
-<td>Windows</td>
-<td><code>irm https://omp.sh/install.ps1 \| iex</code></td>
-<td>PowerShell 用户</td>
-</tr>
-</tbody>
-</table>
-<h3 id="_3">装完后的两步收尾</h3>
-<pre><code class="language-sh"># 1. shell 补全（zsh 为例；bash/fish 用 omp completions bash / fish）
-echo 'eval &quot;$(omp completions zsh)&quot;' &gt;&gt; ~/.zshrc
-
-# 2. 首次配置向导：选 provider、登录、装可选依赖
-omp setup
-</code></pre>
-<p>补全脚本由 omp 基于实时命令元数据自动生成，<strong>永远不会和实际 CLI 脱节</strong>。</p>
-<h3 id="ide">搭配哪个 IDE？</h3>
-<table>
-<thead>
-<tr>
-<th>你的主力编辑器</th>
-<th>推荐打法</th>
-<th>集成深度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Zed</strong></td>
-<td>Zed 内通过 ACP 协议驱动 <code>omp acp</code></td>
-<td>★★★ 官方原生集成</td>
-</tr>
-<tr>
-<td><strong>VS Code / Cursor</strong></td>
-<td>内置终端跑 <code>omp --cwd &lt;项目目录&gt;</code></td>
-<td>★★ 终端 TUI（无官方插件）</td>
-</tr>
-<tr>
-<td><strong>JetBrains 系</strong></td>
-<td>内置终端跑 <code>omp</code></td>
-<td>★★ 同上</td>
-</tr>
-<tr>
-<td><strong>纯终端流</strong></td>
-<td>zellij / tmux 分屏 + <code>omp</code></td>
-<td>★★ TUI 本体</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Zed 是唯一有官方 IDE 集成的</strong>：通过 ACP（Agent Client Protocol）协议，Zed 里跑的就是终端里那个同一个 agent——直接读你正在看的 buffer、文件写入走编辑器的保存路径、破坏性操作在编辑器里弹一次权限确认。官方原话："No bridge, no plugin, no second brain to keep in sync"（无桥接、无插件、无需同步的第二大脑）。</p>
-<p>VS Code / Cursor / JetBrains 目前<strong>没有官方插件</strong>。不过 omp 本身是 TUI 优先设计，在任何编辑器的内置终端里都能完整工作——编辑器负责"看"，omp 负责"改"。</p>
-<h3 id="_4">最优结论（怎么选）</h3>
-<ol>
-<li><strong>装法最优 = Bun 全局安装</strong>：官方推荐方式，升级 <code>bun update -g</code> 一步到位</li>
-<li><strong>IDE 最优 = Zed + ACP</strong>：目前集成度最高的组合，agent 与编辑器共享同一份上下文</li>
-<li><strong>没有 Zed 也别纠结</strong>：VS Code / Cursor + 内置终端 <code>omp</code>，零配置即可开工</li>
-<li><strong>服务器 / 远程开发</strong>：ssh 上去用 zellij/tmux 挂着 <code>omp</code> 跑长任务，断线不丢会话</li>
-</ol>
 <hr />
 <h2 id="1-omp">1️⃣ 启动类：怎么把 OMP 跑起来</h2>
 <h3 id="omp-launch"><code>omp</code>（默认 launch）</h3>
@@ -513,7 +407,7 @@ omp config set bash.patterns '[
 <hr />
 <h2 id="5-tui">5️⃣ 内置斜杠命令（TUI 内输入 <code>/</code> 自动补全）</h2>
 <p>输入 <code>/</code> 会弹出菜单,以下是<strong>最常用的 20 条</strong>：</p>
-<h3 id="_5">会话管理</h3>
+<h3 id="_2">会话管理</h3>
 <table>
 <thead>
 <tr>
@@ -556,7 +450,7 @@ omp config set bash.patterns '[
 </tr>
 </tbody>
 </table>
-<h3 id="_6">模型与模式</h3>
+<h3 id="_3">模型与模式</h3>
 <table>
 <thead>
 <tr>
@@ -587,7 +481,7 @@ omp config set bash.patterns '[
 </tr>
 </tbody>
 </table>
-<h3 id="_7">输出 / 协作</h3>
+<h3 id="_4">输出 / 协作</h3>
 <table>
 <thead>
 <tr>
@@ -626,7 +520,7 @@ omp config set bash.patterns '[
 </tr>
 </tbody>
 </table>
-<h3 id="_8">退出 / 暂停</h3>
+<h3 id="_5">退出 / 暂停</h3>
 <table>
 <thead>
 <tr>
@@ -647,16 +541,16 @@ omp config set bash.patterns '[
 </table>
 <hr />
 <h2 id="6-omp-config">6️⃣ <code>omp config</code>：改配置的万能入口</h2>
-<h3 id="_9">列出全部设置</h3>
+<h3 id="_6">列出全部设置</h3>
 <pre><code class="language-sh">omp config list                  # 按 tab 分组,带默认值和类型
 omp config list --json           # 机器可读
 </code></pre>
 <p><strong>效果</strong>：一张表,所有可调旋钮一目了然。</p>
-<h3 id="_10">查看单个设置</h3>
+<h3 id="_7">查看单个设置</h3>
 <pre><code class="language-sh">omp config get defaultThinkingLevel
 omp config get tools.approvalMode --json
 </code></pre>
-<h3 id="_11">修改单个设置</h3>
+<h3 id="_8">修改单个设置</h3>
 <pre><code class="language-sh">omp config set defaultThinkingLevel high
 omp config set theme.dark titanium
 omp config set compaction.enabled false
@@ -664,13 +558,13 @@ omp config set tools.approval '{&quot;bash&quot;:&quot;allow&quot;,&quot;read&qu
 omp config set enabledModels '[&quot;claude-sonnet-4-5&quot;]'              # 数组用 JSON
 </code></pre>
 <p><strong>效果</strong>：立刻写入 <code>~/.omp/agent/config.yml</code>,下次启动生效。</p>
-<h3 id="_12">重置</h3>
+<h3 id="_9">重置</h3>
 <pre><code class="language-sh">omp config reset steeringMode    # 写回 schema 默认值
 </code></pre>
-<h3 id="_13">找配置文件在哪</h3>
+<h3 id="_10">找配置文件在哪</h3>
 <pre><code class="language-sh">omp config path                  # 打印当前 agent 目录
 </code></pre>
-<h3 id="_14">配置文件位置（优先级从低到高）</h3>
+<h3 id="_11">配置文件位置（优先级从低到高）</h3>
 <pre><code class="language-text">builtin defaults  &lt;  ~/.omp/agent/config.yml  &lt;  &lt;cwd&gt;/.omp/config.yml  &lt;  --config &lt;file&gt;  &lt;  CLI flag/env
 </code></pre>
 <p>简单说：<strong>项目级配置会盖掉全局,CLI flag 会盖掉项目级</strong>。</p>
@@ -939,7 +833,7 @@ omp --export &lt;id&gt;        # 生成 HTML
 open ~/.omp/agent/sessions/&lt;encoded&gt;/&lt;id&gt;.html
 </code></pre>
 <hr />
-<h2 id="_15">❓ 卡住了怎么办</h2>
+<h2 id="_12">❓ 卡住了怎么办</h2>
 <table>
 <thead>
 <tr>
@@ -987,7 +881,7 @@ open ~/.omp/agent/sessions/&lt;encoded&gt;/&lt;id&gt;.html
 </tbody>
 </table>
 <hr />
-<h2 id="_16">📚 想再深入看</h2>
+<h2 id="_13">📚 想再深入看</h2>
 <table>
 <thead>
 <tr>
@@ -1035,7 +929,7 @@ open ~/.omp/agent/sessions/&lt;encoded&gt;/&lt;id&gt;.html
 </tbody>
 </table>
 <blockquote>
-<p><strong>一句话总结</strong>：装它用 <code>bun install -g @oh-my-pi/pi-coding-agent</code>；日常就是 <code>omp</code> 进 TUI、用 <code>/</code> 命令、<code>Ctrl+P</code> 换模型、<code>Ctrl+T</code> 看思考;要自动化就 <code>omp -p</code>;要改全局行为就 <code>omp config</code>。</p>
+<p><strong>一句话总结</strong>：日常就是 <code>omp</code> 进 TUI、用 <code>/</code> 命令、<code>Ctrl+P</code> 换模型、<code>Ctrl+T</code> 看思考;要自动化就 <code>omp -p</code>;要改全局行为就 <code>omp config</code>。</p>
 </blockquote>
   <footer><a href="index.html">← 返回调研报告集</a> · OMP Command Tutorial · 基于 omp v18.0.7</footer>
 </div>
