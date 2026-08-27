@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes 0.20 新特性完全指南：从 0.18 到 Herald Release</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; line-height: 1.7; color: #222; background: #fafafa; }
+  h1 { font-size: 2rem; border-bottom: 3px solid #e63946; padding-bottom: 0.5rem; color: #1a1a2e; }
+  h2 { font-size: 1.5rem; margin-top: 2.5rem; color: #16213e; border-left: 4px solid #e63946; padding-left: 0.75rem; }
+  h3 { font-size: 1.15rem; color: #0f3460; margin-top: 1.5rem; }
+  .badge { display: inline-block; background: #e63946; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; vertical-align: middle; margin-left: 8px; }
+  .new { background: #2d6a4f; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: #1a1a2e; color: white; padding: 10px 12px; text-align: left; }
+  td { padding: 9px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:hover { background: #f5f5f5; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; color: #c7254e; }
+  pre { background: #1a1a2e; color: #e0e0e0; padding: 1.2rem; border-radius: 6px; overflow-x: auto; font-size: 0.88rem; line-height: 1.5; }
+  pre code { background: none; color: inherit; padding: 0; }
+  .callout { padding: 1rem 1.2rem; border-radius: 6px; margin: 1.5rem 0; font-size: 0.95rem; }
+  .callout-info { background: #dbeafe; border-left: 4px solid #2563eb; }
+  .callout-warn { background: #fef9c3; border-left: 4px solid #ca8a04; }
+  .callout-success { background: #d1fae5; border-left: 4px solid #059669; }
+  .callout-danger { background: #fee2e2; border-left: 4px solid #dc2626; }
+  .section { background: white; border-radius: 8px; padding: 1.5rem 2rem; margin: 1.5rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .toc { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+  .toc ol { margin: 0.5rem 0 0 1.2rem; }
+  .toc li { margin: 0.3rem 0; }
+  .ver-tag { display: inline-block; background: #457b9d; color: white; padding: 1px 7px; border-radius: 3px; font-size: 0.78rem; margin-right: 6px; }
+  hr { border: none; border-top: 1px solid #dee2e6; margin: 2rem 0; }
+  .footer { text-align: center; color: #888; font-size: 0.82rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #eee; }
+  kbd { background: #eee; border: 1px solid #ccc; border-radius: 3px; padding: 1px 5px; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<h1>🜲 Hermes 0.20 新特性完全指南<span class="badge new">NEW</span></h1>
+<p><strong>版本：The Herald Release</strong> · 2026年8月3日 · 对比 0.18.x（The Judgment Release）</p>
+<p style="color:#666;font-size:0.9rem;">涵盖 v0.20.0 ~ v0.20.5 所有关键更新，附实操案例与命令栗子</p>
+
+<div class="toc">
+<strong>📋 目录</strong>
+<ol>
+<li><a href="#perf">🚀 性能提升：冷启动快 80%</a></li>
+<li><a href="#voice">🎤 实时语音对话 &amp; 打断（Barge-in）</a></li>
+<li><a href="#wake">🔔 本地唤醒词 &amp; 多 Profile 路由</a></li>
+<li><a href="#voice-platform">📱 跨平台语音接入</a></li>
+<li><a href="#citations">🔬 Grounded Citations 可验证研究</a></li>
+<li><a href="#desktop">🖥️ 桌面端平台化：Artifacts + 插件 SDK</a></li>
+<li><a href="#a2a">🤖 A2A v1.0 Agent 间通信</a></li>
+<li><a href="#webhook">🌐 出站 Webhook + HMAC 签名</a></li>
+<li><a href="#cli">💻 CLI 新命令速查</a></li>
+<li><a href="#tools">🔧 工具自我修复 &amp; 迭代上限提升</a></li>
+<li><a href="#compress">🗜️ 上下文压缩重构</a></li>
+<li><a href="#secret">🔐 密码管理器集成（Bitwarden / 1Password）</a></li>
+<li><a href="#model">🧠 模型 &amp; 推理升级</a></li>
+<li><a href="#patch">📦 补丁版本累积修复（0.20.1~0.20.5）</a></li>
+<li><a href="#update">⚡ 如何升级</a></li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="perf">🚀 1. 性能提升：冷启动快 80%</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p>Hermes 冷启动阶段（显示 "Initializing agent..."）从 <strong>~4.3 秒</strong> 压缩到 <strong>~0.9 秒</strong>，降幅 80%。覆盖 CLI、桌面端、TUI、cron 全平台。</p>
+<table>
+<tr><th>指标</th><th>0.18.x</th><th>0.20.x</th><th>改善</th></tr>
+<tr><td>冷启动时间</td><td>~4.3s</td><td>~0.9s</td><td>↓ 80%</td></tr>
+<tr><td>推理思维流式输出</td><td>❌ 完整生成后显示</td><td>✅ 实时流式</td><td>新增</td></tr>
+<tr><td>Markdown 渲染</td><td>按行渲染</td><td>按 token 逐字渲染</td><td>↓ 感知延迟</td></tr>
+</table>
+<h3>实操栗子</h3>
+<p>更新后直接体验，无需任何配置变更：</p>
+<pre><code># 已有安装，直接更新
+hermes update
+
+# 新安装
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+# 验证版本
+hermes --version</code></pre>
+<div class="callout callout-info">
+<b>💡 实测体感：</b>在 CLI 和桌面端首次交互时，原来需要等一个 "深呼吸" 的时间，现在几乎感觉不到等待。TUI 场景改善最明显。
+</div>
+</div>
+
+<hr>
+
+<h2 id="voice">🎤 2. 实时语音对话 &amp; Barge-in（打断）</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 语音模式从「说完等待 → 等完整回复 → 听长音频」变为「边说边听边播报，随时打断」。</p>
+<table>
+<tr><th>功能</th><th>0.18.x</th><th>0.20.x</th></tr>
+<tr><td>TTS 播报时机</td><td>等完整回复生成后一次性播报</td><td>按从句流式实时播报</td></tr>
+<tr><td>Barge-in 打断</td><td>❌ 不支持</td><td>✅ 说话中直接插嘴即可打断</td></tr>
+<tr><td>多轮对话</td><td>每次需手动触发</td><td>一次唤醒，持续多轮</td></tr>
+<tr><td>静默检测</td><td>无</td><td>忙碌感知，不抢话</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># CLI 语音模式启动
+hermes voice
+
+# 桌面端：点击麦克风图标，或说唤醒词
+
+# 对话中途直接说话即可打断，模型自动感知并响应
+# 说出 "stop" 结束语音会话</code></pre>
+<div class="callout callout-success">
+<b>✅ Barge-in 原理：</b>模型接收到的 context 里内嵌了"用户已打断"的信号，所以打断后的回复会自然承接打断前的意图，而不是从头开始。
+</div>
+</div>
+
+<hr>
+
+<h2 id="wake">🔔 3. 本地唤醒词 &amp; 多 Profile 语音路由</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 唤醒词检测完全在本地运行，音频不上云。支持自定义唤醒词，以及不同唤醒词触发不同 profile。</p>
+<h3>实操栗子：配置自定义唤醒词</h3>
+<pre><code># 在 config.yaml 中配置
+voice:
+  wake_word: "hey hermes"        # 自定义唤醒词，支持任意短语
+  wake_engine: "openwakeword"    # 本地检测引擎，不上传音频
+  multi_profile_routing: true   # 不同唤醒词路由到不同 profile
+
+profiles:
+  work:
+    voice:
+      wake_word: "hey work"
+  personal:
+    voice:
+      wake_word: "hey home"</code></pre>
+<div class="callout callout-warn">
+<b>⚠️ 注意：</b>唤醒词必须是「开放词汇」短语，不能是单字或极易误触的词。建议 2~4 个音节，如 <code>hey hermes</code>、<code>小德小德</code>。
+</div>
+</div>
+
+<hr>
+
+<h2 id="voice-platform">📱 4. 跨平台语音消息接入</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 支持以下平台接收语音消息 → 自动转写 → 回复 → TTS 发回：WhatsApp、飞书（Lark）、钉钉（DingTalk）、LINE、QQ、微信（Weixin）、Photon。</p>
+<h3>实操栗子：配置飞书语音</h3>
+<pre><code># config.yaml
+platforms:
+  feishu:
+    enabled: true
+    voice:
+      stt_provider: "openai"      # gpt-transcribe
+      stt_language: "zh-CN"       # 强制中文转写
+      tts_provider: "minimax"    # 平台适配 TTS
+      tts_format: "opus"          # 自动适配平台格式</code></pre>
+<div class="callout callout-info">
+<b>💡 统一语言解析：</b>0.20 新增跨平台语言自动检测，解决「语音消息发出去变成英文转写」的经典问题——现在可以强制指定语言，或让系统自动检测。
+</div>
+</div>
+
+<hr>
+
+<h2 id="citations">🔬 5. Grounded Citations 可验证研究</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 研究类请求输出的每条 claim 都附有可验证来源：引用文本与实际页面文字精确匹配，而非 LLM 幻觉的摘要。</p>
+<table>
+<tr><th>模式</th><th>触发方式</th><th>输出</th></tr>
+<tr><td><strong>Grounded Mode</strong></td><td>使用 <code>grounded-citations</code> skill 或 <code>/research</code> 命令</td><td>每条 claim 带原文引用 + 页面链接</td></tr>
+<tr><td><strong>Fact-check Mode</strong></td><td>传入文档或 claim，用 <code>/factcheck</code> 命令</td><td>三类结果：属实 / 不实 / 无法验证</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># 在 skill 配置中指定来源域
+grounded_citations:
+  domains:
+    - arxiv.org
+    - github.com
+    - official-docs.example.com
+  factcheck_mode: true
+
+# 用法示例（Hermes 对话中）
+/research Gemini 3.6 Flash vs GPT-5.6 performance benchmarks 2026
+# → 输出带精确来源引用的研究报告</code></pre>
+<div class="callout callout-success">
+<b>✅ vs 0.18.x：</b>0.18 的研究输出依赖模型自身知识，无引用验证机制。0.20 的 grounded citations 在引用匹配层做事实校验，claim 引用的是真实页面文字，而非 LLM 重述。
+</div>
+</div>
+
+<hr>
+
+<h2 id="desktop">🖥️ 6. 桌面端平台化：Artifacts + 插件 SDK</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 桌面端从「聊天客户端」进化为「工作台」，新增三大能力：</p>
+
+<h3>6.1 Artifacts 实时预览 <span class="badge new">NEW</span></h3>
+<p>生成的 HTML/代码/App 以版本化卡片形式，在右侧预览区沙箱运行。代码改动后实时刷新。</p>
+
+<h3>6.2 插件 SDK <span class="badge new">NEW</span></h3>
+<p>官方首发插件：<strong>Kanban（看板）</strong>。</p>
+<pre><code># 安装官方 Kanban 插件
+hermes plugins install kanban
+
+# 插件能力：ctx.download / 浮动面板 / 多窗口</code></pre>
+
+<h3>6.3 全局快捷入口 <span class="badge new">NEW</span></h3>
+<p><kbd>Global Hotkey</kbd> 呼出快速输入框，任意位置捕获想法到任意 session。</p>
+
+<div class="callout callout-info">
+<b>💡 使用场景：</b>在看文档、刷代码时突然有想法，按全局快捷键 → 输入 → 自动路由到目标 session，不打断当前工作流。
+</div>
+</div>
+
+<hr>
+
+<h2 id="a2a">🤖 7. A2A v1.0 Agent-to-Agent 通信</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> Hermes 内置 A2A v1.0 协议实现，可与异构多 Agent 系统标准互联。这是 Issue #514 —— 社区最老的 Feature Request 之一。</p>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>Agent 发现</td><td>自动发现同网络内 A2A 兼容 Agent</td></tr>
+<tr><td>标准 Wire Protocol</td><td>HTTP/WebSocket 上的 JSON-RPC 2.0</td></tr>
+<tr><td>任务委派</td><td>向其他 Agent 发送任务、接收结果</td></tr>
+<tr><td>状态同步</td><td>多 Agent 之间状态一致性</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># config.yaml 配置 A2A
+a2a:
+  enabled: true
+  agent_id: "hermes-primary"
+  discover: true
+  registry:
+    - url: "http://agent-2:8100"
+      role: "researcher"
+
+# 在对话中委派任务
+/hermes 请让 researcher agent 调研 Tesla FSD 最新进展</code></pre>
+<div class="callout callout-warn">
+<b>⚠️ 前置要求：</b>对端 Agent 也必须支持 A2A v1.0 协议，不是任意 Agent 都能直接互通。
+</div>
+</div>
+
+<hr>
+
+<h2 id="webhook">🌐 8. 出站 Webhook + HMAC 签名</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> Hermes 从「被动响应」变为「主动推送」——可向任意 HTTP 端点发送带签名验证的生命周期事件。</p>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>session.start</code></td><td>新会话创建</td></tr>
+<tr><td><code>turn.complete</code></td><td>每轮对话完成</td></tr>
+<tr><td><code>tool.event</code></td><td>工具调用完成/失败</td></tr>
+<tr><td><code>delivery.retry</code></td><td>消息发送重试</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># config.yaml
+webhooks:
+  - name: "ci-dashboard"
+    url: "https://ci.example.com/hermes-webhook"
+    secret: "your-hmac-secret-key"
+    events:
+      - "session.start"
+      - "turn.complete"
+      - "tool.event"
+    filter:
+      platforms: ["cli", "desktop"]
+
+# 接收方验签示例（Node.js）
+const crypto = require('crypto');
+function verifySignature(payload, signature, secret) {
+  const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  return `sha256=${expected}` === signature;
+}</code></pre>
+<div class="callout callout-success">
+<b>✅ 集成场景：</b>CI/CD Dashboard 监听 session 事件 → 自动记录工时；Home Assistant 监听 tool.event → 触发自动化；自建 APM 接收 delivery.retry → 监控消息送达率。
+</div>
+</div>
+
+<hr>
+
+<h2 id="cli">💻 9. CLI 新命令速查</h2>
+<div class="section">
+<table>
+<tr><th>命令</th><th>功能</th><th>新增版本</th></tr>
+<tr><td><code>! &lt;shell-cmd&gt;</code></td><td>直接运行 shell 命令，不消耗模型 token</td><td>0.20.0</td></tr>
+<tr><td><code>/init</code></td><td>扫描项目，生成/更新 AGENTS.md</td><td>0.20.0</td></tr>
+<tr><td><code>/diff [staged|all|session]</code></td><td>查看差异，任意表面可用</td><td>0.20.0</td></tr>
+<tr><td><code>/context</code></td><td>分解上下文窗口占用详情</td><td>0.20.0</td></tr>
+<tr><td><code>/focus</code></td><td>精简输出视图，可恢复隐藏行</td><td>0.20.0</td></tr>
+<tr><td><code>Ctrl+S</code></td><td>半写 prompt 暂存到可浏览面板</td><td>0.20.0</td></tr>
+<tr><td><code>/model [name]</code></td><td>模糊匹配切换模型（fuzzy picker）</td><td>0.20.5</td></tr>
+<tr><td><code>Ctrl+P</code></td><td>命令面板（Command Palette）</td><td>0.20.5</td></tr>
+<tr><td><code>/status</code></td><td>更丰富的状态输出</td><td>0.20.5</td></tr>
+<tr><td><code>hermes import-agent</code></td><td>迁移 Claude Code / Codex CLI 配置</td><td>0.20.0</td></tr>
+<tr><td><code>hermes update --receipt</code></td><td>更新收据验证</td><td>0.20.5</td></tr>
+<tr><td><code>hermes worktree list / prune</code></td><td>工作树列表/清理</td><td>0.20.5</td></tr>
+</table>
+<pre><code># 直接运行 shell，不消耗 token
+! ps aux | grep hermes
+
+# 扫描项目生成 AGENTS.md
+hermes init
+
+# 模糊切换模型
+hermes model gpt5
+# → 自动模糊匹配最接近的 GPT-5 模型</code></pre>
+</div>
+
+<hr>
+
+<h2 id="tools">🔧 10. 工具自我修复 &amp; 迭代上限提升</h2>
+<div class="section">
+<h3>10.1 工具失败自我恢复</h3>
+<table>
+<tr><th>工具</th><th>改进</th><th>0.18.x 行为</th></tr>
+<tr><td>Terminal</td><td>超长输出自动落盘到文件，agent 可读回</td><td>截断，agent 丢失后半部分</td></tr>
+<tr><td>patch</td><td>检测重复应用 + 空白符不匹配诊断</td><td>盲目重试</td></tr>
+<tr><td>write_file</td><td>写后读取验证内容一致性</td><td>写完即结束</td></tr>
+<tr><td>search_files</td><td>空结果时探测近邻文件并提示</td><td>返回空，无补救</td></tr>
+<tr><td>所有工具</td><td>常见失败类型返回可操作建议</td><td>通用错误信息</td></tr>
+</table>
+<h3>10.2 迭代上限提升</h3>
+<p>默认工具调用迭代上限从 <code>90</code> 提升到 <code>500</code>。</p>
+<pre><code># config.yaml 中可精细控制
+agent:
+  max_iterations: 500   # 默认</code></pre>
+<div class="callout callout-danger">
+<b>⚠️ 风险提示：</b>迭代上限提升意味着自治任务运行时间更长，确认你理解任务范围再使用高上限。
+</div>
+</div>
+
+<hr>
+
+<h2 id="compress">🗜️ 11. 上下文压缩重构</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 上下文压缩从「被动触发」变为「主动管理」，解决了长会话掉线索、压缩时大停顿等问题。</p>
+<table>
+<tr><th>特性</th><th>说明</th></tr>
+<tr><td>Proactive Tool-result 修剪</td><td>大 context window 模型主动识别低价值 tool result 并修剪</td></tr>
+<tr><td>Per-turn 微压缩</td><td>每个 turn 分散压缩成本，消除一次性大暂停</td></tr>
+<tr><td>Guaranteed N 条用户消息尾</td><td>最近 N 条用户消息永远保留，不被压缩</td></tr>
+<tr><td>进度感知超时</td><td>慢速摘要模型不再因超时失败</td></tr>
+<tr><td>Ghost-skill 防御</td><td>被修剪的 skill 不会再静默残存 session</td></tr>
+<tr><td>Per-model 配置</td><td>压缩阈值可按模型独立设置（token 绝对值）</td></tr>
+</table>
+<pre><code># config.yaml
+compression:
+  enabled: true
+  per_model_tuning:
+    gpt-4o:
+      max_context_tokens: 120000
+      prune_threshold: 0.4
+  guaranteed_user_message_tail: 5
+  progress_aware_timeout: true
+  ghost_skill_defense: true</code></pre>
+</div>
+
+<hr>
+
+<h2 id="secret">🔐 12. 密码管理器集成（Bitwarden / 1Password）</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.19.0</span> API 密钥不再需要写在明文 .env 文件，通过 <code>op://</code> 引用直接从密码库读取。</p>
+<table>
+<tr><th>提供商</th><th>引用格式</th><th>状态</th></tr>
+<tr><td>1Password</td><td><code>op://vault/item/field</code></td><td>✅ 官方支持</td></tr>
+<tr><td>Bitwarden</td><td><code>bw://item/field</code></td><td>✅ 官方支持</td></tr>
+</table>
+<pre><code># config.yaml 中使用 1Password 引用
+providers:
+  openai:
+    api_key: "op://MyVault/openai-api/key"
+
+secret_sources:
+  - type: "1password"
+    vaults: ["MyVault", "Work", "Personal"]
+    precedence: ["MyVault", "Work"]</code></pre>
+<div class="callout callout-success">
+<b>✅ 优势：</b>密钥不落磁盘 CI 日志、环境变量快照；多人团队共享引用路径而非明文值； vault 锁定后自动失效。
+</div>
+</div>
+
+<hr>
+
+<h2 id="model">🧠 13. 模型 &amp; 推理升级</h2>
+<div class="section">
+<h3>13.1 新增模型支持</h3>
+<table>
+<tr><th>模型</th><th>提供商</th><th>新增版本</th></tr>
+<tr><td>GPT-5.6（Sol/Terra/Luna/Pro）</td><td>OpenAI</td><td>0.19.0</td></tr>
+<tr><td>Grok 4.5 GA</td><td>xAI</td><td>0.19.0</td></tr>
+<tr><td>Moonshot K3</td><td>月之暗面</td><td>0.19.0</td></tr>
+<tr><td>Claude Sonnet 5 / Opus 5</td><td>Anthropic</td><td>0.19.0</td></tr>
+<tr><td>Fireworks AI（first-class）</td><td>Fireworks</td><td>0.19.0</td></tr>
+<tr><td>DeepInfra（first-class）</td><td>DeepInfra</td><td>0.19.0</td></tr>
+<tr><td>LM Studio JIT 加载</td><td>本地</td><td>0.19.0</td></tr>
+</table>
+<h3>13.2 推理深度精细化</h3>
+<p>新增 <code>max</code> / <code>ultra</code> 推理档位，可按模型/任务/MoA advisor 独立配置。</p>
+<pre><code># config.yaml
+reasoning:
+  effort:
+    default: "medium"
+    per_model:
+      "gpt-5.6-pro": "ultra"
+      "claude-opus-5": "max"
+
+# CLI 指定
+hermes --reasoning-effort ultra</code></pre>
+</div>
+
+<hr>
+
+<h2 id="patch">📦 14. 补丁版本累积修复（0.20.1 ~ 0.20.5）</h2>
+<div class="section">
+<table>
+<tr><th>版本</th><th>规模</th><th>关键修复 &amp; 改进</th></tr>
+<tr><td><strong>0.20.1</strong></td><td>656 PRs · 1,444 commits</td><td>桌面多 gateway 注册表、profile 级刷新、MCP 健康检查和 deep link；CLI Windows 探针修复；gateway 持久化模型路由；cron 强化；auth 穿透 profile 作用域</td></tr>
+<tr><td><strong>0.20.2</strong></td><td>397 PRs · 967 commits</td><td>MCP 2.x SDK 迁移；Bundled Bot Mode（teammate 协议）；Cua Driver 0.20 运行时契约；subprocess Python 隔离（PYTHONHOME/PYTHONPATH）；UTF-16 文件读取</td></tr>
+<tr><td><strong>0.20.3</strong></td><td>125 PRs · 250 commits</td><td>cron 调度器自愈（EMFILE 恢复、stale-claim 调和、wedged-job 重启）；session 交接数据零丢失；Gemini 3 tool-call ID 保留</td></tr>
+<tr><td><strong>0.20.4</strong></td><td>74 PRs · 146 commits</td><td>桌面毛玻璃/半透明界面（macOS 预选）；tabbed SESSIONS|BOTS 侧边栏；Bot Mode 群聊 Markdown 渲染；NVIDIA SkillEvaluator Tier 1 安全扫描；原生 OS 通知</td></tr>
+<tr><td><strong>0.20.5</strong></td><td>323 PRs · 746 commits</td><td>Bot Mode group-room 线程；可折叠对话摘要；PDF/文件附件拖放；无密钥 web tier（5 vendor 自由轮换）；<code>/model</code> 模糊选择器；Ctrl+P 命令面板；cron 持久化记忆 + per-job 推理档位</td></tr>
+</table>
+</div>
+
+<hr>
+
+<h2 id="update">⚡ 15. 如何升级</h2>
+<div class="section">
+<pre><code># 方式一：已有安装（推荐）
+hermes update
+
+# 方式二：新安装
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+# 方式三：验证更新结果
+hermes update --receipt
+hermes --version</code></pre>
+<p>建议直接从 <strong>0.18.x 升级到 0.20.5</strong>（latest），无需逐版升级。</p>
+<div class="callout callout-info">
+<b>📌 提示：</b>0.20.x 相比 0.18.x 有大量配置字段变化。更新后首次启动会自动尝试迁移配置，但建议提前备份 <code>~/.hermes/config.yaml</code>。
+</div>
+</div>
+
+<hr>
+
+<h2>📊 0.18 vs 0.20 核心定位对比</h2>
+<div class="section">
+<table>
+<tr><th>维度</th><th>0.18 — The Judgment Release</th><th>0.20 — The Herald Release</th></tr>
+<tr><td>核心叙事</td><td>让 Agent <strong>证明</strong>自己的工作</td><td>让 Agent <strong>像信使</strong>一样行动</td></tr>
+<tr><td>招牌功能</td><td>Evidence-led completion、MoA、<code>/learn</code>、<code>/journey</code>、background fan-out</td><td>实时语音 + barge-in、桌面平台化（Artifacts + SDK）、A2A v1.0、grounded citations、80% 冷启动加速</td></tr>
+<tr><td>最大变化</td><td>输出质量保障</td><td>输入/输出速度 + 多模态交互</td></tr>
+<tr><td>目标用户</td><td>深度用户、研究者</td><td>所有层级用户（语音降低门槛）</td></tr>
+</table>
+</div>
+
+<div class="footer">
+<p>📝 本指南基于 GitHub 官方 Release Notes 整理 · Hermes Agent v0.20.5 · 2026-08-27</p>
+<p>🔗 <a href="https://github.com/NousResearch/hermes-agent/releases">官方 Release Notes</a> · <a href="https://github.com/binbinao/openclaw-impact-report">仓库地址</a></p>
+</div>
+
+</body>
+</html>
+HTMLEOFcat > /tmp/hermes-0.20-guide.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes 0.20 新特性完全指南：从 0.18 到 Herald Release</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 900px; margin: 0 auto; padding: 2rem; line-height: 1.7; color: #222; background: #fafafa; }
+  h1 { font-size: 2rem; border-bottom: 3px solid #e63946; padding-bottom: 0.5rem; color: #1a1a2e; }
+  h2 { font-size: 1.5rem; margin-top: 2.5rem; color: #16213e; border-left: 4px solid #e63946; padding-left: 0.75rem; }
+  h3 { font-size: 1.15rem; color: #0f3460; margin-top: 1.5rem; }
+  .badge { display: inline-block; background: #e63946; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; vertical-align: middle; margin-left: 8px; }
+  .new { background: #2d6a4f; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+  th { background: #1a1a2e; color: white; padding: 10px 12px; text-align: left; }
+  td { padding: 9px 12px; border-bottom: 1px solid #e0e0e0; }
+  tr:hover { background: #f5f5f5; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.88em; color: #c7254e; }
+  pre { background: #1a1a2e; color: #e0e0e0; padding: 1.2rem; border-radius: 6px; overflow-x: auto; font-size: 0.88rem; line-height: 1.5; }
+  pre code { background: none; color: inherit; padding: 0; }
+  .callout { padding: 1rem 1.2rem; border-radius: 6px; margin: 1.5rem 0; font-size: 0.95rem; }
+  .callout-info { background: #dbeafe; border-left: 4px solid #2563eb; }
+  .callout-warn { background: #fef9c3; border-left: 4px solid #ca8a04; }
+  .callout-success { background: #d1fae5; border-left: 4px solid #059669; }
+  .callout-danger { background: #fee2e2; border-left: 4px solid #dc2626; }
+  .section { background: white; border-radius: 8px; padding: 1.5rem 2rem; margin: 1.5rem 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .toc { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 1.2rem 1.5rem; margin: 1.5rem 0; }
+  .toc ol { margin: 0.5rem 0 0 1.2rem; }
+  .toc li { margin: 0.3rem 0; }
+  .ver-tag { display: inline-block; background: #457b9d; color: white; padding: 1px 7px; border-radius: 3px; font-size: 0.78rem; margin-right: 6px; }
+  hr { border: none; border-top: 1px solid #dee2e6; margin: 2rem 0; }
+  .footer { text-align: center; color: #888; font-size: 0.82rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #eee; }
+  kbd { background: #eee; border: 1px solid #ccc; border-radius: 3px; padding: 1px 5px; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<h1>🜲 Hermes 0.20 新特性完全指南<span class="badge new">NEW</span></h1>
+<p><strong>版本：The Herald Release</strong> · 2026年8月3日 · 对比 0.18.x（The Judgment Release）</p>
+<p style="color:#666;font-size:0.9rem;">涵盖 v0.20.0 ~ v0.20.5 所有关键更新，附实操案例与命令栗子</p>
+
+<div class="toc">
+<strong>📋 目录</strong>
+<ol>
+<li><a href="#perf">🚀 性能提升：冷启动快 80%</a></li>
+<li><a href="#voice">🎤 实时语音对话 &amp; 打断（Barge-in）</a></li>
+<li><a href="#wake">🔔 本地唤醒词 &amp; 多 Profile 路由</a></li>
+<li><a href="#voice-platform">📱 跨平台语音接入</a></li>
+<li><a href="#citations">🔬 Grounded Citations 可验证研究</a></li>
+<li><a href="#desktop">🖥️ 桌面端平台化：Artifacts + 插件 SDK</a></li>
+<li><a href="#a2a">🤖 A2A v1.0 Agent 间通信</a></li>
+<li><a href="#webhook">🌐 出站 Webhook + HMAC 签名</a></li>
+<li><a href="#cli">💻 CLI 新命令速查</a></li>
+<li><a href="#tools">🔧 工具自我修复 &amp; 迭代上限提升</a></li>
+<li><a href="#compress">🗜️ 上下文压缩重构</a></li>
+<li><a href="#secret">🔐 密码管理器集成（Bitwarden / 1Password）</a></li>
+<li><a href="#model">🧠 模型 &amp; 推理升级</a></li>
+<li><a href="#patch">📦 补丁版本累积修复（0.20.1~0.20.5）</a></li>
+<li><a href="#update">⚡ 如何升级</a></li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="perf">🚀 1. 性能提升：冷启动快 80%</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p>Hermes 冷启动阶段（显示 "Initializing agent..."）从 <strong>~4.3 秒</strong> 压缩到 <strong>~0.9 秒</strong>，降幅 80%。覆盖 CLI、桌面端、TUI、cron 全平台。</p>
+<table>
+<tr><th>指标</th><th>0.18.x</th><th>0.20.x</th><th>改善</th></tr>
+<tr><td>冷启动时间</td><td>~4.3s</td><td>~0.9s</td><td>↓ 80%</td></tr>
+<tr><td>推理思维流式输出</td><td>❌ 完整生成后显示</td><td>✅ 实时流式</td><td>新增</td></tr>
+<tr><td>Markdown 渲染</td><td>按行渲染</td><td>按 token 逐字渲染</td><td>↓ 感知延迟</td></tr>
+</table>
+<h3>实操栗子</h3>
+<p>更新后直接体验，无需任何配置变更：</p>
+<pre><code># 已有安装，直接更新
+hermes update
+
+# 新安装
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+# 验证版本
+hermes --version</code></pre>
+<div class="callout callout-info">
+<b>💡 实测体感：</b>在 CLI 和桌面端首次交互时，原来需要等一个 "深呼吸" 的时间，现在几乎感觉不到等待。TUI 场景改善最明显。
+</div>
+</div>
+
+<hr>
+
+<h2 id="voice">🎤 2. 实时语音对话 &amp; Barge-in（打断）</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 语音模式从「说完等待 → 等完整回复 → 听长音频」变为「边说边听边播报，随时打断」。</p>
+<table>
+<tr><th>功能</th><th>0.18.x</th><th>0.20.x</th></tr>
+<tr><td>TTS 播报时机</td><td>等完整回复生成后一次性播报</td><td>按从句流式实时播报</td></tr>
+<tr><td>Barge-in 打断</td><td>❌ 不支持</td><td>✅ 说话中直接插嘴即可打断</td></tr>
+<tr><td>多轮对话</td><td>每次需手动触发</td><td>一次唤醒，持续多轮</td></tr>
+<tr><td>静默检测</td><td>无</td><td>忙碌感知，不抢话</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># CLI 语音模式启动
+hermes voice
+
+# 桌面端：点击麦克风图标，或说唤醒词
+
+# 对话中途直接说话即可打断，模型自动感知并响应
+# 说出 "stop" 结束语音会话</code></pre>
+<div class="callout callout-success">
+<b>✅ Barge-in 原理：</b>模型接收到的 context 里内嵌了"用户已打断"的信号，所以打断后的回复会自然承接打断前的意图，而不是从头开始。
+</div>
+</div>
+
+<hr>
+
+<h2 id="wake">🔔 3. 本地唤醒词 &amp; 多 Profile 语音路由</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 唤醒词检测完全在本地运行，音频不上云。支持自定义唤醒词，以及不同唤醒词触发不同 profile。</p>
+<h3>实操栗子：配置自定义唤醒词</h3>
+<pre><code># 在 config.yaml 中配置
+voice:
+  wake_word: "hey hermes"        # 自定义唤醒词，支持任意短语
+  wake_engine: "openwakeword"    # 本地检测引擎，不上传音频
+  multi_profile_routing: true   # 不同唤醒词路由到不同 profile
+
+profiles:
+  work:
+    voice:
+      wake_word: "hey work"
+  personal:
+    voice:
+      wake_word: "hey home"</code></pre>
+<div class="callout callout-warn">
+<b>⚠️ 注意：</b>唤醒词必须是「开放词汇」短语，不能是单字或极易误触的词。建议 2~4 个音节，如 <code>hey hermes</code>、<code>小德小德</code>。
+</div>
+</div>
+
+<hr>
+
+<h2 id="voice-platform">📱 4. 跨平台语音消息接入</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 支持以下平台接收语音消息 → 自动转写 → 回复 → TTS 发回：WhatsApp、飞书（Lark）、钉钉（DingTalk）、LINE、QQ、微信（Weixin）、Photon。</p>
+<h3>实操栗子：配置飞书语音</h3>
+<pre><code># config.yaml
+platforms:
+  feishu:
+    enabled: true
+    voice:
+      stt_provider: "openai"      # gpt-transcribe
+      stt_language: "zh-CN"       # 强制中文转写
+      tts_provider: "minimax"    # 平台适配 TTS
+      tts_format: "opus"          # 自动适配平台格式</code></pre>
+<div class="callout callout-info">
+<b>💡 统一语言解析：</b>0.20 新增跨平台语言自动检测，解决「语音消息发出去变成英文转写」的经典问题——现在可以强制指定语言，或让系统自动检测。
+</div>
+</div>
+
+<hr>
+
+<h2 id="citations">🔬 5. Grounded Citations 可验证研究</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 研究类请求输出的每条 claim 都附有可验证来源：引用文本与实际页面文字精确匹配，而非 LLM 幻觉的摘要。</p>
+<table>
+<tr><th>模式</th><th>触发方式</th><th>输出</th></tr>
+<tr><td><strong>Grounded Mode</strong></td><td>使用 <code>grounded-citations</code> skill 或 <code>/research</code> 命令</td><td>每条 claim 带原文引用 + 页面链接</td></tr>
+<tr><td><strong>Fact-check Mode</strong></td><td>传入文档或 claim，用 <code>/factcheck</code> 命令</td><td>三类结果：属实 / 不实 / 无法验证</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># 在 skill 配置中指定来源域
+grounded_citations:
+  domains:
+    - arxiv.org
+    - github.com
+    - official-docs.example.com
+  factcheck_mode: true
+
+# 用法示例（Hermes 对话中）
+/research Gemini 3.6 Flash vs GPT-5.6 performance benchmarks 2026
+# → 输出带精确来源引用的研究报告</code></pre>
+<div class="callout callout-success">
+<b>✅ vs 0.18.x：</b>0.18 的研究输出依赖模型自身知识，无引用验证机制。0.20 的 grounded citations 在引用匹配层做事实校验，claim 引用的是真实页面文字，而非 LLM 重述。
+</div>
+</div>
+
+<hr>
+
+<h2 id="desktop">🖥️ 6. 桌面端平台化：Artifacts + 插件 SDK</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 桌面端从「聊天客户端」进化为「工作台」，新增三大能力：</p>
+
+<h3>6.1 Artifacts 实时预览 <span class="badge new">NEW</span></h3>
+<p>生成的 HTML/代码/App 以版本化卡片形式，在右侧预览区沙箱运行。代码改动后实时刷新。</p>
+
+<h3>6.2 插件 SDK <span class="badge new">NEW</span></h3>
+<p>官方首发插件：<strong>Kanban（看板）</strong>。</p>
+<pre><code># 安装官方 Kanban 插件
+hermes plugins install kanban
+
+# 插件能力：ctx.download / 浮动面板 / 多窗口</code></pre>
+
+<h3>6.3 全局快捷入口 <span class="badge new">NEW</span></h3>
+<p><kbd>Global Hotkey</kbd> 呼出快速输入框，任意位置捕获想法到任意 session。</p>
+
+<div class="callout callout-info">
+<b>💡 使用场景：</b>在看文档、刷代码时突然有想法，按全局快捷键 → 输入 → 自动路由到目标 session，不打断当前工作流。
+</div>
+</div>
+
+<hr>
+
+<h2 id="a2a">🤖 7. A2A v1.0 Agent-to-Agent 通信</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> Hermes 内置 A2A v1.0 协议实现，可与异构多 Agent 系统标准互联。这是 Issue #514 —— 社区最老的 Feature Request 之一。</p>
+<table>
+<tr><th>功能</th><th>说明</th></tr>
+<tr><td>Agent 发现</td><td>自动发现同网络内 A2A 兼容 Agent</td></tr>
+<tr><td>标准 Wire Protocol</td><td>HTTP/WebSocket 上的 JSON-RPC 2.0</td></tr>
+<tr><td>任务委派</td><td>向其他 Agent 发送任务、接收结果</td></tr>
+<tr><td>状态同步</td><td>多 Agent 之间状态一致性</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># config.yaml 配置 A2A
+a2a:
+  enabled: true
+  agent_id: "hermes-primary"
+  discover: true
+  registry:
+    - url: "http://agent-2:8100"
+      role: "researcher"
+
+# 在对话中委派任务
+/hermes 请让 researcher agent 调研 Tesla FSD 最新进展</code></pre>
+<div class="callout callout-warn">
+<b>⚠️ 前置要求：</b>对端 Agent 也必须支持 A2A v1.0 协议，不是任意 Agent 都能直接互通。
+</div>
+</div>
+
+<hr>
+
+<h2 id="webhook">🌐 8. 出站 Webhook + HMAC 签名</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> Hermes 从「被动响应」变为「主动推送」——可向任意 HTTP 端点发送带签名验证的生命周期事件。</p>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>session.start</code></td><td>新会话创建</td></tr>
+<tr><td><code>turn.complete</code></td><td>每轮对话完成</td></tr>
+<tr><td><code>tool.event</code></td><td>工具调用完成/失败</td></tr>
+<tr><td><code>delivery.retry</code></td><td>消息发送重试</td></tr>
+</table>
+<h3>实操栗子</h3>
+<pre><code># config.yaml
+webhooks:
+  - name: "ci-dashboard"
+    url: "https://ci.example.com/hermes-webhook"
+    secret: "your-hmac-secret-key"
+    events:
+      - "session.start"
+      - "turn.complete"
+      - "tool.event"
+    filter:
+      platforms: ["cli", "desktop"]
+
+# 接收方验签示例（Node.js）
+const crypto = require('crypto');
+function verifySignature(payload, signature, secret) {
+  const expected = crypto.createHmac('sha256', secret).update(payload).digest('hex');
+  return `sha256=${expected}` === signature;
+}</code></pre>
+<div class="callout callout-success">
+<b>✅ 集成场景：</b>CI/CD Dashboard 监听 session 事件 → 自动记录工时；Home Assistant 监听 tool.event → 触发自动化；自建 APM 接收 delivery.retry → 监控消息送达率。
+</div>
+</div>
+
+<hr>
+
+<h2 id="cli">💻 9. CLI 新命令速查</h2>
+<div class="section">
+<table>
+<tr><th>命令</th><th>功能</th><th>新增版本</th></tr>
+<tr><td><code>! &lt;shell-cmd&gt;</code></td><td>直接运行 shell 命令，不消耗模型 token</td><td>0.20.0</td></tr>
+<tr><td><code>/init</code></td><td>扫描项目，生成/更新 AGENTS.md</td><td>0.20.0</td></tr>
+<tr><td><code>/diff [staged|all|session]</code></td><td>查看差异，任意表面可用</td><td>0.20.0</td></tr>
+<tr><td><code>/context</code></td><td>分解上下文窗口占用详情</td><td>0.20.0</td></tr>
+<tr><td><code>/focus</code></td><td>精简输出视图，可恢复隐藏行</td><td>0.20.0</td></tr>
+<tr><td><code>Ctrl+S</code></td><td>半写 prompt 暂存到可浏览面板</td><td>0.20.0</td></tr>
+<tr><td><code>/model [name]</code></td><td>模糊匹配切换模型（fuzzy picker）</td><td>0.20.5</td></tr>
+<tr><td><code>Ctrl+P</code></td><td>命令面板（Command Palette）</td><td>0.20.5</td></tr>
+<tr><td><code>/status</code></td><td>更丰富的状态输出</td><td>0.20.5</td></tr>
+<tr><td><code>hermes import-agent</code></td><td>迁移 Claude Code / Codex CLI 配置</td><td>0.20.0</td></tr>
+<tr><td><code>hermes update --receipt</code></td><td>更新收据验证</td><td>0.20.5</td></tr>
+<tr><td><code>hermes worktree list / prune</code></td><td>工作树列表/清理</td><td>0.20.5</td></tr>
+</table>
+<pre><code># 直接运行 shell，不消耗 token
+! ps aux | grep hermes
+
+# 扫描项目生成 AGENTS.md
+hermes init
+
+# 模糊切换模型
+hermes model gpt5
+# → 自动模糊匹配最接近的 GPT-5 模型</code></pre>
+</div>
+
+<hr>
+
+<h2 id="tools">🔧 10. 工具自我修复 &amp; 迭代上限提升</h2>
+<div class="section">
+<h3>10.1 工具失败自我恢复</h3>
+<table>
+<tr><th>工具</th><th>改进</th><th>0.18.x 行为</th></tr>
+<tr><td>Terminal</td><td>超长输出自动落盘到文件，agent 可读回</td><td>截断，agent 丢失后半部分</td></tr>
+<tr><td>patch</td><td>检测重复应用 + 空白符不匹配诊断</td><td>盲目重试</td></tr>
+<tr><td>write_file</td><td>写后读取验证内容一致性</td><td>写完即结束</td></tr>
+<tr><td>search_files</td><td>空结果时探测近邻文件并提示</td><td>返回空，无补救</td></tr>
+<tr><td>所有工具</td><td>常见失败类型返回可操作建议</td><td>通用错误信息</td></tr>
+</table>
+<h3>10.2 迭代上限提升</h3>
+<p>默认工具调用迭代上限从 <code>90</code> 提升到 <code>500</code>。</p>
+<pre><code># config.yaml 中可精细控制
+agent:
+  max_iterations: 500   # 默认</code></pre>
+<div class="callout callout-danger">
+<b>⚠️ 风险提示：</b>迭代上限提升意味着自治任务运行时间更长，确认你理解任务范围再使用高上限。
+</div>
+</div>
+
+<hr>
+
+<h2 id="compress">🗜️ 11. 上下文压缩重构</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.20.0</span> 上下文压缩从「被动触发」变为「主动管理」，解决了长会话掉线索、压缩时大停顿等问题。</p>
+<table>
+<tr><th>特性</th><th>说明</th></tr>
+<tr><td>Proactive Tool-result 修剪</td><td>大 context window 模型主动识别低价值 tool result 并修剪</td></tr>
+<tr><td>Per-turn 微压缩</td><td>每个 turn 分散压缩成本，消除一次性大暂停</td></tr>
+<tr><td>Guaranteed N 条用户消息尾</td><td>最近 N 条用户消息永远保留，不被压缩</td></tr>
+<tr><td>进度感知超时</td><td>慢速摘要模型不再因超时失败</td></tr>
+<tr><td>Ghost-skill 防御</td><td>被修剪的 skill 不会再静默残存 session</td></tr>
+<tr><td>Per-model 配置</td><td>压缩阈值可按模型独立设置（token 绝对值）</td></tr>
+</table>
+<pre><code># config.yaml
+compression:
+  enabled: true
+  per_model_tuning:
+    gpt-4o:
+      max_context_tokens: 120000
+      prune_threshold: 0.4
+  guaranteed_user_message_tail: 5
+  progress_aware_timeout: true
+  ghost_skill_defense: true</code></pre>
+</div>
+
+<hr>
+
+<h2 id="secret">🔐 12. 密码管理器集成（Bitwarden / 1Password）</h2>
+<div class="section">
+<h3>变化了什么</h3>
+<p><span class="ver-tag">0.19.0</span> API 密钥不再需要写在明文 .env 文件，通过 <code>op://</code> 引用直接从密码库读取。</p>
+<table>
+<tr><th>提供商</th><th>引用格式</th><th>状态</th></tr>
+<tr><td>1Password</td><td><code>op://vault/item/field</code></td><td>✅ 官方支持</td></tr>
+<tr><td>Bitwarden</td><td><code>bw://item/field</code></td><td>✅ 官方支持</td></tr>
+</table>
+<pre><code># config.yaml 中使用 1Password 引用
+providers:
+  openai:
+    api_key: "op://MyVault/openai-api/key"
+
+secret_sources:
+  - type: "1password"
+    vaults: ["MyVault", "Work", "Personal"]
+    precedence: ["MyVault", "Work"]</code></pre>
+<div class="callout callout-success">
+<b>✅ 优势：</b>密钥不落磁盘 CI 日志、环境变量快照；多人团队共享引用路径而非明文值； vault 锁定后自动失效。
+</div>
+</div>
+
+<hr>
+
+<h2 id="model">🧠 13. 模型 &amp; 推理升级</h2>
+<div class="section">
+<h3>13.1 新增模型支持</h3>
+<table>
+<tr><th>模型</th><th>提供商</th><th>新增版本</th></tr>
+<tr><td>GPT-5.6（Sol/Terra/Luna/Pro）</td><td>OpenAI</td><td>0.19.0</td></tr>
+<tr><td>Grok 4.5 GA</td><td>xAI</td><td>0.19.0</td></tr>
+<tr><td>Moonshot K3</td><td>月之暗面</td><td>0.19.0</td></tr>
+<tr><td>Claude Sonnet 5 / Opus 5</td><td>Anthropic</td><td>0.19.0</td></tr>
+<tr><td>Fireworks AI（first-class）</td><td>Fireworks</td><td>0.19.0</td></tr>
+<tr><td>DeepInfra（first-class）</td><td>DeepInfra</td><td>0.19.0</td></tr>
+<tr><td>LM Studio JIT 加载</td><td>本地</td><td>0.19.0</td></tr>
+</table>
+<h3>13.2 推理深度精细化</h3>
+<p>新增 <code>max</code> / <code>ultra</code> 推理档位，可按模型/任务/MoA advisor 独立配置。</p>
+<pre><code># config.yaml
+reasoning:
+  effort:
+    default: "medium"
+    per_model:
+      "gpt-5.6-pro": "ultra"
+      "claude-opus-5": "max"
+
+# CLI 指定
+hermes --reasoning-effort ultra</code></pre>
+</div>
+
+<hr>
+
+<h2 id="patch">📦 14. 补丁版本累积修复（0.20.1 ~ 0.20.5）</h2>
+<div class="section">
+<table>
+<tr><th>版本</th><th>规模</th><th>关键修复 &amp; 改进</th></tr>
+<tr><td><strong>0.20.1</strong></td><td>656 PRs · 1,444 commits</td><td>桌面多 gateway 注册表、profile 级刷新、MCP 健康检查和 deep link；CLI Windows 探针修复；gateway 持久化模型路由；cron 强化；auth 穿透 profile 作用域</td></tr>
+<tr><td><strong>0.20.2</strong></td><td>397 PRs · 967 commits</td><td>MCP 2.x SDK 迁移；Bundled Bot Mode（teammate 协议）；Cua Driver 0.20 运行时契约；subprocess Python 隔离（PYTHONHOME/PYTHONPATH）；UTF-16 文件读取</td></tr>
+<tr><td><strong>0.20.3</strong></td><td>125 PRs · 250 commits</td><td>cron 调度器自愈（EMFILE 恢复、stale-claim 调和、wedged-job 重启）；session 交接数据零丢失；Gemini 3 tool-call ID 保留</td></tr>
+<tr><td><strong>0.20.4</strong></td><td>74 PRs · 146 commits</td><td>桌面毛玻璃/半透明界面（macOS 预选）；tabbed SESSIONS|BOTS 侧边栏；Bot Mode 群聊 Markdown 渲染；NVIDIA SkillEvaluator Tier 1 安全扫描；原生 OS 通知</td></tr>
+<tr><td><strong>0.20.5</strong></td><td>323 PRs · 746 commits</td><td>Bot Mode group-room 线程；可折叠对话摘要；PDF/文件附件拖放；无密钥 web tier（5 vendor 自由轮换）；<code>/model</code> 模糊选择器；Ctrl+P 命令面板；cron 持久化记忆 + per-job 推理档位</td></tr>
+</table>
+</div>
+
+<hr>
+
+<h2 id="update">⚡ 15. 如何升级</h2>
+<div class="section">
+<pre><code># 方式一：已有安装（推荐）
+hermes update
+
+# 方式二：新安装
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+
+# 方式三：验证更新结果
+hermes update --receipt
+hermes --version</code></pre>
+<p>建议直接从 <strong>0.18.x 升级到 0.20.5</strong>（latest），无需逐版升级。</p>
+<div class="callout callout-info">
+<b>📌 提示：</b>0.20.x 相比 0.18.x 有大量配置字段变化。更新后首次启动会自动尝试迁移配置，但建议提前备份 <code>~/.hermes/config.yaml</code>。
+</div>
+</div>
+
+<hr>
+
+<h2>📊 0.18 vs 0.20 核心定位对比</h2>
+<div class="section">
+<table>
+<tr><th>维度</th><th>0.18 — The Judgment Release</th><th>0.20 — The Herald Release</th></tr>
+<tr><td>核心叙事</td><td>让 Agent <strong>证明</strong>自己的工作</td><td>让 Agent <strong>像信使</strong>一样行动</td></tr>
+<tr><td>招牌功能</td><td>Evidence-led completion、MoA、<code>/learn</code>、<code>/journey</code>、background fan-out</td><td>实时语音 + barge-in、桌面平台化（Artifacts + SDK）、A2A v1.0、grounded citations、80% 冷启动加速</td></tr>
+<tr><td>最大变化</td><td>输出质量保障</td><td>输入/输出速度 + 多模态交互</td></tr>
+<tr><td>目标用户</td><td>深度用户、研究者</td><td>所有层级用户（语音降低门槛）</td></tr>
+</table>
+</div>
+
+<div class="footer">
+<p>📝 本指南基于 GitHub 官方 Release Notes 整理 · Hermes Agent v0.20.5 · 2026-08-27</p>
+<p>🔗 <a href="https://github.com/NousResearch/hermes-agent/releases">官方 Release Notes</a> · <a href="https://github.com/binbinao/openclaw-impact-report">仓库地址</a></p>
+</div>
+
+</body>
+</html>
