@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WorkBuddy 深度调研与国内 AI 办公 Agent 竞品格局（2026-09-02）</title>
+<meta name="description" content="腾讯 WorkBuddy 深度调研：与千问办公/扣子/WPS/Manus 横向对比，三层竞争格局，2026Q4-2027Q1 发展预判与市场占有推演">
+<style>
+:root{
+  --bg:#F6F4EF; --card:#FFFFFF; --text:#1b1a17; --muted:#6f6c63;
+  --clay:#C95D3E; --clay-soft:#F6E7DF; --olive:#6C7A4F; --rust:#A6482F;
+  --sky:#3E6C7E; --line:#E4DFD3; --th:#EFEAE0; --code:#F1EDE3;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  font-size:15px; line-height:1.75;}
+.wrap{max-width:960px; margin:0 auto; padding:32px 22px 90px;}
+.topbar{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; font-size:13px;}
+.topbar a{color:var(--clay); text-decoration:none; border:1px solid var(--clay); border-radius:20px; padding:3px 14px; transition:.15s;}
+.topbar a:hover{background:var(--clay); color:#fff;}
+.topbar .meta{color:var(--muted);}
+article{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:44px 48px 52px;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);}
+header h1{font-size:29px; line-height:1.45; font-weight:700; letter-spacing:.2px;}
+.kicker{color:var(--clay); font-size:13px; font-weight:600; margin-bottom:10px; letter-spacing:1px;}
+.badges{margin:14px 0 4px;}
+.badge{display:inline-block; font-size:12px; padding:2px 12px; border-radius:14px; margin:3px 6px 3px 0;
+  background:var(--clay-soft); color:var(--rust); border:1px solid #e8c9bd;}
+.badge.olive{background:#eef0e4; color:var(--olive); border-color:#d8ddc2;}
+hr.sep{border:none; border-top:1px solid var(--line); margin:26px 0;}
+.toc{background:#fbfaf6; border:1px solid var(--line); border-left:4px solid var(--clay);
+  border-radius:10px; padding:16px 20px; margin:22px 0 8px;}
+.toc-title{font-weight:700; font-size:14px; margin-bottom:8px; color:var(--rust);}
+.toc ul{list-style:none;}
+.toc li.l1{margin:6px 0 2px; font-weight:600;}
+.toc li.l2{margin:3px 0 1px; padding-left:14px; font-size:14px;}
+.toc li.l3{margin:2px 0 1px; padding-left:28px; font-size:13px; color:var(--muted);}
+.toc a{color:inherit; text-decoration:none;}
+.toc a:hover{color:var(--clay);}
+h1,h2,h3,h4{line-height:1.5;}
+h2{font-size:21px; margin:38px 0 14px; padding:6px 0 8px 14px; border-left:5px solid var(--clay);
+  border-bottom:1px solid var(--line);}
+h3{font-size:16.5px; margin:26px 0 10px; color:var(--rust);}
+h4{font-size:15px; margin:20px 0 8px; color:var(--olive);}
+p{margin:10px 0;}
+ul,ol{margin:10px 0 10px 4px; padding-left:24px;}
+li{margin:5px 0;}
+strong{color:#0f0e0c;}
+em{color:var(--muted);}
+a{color:var(--sky); text-decoration:none; border-bottom:1px dotted #9db8c4;}
+a:hover{color:var(--clay); border-bottom-color:var(--clay);}
+code{font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.88em; background:var(--code);
+  padding:1px 6px; border-radius:5px;}
+blockquote{margin:16px 0; padding:12px 18px; background:#faf6ef; border-left:4px solid var(--clay);
+  border-radius:0 8px 8px 0; color:#5c514a; font-size:14px;}
+blockquote p{margin:4px 0;}
+.table-wrap{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:10px;}
+table{border-collapse:collapse; width:100%; font-size:13.5px; background:#fff;}
+th{background:var(--th); color:#33302a; font-weight:600; text-align:left; padding:9px 12px;
+  border-bottom:2px solid var(--clay); white-space:nowrap;}
+td{padding:8px 12px; border-bottom:1px solid #efeae0; vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#fdfaf4;}
+hr{border:none; border-top:1px solid var(--line); margin:28px 0;}
+footer{margin-top:26px; font-size:12.5px; color:var(--muted); text-align:center;}
+@media (max-width:720px){
+  article{padding:26px 18px 34px;}
+  header h1{font-size:22px;}
+  h2{font-size:18.5px;}
+  th,td{padding:6px 8px; white-space:normal;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a href="index.html">← 返回报告集</a>
+    <span class="meta">纪多斌 · 调研报告集 · AI &amp; 科技</span>
+  </div>
+  <article>
+    <header>
+      <div class="kicker">DEEP RESEARCH · 竞品调研 · 2026-09-02</div>
+      <h1>WorkBuddy 深度调研与国内 AI 办公 Agent 竞品格局分析</h1>
+      <div class="badges">
+        <span class="badge">腾讯 WorkBuddy</span><span class="badge">千问办公</span>
+        <span class="badge olive">AI 办公 Agent</span><span class="badge olive">市场推演</span>
+      </div>
+      <p style="color:var(--muted); font-size:13px; margin-top:12px;">
+        事实均有公开来源 · 「判断/预测」为分析推演 · 市场占有为区间估计 · 数据截至 2026-09-01
+      </p>
+    </header>
+    ['<nav class="toc"><div class="toc-title">📑 目录</div><ul>', '<li class="l1"><a href="#sec-1">WorkBuddy 深度调研与国内 AI 办公 Agent 竞品格局分析</a></li>', '<li class="l2"><a href="#sec-2">摘要（TL;DR）</a></li>', '<li class="l2"><a href="#sec-3">一、WorkBuddy 是谁：事实画像</a></li>', '<li class="l3"><a href="#sec-4">1. 基本盘</a></li>', '<li class="l3"><a href="#sec-5">2. 六个月演化路径（官方更新日志还原）</a></li>', '<li class="l3"><a href="#sec-6">3. 优势与短板（判断）</a></li>', '<li class="l2"><a href="#sec-7">二、国内同类产品横向比较</a></li>', '<li class="l3"><a href="#sec-8">1. 竞争地图：三层结构</a></li>', '<li class="l3"><a href="#sec-9">2. 核心竞品逐一拆解（2026 年当下状态）</a></li>', '<li class="l3"><a href="#sec-10">3. 关键横评对照表</a></li>', '<li class="l2"><a href="#sec-11">三、我的核心洞察</a></li>', '<li class="l2"><a href="#sec-12">四、未来 3-6 个月（2026Q4-2027Q1）发展预判与市场占有</a></li>', '<li class="l3"><a href="#sec-13">1. 大盘判断</a></li>', '<li class="l3"><a href="#sec-14">2. 分玩家推演（3-6 个月）</a></li>', '<li class="l3"><a href="#sec-15">3. 6 个月后（2027 年一季度）L1 细分份额情景表（判断）</a></li>', '<li class="l3"><a href="#sec-16">4. 需要盯的先行指标（建议月度跟踪）</a></li>', '<li class="l2"><a href="#sec-17">五、结论（给决策者的一句话）</a></li>', '<li class="l2"><a href="#sec-18">附录：主要信息来源</a></li>', '</ul></nav>']
+    <h1><span id="sec-1"></span>WorkBuddy 深度调研与国内 AI 办公 Agent 竞品格局分析</h1>
+<blockquote>
+<p>调研日期：2026-09-02｜方法：公开网页/官方文档/产品更新日志/媒体报道交叉验证｜数据时效截至 2026-09-01
+说明：文中「事实」均有公开来源；标注「判断/预测」的部分为基于事实的分析推演，市场占有数字为区间估计，非第三方审计数据。</p>
+</blockquote>
+<hr />
+<h2><span id="sec-2"></span>摘要（TL;DR）</h2>
+<ul>
+<li><strong>WorkBuddy 是腾讯云（CodeBuddy 团队）于 2026 年 3 月推出的"全场景 AI Agent 办公工作台"</strong>：桌面端为主、Web/小程序/移动端为辅，主打"深度调研 + 交付文档/表格/PPT/网页等产物"，并以多模型路由（DeepSeek V4、Kimi K2.6、GLM 等，非绑定混元）、技能/专家/MCP 生态、企微/微信/钉钉/飞书多 IM 接入、企业版（SaaS/专有云）构成完整打法。</li>
+<li><strong>它开创了国内"大厂级桌面 AI 办公工作台"这一细分品类，并引发了 5 个月后阿里的像素级跟进</strong>：2026-08-24 阿里"千问办公 QwenWork 1.0.0"正式上线，产品结构几乎一一对应，且通过钉钉首页首推 + 硬广投放（上半年 AI 应用硬广份额第一，35.9%）+ 阿里云企业渠道全力放大。</li>
+<li>国内竞争呈现<strong>三层结构</strong>：①桌面 AI 工作台原生赛道（WorkBuddy vs 千问办公 vs 扣子空间/豆包工作任务 vs Manus 等）；②办公套件内嵌 AI（WPS AI，装机量最大）；③协同平台内 AI（钉钉、飞书、企业微信/腾讯文档）。</li>
+<li>我的核心判断：<strong>该赛道 6 个月内不会出现赢家通吃，决定性变量是"生态入口 + 企业采购 + Agent 可靠性"，而不是单点模型能力</strong>；市场占有将向"腾讯系/阿里系"双寡头收敛，字节因入口分散暂居第三，金山靠存量守住套件基本盘，独立创业公司（如 Manus）继续被挤压。</li>
+</ul>
+<hr />
+<h2><span id="sec-3"></span>一、WorkBuddy 是谁：事实画像</h2>
+<h3><span id="sec-4"></span>1. 基本盘</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>事实</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出品方</td>
+<td>腾讯云，研发来自腾讯云代码助手 CodeBuddy 团队（2026-01-19 起内部 2000+ 员工试用，2026-02-06 外部内测，官方更新日志记录 4.5.0 于 2026-03-04 发布，公开报道口径 2026-03-09 正式上线）</td>
+</tr>
+<tr>
+<td>定位</td>
+<td>全场景 AI Agent 办公工作台，覆盖日常办公、代码开发、设计创意；官网文案强调"深度调研：从查资料到给结论，15 分钟交付报告"</td>
+</tr>
+<tr>
+<td>形态</td>
+<td>桌面客户端（macOS/Windows）+ Web + 小程序 + 移动端；另有海外版（workbuddy.ai / intl.cloud.tencent.com，强调直连全球办公生态、可接入国际领先模型）</td>
+</tr>
+<tr>
+<td>模型策略</td>
+<td>多模型路由，非绑定自研：已见 DeepSeek V4、Kimi K2.6、GLM 等接入；提供快速/均衡/极致档位与思考强度/上下文长度调节；支持自定义模型；2026-06 前后推出 Token 计费（Token Plan）</td>
+</tr>
+<tr>
+<td>生态连接</td>
+<td>与 CodeBuddy 同账号积分共享；资料库接腾讯文档/ima 知识库/乐享；IM 接入企业微信、微信、钉钉、飞书、QQ；连接器体系（MCP 兼容）</td>
+</tr>
+<tr>
+<td>定价（官方文档口径）</td>
+<td>个人：体验版免费；标准版 ¥99/月（连续订阅有折扣）；高级版 ¥199/月；旗舰版 ¥999/月。2026-07-01 起由单一专业版改为三档订阅（老用户保价 ¥58/月至 2026-12-31）。企业：SaaS 版 198 元/人/月；专有云版 316 元/人/月（100 席起）；另有积分加量包</td>
+</tr>
+<tr>
+<td>更新节奏</td>
+<td>极高：3 月至今约 3-7 天一个版本（4.5.0 → 5.5.x）</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="sec-5"></span>2. 六个月演化路径（官方更新日志还原）</h3>
+<ul>
+<li><strong>3 月（发布期）</strong>：4.5.0 正式发布 → 4.6.x 上专家中心、MCP 集成、插件市场、企微/钉钉/飞书/QQ 多渠道 Bot、定时任务、微信 ClawBot、SkillHub；4.7-4.10 补技能安全检测、产物分享、元宝搜索、自定义模型、computer-use（macOS 实验）。</li>
+<li><strong>4-5 月（产品成型期）</strong>：4.21（4/28）上腾讯文档资料库、图表展示、视频/图片生成水印；<strong>5.0.0（6/3）上 Teams 团队协作</strong>（项目/成员/网盘/看板/消息中心）+ 腾讯文档深度集成 + 锁屏远程。</li>
+<li><strong>6-7 月（商业化期）</strong>：Token Plan、自定义专家、企业自建 Skill/插件、微信支付插件（AI 内支付）、视频生成升级、<strong>7/1 三档订阅体系上线</strong>、企业版（SaaS/专有云）发布。</li>
+<li><strong>8-9 月（纵深+行业化）</strong>：5.4.x 上 Worktree 并行开发任务、Git 分支、独立本地终端、3D 生成、本地 PPT AI 编辑、图片处理全家桶、微信系统分享入口直达；<strong>5.5.0（9/1）上"行业 Buddy"应用</strong>（面向具体岗位/行业封装）。</li>
+<li><strong>隐含信号</strong>：从"个人效率工具"快速向"团队协作 + 企业合规 + 行业方案"爬升，与 CodeBuddy 形成"代码侧/办公侧"双 Agent 产品矩阵，复用同一账号与积分体系。</li>
+</ul>
+<h3><span id="sec-6"></span>3. 优势与短板（判断）</h3>
+<p><strong>优势</strong>
+1. 先发 + 迭代速度：比最接近的大厂竞品早约半年，版本节奏行业最快；
+2. 双栖基因：CodeBuddy 带来的"真 Agent（执行文件/终端/浏览器）"能力比传统对话助手高一个段位，多 Agent 并行交付研究/文档/PPT 的体验在国内属于第一梯队；
+3. 生态纵深：腾讯文档 + ima + 企微/微信入口 + 小程序，是"个人 Agent → 组织协作"最顺的路径之一；海外版同时打开出海想象；
+4. 中立模型策略：不绑死混元，接 DeepSeek/Kimi/GLM，短期体验占优且规避"自研模型拖后腿"风险。</p>
+<p><strong>短板（判断）</strong>
+1. 入口焦虑：C 端最大流量在元宝/微信，WorkBuddy 需"下载桌面客户端"，获客成本高、留存靠重度任务；
+2. 腾讯协同办公的 B 端基本盘（企微/文档）弱于阿里钉钉与字节飞书在各自圈层的统治力；
+3. 商业化刚起步（7 月才分档定价、涨价），个人付费转化与企业大单都需要时间；
+4. "代码 Agent"心智过强，办公场景心智（尤其女性/非技术白领）尚未建立。</p>
+<hr />
+<h2><span id="sec-7"></span>二、国内同类产品横向比较</h2>
+<h3><span id="sec-8"></span>1. 竞争地图：三层结构</h3>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>定义</th>
+<th>代表玩家</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 桌面 AI 工作台（原生 Agent，交付产物）</td>
+<td>独立客户端，任务式执行并交付文档/表格/PPT/网页</td>
+<td><strong>WorkBuddy（腾讯）</strong>、<strong>千问办公（阿里）</strong>、扣子空间/扣子 2.0（字节）、Manus、智谱清言/AutoGLM 电脑助手、Kimi</td>
+</tr>
+<tr>
+<td>L2 办公套件内嵌 AI</td>
+<td>在既有 Office 里做 AI 增强</td>
+<td><strong>WPS AI（金山）</strong>、Microsoft 365 Copilot（世纪互联，参考）</td>
+</tr>
+<tr>
+<td>L3 协同平台内 AI</td>
+<td>在 IM/协作平台内做 AI 助理</td>
+<td>钉钉 AI（+AI 听记/表格/会议）、飞书 AI（智能伙伴，定位"真能用、真落地的企业 AI 助手"）、企业微信/腾讯文档 AI（腾讯侧）</td>
+</tr>
+</tbody>
+</table>
+<h3><span id="sec-9"></span>2. 核心竞品逐一拆解（2026 年当下状态）</h3>
+<p><strong>① 千问办公 QwenWork（阿里）——最直接的对手，2026-08-24 上线</strong>
+- 定位："一站式 AI 办公平台，不止于对话，更注重交付"；slogan"专业人士，都用千问办公"；覆盖内容创作、数据分析、专业研究、文件处理、PPT、网页。
+- 产品结构几乎与 WorkBuddy 镜像：AI 任务 + 多模型选择、本地文件/文件夹处理、设计/写作/PPT 专业工作台、文档/表格/PPT/PDF、网页制作与发布、浏览器+桌面操作（computer-use）、技能/专家套件/连接器（MCP）、IM 频道（钉钉/飞书/企微/Slack）、定时任务、语音、记忆（"意识"）、应用快照、个人网盘；企业版含后台/SSO/积分限额。
+- 差异化打法：<strong>钉钉深度绑定</strong>（授权后可查日程/文档/联系人、处理审批；"钉钉办公连接器 DWS"持续迭代）；客户端覆盖 <strong>HarmonyOS</strong>；专家套件按岗位（HR/律师/财务/分析师/教师等）封装；上线即给新用户 2000 积分 + 每日登录积分。
+- 定价（官方文档）：个人免费版 0 元；标准版 98 元/月（连续包月 78、年付 823）；高级版 198 元/月（连续包月 158、年付 1663）；企业版走阿里云席位+积分。
+- 渠道：钉钉官网首页主下载位 + 阿里云 + 千问 App + 重投放（QuestMobile：2026 上半年 AI 应用硬广投放占比千问 35.9% 列第一）。
+- 短板（判断）：比 WorkBuddy 晚约 5 个半月、桌面端暂不支持企业订阅、生态（除钉钉外）深度待补。</p>
+<p><strong>② 扣子/扣子空间 + 豆包（字节）——三线夹击但入口分散</strong>
+- Coze 2.0（2026-01 升级）：官方定位"职场 AI 伙伴与一站式 AI 开发平台"，可操作电脑和手机、直接交付结果，强化 AgentPlan（长期规划）、技能、连接器与多体协同；另有"扣子编程"做 vibe coding。
+- 豆包："工作任务"模式 2026 年全新改版为职场 AI Agent；桌面端聚合对话/联网搜索/深度研究报告/图文视频生成/PPT/文档/表格，新用户赠送 30 天会员；Seedance 2.0 视频能力接入。
+- 飞书：官网已改定位为"字节跳动旗下 AI 工作平台"，AI 产品页强调"真能用、真落地的企业 AI 助手"，主打 B 端大客户场景。
+- 评价（判断）：字节是全赛道唯一"模型（豆包）+ 平台（扣子）+ 协同（飞书）"三层都有的公司，但<strong>三层分属不同团队、缺少统一入口</strong>，个人职场 Agent 心智被扣子承担、企业入口被飞书承担、C 端流量在豆包——协同成本是最大变量。</p>
+<p><strong>③ WPS AI（金山办公）——存量最大的"隐形对手"</strong>
+- 形态：AI 能力内置在 WPS Office 客户端与金山文档中（写作/PPT/表格/PDF/阅读 + 灵犀对话式助手），国内月活设备数亿级，是"套件内嵌 AI"装机量第一。
+- 2026 状态：随 WPS 云化与会员体系推进 AI 商业化（AI 功能向超级会员/AI 会员收敛），但其产品形态仍是"Office 的 AI 增强"，而非独立任务式工作台。
+- 评价（判断）：对"轻办公人群"（写作、PPT、表格处理）是 WorkBuddy 的最大分流者；但重度研究/多步 Agent 任务不是 WPS 的主场。风险在于：金山若把"灵犀"升级为独立工作台，将直接进入 L1 赛道。</p>
+<p><strong>④ 钉钉 AI / 飞书 AI（L3 协同层）</strong>
+- 钉钉：官网口径 7 亿用户、2700 万+企业组织，2026 年 slogan"钉钉，AI 时代的工作方式"，AI 听记/AI 表格/AI 会议 + 内嵌 AI 助理；<strong>关键动作是把"千问办公"作为钉钉首页首推下载</strong>——阿里事实上采用"钉钉管协同、千问办公管 AI 任务交付"的双产品策略。
+- 飞书：AI 定位企业级（智能伙伴/企业 AI 助手），在先进制造、互联网、出海企业渗透率高。
+- 评价（判断）：L3 玩家短期内不直接抢 WorkBuddy 的个人桌面场景，但会在企业采购中形成"二选一/主入口"之争——<strong>企业客户大概率只会在一个协同生态内深度使用 AI Agent</strong>，这是 WorkBuddy vs 千问办公的终极战场。</p>
+<p><strong>⑤ Manus（蝴蝶效应）——独立创业公司的样本</strong>
+- 事实：2026 年 4 月底，Meta 拟以超 20 亿美元收购其母公司（蝴蝶效应/中国背景），<strong>被国家发改委外商投资安全审查否决、交易撤销</strong>，公司恢复独立运营。
+- 含义（判断）：①通用任务型 Agent 的产品力得到国际巨头背书；②但国内 AI Agent 创业公司的资本化/出海路径被政策收紧，独立公司难以与大厂拼生态与补贴；③未来 3-6 个月 Manus 大概率走"海外 + 开发者 + 高客单"路线，在国内桌面办公份额有限。</p>
+<p><strong>⑥ 通用对话助手（元宝/豆包/Kimi/智谱/DeepSeek 等）——边界模糊的潜在颠覆者</strong>
+- 元宝（腾讯）上半年硬广投放第二（32.8%），与千问在 C 端买量对打；这类"超级入口"一旦把 Agent 执行做成默认能力，会从上方压制独立工作台。Kimi（K2.6 被 WorkBuddy 接入，说明"模型厂 + 工作台"竞合并存）、智谱清言/AutoGLM（电脑操作 Agent）同样在向"任务交付"演进。</p>
+<h3><span id="sec-10"></span>3. 关键横评对照表</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>WorkBuddy（腾讯）</th>
+<th>千问办公（阿里）</th>
+<th>扣子 2.0/豆包任务（字节）</th>
+<th>WPS AI（金山）</th>
+<th>Manus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上线/成型</td>
+<td>2026-03 正式发布，5.5.x</td>
+<td>2026-08-24 正式 1.0.0</td>
+<td>Coze 2.0：2026-01</td>
+<td>存量套件迭代</td>
+<td>2025-03 走红，2026 独立运营</td>
+</tr>
+<tr>
+<td>主打场景</td>
+<td>深度调研+多类产物交付</td>
+<td>专业岗位工作台+钉钉协同</td>
+<td>职场任务+开发平台</td>
+<td>文档/PPT/表格增强</td>
+<td>通用任务自主执行</td>
+</tr>
+<tr>
+<td>客户端</td>
+<td>桌面+Web+小程序+移动</td>
+<td>桌面+Web（桌面端暂无企业订阅）</td>
+<td>Web/桌面/移动/手机操作</td>
+<td>Office 客户端内嵌</td>
+<td>Web/桌面</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>多模型路由（DeepSeek V4/Kimi K2.6/GLM 等）</td>
+<td>阿里系为主（Qwen）+多模型</td>
+<td>豆包/Seed 系</td>
+<td>自研+多模型</td>
+<td>多模型</td>
+</tr>
+<tr>
+<td>生态王牌</td>
+<td>腾讯文档/ima/企微/微信/小程序/CodeBuddy</td>
+<td>钉钉/千问 App/阿里云/鸿蒙</td>
+<td>飞书/豆包流量/开源社区</td>
+<td>数亿装机/会员体系</td>
+<td>产品口碑/海外</td>
+</tr>
+<tr>
+<td>企业版</td>
+<td>SaaS 198 元/人/月、专有云 316 元/人/月</td>
+<td>企业版走阿里云席位</td>
+<td>有企业方案</td>
+<td>会员+机构授权</td>
+<td>无（主要个人/团队）</td>
+</tr>
+<tr>
+<td>个人付费（官方）</td>
+<td>免费体验；标准 99/高级 199/旗舰 999 元月</td>
+<td>免费；标准 98/高级 198 元月（连续包月 78/158）</td>
+<td>部分免费+会员</td>
+<td>WPS 会员+AI 权益</td>
+<td>邀请/积分制为主</td>
+</tr>
+<tr>
+<td>主要短板</td>
+<td>办公 B 端入口弱于钉钉/飞书</td>
+<td>晚发布半年、桌面企业版未开</td>
+<td>字节内部入口分散</td>
+<td>非任务式 Agent</td>
+<td>资本/政策受限、无生态</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2><span id="sec-11"></span>三、我的核心洞察</h2>
+<ol>
+<li>
+<p><strong>WorkBuddy 真正做的事，是把"编程领域的 CodeBuddy 范式"平移到了办公领域</strong>：任务式执行、产物交付、多 Agent 并行、技能生态。这个范式被千问办公在 5 个月内几乎 1:1 复制，说明"对话式助手 ≠ 办公交付"已成为大厂共识，赛道进入<strong>对标-贴身肉搏</strong>阶段，未来竞争焦点将从"谁的模型聪明"转向"谁的交付物可用、连接器多、生态深"。</p>
+</li>
+<li>
+<p><strong>壁垒不在模型，在"入口 + 数据 + 分发"</strong>：阿里用钉钉（组织入口）+ 千问 App/硬广（C 端入口）+ 阿里云（企业采购入口）三路推千问办公；腾讯的牌是微信/企微（IM 入口）+ 腾讯文档/ima（数据入口）+ 云渠道。谁的 Agent 能"长在用户每天打开的应用里"，谁就赢。这解释了为什么两家都要做"IM 频道里 @ Agent"——<strong>IM 是 Agent 的第一分发渠道</strong>。</p>
+</li>
+<li>
+<p><strong>千问办公 8/24 上线是一次"迟到的卡位"，而不是创新</strong>：功能镜像度高、补贴力度大（2000 积分+每日登录）、定价贴身（98 vs 99），说明阿里把 WorkBuddy 视为必须正面压制的战略威胁。未来 6 个月真正的看点不是千问办公有没有 WorkBuddy 的功能，而是<strong>钉钉 7 亿用户里能转化多少"专业人士"、以及企业版能否借阿里云快速签单</strong>。</p>
+</li>
+<li>
+<p><strong>字节的问题不是能力，是"一个公司三个入口"</strong>：扣子、豆包、飞书分头做 Agent，用户心智与数据被打散。若字节未来半年不把"扣子=字节官方职场 AI"这一定位推到飞书/豆包流量前台，将在 L1 赛道从"可争第一"滑向"第三"。</p>
+</li>
+<li>
+<p><strong>WPS 是最大的"沉默分流者"</strong>：对绝大多数中国白领，第一次"AI 做 PPT/写文档"发生在 WPS 里，而不是任何独立工作台。金山不需要做出最强 Agent，只需要让 AI 在存量 Office 流程里"够用"，就能截走最大量的轻办公需求。WorkBuddy/千问办公要吃的是 WPS 之上的<strong>重度研究、跨应用、多步任务</strong>增量市场。</p>
+</li>
+<li>
+<p><strong>Manus 被 Meta 收购否决，是一个市场结构信号</strong>：监管层对"中国基因通用 Agent 被外资控制"高度敏感。后果是：①本土独立 Agent 公司资本化路径收窄，估值逻辑受损；②人才与创业资源进一步流向大厂；③该细分"最终格局由大厂决定"的概率上升。</p>
+</li>
+<li>
+<p><strong>下一阶段主战场是"企业采购 + 合规"</strong>：三家头部（腾讯/阿里/字节）都已把企业版/SaaS/私有化/SSO 排上日程。Agent 要进企业，必须先过"权限、审批、审计、数据不出域"四关。<strong>谁先把"可审计的企业级 Agent 治理"做扎实，谁就在 2027 年的企业预算里占住位置</strong>——这是 WorkBuddy（专有云 + CodeBuddy 企业经验）与千问办公（阿里云政企渠道）最值得盯的赛点。</p>
+</li>
+<li>
+<p><strong>短期杀手场景仍是"深度调研"</strong>：WorkBuddy 用"15 分钟交付一份调研报告"完成破圈，本质是对标 NotebookLM/Perplexity 的"研究即服务"。调研/周报/行业分析是白领最高频、最愿意付费的任务类型；未来 6 个月各家都会围绕"研究 → 报告 → 汇报 PPT"这条链路做深，而非盲目扩展功能数量。</p>
+</li>
+</ol>
+<hr />
+<h2><span id="sec-12"></span>四、未来 3-6 个月（2026Q4-2027Q1）发展预判与市场占有</h2>
+<blockquote>
+<p>口径说明：以下"市场占有"指<strong>国内"桌面 AI 办公工作台/任务式办公 Agent"细分（L1）的用户份额估计</strong>，不含 WPS/钉钉/飞书这类存量套件与协同平台的全体用户（其体量不在同一口径）。数字为区间判断，用于方向性参考。</p>
+</blockquote>
+<h3><span id="sec-13"></span>1. 大盘判断</h3>
+<ul>
+<li>行业背景（QuestMobile 2026 H1）：AI 原生应用月活合计约 5 亿（同比 +85%），但形态正在迁移——AI 网页端/插件下滑，PC 客户端增长（AI 办公的付费与重度使用在向桌面端集中），办公行业进入"结构重构期"。L1 工作台目前仍是<strong>千万级以下的早期市场</strong>，渗透率（相对数亿办公人口）个位数百分比，未来 6 个月的核心是"从尝鲜到习惯、从个人到企业"。</li>
+<li>行业将发生的三件事（判断）：①大厂补贴战升级（免费积分/连续包月折扣/企业免费试用）；②"IM 内 @Agent + 定时任务"成为标配，Agent 从"打开才用"变成"挂在聊天里随时调用"；③第一波企业批量采购案例出现（2026Q4-2027Q1），标杆客户决定 2027 年格局。</li>
+</ul>
+<h3><span id="sec-14"></span>2. 分玩家推演（3-6 个月）</h3>
+<p><strong>WorkBuddy（腾讯）——守成 + 上攻企业</strong>
+- 预期动作：持续推进"行业 Buddy"与技能生态（对标千问专家套件）；深挖企微/微信入口与小程序；把 CodeBuddy 企业客户交叉销售 WorkBuddy；海外版加大推广；预计 2026Q4-2027Q1 出"多 Agent 团队协作 + 企业治理"的旗舰更新。
+- 风险：老用户保价到期（2026-12-31）后涨价反噬口碑；元宝若推出同源免费工作台会内部打架。
+- 份额判断：L1 细分当前约 35-45%（先发 + 迭代优势下的最大单一玩家）；未来 6 个月绝对用户数继续增长，但份额被千问办公分流，预计回落至 <strong>25-35%</strong>。</p>
+<p><strong>千问办公（阿里）——最强的追赶者</strong>
+- 预期动作：复制并反超 WorkBuddy 功能清单；桌面端补企业订阅；以"钉钉组织内 Agent"场景打差异化（审批/日程/文档闭环）+ 鸿蒙生态 + 阿里云企业签单；投放预计保持高位（对标元宝的买量战）。
+- 判断：增长斜率取决于钉钉用户转化率。乐观情形下 6 个月内冲到 L1 第二甚至逼近 WorkBuddy。
+- 份额判断：当前（上线仅一周）&lt;5%；6 个月后预计 <strong>20-30%</strong>（若钉钉/阿里云转化不及预期则 10-15%）。</p>
+<p><strong>字节（扣子 2.0 + 豆包工作任务 + 飞书）——三线整合是唯一变量</strong>
+- 预期动作：大概率把"扣子"进一步推到豆包/飞书前台（否则难以起量）；扣子编程与 Agent 开发社区继续做开发者心智；飞书在企业端做"智能伙伴+工作台"方案。
+- 份额判断：L1 细分当前约 10-15%（扣子空间+豆包任务口径）；若字节完成入口整合，6 个月后可达 <strong>15-20%</strong>；若不整合，回落至 10% 左右。</p>
+<p><strong>WPS AI（金山）——套件口径第一、L1 口径边缘</strong>
+- 预期动作：AI 权益继续与会员深度绑定（提 ARPU），"灵犀"向任务式演进；关注其是否推出独立桌面 Agent（若推出将改变 L1 格局）。
+- 判断：在"所有 AI 办公行为"总口径中，WPS 仍是使用人数第一；但在 L1 独立工作台口径中不占主要份额（&lt;5%），其威胁体现在<strong>分流轻办公需求</strong>而非直接抢 L1 用户。</p>
+<p><strong>Manus 及其他独立/通用助手（智谱、Kimi、元宝、豆包等）</strong>
+- Manus：恢复独立后预计聚焦海外与高价值任务，国内 L1 份额 &lt;3-5%，影响力大于份额。
+- 通用助手（元宝/豆包/Kimi/智谱）：若把 Agent 执行做成默认能力，6 个月后可能以"对话入口"形态截胡 L1 增量；届时 L1 独立客户端会感受到"上方压力"。当前合计在 L1 口径约 5-10%。</p>
+<h3><span id="sec-15"></span>3. 6 个月后（2027 年一季度）L1 细分份额情景表（判断）</h3>
+<table>
+<thead>
+<tr>
+<th>玩家</th>
+<th>悲观情景</th>
+<th>基准情景</th>
+<th>乐观情景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WorkBuddy（腾讯）</td>
+<td>20%</td>
+<td>28%</td>
+<td>35%</td>
+</tr>
+<tr>
+<td>千问办公（阿里）</td>
+<td>12%</td>
+<td>25%</td>
+<td>32%</td>
+</tr>
+<tr>
+<td>字节（扣子+豆包任务）</td>
+<td>8%</td>
+<td>15%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>WPS AI（若只做套件）</td>
+<td>2%</td>
+<td>4%</td>
+<td>6%</td>
+</tr>
+<tr>
+<td>Manus/智谱/Kimi/其他</td>
+<td>8%</td>
+<td>10%</td>
+<td>15%</td>
+</tr>
+<tr>
+<td>（通用助手以对话入口截胡的增量另计）</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3><span id="sec-16"></span>4. 需要盯的先行指标（建议月度跟踪）</h3>
+<ol>
+<li>App/PC 客户端下载榜与 DAU（点点数据/QuestMobile）；</li>
+<li>各家更新日志的功能方向（是否出现"企业治理/行业方案/IM 深度集成"类更新）；</li>
+<li>钉钉/企微/飞书内"AI 助理/频道"的企业开通数；</li>
+<li>财报口径：腾讯（云+企业服务）、阿里（钉钉/云）、金山（WPS AI 会员收入）对 AI 办公的披露；</li>
+<li>政策与监管：Agent 数据合规/外资审查事件（如 Manus 案后续）。</li>
+</ol>
+<hr />
+<h2><span id="sec-17"></span>五、结论（给决策者的一句话）</h2>
+<p>未来 3-6 个月，国内"桌面 AI 办公工作台"将从 WorkBuddy 单极，走向<strong>腾讯（WorkBuddy）× 阿里（千问办公）双寡头竞速 + 字节蓄势 + 金山分流 + 独立派边缘化</strong>的格局；胜负手不在模型与功能清单，而在<strong>谁能通过 IM/协同/云把 Agent 送进企业日常流程，并先跑通"可治理、可计费、可签单"的商业闭环</strong>。市场占有不会出现单一赢家，但"头两名吃掉 60% 以上 L1 份额"是大概率情景。</p>
+<hr />
+<h2><span id="sec-18"></span>附录：主要信息来源</h2>
+<ul>
+<li>腾讯云 CodeBuddy 官方文档（WorkBuddy Overview/Changelog/Pricing 等）：codebuddy.cn/docs/workbuddy</li>
+<li>腾讯云国际站/官网 WorkBuddy 产品页：intl.cloud.tencent.com/zh/products/workbuddy、cloud.tencent.cn/act/pro/workbuddy；workbuddy.cn</li>
+<li>千问办公官网与文档（产品简介/产品权益/客户端更新日志，1.0.0 于 2026-08-24 上线）：qwenwork.cn、docs.qwenwork.cn</li>
+<li>钉钉官网（2026-09 首页：7 亿用户、2700 万+组织、首推千问办公）：dingtalk.com</li>
+<li>飞书官网（"字节跳动旗下 AI 工作平台"、飞书 AI 产品页）：feishu.cn</li>
+<li>WPS/WPS AI：wps.cn、ai.wps.cn</li>
+<li>QuestMobile 2026 上半年中国移动互联网报告（澎湃转载）及 AI 应用投放/月活数据</li>
+<li>Coze 2.0 定位与更新（coze.cn 官网文案及第三方整理 aigc.cn/coze）；豆包官方商店页/活动页</li>
+<li>Manus-蝴蝶效应与 Meta 收购被发改委否决相关新闻报道（2026-04 至 05）</li>
+<li>知乎等社区对 WorkBuddy 的体验长文（发布时间线、与 CodeBuddy 关系、用户画像等）</li>
+</ul>
+<blockquote>
+<p>局限声明：本报告基于公开信息与逻辑推演；付费级市场数据（份额、MAU、收入）请以 QuestMobile/易观/点点数据或厂商财报为准。预测部分为分析观点，不构成投资或经营决策的唯一依据。</p>
+</blockquote>
+    <hr>
+    <footer>纪多斌 出品 · openclaw-impact-report · 基于公开信息整理，转发请注明来源</footer>
+  </article>
+</div>
+</body>
+</html>
