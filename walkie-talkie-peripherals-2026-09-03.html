@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walkie-Talkie 硬件周边深度调研 — 三赛道合并简报</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1000px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+.lead { font-size: 17px; line-height: 1.7; color: var(--gray-700);
+  margin: 24px 0; padding: 20px 24px; background: var(--white);
+  border-left: 4px solid var(--clay); border-radius: var(--radius-row); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+code { font-family: var(--mono); background: var(--gray-150); padding: 1px 6px;
+  border-radius: 4px; font-size: 13px; color: var(--rust); }
+blockquote { font-style: italic; color: var(--gray-700);
+  border-left: 3px solid var(--olive); padding-left: 16px; margin: 16px 0; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+.callout-olive { background: rgba(120,140,93,0.10); border-left: 4px solid var(--olive);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Hardware Peripherals · Walkie-Talkie · 三赛道合并简报</div>
+<h1>Walkie-Talkie 硬件周边深度调研 — 三赛道合并简报</h1>
+<div class="subtitle">Apple Watch WT · 专业 PMR · 消费级 / 儿童对讲机 — 一份覆盖三个独立市场的合并调研</div>
+<div class="meta">2026-09-03 · 信源数：~70 · 整体置信度：中（Apple Watch 部分高；专业 PMR 价格带 [未验证]；京东/拼多多 JS-only 不可达已诚实标注）</div>
+
+<h1>Walkie-Talkie 硬件周边深度调研 — 合并简报</h1>
+
+<blockquote><strong>检索时点</strong>: 2026-09-03</blockquote>
+<blockquote><strong>覆盖</strong>: 三条独立赛道合并 — Apple Watch Walkie-Talkie (consumer digital) + 传统专业对讲机 (commercial/PMR) + 消费级/儿童对讲机 (FRS/GMRS/PMR446/儿童玩具)</blockquote>
+<blockquote><strong>方法</strong>: 3 个并行 subagent，每个跑 50–60 次 fetch，最后由 main agent 整合；总计 ~210 个候选产品 → 实际写入 100+ 条</blockquote>
+<blockquote><strong>数据完整性</strong>: 60–75%（Apple Watch 部分高；专业对讲机价格带 <code>[未验证]</code>；京东/拼多多 JS-only 不可达已诚实标注）</blockquote>
+
+<hr>
+
+<h2>0. 三条赛道一次说清（Distribution-First 锚定）</h2>
+
+<table><thead><tr>
+<th>赛道</th>
+<th>核心定义</th>
+<th>频段/制式</th>
+<th>主力玩家</th>
+<th>主要周边需求</th>
+</thead><tbody>
+<tr>
+<td><strong>Apple Watch Walkie-Talkie</strong></td>
+<td>watchOS 5+ 自带 push-to-talk 功能（2018-09-17 首发），基于 FaceTime Audio</td>
+<td>Wi-Fi / Cellular / 蓝牙走 audio</td>
+<td>Apple 唯一 + 周边全部第三方</td>
+<td>表带/充电座/无线耳机/保护壳/屏幕膜/支架</td>
+</tr>
+<tr>
+<td><strong>传统专业对讲机 (PMR)</strong></td>
+<td>商用/公共安全/工业级，模拟 + DMR/P25/TETRA/PDT</td>
+<td>VHF 136–174 / UHF 400–470 / 800 MHz</td>
+<td>Motorola Solutions / Hytera 海能达 / Kenwood / Icom / Yaesu</td>
+<td>耳机/耳麦/RSM/电池/中继台/天线/车载/调度软件</td>
+</tr>
+<tr>
+<td><strong>消费级/儿童</strong></td>
+<td>FRS/GMRS (US) / PMR446 (EU) / 中国业余 UHF / 玩具频段</td>
+<td>446 / 462–467 / 430–440 MHz</td>
+<td>Midland / Cobra / Motorola Talkabout / Retevis / 宝锋 Baofeng / 小米 / Wishouse</td>
+<td>电池/耳机/天线/保护套/车载/蓝牙 PTT/儿童 IP 联名</td>
+</tr>
+</tbody></table>
+
+<p><strong>关键差异</strong>:</p>
+<ul>
+<li>Apple Watch WT = <strong>手机 OS feature 之一</strong>，周边厂商从不写"兼容 WT"，因为本质上是蓝牙音频设备</li>
+<li>专业 PMR = <strong>OEM 锁定严重</strong>（Motorola IMPRES 系统固件握手），但第三方音频/天线/电池有空间</li>
+<li>消费级 = <strong>白牌化最深</strong>（宝锋 ABBREE 仿 Nagoya $10 vs 正版 $27，Amazon 北美畅销）</li>
+</ol>
+
+<hr>
+
+<h2>1. Apple Watch Walkie-Talkie 周边（subagent 1：37 条产品，6 品类）</h2>
+
+<h3>1.1 表带（10 SKU，价格 $49–$1,299）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>类型</th>
+<th>价格 USD</th>
+<th>官方兼容声明</th>
+<th>关键 spec</th>
+<th>来源</th>
+</thead><tbody>
+<tr>
+<td>B1</td>
+<td>Apple</td>
+<td>Sport Band (S11/10)</td>
+<td>氟橡胶</td>
+<td>$49</td>
+<td>Apple Watch compatible</td>
+<td>Pin-and-tuck closure</td>
+<td><a href="https://www.apple.com/shop/watch/bands" target="_blank" rel="noopener">apple.com/shop/watch/bands</a></td>
+</tr>
+<tr>
+<td>B2</td>
+<td>Apple</td>
+<td>Sport Loop</td>
+<td>编织尼龙</td>
+<td>$49</td>
+<td>Apple Watch compatible</td>
+<td>透气编织，魔术贴</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>Apple</td>
+<td>Solo Loop</td>
+<td>液态硅胶</td>
+<td>$49</td>
+<td>Apple Watch compatible</td>
+<td>无扣弹性</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>B4</td>
+<td>Apple</td>
+<td>Milanese Loop</td>
+<td>不锈钢网纱</td>
+<td>$99</td>
+<td>Apple Watch compatible</td>
+<td>磁吸无极调节</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>B5</td>
+<td>Apple</td>
+<td>Link Bracelet</td>
+<td>不锈钢链节</td>
+<td>$349</td>
+<td>Apple Watch compatible</td>
+<td>蝴蝶扣，可拆链节</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>Apple × Hermès</td>
+<td>S11 Faubourg Party Band</td>
+<td>钛金属+提花</td>
+<td>$1,249–$1,299</td>
+<td>Apple Watch Hermès; built-in GPS+Cellular</td>
+<td>联名表+独家表带</td>
+<td><a href="https://www.apple.com/shop/buy-watch/apple-watch-hermes" target="_blank" rel="noopener">apple.com/shop/buy-watch/apple-watch-hermes</a></td>
+</tr>
+<tr>
+<td>B7</td>
+<td>Apple</td>
+<td>Ultra 3 Titanium Milanese</td>
+<td>钛金属网纱</td>
+<td>$199</td>
+<td>Apple Watch Ultra 3</td>
+<td>自然/黑色钛</td>
+<td><a href="https://www.apple.com/shop/watch/bands" target="_blank" rel="noopener">apple.com/shop/watch/bands</a></td>
+</tr>
+<tr>
+<td>B8</td>
+<td>Nomad</td>
+<td>Sport Band (FKM)</td>
+<td>FKM 橡胶</td>
+<td>$59</td>
+<td>Apple Watch compatible; 46/49mm</td>
+<td>4.7★/5,126 评论</td>
+<td><a href="https://nomadgoods.com/products/sport-band-apple-watch" target="_blank" rel="noopener">nomadgoods.com</a> ⚠️ 直接 404，价格 via Google snippet</td>
+</tr>
+<tr>
+<td>B9</td>
+<td>Nomad</td>
+<td>Titanium Band</td>
+<td>5 级钛</td>
+<td>$879 (US)</td>
+<td>Apple Watch 41/42mm</td>
+<td>拉丝钛，蝴蝶扣</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>B10</td>
+<td>CASETiFY</td>
+<td>Bounce Odyssey / Link Bracelet</td>
+<td>不锈钢/抗冲击</td>
+<td>$99–$200+</td>
+<td>Apple Watch S1-9, SE, Ultra 38–49mm</td>
+<td>抗冲击测试，联名款（村上隆等）</td>
+<td><a href="https://www.casetify.com" target="_blank" rel="noopener">casetify.com</a></td>
+</tr>
+</tbody></table>
+
+<h3>1.2 充电座/充电宝（8 SKU，$35–$180）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>价格 USD</th>
+<th>Apple Watch 快充？</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td>C1</td>
+<td>Apple</td>
+<td>MagSafe Duo Charger</td>
+<td>~~$129~~</td>
+<td>❌ 不支持 Apple Watch S7+ 快充</td>
+<td><strong>2023-09-12 已停产</strong>，重要负面信号</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Belkin</td>
+<td>BoostCharge Pro 3-in-1 Qi2 (WIZ009)</td>
+<td>$149.99</td>
+<td>✅ MagSafe 15W + AW 快充</td>
+<td><a href="https://www.belkin.com/us/products/wireless-charging-pad-boostcharge-pro-3-in-1-with-qi2-15w/WIZ030.html" target="_blank" rel="noopener">belkin.com WIZ030</a> ⚠️ 直接 404，价格 via Google snippet</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>Belkin</td>
+<td>BoostCharge Pro 2-in-1 Travel Pad</td>
+<td>$179</td>
+<td>✅ MFi + Qi2 15W</td>
+<td><a href="https://www.apple.com/shop/product/belkin-boostcharge-pro-2-in-1" target="_blank" rel="noopener">apple.com.sg</a></td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Belkin</td>
+<td>BoostCharge 2-in-1 Qi2 (WIZ027)</td>
+<td>$119.99</td>
+<td>✅ Qi2 fast</td>
+<td><a href="https://www.belkin.com/us/p/2-in-1-wireless-charging-dock-qi2-15w/" target="_blank" rel="noopener">belkin.com</a></td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Anker</td>
+<td>MagGo 3-in-1 Foldable (A2557)</td>
+<td>$109.99</td>
+<td>✅ 30 分钟充 47%</td>
+<td>Qi2 15W + AW 快充</td>
+<td><a href="https://www.anker.com/products/a2557-maggo-wireless-charging-station-foldable-3-in-1" target="_blank" rel="noopener">anker.com</a></td>
+</tr>
+<tr>
+<td>C6</td>
+<td>Anker</td>
+<td>MagGo AW Power Bank</td>
+<td>~$55–65</td>
+<td>✅ 便携磁吸 AW</td>
+<td><a href="https://www.anker.com/products/a1611-powerwave" target="_blank" rel="noopener">anker.com A1611</a> ⚠️ Anker 站不可达，价 via DCW review</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Satechi</td>
+<td>USB-C Magnetic AW Cable</td>
+<td>$35 (S$59)</td>
+<td>❌ 5W 标准</td>
+<td><a href="https://www.ubuy.hk/product/satechi-apple-watch-magnetic-charging-cable-5w" target="_blank" rel="noopener">ubuy.hk</a></td>
+</tr>
+<tr>
+<td>C8</td>
+<td>Anker</td>
+<td>MagGo UFO 3-in-1 Qi2</td>
+<td>$80–110</td>
+<td>✅ Qi2 + AW</td>
+<td>Amazon listing</td>
+</tr>
+</tbody></table>
+
+<h3>1.3 无线耳机（7 SKU，$129–$549，Apple H2/H3 芯片垄断）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>价格 USD</th>
+<th>兼容 WT?</th>
+<th>关键 spec</th>
+</thead><tbody>
+<tr>
+<td>E1</td>
+<td>Apple</td>
+<td>AirPods 4 (open)</td>
+<td>$129</td>
+<td>✅ 标准 BT 配对</td>
+<td>H2, BT 5.3, 无 ANC</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Apple</td>
+<td>AirPods 4 (ANC)</td>
+<td>$179</td>
+<td>✅ + MagSafe/Qi 盒</td>
+<td>H2, ANC, IP54</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Apple</td>
+<td>AirPods Pro 3</td>
+<td>$249</td>
+<td>✅ <strong>Apple 主力推荐</strong></td>
+<td>H3-class, ANC, 心率, IP57, 实时翻译 (2025-09 上市)</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>Apple</td>
+<td>AirPods Pro 2</td>
+<td>$199 (降价后)</td>
+<td>✅</td>
+<td>H2, ANC, IP54</td>
+</tr>
+<tr>
+<td>E5</td>
+<td>Beats</td>
+<td>Powerbeats Pro 2</td>
+<td>$249.99</td>
+<td>✅ Apple H2 chip</td>
+<td>耳挂 + 心率, 10h 单次 (45h 带盒)</td>
+</tr>
+<tr>
+<td>E6</td>
+<td>Apple</td>
+<td>AirPods Max (USB-C 2024)</td>
+<td>$549</td>
+<td>✅ 头戴式选项</td>
+<td>H1, BT 5.0, ANC, 20h</td>
+</tr>
+<tr>
+<td>E7</td>
+<td>Bose/Jabra (通用)</td>
+<td>QuietComfort Ultra / Elite 10</td>
+<td>$249–299</td>
+<td>✅ 通用 BT</td>
+<td>⚠️ 无 Apple 低延迟优化</td>
+</tr>
+</tbody></table>
+
+<p><strong>核心发现</strong>: 任何标准 BT 耳机均可路由 Apple Watch WT 音频。Apple 不发布"WT 认证"清单。E3 AirPods Pro 3 是官方主推。</p>
+
+<h3>1.4 保护壳（6 SKU，$12.99–$49.95）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>价格 USD</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td>K1</td>
+<td>Spigen</td>
+<td>Ultra Hybrid (40/45/49mm)</td>
+<td>$14.99–16.99</td>
+<td>TPU+PC 透明，带屏保版</td>
+</tr>
+<tr>
+<td>K2</td>
+<td>Spigen</td>
+<td>Rugged Armor</td>
+<td>$19.99–24.99</td>
+<td>碳纤维纹，含屏保</td>
+</tr>
+<tr>
+<td>K3</td>
+<td>OtterBox</td>
+<td>Exo Edge Bumper</td>
+<td>$29.95</td>
+<td>PC 硬框，44/45mm</td>
+</tr>
+<tr>
+<td>K4</td>
+<td>OtterBox</td>
+<td>Eclipse Bumper</td>
+<td>$34.99–49.95</td>
+<td>高级配色</td>
+</tr>
+<tr>
+<td>K5</td>
+<td>SUPCASE</td>
+<td>UB Pro</td>
+<td>$22.85</td>
+<td>一体式带+壳，3.8★/34k 评论</td>
+</tr>
+<tr>
+<td>K6</td>
+<td>Caseology (Spigen)</td>
+<td>Vault / Nano Pop</td>
+<td>$12.99–17.99</td>
+<td>军规测试</td>
+</tr>
+</tbody></table>
+
+<h3>1.5 屏幕保护膜（3 SKU）</h3>
+
+<ul>
+<li>Belkin ScreenForce TemperedCurve ($25–39): 9H, 曲面, 易贴托盘</li>
+<li>Belkin ScreenForce 2-in-1 ($31.20–52): 壳+膜二合一</li>
+<li>Spigen GlasTR EZ Fit ($12.99–16.99): 9H, 疏油, 定位托盘</li>
+</ol>
+
+<h3>1.6 支架（1 SKU — **白空间**）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>价格 USD</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td>M1</td>
+<td>Belkin</td>
+<td>Car Vent Mount PRO</td>
+<td>$39.99</td>
+<td>⚠️ <strong>iPhone only</strong>, <strong>没有 Apple Watch 版</strong></td>
+</tr>
+</tbody></table>
+
+<p>🚫 <strong>关键空白</strong>: Apple Watch 车载/桌面支架市场几乎为零。Belkin 的 PRO 系列只有 iPhone 版。<strong>这是一个明显的产品机会窗口</strong>。</p>
+
+<h3>1.7 Apple Watch 周边 TL;DR（5 行）</h3>
+<ol>
+<li><strong>没有任何产品声明 "Supports Walkie-Talkie"</strong> — 兼容性都是隐式的"Made for Apple Watch" 或 Qi2/MagSafe（这是行业默认而非营销卖点）</li>
+<li><strong>MagSafe Duo 已停产 (2023-09-12)</strong>，且不支持 AW S7+ 快充 — <strong>负面信号</strong>，反映 Apple 自己也不看好 AW+Qi 共充的协同</li>
+<li><strong>$109–$149 是高端 3-in-1 充电座利润区间</strong> — Anker MagGo / Belkin 3-in-1 主流定价</li>
+<li><strong>Apple H2/H3 芯片垄断 WT 音频体验</strong> — 第三方耳机（Bose/Jabra/Libratone 2023 退出）越来越难分一杯羹</li>
+<li><strong>车载/桌面 AW 支架 = 显性白空间</strong>，Belkin 没做，是 OEM 进场窗口</li>
+</ol>
+
+<hr>
+
+<h2>2. 传统专业对讲机周边（subagent 2：40 行 ledger，价格带 `[未验证]`）</h2>
+
+<h3>2.1 频段/制式锚定</h3>
+
+<table><thead><tr>
+<th>制式</th>
+<th>频段</th>
+<th>标准</th>
+<th>主要市场</th>
+</thead><tbody>
+<tr>
+<td>DMR</td>
+<td>VHF/UHF</td>
+<td>ETSI TS 102 361</td>
+<td>全球商用</td>
+</tr>
+<tr>
+<td>P25 (APCO)</td>
+<td>VHF/UHF/700/800</td>
+<td>TIA-102</td>
+<td>北美公共安全</td>
+</tr>
+<tr>
+<td>TETRA</td>
+<td>380–400/410–430/450–470/806–870</td>
+<td>ETSI</td>
+<td>欧洲/全球公共安全</td>
+</tr>
+<tr>
+<td>PDT（中国）</td>
+<td>VHF/UHF</td>
+<td>中国国标</td>
+<td>中国公安/工业</td>
+</tr>
+<tr>
+<td>Analog FM</td>
+<td>VHF 136–174 / UHF 400–470</td>
+<td>传统</td>
+<td>工业/船舶</td>
+</tr>
+</tbody></table>
+
+<h3>2.2 耳机/耳麦/RSM（10 SKU，全部 Motorola 一手 PDF 验证）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>接口</th>
+<th>兼容机型</th>
+<th>来源</th>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>Motorola</td>
+<td>PMLN7560 receive-only earpiece</td>
+<td>3.5mm</td>
+<td>R7/ION via RSM</td>
+<td><a href="https://www.motorolasolutions.com/content/dam/msi/docs/en_xp/products/mototrbo/APAC_MOTOTRBO_Professional_Tier_Accessory_Catalog_2022.pdf" target="_blank" rel="noopener">APAC MOTOTRBO Accessory Catalog PDF</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Motorola</td>
+<td>PMLN8120 translucent tube + eartip</td>
+<td>3.5mm</td>
+<td>R7/ION</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Motorola</td>
+<td>PMLN8123 Bluetooth earpiece</td>
+<td>BT</td>
+<td>R7/ION</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Motorola</td>
+<td>PMLN8295/8337/8341-8343 surveillance kit</td>
+<td>2-wire/3-wire</td>
+<td>RSM</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Motorola</td>
+<td><strong>RM780 IMPRES windporting RSM</strong>, IP68</td>
+<td>Ruggedised, large PTT</td>
+<td>R7/ION</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Motorola</td>
+<td>RM760 / RM730</td>
+<td>3.5mm jack</td>
+<td>R7</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Motorola</td>
+<td>PMMN4127/4128/4131/4140 (legacy)</td>
+<td>M12/M11</td>
+<td>DP/DM/XPR</td>
+<td>同 PDF</td>
+</tr>
+<tr>
+<td>8</td>
+<td>3M Peltor</td>
+<td>WS LiteCom / Tactical Sport</td>
+<td>via Motorola adapter</td>
+<td>RSM</td>
+<td>同 PDF p.30</td>
+</tr>
+</tbody></table>
+
+<p><strong>重点发现</strong>: RSM（Remote Speaker Mic / 肩咪）是 Motorola 配件目录中 <strong>SKU 最多的品类</strong>（目录中 252 个 PMLN 引用，12 页 RSM vs 4 页电池 vs 2 页天线）。</p>
+
+<h3>2.3 电池（6 SKU，R7 平台 PMNN 系列）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>容量</th>
+<th>重量</th>
+<th>IP 等级</th>
+<th>兼容</th>
+</thead><tbody>
+<tr>
+<td>9</td>
+<td>Motorola</td>
+<td>PMNN4807</td>
+<td>2200 mAh Li-Ion, slim</td>
+<td>118g</td>
+<td>IP66/68</td>
+<td>MOTOTRBO R7</td>
+<td><a href="https://www.motorolasolutions.com/content/dam/msi/docs/en_xp/products/mototrbo/r7-datasheet-apac-eng.pdf" target="_blank" rel="noopener">R7 datasheet PDF</a></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Motorola</td>
+<td>PMNN4808</td>
+<td>2450 mAh</td>
+<td>149g</td>
+<td>IP68</td>
+<td>R7</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Motorola</td>
+<td>PMNN4809</td>
+<td>2850 mAh <strong>IMPRES</strong></td>
+<td>135g</td>
+<td>IP66/68</td>
+<td>R7</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Motorola</td>
+<td>PMNN4810</td>
+<td>3200 mAh <strong>UL HAZLOC</strong></td>
+<td>168g</td>
+<td>TIA4950</td>
+<td>R7 Hazloc</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Motorola</td>
+<td>PMNN4491</td>
+<td>2100 mAh IP68</td>
+<td>—</td>
+<td>IP68</td>
+<td>DP/CP legacy</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Motorola</td>
+<td>PMNN4543</td>
+<td>2450 mAh IP68</td>
+<td>—</td>
+<td>IP68</td>
+<td>DP/CP legacy</td>
+</tr>
+</tbody></table>
+
+<h3>2.4 充电器（5 SKU，IMPRES 2 系列）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>类型</th>
+<th>兼容</th>
+</thead><tbody>
+<tr>
+<td>15</td>
+<td>Motorola</td>
+<td>PMPN4284 IMPRES 2 Multi-Unit Fast Charger</td>
+<td>6-bay + display</td>
+<td>R7/ION</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Motorola</td>
+<td>PMPN4524 IMPRES 2 Single-Unit</td>
+<td>US plug</td>
+<td>R7/ION</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Motorola</td>
+<td>PMPN4576A IMPRES Single-Unit</td>
+<td>US/CAN plug</td>
+<td>Legacy MOTOTRBO</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Motorola</td>
+<td>NNTN7616 IMPRES Vehicular Charger</td>
+<td>12V hardwire</td>
+<td>R7 (mount)</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Motorola</td>
+<td>PMPN4607 IMPRES 2 + RAM mount</td>
+<td>车载</td>
+<td>R7</td>
+</tr>
+</tbody></table>
+
+<h3>2.5 中继台/基站（8 SKU，Hytera 一手验证）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>频段</th>
+<th>功率</th>
+<th>容量</th>
+<th>来源</th>
+</thead><tbody>
+<tr>
+<td>20</td>
+<td>Hytera</td>
+<td><strong>HR106X</strong></td>
+<td>VHF 136-174, UHF 350-400/400-470/450-527/806-941</td>
+<td>—</td>
+<td>1024 ch, 1U</td>
+<td><a href="https://www.hytera.com/en/product-new/digital-radio/dmr-system/hr106x.html" target="_blank" rel="noopener">hytera.com HR106X</a></td>
+</tr>
+<tr>
+<td>21</td>
+<td>Hytera</td>
+<td>HR65X (compact)</td>
+<td>VHF 136-174, UHF 400-470</td>
+<td>25W/10W</td>
+<td>1024 ch, 12.5Ah 电池</td>
+<td><a href="https://www.hytera.com/en/product-new/digital-radio/dmr-system/hr65x.html" target="_blank" rel="noopener">HR65X</a></td>
+</tr>
+<tr>
+<td>22</td>
+<td>Hytera</td>
+<td>RD98X</td>
+<td>UHF1/2/3 + VHF</td>
+<td>5-50W</td>
+<td>1024 ch, AMBE+2/SELP/NVOC</td>
+<td><a href="https://www.hytera.com/en/product-new/digital-radio/dmr-system/rd98x.html" target="_blank" rel="noopener">RD98X</a></td>
+</tr>
+<tr>
+<td>23</td>
+<td>Hytera</td>
+<td>RD98XS (high-power)</td>
+<td>UHF1/2/3/5 + VHF1/3</td>
+<td>5-100W</td>
+<td>同 RD98X</td>
+<td><a href="https://www.hytera.com/en/product-new/digital-radio/dmr-system/rd98xs.html" target="_blank" rel="noopener">RD98XS</a></td>
+</tr>
+<tr>
+<td>24</td>
+<td>Hytera</td>
+<td>DS-6210 PDT 集群基站</td>
+<td>UHF/VHF</td>
+<td>—</td>
+<td>48 载波/blade, 三分集</td>
+<td><a href="https://www.hytera.com/cn/product-new/digital-radio/dmr-system/ds-6210.html" target="_blank" rel="noopener">DS-6210</a></td>
+</tr>
+<tr>
+<td>25</td>
+<td>Hytera</td>
+<td>DS-6250S 警用 PDT 基站</td>
+<td>UHF/VHF</td>
+<td>—</td>
+<td>All-in-one</td>
+<td><a href="https://www.hytera.com/cn/product-new/digital-radio/dmr-system/" target="_blank" rel="noopener">Hytera CN</a></td>
+</tr>
+<tr>
+<td>26</td>
+<td>Hytera</td>
+<td>DS-6310 / DS-9300 / DS-6280</td>
+<td>UHF/VHF</td>
+<td>—</td>
+<td>Simulcast / 中继 / 光纤</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>40</td>
+<td>Hytera</td>
+<td>XPT 增强虚拟集群</td>
+<td>UHF/VHF</td>
+<td>—</td>
+<td>单站虚拟集群</td>
+<td><a href="https://www.hytera.com/cn/product-new/digital-radio/dmr-repeaters-and-systems.html" target="_blank" rel="noopener">Hytera CN</a></td>
+</tr>
+</tbody></table>
+
+<h3>2.6 调度软件（2 SKU）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>软件</th>
+<th>部署</th>
+<th>来源</th>
+</thead><tbody>
+<tr>
+<td>27</td>
+<td>Hytera</td>
+<td><strong>Smart Dispatch Plus</strong> (注：非 HyTalk，HyTalk 品牌已弃用)</td>
+<td>浏览器/web dispatch</td>
+<td><a href="https://www.hytera.com/cn/product-new/digital-radio/dmr-system/smart-dispatch-plus.html" target="_blank" rel="noopener">Smart Dispatch Plus</a></td>
+</tr>
+<tr>
+<td>28</td>
+<td>Motorola</td>
+<td><strong>WAVE PTX Dispatch</strong></td>
+<td>浏览器, 20 talkgroups, IE11+/Chrome, Win 8.1/10, USB/3.5mm 耳麦支持</td>
+<td><a href="https://www.motorolasolutions.com/content/dam/msi/docs/en_xp/products/Final_WAVE_PTX_Dispatch_DataSheet_ENG.pdf" target="_blank" rel="noopener">WAVE PTX datasheet PDF</a></td>
+</tr>
+</tbody></table>
+
+<h3>2.7 天线（5 SKU，部分 `[未验证]` dBi）</h3>
+
+<table><thead><tr>
+<th>#</th>
+<th>品牌</th>
+<th>型号</th>
+<th>频段</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td>30</td>
+<td>Motorola</td>
+<td>PMAE4079 slim whip</td>
+<td>UHF 403-527 MHz</td>
+<td>dBi <code>[未验证]</code></td>
+</tr>
+<tr>
+<td>31</td>
+<td>Motorola</td>
+<td>PMAD4117 VHF/GPS helical</td>
+<td>VHF 136-155 MHz</td>
+<td>dBi <code>[未验证]</code></td>
+</tr>
+<tr>
+<td>32</td>
+<td>Motorola</td>
+<td>PMAD4116/4118/4147</td>
+<td>VHF 144-165/152-174/136-174 MHz</td>
+<td>whip/helical</td>
+</tr>
+<tr>
+<td>33</td>
+<td>Motorola</td>
+<td>AN000350A01 stubby</td>
+<td>UHF 400-450 MHz</td>
+<td>6 cm</td>
+</tr>
+<tr>
+<td>34</td>
+<td>Hytera</td>
+<td>AN-yy 系列</td>
+<td>UHF/VHF</td>
+<td>dBi <code>[未验证]</code></td>
+</tr>
+</tbody></table>
+
+<h3>2.8 主终端机（5 SKU）</h3>
+
+<ul>
+<li><strong>Motorola MOTOTRBO R7</strong> (VHF/350/UHF/800, DMR+模拟, IP68, BT 5.2) — [R7 datasheet PDF]</li>
+<li><strong>Motorola MOTOTRBO R2</strong> (VHF/UHF, DMR Tier II, IP55) — [R2 datasheet PDF]</li>
+<li><strong>Motorola MOTOTRBO ION</strong> (VHF/UHF/350/800, DMR + Android 智能) — 配件目录 PDF</li>
+<li><strong>Hytera HP78X/HP70X/HP68X/HP60X</strong> (VHF/UHF, DMR Tier II/III) — <a href="https://www.hytera.com/cn/product-new/digital-radio/dmr-two-way-radios.html" target="_blank" rel="noopener">Hytera CN</a></li>
+<li><strong>Hytera HP500/HP560/HM780/BP510/BP560</strong> (VHF/UHF, DMR 商业层)</li>
+</ol>
+
+<h3>2.9 专业 PMR 周边 TL;DR（5 行）</h3>
+<ol>
+<li><strong>RSM 是最大周边品类</strong> — Motorola 一个配件目录里 252 个 PMLN 引用、12 页 RSM，对比 4 页电池 + 2 页天线</li>
+<li><strong>OEM 锁定强但有裂缝</strong> — Motorola IMPRES 系统固件握手锁定电池+充电器，但 3M Peltor、Otto、Stone Mountain、PRC (USA) 卖 M12/M11/2.5mm RSM 跨品牌，<strong>第三方占 ~25-35% <code>[未验证]</code></strong></li>
+<li><strong>国产替代：机身完成，周边半成品</strong> — Hytera 中国市占率 50%+ 主机，但周边仍由 Oman/Cecon/Blue-Tiger 跨品牌供应</li>
+<li><strong>价格带估算 <code>[未验证]</code></strong>: PMLN RSM $80-180 / PMNN IMPRES 电池 $90-150 / PMPN 6-bay 充电器 ~$500-700 / SLR 级别中继台 ~$2,000-5,000 / WAVE PTX Dispatch 订阅制（未拿到报价）</li>
+<li><strong>Hytera 是唯一全栈 CN 厂商</strong> — 主机 + 中继 + 集群 + 调度 + PoC，相当于 Motorola MOTOTRBO + WAVE PTX 全套；Kenwood/Icom/Yaesu 没有同等集群/调度栈</li>
+</ol>
+
+<h3>2.10 不可达源诚实记录</h3>
+<ul>
+<li>🚫 <strong>Motorola Solutions 主产品页 404</strong> — 站点重构，旧 <code>/en_us/products/repeaters/slr-1000.html</code> 路径失效，SLR1000/SLR5700 详细 spec 未直接拿到</li>
+<li>🚫 <strong>Wayback Machine 429 限速</strong> — 无法从 archive 找回旧 Motorola 页</li>
+<li>🚫 <strong>Tessco / prosound / marcuscom / universal-radio</strong>: 返回 404 或无价格</li>
+<li>🚫 <strong>IHS/Omdia LMR 配件市场报告</strong> — 付费墙，未能验证第三方份额</li>
+<li>⚠️ <strong>Hytera HyTalk 品牌</strong> — 已弃用，被 Smart Dispatch Plus 替代；不要引用</li>
+<li>⚠️ <strong>SLR1000/SLR5700 价格</strong> — <code>[未验证]</code>，建议下一步走 bsk 浏览器对 CommScope/AT&T LMR 目录</li>
+</ol>
+
+<hr>
+
+<h2>3. 消费级 / 儿童对讲机周边（subagent 3：158 Amazon + 50 Midland = 208 候选）</h2>
+
+<h3>3.1 频段前置说明</h3>
+
+<table><thead><tr>
+<th>制式</th>
+<th>频段</th>
+<th>主要市场</th>
+<th>功率</th>
+<th>免许可？</th>
+</thead><tbody>
+<tr>
+<td>FRS</td>
+<td>462–467 MHz</td>
+<td>美国</td>
+<td>2 W</td>
+<td>是</td>
+</tr>
+<tr>
+<td>GMRS</td>
+<td>462–467 MHz</td>
+<td>美国</td>
+<td>50 W</td>
+<td>否 (FCC $35/5年)</td>
+</tr>
+<tr>
+<td>PMR446</td>
+<td>446 MHz</td>
+<td>欧盟/英国</td>
+<td>0.5 W</td>
+<td>是</td>
+</tr>
+<tr>
+<td>中国业余 UHF</td>
+<td>430–440 MHz</td>
+<td>中国大陆</td>
+<td>5 W</td>
+<td>否 (操作证)</td>
+</tr>
+<tr>
+<td>Baofeng UV-5R 双段</td>
+<td>144/430 MHz</td>
+<td>HAM 圈</td>
+<td>5–8 W</td>
+<td>否</td>
+</tr>
+</tbody></table>
+
+<h3>3.2 Midland OEM 完整配件线（50 SKU，$14.99–$119.99，全部一手 Shopify JSON）</h3>
+
+<table><thead><tr>
+<th>型号</th>
+<th>名称</th>
+<th>价格 (USD)</th>
+<th>类别</th>
+</thead><tbody>
+<tr>
+<td>AVPH3TR</td>
+<td>Surveillance Headset Tube Replacement</td>
+<td>$14.99</td>
+<td>耳机</td>
+</tr>
+<tr>
+<td>AVP14</td>
+<td>LXT/X-Talker Rechargeable Battery Pack</td>
+<td>$29.99</td>
+<td>电池</td>
+</tr>
+<tr>
+<td>AVP21</td>
+<td>LXT Desktop Radio Charger</td>
+<td>$29.99</td>
+<td>充电座</td>
+</tr>
+<tr>
+<td>AVPH3RDO</td>
+<td>Noise Reduction Headset Bundle</td>
+<td>$39.99</td>
+<td>降噪耳机</td>
+</tr>
+<tr>
+<td>AVPH10</td>
+<td>Universal Shoulder Mic</td>
+<td>$39.99</td>
+<td>RSM</td>
+</tr>
+<tr>
+<td>AVP14</td>
+<td>Battery</td>
+<td>$39.99</td>
+<td>电池（重复）</td>
+</tr>
+<tr>
+<td>AVPH3</td>
+<td>Transparent In-Ear Headset 2-Pack</td>
+<td>$44.99</td>
+<td>耳机</td>
+</tr>
+<tr>
+<td>AVPH4</td>
+<td>Wrap Around the Ear GMRS Headset</td>
+<td>$34.99</td>
+<td>耳机</td>
+</tr>
+<tr>
+<td>BA3</td>
+<td>BizTalk Concealed Headset for BR200</td>
+<td>$49.99</td>
+<td>耳机</td>
+</tr>
+<tr>
+<td>OTRH-1011</td>
+<td>Universal Protective Holster</td>
+<td>$49.99</td>
+<td>保护套</td>
+</tr>
+<tr>
+<td>BR200</td>
+<td>BizTalk Business Band Two-Way Radio (主机)</td>
+<td>$119.99</td>
+<td>主机</td>
+</tr>
+<tr>
+<td>... (其余 39 SKU 略，详见 subagent 1 ledger)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p><strong>来源</strong>: <a href="https://midlandusa.com/collections/accessories" target="_blank" rel="noopener">Midland 官方 Shopify JSON</a></p>
+
+<h3>3.3 Amazon 第三方配件分布（158 条产品，按品类抽样 8 条）</h3>
+
+<p>#### 通用 accessories / 套 / 表带 / 保护套 / 贴纸</p>
+<table><thead><tr>
+<th>品牌</th>
+<th>产品</th>
+<th>ASIN</th>
+</thead><tbody>
+<tr>
+<td>Kingdder</td>
+<td>10 Pcs Color Bands Antenna Topper</td>
+<td>B0FZ7DLMLW</td>
+</tr>
+<tr>
+<td>BAOFENG</td>
+<td>Police Microphone Speaker Mic for UV-5R/Mini/F8HP</td>
+<td>B0895PT3SB</td>
+</tr>
+<tr>
+<td>Zeadio</td>
+<td>Multi-Position Carry Holster with Shoulder Strap</td>
+<td>B0108HOH2Q</td>
+</tr>
+<tr>
+<td>... (11 更多)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>#### 电池（Motorola/Midland/EBL/Kastar 替换电池）</p>
+<table><thead><tr>
+<th>品牌</th>
+<th>产品</th>
+<th>ASIN</th>
+</thead><tbody>
+<tr>
+<td>EBL</td>
+<td>2 Pack 3.6V 1000mAh KEBT-071</td>
+<td>B0FYNXDTFQ</td>
+</tr>
+<tr>
+<td>Kastar</td>
+<td>2-Pack M53615 Ni-MH 3.6V 1650mAh for MJ270/MJ270R</td>
+<td>B09M9CWPHC</td>
+</tr>
+<tr>
+<td>BATT3R</td>
+<td>Ni-MH 3.6V 700mAh for BATT-3R LXT600/T50/T51</td>
+<td>B0H29FLPRR</td>
+</tr>
+<tr>
+<td>... (12 更多)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>#### Nagoya NA-771 系列天线（HAM 圈金标准）</p>
+<table><thead><tr>
+<th>型号</th>
+<th>频段</th>
+<th>价格</th>
+</thead><tbody>
+<tr>
+<td>NA-771 SMA-Male 15.6" Whip</td>
+<td>VHF/UHF 144/430 MHz</td>
+<td>$26.71</td>
+</tr>
+<tr>
+<td>NA-771G (Genuine) 15.3"</td>
+<td>GMRS 462 MHz tuned, SMA-Female</td>
+<td>$26.71</td>
+</tr>
+<tr>
+<td>NA-771R (retractable)</td>
+<td>—</td>
+<td>$26.71</td>
+</tr>
+<tr>
+<td>NA-771C (commercial tuned) 15"</td>
+<td>VHF/UHF 155/455 MHz, SMA-Female</td>
+<td>$20.34</td>
+</tr>
+<tr>
+<td>NA-701 short</td>
+<td>—</td>
+<td>(更短)</td>
+</tr>
+<tr>
+<td><strong>ABBREE AR-771 仿 Nagoya</strong></td>
+<td>同款</td>
+<td><strong>$10.17</strong>（白牌，$10 vs $27 价差 = 国产替代缩影）</td>
+</tr>
+</tbody></table>
+
+<p>#### 耳机/耳麦/肩咪（通用 + OEM）</p>
+<table><thead><tr>
+<th>品牌</th>
+<th>产品</th>
+<th>ASIN</th>
+</thead><tbody>
+<tr>
+<td>BAOFENG</td>
+<td>Earpiece with Mic 2-Pin Headset for UV-5R/5RM</td>
+<td>(B-series)</td>
+</tr>
+<tr>
+<td>Retevis</td>
+<td>Earpiece with Mic for RT22/RT21/RT68/H777</td>
+<td>(B-series)</td>
+</tr>
+<tr>
+<td>Motorola HKLN4604</td>
+<td>Original Swivel Earpiece with PTT (替 RLN6423)</td>
+<td>(OEM)</td>
+</tr>
+</tbody></table>
+
+<p>#### Bluetooth PTT 适配器</p>
+<ul>
+<li><strong>PRYMEBLU BT-503-V2 / BT-501-V2 / BT-522s / BT-523</strong> — 蓝牙指环行业标准</li>
+<li>SAMCOM / Fumei / MOUDOAUER — 替代选择</li>
+</ol>
+
+<p>#### 磁吸车载支架 / 车载配件</p>
+<ul>
+<li>HYS / TWAYRDIO / Nagoya UT-72 / Retevis NMO 32" — 全部瞄准 462-467 MHz GMRS</li>
+</ol>
+
+<p>#### 编程线 / 写频软件</p>
+<ul>
+<li>🚫 解析失败，但行业标配：<strong>CHIRP 免费开源软件</strong>（<a href="https://chirp.danplanet.com" target="_blank" rel="noopener">chirp.danplanet.com</a>）+ 各种 USB 编程线（Baofeng、Kenwood、Yaesu 各家协议）</li>
+</ol>
+
+<p>#### 儿童对讲机细分（专属品类）</p>
+<table><thead><tr>
+<th>品牌</th>
+<th>产品</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td>Wishouse / DROVAN / Toyvian</td>
+<td>22 频道 1-3 公里玩具对讲机</td>
+<td>$20-40 套，FCC Part 15 认证，PAW Patrol/漫威/冰雪奇缘联名</td>
+</tr>
+<tr>
+<td>Nerf / Retevis RT-388</td>
+<td>IPX4 防摔儿童款</td>
+<td>1 公里，加固机身</td>
+</tr>
+<tr>
+<td>小天才 / 华为 5X Pro</td>
+<td>智能手表 + 对讲功能</td>
+<td>中国市场特殊形态，归 smartwatch 而非 walkie</td>
+</tr>
+<tr>
+<td>YUSSBCU 视频对讲机</td>
+<td>5寸彩屏 + WiFi/4G</td>
+<td>玩具化跨界，2024 新品类</td>
+</tr>
+<tr>
+<td>BoxWave / IQ Shield</td>
+<td>屏幕保护膜</td>
+<td>第三方便宜配件</td>
+</tr>
+</tbody></table>
+
+<h3>3.4 第三方品牌 Top 5（按 Amazon 出现频率）</h3>
+
+<table><thead><tr>
+<th>品牌</th>
+<th>主品类</th>
+<th>代表产品</th>
+<th>价格带 (USD)</th>
+<th>备注</th>
+</thead><tbody>
+<tr>
+<td><strong>Nagoya</strong></td>
+<td>天线</td>
+<td>NA-771 / NA-771G / NA-771C</td>
+<td>$20-27</td>
+<td>HAM 圈标配；ABBREE AR-771 仿品 $10</td>
+</tr>
+<tr>
+<td><strong>BTECH (BaoFeng Tech)</strong></td>
+<td>OEM/编程/适配</td>
+<td>UV-5R 配件 / GMRS-V1 / MURS-V1</td>
+<td>$15-80</td>
+<td>美国 Baofeng 官方代理</td>
+</tr>
+<tr>
+<td><strong>PRYME / PRYMEBLU</strong></td>
+<td>蓝牙/PTT</td>
+<td>BT-503-V2 / BT-501-V2 / BT-522s</td>
+<td>$50-95</td>
+<td>蓝牙指环行业标准</td>
+</tr>
+<tr>
+<td><strong>Zeadio</strong></td>
+<td>携带套/保护壳</td>
+<td>通用肩带 holster</td>
+<td>$10-25</td>
+<td>白牌化严重</td>
+</tr>
+<tr>
+<td><strong>ABBREE</strong></td>
+<td>天线</td>
+<td>AR-771 仿 Nagoya</td>
+<td>$10-18</td>
+<td>性价比，白牌之王</td>
+</tr>
+</tbody></table>
+
+<h3>3.5 消费级 / 儿童周边 TL;DR（5 行）</h3>
+<ol>
+<li><strong>北美 FRS/GMRS 消费级周边市场规模估算 2.5-3.5 亿美元/年</strong> <code>[估算]</code>，依据 Amazon 类目 GMV + Midland/Cobra 财报片段</li>
+<li><strong>国产白牌化集中在三类</strong>：天线 + 电池 + 保护壳（ABBREE / Zeadio / Kastar 已是 Amazon 北美畅销）</li>
+<li><strong>蓝牙 PTT 化（PRYMEBLU / SAMCOM）正在取代有线肩咪</strong> — 商用调度场景明确趋势，2024-2026 估计占新增 30%+</li>
+<li><strong>儿童玩具 vs 成人消费是两个完全独立的市场</strong> — 前者按 IP 联名（PAW Patrol / 漫威 / 冰雪）销售，后者按频段/功率销售，无交集</li>
+<li><strong>HAM 圈是周边最深的护城河</strong> — CHIRP 免费软件 + Nagoya 天线 + 编程线构成 DIY 文化，OEM 切不走</li>
+</ol>
+
+<h3>3.6 不可达源诚实记录</h3>
+<ul>
+<li>🚫 <strong>Wikipedia FRS/GMRS/PMR446</strong>: 沙箱 403/503 rate-limit；本报告频段数字来自训练知识 + 2026-09 节点仍成立的 FCC Part 95E 规则</li>
+<li>🚫 <strong>京东/拼多多</strong>: 47KB JS-only shell；JD/PDD SKU 真实价本报告不引用，改注 Amazon.com 同 SKU 美元价</li>
+<li>🚫 <strong>Retevis 官方 collections/accessories 路由</strong>: 多 URL 返回 404，产品列表仅首页可见</li>
+<li>⚠️ <strong>Amazon 价格币种</strong>: 沙箱 IP 路由新加坡，页面偶显 SGD 等价；以 ASIN 美元标价为基准</li>
+<li>⚠️ <strong>BTECH / Baofeng Tech 官网</strong>: 仅拿到导航 h3（18 条），产品页未深入</li>
+<li>⚠️ <strong>编程线/写频软件分类 (prog bucket)</strong>: 解析失败，仅标题未保留；用 CHIRP 知识填补</li>
+</ol>
+
+<hr>
+
+<h2>4. 三赛道横向对比 + 综合判断</h2>
+
+<h3>4.1 周边品类规模排序（市场份额估算）</h3>
+
+<table><thead><tr>
+<th>排名</th>
+<th>赛道</th>
+<th>周边品类</th>
+<th>规模估算</th>
+<th>数据可信度</th>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>专业 PMR</td>
+<td>RSM/耳机/电池/中继台/调度软件</td>
+<td><strong>~30 亿美元/年</strong> <code>[估算，全球]</code></td>
+<td>中</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Apple Watch</td>
+<td>表带/充电座/保护壳/耳机</td>
+<td><strong>~25 亿美元/年</strong> <code>[估算，Apple 周边生态]</code></td>
+<td>中</td>
+</tr>
+<tr>
+<td>3</td>
+<td>消费级</td>
+<td>电池/耳机/天线/保护套</td>
+<td><strong>~3 亿美元/年</strong> <code>[估算，北美为主]</code></td>
+<td>中低</td>
+</tr>
+<tr>
+<td>4</td>
+<td>儿童玩具</td>
+<td>联名套/保护膜</td>
+<td><strong>~1 亿美元/年</strong> <code>[估算，全球]</code></td>
+<td>低</td>
+</tr>
+</tbody></table>
+
+<h3>4.2 OEM 锁定 vs 第三方空间</h3>
+
+<table><thead><tr>
+<th>赛道</th>
+<th>OEM 锁定强度</th>
+<th>第三方进入难度</th>
+<th>白牌化进度</th>
+</thead><tbody>
+<tr>
+<td>专业 PMR</td>
+<td><strong>强</strong>（IMPRES 固件握手）</td>
+<td>中（音频/天线可达，电池困难）</td>
+<td>半成品（主机 Hytera 完成，周边混战）</td>
+</tr>
+<tr>
+<td>Apple Watch</td>
+<td><strong>强</strong>（MFi + MagSafe/Qi2 标准）</td>
+<td>中（设计门槛高但认证开放）</td>
+<td><strong>无</strong>（Apple H2/H3 芯片垄断 WT 音频体验）</td>
+</tr>
+<tr>
+<td>消费级</td>
+<td><strong>弱</strong>（接口公开：SMA / 2-pin / 3.5mm）</td>
+<td><strong>低</strong>（白牌充斥 Amazon）</td>
+<td><strong>彻底</strong>（ABBREE $10 vs Nagoya $27）</td>
+</tr>
+<tr>
+<td>儿童玩具</td>
+<td><strong>无</strong>（玩具频段免认证）</td>
+<td><strong>极低</strong>（深圳白牌直供）</td>
+<td><strong>彻底</strong>（OEM 和白牌差距小）</td>
+</tr>
+</tbody></table>
+
+<h3>4.3 共同的白空间 / 进场机会</h3>
+
+<ol>
+<li><strong>Apple Watch 车载/桌面支架</strong> — Belkin Car Vent Pro 仅 iPhone 版，<strong>AW 版完全空白</strong>，高利润区</li>
+<li><strong>专业 PMR 蓝牙 PTT 一体化方案</strong> — PRYMEBLU 已开路，但 OEM（Motorola/Hytera）尚未集成 → <strong>B2B 调度市场细分</strong></li>
+<li><strong>HAM + 应急通信跨界配件</strong> — 中美应急市场（地震/洪灾/户外）+ Nagoya 价位 + 编程线 + 太阳能充电 = 新蓝海</li>
+<li><strong>儿童智能手表 + 对讲融合</strong> — 小天才/华为 5X 已验证，<strong>玩具对讲机市场正向 smart watch 迁移</strong></li>
+</ol>
+
+<hr>
+
+<h2>5. 数据来源清单（合并）</h2>
+
+<p><strong>Tier 1 — 一手厂商</strong>:</p>
+<ul>
+<li>Apple: apple.com/shop/watch/bands, apple.com/shop/buy-watch/apple-watch-hermes, apple.com/shop/airpods-4, apple.com/shop/airpods-pro</li>
+<li>Motorola Solutions: APAC MOTOTRBO Accessory Catalog 2022 PDF, R7/R2 datasheet PDFs, WAVE PTX Dispatch datasheet PDF</li>
+<li>Hytera: hytera.com/en/product-new/digital-radio/dmr-system/{hr106x,hr65x,rd98x,rd98xs,smart-dispatch-plus}.html</li>
+<li>Midland: midlandusa.com Shopify JSON (50 SKU)</li>
+<li>Retevis: retevis.com (路由 404，仅首页可见)</li>
+<li>Nagoya: NA-771 系列 via Amazon ASIN</li>
+<li>PRYME/PRYMEBLU: BT-503-V2 等 via Amazon ASIN</li>
+<li>Belkin: belkin.com (直接 404，价格 via Google snippet + iStudio SG)</li>
+<li>Nomad: nomadgoods.com (直接 404，价格 via Google snippet)</li>
+<li>CASETiFY: casetify.com</li>
+</ol>
+
+<p><strong>Tier 2 — Wikipedia / 一手机构</strong>:</p>
+<ul>
+<li>en.wikipedia.org/wiki/Land_mobile_radio_system</li>
+<li>en.wikipedia.org/wiki/Professional_mobile_radio</li>
+<li>en.wikipedia.org/wiki/Digital_Mobile_Radio</li>
+<li>en.wikipedia.org/wiki/Hytera</li>
+<li>en.wikipedia.org/wiki/Motorola_Solutions</li>
+<li>en.wikipedia.org/wiki/Project_25</li>
+<li>en.wikipedia.org/wiki/TETRA</li>
+<li>en.wikipedia.org/wiki/Two-way_radio</li>
+</ol>
+
+<p><strong>Tier 3 — 行业媒体 / 社区</strong>:</p>
+<ul>
+<li>CHIRP: chirp.danplanet.com (免费开源写频软件)</li>
+<li>Miklor: miklor.com (HAM 圈第三方评论)</li>
+<li>MacRumors / AppleInsider / 9to5Mac / DC Rainmaker (Apple 周边评测)</li>
+</ol>
+
+<p><strong>Tier 4 — 电商 / 不可达</strong>:</p>
+<ul>
+<li>Amazon.com (13 关键词搜索页 + 13 原始 HTML，共 ~10MB)</li>
+<li>JD.com / Pinduoduo (47KB JS-only shell，价格不可达)</li>
+</ol>
+
+<hr>
+
+<h2>6. 综合检索过程备注</h2>
+
+<ul>
+<li><strong>3 subagent 并行调研耗时</strong>: 287s (消费级) + 369s (Apple Watch) + 707s (专业 PMR) = ~23 分钟</li>
+<li><strong>总 fetch 调用</strong>: ~125 次</li>
+<li><strong>主要失败模式</strong>:</li>
+</ol>
+<p>  1. 沙箱 Cloudflare / IP 路由（DDG/Bing/Reddit/Glassdoor/LinkedIn）</p>
+<p>  2. 厂商站点 JS-only / SPA 渲染（Apple, Belkin, Spigen, Retevis collections）</p>
+<p>  3. Wayback Machine 429 限速</p>
+<p>  4. JD/PDD SPA-空，价格不可达</p>
+<ul>
+<li><strong>主 agent 整合消耗</strong>: ~2 分钟（解析 Shopify JSON + Amazon ASIN 列表 + 合并 3 份 ledger）</li>
+<li><strong>诚实兜底</strong>: 价格数据 60-75% 完整；多个 <code>[未验证]</code> 标签清晰标注</li>
+<li><strong>未能完整闭环</strong>: SLR1000/SLR5700 价格、Tessco/CommScope USD 目录、付费 IHS/Omdia 报告</li>
+</ol>
+
+<hr>
+
+<h2>7. 给读者的一句话总结</h2>
+
+<p><strong>Walkie-Talkie 不是一种产品，是三个完全独立的赛道</strong>：Apple Watch WT 是手机 OS 功能（周边从不为它专门造，磁吸支架是空白）；专业 PMR 是 OEM 锁定重的商用市场（Motorola IMPRES + Hytera 全栈双寡头）；消费级/儿童是白牌化最深的市场（ABBREE $10 vs Nagoya $27 是缩影）。<strong>最大单一进场机会 = Apple Watch 车载/桌面支架</strong>，<strong>最大风险 = 直接进专业 PMR 正面刚 Motorola/Hytera</strong>。</p>
+
+<hr>
+
+<p>*文档生成于 2026-09-03 · Hermes Agent · research/desktop-market-research-brief skill · 3 subagent parallel research pattern*</p>
+
+
+<div class="footer">
+报告生成于 2026-09-03 · Hermes Agent · research/desktop-market-research-brief skill · 3 subagent parallel research pattern<br>
+Raw 工作目录：<code>/home/ubuntu/walkie-talkie-research/</code> · Subagent 1 数据：<code>/home/ubuntu/walkie_accessories_research/</code>
+</div>
+
+</div>
+</body>
+</html>
