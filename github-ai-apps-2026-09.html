@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub 火爆 AI 应用调研报告（2026-09-03）</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1200px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 12px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 13px; color: var(--gray-700); margin-bottom: 24px; }
+.meta-line { margin: 4px 0; }
+.meta-line .ml { display: inline-block; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.04em; background: var(--gray-150); color: var(--gray-700);
+  padding: 2px 8px; border-radius: 4px; margin-right: 8px; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+.callout-warn { background: rgba(176,74,63,0.08); border-left: 4px solid var(--rust); }
+.callout-good { background: rgba(120,140,93,0.08); border-left: 4px solid var(--olive); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+.panel p { font-size: 15px; line-height: 1.75; }
+.panel p strong { color: var(--clay); }
+.toc { margin: 24px 0 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.toc a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.03em;
+  text-decoration: none; color: var(--gray-700); background: var(--white);
+  border: var(--border); border-radius: 20px; padding: 5px 14px; }
+.toc a:hover { background: var(--oat); color: var(--slate); }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 12px 0;
+  border: var(--border); border-radius: var(--radius-panel); background: var(--white); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.table-wrap table { margin: 0; min-width: 1080px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+tbody tr:last-child td { border-bottom: none; }
+.app-name strong { font-weight: 600; color: var(--slate); }
+.repo-link { font-family: var(--mono); font-size: 11.5px; color: var(--rust);
+  text-decoration: none; word-break: break-all; border-bottom: 1px dotted rgba(176,74,63,0.35); }
+.repo-link:hover { color: var(--clay); }
+.stars-total { font-family: var(--mono); font-weight: 600; color: var(--slate);
+  white-space: nowrap; }
+.stars-delta { display: block; font-family: var(--mono); font-size: 11px;
+  color: var(--olive); white-space: nowrap; margin-top: 2px; }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+ol.insights { margin-left: 22px; }
+ol.insights li { margin: 16px 0; font-size: 15px; line-height: 1.75; padding-left: 6px; }
+ol.insights li::marker { font-family: var(--mono); font-weight: 600; color: var(--clay); }
+ol.insights li strong { color: var(--slate); }
+ul.data-notes li { font-size: 14.5px; line-height: 1.7; margin: 8px 0; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.tag-big { font-size: 11px; padding: 4px 10px; font-weight: 600; }
+.tag-b { background: rgba(91,141,184,0.15); color: var(--sky); }
+.tag-c { background: rgba(217,119,87,0.12); color: var(--clay); }
+.tag-d { background: rgba(139,107,158,0.12); color: var(--purple); }
+.tag-g { background: rgba(120,140,93,0.12); color: var(--olive); }
+.tag-r { background: rgba(176,74,63,0.12); color: var(--rust); }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+.footer a { color: var(--clay); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+@media (max-width: 640px) {
+  body { padding: 24px 14px 80px; }
+  h1 { font-size: 23px; }
+  h2 { font-size: 19px; margin-top: 36px; }
+  .panel { padding: 16px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">GitHub Trending · AI Apps Research · 2026-09</div>
+<h1>GitHub 火爆 AI 应用调研报告（2026-09-03）</h1>
+
+<div class="meta">
+  <div class="meta-line"><span class="ml">统计日期</span>2026-09-03（CST）</div>
+  <div class="meta-line"><span class="ml">数据来源</span>github.com/trending（daily + weekly 双榜），实抓取（daily 19 条 / weekly 23 条）</div>
+  <div class="meta-line"><span class="ml">Stars 口径</span>总数（括号内为该周期增量），d=日榜、w=周榜增量</div>
+  <div class="meta-line"><span class="ml">入选范围</span>AI 应用类为主（Agent 应用、技能包、图像/语音/编程工具、垂直场景工具）；纯底层框架/基础模型仅收少量并标注【基础设施】</div>
+</div>
+
+<div class="callout callout-warn">⚠️ <strong>交叉验证提示</strong>：OSSInsight 称 GitHub events feed 自 2026-03-01 起不完整，本期增量数字宜视为下界。本期榜单最大特征：Agent Skills（技能包）成为应用的主流分发形态，日榜 19 席中过半是技能类仓库——这不是选题偏好，是数据本身的样子。</div>
+
+<nav class="toc">
+  <a href="#main-table">主表</a>
+  <a href="#deep-dives">重点应用深度点评</a>
+  <a href="#trends">横向趋势洞察</a>
+  <a href="#data-notes">数据边界 / 未验证项</a>
+</nav>
+
+<h2 id="main-table">主表</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th style="width:13%">应用</th>
+      <th style="width:19%">仓库</th>
+      <th style="width:10%">Stars</th>
+      <th style="width:17%">一句话定位</th>
+      <th style="width:20%">核心应用场景</th>
+      <th style="width:21%">商业价值</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="app-name">🧩 <strong>Matt Pocock 工程技能包</strong></td><td><a class="repo-link" href="https://github.com/mattpocock/skills">https://github.com/mattpocock/skills</a></td><td><span class="stars-total">246,175</span><span class="stars-delta">(d+1,576)</span></td><td>真实工程师 .agents 目录里的技能包全公开</td><td>给 Claude/Codex 等 agent 装「资深工程师经验」：代码审查、重构、工程规范</td><td>个人 IP 资产化样板：技能即简历、即课程、即咨询服务入口</td></tr>
+    <tr><td class="app-name">🧩 <strong>Anthropic Agent Skills 官方库</strong></td><td><a class="repo-link" href="https://github.com/anthropics/skills">https://github.com/anthropics/skills</a></td><td><span class="stars-total">173,411</span><span class="stars-delta">(d+277)</span></td><td>模型厂商官方的技能包公开仓库</td><td>Agent 技能标准的参照实现，各技能包落地到自家 agent</td><td>厂商圈地：用开源技能包绑定自家 agent 生态与格式标准</td></tr>
+    <tr><td class="app-name">🧩 <strong>Addy Osmani 工程技能库</strong></td><td><a class="repo-link" href="https://github.com/addyosmani/agent-skills">https://github.com/addyosmani/agent-skills</a></td><td><span class="stars-total">91,852</span><span class="stars-delta">(d+280)</span></td><td>Chrome 团队性能专家出品的生产级工程技能</td><td>Web 性能优化、前端工程化给 AI 编程 agent 当「师傅」</td><td>专家经验可复制化——顶级工程师的隐性知识变成可分发商品</td></tr>
+    <tr><td class="app-name">🧩 <strong>AI Scientist 科研技能库</strong></td><td><a class="repo-link" href="https://github.com/K-Dense-AI/scientific-agent-skills">https://github.com/K-Dense-AI/scientific-agent-skills</a></td><td><span class="stars-total">42,275</span><span class="stars-delta">(w+7,558)</span></td><td>把任意 AI agent 变成 AI Scientist 的技能库</td><td>科研全流程：文献→实验→论文写作自动化</td><td>科研服务市场大：瞄准实验室/药企的 agent 化科研外包</td></tr>
+    <tr><td class="app-name">🧩 <strong>中国专利技能包</strong></td><td><a class="repo-link" href="https://github.com/handsomestWei/patent-disclosure-skill">https://github.com/handsomestWei/patent-disclosure-skill</a></td><td><span class="stars-total">7,160</span><span class="stars-delta">(w+1,750)</span></td><td>专利点挖掘+交底书（发明/实用/外观）编写的中文技能</td><td>企业研发/代理机构快速产出专利交底书初稿</td><td>中文垂直刚需场景：IPR 流程的 agent 化降本，潜力大但需合规兜底</td></tr>
+    <tr><td class="app-name">🧩 <strong>Archify 绘图技能</strong></td><td><a class="repo-link" href="https://github.com/tt-a1i/archify">https://github.com/tt-a1i/archify</a></td><td><span class="stars-total">44,973</span><span class="stars-delta">(w+26,626)</span></td><td>生成可验证的架构图/流程图/时序图（自包含 HTML+动效）</td><td>架构文档、技术方案汇报的图表自动生成</td><td>本周增速王：文档/架构绘图是高频刚需，验证了「技能包也能跑出爆款」</td></tr>
+    <tr><td class="app-name">✍️ <strong>Humanizer</strong></td><td><a class="repo-link" href="https://github.com/blader/humanizer">https://github.com/blader/humanizer</a></td><td><span class="stars-total">41,036</span><span class="stars-delta">(d+1,214)</span></td><td>Agent 技能：消除文本的 AI 生成腔</td><td>把 AI 初稿润色成自然人类口吻（营销文案、自媒体、邮件）</td><td>巨大灰色市场（对标 Undetectable.ai 类商业产品）；有学术诚信滥用风险，正当用法是写作风格优化</td></tr>
+    <tr><td class="app-name">🤖 <strong>Ponytail</strong></td><td><a class="repo-link" href="https://github.com/DietrichGebert/ponytail">https://github.com/DietrichGebert/ponytail</a></td><td><span class="stars-total">122,762</span><span class="stars-delta">(d+2,138)</span></td><td>让 agent 像「最懒的资深开发」思考——最好的代码是没写的那行</td><td>约束 AI 编程 agent 少生成、少改动，控 token 与代码噪音</td><td>直击 Agent 编程商用化痛点（过度生成=烧钱），省钱型工具，可挂靠 IDE/CI 做成本管控</td></tr>
+    <tr><td class="app-name">🤖 <strong>OpenClaude</strong></td><td><a class="repo-link" href="https://github.com/Gitlawb/openclaude">https://github.com/Gitlawb/openclaude</a></td><td><span class="stars-total">32,198</span><span class="stars-delta">(d+453/w+1,035)</span></td><td>「runs anywhere, uses anything」的跨平台 Agent 客户端</td><td>在任意终端/环境接入任意模型/工具的统一 agent 入口</td><td>类 OpenClaw 模式的「开源 AI 助手+自带终端」路线，隐私/可控诉求下替代云订阅的价值明确</td></tr>
+    <tr><td class="app-name">🤖 <strong>Hermes Agent</strong></td><td><a class="repo-link" href="https://github.com/NousResearch/hermes-agent">https://github.com/NousResearch/hermes-agent</a></td><td><span class="stars-total">240,516</span><span class="stars-delta">(d+778)</span></td><td>个人 AI Agent 平台：技能/插件/定时任务全生命周期【基础设施】</td><td>个人与团队长期运行的自主 agent（自动化、多 Profile 协作）</td><td>Agent 基础设施层：平台化收割技能生态，类似「WordPress 之于建站」</td></tr>
+    <tr><td class="app-name">🤖 <strong>Superpowers</strong></td><td><a class="repo-link" href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a></td><td><span class="stars-total">281,106</span><span class="stars-delta">(d+460)</span></td><td>agentic 技能框架+软件开发方法论（全场最高星）【框架】</td><td>把「规划→执行→审查」工程方法沉淀成可装载技能栈</td><td>方法论是最高壁垒：星数印证开发者愿意为「流程本身」付费</td></tr>
+    <tr><td class="app-name">💻 <strong>Screenshot-to-code</strong></td><td><a class="repo-link" href="https://github.com/abi/screenshot-to-code">https://github.com/abi/screenshot-to-code</a></td><td><span class="stars-total">77,291</span><span class="stars-delta">(w+2,634)</span></td><td>截图直接生成 HTML/Tailwind/React/Vue 代码</td><td>设计稿还原、前端原型快速搭建</td><td>老牌长青应用：设计→代码这条流水线的效率溢价持续被验证</td></tr>
+    <tr><td class="app-name">💻 <strong>Cursor Plugins</strong></td><td><a class="repo-link" href="https://github.com/cursor/plugins">https://github.com/cursor/plugins</a></td><td><span class="stars-total">6,716</span><span class="stars-delta">(w+1,333)</span></td><td>Cursor 插件规范与官方插件</td><td>给 AI 编辑器扩展自定义行为/工具链</td><td>应用平台化信号：编辑器开始有自己的插件经济（对标 VS Code 早期）</td></tr>
+    <tr><td class="app-name">🎨 <strong>GPT-Image2 工业提示词库</strong></td><td><a class="repo-link" href="https://github.com/freestylefly/awesome-gpt-image-2">https://github.com/freestylefly/awesome-gpt-image-2</a></td><td><span class="stars-total">27,644</span><span class="stars-delta">(w+7,006)</span></td><td>Prompt as Code：530+ 逆向案例、20+ 套工业模板</td><td>电商/营销/设计图的高质量可复用图像提示词工程</td><td>提示词开始作为 IP/模板资产变现，图像生成进入「工程化复用」阶段</td></tr>
+    <tr><td class="app-name">🌍 <strong>Gods Eye View</strong></td><td><a class="repo-link" href="https://github.com/bilawalsidhu/gods-eye-view">https://github.com/bilawalsidhu/gods-eye-view</a></td><td><span class="stars-total">16,640</span><span class="stars-delta">(w+10,679)</span></td><td>浏览器里的真实卫星数据 3D 地球（AI 成分低，属空间数据可视化应用）</td><td>实时空间情报可视化、舆情/物流/地缘分析演示</td><td>证明「实时数据+沉浸可视化」的浏览器应用自带病毒传播力，数据订阅是可持续商业模式</td></tr>
+    <tr><td class="app-name">🎙️ <strong>VoiceStudio</strong></td><td><a class="repo-link" href="https://github.com/debpalash/VoiceStudio">https://github.com/debpalash/VoiceStudio</a></td><td><span class="stars-total">15,668</span><span class="stars-delta">(d+832/w+2,511)</span></td><td>全本地运行的 ElevenLabs 替代：语音克隆+TTS</td><td>配音、有声书、虚拟人语音（数据不出本机）</td><td>本地化语音切隐私敏感客户（医疗/金融/创作者），SaaS 订阅的本地替代品有明确付费盘</td></tr>
+    <tr><td class="app-name">🎓 <strong>OpenMAIC</strong></td><td><a class="repo-link" href="https://github.com/THU-MAIC/OpenMAIC">https://github.com/THU-MAIC/OpenMAIC</a></td><td><span class="stars-total">30,874</span><span class="stars-delta">(w+9,426)</span></td><td>清华系开源多智能体互动课堂，一键进入沉浸式学习</td><td>AI 教学：多个 agent 扮演老师/助教/学伴的课堂模拟</td><td>教育是多智能体最先跑出真实付费场景的赛道之一；高校品牌背书强</td></tr>
+    <tr><td class="app-name">📈 <strong>Open SEO</strong></td><td><a class="repo-link" href="https://github.com/every-app/open-seo">https://github.com/every-app/open-seo</a></td><td><span class="stars-total">16,547</span><span class="stars-delta">(w+2,767)</span></td><td>Semrush/Ahrefs 的开源替代</td><td>关键词研究、外链/排名监控等 SEO 工作台</td><td>开源杀 SaaS 高价工具的老剧本：以「数据自主」为卖点抢中小企业</td></tr>
+    <tr><td class="app-name">🔌 <strong>FreeLLM API</strong></td><td><a class="repo-link" href="https://github.com/tashfeenahmed/freellmapi">https://github.com/tashfeenahmed/freellmapi</a></td><td><span class="stars-total">24,020</span><span class="stars-delta">(w+3,366)</span></td><td>聚合 34 家免费 LLM 供应商、635 个模型端点的 API 层【基础设施】</td><td>开发者低成本接入多家模型的统一网关/负载均衡</td><td>API 聚合套利生意：模型层商品化加速，「谁便宜接谁」的中间层有流量，但依赖免费额度可持续性</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2 id="deep-dives">重点应用深度点评</h2>
+
+<div class="panel"><p><strong>🧩 Agent Skills 生态（本期绝对主线）</strong>：mattpocock、addyosmani（Chrome 性能专家）这类个人工程师把整个 .agents 目录开源，anthropics 这类厂商下场定标准，加上 archify 周增 2.6 万星——技能包已事实上成为 AI 应用的「新 APK」。技术亮点在格式统一（.agents/skills 目录约定）+ 零成本分发（复制文件夹即安装）。风险：同质化极快，同类技能一周内会涌出十几个搬运版；护城河只剩「方法论质量+持续更新」，搬运型仓库会速朽。商业上，技能开源获客 + 托管执行/合规/数据服务收费（open-core 上移）是正解——专利技能包这类中文垂直场景尤其适合该打法，但新颖性检索与法律效力必须人工兜底，纯交付物有合规风险。</p></div>
+
+<div class="panel"><p><strong>🤖 Ponytail / 约束型编程工具</strong>：日增 2,138 星说明「让 agent 少写代码」已成刚需——AI 编程的最大成本与质量敌人是过度生成。这类技能本质是把资深工程师的「克制」编码成系统提示/决策规则。商业价值不在卖技能本身，而在把它做成 token 审计、变更质量门禁、CI 成本管控这类可挂在流水线上计费的工具。</p></div>
+
+<div class="panel"><p><strong>🤖 Agent 运行时（OpenClaude / Hermes Agent / Superpowers）</strong>：三者的星数说明「自托管 agent 平台」从极客玩具长成了主流心智。护城河判断：Superpowers（方法论+框架）与 Hermes（平台+技能生态）这类沉淀了流程与生态的项目最抗抄袭；纯客户端（OpenClaude 类）容易被模型厂商官方客户端迭代碾过——除非绑死「多模型自由接入」这一厂商永远不想给的诉求。</p></div>
+
+<div class="panel"><p><strong>🎙️ VoiceStudio</strong>：全本地语音克隆是对「API 订阅 SaaS」的正面进攻。护城河=模型权重+推理优化+合规叙事（数据不出机）；风险是语音克隆的滥用治理与厂商本地模型的性能追赶。本地化是 2026 年明确的分化方向，凡是隐私敏感场景（医疗、金融、法务）都值得按此重做一遍。</p></div>
+
+<div class="panel"><p><strong>🌍 Gods Eye View</strong>：严格说不是 LLM 应用，但周增破万说明「实时数据+沉浸可视化」比又一个聊天机器人更能引爆传播。对工具流玩家的启示：给 AI 应用加上「看得见的动态世界」是低成本高传播的加分项（同款思路：把 agent 的每一步操作可视化）。</p></div>
+
+<div class="panel"><p><strong>🎓 OpenMAIC 与 📈 Open SEO</strong>：多智能体教育 + 开源替代高价 SaaS，分别代表「新场景」与「旧场景降本」两条主流商业化路径。教育类的关键在于 agent 角色编排的教学法质量（清华背书加分）；SEO 类则要警惕开源替代项目的通病——数据源成本与功能面永远追不上闭源商业版。</p></div>
+
+<h2 id="trends">横向趋势洞察（我的判断）</h2>
+
+<ol class="insights">
+<li><strong>应用的形态在变：Agent Skills 就是新的 App</strong>。分发单元从「可执行软件」变成「可装载的知识/方法论包」，安装成本趋近于零，市场（skills.sh、SkillsMP 等已成形）雏形出现。这意味着纯功能型小工具的生存空间被压缩，内容+方法论型资产（技能包、模板库、规范库）成为新的价值载体——JetBrains 都开始给 AI agent 写「现代 Go 家规」就是大厂认路的信号。</li>
+<li><strong>AI 编程的主战场从「生成能力」转向「生成治理」</strong>：Ponytail/Caveman/ECC 一类「少写、省 token、控质量」的约束型工具密集起量。判断：能证明自己降低了每千行代码成本或提升了合并率的工具，比多一个代码生成器更有商业前途；token 审计与质量门禁会是下一个企业采购点。</li>
+<li><strong>垂直行业技能包 = 蓝海中的蓝海，但商业模式必须上移</strong>。专利、科研、SEO、法律……每个职业都可能长出「技能即 SaaS」。同质化无法靠代码防住（技能本质是可蒸馏的文本），护城河只能建在行业数据、合规流程、交付责任上——开源技能负责获客与口碑，钱在托管执行与企业版。</li>
+<li><strong>模型层商品化加剧，应用层必须绑定「工作流/数据/隐私」而非模型</strong>：一边是 FreeLLM API 聚合 34 家免费供应商做套利，一边是 VoiceStudio 全本地化切隐私盘——夹在中间的「单模型 API 转售」最危险。应用创业者现在正确的姿势是：要么本地化（数据不出机），要么多云路由（永远选最便宜），要么绑死某个工作流的数据飞轮。</li>
+<li><strong>纯聊天下半场，带「环境/数据/仿真」的应用在起量</strong>：多智能体课堂（OpenMAIC）、空间数据地球（Gods Eye View）周增均破万，timesfm 时间序列模型也在榜——凡是需要「跑起来、看得见、可交互」的场景（教育仿真、时空数据、金融预测）都在从 demo 走向产品。对做金融建模工具流的你来说：timesfm 上榜是个信号——时序预测+agent 的财务分析应用还缺一个杀手级开源产品，值得占坑。</li>
+<li><strong>警示：本期技能赛道已现拥挤</strong>。archify 爆火后必有大量绘图技能复制品；技能包的低复制成本决定它「赢家通吃+速朽」并存——只有持续更新、绑定真实工作流（如进 CI、进 IDE、进企业知识库）的技能才能沉淀成壁垒。跟风做技能本身不是机会，做技能的分发、评估、版本管理与质量认证（技能包时代的 npm/App Store）才是更大的机会。</li>
+</ol>
+
+<h2 id="data-notes">数据边界 / 未验证项</h2>
+
+<ul class="data-notes">
+<li>各仓库功能细节仅依据 Trending 抓取的单行简介推断，未逐一打开 repo 主页核实；涉及具体功能断言处请以仓库 README 为准</li>
+<li>OSSInsight 提示 GitHub events feed 自 2026-03-01 起不完整，增量星数宜视为下界</li>
+<li>脚本请求 limit=30，GitHub 实际返回 daily 19 条 / weekly 23 条；长期头部但当日未上榜的稳定项目不在本报告范围</li>
+<li>未收录及原因：fmtlib/zod/ByteByteGoHq 等非 AI；bannedbook/fanqiang、zedeus/nitter、majd/ipatool、omacom/omarchy 非 AI 应用；p-e-w/heretic（模型级去审查工具，属模型层且定位敏感，不展开）；magnitudedev/magnitude（仅 1.7k 星，样本太小）；jingyaogong/minimind、google-research/timesfm 等模型训练/基础模型类仅以 timesfm 为代表收录并标注</li>
+</ul>
+
+<div class="footer">
+<span class="tag tag-c">GitHub Trending</span><span class="tag tag-g">Agent Skills</span><span class="tag tag-b">AI 应用</span><span class="tag tag-d">2026-09-03</span>
+<br><br>
+整理：Hermes Agent · 2026-09-03（CST）· 数据来源 github.com/trending（daily + weekly 双榜）<br>
+风格源站：<a href="https://github.com/binbinao/openclaw-impact-report">github.com/binbinao/openclaw-impact-report</a>
+</div>
+
+</div>
+</body>
+</html>
