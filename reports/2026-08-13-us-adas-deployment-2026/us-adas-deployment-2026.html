@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美国汽车智驾深度调研（2024–2026）</title>
+  <style>
+:root {
+  --ivory:#FAF9F5; --white:#FFFFFF; --slate:#141413;
+  --clay:#D97757; --olive:#788C5D; --rust:#B04A3F; --oat:#E3DACC;
+  --sky:#5B8BA0; --purple:#8B6B9E;
+  --gray-100:#F0EEE6; --gray-300:#D1CFC5; --gray-500:#87867F; --gray-700:#3D3D3A;
+  --border:1.5px solid var(--gray-300);
+  --radius-panel:12px; --radius-row:8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background:var(--ivory); color:var(--gray-700);
+  font-family:var(--sans); font-size:15px; line-height:1.7;
+  padding:56px 24px 120px; -webkit-font-smoothing:antialiased;
+}
+.page { max-width:980px; margin:0 auto; }
+header { margin-bottom:36px; border-bottom:1px solid var(--gray-300); padding-bottom:18px; }
+.eyebrow {
+  font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--gray-500); margin-bottom:8px;
+}
+h1 {
+  font-family:var(--serif); font-weight:500; font-size:30px;
+  letter-spacing:-.01em; color:var(--slate); line-height:1.3;
+}
+.meta { color:var(--gray-500); font-size:13px; margin-top:10px; }
+.lead {
+  font-size:16px; color:var(--gray-700); margin:22px 0 32px;
+  padding:18px 20px; background:rgba(217,119,87,.05);
+  border-left:3px solid var(--clay); border-radius:var(--radius-row);
+  line-height:1.75;
+}
+section { margin-bottom:44px; }
+h2 {
+  font-family:var(--serif); font-weight:500; font-size:22px;
+  letter-spacing:-.01em; color:var(--slate);
+  margin:32px 0 12px; scroll-margin-top:24px;
+}
+h3 {
+  font-family:var(--serif); font-weight:500; font-size:17px;
+  color:var(--slate); margin:20px 0 8px;
+}
+hr.rule { border:none; border-top:1px solid var(--gray-300); margin:32px 0; }
+p { margin:0 0 14px; }
+ul, ol { margin:0 0 14px 22px; }
+li { margin:0 0 6px; }
+strong { color:var(--slate); font-weight:600; }
+em { font-style:italic; color:var(--gray-700); }
+.data-table {
+  width:100%; border-collapse:separate; border-spacing:0;
+  background:var(--white); border:var(--border);
+  border-radius:var(--radius-panel); overflow:hidden;
+  margin:14px 0 18px; font-size:13px;
+}
+.data-table thead th {
+  text-align:left; font-family:var(--sans); font-size:10px;
+  font-weight:600; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--gray-500); background:var(--gray-100);
+  padding:10px 14px; border-bottom:1px solid var(--gray-300);
+}
+.data-table tbody td {
+  padding:10px 14px; border-bottom:1px solid var(--gray-100);
+  vertical-align:top; line-height:1.55;
+}
+.data-table tbody tr:last-child td { border-bottom:none; }
+.data-table tbody tr:hover { background:var(--ivory); }
+pre {
+  background:var(--gray-100); border:var(--border);
+  border-radius:var(--radius-panel); padding:16px 20px;
+  overflow-x:auto; font-family:var(--mono); font-size:12.5px;
+  line-height:1.55; color:var(--slate); margin:14px 0 20px;
+}
+code { font-family:var(--mono); font-size:.92em; }
+sup.cite {
+  font-family:var(--mono); font-size:11px; color:var(--clay);
+  font-weight:600; padding:0 1px; cursor:pointer;
+}
+sup.cite a { color:inherit; text-decoration:none; }
+sup.cite:hover { color:var(--rust); }
+blockquote {
+  border-left:3px solid var(--olive);
+  background:rgba(120,140,93,.06);
+  padding:12px 18px; margin:14px 0; border-radius:var(--radius-row);
+  color:var(--gray-700); font-size:14.5px;
+}
+.callout {
+  background:rgba(217,119,87,.06); border-left:3px solid var(--clay);
+  border-radius:var(--radius-row); padding:14px 16px; margin:14px 0;
+  font-size:14px;
+}
+.callout.warn {
+  background:rgba(176,74,63,.06); border-left-color:var(--rust);
+}
+.callout.olive {
+  background:rgba(120,140,93,.08); border-left-color:var(--olive);
+}
+.footer {
+  margin-top:64px; padding-top:18px; border-top:1px solid var(--gray-300);
+  font-family:var(--mono); font-size:11px; color:var(--gray-500);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+.footer a { color:var(--clay); text-decoration:none; }
+.footer a:hover { color:var(--rust); }
+.sources { margin-top:48px; }
+.sources h2 { font-size:20px; }
+.sources ol {
+  font-size:13px; line-height:1.6; color:var(--gray-700);
+  list-style:decimal; padding-left:24px;
+}
+.sources ol li { margin-bottom:6px; word-break:break-word; }
+.sources ol li a { color:var(--slate); text-decoration:underline; text-decoration-color:var(--gray-300); }
+.sources ol li a:hover { text-decoration-color:var(--clay); }
+.badge { display:inline-block; border-radius:6px; padding:2px 8px;
+         font-family:var(--mono); font-size:11px; margin-right:4px; }
+.badge.rust { background:rgba(176,74,63,.15); color:var(--rust); }
+.badge.olive { background:rgba(120,140,93,.15); color:var(--olive); }
+.badge.clay { background:rgba(217,119,87,.15); color:var(--clay); }
+.badge.sky { background:rgba(91,139,160,.15); color:var(--sky); }
+.badge.purple { background:rgba(139,107,174,.15); color:var(--purple); }
+</style>
+</head>
+<body>
+<div class="page">
+<header><div class='eyebrow'>DEEP RESEARCH · US AUTOMOTIVE INTELLIGENCE</div>
+<h1>美国汽车智能驾驶市场深度调研（2024–2026）</h1>
+
+</header>
+__META_BLOCK_::
+__LEAD_BLOCK_::
+
+<p><strong>报告周期</strong>：2024-Q1 – 2026-Q2（重点 2025-Q4 – 2026-Q2）</p>
+<p><strong>数据截止</strong>：2026-08-13</p>
+<p><strong>地理边界</strong>：美国市场为主，必要对照中国市场</p>
+
+<hr class="rule">
+
+<h2>一句话结论（TL;DR）</h2>
+
+<p>美国 2024–2026 的智能驾驶市场呈现"L2 高度渗透、L3 名存实亡、L4 Robotaxi 一超多强"的断层格局：Waymo 以 500,000 单/周（3,067 辆车队、10 城市、220M 全自动英里）坐稳头部；Tesla 6/22/2025 启动奥斯汀 Robotaxi，但全奥斯汀仅部署 ~20 辆且 17 起 NHTSA 事故；Cruise 经 2024-Q4 GM 撤资、2025-02 不重启、2026-05 才在休斯顿重启监督测试；Mercedes 主动暂停 Drive Pilot L3；芯片端 Mobileye 2025 累计 230M 装车 + Q1 2026 营收 $558M（+27% YoY），NVIDIA Drive Orin/Thor 占高端 AI 计算 25-35% 份额；NHTSA 在 2026-03-18 将 Tesla FSD 320 万辆调查升至"工程分析"（EA26002），距离强制召回仅一步之遥。<sup class="cite"><a href="#src-7">[7]</a></sup><sup class="cite"><a href="#src-33">[33]</a></sup><sup class="cite"><a href="#src-48">[48]</a></sup><sup class="cite"><a href="#src-70">[70]</a></sup><sup class="cite"><a href="#src-17">[17]</a></sup></p>
+
+<hr class="rule">
+
+<h2>1. 美国市场分层：L2 / L2+ / L3 / L4 的真实落地差异</h2>
+
+<p>美国市场的"智驾"是个被滥用的词——SAE J3016 划分下的 L2、L2+、L3、L4 在监管责任、定价、运营模式上完全是不同的生意，但产业传播上常被一锅炖。下表是 2026-Q2 当前最权威的分层现实：</p>
+
+<pre>                  美国市场智驾分层（金字塔 2026-Q2 实际落地版）
+                  ============================================
+                       L4 Robotaxi  ←  真正无人，单车可独立计费
+                     ─┬────────────┬─
+                  L3  │            │  SAE 标准"条件性自动驾驶"
+                高速  │            │  仅 Mercedes Drive Pilot 1 处
+                拥堵  │            │  在加州/内华达保留，2026 暂停新车型
+              ─┬──────┴────────────┴──────┬─
+            L2+ │                          │  高速 NOA / 城市 NOA
+          高速  │                          │  BlueCruise 97% 美高速覆盖
+          NOA   │                          │  Super Cruise 75 万英里
+               ─┤                          │  FSD Supervised 320 万辆
+            L2  │                          │  Toyota Safety Sense / Honda
+          ACC + │                          │  Sensing / Hyundai HDA 等
+          LKA   │                          │  100% 渗透新车</pre>
+
+<p><strong>关键差异</strong>：</p>
+
+<table class="data-table">
+<thead><tr><th>维度</th><th>L2 (基础)</th><th>L2+ (NOA)</th><th>L3 (有条件)</th><th>L4 (Robotaxi)</th></tr></thead>
+<tbody>
+<tr><td><strong>2026 代表玩家</strong></td><td>Toyota Safety Sense 3.0 标配 <sup class="cite"><a href="#src-12">[12]</a></sup></td><td>Ford BlueCruise、GM Super Cruise、Tesla FSD (Supervised)</td><td>Mercedes Drive Pilot (S/EQS，2026 暂停新车型) <sup class="cite"><a href="#src-37">[37]</a></sup></td><td>Waymo、Zoox、Tesla Robotaxi、Cruise (重测)</td></tr>
+<tr><td><strong>单车定价/年费</strong></td><td>0（新车标配）</td><td>BlueCruise $495-$995/年 <sup class="cite"><a href="#src-35">[35]</a></sup>；Super Cruise 3 年免费 <sup class="cite"><a href="#src-49">[49]</a></sup>；FSD $8,000 一次性或 $99/月</td><td>Drive Pilot $5,000-$10,000 一次性（奔驰 S/EQS 仅高速拥堵 &lt;40mph） <sup class="cite"><a href="#src-37">[37]</a></sup></td><td>会员价 $0.30-$0.70/英里（Waymo 早期数据） <sup class="cite"><a href="#src-3">[3]</a></sup></td></tr>
+<tr><td><strong>运营责任</strong></td><td>驾驶员全责</td><td>驾驶员须监控</td><td>系统在 ODD 内负责</td><td>系统全责（需 SAEL4 认证）</td></tr>
+<tr><td><strong>市场规模</strong></td><td>100% 新车</td><td>数百万存量</td><td>&lt; 5,000 辆</td><td>Waymo 3,067 辆全国 <sup class="cite"><a href="#src-7">[7]</a></sup></td></tr>
+<tr><td><strong>关键监管</strong></td><td>FMVSS 豁免</td><td>FMVSS 豁免</td><td>各州 L3 立法</td><td>NHTSA SGO 2021-01 + 州/地方法规</td></tr>
+<tr><td><strong>2026-Q2 真实状态</strong></td><td>完全渗透</td><td>数百万用户，跑通商业模式</td><td><strong>名存实亡</strong>——Mercedes 主动退守</td><td>Waymo 一超，Tesla/Cruise 极小规模</td></tr>
+</tbody></table>
+
+<hr class="rule">
+
+<h2>2. Tesla FSD 进展与 Robotaxi 真实数据</h2>
+
+<h3>2.1 软件版本时间线</h3>
+
+__UL_START_::**FSD v13（Supervised）**：2024-Q4 发布；硬件 HW4 上 5 倍参数、5 倍算力 [42]
+__UL_START_::**FSD v14 (v14.3.5 / v14.3.6)**：2025-07 至 2025-08 推送，HW3 / HW4 双平台；含"端到端高速"功能 [42]
+__UL_START_::**FSD v15（计划中）**：Musk 在 Q1 2026 财报电话会明确，"驾驶模型"将从 ~10 亿参数扩到 ~100 亿参数，定位为 v13 以来"最大架构改写"，目标窗口为 **2026 年末 - 2027 年初**[7]；Musk 同时承认"知道有重大架构改进要上时，部署大规模无人监督 FSD 不合理"——这与 Robotaxi 大规模扩张直接挂钩。
+
+<h3>2.2 Robotaxi 启动与扩区</h3>
+
+__UL_START_::**2025-06-22**：Tesla 在奥斯汀启动无人监督 Robotaxi 服务（最初邀请制），每单固定 $4.20，前排配 Tesla 员工监督 [8][9][10]
+__UL_START_::**2026-Q2 全奥斯汀覆盖**：2026-06-03 扩至整个奥斯汀都市圈（含机场），约 245 平方英里 [7]，车型仍为 Model Y（非 Cybercab）
+__UL_START_::**2026-04 跨城市扩张**：进入达拉斯、休斯顿，"Texas 成为全美第一个具多城市无监督 Robotaxi 部署的州" [7]
+__UL_START_::**2026-06-22 一周年**：奥斯汀业务满 1 年，但实际运营规模与 Musk 早期"千辆级"承诺差距巨大 [7]
+
+<h3>2.3 真实车队规模（被低估的核心数据）</h3>
+
+<p>Tesla 在 2025-06 启动后车队增长曲线平缓甚至下行，与 Waymo 形成指数级对比：</p>
+
+<table class="data-table">
+<thead><tr><th>指标</th><th>Tesla Robotaxi (2026-Q2)</th><th>Waymo (2025-12 报备，2026 持续)</th></tr></thead>
+<tbody>
+<tr><td><strong>德州全州授权车辆</strong></td><td><strong>42 辆</strong>（May 2026 州数据库） <sup class="cite"><a href="#src-7">[7]</a></sup></td><td><strong>577 辆</strong> <sup class="cite"><a href="#src-7">[7]</a></sup></td></tr>
+<tr><td><strong>奥斯汀活跃无监督车辆</strong></td><td><strong>~20 辆</strong>（Robotaxi Tracker，2026-06），从 4 月 ~25 辆峰值回落 <sup class="cite"><a href="#src-7">[7]</a></sup></td><td>Waymo 在奥斯汀通过 Uber App 提供服务</td></tr>
+<tr><td><strong>每周付费单量</strong></td><td>未披露，"low thousands" 估算 <sup class="cite"><a href="#src-7">[7]</a></sup></td><td><strong>500,000+ 单/周</strong>（Waymo 2025-12 报备 250k paid trips weekly，2026-Q2 已翻倍） <sup class="cite"><a href="#src-7">[7]</a></sup><sup class="cite"><a href="#src-47">[47]</a></sup></td></tr>
+<tr><td><strong>NHTSA 备案事故</strong></td><td>17 起（2025-07 至 2026-04），其中 2 起轻伤、1 起需住院 <sup class="cite"><a href="#src-7">[7]</a></sup></td><td>464+ 起（2025 累计上报） <sup class="cite"><a href="#src-57">[57]</a></sup>，但 17 起 在 NHTSA 关闭调查中无系统性违规 <sup class="cite"><a href="#src-53">[53]</a></sup></td></tr>
+<tr><td><strong>车队平台</strong></td><td>Model Y（同家用车型）</td><td>Geely-极氪 / Jaguar I-PACE / Hyundai IONIQ 5（专用平台） <sup class="cite"><a href="#src-5">[5]</a></sup></td></tr>
+</tbody></table>
+
+<p>Reuters 基于 9 位前 Tesla 数据标注员、1 位前自动驾驶工程师、11 位交通安全研究员的访谈，发现 <sup class="cite"><a href="#src-7">[7]</a></sup><sup class="cite"><a href="#src-11">[11]</a></sup>：</p>
+
+__UL_START_::奥斯汀启动前，Tesla 员工从晚 6 点至凌晨测试 Robotaxi 原型车；数据标注员花数百小时标注沿线路缘与路面标记
+__UL_START_::Tesla 将 FSD airbag-deployment 撞车数据与"全国撞车平均（含未弹出气囊）"对比，安全优势被夸大约 **3 倍**；11 位交通安全研究员中 10 位称该统计"具误导性"
+__UL_START_::9 位前标注员中 7 位表示"不会信任 FSD 载他们自己"
+
+<p><strong>结论</strong>：Tesla 的"无地图路线泛化"主张与 Reuters 调查的"路线专属准备"现实存在结构性张力；这构成了 v15 rewrite 前的最大叙事风险。</p>
+
+<hr class="rule">
+
+<h2>3. Waymo 真实运营数据（Alphabet 子公司）</h2>
+
+<h3>3.1 车队与运营规模</h3>
+
+__UL_START_::**车队规模（2025-12 上报）**：**3,067 辆** robotaxi 在全美运行第五代 Driver [7]
+__UL_START_::**周单量**：从 2024-Q1 ~25,000 单/周 → 2025-Q4 ~250,000 单/周 [7] → 2026-Q2 **>500,000 单/周**（Tech Times 报道 Waymo 上报 NHTSA 数据） [7][46]
+__UL_START_::**年度累计（2025 全年）**：超过 **15M 付费行程**；累计 **20M+** 终生付费行程 [46]
+__UL_START_::**全自动英里累计**：截至 2026-03 末**220M 全自动英里**（折合"超过 250 个人类寿命的驾驶时间"） [1][2]
+
+<h3>3.2 覆盖城市（2026-Q2，10 城+）</h3>
+
+<table class="data-table">
+<thead><tr><th>城市</th><th>启动年份</th><th>2026 状态</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td>Phoenix（凤凰城）</td><td>2020 (Rider Only)</td><td>公开运营，机场待开通</td><td><sup class="cite"><a href="#src-1">[1]</a></sup></td></tr>
+<tr><td>San Francisco（旧金山）</td><td>2022-06 / 2024-06 公开</td><td>Bay Area 服务区已统一</td><td><sup class="cite"><a href="#src-1">[1]</a></sup><sup class="cite"><a href="#src-2">[2]</a></sup></td></tr>
+<tr><td>Los Angeles（洛杉矶）</td><td>2024</td><td>公开运营</td><td><sup class="cite"><a href="#src-1">[1]</a></sup></td></tr>
+<tr><td>Austin（奥斯汀）</td><td>2025-03</td><td>Tesla Robotaxi 主要竞争城市</td><td><sup class="cite"><a href="#src-7">[7]</a></sup></td></tr>
+<tr><td>Atlanta（亚特兰大）</td><td>2025-06</td><td>5.4M 自治英里，机场服务</td><td><sup class="cite"><a href="#src-1">[1]</a></sup></td></tr>
+<tr><td>Miami / Miami Beach</td><td>2026</td><td>Waymo + Uber 双 App</td><td><sup class="cite"><a href="#src-3">[3]</a></sup></td></tr>
+<tr><td>Nashville（纳什维尔）</td><td>2026-04 / 2026-06-25 全开放 <sup class="cite"><a href="#src-4">[4]</a></sup></td><td>累计数万人体验</td><td><sup class="cite"><a href="#src-4">[4]</a></sup></td></tr>
+<tr><td>Dallas（达拉斯）</td><td>2026-08-04 全开放（从 2025-12 起先内部开放）</td><td>累计近 150,000 riders</td><td><sup class="cite"><a href="#src-3">[3]</a></sup></td></tr>
+<tr><td>Denver（丹佛）</td><td>2026-Q3 起公开</td><td>内测开放</td><td><sup class="cite"><a href="#src-5">[5]</a></sup></td></tr>
+<tr><td>Las Vegas（拉斯维加斯）</td><td>2026-Q3 起公开</td><td>内测开放</td><td><sup class="cite"><a href="#src-5">[5]</a></sup></td></tr>
+<tr><td>San Diego（圣地亚哥）</td><td>2026-Q3 起公开</td><td>内测开放</td><td><sup class="cite"><a href="#src-5">[5]</a></sup></td></tr>
+<tr><td>Tampa（坦帕）</td><td>2026-Q3 起公开</td><td>内测开放</td><td><sup class="cite"><a href="#src-5">[5]</a></sup></td></tr>
+<tr><td><strong>Portland（波特兰）</strong></td><td>2026-04-28 宣布 <sup class="cite"><a href="#src-6">[6]</a></sup></td><td>2026 年内启动</td><td><sup class="cite"><a href="#src-6">[6]</a></sup></td></tr>
+</tbody></table>
+
+<p>Waymo 自家最新分析 <sup class="cite"><a href="#src-1">[1]</a></sup><sup class="cite"><a href="#src-2">[2]</a></sup>：</p>
+
+<table class="data-table">
+<thead><tr><th>指标</th><th>Waymo vs 人类驾驶员</th><th>折减事故数</th></tr></thead>
+<tbody>
+<tr><td>严重伤亡或更糟碰撞</td><td><strong>-94%</strong></td><td>累计少 47 起</td></tr>
+<tr><td>气囊弹出碰撞</td><td><strong>-82%</strong></td><td>累计少 305 起</td></tr>
+<tr><td>任何伤害碰撞</td><td><strong>-82%</strong></td><td>累计少 707 起</td></tr>
+<tr><td>行人受伤碰撞</td><td><strong>-93%</strong></td><td>累计少 76 起</td></tr>
+<tr><td>骑自行车人受伤碰撞</td><td><strong>-84%</strong></td><td>累计少 48 起</td></tr>
+<tr><td>摩托车手受伤碰撞</td><td><strong>-84%</strong></td><td>累计少 32 起</td></tr>
+</tbody></table>
+
+<h3>3.4 定价与监管关键事件</h3>
+
+__UL_START_::**NHTSA 调查（2024-05 启动，2025-07-29 结案）**：调查 14 个月，审查 22 起涉及 440 辆 Waymo 车的事件，其中 17 起为碰撞；**结论：未发现系统性安全违规** [53]
+__UL_START_::**NHTSA 调查二（2025-10 启动）**：聚焦 Waymo 在停靠校车附近"违反保护行人交通规则"；**2025-12 触发软件召回** [59]
+__UL_START_::**首起致死事件**：2025 年内 Waymo Robotaxi 发生首起致死碰撞（详见后文）
+__UL_START_::**纽约测试许可**：2026-03-31 到期，**Waymo 测试车在 NYC 不允许继续测试** [7 引用图说]
+__UL_START_::**第六代 Waymo Driver**：搭载 **Hyundai IONIQ 5** 平台，2026-Q3 起在多个新城市内测 [5]
+
+<hr class="rule">
+
+<h2>4. Cruise（GM 旗下）：从 2024 危机到 2026 重组</h2>
+
+<h3>4.1 时间线（关键节点）</h3>
+
+<table class="data-table">
+<thead><tr><th>日期</th><th>事件</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td>2023-10-02</td><td>旧金山行人拖拽事故：Cruise 车辆将已被撞行人拖行约 20 英尺（7mph），行人重伤</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2023-10-24</td><td>加州 DMV 吊销 Cruise 运营许可（指控隐瞒视频片段）</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2023-11</td><td>CEO Kyle Vogt 辞职；公司裁员 ~25%</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2023-12</td><td>NHTSA 启动正式调查；全美所有运营暂停</td><td><sup class="cite"><a href="#src-12">[12]</a></sup><sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+<tr><td>2024-01</td><td>SEC 与 DOJ 启动调查</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2024-04</td><td>凤凰城恢复人工数据采集（人类驾驶员手动）</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2024-05</td><td>凤凰城开始有监督自动驾驶测试</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2024-06-11</td><td>GM 宣布向 Cruise 再注资 <strong>$850M</strong> <sup class="cite"><a href="#src-15">[15]</a></sup></td><td><sup class="cite"><a href="#src-15">[15]</a></sup></td></tr>
+<tr><td>2024-12-10</td><td><strong>GM 宣布退出 Robotaxi 业务，停止为 Cruise 独立融资</strong> <sup class="cite"><a href="#src-14">[14]</a></sup></td><td><sup class="cite"><a href="#src-14">[14]</a></sup></td></tr>
+<tr><td>2025-02-06</td><td><strong>Cruise 正式确认不会重启 Robotaxi 服务</strong> <sup class="cite"><a href="#src-13">[13]</a></sup></td><td><sup class="cite"><a href="#src-13">[13]</a></sup></td></tr>
+<tr><td>2025-02</td><td>GM 再裁员 ~50%（约 1,000 人），CEO Marc Whitten（任期仅数月）离任</td><td><sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td>2026-04</td><td><strong>凤凰城重启监督测试</strong> <sup class="cite"><a href="#src-16">[16]</a></sup></td><td><sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+<tr><td>2026-05-31</td><td><strong>休斯顿重启监督测试</strong>：10 辆改装 Chevrolet Bolts 开始街道制图 <sup class="cite"><a href="#src-16">[16]</a></sup></td><td><sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+<tr><td>2026-05</td><td>Houston 议会 6-5 投票通过 Cruise 测试许可（限 10am-4pm 晴好天气）</td><td><sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+<tr><td>2026-08（计划）</td><td>凤凰城 + 休斯顿试点扩至 20 辆，休斯顿目标 9 月起载客</td><td><sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+</tbody></table>
+
+__UL_START_::**2025 现金燃烧**：约 **$2.7B** [16]
+__UL_START_::**GM 自 2016 累计投入 Cruise**：$10B+ [16]
+__UL_START_::**裁员总数**：2023-12 ~24% + 2025-02 ~50%（剩余 1,000 人）[12]
+
+<h3>4.3 NHTSA 调查当前状态</h3>
+
+__UL_START_::**2023-12 启动的调查仍开放**——NHTSA 要求 Cruise 证明车辆能在低光照条件下检测并避开行人（即旧金山事故失败模式），Cruise 需每月向 NHTSA 提交报告 [16]
+
+<hr class="rule">
+
+<h2>5. Aurora、Zoox 与第二梯队 Robotaxi</h2>
+
+<h3>5.1 Aurora Innovation（AUR）：卡车先行 + 出租车双线</h3>
+
+__UL_START_::**2025-05-01**：Aurora 在德州正式启动**商业 Class 8 无人卡车**运营，Dallas–Houston 双向定期 [24]
+__UL_START_::**2025-08-07**：发布第二代 driverless trucks [27]
+__UL_START_::**2025-10-28**：扩展至 Fort Worth – El Paso 第二条无人卡车路线 [25]
+__UL_START_::**2026-Q1**：规划 Sun Belt 进一步扩张 [26]
+__UL_START_::**2025 实际营收**：**$3M**（vs 2024 基本为 0）[26]
+__UL_START_::**出租车业务**：Aurora Driver 同时供应乘用车 OEM，但未启动乘用车 Robotaxi 商业运营 [27]
+
+<h3>5.2 Zoox（Amazon）：从原型到 8/10/2026 收费</h3>
+
+__UL_START_::**2025**：在 Las Vegas Strip 启动免费公众乘坐 [48]
+__UL_START_::**2026-04**：宣布扩至 San Francisco、Miami、Austin、Florida [48]
+__UL_START_::**截至 2026-05**：累计 ~2M 全自动英里、**350,000+ 乘客**（免费） [48]
+__UL_START_::**2026-08-05**：宣布**首条付费 Robotaxi 服务**——Las Vegas Strip，8/10 启动 [43][44][45]
+__UL_START_::**NHTSA 商业豁免**：Zoox 是首个拿到无方向盘、无踏板目的建造 robotaxi NHTSA 商业豁免的公司 [45]
+__UL_START_::**车队规模**：未公开具体数字，2026 年公开目标扩至数十至数百
+
+<h3>5.3 中国公司在美 Robotaxi：基本缺席</h3>
+
+<p>见第 11 节详细分析。</p>
+
+<hr class="rule">
+
+<h2>6. 传统车企的 L2/L3 路径</h2>
+
+<h3>6.1 Ford BlueCruise</h3>
+
+__UL_START_::**2025 状态**：蓝区已覆盖美国 **97% 受控进出高速** [35]
+__UL_START_::**2025 软件版本 IPMA-24.204.10.9**（秋季）+ **2026 IPMA-25.22.7.3.10B**（夏季）[35]
+__UL_START_::**车辆覆盖**：Mustang Mach-E、F-150 Lightning、Explorer（ST-Line/ST/Platinum from 2025 MY）、Lincoln 车型 [35]
+__UL_START_::**订阅价**：~$495-$995/年（数据基于 Ford 官网，未给出 2026 统一价目）
+__UL_START_::**2026 趋势**：Ford 在 2025 文章中称"hands-free usage skyrockets" [36]
+
+<h3>6.2 GM Super Cruise</h3>
+
+__UL_START_::**2024-2025 网络扩展**：GM 将可用蓝区从 ~400,000 英里**扩至 750,000 英里**——成为北美最大 hands-free 高速公路网 [49][52]
+__UL_START_::**2026 MY 升级**：与 Google Maps 整合、拖挂模式等 [51]
+__UL_START_::**2026 累计 hands-free 英里**：**超过 10 亿英里** [50 引用 cartipsdaily 2026 数据]
+__UL_START_::**覆盖车辆**：2024-2025 15% GM 车型含 Super Cruise [50]；CT4/CT5、Escalade、Silverado EV、Sierra EV 等
+
+<h3>6.3 Mercedes Drive Pilot L3：主动暂停</h3>
+
+__UL_START_::**2023-01-26**：内华达州首个认证 SAE L3 [32]
+__UL_START_::**2026-03-24**：加州认证获批 [33][34]
+__UL_START_::**2026 中期现状（Unanswered 2026-02-13）**：**Mercedes 已暂停在新车型部署 Drive Pilot**，包括 2026 S-Class 改款改为 **Level 2++ MB.Drive Assist Pro** [37]
+__UL_START_::**理由**：成本 vs 需求、传感器成本、当前 ODD（< 40mph 拥堵）"提供收益有限" [37]
+__UL_START_::**未来路线**：Mercedes 转向更高速度 L3 + 完整 L4，公共道路 L4 Robotaxi 原型已在 Abu Dhabi 测试，与 NVIDIA 合作核心计算 [37][40]
+
+<h3>6.4 其他传统车企</h3>
+
+__UL_START_::**Toyota Safety Sense**（TSS 3.0/4.0）：标配 L2 全速 ACC + LKA；不进入 L2+/L3 商业化 [12]
+__UL_START_::**Stellantis / Stellantis Cloud-Enhanced ADAS**：Mobileye 在 Q2 2026 报新增高产量 Cloud-Enhanced ADAS design win [33]
+__UL_START_::**Volvo EX90**：搭载 NVIDIA DRIVE AGX Orin，规划迁至 Thor [38]
+
+<hr class="rule">
+
+<h2>7. 芯片与供应链：Mobileye / NVIDIA / Qualcomm 三足鼎立</h2>
+
+<h3>7.1 Mobileye（MBLY，市值约 $130 亿）</h3>
+
+__UL_START_::**2025 全年营收**：$1,894M；净亏 $392M [70]
+__UL_START_::**2026-Q1 营收**：**$558M**，同比 **+27%** [70]
+__UL_START_::**2026-Q2 营收**：**$508M**（与 2025-Q2 持平；按 GAAP 运营亏损 $30M、调整后运营利润 $46M/+46% YoY） [33]
+__UL_START_::**2026 财年指引**：上调至 **$1,970M – $2,020M**，同比 +4% – 7% [33]
+__UL_START_::**EyeQ 累计装车（2025 年末）**：超过 **230,000,000 辆** [70]
+__UL_START_::**Q2 2026 EyeQ 出货量**：**9.3M**（[34] 引用 24/7 Wall St 数据）
+__UL_START_::**EyeQ6 Lite 已上线，设定至 2027 年成为销量最大的汽车级视觉 SoC** [67]
+__UL_START_::**Mobileye Chauffeur**：Polestar 4 + ECARX 集成，2026 起装车 [28][29][30]
+
+<h3>7.2 NVIDIA DRIVE</h3>
+
+__UL_START_::**Drive Orin**（254 TOPS）：**当前主流 L2/L3 中央计算平台**，设计赢包括 Mercedes、Volvo、Lucid、中国 OEM 多家 [38][41]
+__UL_START_::**Drive Thor**（2,000 TOPS）：2025-2026 生产，首批客户 Mercedes CLA（MB.DRIVE ASSIST PRO 量产 2026-Q1） [40][41]
+__UL_START_::**NVIDIA 全球域控制器市占率（H1 2025）**：约 **25-35%**（LinkedIn 行业分析） [63]
+__UL_START_::**DriveOS**：安全认证操作系统 [38]
+
+<h3>7.3 Qualcomm Snapdragon Ride</h3>
+
+__UL_START_::**SA8775P**：与 Orin / EyeQ6 并列的 L2+ 主控平台 [63]
+__UL_START_::**设计赢**：在 Toyota 等日系厂商占比相对较高；2025-2026 公开设计赢数据零散，但据 LinkedIn 估算占域控制器 ~10-15% 区间 [63]
+
+<h3>7.4 芯片对比表</h3>
+
+<table class="data-table">
+<thead><tr><th>厂商</th><th>旗舰 SoC</th><th>算力 (TOPS)</th><th>美国 L2/L3 主力客户</th><th>2025-2026 关键动作</th></tr></thead>
+<tbody>
+<tr><td><strong>Mobileye</strong></td><td>EyeQ6 High / EyeQ Ultra</td><td>EyeQ6 ~5x EyeQ5；Ultra Ultra ~172</td><td>Polestar (Chauffeur) + VW/Stellantis</td><td>Q1 2026 营收 +27% YoY；累计装车 230M <sup class="cite"><a href="#src-70">[70]</a></sup></td></tr>
+<tr><td><strong>NVIDIA</strong></td><td>Drive Orin / Thor</td><td>Orin 254；Thor 2,000</td><td>Mercedes (MB.DRIVE ASSIST PRO) + Volvo + Lucid</td><td>Thor 量产 2026-Q1，首发 CLA <sup class="cite"><a href="#src-40">[40]</a></sup></td></tr>
+<tr><td><strong>Qualcomm</strong></td><td>SA8775P / SA8797P</td><td>SA8775P ~30-50</td><td>Toyota/Lexus、部分中国</td><td>Ride Pilot SDK 扩 <sup class="cite"><a href="#src-63">[63]</a></sup></td></tr>
+<tr><td><strong>Tesla 自研</strong></td><td>HW4 / AI4</td><td>144 (HW4)</td><td>仅 Tesla 自用</td><td>自研路线，<strong>不外销</strong> <sup class="cite"><a href="#src-64">[64]</a></sup></td></tr>
+</tbody></table>
+
+<h2>8. 监管与法规</h2>
+
+<h3>8.1 SAE J3016 与 NHTSA</h3>
+
+__UL_START_::**SAE J3016（2021-04 最新修订）**：0-5 级自动驾驶定义；产业事实标准，但**法律上仅是参考**
+__UL_START_::**NHTSA SGO 2021-01**：要求 L3+ 运营方上报碰撞数据；2024-08 进一步要求上报所有 SAE L2 ADAS 撞车数据
+__UL_START_::**FMVSS（联邦机动车辆安全标准）豁免**：每个无方向盘/踏板的 L4 Robotaxi 都需要 NHTSA 单独豁免；目前获豁免的仅 **Nuro（低速 2018/2020）、Zoox（2026）**等极少数 [45]
+
+<h3>8.2 州/地方层面</h3>
+
+<table class="data-table">
+<thead><tr><th>州</th><th>L3 立法</th><th>L4 法规</th><th>2026 关键</th></tr></thead>
+<tbody>
+<tr><td><strong>California</strong></td><td>Mercedes Drive Pilot L3 2026-03-24 获批 <sup class="cite"><a href="#src-33">[33]</a></sup></td><td>DMV Autonomous Vehicle Tester (Drivered) / Driverless Permit</td><td>Zoox SF 免费乘坐、Waymo 全开放</td></tr>
+<tr><td><strong>Nevada</strong></td><td>Mercedes Drive Pilot L3 2023-01 首个 <sup class="cite"><a href="#src-32">[32]</a></sup></td><td>DMV AV 牌照</td><td>Waymo Las Vegas 试点</td></tr>
+<tr><td><strong>Arizona</strong></td><td>无 L3 特定立法</td><td>较宽松，无里程限制</td><td>Waymo Phoenix 全开放、Zoox 计划</td></tr>
+<tr><td><strong>Texas</strong></td><td>无 L3 立法</td><td><strong>SB 2807（2025-06 通过）</strong>要求商业 AV 运营方向 TxDMV 备案并自证 SAE L4 <sup class="cite"><a href="#src-60">[60]</a></sup><sup class="cite"><a href="#src-61">[61]</a></sup><sup class="cite"><a href="#src-62">[62]</a></sup></td><td>Tesla / Waymo / Aurora / Zoox 全在德州运营；2026-05-28 SB 2807 生效</td></tr>
+<tr><td><strong>New York</strong></td><td>L3 立法待定</td><td>DMV AV 测试许可（需市议会批）</td><td>Waymo 测试许可 2026-03-31 到期未续 [7 引用图说]</td></tr>
+</tbody></table>
+
+__UL_START_::89R Texas Legislature 于 **2025-06** 通过 [62]
+__UL_START_::**生效日**：**2026-05-28** [62]
+__UL_START_::要求：在德州"州内公路"商业运营 AV 的运营商，须向 TxDMV 申请授权 + 自证 SAE L4 能力 + 标识车辆 + 上报事故 + 配合执法 [60][61]
+__UL_START_::**2026-05-28 报备数据**：Tesla 42 辆、Waymo 577 辆、Avride 317 辆、Zoox 35 辆 [7]
+
+<hr class="rule">
+
+<h2>9. 事故与安全数据：NHTSA 调查记录</h2>
+
+<h3>9.1 Tesla</h3>
+
+<table class="data-table">
+<thead><tr><th>调查编号</th><th>启动</th><th>当前状态</th><th>关键事实</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td><strong>EA22002</strong></td><td>2022</td><td>部分结束，仍持续</td><td>Autopilot 撞应急车辆</td><td><sup class="cite"><a href="#src-17">[17]</a></sup></td></tr>
+<tr><td><strong>PE24031</strong></td><td>2024-10</td><td>升级至 EA26002</td><td>低能见度条件 FSD 撞车</td><td><sup class="cite"><a href="#src-17">[17]</a></sup><sup class="cite"><a href="#src-18">[18]</a></sup></td></tr>
+<tr><td><strong>PE25012</strong></td><td>2025-10-07</td><td>初步评估进行中</td><td>FSD 违反交通安全法规</td><td><sup class="cite"><a href="#src-19">[19]</a></sup></td></tr>
+<tr><td><strong>EA26002</strong></td><td>2026-03-18</td><td><strong>"工程分析"</strong>（强制召回前一步）</td><td>涵盖 <strong>3.2M</strong> Tesla 车辆（Model S/X/3/Y + Cybertruck），9 起撞车含 1 致死</td><td><sup class="cite"><a href="#src-17">[17]</a></sup><sup class="cite"><a href="#src-18">[18]</a></sup><sup class="cite"><a href="#src-20">[20]</a></sup><sup class="cite"><a href="#src-22">[22]</a></sup></td></tr>
+<tr><td><strong>旧金山 Robotaxi 事故 17 起</strong></td><td>2025-07 至 2026-04</td><td>已上报</td><td>2 起轻伤、1 起需住院</td><td><sup class="cite"><a href="#src-7">[7]</a></sup></td></tr>
+</tbody></table>
+
+<h3>9.2 Waymo</h3>
+
+<table class="data-table">
+<thead><tr><th>调查编号</th><th>启动</th><th>当前状态</th><th>关键事实</th><th>来源</th></tr></thead>
+<tbody>
+<tr><td><strong>PE24016</strong></td><td>2024-05</td><td><strong>2025-07-29 已结案</strong></td><td>22 起涉及 440 辆车事件，<strong>未发现系统性违规</strong></td><td><sup class="cite"><a href="#src-53">[53]</a></sup></td></tr>
+<tr><td><strong>校车周边违规调查</strong></td><td>2025-10</td><td>2025-12 软件召回</td><td>Waymo 在停靠校车附近违规保护行人的规则</td><td><sup class="cite"><a href="#src-59">[59]</a></sup></td></tr>
+<tr><td><strong>2025 全年累计上报</strong></td><td>—</td><td>—</td><td>464+ 起 <sup class="cite"><a href="#src-57">[57]</a></sup></td><td><sup class="cite"><a href="#src-57">[57]</a></sup></td></tr>
+<tr><td><strong>首起致死事件</strong></td><td>2025 年内</td><td>详情未完整披露</td><td>—</td><td><sup class="cite"><a href="#src-57">[57]</a></sup></td></tr>
+</tbody></table>
+
+<table class="data-table">
+<thead><tr><th>调查</th><th>状态</th></tr></thead>
+<tbody>
+<tr><td>NHTSA 2023-12 启动调查</td><td><strong>截至 2026-05 仍开放</strong> <sup class="cite"><a href="#src-16">[16]</a></sup></td></tr>
+<tr><td>旧金山 DMV 2023-10-24 吊销许可</td><td>未恢复 <sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+</tbody></table>
+
+<h2>10. 中国出海玩家在美国的实际状态</h2>
+
+<h3>10.1 总览</h3>
+
+<p>中国头部新能源车企在美国的真实定位（2026-Q2）：</p>
+
+<table class="data-table">
+<thead><tr><th>公司</th><th>美国整车销售</th><th>美国智驾功能</th><th>备注</th></tr></thead>
+<tbody>
+<tr><td><strong>蔚来 NIO</strong></td><td><strong>0</strong>（无进口，无本地组装）</td><td>无</td><td>2022 宣布进美国，<strong>未实现</strong>；主要资源欧洲<sup class="cite"><a href="#src-66">[66]</a></sup></td></tr>
+<tr><td><strong>小鹏 XPeng</strong></td><td><strong>0 整车</strong></td><td><strong>通过 G6/G9 出口至极少数量经销商</strong>（2025 H1 进入英国、意大利、爱尔兰等欧洲 46 国） <sup class="cite"><a href="#src-56">[56]</a></sup></td><td>美国市场未启动零售；通过 VW 合作输出智驾方案</td></tr>
+<tr><td><strong>理想 Li Auto</strong></td><td><strong>0</strong>（2023 取消美国上市计划）</td><td>无</td><td>中国市场专注；无美国渠道 <sup class="cite"><a href="#src-12">[12]</a></sup></td></tr>
+<tr><td><strong>比亚迪 BYD</strong></td><td><strong>0 整车零售</strong>（100% 关税）</td><td>无</td><td>2025-07 暂停墨西哥工厂计划 <sup class="cite"><a href="#src-54">[54]</a></sup><sup class="cite"><a href="#src-55">[55]</a></sup>；2026-Q2 通过加拿大（6.1% 关税额度内）开 ~20 家经销 [61 引用 thedailyautomotive]</td></tr>
+<tr><td><strong>中国 Robotaxi（萝卜快跑、文远知行等）</strong></td><td>美国基本无运营</td><td>仅 Pony.ai、Aurora 背景投资</td><td>美国"中国造" Robotaxi 缺席</td></tr>
+</tbody></table>
+
+__UL_START_::美国对中国 EV 关税：**100%+** [55 引用 cartax]
+__UL_START_::BYD 2023 宣布墨西哥 150K 产能工厂 → **2025-07 暂停**（贸易不确定性 + Trump 关税） [54]
+__UL_START_::2026-02 BYD 与 Geely 联合竞标日产-奔驰 230K 产能墨西哥工厂（仍在谈判）[57]
+__UL_START_::墨西哥 2025-09 起对中国 EV 关税升至 **50%** [55 引用 eletric-vehicles.com]
+__UL_START_::BYD 加拿大："6.1% 关税额度新规" → 计划魁北克、BC 等开 ~20 家经销商，2026 年内开始零售 [61]
+
+<h3>10.3 XPeng 的美国策略</h3>
+
+__UL_START_::2025-07 月报：XPeng 进入 46 国，新增英国/意大利/爱尔兰 [56]
+__UL_START_::2025 全年海外交付：**45,008 辆**（+96% YoY），2025 年末覆盖 **60 国** [58]
+__UL_START_::美国市场：未启动零售；与大众汽车合作输出 E/E 架构与智驾方案
+__UL_START_::**XPeng G6 / G9 / Mona M03**：中国主销；2024 末曾在挪威、荷兰试点
+
+<h3>10.4 中国对美智驾输出的间接路径</h3>
+
+__UL_START_::**Mobileye Chauffeur + ECARX + Polestar 4**：中国 OEM 在欧洲采用 Mobileye Chauffeur + Polestar 平台，但实际数据闭环在美国/欧洲 [28][29][30]
+__UL_START_::**小鹏 XNGP / 华为 ADS**：仅在中国数据闭环
+__UL_START_::**Mobileye Q2 2026 报新增 Stellantis Cloud-Enhanced ADAS 设计赢**，包含 17 款 ICE/EV 车型，2026 起陆续推出 [65]——这条线通过 OEM 把中国可控的智驾方案间接带进美国市场
+
+<hr class="rule">
+
+<h2>11. 关键风险与不确定性</h2>
+
+<h3>11.1 监管</h3>
+
+__UL_START_::**NHTSA EA26002 vs Tesla**：320 万辆调查距离"召回"仅一步。Musk 若 v15 未在 2026-Q4 推出，监管可能强制要求 FSD 在低能见度条件下失效或限制使用区域
+__UL_START_::**德州 SB 2807**：2026-05-28 生效后，对未通过 SAE L4 自证的运营商可能吊销州内运营权
+__UL_START_::**加州 DMV** 对 Zoox 商业豁免仍开放，但 Zoox 是首批受益者，后续厂商未必能获相同豁免
+
+<h3>11.2 技术</h3>
+
+__UL_START_::**Tesla FSD v15 推迟风险**：Musk 在 2026-Q1 已暗示推迟 6 个月——若 2026 末未发布，"奥斯汀 20 辆车"叙事会被持续放大
+__UL_START_::**Tesla 摄像头-only 路线**：Reuters 调查指出其路线专属准备与 Musk 主张冲突 [11]
+__UL_START_::**Waymo L4 成本下降速度**：当前单车成本 $50K-$100K 估算（业界口径），尚未实现与人类司机成本交叉
+
+<h3>11.3 商业</h3>
+
+__UL_START_::**Cruise 重启风险**：Phoenix 测试尚未载客；休斯顿 2026-09 计划载客能否兑现存疑
+__UL_START_::**Zoox 收费后能否扩量**：免费 → 收费转换可能拉低 ride 数
+__UL_START_::**Aurora 卡车商业化速度**：2025 全年仅 $3M 营收，距 IPO 时"百亿美元"叙事差距大
+
+<h3>11.4 中国出海的不确定性</h3>
+
+__UL_START_::**BYD 美国市场入场**：100%+ 关税 + Trump 政府对 USMCA 收紧，进入美国至少要 2-3 年
+__UL_START_::**XPeng 美国**：暂无明确零售时间表
+__UL_START_::**Mobileye / ECARX / Polestar 间接路径**：是"中国数据闭环进入美国"的最现实通道，但美国 OEM 更倾向直接控制平台
+
+<hr class="rule">
+
+<section class="sources">
+<h2>Sources</h2>
+<ol>
+<li id="src-1"><a href="https://waymo.com/blog/shorts/safetydata-june26" target="_blank" rel="noopener">[1] https://waymo.com/blog/shorts/safetydata-june26</a> — Waymo safety data 220M miles (June 2026)</li>
+<li id="src-2"><a href="https://waymo.com/safety/impact" target="_blank" rel="noopener">[2] https://waymo.com/safety/impact</a> — Waymo Safety Impact hub</li>
+<li id="src-3"><a href="https://waymo.com/blog/shorts/dallas-open-to-all" target="_blank" rel="noopener">[3] https://waymo.com/blog/shorts/dallas-open-to-all</a> — Waymo Dallas open to all 2026-08-04</li>
+<li id="src-4"><a href="https://waymo.com/blog/shorts/nashville-june2026" target="_blank" rel="noopener">[4] https://waymo.com/blog/shorts/nashville-june2026</a> — Waymo Nashville opens 2026-06-25</li>
+<li id="src-5"><a href="https://waymo.com/blog/shorts/ro-den-lv-sd-tmpa" target="_blank" rel="noopener">[5] https://waymo.com/blog/shorts/ro-den-lv-sd-tmpa</a> — Waymo 4 new cities 2026-07-08</li>
+<li id="src-6"><a href="https://waymo.com/blog/shorts/waymo-in-portland" target="_blank" rel="noopener">[6] https://waymo.com/blog/shorts/waymo-in-portland</a> — Waymo Portland announce 2026-04-28</li>
+<li id="src-7"><a href="https://www.techtimes.com/articles/318160/20260610/tesla-robotaxi-trails-waymo-42-577-texasaustin-map-masks-20-car-fleet-until-fsd-v15-rewrite.htm" target="_blank" rel="noopener">[7] https://www.techtimes.com/articles/318160/20260610/tesla-robotaxi-trails-waymo-42-577-texasaustin-map-masks-20-car-fleet-until-fsd-v15-rewrite.htm</a> — Tech Times: Tesla Trails Waymo 42-577 in TX (2026-06-10)</li>
+<li id="src-8"><a href="https://techcrunch.com/2025/06/22/tesla-launches-robotaxi-rides-in-austin-with-big-promises-and-unanswered-questions" target="_blank" rel="noopener">[8] https://techcrunch.com/2025/06/22/tesla-launches-robotaxi-rides-in-austin-with-big-promises-and-unanswered-questions</a> — TechCrunch: Tesla Robotaxi Austin launch 2025-06-22</li>
+<li id="src-9"><a href="https://fortune.com/2025/06/22/elon-musk-tesla-robotaxi-service-launch-austin-420-flat-fee" target="_blank" rel="noopener">[9] https://fortune.com/2025/06/22/elon-musk-tesla-robotaxi-service-launch-austin-420-flat-fee</a> — Fortune: Tesla Robotaxi $4.20 flat fee 2025-06-22</li>
+<li id="src-10"><a href="https://www.cnbc.com/2025/06/20/tesla-robotaxi-launch-austin.html" target="_blank" rel="noopener">[10] https://www.cnbc.com/2025/06/20/tesla-robotaxi-launch-austin.html</a> — CNBC: Tesla Robotaxi launch details 2025-06-20</li>
+<li id="src-11"><a href="https://www.reuters.com/business/autos-transportation/tesla-fsd-safety-claims-misleading-2026-05-28" target="_blank" rel="noopener">[11] https://www.reuters.com/business/autos-transportation/tesla-fsd-safety-claims-misleading-2026-05-28</a> — Reuters: Tesla FSD safety inflated 2026-05-28</li>
+<li id="src-12"><a href="https://www.birow.com/cruise-journey" target="_blank" rel="noopener">[12] https://www.birow.com/cruise-journey</a> — Birow: Cruise Journey 2025-04</li>
+<li id="src-13"><a href="https://www.fox7austin.com/news/no-more-cruise-robotaxis-general-motors-acquisition" target="_blank" rel="noopener">[13] https://www.fox7austin.com/news/no-more-cruise-robotaxis-general-motors-acquisition</a> — Fox7: Cruise not relaunching 2025-02-06</li>
+<li id="src-14"><a href="https://www.cnbc.com/2024/12/10/gm-halts-funding-of-robotaxi-development-by-cruise.html" target="_blank" rel="noopener">[14] https://www.cnbc.com/2024/12/10/gm-halts-funding-of-robotaxi-development-by-cruise.html</a> — CNBC: GM exits robotaxi 2024-12-10</li>
+<li id="src-15"><a href="https://techcrunch.com/2024/06/11/gm-gives-cruise-850m-lifeline-as-it-relaunches-robotaxis-in-houston" target="_blank" rel="noopener">[15] https://techcrunch.com/2024/06/11/gm-gives-cruise-850m-lifeline-as-it-relaunches-robotaxis-in-houston</a> — TechCrunch: GM $850M lifeline Cruise 2024-06-11</li>
+<li id="src-16"><a href="https://newsalot.net/2026/05/31/gms-cruise-resumes-robotaxi-testing-in-houston-after-18-month-pause" target="_blank" rel="noopener">[16] https://newsalot.net/2026/05/31/gms-cruise-resumes-robotaxi-testing-in-houston-after-18-month-pause</a> — Newsalot: Cruise resumes Houston 2026-05-31</li>
+<li id="src-17"><a href="https://www.cnbc.com/2026/03/19/tesla-nhtsa-full-self-driving-fsd-reduced-visibility.html" target="_blank" rel="noopener">[17] https://www.cnbc.com/2026/03/19/tesla-nhtsa-full-self-driving-fsd-reduced-visibility.html</a> — CNBC: Tesla NHTSA reduced visibility 2026-03-19</li>
+<li id="src-18"><a href="https://electrek.co/2026/03/19/nhtsa-upgrades-tesla-fsd-visibility-investigation-3-2-million-vehicles" target="_blank" rel="noopener">[18] https://electrek.co/2026/03/19/nhtsa-upgrades-tesla-fsd-visibility-investigation-3-2-million-vehicles</a> — Electrek: NHTSA upgrades Tesla FSD 2026-03-19</li>
+<li id="src-19"><a href="https://static.nhtsa.gov/odi/inv/2025/INOA-PE25012-19171.pdf" target="_blank" rel="noopener">[19] https://static.nhtsa.gov/odi/inv/2025/INOA-PE25012-19171.pdf</a> — NHTSA PE25012 FSD investigation 2025-10-07</li>
+<li id="src-20"><a href="https://static.nhtsa.gov/odi/inv/2026/INOA-EA26002-10023.pdf" target="_blank" rel="noopener">[20] https://static.nhtsa.gov/odi/inv/2026/INOA-EA26002-10023.pdf</a> — NHTSA EA26002 Tesla FSD 2026-03-18</li>
+<li id="src-22"><a href="https://motorillustrated.com/nhtsas-fsd-investigation-enters-recall-track-phase-covering-3-2-million-vehicles/178820" target="_blank" rel="noopener">[22] https://motorillustrated.com/nhtsas-fsd-investigation-enters-recall-track-phase-covering-3-2-million-vehicles/178820</a> — MotorIllustrated: NHTSA FSD 3.2M recall-track 2026-03-20</li>
+<li id="src-24"><a href="https://ir.aurora.tech/news-events/press-releases/detail/119/aurora-begins-commercial-driverless-trucking-in-texas-ushering-in-a-new-era-of-freight" target="_blank" rel="noopener">[24] https://ir.aurora.tech/news-events/press-releases/detail/119/aurora-begins-commercial-driverless-trucking-in-texas-ushering-in-a-new-era-of-freight</a> — Aurora IR: Commercial driverless trucking Texas 2025-05-01</li>
+<li id="src-25"><a href="https://ir.aurora.tech/news-events/press-releases/detail/128/aurora-expands-driverless-trucking-service-from-fort-worth-to-el-paso" target="_blank" rel="noopener">[25] https://ir.aurora.tech/news-events/press-releases/detail/128/aurora-expands-driverless-trucking-service-from-fort-worth-to-el-paso</a> — Aurora IR: Fort Worth to El Paso expansion 2025-10-28</li>
+<li id="src-26"><a href="https://www.post-gazette.com/business/tech-news/2026/02/12/aurora-innovation-driverless-trucks-sun-belt/stories/202602120068" target="_blank" rel="noopener">[26] https://www.post-gazette.com/business/tech-news/2026/02/12/aurora-innovation-driverless-trucks-sun-belt/stories/202602120068</a> — Post-Gazette: Aurora $3M revenue 2025</li>
+<li id="src-27"><a href="https://aurora.tech/newsroom/progress-in-2024-readying-for-commercial-launch" target="_blank" rel="noopener">[27] https://aurora.tech/newsroom/progress-in-2024-readying-for-commercial-launch</a> — Aurora: Progress in 2024</li>
+<li id="src-28"><a href="https://www.mobileye.com/news/polestar-selects-mobileye-to-bring-autonomous-technology-to-polestar-4" target="_blank" rel="noopener">[28] https://www.mobileye.com/news/polestar-selects-mobileye-to-bring-autonomous-technology-to-polestar-4</a> — Mobileye: Polestar 4 Chauffeur</li>
+<li id="src-29"><a href="https://media.polestar.com/releases/538" target="_blank" rel="noopener">[29] https://media.polestar.com/releases/538</a> — Polestar: Luminar LiDAR Mobileye Chauffeur</li>
+<li id="src-30"><a href="https://www.mobileye.com/news/ecarx-announces-mobileye-collaboration-for-polestar-future-products" target="_blank" rel="noopener">[30] https://www.mobileye.com/news/ecarx-announces-mobileye-collaboration-for-polestar-future-products</a> — Mobileye: ECARX Polestar collaboration</li>
+<li id="src-32"><a href="https://group.mercedes-benz.com/technology/autonomous-driving/driving/drive-pilot-nevada.html" target="_blank" rel="noopener">[32] https://group.mercedes-benz.com/technology/autonomous-driving/driving/drive-pilot-nevada.html</a> — Mercedes: Drive Pilot Nevada 2023-01-26</li>
+<li id="src-33"><a href="https://ir.mobileye.com/news-releases/news-release-details/mobileye-releases-second-quarter-2026-results-updates-guidance" target="_blank" rel="noopener">[33] https://ir.mobileye.com/news-releases/news-release-details/mobileye-releases-second-quarter-2026-results-updates-guidance</a> — Mobileye IR: Q2 2026 $508M revenue, 9.3M EyeQ shipments</li>
+<li id="src-34"><a href="https://www.fool.com/earnings/call-transcripts/2026/04/23/mobileye-mbly-q1-2026-earnings-transcript" target="_blank" rel="noopener">[34] https://www.fool.com/earnings/call-transcripts/2026/04/23/mobileye-mbly-q1-2026-earnings-transcript</a> — Motley Fool: Mobileye Q1 2026 transcript</li>
+<li id="src-35"><a href="https://www.ford.com/technology/bluecruise" target="_blank" rel="noopener">[35] https://www.ford.com/technology/bluecruise</a> — Ford: BlueCruise hands-free 97% highways</li>
+<li id="src-36"><a href="https://www.fromtheroad.ford.com/us/en/articles/2026/2025-bluecruise-trends-hands-free-usage-skyrockets" target="_blank" rel="noopener">[36] https://www.fromtheroad.ford.com/us/en/articles/2026/2025-bluecruise-trends-hands-free-usage-skyrockets</a> — Ford: BlueCruise 2025 trends</li>
+<li id="src-37"><a href="https://unanswered.io/guide/mercedes-level-3-autonomous-driving-usa-availability" target="_blank" rel="noopener">[37] https://unanswered.io/guide/mercedes-level-3-autonomous-driving-usa-availability</a> — Unanswered: Mercedes Drive Pilot USA Status Feb 2026</li>
+<li id="src-38"><a href="https://www.nvidia.com/en-us/solutions/autonomous-vehicles" target="_blank" rel="noopener">[38] https://www.nvidia.com/en-us/solutions/autonomous-vehicles</a> — NVIDIA: Robotaxi AV solutions</li>
+<li id="src-40"><a href="https://electrek.co/2026/01/05/nvidia-unveils-open-source-ai-for-autonomous-driving-ships-in-mercedes-benz-cla-in-q1-2026" target="_blank" rel="noopener">[40] https://electrek.co/2026/01/05/nvidia-unveils-open-source-ai-for-autonomous-driving-ships-in-mercedes-benz-cla-in-q1-2026</a> — Electrek: NVIDIA open-source AI Mercedes CLA 2026-01-05</li>
+<li id="src-41"><a href="https://datacentremagazine.com/globenewswire/3190664" target="_blank" rel="noopener">[41] https://datacentremagazine.com/globenewswire/3190664</a> — Data Centre Mag: Nvidia automotive computing market 2026</li>
+<li id="src-42"><a href="https://www.basenor.com/pages/tesla-software-updates" target="_blank" rel="noopener">[42] https://www.basenor.com/pages/tesla-software-updates</a> — Basenor: Tesla Software Updates 2026</li>
+<li id="src-43"><a href="https://www.cnbc.com/2026/08/05/amazon-zoox-paid-robotaxi-rides-las-vegas.html" target="_blank" rel="noopener">[43] https://www.cnbc.com/2026/08/05/amazon-zoox-paid-robotaxi-rides-las-vegas.html</a> — CNBC: Zoox paid rides Vegas 2026-08-05</li>
+<li id="src-44"><a href="https://techcrunch.com/2026/08/05/zoox-to-start-charging-for-robotaxi-rides-in-las-vegas" target="_blank" rel="noopener">[44] https://techcrunch.com/2026/08/05/zoox-to-start-charging-for-robotaxi-rides-in-las-vegas</a> — TechCrunch: Zoox paid Vegas 2026-08-05</li>
+<li id="src-45"><a href="https://www.latimes.com/business/story/2026-08-10/zoox-to-begin-paid-rides-following-regulatory-approval" target="_blank" rel="noopener">[45] https://www.latimes.com/business/story/2026-08-10/zoox-to-begin-paid-rides-following-regulatory-approval</a> — LATimes: Zoox paid rides 2026-08-10</li>
+<li id="src-46"><a href="https://waymo.com/blog/2025/12/2025-year-in-review" target="_blank" rel="noopener">[46] https://waymo.com/blog/2025/12/2025-year-in-review</a> — Waymo 2025 Year in Review (15M rides, 20M lifetime)</li>
+<li id="src-47"><a href="https://www.thedriverlessdigest.com/p/waymos-2025-year-in-review-the-year" target="_blank" rel="noopener">[47] https://www.thedriverlessdigest.com/p/waymos-2025-year-in-review-the-year</a> — Driverless Digest: Waymo 2025 review</li>
+<li id="src-48"><a href="https://evmagazine.com/articles/zoox-robotaxi-is-expanding-in-las-vegas-and-san-francisco" target="_blank" rel="noopener">[48] https://evmagazine.com/articles/zoox-robotaxi-is-expanding-in-las-vegas-and-san-francisco</a> — EV Magazine: Zoox 2M miles 350K riders</li>
+<li id="src-49"><a href="https://investor.gm.com/news-releases/news-release-details/gm-expands-super-cruise-network-750000-hands-free-miles-largest" target="_blank" rel="noopener">[49] https://investor.gm.com/news-releases/news-release-details/gm-expands-super-cruise-network-750000-hands-free-miles-largest</a> — GM Investor: Super Cruise 750K miles</li>
+<li id="src-50"><a href="https://gmauthority.com/blog/2024/10/15-percent-of-gm-vehicles-will-include-super-cruise-in-2025" target="_blank" rel="noopener">[50] https://gmauthority.com/blog/2024/10/15-percent-of-gm-vehicles-will-include-super-cruise-in-2025</a> — GM Authority: 15% GM vehicles Super Cruise 2025</li>
+<li id="src-51"><a href="https://gmauthority.com/blog/2025/07/gm-super-cruise-gets-these-enhancements-for-2026-model-year-vehicles" target="_blank" rel="noopener">[51] https://gmauthority.com/blog/2025/07/gm-super-cruise-gets-these-enhancements-for-2026-model-year-vehicles</a> — GM Authority: Super Cruise 2026 MY</li>
+<li id="src-52"><a href="https://www.gm-trucks.com/general-motors-expands-super-cruise-to-over-750000-miles-of-roads" target="_blank" rel="noopener">[52] https://www.gm-trucks.com/general-motors-expands-super-cruise-to-over-750000-miles-of-roads</a> — GM-Trucks: Super Cruise 750K miles 160M safety</li>
+<li id="src-53"><a href="https://www.huschblackwell.com/newsandinsights/nhtsa-closes-waymo-investigation-key-takeaways-for-the-av-industry" target="_blank" rel="noopener">[53] https://www.huschblackwell.com/newsandinsights/nhtsa-closes-waymo-investigation-key-takeaways-for-the-av-industry</a> — Husch Blackwell: NHTSA closes Waymo probe 2025-07-29</li>
+<li id="src-54"><a href="https://www.electrive.com/2025/07/03/byd-halts-mexico-factory-plans-amid-trumps-trade-tensions" target="_blank" rel="noopener">[54] https://www.electrive.com/2025/07/03/byd-halts-mexico-factory-plans-amid-trumps-trade-tensions</a> — Electrive: BYD halts Mexico factory 2025-07-03</li>
+<li id="src-55"><a href="https://www.cfr.org/articles/what-canadian-and-mexican-ev-imports-from-china-mean-for-the-united-states" target="_blank" rel="noopener">[55] https://www.cfr.org/articles/what-canadian-and-mexican-ev-imports-from-china-mean-for-the-united-states</a> — CFR: Mexico Canada China EV imports</li>
+<li id="src-56"><a href="https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-announces-vehicle-delivery-results-july-2025" target="_blank" rel="noopener">[56] https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-announces-vehicle-delivery-results-july-2025</a> — XPeng IR: July 2025 delivery</li>
+<li id="src-57"><a href="https://humanoidliability.com/resources/waymo-2025-incident-tracker" target="_blank" rel="noopener">[57] https://humanoidliability.com/resources/waymo-2025-incident-tracker</a> — Waymo 2025 Incident Tracker</li>
+<li id="src-58"><a href="https://www.prnewswire.com/news-releases/xpeng-announces-vehicle-delivery-results-for-december-and-full-year-2025-302651514.html" target="_blank" rel="noopener">[58] https://www.prnewswire.com/news-releases/xpeng-announces-vehicle-delivery-results-for-december-and-full-year-2025-302651514.html</a> — PR Newswire: XPeng FY2025 delivery 45K overseas</li>
+<li id="src-59"><a href="https://bgr.com/2051218/waymo-recall-self-driving-cars-safety-concerns" target="_blank" rel="noopener">[59] https://bgr.com/2051218/waymo-recall-self-driving-cars-safety-concerns</a> — BGR: Waymo school bus safety recall Dec 2025</li>
+<li id="src-60"><a href="https://www.txdmv.gov/AVprogram" target="_blank" rel="noopener">[60] https://www.txdmv.gov/AVprogram</a> — TxDMV: Automated Vehicles Regulatory Program SB2807</li>
+<li id="src-61"><a href="https://capitol.texas.gov/tlodocs/89R/billtext/html/SB02807F.HTM" target="_blank" rel="noopener">[61] https://capitol.texas.gov/tlodocs/89R/billtext/html/SB02807F.HTM</a> — Texas Legislature: SB2807 enrolled</li>
+<li id="src-62"><a href="https://dallasexpress.com/state/texas-self-driving-law-takes-effect-today-robotaxis-av-trucks-need-txdmv-permit" target="_blank" rel="noopener">[62] https://dallasexpress.com/state/texas-self-driving-law-takes-effect-today-robotaxis-av-trucks-need-txdmv-permit</a> — Dallas Express: Texas AV law effective 2026-05-28</li>
+<li id="src-63"><a href="https://www.linkedin.com/pulse/adas-soc-wars-nvidia-drive-orin-vs-qualcomm-sa8775p-eyeq6-mudduluru-hos0c" target="_blank" rel="noopener">[63] https://www.linkedin.com/pulse/adas-soc-wars-nvidia-drive-orin-vs-qualcomm-sa8775p-eyeq6-mudduluru-hos0c</a> — LinkedIn: ADAS SoC Wars - NVIDIA Orin vs Qualcomm vs Mobileye</li>
+<li id="src-64"><a href="https://www.eetimes.com/what-is-nvidia-doing-in-automotive" target="_blank" rel="noopener">[64] https://www.eetimes.com/what-is-nvidia-doing-in-automotive</a> — EE Times: NVIDIA automotive Thor</li>
+<li id="src-65"><a href="https://iot-automotive.news/mobileye-reveals-new-wins-for-key-tech-platforms-with-large-global-automaker" target="_blank" rel="noopener">[65] https://iot-automotive.news/mobileye-reveals-new-wins-for-key-tech-platforms-with-large-global-automaker</a> — IoT Automotive: Mobileye new design wins</li>
+<li id="src-66"><a href="https://chip.computer/guides/autonomous-driving-chips-guide" target="_blank" rel="noopener">[66] https://chip.computer/guides/autonomous-driving-chips-guide</a> — Chip.computer: AD chips guide 2026</li>
+<li id="src-67"><a href="https://www.mobileye.com/news/mobileye-eyeq6-lite-launches-to-speed-adas-upgrades-worldwide" target="_blank" rel="noopener">[67] https://www.mobileye.com/news/mobileye-eyeq6-lite-launches-to-speed-adas-upgrades-worldwide</a> — Mobileye: EyeQ6 Lite launch 46M vehicles</li>
+<li id="src-70"><a href="https://ir.mobileye.com/news-releases/news-release-details/mobileye-releases-first-quarter-2026-results-updates-full-year" target="_blank" rel="noopener">[70] https://ir.mobileye.com/news-releases/news-release-details/mobileye-releases-first-quarter-2026-results-updates-full-year</a> — Mobileye IR: Q1 2026 $558M revenue, 230M cumulative EyeQ</li>
+</ol>
+</section>
+<div class="footer"><span>共 64 个独立来源 · 调研周期 2024-Q1 → 2026-Q2 · 数据截止 2026-08-13</span><a href="../../index.html">← 返回首页</a></div>
+</div>
+</body>
+</html>

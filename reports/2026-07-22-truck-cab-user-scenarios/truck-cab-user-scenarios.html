@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大型商用货车用户画像与典型场景（1/4）</title>
+<style>
+:root {
+  --ivory: #FAF9F5; --white: #FFFFFF; --slate: #141413;
+  --clay: #D97757; --olive: #788C5D; --rust: #B04A3F; --oat: #E3DACC;
+  --sky: #5B8DB8; --purple: #8B6BAE; --amber: #C7843A;
+  --gray-150: #F0EEE6; --gray-300: #D1CFC5; --gray-500: #87867F; --gray-700: #3D3D3A;
+  --border: 1.5px solid var(--gray-300);
+  --radius-panel: 12px; --radius-row: 8px;
+  --serif: ui-serif, Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--ivory); color: var(--gray-700);
+  font-family: var(--sans); line-height: 1.6;
+  -webkit-font-smoothing: antialiased; padding: 40px 24px 120px;
+}
+.page { max-width: 1100px; margin: 0 auto; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: 8px; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: 30px;
+  letter-spacing: -0.01em; color: var(--slate); margin-bottom: 4px; }
+h2 { font-family: var(--serif); font-weight: 500; font-size: 22px;
+  letter-spacing: -0.01em; color: var(--slate); margin: 48px 0 16px;
+  padding-bottom: 8px; border-bottom: var(--border); }
+h3 { font-family: var(--serif); font-weight: 500; font-size: 17px;
+  color: var(--slate); margin: 28px 0 10px; }
+.subtitle { color: var(--gray-500); font-size: 15px; margin-bottom: 8px; }
+.meta { font-size: 12px; color: var(--gray-500); margin-bottom: 36px; }
+.lead { font-size: 17px; line-height: 1.7; color: var(--gray-700);
+  margin: 24px 0; padding: 20px 24px; background: var(--white);
+  border-left: 4px solid var(--clay); border-radius: var(--radius-row); }
+.panel { background: var(--white); border: var(--border);
+  border-radius: var(--radius-panel); padding: 20px 24px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+th { background: var(--gray-150); text-align: left; padding: 10px 12px;
+  font-weight: 600; color: var(--slate); border-bottom: 2px solid var(--gray-300); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-150); vertical-align: top; }
+tr:hover td { background: var(--oat); }
+code { font-family: var(--mono); background: var(--gray-150); padding: 1px 6px;
+  border-radius: 4px; font-size: 13px; color: var(--rust); }
+blockquote { font-style: italic; color: var(--gray-700);
+  border-left: 3px solid var(--olive); padding-left: 16px; margin: 16px 0; }
+.callout { background: rgba(217,119,87,0.08); border-left: 4px solid var(--clay);
+  padding: 14px 18px; margin: 16px 0; border-radius: var(--radius-row); }
+.callout-good { background: rgba(120,140,93,0.08); border-left: 4px solid var(--olive); }
+.callout-warn { background: rgba(176,74,63,0.08); border-left: 4px solid var(--rust); }
+ul, ol { margin: 12px 0 12px 24px; }
+li { margin: 6px 0; }
+.tag { display: inline-block; font-family: var(--mono); font-size: 10px;
+  padding: 3px 8px; background: var(--gray-150); color: var(--gray-700);
+  border-radius: 4px; margin-right: 6px; letter-spacing: 0.05em; }
+.series-nav { background: var(--gray-150); padding: 16px 20px; border-radius: var(--radius-row);
+  margin: 24px 0; font-size: 13px; }
+.series-nav h4 { margin-bottom: 8px; color: var(--slate); font-size: 13px; }
+.series-nav ol { margin: 4px 0 0 18px; }
+.series-nav li { margin: 3px 0; }
+.footer { margin-top: 80px; padding-top: 24px; border-top: var(--border);
+  font-size: 13px; color: var(--gray-500); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="eyebrow">Commercial Truck · Cab Design · User Research</div>
+<h1>大型商用货车座舱需求调研（一）</h1>
+<div class="subtitle">用户画像 × 典型场景——理解职业司机，才能设计出真需求的座舱</div>
+<div class="meta">2026-07-22 · 纪多斌调研 · 系列报告 1/4</div>
+
+<div class="lead">
+商用货车座舱设计与乘用车最大的差异是<strong>用户不是"司机"</strong>——是<strong>4 类职业人、14 个细分岗位、6 个典型场景</strong>。<br>
+理解"谁在车里待多久、做什么动作、什么时候最累"，比懂"加什么屏幕"更重要。
+</div>
+
+<div class="series-nav">
+<h4>📚 本系列 4 篇报告</h4>
+<ol>
+  <li>用户画像 × 典型场景（本篇）</li>
+  <li><a href="../2026-07-22-truck-cab-oem-needs/truck-cab-oem-needs.html">主机厂需求对比</a>（徐工/解放/陕汽/东风）</li>
+  <li><a href="../2026-07-22-truck-cab-13-design-points/truck-cab-13-design-points.html">13 个核心设计点</a>（平地板/卧铺/座椅/视野等）</li>
+  <li><a href="../2026-07-22-truck-cab-fatigue-future/truck-cab-fatigue-future.html">驾驶疲劳 × 智能座舱趋势</a></li>
+</ol>
+</div>
+
+<h2>一、用户分类总览</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:18%">大类</th><th>细分岗位</th><th>代表车型</th><th>核心痛点</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>干线运输司机</strong></td>
+      <td>长途货运司机</td>
+      <td>半挂牵引车</td>
+      <td>长时间驾驶 / 疲劳 / 卧铺</td>
+    </tr>
+    <tr>
+      <td><strong>工程作业司机</strong></td>
+      <td>矿车司机 / 自卸车司机</td>
+      <td>矿用车 / 自卸车</td>
+      <td>颠簸 / 粉尘 / 高频上下车</td>
+    </tr>
+    <tr>
+      <td><strong>城市配送司机</strong></td>
+      <td>轻卡司机 / 城配司机</td>
+      <td>载货车</td>
+      <td>频繁启停 / 装卸货 / 城市拥堵</td>
+    </tr>
+    <tr>
+      <td><strong>专用车司机</strong></td>
+      <td>冷链 / 危化品 / 工程救援</td>
+      <td>专用作业车</td>
+      <td>特种规范 / 安全冗余</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>二、4 类职业司机深度画像</h2>
+
+<h3>画像 1：长途干线司机</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:25%">维度</th><th>详情</th></tr>
+    <tr><td><strong>年龄</strong></td><td>35-50 岁（主力），呈现老龄化趋势</td></tr>
+    <tr><td><strong>性别</strong></td><td>99% 男性</td></tr>
+    <tr><td><strong>日均驾驶</strong></td><td>8-12 小时（含装卸货等待）</td></tr>
+    <tr><td><strong>单趟里程</strong></td><td>500-1500 km</td></tr>
+    <tr><td><strong>作业强度</strong></td><td>4-5 天一趟，月跑 1.2-1.5 万公里</td></tr>
+    <tr><td><strong>主要收入模式</strong></td><td>按趟计费 + 油耗奖励</td></tr>
+    <tr><td><strong>驾驶感受</strong></td><td>把车当"移动的家"——生活 80% 时间在车内</td></tr>
+    <tr><td><strong>核心需求</strong></td><td>卧铺舒适、长时间不疲劳、辅助驾驶减少劳动强度</td></tr>
+  </table>
+</div>
+
+<div class="callout">
+<strong>设计启示</strong>：长途司机对座舱的需求近似"移动卧室"——卧铺面积、车居化设施、长途疲劳缓解系统比乘用车的"娱乐屏"更关键。
+</div>
+
+<h3>画像 2：矿车 / 自卸车司机</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:25%">维度</th><th>详情</th></tr>
+    <tr><td><strong>工作环境</strong></td><td>矿山工地 / 港口 / 基建工地</td></tr>
+    <tr><td><strong>日均驾驶</strong></td><td>10-14 小时</td></tr>
+    <tr><td><strong>路面</strong></td><td>未铺装路面、泥泞、碎石</td></tr>
+    <tr><td><strong>粉尘 / 振动</strong></td><td>极高（需要正压驾驶室）</td></tr>
+    <tr><td><strong>上下车频率</strong></td><td>极高（每装卸一车一次）</td></tr>
+    <tr><td><strong>安全要求</strong></td><td>防滚架（ROPS）、落石保护（FOPS）</td></tr>
+    <tr><td><strong>核心需求</strong></td><td>抗噪 / 抗振 / 高强度座椅 / 易清洁</td></tr>
+  </table>
+</div>
+
+<div class="callout callout-warn">
+<strong>设计启示</strong>：矿车座舱是"工业设备"——不能套乘用车的内饰语言，需要考虑<strong>防尘、抗振、易清洁、上下车便利性</strong>。
+</div>
+
+<h3>画像 3：城市配送司机</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:25%">维度</th><th>详情</th></tr>
+    <tr><td><strong>工作半径</strong></td><td>100 km 以内</td></tr>
+    <tr><td><strong>日均驾驶</strong></td><td>8-10 小时（含多次装卸）</td></tr>
+    <tr><td><strong>装卸频次</strong></td><td>5-15 次/天</td></tr>
+    <tr><td><strong>路面</strong></td><td>城市道路（拥堵 + 频繁启停）</td></tr>
+    <tr><td><strong>痛点</strong></td><td>频繁上下车 / 装卸货 / 拥堵焦虑</td></tr>
+    <tr><td><strong>核心需求</strong></td><td>易上下车 / 储物空间 / 盲区少 / 360° 视野</td></tr>
+  </table>
+</div>
+
+<h3>画像 4：专用车司机（冷链 / 危化品）</h3>
+
+<div class="panel">
+  <table>
+    <tr><th style="width:25%">维度</th><th>详情</th></tr>
+    <tr><td><strong>法规约束</strong></td><td>危化品运输强制 GPS + 监控 + 限速</td></tr>
+    <tr><td><strong>冷链要求</strong></td><td>驾驶室与货舱隔离 / 温度监控显示</td></tr>
+    <tr><td><strong>应急设备</strong></td><td>灭火器、应急切断阀位置显著</td></tr>
+    <tr><td><strong>核心需求</strong></td><td>合规 HMI / 监控联动 / 应急操作便利性</td></tr>
+  </table>
+</div>
+
+<h2>三、6 类典型场景</h2>
+
+<h3>场景 1：长途 8 小时+ 不间断驾驶</h3>
+
+<div class="panel">
+  <p><strong>典型场景</strong>：京沪线 / 沪昆线 / 318 国道一类长途干线，单趟 1500 km，需要 18-22 小时连续作战（含 2-3 次休息）。</p>
+
+  <p><strong>对座舱的需求</strong>：</p>
+  <ul>
+    <li>✅ 腰部支撑强的座椅（不是软，要稳）</li>
+    <li>✅ 减振 + 隔音（驾驶室 NVH ≤ 65 dB）</li>
+    <li>✅ L2-L3 级辅助驾驶（缓解脚踝疲劳）</li>
+    <li>✅ 大容量水壶架 + 食物加热（电热饭盒）</li>
+    <li>✅ 手机支架 + 充电位 + 多 USB 口</li>
+  </ul>
+</div>
+
+<h3>场景 2：停车检修 / 强制休息（驾驶 4 小时强制 20 分钟）</h3>
+
+<div class="panel">
+  <p><strong>法规</strong>：GB/T 26982《营运车辆驾驶员监控系统》和 GB 18565《道路运输车辆综合性能要求和检验方法》。</p>
+
+  <p><strong>对座舱的需求</strong>：</p>
+  <ul>
+    <li>✅ 卧铺（800-2200 mm 长 × 600-900 mm 宽）</li>
+    <li>✅ 卧铺区域有独立阅读灯、充电口</li>
+    <li>✅ 车居化：可挂衣服、可放鞋、储物分门别类</li>
+    <li>✅ 冰箱（车载 12V/24V 压缩机冰箱，10-20L）</li>
+    <li>✅ 220V 逆变器（笔记本电脑、电热饭盒）</li>
+  </ul>
+</div>
+
+<h3>场景 3：夜间驾驶 / 长隧道</h3>
+
+<div class="panel">
+  <p><strong>典型场景</strong>：西部高速夜间行驶 / 秦岭隧道群 / 跨海大桥。</p>
+
+  <p><strong>对座舱的需求</strong>：</p>
+  <ul>
+    <li>✅ 仪表盘可调亮度（不刺眼）</li>
+    <li>✅ 抬头显示 HUD（夜视不低头）</li>
+    <li>✅ 防眩目后视镜 + 智能调光</li>
+    <li>✅ 司机疲劳监测（DMS）必须</li>
+    <li>✅ 副驾休息位（长途车常 2 名司机轮班）</li>
+  </ul>
+</div>
+
+<h3>场景 4：颠簸工地 / 矿山作业</h3>
+
+<div class="panel">
+  <p><strong>典型场景</strong>：露天矿 / 港口码头 / 建筑工地。</p>
+
+  <p><strong>对座舱的需求</strong>：</p>
+  <ul>
+    <li>✅ 悬浮座椅 + 主动减振</li>
+    <li>✅ 全景玻璃 + 强刮水器 + 喷淋（防尘）</li>
+    <li>✅ 防滚架（ROPS）+ 落石保护（FOPS）</li>
+    <li>✅ 上下车扶手 + 防滑踏板</li>
+    <li>✅ 内饰易清洁（橡胶地板、可冲洗）</li>
+  </ul>
+</div>
+
+<h3>场景 5：平地板 + 卧铺二选一</h3>
+
+<div class="panel">
+  <p><strong>核心痛点</strong>：乘用车平地板（GL8、奥德赛）在中国卖得很好，但商用车由于传动轴从中间穿过，长期无法做平地板。</p>
+
+  <p><strong>2025-2026 技术突破</strong>：</p>
+  <ul>
+    <li>✅ <strong>电动化平台</strong>——没有传动轴，可以做平地板</li>
+    <li>✅ <strong>中央通道卧铺</strong>——上下铺设计（卧铺宽度 800-900 mm，长度 2000+ mm）</li>
+    <li>✅ <strong>翻转座椅</strong>——白天座椅，夜间变卧铺</li>
+    <li>✅ <strong>副驾旋转座椅</strong>——和卧铺拼成完整双人床</li>
+  </ul>
+</div>
+
+<h3>场景 6：装卸货 / 频繁上下车</h3>
+
+<div class="panel">
+  <p><strong>典型场景</strong>：城市配送司机每日 5-15 次装卸货，每次需要离车操作。</p>
+
+  <p><strong>对座舱的需求</strong>：</p>
+  <ul>
+    <li>✅ 车门开度 ≥ 75°（传统车 65°）</li>
+    <li>✅ 扶手（上下车 + 工作位切换）</li>
+    <li>✅ 雨衣 / 反光衣专用储物</li>
+    <li>✅ 货舱监控（双屏 / 流媒体后视镜）</li>
+  </ul>
+</div>
+
+<h2>四、给主机厂的 4 个核心启示</h2>
+
+<div class="callout callout-good">
+<strong>启示 1：用户分层 ≠ 平均设计</strong>——长途车、矿车、城配、专用车的座舱设计哲学完全不同，不能套娃。
+</div>
+
+<div class="callout callout-good">
+<strong>启示 2：卧铺 + 平地板是长途车的"刚需"</strong>——电动化让平地板成为可能，2026-2028 是新车型井喷期。
+</div>
+
+<div class="callout callout-good">
+<strong>启示 3：疲劳管理是法规 + 安全 + 商业的三重压力</strong>——DMS / 限速 / 工时监控都和座舱 HMI 强耦合。
+</div>
+
+<div class="callout callout-good">
+<strong>启示 4：智能化不是"加屏"</strong>——商用车智能化是"减少司机负担 + 增加合规能力"，不是娱乐。
+</div>
+
+<div class="series-nav">
+<h4>📚 本系列 4 篇报告</h4>
+<ol>
+  <li>用户画像 × 典型场景（本篇）</li>
+  <li><a href="../2026-07-22-truck-cab-oem-needs/truck-cab-oem-needs.html">主机厂需求对比</a>（徐工/解放/陕汽/东风）</li>
+  <li><a href="../2026-07-22-truck-cab-13-design-points/truck-cab-13-design-points.html">13 个核心设计点</a>（平地板/卧铺/座椅/视野等）</li>
+  <li><a href="../2026-07-22-truck-cab-fatigue-future/truck-cab-fatigue-future.html">驾驶疲劳 × 智能座舱趋势</a></li>
+</ol>
+</div>
+
+<div class="footer">
+<span class="tag">商用货车</span><span class="tag">用户画像</span><span class="tag">典型场景</span><span class="tag">职业司机</span><span class="tag">卧铺</span><span class="tag">平地板</span>
+<br><br>
+整理：纪多斌 · Hermes Agent · 2026-07-22
+<br>
+来源：大型商用货车座舱需求调研报告（内部稿）
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>腾讯云产品关联关系映射表</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; background: #f1f5f9; color: #1e293b; }
+  .page-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+  .page-title { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+  .page-sub { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+  .stats-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .total-card { background: linear-gradient(135deg,#1e40af,#3b82f6); color:#fff; border-radius: 10px; padding: 14px 20px; text-align:center; min-width:100px; }
+  .search-bar { background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:10px 16px; display:flex; align-items:center; gap:10px; margin-bottom:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+  .search-bar input { border:none; outline:none; flex:1; font-size:14px; color:#374151; background:transparent; }
+  .search-bar input::placeholder { color:#9ca3af; }
+  .table-wrap { background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.08); border:1px solid #e2e8f0; }
+  table { width:100%; border-collapse:collapse; }
+  thead th { background:#0f172a; color:#e2e8f0; padding:12px 14px; text-align:left; font-size:12px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; }
+  .data-row:hover { filter:brightness(.96); }
+  .data-row td { border-bottom:1px solid #f1f5f9; }
+  .no-result { text-align:center; padding:40px; color:#9ca3af; font-size:14px; display:none; }
+  .filter-active { outline: 3px solid #3b82f6; }
+  @media (max-width:768px) {
+    .stats-bar { gap:8px; }
+    thead th:nth-child(2) { display:none; }
+    .data-row td:nth-child(2) { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="page-title">腾讯云产品关联关系映射表</div>
+  <div class="page-sub">共 127 条关联关系 · 6 种边类型 · 点击分类卡片可筛选 · 点击分组标题可折叠</div>
+
+  <div class="stats-bar">
+    <div class="total-card" onclick="filterType('all')" style="cursor:pointer;">
+      <div style="font-size:22px;font-weight:800;">127</div>
+      <div style="font-size:12px;opacity:.85;margin-top:4px;">全部关系</div>
+    </div>
+    
+    <div onclick="filterType('强依赖')" style="cursor:pointer;background:#fff;border:2px solid #fca5a5;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#ef4444;">34</div>
+      <div style="font-size:12px;color:#dc2626;font-weight:600;margin-top:4px;">强依赖</div>
+    </div>
+    <div onclick="filterType('依赖')" style="cursor:pointer;background:#fff;border:2px solid #fdba74;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#f97316;">20</div>
+      <div style="font-size:12px;color:#ea580c;font-weight:600;margin-top:4px;">依赖</div>
+    </div>
+    <div onclick="filterType('被依赖')" style="cursor:pointer;background:#fff;border:2px solid #93c5fd;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#3b82f6;">18</div>
+      <div style="font-size:12px;color:#2563eb;font-weight:600;margin-top:4px;">被依赖</div>
+    </div>
+    <div onclick="filterType('集成')" style="cursor:pointer;background:#fff;border:2px solid #86efac;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#22c55e;">47</div>
+      <div style="font-size:12px;color:#16a34a;font-weight:600;margin-top:4px;">集成</div>
+    </div>
+    <div onclick="filterType('内含')" style="cursor:pointer;background:#fff;border:2px solid #d8b4fe;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#a855f7;">2</div>
+      <div style="font-size:12px;color:#9333ea;font-weight:600;margin-top:4px;">内含</div>
+    </div>
+    <div onclick="filterType('可选')" style="cursor:pointer;background:#fff;border:2px solid #cbd5e1;border-radius:10px;padding:14px 20px;text-align:center;transition:all .2s;min-width:100px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="font-size:22px;font-weight:800;color:#64748b;">6</div>
+      <div style="font-size:12px;color:#475569;font-weight:600;margin-top:4px;">可选</div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" fill="none" stroke="#9ca3af" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="搜索产品名称或关系描述…" oninput="doSearch()">
+    <span id="searchCount" style="color:#9ca3af;font-size:12px;white-space:nowrap;"></span>
+  </div>
+
+  <div class="table-wrap">
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th style="width:140px;">源产品</th>
+          <th style="width:90px;text-align:center;">边类型</th>
+          <th style="width:140px;">目标产品</th>
+          <th>关系描述</th>
+        </tr>
+      </thead>
+      
+    <tbody class="type-group" id="group-强依赖">
+      <tr class="group-header" style="background:#dc2626;cursor:pointer;" onclick="toggleGroup('强依赖')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">34 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">源产品必须依赖目标产品才能正常运行，缺失则功能不可用</span>
+            </div>
+            <span class="toggle-icon-强依赖" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">SCF函数作为后端服务</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBSSnapshot</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">快照保护数据</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CDN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">COS作为CDN源站</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">通过VPC内网IP(VIP)提供服务</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">以Turbo高性能层为核心</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">腾讯云侧双向数据同步后端</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">同地域内网传输</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">MGS/MDS/OSS节点运行在CVM上</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">MGT/MDT/OST数据块设备</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">集群内部网络互通与安全隔离</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPC内网访问</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">运行在VPC网络环境内</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">系统盘和数据盘</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">网络访问控制</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">HDFS数据层存储在COS</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">计算节点运行在CVM</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">集群网络隔离</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">ES</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">ES集群网络</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPC内网访问镜像仓库</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">镜像层数据存储在COS</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TDSQL</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">分布式数据库网络隔离</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">工作节点运行在CVM上</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">集群网络基于VPC</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">Service/Ingress通过CLB暴露</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">从TCR拉取容器镜像</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">应用部署在CVM上</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_MySQL</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPC内网访问</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_Redis</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPC内网访问</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">管理训练任务的容器镜像</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">训练任务跑在TKE集群上</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">训练数据集和模型存储</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据集上传/模型归档到COS</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">计算集群网络隔离</td>
+        </tr>
+        <tr class="data-row" data-type="强依赖" style="background:#fef2f2">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#ef4444;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">强依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据湖存储层</td>
+        </tr>
+    </tbody>
+    <tbody class="type-group" id="group-依赖">
+      <tr class="group-header" style="background:#ea580c;cursor:pointer;" onclick="toggleGroup('依赖')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">依赖</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">20 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">源产品依赖目标产品的某项能力，缺失则部分功能受限</span>
+            </div>
+            <span class="toggle-icon-依赖" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">API鉴权</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">配合权限组IP白名单</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBSSnapshot</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">基于快照的定期备份</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">消费COS增量日志驱动近实时同步</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">跨地域/跨VPC客户端访问</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">IP/端口放通策略</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">后端RS为CVM实例</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">Kubernetes Service后端</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">日志主题访问权限</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">存储桶访问权限控制</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">角色授权访问云资源</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">节点本地存储</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">函数执行角色</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">镜像推拉权限管理</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">节点角色和操作权限</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">节点网络安全策略</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_MySQL</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">网络访问控制</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_MySQL</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据库访问权限</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">用户权限管控</td>
+        </tr>
+        <tr class="data-row" data-type="依赖" style="background:#fff7ed">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#f97316;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据权限管控</td>
+        </tr>
+    </tbody>
+    <tbody class="type-group" id="group-被依赖">
+      <tr class="group-header" style="background:#2563eb;cursor:pointer;" onclick="toggleGroup('被依赖')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">18 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">目标产品会依赖/使用源产品，源产品作为基础设施被消费</span>
+            </div>
+            <span class="toggle-icon-被依赖" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">存储桶权限控制</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">集群角色与操作权限</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">实例操作权限</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">挂载给CVM使用</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">挂载给容器Pod使用</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">打通多个VPC</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">跨地域访问CFS Turbo</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">CVM通过NFS挂载CFS</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">TKE通过PVC挂载CFS</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">BatchCompute</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">批量计算挂载CFS共享数据</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">日志流投递</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">大数据计算消费</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">实时数据流</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">驱动增量数据同步</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">TKE拉取镜像</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TCR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">TiOne管理训练镜像</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_MySQL</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">业务服务连接数据库</td>
+        </tr>
+        <tr class="data-row" data-type="被依赖" style="background:#eff6ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TencentDB_Redis</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#3b82f6;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">被依赖</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">缓存层访问</td>
+        </tr>
+    </tbody>
+    <tbody class="type-group" id="group-集成">
+      <tr class="group-header" style="background:#16a34a;cursor:pointer;" onclick="toggleGroup('集成')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">集成</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">47 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">两者通过接口/插件集成，通常是可选增强能力</span>
+            </div>
+            <span class="toggle-icon-集成" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">容器服务作为后端</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VM服务作为后端</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">API访问日志</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CAM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">KMS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">密钥访问授权</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">DirectConnect</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">专线接入后加入CCN</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPN接入后加入CCN</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CDN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">CLB作为CDN后端源站</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CDN</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">CDN访问日志</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WAF</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">WAF挂接CLB做Web防护</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">CLB流量监控</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">日志长期归档到COS</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">日志实时投递到CKafka</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">日志告警联动云监控</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CDN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">COS源站接入CDN加速分发</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">COS访问日志投递到CLS</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">对象上传触发SCF函数</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据湖数据源</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">DLC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据湖分析的存储层</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">被CLB纳入后端服务组</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">LogListener采集CVM日志</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">云监控采集CVM指标</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">实时数据源消费</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">高性能计算挂载</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">ES</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">快照备份到COS</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">COS对象事件触发</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">消息触发函数</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">函数日志</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CBS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">PVC挂载CBS持久化存储</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">PVC挂载CFS共享存储</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSTurbo</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">AI训练时挂载高性能存储</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">容器日志采集到CLS</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">集群和容器监控</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TKE</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">容器化部署</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TDMQ</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">消息队列打通</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">服务日志采集</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">服务监控</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TSF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">APIGW</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">API管理与路由</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">训练任务日志收集</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">TiOne</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">运行训练任务的底层算力</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">NAT</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPC出公网通过NAT</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">云联网打通多个VPC</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">DirectConnect</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">专线接入到VPC</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">VPN通道连到VPC</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EMR</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">Spark/Hive计算引擎</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CDWPG</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">数据仓库计算层</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#f0fdf4">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">DLC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">无服务器查询</td>
+        </tr>
+        <tr class="data-row" data-type="集成" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">WeData</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#22c55e;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">集成</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CKafka</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">实时数据流接入</td>
+        </tr>
+    </tbody>
+    <tbody class="type-group" id="group-内含">
+      <tr class="group-header" style="background:#9333ea;cursor:pointer;" onclick="toggleGroup('内含')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">内含</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">2 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">目标产品是源产品的组成部分或子能力</span>
+            </div>
+            <span class="toggle-icon-内含" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="内含" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#a855f7;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">内含</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SecurityGroup</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">安全组在VPC层面生效</td>
+        </tr>
+        <tr class="data-row" data-type="内含" style="background:#fdf4ff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#a855f7;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">内含</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CLB</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">CLB在VPC内提供服务</td>
+        </tr>
+    </tbody>
+    <tbody class="type-group" id="group-可选">
+      <tr class="group-header" style="background:#475569;cursor:pointer;" onclick="toggleGroup('可选')">
+        <td colspan="4" style="padding:12px 16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="color:#fff;font-size:15px;font-weight:700;letter-spacing:.5px;">可选</span>
+              <span style="background:rgba(255,255,255,0.25);color:#fff;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;">6 条</span>
+              <span style="color:rgba(255,255,255,0.8);font-size:12px;">可选增强，缺失不影响核心功能</span>
+            </div>
+            <span class="toggle-icon-可选" style="color:#fff;font-size:14px;">▼</span>
+          </div>
+        </td>
+      </tr>
+      
+        <tr class="data-row" data-type="可选" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CCN</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">跨地域/跨VPC访问CFS</td>
+        </tr>
+        <tr class="data-row" data-type="可选" style="background:#f8fafc">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">GA</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">跨地域/跨云走全球加速</td>
+        </tr>
+        <tr class="data-row" data-type="可选" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CFSDataEngine</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">DirectConnect</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">跨云专线传输</td>
+        </tr>
+        <tr class="data-row" data-type="可选" style="background:#f8fafc">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">COS</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">KMS</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">服务端加密密钥管理</td>
+        </tr>
+        <tr class="data-row" data-type="可选" style="background:#ffffff">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">CVM</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">EIP</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">绑定公网IP</td>
+        </tr>
+        <tr class="data-row" data-type="可选" style="background:#f8fafc">
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">SCF</td>
+          <td style="padding:10px 14px;text-align:center;">
+            <span style="display:inline-block;padding:2px 10px;border-radius:12px;background:#64748b;color:#fff;font-size:11px;font-weight:700;letter-spacing:.5px;">可选</span>
+          </td>
+          <td style="padding:10px 14px;color:#374151;font-weight:600;font-family:monospace;font-size:13px;">VPC</td>
+          <td style="padding:10px 14px;color:#6b7280;font-size:13px;">函数访问VPC内资源</td>
+        </tr>
+    </tbody>
+    </table>
+    <div class="no-result" id="noResult">未找到匹配的产品或关系</div>
+  </div>
+
+  <div style="text-align:center;margin-top:32px;color:#64748b;font-size:13px;">
+    <a href="../../index.html" style="color:#3b82f6;text-decoration:none;">← 返回调研报告集</a> · 腾讯云产品关联关系映射表
+  </div>
+</div>
+
+<script>
+let currentFilter = 'all';
+let currentSearch = '';
+
+function toggleGroup(type) {
+  const rows = document.querySelectorAll(`.data-row[data-type="${type}"]`);
+  const icon = document.querySelector(`.toggle-icon-${type}`);
+  const hidden = rows[0] && rows[0].style.display === 'none';
+  rows.forEach(r => r.style.display = hidden ? '' : 'none');
+  if (icon) icon.textContent = hidden ? '▼' : '▶';
+}
+
+function filterType(type) {
+  currentFilter = type;
+  applyFilter();
+}
+
+function doSearch() {
+  currentSearch = document.getElementById('searchInput').value.trim().toLowerCase();
+  applyFilter();
+}
+
+function applyFilter() {
+  const rows = document.querySelectorAll('.data-row');
+  let visible = 0;
+  rows.forEach(row => {
+    const src = row.cells[0].textContent.toLowerCase();
+    const tgt = row.cells[2].textContent.toLowerCase();
+    const desc = row.cells[3].textContent.toLowerCase();
+    const type = row.dataset.type;
+    const matchFilter = currentFilter === 'all' || type === currentFilter;
+    const matchSearch = !currentSearch || src.includes(currentSearch) || tgt.includes(currentSearch) || desc.includes(currentSearch);
+    const show = matchFilter && matchSearch;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  // 隐藏分组 header（该类型下无可见行时）
+  document.querySelectorAll('.group-header').forEach(header => {
+    const tbody = header.closest('tbody');
+    const visRows = tbody.querySelectorAll('.data-row:not([style*="display: none"])');
+    header.parentElement.style.display = (currentFilter !== 'all' && visRows.length === 0) ? 'none' : '';
+  });
+
+  document.getElementById('noResult').style.display = visible === 0 ? 'block' : 'none';
+  document.getElementById('searchCount').textContent = currentSearch ? `${visible} 条匹配` : '';
+}
+</script>
+</body>
+</html>
