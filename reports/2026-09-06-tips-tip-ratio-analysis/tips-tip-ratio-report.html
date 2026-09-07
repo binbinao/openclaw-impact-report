@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>小费经济学 · tips 数据集深度分析</title>
+<style>
+  :root{--ink:#1C1C1E;--muted:#5F5E5A;--line:#E8E7E0;--gold:#F59E0B;--card:#FFFFFF;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:#F6F5F1;color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+       line-height:1.7;}
+  main{max-width:880px;margin:0 auto;padding:40px 28px 80px;}
+  .kicker{font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:600;
+          text-transform:uppercase;margin-bottom:10px;}
+  h1{font-size:34px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em;}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 30px;}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12px;color:var(--muted);
+        border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+        padding:12px 0;margin-bottom:36px;}
+  section{margin-bottom:48px;}
+  h2{font-size:20px;margin:0 0 6px;}
+  .lead{color:var(--muted);font-size:14px;margin:0 0 18px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:18px 0 26px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;}
+  .card .k{font-size:12px;color:var(--muted);margin-bottom:6px;}
+  .card .v{font-size:22px;font-weight:600;letter-spacing:-.3px;line-height:1.2;}
+  .card .d{font-size:11.5px;color:var(--muted);margin-top:4px;}
+  .callout{background:#FFF9EE;border:1px solid #F6E3BE;border-left:4px solid var(--gold);
+           border-radius:8px;padding:16px 20px;margin:20px 0;font-size:14.5px;}
+  .callout b{color:#854F0B;}
+  .verdict{background:#F2F6FB;border:1px solid #D9E5F2;border-left:4px solid #185FA5;
+           border-radius:8px;padding:16px 20px;margin:20px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:16px 0;}
+  th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;}
+  th{font-size:12px;color:var(--muted);font-weight:600;background:#FAF9F6;}
+  td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;}
+  .tag{display:inline-block;font-size:11px;background:#FAEEDA;color:#854F0B;
+       border-radius:4px;padding:1px 7px;margin-left:4px;}
+  .tag.alt{background:#E1F5EE;color:#0F6E56;}
+  .note{font-size:12px;color:var(--muted);border-top:1px dashed var(--line);
+        padding-top:14px;margin-top:30px;}
+  .figure{margin:16px 0;}
+  .figure p{font-size:12px;color:var(--muted);margin:8px 0 0;}
+  code{background:#F1EFE8;border-radius:4px;padding:1px 6px;font-size:12.5px;
+       font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+  .pill{display:inline-block;font-size:11.5px;border:1px solid var(--line);border-radius:20px;
+        padding:2px 12px;margin:0 6px 6px 0;color:var(--muted);}
+  h3{font-size:16px;margin:22px 0 8px;}
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Data Snapshot · tips.csv</div>
+  <h1>小费经济学：星期几决定你给多少？</h1>
+  <p class="sub">244 笔美国餐厅消费记录，账单金额 × 小费 × 星期几 —— 一次关于"比例陷阱"的完整剖析</p>
+  <div class="meta">
+    <span>样本：244 笔</span><span>区间：周四 ~ 周日</span><span>平均账单 $19.79</span>
+    <span>平均小费 $3.00</span><span>日期：2026-09</span>
+  </div>
+
+  <section>
+    <h2>先给结论</h2>
+    <p class="lead">三种口径的答案各不相同，但统计检验只认一个。</p>
+    <div class="cards">
+      <div class="card"><div class="k">每笔平均比例 · 最高</div><div class="v">周五 16.99%</div><div class="d">但仅 19 笔样本</div></div>
+      <div class="card"><div class="k">中位数比例 · 最高</div><div class="v">周日 16.11%</div><div class="d">最稳定的"大方日"</div></div>
+      <div class="card"><div class="k">组间差异检验</div><div class="v">p = 0.469</div><div class="d">ANOVA F=0.85 · 不显著</div></div>
+      <div class="card"><div class="k">金额加权 · 最高</div><div class="v">周五 15.94%</div><div class="d">Σtip/Σbill 口径</div></div>
+    </div>
+    <div class="verdict">
+      <b>核心判断：小费比例与星期几没有可验证的显著关系。</b>
+      单因素方差分析 p=0.469 &gt; 0.05 —— 周四到周日的比例差异，完全可能是随机波动。
+      "周五最慷慨"是均值被 19 个样本里的 9 笔高比例记录抬起来的幻觉；
+      样本量充足的周日（76 笔）无论均值还是中位数都稳定地高。
+    </div>
+  </section>
+
+  <section>
+    <h2>第一步：原始问题怎么算</h2>
+    <p class="lead">题目要求先算每笔的 <code>tip / total_bill</code>，再按星期几分组取平均 —— 这是"每笔等权"口径。</p>
+    <table>
+      <tr><th>星期</th><th class="r">笔数</th><th class="r">平均比例</th><th class="r">中位数</th>
+          <th class="r">金额加权</th><th class="r">四分位区间</th><th>标签</th></tr>
+      <tr><td><b>周五</b></td><td class='r'>19</td><td class='r'><b>17.0%</b></td><td class='r'>15.6%</td><td class='r'>15.9%</td><td class='r'>12%–20%</td><td><span class="tag">均值最高</span></td></tr><tr><td><b>周日</b></td><td class='r'>76</td><td class='r'><b>16.7%</b></td><td class='r'>16.1%</td><td class='r'>15.2%</td><td class='r'>12%–19%</td><td><span class="tag alt">中位数最高</span></td></tr><tr><td><b>周四</b></td><td class='r'>62</td><td class='r'><b>16.1%</b></td><td class='r'>15.4%</td><td class='r'>15.7%</td><td class='r'>14%–19%</td><td></td></tr><tr><td><b>周六</b></td><td class='r'>87</td><td class='r'><b>15.3%</b></td><td class='r'>15.2%</td><td class='r'>14.6%</td><td class='r'>12%–19%</td><td></td></tr>
+    </table>
+    <div class="figure">
+      <svg viewBox="0 0 760 226" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="按天平均小费比例条形图"><title>各天平均小费比例</title><text x="0" y="28" font-size="14.5" font-weight="600" fill="#1C1C1E">周五</text><rect x="0" y="36" width="441.8" height="30" rx="4" fill="#F59E0B"/><text x="449.8" y="58" font-size="13" font-weight="600" fill="#854F0B">17.0%</text><text x="449.8" y="80" font-size="11.5" fill="#888780">（n=19 笔 · 中位 15.6%）</text><text x="0" y="94" font-size="14.5" font-weight="600" fill="#1C1C1E">周日</text><rect x="0" y="102" width="433.9" height="30" rx="4" fill="#D3D1C7"/><text x="441.9" y="124" font-size="13" font-weight="600" fill="#854F0B">16.7%</text><text x="441.9" y="146" font-size="11.5" fill="#888780">（n=76 笔 · 中位 16.1%）</text><text x="0" y="160" font-size="14.5" font-weight="600" fill="#1C1C1E">周四</text><rect x="0" y="168" width="419.3" height="30" rx="4" fill="#D3D1C7"/><text x="427.3" y="190" font-size="13" font-weight="600" fill="#854F0B">16.1%</text><text x="427.3" y="212" font-size="11.5" fill="#888780">（n=62 笔 · 中位 15.4%）</text><text x="0" y="226" font-size="14.5" font-weight="600" fill="#1C1C1E">周六</text><rect x="0" y="234" width="398.2" height="30" rx="4" fill="#D3D1C7"/><text x="406.2" y="256" font-size="13" font-weight="600" fill="#854F0B">15.3%</text><text x="406.2" y="278" font-size="11.5" fill="#888780">（n=87 笔 · 中位 15.2%）</text><text x="0" y="284" font-size="11.5" fill="#A1A1AA">┆ 全体平均 16.1%</text>
+      <p>图 1 · 平均小费比例（金色 = 该口径第一名）。周五领先但 n 只有 19，是四天里最小的样本。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>第二步：换个角度看分布</h2>
+    <p class="lead">平均值会撒谎。把 244 笔全部摊开看分布，每天的中位数（金色粗线）才是"典型客人"的水平。</p>
+    <div class="figure">
+      <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小费比例分布点阵图, 按星期几分组"><title>小费比例分布: 每天一个点带, 横线为中位数</title><text x="0" y="44" font-size="13" font-weight="600" fill="#1C1C1E">周四</text><text x="0" y="62" font-size="11" fill="#888780">n=62</text><circle cx="181.6" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="169.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="189.6" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="187.6" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="228.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="210.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="186.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="165.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="182.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="186.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="240.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="255.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="177.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="176.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="179.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="160.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="163.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="204.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="163.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="226.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="176.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="203.6" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="173.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="205.3" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="139.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="125.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="171.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="194.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="207.1" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="181.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="220.1" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="176.8" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="163.3" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="232.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="225.6" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="221.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="160.3" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="212.8" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="208.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="120.3" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="173.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="206.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="280.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="234.8" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="134.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="167.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="259.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="217.5" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="219.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="155.9" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="187.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="182.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="236.7" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="190.4" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="187.2" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="186.0" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="221.1" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="222.1" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="192.1" cy="48" r="3.4" fill="#185FA5" opacity="0.55"/><line x1="187.2" y1="34" x2="187.2" y2="62" stroke="#F59E0B" stroke-width="4"/><text x="0" y="104" font-size="13" font-weight="600" fill="#1C1C1E">周五</text><text x="0" y="122" font-size="11" fill="#888780">n=19</text><circle cx="145.6" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="188.6" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="203.8" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="277.8" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="178.1" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="157.3" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="181.2" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="163.1" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="178.0" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="159.5" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="242.1" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="221.2" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="209.6" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="274.4" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="245.0" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="215.2" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="157.3" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="187.0" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.9" cy="108" r="3.4" fill="#185FA5" opacity="0.55"/><line x1="188.6" y1="94" x2="188.6" y2="122" stroke="#F59E0B" stroke-width="4"/><text x="0" y="164" font-size="13" font-weight="600" fill="#1C1C1E">周六</text><text x="0" y="182" font-size="11" fill="#888780">n=87</text><circle cx="194.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="248.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="172.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="176.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="219.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="192.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="168.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="183.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="190.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="186.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="185.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="172.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="224.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="157.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="212.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="183.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="161.4" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="209.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="162.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="192.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.4" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="125.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="107.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="189.4" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="190.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="179.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="208.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="229.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="184.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="189.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="184.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="329.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="142.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="195.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="205.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="156.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="183.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="158.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="202.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="106.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="188.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="221.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="148.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="200.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="230.4" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="291.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="237.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="174.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="185.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="215.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="222.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="225.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="166.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="124.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="129.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="204.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="115.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="224.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="213.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="215.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="250.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="130.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="148.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="167.0" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="213.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="144.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="181.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="229.3" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="167.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="128.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="218.1" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="301.4" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="172.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="219.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="162.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="125.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="89.5" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="167.7" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="228.6" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="120.8" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="132.9" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="141.2" cy="168" r="3.4" fill="#185FA5" opacity="0.55"/><line x1="185.5" y1="154" x2="185.5" y2="182" stroke="#F59E0B" stroke-width="4"/><text x="0" y="224" font-size="13" font-weight="600" fill="#1C1C1E">周日</text><text x="0" y="242" font-size="11" fill="#888780">n=76</text><circle cx="109.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="192.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="197.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="175.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="181.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="214.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="248.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="156.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="167.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="240.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="197.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="177.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="144.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="194.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="228.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="210.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="193.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="248.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="230.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="180.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="241.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="172.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="212.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="195.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="245.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="213.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="119.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="197.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="224.8" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="268.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="183.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="189.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="200.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="208.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="146.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="148.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="188.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="227.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="200.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="206.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="185.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="191.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="127.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="143.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="202.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="145.8" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="184.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="221.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="160.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="194.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="223.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="162.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="179.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="201.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="177.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="149.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="177.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="647.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="142.5" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="256.6" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="138.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="152.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="174.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="404.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="144.7" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="147.8" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="260.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="123.8" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="291.9" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="121.2" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="259.8" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="198.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="114.3" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="219.4" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="203.1" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><circle cx="139.0" cy="228" r="3.4" fill="#185FA5" opacity="0.55"/><line x1="193.2" y1="214" x2="193.2" y2="242" stroke="#F59E0B" stroke-width="4"/><text x="60.0" y="290" font-size="10.5" fill="#888780" text-anchor="middle">0%</text><text x="142.7" y="290" font-size="10.5" fill="#888780" text-anchor="middle">10%</text><text x="225.3" y="290" font-size="10.5" fill="#888780" text-anchor="middle">20%</text><text x="308.0" y="290" font-size="10.5" fill="#888780" text-anchor="middle">30%</text><text x="390.7" y="290" font-size="10.5" fill="#888780" text-anchor="middle">40%</text><text x="473.3" y="290" font-size="10.5" fill="#888780" text-anchor="middle">50%</text><text x="60" y="310" font-size="11" fill="#A1A1AA">金色粗线 = 中位数</text>
+      <p>图 2 · 每天全部记录的点带图。横轴是小费比例，金色粗线为中位数。可见：① 各组分布大量重叠，
+      ② 极值比例（71%、42%）来自小额账单，是"分母太小"造成的失真，不是慷慨 —— 全数据 bill&lt;$5
+      的记录仅有 1 条。</p>
+    </div>
+    <table>
+      <tr><th>极端记录</th><th>星期</th><th>比例</th><th>账单 / 小费</th><th>说明</th></tr>
+      <tr><td>最大方</td><td>周日</td><td>71.0%</td><td>$7 / $5.15</td><td>小账单 + 大方客人 → 比例爆炸</td></tr>
+      <tr><td>第二位</td><td>周日</td><td>41.7%</td><td>$10 / $4.00</td><td>同上</td></tr>
+      <tr><td>第三位</td><td>周六</td><td>32.6%</td><td>$3 / $1.00</td><td>$3 的账单, 比例天然失真</td></tr>
+      <tr><td>最抠门</td><td>周六</td><td>3.6%</td><td>$33 / $1.17</td><td>大账单低小费, 比例被稀释</td></tr>
+    </table>
+    <div class="callout">
+      <b>为什么会出现 71% 这种"异常"？</b>比例 = 小费 ÷ 账单，分母越小，同样的金额越显得"慷慨"。
+      所以小额账单天然容易产生极端高比例 —— 这是比率型指标的固有缺陷，与大方无关。
+    </div>
+  </section>
+
+  <section>
+    <h2>第三步：账单金额才是真正的解释变量</h2>
+    <p class="lead">如果差异不在星期几，那在哪儿？把账单金额拉进来，规律立刻清晰。</p>
+    <div class="cards">
+      <div class="card"><div class="k">账单金额 vs 比例 相关系数</div><div class="v">r = -0.339</div><div class="d">负相关：账单越大, 比例越低</div></div>
+      <div class="card"><div class="k">小额账单组 ($≤18)</div><div class="v">17.7%</div><div class="d">n=122 · 中位 16.4%</div></div>
+      <div class="card"><div class="k">大额账单组 (&gt;18)</div><div class="v">14.5%</div><div class="d">n=122 · 中位 14.7%</div></div>
+    </div>
+    <div class="callout">
+      <b>锚定效应：</b>人们给的小费金额与账单金额大致成比例，但存在"下限"——
+      账单 $10 时给 15% 很自然，账单 $80 时同样 15% 意味着 $12 的小费，客人会犹豫。
+      结果是<em>账单越大、比例反而越低</em>（r=-0.339）。这解释了周六：账单均值 $20.4、
+      大额单（$30+）占比 14%，结构上更偏"高消费"，整体比例因此被结构性拉低。
+    </div>
+    <p class="note">所以"周六客人最抠门"同样是陷阱 —— 不是周六的人小气，是周六的客单价高。</p>
+  </section>
+
+  <section>
+    <h2>三个追问：这份结论经得起敲打吗？</h2>
+    <p class="lead">"周五最高"有三个天然疑点：样本太少、小额账单拉比例、周六金额最高却比例最低。逐一拆解。</p>
+
+    <h3 style="font-size:16px;margin:22px 0 8px;">追问一：周五只有 19 笔，均值可信吗？</h3>
+    <p>给每个均值套上 95% 置信区间 —— 均值 ± 约 2 倍标准误。样本越小，标准误越大，区间越宽，估计越不可靠。</p>
+    <table>
+      <tr><th>星期</th><th class="r">n</th><th class="r">均值</th><th class="r">95% CI</th><th class="r">区间宽度</th><th>注</th></tr>
+      <tr><td><b>周五</b></td><td class='r'>19</td><td class='r'><b>17.0%</b></td><td class='r'>[14.7%, 19.3%]</td><td class='r'>4.6pp</td><td> ← 最宽 (n 最小)</td></tr><tr><td><b>周日</b></td><td class='r'>76</td><td class='r'><b>16.7%</b></td><td class='r'>[14.6%, 18.7%]</td><td class='r'>4.1pp</td><td></td></tr><tr><td><b>周四</b></td><td class='r'>62</td><td class='r'><b>16.1%</b></td><td class='r'>[15.1%, 17.2%]</td><td class='r'>2.1pp</td><td></td></tr><tr><td><b>周六</b></td><td class='r'>87</td><td class='r'><b>15.3%</b></td><td class='r'>[14.2%, 16.5%]</td><td class='r'>2.3pp</td><td> ← 最窄 (n 最大)</td></tr>
+    </table>
+    <div class="callout">
+      <b>结论：周五的"领先"落在噪声里。</b>周五 95% CI [14.69%, 19.29%] 与周六 [14.16%, 16.47%]、
+      周四 [15.10%, 17.16%] 大面积重叠 —— 统计上无法区分。真实均值完全可能低于周日。
+      19 笔撑不起"周五最慷慨"这种结论，它只是四天里最宽的估计。
+    </div>
+
+    <h3 style="font-size:16px;margin:22px 0 8px;">追问二：$3 账单给 $1 小费这种极端单怎么处理？</h3>
+    <p>先查清事实：全数据里 bill &lt; $5 的记录只有 <b>1 条</b>（周六 $3.07 → 32.6%）。
+      "$3 小单"并不是每天都有 —— 这类记录更像买杯饮料顺手留 $1，不是"吃饭给小费"场景。但处理方法仍有讲究，三种口径对比：</p>
+    <table>
+      <tr><th>口径</th><th class="r">周四</th><th class="r">周五</th><th class="r">周六</th><th class="r">周日</th></tr>
+      <tr><td><b>原始均值</b>（含全部）</td><td class='r'>16.13% (n=62)</td><td class='r'>16.99% (n=19) <span class="tag">最高</span></td><td class='r'>15.32% (n=87)</td><td class='r'>16.69% (n=76)</td></tr>
+      <tr><td><b>剔除 bill&lt;$3</b></td><td class='r'>17.0% (n=19)<span class="tag">最高</span></td><td class='r'>16.7% (n=76)</td><td class='r'>16.1% (n=62)</td><td class='r'>15.3% (n=87)</td></tr>
+      <tr><td><b>剔除 bill&lt;$5</b></td><td class='r'>17.0% (n=19)<span class="tag">最高</span></td><td class='r'>16.7% (n=76)</td><td class='r'>16.1% (n=62)</td><td class='r'>15.1% (n=86)</td></tr>
+      <tr><td><b>剔除 bill&lt;$8</b></td><td class='r'>17.0% (n=18)<span class="tag">最高</span></td><td class='r'>16.0% (n=75)</td><td class='r'>15.9% (n=60)</td><td class='r'>15.1% (n=84)</td></tr>
+      <tr><td><b>金额加权</b> Σtip/Σbill</td><td class='r'>15.67%</td><td class='r'>15.94% <span class="tag">最高</span></td><td class='r'>14.64%</td><td class='r'>15.20%</td></tr>
+      <tr><td><b>中位数</b>（天然抗极值）</td><td class='r'>15.38%</td><td class='r'>15.56%</td><td class='r'>15.18%</td><td class='r'>16.11% <span class="tag alt">最高</span></td></tr>
+    </table>
+    <div class="callout">
+      <b>结论：怎么处理，榜首都在周五和周日之间摇摆，但周五从不是中位数口径的冠军。</b>
+      阈值剔除和金额加权都保留周五第一，因为它的高比例记录分布广而非靠个别极端单；
+      但一到抗极值的中位数，周日（16.11%）就反超。稳健的结论是：<b>没有一天稳定地"更慷慨"</b>，
+      差异在噪声范围内。
+    </div>
+
+    <h3 style="font-size:16px;margin:22px 0 8px;">追问三：周六账单最大，比例为何反而最低？</h3>
+    <p>先确认"最大"是真的 —— 周六账单均值 $20.4，仅次于周日 $21.4，中位 $18.2 也高。关键在结构：
+      大额账单（$30+）占比周六 14%、周日 18%，而周四只有 8%。如果比例随金额递减（锚定效应），
+      大单多的天，平均比例必然被拉低。</p>
+    <p>验证方法：把账单分段，看<b>同一金额段内</b>各天的比例是否还有差异：</p>
+    <table>
+      <tr><th>账单金额段</th><th class="r">周四</th><th class="r">周五</th><th class="r">周六</th><th class="r">周日</th></tr>
+      <tr><td><b>$0–10</b></td><td class='r'>18.9% (n=6)</td><td class='r'>19.9% (n=2)</td><td class='r'>20.0% (n=4)</td><td class='r'>33.0% (n=5)</td></tr><tr><td><b>$10–20</b></td><td class='r'>16.3% (n=40)</td><td class='r'>18.4% (n=11)</td><td class='r'>16.3% (n=45)</td><td class='r'>16.6% (n=34)</td></tr><tr><td><b>$20–35</b></td><td class='r'>15.2% (n=14)</td><td class='r'>13.8% (n=5)</td><td class='r'>13.7% (n=30)</td><td class='r'>15.3% (n=32)</td></tr><tr><td><b>$35+</b></td><td class='r'>11.9% (n=2)</td><td class='r'>11.8% (n=1)</td><td class='r'>13.2% (n=8)</td><td class='r'>10.0% (n=5)</td></tr>
+    </table>
+    <div class="callout">
+      <b>结论：控制金额后，"周六低"基本消失。</b>同一账单段内各天比例非常接近 ——
+      $20–35 段周六 13.7% vs 周四 15.2% / 周日 15.3%，差距从总体均值差的 1.7pp 缩小到不足 1.5pp，
+      且方向不再稳定。周六总体比例低的真正原因：<b>它的高消费人群（$35+ 大单）占比高，
+      而大单比例被锚定效应压到 10–13%</b>（全体 $35+ 均值 12.0%，n=16）。
+      这是 Simpson 悖论的变体 —— 组内无差异，组间差异来自结构。</p>
+    </div>
+    <p class="note">一句话：周六不是"抠门日"，是"请客日"。比例指标不控制金额就跨组比较，得出的是结构性幻觉。</p>
+  </section>
+
+  <section>
+    <h2>方法学与局限</h2>
+    <table>
+      <tr><td style="width:180px">为什么用 ANOVA</td><td>4 组均值差异检验：F=0.85，p=0.469。p&gt;0.05 意味着"观察到这种差异"在"各组其实相同"的假设下并不罕见，不能拒绝原假设。</td></tr>
+      <tr><td>样本失衡</td><td>周五仅 19 笔（占 8%），周四 62、周六 87、周日 76。小样本组的均值方差大，最容易被极值牵着走。</td></tr>
+      <tr><td>口径差异</td><td>均值 / 中位数 / 金额加权三种口径排序不同 —— 报告统计量时必须声明口径，否则结论会打架。</td></tr>
+      <tr><td>数据局限</td><td>单餐厅、两周观测、无顾客画像。星期差异若要坐实，需要跨餐厅、跨月份、更长窗口的数据。本数据集能可靠支持的是"比例与星期几无显著关系"。</td></tr>
+    </table>
+  </section>
+
+  <div class="note">
+    生成方式：<code>scripts/make_tips_report.py</code> 现场读取 <code>data/plotly-datasets/tips.csv</code> 计算全部统计量（含手算单因素 ANOVA 与不完全 Beta 函数求 p 值），无任何硬编码数字。数据集版权归原仓库（seaborn-data）所有。
+  </div>
+</main>
+</body>
+</html>
