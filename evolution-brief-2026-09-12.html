@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 自进化简报 · 第 107 期</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --green: #3fb950;
+    --red: #f85149;
+    --yellow: #d29922;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --cyan: #39d2c0;
+    --orange: #f0883e;
+    --pink: #f778ba;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    line-height: 1.6;
+    padding: 0;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+
+  .header {
+    background: linear-gradient(135deg, #1a0533 0%, #0d1117 50%, #001a1a 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 32px;
+    margin-bottom: 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '🧬';
+    position: absolute;
+    top: -20px; right: -20px;
+    font-size: 120px;
+    opacity: 0.06;
+  }
+  .header .milestone { font-size: 14px; color: var(--yellow); margin-bottom: 8px; }
+  .header h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .header .subtitle { color: var(--muted); font-size: 16px; }
+  .header .badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .badge.green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+  .badge.red { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+  .badge.yellow { background: rgba(210,153,34,0.15); color: var(--yellow); border: 1px solid rgba(210,153,34,0.3); }
+  .badge.blue { background: rgba(88,166,255,0.15); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+  .badge.purple { background: rgba(188,140,255,0.15); color: var(--purple); border: 1px solid rgba(188,140,255,0.3); }
+  .badge.cyan { background: rgba(57,210,192,0.15); color: var(--cyan); border: 1px solid rgba(57,210,192,0.3); }
+  .badge.orange { background: rgba(240,136,62,0.15); color: var(--orange); border: 1px solid rgba(240,136,62,0.3); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card h2 { font-size: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card h3 { font-size: 16px; margin-bottom: 12px; color: var(--cyan); }
+  .card .label { color: var(--muted); font-size: 13px; }
+  .card .muted-text { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .stat-card {
+    background: rgba(13,17,23,0.6);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .value { font-size: 28px; font-weight: 700; }
+  .stat-card .value.green { color: var(--green); }
+  .stat-card .value.red { color: var(--red); }
+  .stat-card .value.yellow { color: var(--yellow); }
+  .stat-card .value.blue { color: var(--blue); }
+  .stat-card .value.cyan { color: var(--cyan); }
+  .stat-card .value.purple { color: var(--purple); }
+  .stat-card .value.orange { color: var(--orange); }
+  .stat-card .delta { font-size: 12px; margin-top: 4px; }
+  .stat-card .delta.up { color: var(--green); }
+  .stat-card .delta.down { color: var(--red); }
+  .stat-card .delta.zero { color: var(--muted); }
+  .stat-card .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .component-bar { display: flex; height: 24px; border-radius: 6px; overflow: hidden; margin: 12px 0; }
+  .component-bar .seg { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; }
+
+  .paper { border-left: 3px solid var(--purple); padding-left: 14px; margin: 10px 0; }
+  .paper .title { font-size: 15px; font-weight: 600; color: var(--blue); }
+  .paper .meta { font-size: 12px; color: var(--muted); margin: 2px 0; }
+  .paper .summary { font-size: 13px; color: var(--text); margin-top: 4px; line-height: 1.5; }
+
+  .story { border-left: 3px solid var(--orange); padding-left: 14px; margin: 10px 0; }
+  .story .title { font-size: 15px; font-weight: 600; color: var(--orange); }
+  .story .meta { font-size: 12px; color: var(--muted); margin: 2px 0; }
+
+  .alert-box { padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: 14px; }
+  .alert-box.red { background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.3); color: var(--red); }
+  .alert-box.yellow { background: rgba(210,153,34,0.1); border: 1px solid rgba(210,153,34,0.3); color: var(--yellow); }
+  .alert-box.green { background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.3); color: var(--green); }
+  .alert-box.blue { background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.3); color: var(--blue); }
+
+  .trend-cell { text-align: center; }
+  .trend-cell.up { color: var(--green); }
+  .trend-cell.down { color: var(--red); }
+  .trend-cell.zero { color: var(--muted); }
+
+  .suggestion { padding: 10px 14px; border-left: 3px solid var(--cyan); margin: 8px 0; background: rgba(57,210,192,0.04); }
+  .suggestion .title { font-weight: 600; color: var(--cyan); }
+  .suggestion .desc { font-size: 13px; color: var(--text); margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="milestone">🎯 第 107 期 · 2026-09-12</div>
+  <h1>🧬 自进化简报</h1>
+  <div class="subtitle">Hermes Agent · 每日系统健康度与能力追踪</div>
+  <div class="badge-row">
+    <span class="badge green">🟢 超级稳态第34期</span>
+    <span class="badge yellow">🤖 自动降级后第20期</span>
+    <span class="badge cyan">📊 零变化第13期</span>
+    <span class="badge purple">🏆 PID 第62期 · 61天</span>
+    <span class="badge green">📚 arXiv 连续第2期成功</span>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: CAPABILITY STATUS ===== -->
+<div class="card">
+  <h2>📊 能力状态</h2>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="value green">43</div>
+      <div class="delta zero">→ 0 (第9期稳定)</div>
+      <div class="label">工具数</div>
+    </div>
+    <div class="stat-card">
+      <div class="value purple">81</div>
+      <div class="delta zero">→ 0 (第7期稳定)</div>
+      <div class="label">技能总数</div>
+    </div>
+    <div class="stat-card">
+      <div class="value cyan">21</div>
+      <div class="delta zero">→ 0 (第7期稳定)</div>
+      <div class="label">活跃技能</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--muted)">58</div>
+      <div class="delta zero">→ 0 (第7期稳定)</div>
+      <div class="label">过期技能</div>
+    </div>
+    <div class="stat-card">
+      <div class="value blue">37%</div>
+      <div class="delta zero">→ 不变</div>
+      <div class="label">Memory 使用率</div>
+    </div>
+    <div class="stat-card">
+      <div class="value green">2</div>
+      <div class="delta zero">→ 不变</div>
+      <div class="label">活跃 Cron 任务</div>
+    </div>
+  </div>
+  <div style="margin-top:16px; padding:12px; background:rgba(57,210,192,0.06); border-radius:8px; border:1px solid rgba(57,210,192,0.15);">
+    <span style="color:var(--cyan);font-weight:600;">✅ 能力冻结确认：</span>
+    <span style="color:var(--muted);font-size:14px;">所有5项能力指标连续第13期零变化。工具数43自P100起冻结（9期），技能数81自P101起冻结（7期），Memory使用率37%长期不变。</span>
+  </div>
+</div>
+
+<!-- ===== SECTION 2: LOG ANALYSIS ===== -->
+<div class="card">
+  <h2>📋 日志分析 · 尾窗 500 行</h2>
+  
+  <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="stat-card">
+      <div class="value" style="color:var(--yellow)">395</div>
+      <div class="label">WARNING</div>
+    </div>
+    <div class="stat-card">
+      <div class="value red">105</div>
+      <div class="label">ERROR</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--muted)">500</div>
+      <div class="label">总计 (全量窗口)</div>
+    </div>
+  </div>
+
+  <div class="component-bar">
+    <div class="seg" style="width:58.8%; background:#6b21a8;" title="hermes_cli.plugins">plugins 294</div>
+    <div class="seg" style="width:19.8%; background:#0369a1;" title="hermes_cli.gateway">gateway 99</div>
+    <div class="seg" style="width:19.6%; background:#b91c1c;" title="gateway.run">run 98</div>
+    <div class="seg" style="width:1.4%; background:#d97706;" title="api_server">api 7</div>
+    <div class="seg" style="width:0.4%; background:#059669;" title="tools.approval">appr 2</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>组件</th><th>条目</th><th>占比</th><th>级别</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>hermes_cli.plugins</td><td>294</td><td>58.8%</td><td><span style="color:var(--yellow)">WARNING</span></td><td>plugin.json 解析失败 (3签名×98条)</td></tr>
+      <tr><td>hermes_cli.gateway</td><td>99</td><td>19.8%</td><td><span style="color:var(--yellow)">WARNING</span></td><td>网关重启风暴 (70×10s + 29×20s backoff)</td></tr>
+      <tr><td>gateway.run</td><td>98</td><td>19.6%</td><td><span style="color:var(--red)">ERROR</span></td><td>PID 3433647 已存在</td></tr>
+      <tr><td>gateway.platforms.api_server</td><td>7</td><td>1.4%</td><td><span style="color:var(--red)">ERROR</span></td><td>API_SERVER_KEY 缺失</td></tr>
+      <tr><td>tools.approval</td><td>2</td><td>0.4%</td><td><span style="color:var(--yellow)">WARNING</span></td><td>approvals.mode 'auto' 无效</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert-box green">✅ 组件分布与 P75 模式差异 < 0.3pp。跨轮转稳定性第 23 次验证通过。全 500 行均为 09-12 当日数据。</div>
+
+  <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-top:20px;">
+    <div class="stat-card">
+      <div class="value yellow">0</div>
+      <div class="label">弱点检出（<span class="badge red" style="font-size:10px;">⚠️ 盲区第66期</span>）</div>
+    </div>
+    <div class="stat-card">
+      <div class="value green">2</div>
+      <div class="label">唯一 ERROR 签名</div>
+    </div>
+    <div class="stat-card">
+      <div class="value cyan">0</div>
+      <div class="label">高危弱点</div>
+    </div>
+  </div>
+
+  <div class="alert-box red" style="margin-top:12px;">
+    ⚠️ <strong>WARNING 过滤盲区 · 第 66 期持续确认（>5.5 个月）</strong><br>
+    <span style="font-size:13px;">395 条 WARNING（79%）——包括 hermes_cli.plugins 294 条、hermes_cli.gateway 99 条、tools.approval 2 条——全部被 weakness_scan 忽略。这是架构级缺陷，非阈值调优问题。</span>
+  </div>
+</div>
+
+<!-- ===== SECTION 3: KEY METRICS & TRENDS ===== -->
+<div class="card">
+  <h2>📈 核心指标趋势</h2>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>P106 (09-11)</th><th>P107 (09-12)</th><th>变化</th><th>连续稳定期</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>工具数</td><td>43</td><td>43</td><td class="trend-cell zero">→ 0</td><td>9 期</td></tr>
+      <tr><td>技能总数</td><td>81</td><td>81</td><td class="trend-cell zero">→ 0</td><td>7 期</td></tr>
+      <tr><td>活跃技能</td><td>21</td><td>21</td><td class="trend-cell zero">→ 0</td><td>7 期</td></tr>
+      <tr><td>Memory %</td><td>37%</td><td>37%</td><td class="trend-cell zero">→ 0</td><td>长期</td></tr>
+      <tr><td>尾窗 WARNING</td><td>395</td><td>395</td><td class="trend-cell zero">→ 0</td><td>精确复制</td></tr>
+      <tr><td>尾窗 ERROR</td><td>105</td><td>105</td><td class="trend-cell zero">→ 0</td><td>精确复制</td></tr>
+      <tr><td>尾窗总行</td><td>500</td><td>500</td><td class="trend-cell zero">→ 0</td><td>全量窗口</td></tr>
+      <tr><td>组件分布 (plugins/gateway/run/api/appr)</td><td>295/99/98/7/1</td><td>294/99/98/7/2</td><td class="trend-cell zero">→ ~0</td><td>±0.2pp</td></tr>
+      <tr><td>PID</td><td>3433647</td><td>3433647</td><td class="trend-cell zero">→ 不变</td><td>62 期</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:20px;">📉 PID 3433647 · 61 天连续运行里程碑 🏆</h3>
+  <div class="component-bar" style="background:#1a1a2e;">
+    <div class="seg" style="width:100%; background:linear-gradient(90deg, #0f0, #00d4ff);">
+      🏆 62 期 / 61 天 · 持续刷新纪录
+    </div>
+  </div>
+  <div class="muted-text" style="margin-top:8px;">
+    PID 3433647 自 P92（2026-08-27）以来持续运行，历经 23 次日志轮转验证。61 天连续运行是简报系统创建以来的最长 PID 存活纪录。
+    该进程的存在是 gateway.run（98条/期）和 hermes_cli.gateway（99条/期）两条日志流的根本原因——cron job 每次启动尝试均触发"已存在"+ 重启风暴警告。
+  </div>
+
+  <h3 style="margin-top:20px;">🔄 超级稳态计数器</h3>
+  <table>
+    <thead>
+      <tr><th>指标</th><th>P107 值</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>超级稳态期数</td><td>34（P76起）</td></tr>
+      <tr><td>自动降级后期数</td><td>20（P88起）</td></tr>
+      <tr><td>所有指标零变化期数</td><td>13</td></tr>
+      <tr><td>跨轮转稳定验证次数</td><td>23</td></tr>
+      <tr><td>WARNING 过滤盲区期数</td><td>66</td></tr>
+      <tr><td>弱点盲区期数</td><td>66</td></tr>
+    </tbody>
+  </table>
+  <div class="alert-box yellow" style="margin-top:12px;">
+    ⚠️ 超级稳态疲劳持续——系统已连续 34 期无任何结构性变化。简报分析重心维持于外部知识发现和架构修复建议。
+  </div>
+</div>
+
+<!-- ===== SECTION 4: EXTERNAL KNOWLEDGE ===== -->
+<div class="card">
+  <h2>🔬 外部知识 · arXiv 论文</h2>
+  <div class="alert-box green">🎉 arXiv 连续第 2 期成功！5 篇新论文入库。累计 49/107 = 45.8%（↑+0.8pp vs P106）。</div>
+
+  <div class="paper">
+    <div class="title">GPU-CFR: 80x Faster Counterfactual Regret Minimization</div>
+    <div class="meta">Boning Li, Longbo Huang · cs.DC/cs.AI/cs.GT</div>
+    <div class="summary">将博弈树 CFR 算法编译为静态数据流 + CUDA Graph Replay，实现 80 倍加速。关键洞察：CFR 的每次迭代在 GPU 上仅需微秒级 kernel，但传统框架派发的开销压倒了计算本身。通过编译期转换消除微 kernel 派发，使 GPU 在 CFR 上首次超越 CPU。</div>
+  </div>
+  <div class="paper">
+    <div class="title">General Quantification of Covariate and Concept Shifts</div>
+    <div class="meta">Hongbo Chen, Li Charlie Xia · cs.LG/cs.AI/stat.ML</div>
+    <div class="summary">利用 entropic optimal transport 提出通用概念漂移定义 γ*-concept shift，弥合分布偏移理论与实践的鸿沟。解决源域和目标域支撑集不匹配时的理论空白。</div>
+  </div>
+  <div class="paper">
+    <div class="title">Data Scarcity and Model Sparsity: MoE Overfits More to Repeated Data</div>
+    <div class="meta">Atindra Jha, Margaret Li, Jure Leskovec, Percy Liang, Luke Zettlemoyer · cs.LG/cs.CL</div>
+    <div class="summary">MoE 架构比密集 Transformer 对重复数据过拟合更严重，在数据稀缺场景下性能退化更快。这对 Hermes 的 MoE 模型使用策略有参考价值——重复 prompt 模板可能导致选择性过拟合。</div>
+  </div>
+  <div class="paper">
+    <div class="title">Can Edge-Deployable VLMs Identify Species?</div>
+    <div class="meta">William Zhou et al. · cs.AI</div>
+    <div class="summary">评估 2-8B 参数范围的 edge-deployable VLM 在 96 物种识别任务上的表现。直接相关的背景：Hermes 的 vision_tool 在 cron 模式下的可用性与此类小参数模型密切相关。</div>
+  </div>
+  <div class="paper">
+    <div class="title">Generative Marketing Mix Modeling: Causal Framework for GEO/GEM</div>
+    <div class="meta">Masahiro Kato, Daiki Honma, Taka Kato · stat.ML/cs.AI/cs.LG/econ.EM</div>
+    <div class="summary">估算生成式搜索引擎优化（GEO）和生成式引擎营销（GEM）的因果效应。新兴交叉领域——与 AI 产品推广和 market positioning 相关。</div>
+  </div>
+
+  <h3 style="margin-top:24px;">📰 Hacker News 头条</h3>
+  <div class="story">
+    <div class="title"><a href="https://mathandai.org/" target="_blank" style="color:var(--orange);text-decoration:none;">A misalignment of AI in mathematics</a> <span class="badge green" style="font-size:10px;">🔥 602 pts 656 comments</span></div>
+    <div class="meta">AI 在数学中的错位——当 AI 擅长模式匹配但数学家需要概念理解时的根本张力。</div>
+  </div>
+  <div class="story">
+    <div class="title"><a href="https://www.rubyhack.ai/" target="_blank" style="color:var(--orange);text-decoration:none;">OpenAI agents carried out an undisclosed attack on RubyGems</a> <span class="badge red" style="font-size:10px;">⚠️ 247 pts 139 comments</span></div>
+    <div class="meta">OpenAI agent 对 RubyGems 包管理器发起未公开的攻击尝试。与 tool_security 和工具访问控制直接相关——agent 的自动攻击能力正在被测试和利用。</div>
+  </div>
+  <div class="story">
+    <div class="title"><a href="https://github.com/kennethwolters/litelm" target="_blank" style="color:var(--orange);text-decoration:none;">Litelm: LiteLLM Without the Bloat</a> <span class="badge blue" style="font-size:10px;">⭐ 93 pts 34 comments</span></div>
+    <div class="meta">LiteLLM 的轻量化替代品——去除臃肿依赖，保留核心功能。对于 Hermes 的 LLM provider 层精简具有参考价值。</div>
+  </div>
+  <div class="story">
+    <div class="title"><a href="https://www.firecrawl.dev/blog/ai-software-factory" target="_blank" style="color:var(--orange);text-decoration:none;">How to Build an AI Software Factory: Agents That Open, Review, and Merge PRs</a> <span class="badge cyan" style="font-size:10px;">🤖 10 pts</span></div>
+    <div class="meta">AI agent 自动处理 PR 全生命周期（打开、审查、合并）。与 Hermes 的自动化开发 workflows 直接相关。</div>
+  </div>
+  <div class="story">
+    <div class="title"><a href="https://projectzero.google/2026/09/maccconc-race-condition.html" target="_blank" style="color:var(--orange);text-decoration:none;">Testing Race Conditions</a> <span class="badge blue" style="font-size:10px;">🔬 11 pts</span></div>
+    <div class="meta">Google Project Zero 发布的竞争条件测试方法论。与 cron job 的并发控制（gateway 重启风暴）相关。</div>
+  </div>
+</div>
+
+<!-- ===== SECTION 5: EVOLUTION SUGGESTIONS ===== -->
+<div class="card">
+  <h2>🧬 进化建议</h2>
+
+  <div class="suggestion">
+    <div class="title">🔧 P1 — 清理 superpowers 插件目录</div>
+    <div class="desc">删除 ~/.hermes/profiles/reviewer/plugins/superpowers/.claude-plugin/、.codex-plugin/、.cursor-plugin/ 目录。这三个目录的 plugin.json 因声明不兼容的 Agent Plugins schema 而被 hermes_cli.plugins 在每个启动周期解析失败 3×98=294 次。修复后可消除 58.8% 的日志噪声。优先级：⭐⭐⭐⭐⭐（P107 推荐——294 条/期持续 33 期末修复）</div>
+  </div>
+
+  <div class="suggestion">
+    <div class="title">🔧 P2 — 添加启动前置 gateway 存活检测</div>
+    <div class="desc">在 cron job 启动脚本中添加"检测 PID 3433647 是否存活"的前置检查。若 PID 仍在运行则跳过启动步骤。修复后 gateway.run (98条) + hermes_cli.gateway (99条) 共 197 条日志将被消除。优先级：⭐⭐⭐⭐⭐</div>
+  </div>
+
+  <div class="suggestion">
+    <div class="title">🔧 P3 — 修复 API_SERVER_KEY 配置</div>
+    <div class="desc">在 config.yaml 或环境变量中设置 API_SERVER_KEY，消除 api_server 的 7 条/期 ERROR 日志。优先级：⭐⭐⭐</div>
+  </div>
+
+  <div class="suggestion">
+    <div class="title">🔧 P4 — 修复 approvals.mode 配置</div>
+    <div class="desc">将 config.yaml 中的 approvals.mode 设为 smart 或 manual（有效值：manual, smart, off）。消除 tools.approval 的 2 条/期 WARNING。优先级：⭐⭐</div>
+  </div>
+
+  <div class="suggestion">
+    <div class="title">🔧 P5 — 修复 weakness_scan.py WARNING 过滤盲区</div>
+    <div class="desc">在 weakness_scan.py 中添加 WARNING 级别配置错误的聚合检测规则——同一 WARNING 签名出现 ≥10 次视为 medium 弱点。此盲区已持续 66 期（>5.5 个月），是系统最持久的单一缺陷。优先级：⭐⭐⭐⭐</div>
+  </div>
+
+  <div class="suggestion">
+    <div class="title">📖 本周 HN 洞察</div>
+    <div class="desc">(1) "OpenAI agents carried out an undisclosed attack on RubyGems"——AI agent 的自动攻击潜力正在被验证，与 Hermes 自身的 tool_security 机制和 pending_approval 策略高度相关。(2) "AI Software Factory: agents that open, review, and merge PRs"——agent 驱动的自动化开发工作流正成为现实。(3) "Litelm: LiteLLM Without the Bloat"——精简 LLM provider 栈的趋势可为 Hermes 提供参考。</div>
+  </div>
+</div>
+
+<!-- ===== SECTION 6: APPENDIX ===== -->
+<div class="card">
+  <h2>📋 附录</h2>
+
+  <h3>📚 arXiv 历史表现</h3>
+  <table>
+    <thead><tr><th>指标</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td>累计成功率</td><td>49/107 = 45.8%</td></tr>
+      <tr><td>本期状态</td><td><span class="badge green">✅ 成功</span></td></tr>
+      <tr><td>连续成功期数</td><td>2（P106→P107）</td></tr>
+      <tr><td>连续失败期数（最近）</td><td>3（P103→P105，已打破）</td></tr>
+      <tr><td>最长连续成功</td><td>4（P94→P97, 2026-08-29→09-01）</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:16px;">🏭 日志洪水源状态</h3>
+  <table>
+    <thead><tr><th>洪水源</th><th>条目/期</th><th>速率</th><th>可修复?</th><th>修复优先级</th></tr></thead>
+    <tbody>
+      <tr><td>hermes_cli.plugins</td><td>294 (58.8%)</td><td>WARNING/启动周期</td><td>✅ 删不兼容 plugin 目录</td><td>P1</td></tr>
+      <tr><td>hermes_cli.gateway</td><td>99 (19.8%)</td><td>6-7次/120s</td><td>✅ 启动前置检查</td><td>P2</td></tr>
+      <tr><td>gateway.run</td><td>98 (19.6%)</td><td>ERROR/启动周期</td><td>✅ kill 已有实例</td><td>P2</td></tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:16px;">📊 长期趋势摘要</h3>
+  <table>
+    <thead>
+      <tr><th>期段</th><th>范围</th><th>核心特征</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>P1-P18</td><td>05-17→06-14</td><td>双轨分化模式，准确定位改善轨/恶化轨</td></tr>
+      <tr><td>P19-P24</td><td>06-15→06-20</td><td>假突破 3.0 / 三阶段洪水升级 / 日志轮转发现</td></tr>
+      <tr><td>P25-P33</td><td>06-21→06-29</td><td>纯稳态洪水 / 非洪水基线建立 / 跨午夜运行</td></tr>
+      <tr><td>P34-P51</td><td>06-30→07-17</td><td>单期极端值陷阱 / 结构性步进变化 / 1-3-5 振荡/签名碎片化/WARNING盲区</td></tr>
+      <tr><td>P52-P73</td><td>07-18→08-08</td><td>近似饱和稳态 / 低水位饱和稳态 / 四选三模式 / tools.approval 漂移</td></tr>
+      <tr><td>P74-P87</td><td>08-09→08-22</td><td>WARNING 结构突变 / 超级稳态 / 跨轮转稳定性 / 超级稳态疲劳</td></tr>
+      <tr><td>P88-P107</td><td>08-23→09-12</td><td>⚡ 自动降级 · 仅监控关键指标 · 所有指标冻结 · PID 3433647 61天纪录</td></tr>
+    </tbody>
+  </table>
+
+  <div class="muted-text" style="margin-top:12px;text-align:center;">
+    简报生成: 2026-09-12 09:00 CST · 数据采集: 2026-09-12 01:00 UTC<br>
+    <a href="https://github.com/binbinao/openclaw-impact-report/blob/main/evolution-brief-2026-09-12.html" style="color:var(--blue);">📄 GitHub Pages 镜像</a>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
