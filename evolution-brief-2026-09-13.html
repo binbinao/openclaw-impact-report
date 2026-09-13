@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 Evolution Brief — P108 · 2026-09-13</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #d4760a;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --cyan: #39d2c0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, 'Segoe UI', 'Noto Sans', sans-serif; line-height: 1.6; padding: 0; }
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  .header .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-top: 10px; }
+  .badge-blue { background: #1f3a5f; color: var(--accent); }
+  .badge-green { background: #1a3a2a; color: var(--green); }
+  .badge-yellow { background: #2f2a1a; color: var(--yellow); }
+  .badge-red { background: #3a1a1a; color: var(--red); }
+  .badge-purple { background: #2a1a3a; color: var(--purple); }
+
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  .section h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--accent); }
+  .section h3 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; color: var(--text); }
+  .section p { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  td { color: var(--text); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 16px 0; }
+  .stat-card { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 6px; padding: 12px; text-align: center; }
+  .stat-card .value { font-size: 22px; font-weight: 700; font-family: 'SF Mono', 'Fira Code', monospace; }
+  .stat-card .label { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .delta { font-size: 11px; font-weight: 600; margin-top: 2px; }
+
+  .error-bar { display: flex; height: 24px; border-radius: 4px; overflow: hidden; margin: 12px 0; }
+  .error-bar div { display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #fff; }
+
+  .hn-item { padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .hn-item:last-child { border-bottom: none; }
+  .hn-item .title { font-size: 14px; font-weight: 500; }
+  .hn-item .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .hn-item .score { color: var(--yellow); font-weight: 600; }
+
+  .trend-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .trend-row .label { color: var(--muted); font-size: 12px; min-width: 140px; }
+  .trend-row .value { font-family: 'SF Mono', monospace; font-size: 13px; }
+  .trend-row .bar { flex: 1; max-width: 200px; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .trend-row .bar-fill { height: 100%; border-radius: 3px; }
+
+  .insight { border-left: 3px solid var(--yellow); padding: 10px 14px; margin: 12px 0; background: rgba(210,153,34,0.08); border-radius: 0 4px 4px 0; }
+  .insight.alert { border-left-color: var(--red); background: rgba(248,81,73,0.06); }
+  .insight.success { border-left-color: var(--green); background: rgba(63,185,80,0.06); }
+  .insight.info { border-left-color: var(--accent); background: rgba(88,166,255,0.06); }
+  .insight .label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .insight p { font-size: 13px; margin: 0; }
+
+  .footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 32px; }
+  @media (max-width: 600px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🧬 Evolution Brief · P108</h1>
+  <div class="subtitle">2026-09-13 · Super Steady State Period 35</div>
+  <span class="badge badge-blue">⏳ Auto-Degraded · Period 21</span>
+  <span class="badge badge-yellow" style="margin-left:6px">🌀 Zero-Change · 14th</span>
+  <span class="badge badge-red" style="margin-left:6px">📉 arXiv Failed · 49/108</span>
+</div>
+
+<!-- SECTION 1: Capability -->
+<div class="section">
+  <h2>📊 Capability Status</h2>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="value" style="color:var(--accent)">43</div>
+      <div class="label">Tools</div>
+      <div class="delta" style="color:var(--muted)">11th period stable</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--green)">81</div>
+      <div class="label">Skills Total</div>
+      <div class="delta" style="color:var(--muted)">9th period stable</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--cyan)">21</div>
+      <div class="label">Active Skills</div>
+      <div class="delta" style="color:var(--muted)">9th period stable</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--yellow)">37%</div>
+      <div class="label">Memory</div>
+      <div class="delta" style="color:var(--muted)">816 + 231 chars</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--purple)">2</div>
+      <div class="label">Cron Jobs</div>
+      <div class="delta" style="color:var(--muted)">2 active, 0 paused</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--orange)">3</div>
+      <div class="label">Agent-Created Skills</div>
+      <div class="delta" style="color:var(--muted)">document-output-format, scheduled-content-briefs, weixin-content</div>
+    </div>
+  </div>
+
+  <h3>Skills Distribution</h3>
+  <table>
+    <tr><th>Category</th><th class="num">Count</th><th>Details</th></tr>
+    <tr><td>Active</td><td class="num" style="color:var(--green)">21</td><td style="font-size:12px;color:var(--muted)">ai-coding-agents, ai-music-production, baoyu-slide-deck, bazi-analysis, self-evolution, writing-plans …</td></tr>
+    <tr><td>Stale</td><td class="num" style="color:var(--yellow)">58</td><td style="font-size:12px;color:var(--muted)">arxiv, github, notion, llama-cpp, humanizer, pdf, obsidian …</td></tr>
+    <tr><td>Archived</td><td class="num" style="color:var(--muted)">2</td><td></td></tr>
+  </table>
+
+  <h3>Tool Categories (43 total)</h3>
+  <p style="font-size:12px;color:var(--muted)">browser, code_execution, computer_use, cronjobs, delegate, file_tools, image_generation, memory, session_search, skill_manager, terminal, vision, web, x_search, feishu_doc, homeassistant, kanban, video_generation, yuanbao …</p>
+</div>
+
+<!-- SECTION 2: Weakness -->
+<div class="section">
+  <h2>⚠️ Weakness Alerts</h2>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--red)">WARNING FILTERING BLIND SPOT · 39th Period Confirmation</div>
+    <p>396 WARNING + 104 ERROR entries analyzed. <strong>Zero weaknesses detected</strong> — 67th consecutive period with no weakness output. The WARNING-level filtering blind spot (hermes_cli.plugins .json parse failures, hermes_cli.gateway respawn storm, tools.approval config error) continues undetected despite accounting for 79.2% of all log entries.</p>
+  </div>
+
+  <h3>Component Distribution (Tail 500 Lines)</h3>
+  <div class="error-bar">
+    <div style="width:59.0%;background:#58a6ff">plugins 295</div>
+    <div style="width:19.8%;background:#d29922">gateway 99</div>
+    <div style="width:19.6%;background:#f85149">run 98</div>
+    <div style="width:1.2%;background:#8b949e">api 6</div>
+    <div style="width:0.4%;background:#bc8cff">app 2</div>
+  </div>
+
+  <table>
+    <tr><th>Component</th><th>Level</th><th class="num">Count</th><th class="num">Share</th><th>Top Signature</th></tr>
+    <tr>
+      <td>hermes_cli.plugins</td><td><span style="color:var(--yellow)">WARNING</span></td>
+      <td class="num">295</td><td class="num">59.0%</td>
+      <td style="font-size:12px">Failed to parse plugin.json (3 × 98-99 repeats)</td>
+    </tr>
+    <tr>
+      <td>hermes_cli.gateway</td><td><span style="color:var(--yellow)">WARNING</span></td>
+      <td class="num">99</td><td class="num">19.8%</td>
+      <td style="font-size:12px">Gateway respawn storm — 6–7 restarts/120s</td>
+    </tr>
+    <tr>
+      <td>gateway.run</td><td><span style="color:var(--red)">ERROR</span></td>
+      <td class="num">98</td><td class="num">19.6%</td>
+      <td style="font-size:12px">Another instance already running (PID 3433647)</td>
+    </tr>
+    <tr>
+      <td>api_server</td><td><span style="color:var(--red)">ERROR</span></td>
+      <td class="num">6</td><td class="num">1.2%</td>
+      <td style="font-size:12px">API_SERVER_KEY required</td>
+    </tr>
+    <tr>
+      <td>tools.approval</td><td><span style="color:var(--yellow)">WARNING</span></td>
+      <td class="num">2</td><td class="num">0.4%</td>
+      <td style="font-size:12px">Unknown approvals.mode 'auto'</td>
+    </tr>
+  </table>
+
+  <h3>Component Distribution vs P75 Pattern</h3>
+  <table>
+    <tr><th>Component</th><th class="num">Actual</th><th class="num">P75 Expected</th><th class="num">Diff</th><th>Status</th></tr>
+    <tr><td>hermes_cli.plugins</td><td class="num">295</td><td class="num">294</td><td class="num" style="color:var(--green)">+0.2%</td><td>✅ < 0.3pp</td></tr>
+    <tr><td>hermes_cli.gateway</td><td class="num">99</td><td class="num">99</td><td class="num" style="color:var(--green)">0.0%</td><td>✅ Exact match</td></tr>
+    <tr><td>gateway.run</td><td class="num">98</td><td class="num">98</td><td class="num" style="color:var(--green)">0.0%</td><td>✅ Exact match</td></tr>
+    <tr><td>api_server</td><td class="num">6</td><td class="num">7</td><td class="num" style="color:var(--green)">-0.2pp</td><td>✅ < 0.3pp</td></tr>
+    <tr><td>tools.approval</td><td class="num">2</td><td class="num">2</td><td class="num" style="color:var(--green)">0.0pp</td><td>✅ Exact match</td></tr>
+  </table>
+
+  <div class="insight success">
+    <div class="label" style="color:var(--green)">✅ P75 Pattern Match · Cross-Rotation Stability · 24th Verification</div>
+    <p>All component differences < 0.3pp. PID 3433647 unchanged (63rd period / 62 days). No log rotation (full 500-line window). The system has perfectly replicated the P75 structural mutation steady state for the 35th consecutive period.</p>
+  </div>
+
+  <h3>Top Error Signatures</h3>
+  <table>
+    <tr><th class="num">Rank</th><th>Signature</th><th>Level</th><th class="num">Count</th></tr>
+    <tr><td class="num">1</td><td style="font-size:13px">Failed to parse plugin.json (superpowers/.cursor-plugin)</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">99</td></tr>
+    <tr><td class="num">2</td><td style="font-size:13px">Another gateway instance already running (PID 3433647)</td><td><span style="color:var(--red)">ERR</span></td><td class="num">98</td></tr>
+    <tr><td class="num">3</td><td style="font-size:13px">Failed to parse plugin.json (superpowers/.claude-plugin)</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">98</td></tr>
+    <tr><td class="num">4</td><td style="font-size:13px">Failed to parse plugin.json (superpowers/.codex-plugin)</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">98</td></tr>
+    <tr><td class="num">5</td><td style="font-size:13px">Gateway (re)started 6 times / 120s — backoff 10s</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">71</td></tr>
+    <tr><td class="num">6</td><td style="font-size:13px">Gateway (re)started 7 times / 120s — backoff 20s</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">28</td></tr>
+    <tr><td class="num">7</td><td style="font-size:13px">[Api_Server] API_SERVER_KEY required</td><td><span style="color:var(--red)">ERR</span></td><td class="num">6</td></tr>
+    <tr><td class="num">8</td><td style="font-size:13px">Unknown approvals.mode 'auto'</td><td><span style="color:var(--yellow)">WARN</span></td><td class="num">2</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 3: Knowledge Feed -->
+<div class="section">
+  <h2>🔬 Knowledge Feed</h2>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="value" style="color:var(--red)">0</div>
+      <div class="label">arXiv Papers</div>
+      <div class="delta" style="color:var(--red)">❌ Failed — 3 failures in last 5 periods</div>
+    </div>
+    <div class="stat-card">
+      <div class="value" style="color:var(--green)">10</div>
+      <div class="label">HN Stories</div>
+      <div class="delta" style="color:var(--green)">✅ Success</div>
+    </div>
+  </div>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--red)">📉 arXiv Failure · 49/108 cumulative (45.4%)</div>
+    <p>P108 failed to fetch arXiv papers. The previous "3勝→3敗→2勝" pattern shifts to "3勝→3敗→2勝→1敗". After 2 consecutive successes (P106-P107), arXiv reverts to failure. The alternating availability window pattern (3–4 failures → 1–2 successes) continues with no predictability improvement. Cumulative success rate drops from 45.8% (P107) to 45.4% (P108).</p>
+  </div>
+
+  <h3>Hacker News Top Stories</h3>
+  <table>
+    <tr><th class="num">🔥</th><th>Title</th><th class="num">Score</th><th class="num">Comments</th></tr>
+    <tr><td class="num" style="color:var(--yellow)">1</td><td>IKEA made a mod for Skyrim <span style="color:var(--muted);font-size:11px">[video]</span></td><td class="num">557</td><td class="num">149</td></tr>
+    <tr><td class="num" style="color:var(--yellow)">2</td><td>We must pace the frontier <span style="color:var(--muted);font-size:11px">— Dario Amodei</span></td><td class="num">529</td><td class="num">743</td></tr>
+    <tr><td class="num" style="color:var(--yellow)">3</td><td>LG denies TV spying claims</td><td class="num">428</td><td class="num">348</td></tr>
+    <tr><td class="num" style="color:var(--yellow)">4</td><td>Nvidia is the central bank of AI <span style="color:var(--muted);font-size:11px">— Economist</span></td><td class="num">382</td><td class="num">261</td></tr>
+    <tr><td class="num" style="color:var(--yellow)">5</td><td>Make your first edit to OpenStreetMap</td><td class="num">308</td><td class="num">75</td></tr>
+    <tr><td class="num">6</td><td>Stabilizing Rust's Never Type</td><td class="num">125</td><td class="num">29</td></tr>
+    <tr><td class="num">7</td><td>Apple iPod Engraver (2019)</td><td class="num">111</td><td class="num">20</td></tr>
+    <tr><td class="num">8</td><td>Real-SWE: Benchmarking AI on enterprise codebases</td><td class="num">96</td><td class="num">59</td></tr>
+    <tr><td class="num">9</td><td>Will There Be a 7G? <span style="color:var(--muted);font-size:11px">— arXiv</span></td><td class="num">81</td><td class="num">135</td></tr>
+    <tr><td class="num">10</td><td>Getting 50 GB/S Back from the Apple Neural Engine</td><td class="num">63</td><td class="num">11</td></tr>
+  </table>
+
+  <div class="insight info">
+    <div class="label" style="color:var(--accent">📌 Key Insights</div>
+    <p><strong>Dario Amodei — "We must pace the frontier":</strong> Anthropic's CEO argues for measured AI development pace, not speed. 529 points, 743 comments — high engagement signals strong community response. Suggests ongoing tension between "acceleration" and "alignment" camps in AI discourse.<br><br>
+    <strong>Real-SWE Benchmark:</strong> New enterprise-focused benchmark for AI models on private codebases. Could be relevant for Hermes' tool_executor and code analysis capabilities.<br><br>
+    <strong>Nvidia = Central Bank of AI:</strong> The Economist's framing of Nvidia as the monetary authority of the AI economy underscores hardware dependency risks in the current AI stack.</p>
+  </div>
+</div>
+
+<!-- SECTION 4: Evolution Suggestions -->
+<div class="section">
+  <h2>🧬 Evolution Suggestions</h2>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--red)">🔴 P1 — WARNING Filtering Blind Spot (67 weeks, 39 confirmed periods)</div>
+    <p><strong>Fix priority: HIGH.</strong> This is the single oldest unfixed issue in the system. 396 WARNING-level entries (79.2% of the tail window) are systematically ignored by weakness_scan.py. <strong>Fix:</strong> Add WARNING-level aggregation rules to weakness_scan.py — identify repeated WARNING signatures (≥10 occurrences) and report as medium-severity weaknesses. Expected impact: 2-3 actionable weaknesses (plugins parsing, gateway respawn storm, approvals config) would be surfaced daily.</p>
+  </div>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--red)">🔴 P2 — Gateway Respawn Storm (35 period continuous)</div>
+    <p>99 WARNING + 98 ERROR entries (39.4% of window) from gateway restart loop. Root cause: cron job attempts to restart gateway without checking if PID 3433647 is still alive. <strong>Fix:</strong> Add "gateway alive" pre-check in cron job startup script (kill -0 $PID). Estimated noise reduction: ~197 entries/period (~39% of log window). This fix alone would reduce total log volume by nearly 40%.</p>
+  </div>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--yellow)">🟡 P3 — Super Steady State Fatigue · 35 Periods</div>
+    <p>System has been in super steady state for 35 consecutive periods (since P74, 08-09). All capability metrics unchanged for 14th consecutive period. The daily brief's detection value is near zero — the system is running in a fixed loop with no structural changes. <strong>Suggestion:</strong> Consider reducing brief frequency to every 3-5 days, or only on change events. Re-allocate analysis cycles to active feature work.</p>
+  </div>
+
+  <div class="insight alert">
+    <div class="label" style="color:var(--yellow)">🟡 P4 — Plugin.json Parse Failures (59% of window)</div>
+    <p>295 WARNING entries from 3 plugin.json files in superpowers/ directory. These are stale/incompatible plugin manifests. <strong>Fix:</strong> Remove or update the 3 superpowers plugin files (.cursor-plugin, .claude-plugin, .codex-plugin). Estimated noise reduction: ~295 entries/period (~59% of log window). Combined with gateway fix (P2), this would reduce log volume by ~98%.</p>
+  </div>
+
+  <div class="insight info">
+    <div class="label" style="color:var(--accent)">📌 Quick Wins — Expected Impact Summary</div>
+    <table>
+      <tr><th>Fix</th><th class="num">Entries Removed</th><th>Complexity</th><th>Priority</th></tr>
+      <tr><td>Remove 3 stale plugin.json files</td><td class="num">~295 (59%)</td><td>🟢 Low (rm 3 files)</td><td>🥇</td></tr>
+      <tr><td>Gateway pre-check in cron</td><td class="num">~197 (39%)</td><td>🟢 Low (kill -0 check)</td><td>🥇</td></tr>
+      <tr><td>Set approvals.mode to valid value</td><td class="num">~2 (0.4%)</td><td>🟢 Low (config edit)</td><td>🥈</td></tr>
+      <tr><td>Set API_SERVER_KEY</td><td class="num">~6 (1.2%)</td><td>🟡 Medium</td><td>🥈</td></tr>
+    </table>
+    <p style="margin-top:8px;font-size:13px"><strong>Note:</strong> The top 2 fixes (plugins + gateway) together would eliminate ~98% of daily log noise. With these fixes, the 500-line tail window would drop from ~500 entries to ~10 entries/period — finally allowing weakness_scan to detect real errors.</p>
+  </div>
+</div>
+
+<!-- SECTION 5: Trend Comparison -->
+<div class="section">
+  <h2>📈 Trend Comparison</h2>
+
+  <h3>Multi-Period Capability Table</h3>
+  <table>
+    <tr><th>Metric</th><th class="num">P106 (09-11)</th><th class="num">P107 (09-12)</th><th class="num">P108 (09-13)</th><th>Trend</th></tr>
+    <tr><td>Tools</td><td class="num">43</td><td class="num">43</td><td class="num">43</td><td>🟢 11th period stable</td></tr>
+    <tr><td>Skills Total</td><td class="num">81</td><td class="num">81</td><td class="num">81</td><td>🟢 9th period stable</td></tr>
+    <tr><td>Active Skills</td><td class="num">21</td><td class="num">21</td><td class="num">21</td><td>🟢 9th period stable</td></tr>
+    <tr><td>Memory</td><td class="num">37%</td><td class="num">37%</td><td class="num">37%</td><td>🟢 Unchanged</td></tr>
+    <tr><td>WARNING entries</td><td class="num">395</td><td class="num">395</td><td class="num">396</td><td>🟢 ±0.2%</td></tr>
+    <tr><td>ERROR entries</td><td class="num">105</td><td class="num">105</td><td class="num">104</td><td>🟢 ±0.2%</td></tr>
+    <tr><td>Weaknesses</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td>🔴 67th period blind</td></tr>
+    <tr><td>arXiv cumulative</td><td class="num">44/106</td><td class="num">49/107</td><td class="num">49/108</td><td>📉 45.8%→45.4%</td></tr>
+    <tr><td>PID 3433647</td><td class="num">61st</td><td class="num">62nd</td><td class="num">63rd</td><td>🟢 62 days running</td></tr>
+    <tr><td>Super Steady State</td><td class="num">33rd</td><td class="num">34th</td><td class="num">35th</td><td>🟢 35th period</td></tr>
+    <tr><td>Log Rotation</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>🟢 None (full 500 window)</td></tr>
+  </table>
+
+  <h3>Acceleration / Plateau Detection</h3>
+  <table>
+    <tr><th>Pattern</th><th>Status</th><th>Explanation</th></tr>
+    <tr><td>Super Steady State</td><td><span style="color:var(--yellow)">🟡 PLATEAU — 35 periods</span></td><td>All capability metrics frozen since period P97 (tools), P100 (skills). No change in 14 consecutive periods.</td></tr>
+    <tr><td>Gateway Respawn Storm</td><td><span style="color:var(--yellow)">🟡 PLATEAU — fixed amplitude</span></td><td>hermes_cli.gateway 99 + gateway.run 98 = 197 entries, identical pattern for 35 periods.</td></tr>
+    <tr><td>Plugin Parse Failures</td><td><span style="color:var(--yellow)">🟡 PLATEAU — 295 entries/period</span></td><td>3 × 99 ± 1 entries each period. Completely deterministic parse failures.</td></tr>
+    <tr><td>WARNING Blind Spot</td><td><span style="color:var(--red)">🔴 PLATEAU — 67 periods</span></td><td>No weakness output for 67 consecutive periods. No acceleration, no improvement, no change.</td></tr>
+    <tr><td>arXiv Availability</td><td><span style="color:var(--orange)">🟠 ACCELERATION? → DEACCELERATION</span></td><td>P106-P107 2 successes were promising, but P108 reverts to failure. Pattern now: 3勝→3敗→2勝→1敗 (accelerating failure).</td></tr>
+  </table>
+
+  <div class="insight info">
+    <div class="label" style="color:var(--accent)">📌 108-Period Summary</div>
+    <p>
+      <strong>Milestones achieved this period:</strong><br>
+      • PID 3433647: 63rd period (<strong>62 days continuous running — new record</strong>)<br>
+      • Super Steady State: 35th consecutive period (since P74, 08-09)<br>
+      • Cross-Rotation Stability: 24th verification<br>
+      • Tools 43: 11th period stable<br>
+      • Skills 81: 9th period stable<br>
+      • All indicators zero change: 14th consecutive period<br><br>
+      <strong>Persistent issues (unchanged):</strong><br>
+      • WARNING filtering blind spot: 39th period, 67th consecutive (no fix applied)<br>
+      • arXiv cumulative success rate: 45.4% (49/108)<br>
+      • Gateway respawn storm: unchanged for 35 periods<br>
+      • Plugin parse failures: 295 entries/period for 35 periods
+    </p>
+  </div>
+</div>
+
+<div class="footer">
+  🧬 Self-Evolution Brief · P108 · 2026-09-13 · Generated by Hermes Agent<br>
+  <span style="font-size:11px">PID 3433647 · 62 days continuous · 35th Super Steady State period · 67 periods without weakness detection</span>
+</div>
+
+</div>
+</body>
+</html>
