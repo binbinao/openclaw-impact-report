@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧬 进化简报 P110 — 2026-09-15</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --orange: #d4760e;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --teal: #56d4dd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d1117 0%, #2a1215 45%, #1c2333 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 32px 32px;
+    text-align: center;
+  }
+  .header h1 { font-size: 2.2rem; background: linear-gradient(90deg, var(--red), var(--orange), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .header .subtitle { color: var(--text2); font-size: 1.05rem; margin-top: 8px; }
+  .header .badge { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin: 4px 4px 0; }
+  .badge-steady { background: rgba(88, 166, 255, 0.15); color: var(--accent); border: 1px solid rgba(88, 166, 255, 0.3); }
+  .badge-record { background: rgba(188, 140, 255, 0.15); color: var(--purple); border: 1px solid rgba(188, 140, 255, 0.3); }
+  .badge-fail { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.3); }
+  .badge-warn { background: rgba(210, 153, 34, 0.15); color: var(--yellow); border: 1px solid rgba(210, 153, 34, 0.3); }
+  .badge-crit { background: rgba(248, 81, 73, 0.25); color: #ff9d96; border: 1px solid rgba(248, 81, 73, 0.6); }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .section.alert { border-color: rgba(248, 81, 73, 0.5); background: linear-gradient(180deg, rgba(248,81,73,0.06) 0%, var(--surface) 120px); }
+  .section h2 { font-size: 1.3rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .stat-card { background: var(--surface2); border-radius: 8px; padding: 14px; text-align: center; }
+  .stat-card .value { font-size: 1.6rem; font-weight: 700; }
+  .stat-card .label { font-size: 0.78rem; color: var(--text2); margin-top: 4px; }
+  .stat-card .trend { font-size: 0.72rem; margin-top: 2px; }
+  .trend-flat { color: var(--text2); }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 0.88rem; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:last-child td { border-bottom: none; }
+  .sig { font-family: "SFMono-Regular", Consolas, monospace; font-size: 0.82rem; word-break: break-all; }
+  .highlight { color: var(--yellow); }
+  .error { color: var(--red); }
+  .success { color: var(--green); }
+  .prose { color: var(--text2); font-size: 0.92rem; line-height: 1.75; margin-bottom: 12px; }
+  .prose strong { color: var(--text); }
+  .prose a { color: var(--accent); }
+  .prose ol, .prose ul { margin: 8px 0 8px 20px; }
+  .prose li { margin-bottom: 6px; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; margin-right: 4px; }
+  .tag-stable { background: rgba(63, 185, 80, 0.12); color: var(--green); }
+  .tag-degraded { background: rgba(210, 153, 34, 0.12); color: var(--yellow); }
+  .tag-frozen { background: rgba(88, 166, 255, 0.12); color: var(--accent); }
+  .tag-new { background: rgba(248, 81, 73, 0.14); color: var(--red); }
+  .tag-dead { background: rgba(139, 148, 158, 0.16); color: var(--text2); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  .hn-list { list-style: none; padding: 0; }
+  .hn-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .hn-item:last-child { border-bottom: none; }
+  .hn-item .title { font-weight: 600; }
+  .hn-item .meta { font-size: 0.78rem; color: var(--text2); margin-top: 2px; }
+  .timestamp { text-align: center; padding: 24px; color: var(--text2); font-size: 0.78rem; }
+  .bar { height: 8px; border-radius: 4px; background: var(--surface2); overflow: hidden; display: inline-block; vertical-align: middle; width: 120px; }
+  .bar > span { display: block; height: 100%; }
+  .callout { border-left: 3px solid var(--red); background: rgba(248,81,73,0.07); padding: 12px 16px; border-radius: 6px; margin: 12px 0; }
+  .callout-good { border-left-color: var(--green); background: rgba(63,185,80,0.07); }
+  .callout-warn { border-left-color: var(--yellow); background: rgba(210,153,34,0.07); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧬 进化简报 · 第 110 期</h1>
+  <div class="subtitle">2026-09-15 · 自进化系统</div>
+  <div style="margin-top: 12px;">
+    <span class="badge badge-crit">🚨 超级稳态终结（36期后断裂）</span>
+    <span class="badge badge-crit">💀 PID 3433647 终止</span>
+    <span class="badge badge-crit">🔄 网关重启风暴 v2.0 · 16 小时</span>
+    <span class="badge badge-fail">📉 arXiv 连续第 3 期失败</span>
+    <span class="badge badge-warn">⚠️ 弱点盲区第 69 期</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- 0. HEADLINE -->
+<div class="section alert">
+<h2>🚨 本期头条 — 结构性断裂</h2>
+<div class="callout">
+<strong style="color:var(--red);font-size:1.05rem;">维持 36 期的超级稳态在本期彻底终结。</strong>
+<p class="prose" style="margin-top:8px;margin-bottom:0;">
+自 P74（08-09）确立的 P75 组件分布模式（<span class="sig">hermes_cli.plugins ≈58.8%</span> /
+<span class="sig">hermes_cli.gateway ≈19.8%</span> / <span class="sig">gateway.run ≈19.8%</span>）
+在连续 36 期零变化后，于本期被完全替换。同时，创造 63 天连续运行纪录的 <strong>PID 3433647 已终止</strong>，
+新网关 <strong>PID 471715</strong> 于今日 08:30 接管。
+</p>
+</div>
+
+<table>
+  <tr><th>维度</th><th>P109（09-14）</th><th>P110（09-15）</th><th>判定</th></tr>
+  <tr><td>尾窗头号组件</td><td class="sig">hermes_cli.plugins (58.8%)</td><td class="sig">tools.registry (56.2%)</td><td class="error">结构性突变</td></tr>
+  <tr><td>hermes_cli.gateway</td><td>99 条 (19.8%)</td><td class="error">0 条（完全消失）</td><td class="error">组件消亡</td></tr>
+  <tr><td>"Another gateway instance"</td><td>99 条</td><td class="success">0 条（完全消失）</td><td class="highlight">旧风暴模式终结</td></tr>
+  <tr><td>网关 PID</td><td>3433647（63 天）</td><td class="error">471715（新，30 分钟）</td><td class="error">PID 变更</td></tr>
+  <tr><td>日志轮转</td><td>—</td><td class="highlight">09-14 17:10 触发</td><td class="highlight">历史基准失效</td></tr>
+  <tr><td>能力冻结</td><td>工具 43（第 11 期）</td><td class="success">工具 45（+2）</td><td class="success">冻结打破</td></tr>
+</table>
+
+<div class="prose" style="margin-bottom:0;">
+<strong>🔑 一句话结论：</strong>这不是一次普通的结构漂移，而是<strong>「旧风暴平息 + 新风暴登场」的叠加事件</strong>——
+长期主导日志的 <span class="sig">hermes_cli.plugins</span>（plugin.json 解析失败）与
+<span class="sig">hermes_cli.gateway</span>（backoff 重启警告）在同一期内双双退场，
+取而代之的是一个由 <span class="sig">API_SERVER_KEY</span> 启动守卫触发的<strong>全新网关重启风暴</strong>。
+</div>
+</div>
+
+<!-- 1. Capability Status -->
+<div class="section">
+<h2>📊 能力状态</h2>
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="value" style="color:var(--green);">45</div>
+    <div class="label">工具数</div>
+    <div class="trend trend-up">↑ +2 · 冻结 11 期后增长</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" style="color:var(--purple);">81</div>
+    <div class="label">技能总数</div>
+    <div class="trend trend-flat">→ 稳定第 10 期</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" style="color:var(--green);">21</div>
+    <div class="label">活跃技能</div>
+    <div class="trend trend-flat">→ 稳定第 10 期</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" style="color:var(--yellow);">37%</div>
+    <div class="label">Memory 使用率</div>
+    <div class="trend trend-flat">→ 长期不变</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" style="color:var(--orange);">58</div>
+    <div class="label">过期技能</div>
+    <div class="trend trend-flat">→ 稳定（存档 2）</div>
+  </div>
+  <div class="stat-card">
+    <div class="value" style="color:var(--teal);">2</div>
+    <div class="label">Cron Jobs</div>
+    <div class="trend trend-flat">→ 2 活跃</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>工具变更</th><th>名称</th><th>说明</th></tr>
+  <tr><td><span class="tag tag-new">新增</span></td><td class="sig">tools.browser_vault_tool</td><td>凭据保险库（浏览器密码/支付/地址填充）</td></tr>
+  <tr><td><span class="tag tag-new">新增</span></td><td class="sig">tools.computer_use_tool</td><td>桌面自动化驱动（截图 / 鼠标 / 键盘）</td></tr>
+  <tr><td><span class="tag tag-dead">移除</span></td><td colspan="2" class="trend-flat">无（纯增量增长）</td></tr>
+</table>
+
+<div class="prose" style="margin-bottom:0;">
+<strong>解读：</strong>本期的 <code>+2</code> 是自 P97（43，+6）以来首次工具数变动，打破 11 期冻结。
+新增的 <span class="sig">browser_vault</span> 与 <span class="sig">computer_use</span> 均为<strong>能力扩展型</strong>工具
+（凭据管理与桌面控制），说明系统正在获得更接近"具身操作"的能力面。
+值得注意的反差：<strong>工具数在增长，但同期 <span class="sig">tools.registry</span> 报告 23 个工具可用性检查全部失败</strong>——
+能力"账面增长"与实际"运行时可用性"出现背离（见下节日志分析）。
+</div>
+</div>
+
+<!-- 2. Log Analysis -->
+<div class="section">
+<h2>📋 日志分析 — 洪水源更替</h2>
+
+<div class="prose">
+<strong>分析窗口：</strong>本期末尾 500 行（496 条可解析）全部为 <strong>09-15 当日数据</strong>，无跨日残留。
+但需注意：<strong>errors.log 于 09-14 17:10 被轮转</strong>，当前文件 6,705 行覆盖 09-14 17:10 → 09-15 09:01
+（约 16 小时，跨两个日历日）。因此尾窗与全文件的分布存在系统性差异——两者都需呈现。
+</div>
+
+<h3 style="color:var(--accent);font-size:1rem;margin:16px 0 8px;">📉 尾窗 500 行分布（weakness_scan 视角）</h3>
+<table>
+  <tr><th>组件</th><th>条数</th><th>占比</th><th>相对 P109</th><th>状态</th></tr>
+  <tr><td class="sig">tools.registry</td><td><strong>279</strong></td><td><strong>56.2%</strong></td><td class="error">0 → 279</td><td><span class="tag tag-new">新头号洪水源</span></td></tr>
+  <tr><td class="sig">tools.approval</td><td>59</td><td>11.9%</td><td class="error">2 → 59（+2850%）</td><td><span class="tag tag-degraded">配置错误放大</span></td></tr>
+  <tr><td class="sig">gateway.run</td><td>49</td><td>9.9%</td><td class="error">99 → 49</td><td><span class="tag tag-new">新错误签名</span></td></tr>
+  <tr><td class="sig">hermes_cli.plugins</td><td>39</td><td>7.9%</td><td class="success">294 → 39</td><td><span class="tag tag-frozen">大幅退场</span></td></tr>
+  <tr><td class="sig">hermes.security_audit</td><td>30</td><td>6.0%</td><td class="error">0 → 30</td><td><span class="tag tag-new">全新组件</span></td></tr>
+  <tr><td class="sig">agent.tool_executor</td><td>17</td><td>3.4%</td><td class="error">0 → 17</td><td><span class="tag tag-new">重现</span></td></tr>
+  <tr><td class="sig">agent.prompt_builder</td><td>11</td><td>2.2%</td><td class="error">0 → 11</td><td><span class="tag tag-new">全新组件</span></td></tr>
+  <tr><td class="sig">gateway.platforms.api_server</td><td>9</td><td>1.8%</td><td class="highlight">6 → 9</td><td><span class="tag tag-degraded">启动守卫冲突</span></td></tr>
+  <tr><td class="sig">cli / tools.url_safety</td><td>1 / 1</td><td>0.2% / 0.2%</td><td class="error">0 → 1</td><td><span class="tag tag-new">零星</span></td></tr>
+  <tr><td class="sig" style="color:var(--red);">hermes_cli.gateway</td><td class="error">0</td><td>0.0%</td><td class="error">99 → 0</td><td><span class="tag tag-dead">完全消失</span></td></tr>
+</table>
+
+<div class="prose" style="margin-top:4px;">
+<strong>级别构成：</strong>WARNING <strong>467</strong>（94.2%）· ERROR <strong>29</strong>（5.8%）。
+ERROR 占比从 P109 的 21.0% 降至 5.8%——但这是<strong>假性改善</strong>：旧 ERROR 源（gateway 重启）转为 WARNING 级别的
+<span class="sig">tools.registry</span> 可用性检查风暴，级别下降而总量上升。
+</div>
+
+<h3 style="color:var(--accent);font-size:1rem;margin:20px 0 8px;">📊 全文件分布（6,705 行 · 16 小时窗口）</h3>
+<table>
+  <tr><th>组件</th><th>条数</th><th>占比</th><th>可视化</th></tr>
+  <tr><td class="sig">tools.registry</td><td>4,235</td><td><strong>63.2%</strong></td><td><span class="bar"><span style="width:100%;background:var(--red);"></span></span></td></tr>
+  <tr><td class="sig">gateway.run</td><td>909</td><td>13.6%</td><td><span class="bar"><span style="width:21%;background:var(--orange);"></span></span></td></tr>
+  <tr><td class="sig">hermes_cli.plugins</td><td>555</td><td>8.3%</td><td><span class="bar"><span style="width:13%;background:var(--yellow);"></span></span></td></tr>
+  <tr><td class="sig">hermes.security_audit</td><td>546</td><td>8.1%</td><td><span class="bar"><span style="width:13%;background:var(--purple);"></span></span></td></tr>
+  <tr><td class="sig">agent.prompt_builder</td><td>183</td><td>2.7%</td><td><span class="bar"><span style="width:4%;background:var(--teal);"></span></span></td></tr>
+  <tr><td class="sig">gateway.platforms.api_server</td><td>181</td><td>2.7%</td><td><span class="bar"><span style="width:4%;background:var(--teal);"></span></span></td></tr>
+  <tr><td class="sig">tools.approval</td><td>62</td><td>0.9%</td><td><span class="bar"><span style="width:2%;background:var(--text2);"></span></span></td></tr>
+  <tr><td class="sig">其他（cli / url_safety / cron）</td><td>3</td><td>0.04%</td><td><span class="bar"><span style="width:1%;background:var(--text2);"></span></span></td></tr>
+</table>
+
+<div class="prose">
+<strong>级别构成（全文件）：</strong>WARNING <strong>6,144</strong>（91.6%）· ERROR <strong>545</strong>（8.1%）。
+<strong>全文件与尾窗的关键差异：</strong><span class="sig">hermes_cli.plugins</span> 在全文件中仍占 555 条（8.3%），
+说明它并未"被修复"——只是被轮转与新的高速洪水源挤出了尾窗。这正是<strong>跨组件窗口位移</strong>的教科书案例。
+</div>
+
+<div class="callout-warn callout">
+<strong>🔍 尾窗代表性检验：不通过</strong>
+<p class="prose" style="margin:6px 0 0;">
+尾窗显示 <span class="sig">hermes_cli.plugins</span> 仅 39 条（7.9%），而全文件实际为 555 条（8.3% × 6705 = 555）。
+两者比例接近，但 <span class="sig">tools.registry</span> 的绝对计数差异巨大（279 vs 4,235）。
+本轮分析必须以<strong>全文件分布</strong>为主、尾窗为辅，所有基于尾窗占比的趋势外推暂停。
+</p>
+</div>
+</div>
+
+<!-- 3. The Restart Storm -->
+<div class="section">
+<h2>🔄 网关重启风暴 v2.0 — 16 小时不间断</h2>
+
+<div class="callout">
+<strong style="color:var(--red);">183 次重启循环 · 精确 5 分钟间隔 · 零退避 · 持续 15 小时 14 分</strong>
+</div>
+
+<table>
+  <tr><th>时刻（CST）</th><th>事件</th><th>证据</th></tr>
+  <tr><td class="sig">09-14 17:10:53</td><td>循环开始 + 日志轮转</td><td class="sig">Gateway hit a non-retryable startup conflict: api_server: API_SERVER_KEY was rejected</td></tr>
+  <tr><td class="sig">09-14 17:10 → 09-15 08:25</td><td class="error">183 次循环（12/小时，恒定）</td><td>每小时计数稳定：12, 12, 12, 12, 12, 12, 11, 12, 12, 12, 12, 12, 12, 12, 12, 5</td></tr>
+  <tr><td class="sig">09-15 08:25:03</td><td>最后一次失败循环</td><td class="sig">Gateway exiting cleanly (SystemExit: 78)</td></tr>
+  <tr><td class="sig">09-15 08:30:06</td><td class="success">✅ 问题解除，新网关启动</td><td class="sig">PID 471715 · gateway run --replace · api_server connected on 127.0.0.1:8654</td></tr>
+</table>
+
+<h3 style="color:var(--accent);font-size:1rem;margin:16px 0 8px;">单次循环的成本（每个 5 分钟周期产生约 37 条日志）</h3>
+<table>
+  <tr><th>日志行</th><th>条数/周期</th><th>总产出（×183）</th><th>级别</th></tr>
+  <tr><td class="sig">check_fn &lt;23 种&gt; returned False</td><td>23</td><td class="error">4,235</td><td>WARNING</td></tr>
+  <tr><td class="sig">plugin.json 解析失败（3 个插件变体）</td><td>3</td><td>555</td><td>WARNING</td></tr>
+  <tr><td class="sig">Security posture audit + 2 项发现</td><td>3</td><td>546</td><td>WARNING</td></tr>
+  <tr><td class="sig">Gateway hit startup conflict / exiting cleanly</td><td>2</td><td>366</td><td class="error">ERROR</td></tr>
+  <tr><td class="sig">[Api_Server] Refusing to start: API_SERVER_KEY required</td><td>1</td><td>181</td><td class="error">ERROR</td></tr>
+  <tr><td class="sig">skipping project-context discovery</td><td>1</td><td>183</td><td>WARNING</td></tr>
+  <tr><td class="sig">Unknown approvals.mode 'auto'</td><td>1</td><td>62</td><td>WARNING</td></tr>
+</table>
+
+<div class="prose">
+<strong>🔬 与旧风暴（P21–P109）的本质区别：</strong>
+</div>
+<table>
+  <tr><th>特征</th><th>旧风暴 P21–P109</th><th>新风暴 P110（09-14 起）</th></tr>
+  <tr><td>根因</td><td>重复启动已存在的 gateway 实例</td><td><strong>API_SERVER_KEY 被启动守卫拒绝</strong></td></tr>
+  <tr><td>错误签名</td><td class="sig">Another gateway instance is already running</td><td class="sig">Gateway hit a non-retryable startup conflict</td></tr>
+  <tr><td>进程行为</td><td>驻留重试 + backoff 节流</td><td><strong>干净退出（SystemExit 78 = EX_CONFIG）</strong></td></tr>
+  <tr><td>节流信号</td><td class="sig">hermes_cli.gateway: backing off N 秒</td><td><strong>无——零退避，恒定 5 分钟</strong></td></tr>
+  <tr><td>对 gateway 的影响</td><td>网关存活（只是日志噪声）</td><td><strong>网关无法启动——功能中断</strong></td></tr>
+  <tr><td>日志速率</td><td>~98 条/500 行</td><td>~1,180 条/小时（峰值）</td></tr>
+</table>
+
+<div class="prose" style="margin-bottom:0;">
+<strong>⚠️ 严重度跃升：</strong>旧风暴是<em>噪声问题</em>（网关照常工作），新风暴是<em>可用性问题</em>——
+从 09-14 17:10 到 09-15 08:30 的 <strong>15 小时 14 分</strong>内，reviewer 网关处于<strong>启动失败状态</strong>，
+api_server 平台完全不可用。期间的 cron job（包括本简报的前置脚本）能执行，是因为 cron 调度器独立于网关运行。
+</div>
+</div>
+
+<!-- 4. PID Status -->
+<div class="section">
+<h2>🏆 PID 运行状态 — 63 天纪录终结</h2>
+<div class="stat-grid">
+  <div class="stat-card" style="border:1px solid rgba(248,81,73,0.4);">
+    <div class="value" style="color:var(--red);font-size:1.25rem;">3433647</div>
+    <div class="label">旧 PID · <span class="error">已终止</span></div>
+    <div class="trend trend-down">64 期 · 63 天 · 纪录结束</div>
+  </div>
+  <div class="stat-card" style="border:1px solid rgba(63,185,80,0.4);">
+    <div class="value" style="color:var(--green);font-size:1.25rem;">471715</div>
+    <div class="label">新 PID · <span class="success">运行中</span></div>
+    <div class="trend trend-up">第 1 期 · 09-15 08:30 启动</div>
+  </div>
+</div>
+
+<div class="prose">
+<strong>事件序列：</strong>
+</div>
+<ol class="prose">
+  <li><strong>09-14 17:10:53</strong> — 首次 <span class="sig">API_SERVER_KEY</span> 启动守卫冲突。<span class="sig">errors.log</span> 同时被轮转（<span class="sig">errors.log.1</span> = 2.1 MB）。</li>
+  <li><strong>09-14 17:10 → 09-15 08:25</strong> — PID 3433647 虽在进程表中未立即消失，但已无法完成有效启动；183 次重启尝试全部失败。</li>
+  <li><strong>09-15 08:30:06</strong> — 以 <span class="sig">--replace</span> 参数启动 PID 471715，<span class="success">api_server 成功监听 127.0.0.1:8654</span>，网关恢复（"Gateway running with 1 platform(s)"）。</li>
+  <li><strong>09-15 09:00</strong> — 本简报采集时，网关健康；<span class="sig">tools.registry</span> 洪水速率从 276/小时降至 13。</li>
+</ol>
+
+<div class="callout-warn callout">
+<strong>💾 基础设施告警：</strong><span class="sig">gateway-exit-diag.log</span> 已达 <strong>456 MB</strong>（单文件），
+记录了每次退出的完整堆栈转储。当前 logs 目录总计 <strong>471 MB</strong>。根分区已用 <strong>57G / 100G（57%）</strong>，
+<code>/data</code> 已用 20G / 49G（44%）。若类似的启动失败风暴复发，该诊断日志会继续以百 MB 级增长，
+建议加入轮转或上限。
+</div>
+</div>
+
+<!-- 5. Weakness Status -->
+<div class="section">
+<h2>⚠️ 弱点状态</h2>
+<table>
+  <tr><th>指标</th><th>值</th><th>状态</th></tr>
+  <tr><td>weakness_scan 检出弱点数</td><td class="error"><strong>0</strong></td><td><span class="tag tag-new">盲区连续第 69 期（&gt;5.7 个月）</span></td></tr>
+  <tr><td>WARNING 级别错误（尾窗）</td><td>467 条（94.2%）</td><td><span class="tag tag-new">过滤盲区第 41 期</span></td></tr>
+  <tr><td>健康度评分</td><td class="trend-flat">不可比</td><td><span class="tag tag-degraded">结构性突变期</span></td></tr>
+  <tr><td>签名碎片化盲区</td><td>持续</td><td><span class="tag tag-new">第 69 期</span></td></tr>
+</table>
+
+<div class="prose">
+<strong>🚫 健康度评分暂停说明：</strong>依据结构性突变判定规则，当新组件占比 &gt;5% 且前 3 期不存在时，
+评分不可与前几期纵向比较，本期<strong>不输出评分数值</strong>。形式上按公式计算约为 85 分（弱点 0 个 × 扣分 0 +
+错误密度 496/100×3 ≈ 14.9 扣分），但该数值<strong>严重失真</strong>——理由是：
+</div>
+<ul class="prose">
+  <li><strong>弱点维度完全失效：</strong>467 条 WARNING 中，至少 <strong>279 条</strong>（<span class="sig">tools.registry</span>）
+      与 <strong>59 条</strong>（<span class="sig">tools.approval</span>）属同一类"配置/可用性"错误，
+      但因全为 WARNING 级别，检测引擎输出 0 个弱点 → 评分扣 0 分。</li>
+  <li><strong>错误密度假性下降：</strong>ERROR 仅 29 条（5.8%），比 P109 的 105 条（21.0%）更低。
+      但这只是因为重启循环把错误<em>转成了 WARNING</em>，而非问题消失。</li>
+  <li><strong>结论：</strong>本期"高分"纯属度量伪影。真实系统状态是<strong>近 18 期以来最严重的可用性中断</strong>。
+      建议以"可避免日志量"（约 4,235 条）+ "中断时长"（15h14m）替代评分作为本期健康度量。</li>
+</ul>
+
+<div class="callout">
+<strong style="color:var(--red);">🔐 新增安全审计发现（真实、可行动）</strong>
+<p class="prose" style="margin:6px 0 0;">
+<span class="sig">hermes.security_audit</span> 本期首次出现（546 条），每次网关启动都会重申两项部署风险：
+</p>
+<ol class="prose" style="margin-bottom:0;">
+  <li><strong>以 ROOT 身份运行</strong> — agent 的 terminal/file 工具持有完整 root 权限；一次成功的提示注入
+      或端点暴露即等于整机沦陷。</li>
+  <li><strong>SSH 密码认证已启用</strong> — 对外网可达的主机上密码认证可被暴力破解，建议改为密钥认证
+      （<span class="sig">PasswordAuthentication no</span>）。</li>
+</ol>
+</div>
+</div>
+
+<!-- 6. Knowledge -->
+<div class="section">
+<h2>🔬 知识摄取</h2>
+
+<h3 style="color:var(--red);font-size:1rem;margin-bottom:8px;">📉 arXiv — 失败（连续第 3 期）</h3>
+<div class="prose">
+本期 <span class="sig">knowledge_ingest.py</span> 返回 <span class="sig">"Failed to fetch arXiv API"</span>，
+0 篇论文入库。这是 <strong>P108 → P109 → P110 连续第 3 期失败</strong>，累计成功率
+<strong>49/110 = 44.5%</strong>（↓ -0.45pp vs P109 的 44.95%）。
+</div>
+<div class="prose">
+<strong>交替节奏更新：</strong>「3 勝 → 3 敗 → 2 勝 → 1 敗 → 1 敗 → <strong>1 敗</strong>」。
+自 P74 以来 37 期中仅 11 期成功（<strong>29.7%</strong>），失败率进一步上升。恢复窗口仍完全不可预测。
+<strong>建议：</strong>连续 3 期失败已满足技能中"启用备选数据源"的预设条件
+（Semantic Scholar 或 arXiv Sanity Lite），建议下期起将备选源设为主力源，arXiv 降为可选补充。
+</div>
+
+<h3 style="color:var(--green);font-size:1rem;margin:16px 0 8px;">🌐 Hacker News — 本期精选（10 条，Top 6）</h3>
+<ul class="hn-list">
+  <li class="hn-item">
+    <div class="title">🚫 <a href="https://xcancel.com/#" style="color:var(--accent);">XCancel service is suspended until further notice</a></div>
+    <div class="meta">439 分 · 752 评论 · 最具讨论度的条目 —— X/Twitter 的替代前端 XCancel 宣布暂停服务。对依赖第三方 X 数据通路的监控/抓取管道是直接风险信号。</div>
+  </li>
+  <li class="hn-item">
+    <div class="title">🤖 <a href="https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/" style="color:var(--accent);">OpenAI bots knew about the RubyGems caching vulnerability</a></div>
+    <div class="meta">364 分 · 309 评论 · AI 爬虫在 RubyGems 缓存漏洞披露前就已"知晓"该漏洞的行为分析。供应链安全 + AI 爬虫情报能力交叉话题。</div>
+  </li>
+  <li class="hn-item">
+    <div class="title">📱 <a href="https://www.apple.com/newsroom/2026/09/major-updates-for-apples-software-platforms-are-now-available/" style="color:var(--accent);">iOS 27, iPadOS 27, and macOS 27</a></div>
+    <div class="meta">345 分 · 398 评论 · Apple 三大平台年度更新发布。与桌面自动化（本期新增 computer_use 工具）相关性高。</div>
+  </li>
+  <li class="hn-item">
+    <div class="title">🏢 <a href="https://andonlabs.com/blog/why-we-built-pion" style="color:var(--accent);">Pion, an agent designed to run any company autonomously</a></div>
+    <div class="meta">276 分 · 290 评论 · 面向"自主运营整家公司"的 agent 构想。对本系统的自进化/自治架构设计有直接参考价值。</div>
+  </li>
+  <li class="hn-item">
+    <div class="title">📚 <a href="https://nvartolomei.com/dist-sys-classics/" style="color:var(--accent);">Distributed Systems Classics (2017)</a></div>
+    <div class="meta">230 分 · 47 评论 · 分布式系统经典论文精选清单。对理解网关/多进程协调问题（本期重启风暴的领域）有理论价值。</div>
+  </li>
+  <li class="hn-item">
+    <div class="title">⚖️ <a href="https://law.justia.com/cases/federal/appellate-courts/ca9/26-1444/26-1444-2026-08-04.html" style="color:var(--accent);">Amazon vs. Perplexity — Ninth Circuit</a></div>
+    <div class="meta">163 分 · 162 评论 · AI 代理抓取与平台权利的司法判例。对 agent 抓取合规边界有参考意义。</div>
+  </li>
+</ul>
+</div>
+
+<!-- 7. Suggestions -->
+<div class="section">
+<h2>🧬 进化建议</h2>
+
+<h3 style="color:var(--red);font-size:1rem;margin-bottom:8px;">🔴 优先级 0（本期新增，紧急）— 防止启动失败风暴复发</h3>
+<ol class="prose">
+  <li><strong>固化 API_SERVER_KEY 修复</strong> — 08:30 的恢复证明密钥问题已解决，但<strong>根因未记录</strong>。
+      建议将 <span class="sig">API_SERVER_KEY</span> 写入 profile 的持久配置（或明确禁用 api_server 平台），
+      并确认它不会在下次 <span class="sig">--replace</span> 或 profile 重建时再次丢失。</li>
+  <li><strong>为启动失败加退避</strong> — 本次循环 <strong>183 次零退避重试</strong>，持续 15 小时。
+      任何人/任何 supervisor 都不应在配置类错误（<span class="sig">EX_CONFIG=78</span>）上以固定 5 分钟无限重试。
+      建议：非可重试的启动冲突应触发指数退避并在若干次后停止重启，同时发出一次性告警。</li>
+  <li><strong>限制 gateway-exit-diag.log 体积</strong> — 单文件 456 MB。建议加入轮转（如 50 MB × 3）或仅在
+      <span class="sig">HERMES_DEBUG</span> 打开时记录。</li>
+</ol>
+
+<h3 style="color:var(--yellow);font-size:1rem;margin:16px 0 8px;">🟡 优先级 1 — 消除已知配置错误（积压已久）</h3>
+<ol class="prose">
+  <li><strong>tools.approval</strong> — <span class="sig">config.yaml</span> 中 <span class="sig">approvals.mode</span>
+      从 <code>'auto'</code> 改为 <code>'manual'</code> 或 <code>'off'</code>。本期 59 条（尾窗），全文件 62 条。
+      <em>该错误已存在于日志中至少 47 期。</em></li>
+  <li><strong>plugin.json 兼容性</strong> — superpowers 的 3 个插件变体
+      （<span class="sig">.cursor-plugin</span> / <span class="sig">.claude-plugin</span> / <span class="sig">.codex-plugin</span>）
+      声明了不支持的 Agent Plugins schema。全文件 555 条 WARNING。删除或更新即可消除。</li>
+  <li><strong>SSH 密码认证</strong> — 设置 <span class="sig">PasswordAuthentication no</span>；同时评估
+      agent 是否必须以 root 运行（可考虑降权 + 白名单 sudo）。</li>
+</ol>
+
+<h3 style="color:var(--orange);font-size:1rem;margin:16px 0 8px;">🟠 优先级 2 — 修复 weakness_scan 检测盲区</h3>
+<ol class="prose">
+  <li><strong>WARNING 级别聚合检测</strong> — 第 41 期盲区，&gt;5.9 个月未修复。本期 467 条 WARNING
+      （含 <span class="sig">tools.registry</span> 279 条同一类型签名）仍输出 0 个弱点。
+      修复：同一 WARNING 签名 ≥10 次即标记为 medium 弱点。</li>
+  <li><strong>跨组件聚合</strong> — 统计所有"配置/可用性"类错误（approval mode、API key、
+      check_fn 可用性）的总和，避免签名分散导致的失明。</li>
+</ol>
+
+<h3 style="color:var(--purple);font-size:1rem;margin:16px 0 8px;">🟣 优先级 3 — 架构与数据源</h3>
+<ol class="prose">
+  <li><strong>启用 arXiv 备选源</strong> — 已连续 3 期失败，满足预设的切换条件。建议下期以
+      Semantic Scholar API 为主力，arXiv 降为补充。</li>
+  <li><strong>tools.registry 可用性风暴定位</strong> — 23 个 check_fn 全部返回 False
+      （browser 系列 13 个、image_generation、connectors、feishu、xai_video、spotify、homeassistant、
+      discord、yuanbao、a2a、x_search、video_generation、react）。需确认这是"未配置凭据的正常降级"
+      还是"注册表初始化缺陷"。若是后者，它会持续污染每一次工具注册。</li>
+</ol>
+</div>
+
+<!-- 8. Trend -->
+<div class="section">
+<h2>📈 长期趋势</h2>
+
+<table>
+  <tr><th>指标</th><th>P100 (09-05)</th><th>P105 (09-10)</th><th>P109 (09-14)</th><th>P110 (09-15)</th><th>趋势</th></tr>
+  <tr><td>工具数</td><td>43</td><td>43</td><td>43</td><td class="success"><strong>45</strong></td><td class="trend-up">↑ +2 · 打破 11 期冻结</td></tr>
+  <tr><td>技能总数</td><td>81</td><td>81</td><td>81</td><td>81</td><td class="trend-flat">→ 10 期稳定</td></tr>
+  <tr><td>活跃技能</td><td>21</td><td>21</td><td>21</td><td>21</td><td class="trend-flat">→ 10 期稳定</td></tr>
+  <tr><td>Memory 使用率</td><td>37%</td><td>37%</td><td>37%</td><td>37%</td><td class="trend-flat">→ 长期不变</td></tr>
+  <tr><td>网关 PID</td><td>3433647</td><td>3433647</td><td>3433647</td><td class="error"><strong>471715</strong></td><td class="trend-down">✗ 变更 · 63 天纪录终止</td></tr>
+  <tr><td>arXiv 累计率</td><td>40.0%</td><td>41.0%</td><td>44.95%</td><td class="error"><strong>44.5%</strong></td><td class="trend-down">↓ -0.45pp · 连败 3 期</td></tr>
+  <tr><td>弱点盲区</td><td>60 期</td><td>64 期</td><td>68 期</td><td class="error"><strong>69 期</strong></td><td class="trend-flat">→ 平台延伸</td></tr>
+  <tr><td>WARNING 过滤盲区</td><td>32 期</td><td>36 期</td><td>40 期</td><td><strong>41 期</strong></td><td class="trend-flat">→ 平台延伸</td></tr>
+  <tr><td>超级稳态期数</td><td>27</td><td>32</td><td>36</td><td class="error"><strong>0（断裂）</strong></td><td class="trend-down">✗ 36 期后终结</td></tr>
+  <tr><td>可避免日志量/期</td><td>~500</td><td>~500</td><td>~500</td><td class="error"><strong>~4,235</strong></td><td class="trend-down">↑ 8.5×</td></tr>
+</table>
+
+<div class="prose"><strong>📊 模式状态表：</strong></div>
+<table>
+  <tr><th>模式</th><th>状态</th><th>持续期数</th></tr>
+  <tr><td>超级稳态（P75 模式）</td><td class="error">✗ 已终结</td><td>P74–P109（36 期）</td></tr>
+  <tr><td>能力冻结（全指标零变化）</td><td class="error">✗ 已打破</td><td>15 期</td></tr>
+  <tr><td>PID 3433647 运行</td><td class="error">✗ 已终止</td><td>64 期（63 天 · 纪录）</td></tr>
+  <tr><td>网关重启风暴（旧签名）</td><td class="success">✅ 已消失</td><td>P21–P109（89 期）</td></tr>
+  <tr><td>网关重启风暴 v2.0（新签名）</td><td class="error">🚨 新出现</td><td>1 期（09-14 起，已解除）</td></tr>
+  <tr><td>结构性突变观测期</td><td class="highlight">⏳ 进行中</td><td>N=1（需 2–3 期确认）</td></tr>
+  <tr><td>WARNING 过滤盲区</td><td class="trend-flat">→ 平台延伸</td><td>41 期</td></tr>
+  <tr><td>弱点盲区</td><td class="trend-flat">→ 平台延伸</td><td>69 期（&gt;5.7 个月）</td></tr>
+  <tr><td>arXiv 交替失败</td><td class="error">↓ 第 3 期连续失败</td><td>已触发备选源切换条件</td></tr>
+  <tr><td>超级稳态疲劳</td><td class="success">✅ 已自然解除</td><td>因结构断裂而结束</td></tr>
+</table>
+
+<div class="prose" style="margin-top:12px;">
+<strong>🔑 关键发现：</strong>
+<ol>
+  <li><strong>超级稳态的终结揭示了一个此前无法观察的事实：</strong>36 期"零变化"并非系统真正静止，
+      而是<strong>两个错误源（plugin.json + 网关重启）恰好互相锁死在一个固定比率上</strong>。
+      一旦其中一方改变行为（网关因新根因改为"干净退出"而非"backoff 重试"），
+      整个分布立刻重排——稳态的低方差掩盖了底层的耦合脆弱性。</li>
+  <li><strong>错误"级别迁移"是一种被忽视的恶化形式：</strong>本期 ERROR 占比从 21.0% 降到 5.8%，
+      看似改善，实则是 <span class="sig">hermes_cli.gateway</span> 的 ERROR 级 backoff 警告
+      被 <span class="sig">tools.registry</span> 的 WARNING 级可用性警告取代。
+      仅看 ERROR 计数会得出完全错误的结论。</li>
+  <li><strong>能力面在扩张、可用性面在收缩：</strong>工具数 +2（browser_vault、computer_use），
+      但同期 23 个工具可用性检查全部失败。这个背离值得在下期重点验证——
+      如果 <span class="sig">tools.registry</span> 风暴只是"未配置凭据的降级播报"，
+      严重度评级应降低；如果它代表"工具注册表初始化缺陷"，则是真正的能力回退。</li>
+  <li><strong>重启风暴 v2.0 的严重度远高于 v1.0：</strong>v1.0（89 期）是噪声，v2.0 是一次
+      <strong>15 小时 14 分的网关功能中断</strong>。这是本系统运行 110 期以来首次记录到
+      "网关无法启动"级别的事件。</li>
+</ol>
+</div>
+</div>
+
+<!-- 9. Next-period watch -->
+<div class="section">
+<h2>🔭 下期观测重点</h2>
+<table>
+  <tr><th>#</th><th>观测项</th><th>判据</th></tr>
+  <tr><td>1</td><td>新组件是否持续（结构突变观测期 N=2）</td><td><span class="sig">tools.registry</span> / <span class="sig">hermes.security_audit</span> / <span class="sig">agent.prompt_builder</span> 的占比变化是否 &lt;1pp → 若成立则进入"结构突变稳态"</td></tr>
+  <tr><td>2</td><td>重启风暴是否真正终结</td><td>09-15 09:00 后是否再出现 <span class="sig">startup conflict</span>；新 PID 471715 是否连续存活</td></tr>
+  <tr><td>3</td><td>旧洪水源是否"复活"</td><td><span class="sig">hermes_cli.plugins</span> 是否从 8.3% 反弹——若反弹则确认其为"被位移"而非"被修复"</td></tr>
+  <tr><td>4</td><td>arXiv 备选源是否启用</td><td>连续 3 期失败已满足切换条件</td></tr>
+  <tr><td>5</td><td><span class="sig">gateway-exit-diag.log</span> 体积</td><td>当前 456 MB，若继续增长需紧急处理</td></tr>
+</table>
+</div>
+
+<div class="timestamp">
+  🧬 自动生成于 2026-09-15 · 第 110 期 · 自进化系统<br>
+  超级稳态第 36 期终结 · 结构性突变观测期 N=1 · 网关重启风暴 v2.0 已解除
+</div>
+
+</div>
+</body>
+</html>
