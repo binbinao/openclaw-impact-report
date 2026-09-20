@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hacker News 每日简报 - 2026年09月20日</title>
+<meta name="description" content="Hacker News 每日简报 2026-09-20: Top 30 热门文章中文摘要、主题分类与热议分析。" />
+<style>
+:root {
+  --bg: #0d1117; --bg-soft: #10161f; --card: #161b22; --card-hover: #1c232d;
+  --border: #232b36; --border-soft: #1b222b;
+  --fg: #e6edf3; --fg-dim: #9aa7b4; --fg-mute: #6e7b8a;
+  --accent: #58a6ff; --ai: #a371f7; --dev: #58a6ff; --sec: #f0883e;
+  --misc: #3fb950; --gold: #e3b341; --radius: 14px;
+  --shadow: 0 6px 24px rgba(0,0,0,.35);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto,
+          Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font); font-size: 16px; line-height: 1.7;
+  background-image:
+    radial-gradient(1100px 520px at 12% -8%, rgba(88,166,255,.10), transparent 62%),
+    radial-gradient(900px 480px at 88% -6%, rgba(163,113,247,.10), transparent 60%);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1140px; margin: 0 auto; padding: 40px 20px 72px; }
+header.hero { border-bottom: 1px solid var(--border); padding-bottom: 26px; margin-bottom: 34px; }
+.kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent);
+  background: rgba(88,166,255,.09); border: 1px solid rgba(88,166,255,.28);
+  padding: 5px 12px; border-radius: 999px;
+}
+.kicker .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #3fb950;
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(63,185,80,.55); }
+  70% { box-shadow: 0 0 0 9px rgba(63,185,80,0); }
+  100% { box-shadow: 0 0 0 0 rgba(63,185,80,0); }
+}
+h1 {
+  font-size: clamp(26px, 4.2vw, 42px); line-height: 1.24; margin: 18px 0 10px;
+  letter-spacing: -.02em; font-weight: 750;
+  background: linear-gradient(92deg, #e6edf3 12%, #58a6ff 58%, #a371f7 96%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.sub { color: var(--fg-dim); font-size: 15px; margin: 0; }
+.sub .sep { color: var(--fg-mute); margin: 0 8px; }
+.stats { display: grid; gap: 14px; margin: 0 0 40px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.stat {
+  background: linear-gradient(180deg, #171d26, var(--card));
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 18px 16px; position: relative; overflow: hidden;
+}
+.stat::after {
+  content: ""; position: absolute; inset: 0 auto auto 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 78%);
+}
+.stat .lbl { font-size: 12.5px; color: var(--fg-mute); letter-spacing: .06em; }
+.stat .val { font-size: 30px; font-weight: 760; font-family: var(--mono);
+  margin: 6px 0 2px; color: var(--fg); line-height: 1.15; }
+.stat .val small { font-size: 14px; color: var(--fg-dim); font-weight: 500; margin-left: 4px; }
+.stat .note { font-size: 12.5px; color: var(--fg-mute); display: block;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.block { margin: 0 0 46px; }
+.block-title {
+  display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 700;
+  margin: 0 0 18px; padding-left: 13px; border-left: 4px solid var(--accent);
+  letter-spacing: -.01em;
+}
+.block-title .count {
+  margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--fg-mute);
+  border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; font-weight: 500;
+}
+.block-title.sec-ai { border-left-color: var(--ai); }
+.block-title.sec-dev { border-left-color: var(--dev); }
+.block-title.sec-sec { border-left-color: var(--sec); }
+.block-title.sec-misc { border-left-color: var(--misc); }
+.block-title.sec-gold { border-left-color: var(--gold); }
+.block-title.sec-hot { border-left-color: var(--sec); }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 18px 16px; min-width: 0;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.card:hover { border-color: #35404e; background: var(--card-hover); transform: translateY(-2px); }
+.card-head { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+.card-title { font-size: 16.5px; font-weight: 650; line-height: 1.45; margin: 0 0 8px;
+  color: var(--fg); flex: 1 1 auto; min-width: 0; }
+.card-sum { margin: 0 0 12px; color: #b9c4d0; font-size: 14.5px; line-height: 1.72; }
+.badge { flex: 0 0 auto; font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
+  padding: 3px 9px; border-radius: 6px; margin-top: 3px;
+  border: 1px solid transparent; white-space: nowrap; }
+.sec-ai { color: var(--ai); background: rgba(163,113,247,.12); border-color: rgba(163,113,247,.32); }
+.sec-dev { color: var(--dev); background: rgba(88,166,255,.12); border-color: rgba(88,166,255,.32); }
+.sec-sec { color: var(--sec); background: rgba(240,136,62,.12); border-color: rgba(240,136,62,.32); }
+.sec-misc { color: var(--misc); background: rgba(63,185,80,.12); border-color: rgba(63,185,80,.32); }
+.star { color: var(--gold); margin-right: 6px; font-size: 14px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.tag { font-family: var(--mono); font-size: 12px; padding: 3px 9px; border-radius: 999px;
+  border: 1px solid var(--border); color: var(--fg-dim); background: #10151c; white-space: nowrap; }
+.tag-score { color: #7ee787; border-color: rgba(63,185,80,.35); background: rgba(63,185,80,.08); }
+.tag-comm { color: #a5d6ff; border-color: rgba(88,166,255,.32); background: rgba(88,166,255,.08); }
+.tag-comm.muted { color: var(--fg-mute); border-color: var(--border); background: #10151c; }
+.tag-rank { color: var(--gold); border-color: rgba(227,179,65,.3); background: rgba(227,179,65,.08); }
+.card-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font-size: 12.5px; text-decoration: none; padding: 5px 11px; border-radius: 8px;
+  border: 1px solid var(--border); color: var(--fg-dim);
+  transition: all .15s ease; font-family: var(--mono); }
+.btn:hover { color: #fff; border-color: #3d4856; background: #1f2731; }
+.btn-orig { color: var(--accent); border-color: rgba(88,166,255,.3); }
+.btn-orig:hover { background: rgba(88,166,255,.14); border-color: var(--accent); }
+.btn-hn { color: #ffb86b; border-color: rgba(240,136,62,.28); }
+.btn-hn:hover { background: rgba(240,136,62,.13); border-color: var(--sec); }
+.read-grid { display: grid; gap: 16px; }
+.read-card { display: flex; gap: 16px; align-items: flex-start; border-color: #2b3441; }
+.read-card:hover { border-color: rgba(227,179,65,.45); }
+.read-rank { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 11px;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 19px;
+  font-weight: 700; color: var(--gold); background: rgba(227,179,65,.10);
+  border: 1px solid rgba(227,179,65,.30); }
+.read-body { min-width: 0; flex: 1 1 auto; }
+.hot {
+  background: linear-gradient(180deg, #1a1614, var(--card));
+  border: 1px solid rgba(240,136,62,.26); border-radius: var(--radius);
+  padding: 22px; box-shadow: var(--shadow);
+}
+.hot .hot-title { font-size: 18px; font-weight: 680; margin: 0 0 4px; line-height: 1.5; }
+.hot .hot-meta { font-family: var(--mono); font-size: 12.5px; color: var(--fg-mute); margin-bottom: 16px; }
+.hot .hot-meta a { color: var(--sec); text-decoration: none; }
+.hot ul { margin: 0; padding-left: 0; list-style: none; }
+.hot li { padding: 12px 0 12px 14px; border-left: 2px solid var(--border);
+  margin-bottom: 2px; font-size: 14.5px; color: #b9c4d0; }
+.hot li b { color: #ffc98a; font-weight: 600; font-family: var(--mono); font-size: 13px; }
+.hot .take { margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+  background: rgba(88,166,255,.06); border: 1px solid rgba(88,166,255,.2);
+  font-size: 14.5px; color: #b9c4d0; }
+.hot .take b { color: var(--accent); }
+h4.mini { font-size: 15px; margin: 24px 0 8px; color: var(--fg);
+  border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
+footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--border);
+  color: var(--fg-mute); font-size: 13px; font-family: var(--mono); line-height: 2; }
+footer a { color: var(--fg-dim); }
+@media (max-width: 620px) {
+  .wrap { padding: 26px 14px 56px; }
+  .card { padding: 16px 15px 14px; }
+  .read-rank { width: 34px; height: 34px; font-size: 16px; }
+  .stat .val { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker"><span class="dot"></span>Hacker News &middot; Daily Digest</span>
+    <h1>Hacker News 每日简报 - 2026年09月20日</h1>
+    <p class="sub">
+      抓取 Top 30 热榜<span class="sep">/</span>中文摘要 + 主题分类<span class="sep">/</span>
+      数据源 HN Firebase API<span class="sep">/</span>生成于 2026-09-20 08:07 CST
+    </p>
+  </header>
+
+  <section class="stats">
+    <div class="stat">
+      <span class="lbl">今日收录文章</span>
+      <div class="val">30<small>篇</small></div>
+      <span class="note">HN 热榜 Top 30（含 1 条招聘）</span>
+    </div>
+    <div class="stat">
+      <span class="lbl">最高得分</span>
+      <div class="val">1326</div>
+      <span class="note">AI-generated posters don’t have to be horrible</span>
+    </div>
+    <div class="stat">
+      <span class="lbl">最热评论数</span>
+      <div class="val">735</div>
+      <span class="note">AI-generated posters don’t have to be horrible</span>
+    </div>
+    <div class="stat">
+      <span class="lbl">评论总量</span>
+      <div class="val">3850</div>
+      <span class="note">平均每篇 128.3 条讨论</span>
+    </div>
+    <div class="stat">
+      <span class="lbl">平均得分</span>
+      <div class="val">275.0</div>
+      <span class="note">中位数 98 分</span>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="block-title sec-gold">&#128293; 必读 Top 5<span class="count">按得分排序</span></h2>
+    <div class="read-grid">
+      <article class="card read-card">
+        <div class="read-rank">1</div>
+        <div class="read-body">
+          <h3 class="card-title">AI 生成的活动海报不一定难看</h3>
+          <p class="card-sum">作者实测 ChatGPT 做活动海报: 默认的「手作市集风」模板千篇一律, 真正让人反感的是重复而非质量. 一旦明确要求换一套设计美学 (如包豪斯 / 现代主义), 产出立刻上一个档次. 全文是一份「怎么提示才能不像 AI」的实操记录.</p>
+          <div class="card-tags"><span class="tag tag-rank">#1</span><span class="tag tag-score">&#9650; 1326</span><span class="tag tag-comm">&#128172; 735</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://john.hartnup.uk/2026/06/07/ai-event-posters.html" target="_blank" rel="noopener">原文 &#183; john.hartnup.uk &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49764791" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </div>
+      </article>
+      <article class="card read-card">
+        <div class="read-rank">2</div>
+        <div class="read-body">
+          <h3 class="card-title">Android 17 是 3.x 以来首个「不开源就加 API」的版本</h3>
+          <p class="card-sum">GrapheneOS 指出: Android 17 QPR1 首次自 Honeycomb (3.x) 以来, 在没有向 AOSP 发布源码的情况下为开发者新增 API, 这些新 API 目前只存在于 Pixel 的系统镜像里, 其他 OEM 拿不到. 评论区把它视为 Google 收紧 Android 开放性的又一信号, 并梳理了 Google「半年一次给 OEM 与公众同步源码, 却每季度发 Pixel 更新」的节奏.</p>
+          <div class="card-tags"><span class="tag tag-rank">#2</span><span class="tag tag-score">&#9650; 1110</span><span class="tag tag-comm">&#128172; 655</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://grapheneos.social/@GrapheneOS/117282080803799576" target="_blank" rel="noopener">原文 &#183; grapheneos.social &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49758736" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </div>
+      </article>
+      <article class="card read-card">
+        <div class="read-rank">3</div>
+        <div class="read-body">
+          <h3 class="card-title">一年前我就做出了非自回归决策模型, 然后某前沿实验室称它为「突破」</h3>
+          <p class="card-sum">作者称他 2025 年 3 月就发布论文 (arXiv:2503.23303), 开源权重与数据集, 做出非自回归 / 不生成文本 / 直接输出结构化概率的决策引擎. 2026 年 9 月一家前沿实验室以「全新科学突破」之名发布了同一概念的产品, 却无论文 / 无开放权重 / 无训练数据集. 附带 Laya 的指标: 35ms 以内, 100+ 语言路由, 校准修复.</p>
+          <div class="card-tags"><span class="tag tag-rank">#3</span><span class="tag tag-score">&#9650; 1053</span><span class="tag tag-comm">&#128172; 247</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://laya.convaiinnovations.com/" target="_blank" rel="noopener">原文 &#183; laya.convaiinnovations.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49765348" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </div>
+      </article>
+      <article class="card read-card">
+        <div class="read-rank">4</div>
+        <div class="read-body">
+          <h3 class="card-title">Cloudflare Quick Tunnels</h3>
+          <p class="card-sum">一条 cloudflared tunnel --url http://localhost:8000 就能把本地端口变成公网加密 URL: 不用账号 / 不动 DNS / 不开放任何入站端口, 约 3 秒拿到 trycloudflare.com 域名. 新落地页明确面向「Agent 时代」- stdout 输出结构化 JSON, 可直接当 webhook 目标, 进程结束即失效. 评论区提醒: 这个功能已经存在 5 年多, 这次只是换了新落地页.</p>
+          <div class="card-tags"><span class="tag tag-rank">#4</span><span class="tag tag-score">&#9650; 809</span><span class="tag tag-comm">&#128172; 308</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://try.cloudflare.com/" target="_blank" rel="noopener">原文 &#183; try.cloudflare.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49754785" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </div>
+      </article>
+      <article class="card read-card">
+        <div class="read-rank">5</div>
+        <div class="read-body">
+          <h3 class="card-title">如何用 LLM 写作 (作者: 只能当校对, 不能当枪手)</h3>
+          <p class="card-sum">两条铁律: 一, 绝不采用 LLM 建议的任何具体措辞 - 前沿模型写什么都带「杂志标题味」, 用多了文章就从「写作」变成「输出」; 二, 回避它的鼓励. 正确姿势是自己先写, 再让模型挑事实错误 / 冗余和病句.</p>
+          <div class="card-tags"><span class="tag tag-rank">#5</span><span class="tag tag-score">&#9650; 618</span><span class="tag tag-comm">&#128172; 372</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/" target="_blank" rel="noopener">原文 &#183; sockpuppet.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49747070" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </div>
+      </article></div>
+  </section>
+
+  
+    <section class="block">
+      <h2 class="block-title sec-ai">&#129302; AI 相关动态<span class="count">7 篇</span></h2>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> AI 生成的活动海报不一定难看</h3>
+          </div>
+          <p class="card-sum">作者实测 ChatGPT 做活动海报: 默认的「手作市集风」模板千篇一律, 真正让人反感的是重复而非质量. 一旦明确要求换一套设计美学 (如包豪斯 / 现代主义), 产出立刻上一个档次. 全文是一份「怎么提示才能不像 AI」的实操记录.</p>
+          <div class="card-tags"><span class="tag tag-rank">#1</span><span class="tag tag-score">&#9650; 1326</span><span class="tag tag-comm">&#128172; 735</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://john.hartnup.uk/2026/06/07/ai-event-posters.html" target="_blank" rel="noopener">原文 &#183; john.hartnup.uk &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49764791" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> 一年前我就做出了非自回归决策模型, 然后某前沿实验室称它为「突破」</h3>
+          </div>
+          <p class="card-sum">作者称他 2025 年 3 月就发布论文 (arXiv:2503.23303), 开源权重与数据集, 做出非自回归 / 不生成文本 / 直接输出结构化概率的决策引擎. 2026 年 9 月一家前沿实验室以「全新科学突破」之名发布了同一概念的产品, 却无论文 / 无开放权重 / 无训练数据集. 附带 Laya 的指标: 35ms 以内, 100+ 语言路由, 校准修复.</p>
+          <div class="card-tags"><span class="tag tag-rank">#3</span><span class="tag tag-score">&#9650; 1053</span><span class="tag tag-comm">&#128172; 247</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://laya.convaiinnovations.com/" target="_blank" rel="noopener">原文 &#183; laya.convaiinnovations.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49765348" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> 如何用 LLM 写作 (作者: 只能当校对, 不能当枪手)</h3>
+          </div>
+          <p class="card-sum">两条铁律: 一, 绝不采用 LLM 建议的任何具体措辞 - 前沿模型写什么都带「杂志标题味」, 用多了文章就从「写作」变成「输出」; 二, 回避它的鼓励. 正确姿势是自己先写, 再让模型挑事实错误 / 冗余和病句.</p>
+          <div class="card-tags"><span class="tag tag-rank">#5</span><span class="tag tag-score">&#9650; 618</span><span class="tag tag-comm">&#128172; 372</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://sockpuppet.org/blog/2026/09/17/how-to-write-with-an-llm/" target="_blank" rel="noopener">原文 &#183; sockpuppet.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49747070" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title">GPT-6 Astra 破译一封一战德军无线电密文</h3>
+          </div>
+          <p class="card-sum">一封 1918 年 11 月 27 日发出 / 采用 ADFGVX 加密的德军电文此前一直无人破译. 作者称 GPT-6 Astra 用一个历史密钥词 TRUPPENVERSCHIEBUNG 解出明文, 内容为「一艘英国巡洋舰抵达塞瓦斯托波尔, 一支盟军分舰队随后」. 这是前沿模型做密码分析的又一份案例.</p>
+          <div class="card-tags"><span class="tag tag-rank">#8</span><span class="tag tag-score">&#9650; 360</span><span class="tag tag-comm">&#128172; 166</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.prinzai.com/p/gpt-6-astra-solves-a-wwi-german-radio" target="_blank" rel="noopener">原文 &#183; prinzai.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49763987" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title">我认为你几乎永远不该用 AI 写作</h3>
+          </div>
+          <p class="card-sum">与同日前排的「如何用 LLM 写作」针锋相对: 作者主张几乎不要用 AI 代笔, 核心论据是读者对 LLM 文风的识别能力远超写作者的预期, 代笔会同时侵蚀作者自己的思考深度与读者信任. (注: 原文站点 SSL 握手失败, 正文未能抓取, 摘要依据标题与 HN 讨论语境)</p>
+          <div class="card-tags"><span class="tag tag-rank">#11</span><span class="tag tag-score">&#9650; 198</span><span class="tag tag-comm">&#128172; 114</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://erichgrunewald.substack.com/p/why-you-should-almost-never-use-ai" target="_blank" rel="noopener">原文 &#183; erichgrunewald.substack.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49767937" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title">Brood War Bench</h3>
+          </div>
+          <p class="card-sum">以「星际争霸: 母巢之战」为战场的一份基准评测报告. HN 评论区把它与 DeepMind 的星际争霸 2 工作, 以及 2010 年前后 BWAPI 时代的 AI 竞赛相提并论; 也有人提到目前战网上已有 Bot 击败所有人类对手.</p>
+          <div class="card-tags"><span class="tag tag-rank">#13</span><span class="tag tag-score">&#9650; 122</span><span class="tag tag-comm">&#128172; 62</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://bw.swerdlow.dev/report" target="_blank" rel="noopener">原文 &#183; bw.swerdlow.dev &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49766966" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-ai">AI</span>
+            <h3 class="card-title">Show HN: CUA-S1 - 面向「电脑操作」的 System 1 模型</h3>
+          </div>
+          <p class="card-sum">trycua/cua 发布 CUA-S1, 定位是 computer-use 场景的快速直觉模型 (System 1 而非慢思考的 System 2). 项目主打开源驱动 / 跨操作系统设备集群, 以及训练 / 评测 / 数据生成基准, GitHub 已有约 24.4k star.</p>
+          <div class="card-tags"><span class="tag tag-rank">#20</span><span class="tag tag-score">&#9650; 56</span><span class="tag tag-comm">&#128172; 7</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://github.com/trycua/cua" target="_blank" rel="noopener">原文 &#183; github.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49767564" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+      </div>
+    </section>
+    <section class="block">
+      <h2 class="block-title sec-dev">&#128187; 编程 &amp; 开源<span class="count">7 篇</span></h2>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> Cloudflare Quick Tunnels</h3>
+          </div>
+          <p class="card-sum">一条 cloudflared tunnel --url http://localhost:8000 就能把本地端口变成公网加密 URL: 不用账号 / 不动 DNS / 不开放任何入站端口, 约 3 秒拿到 trycloudflare.com 域名. 新落地页明确面向「Agent 时代」- stdout 输出结构化 JSON, 可直接当 webhook 目标, 进程结束即失效. 评论区提醒: 这个功能已经存在 5 年多, 这次只是换了新落地页.</p>
+          <div class="card-tags"><span class="tag tag-rank">#4</span><span class="tag tag-score">&#9650; 809</span><span class="tag tag-comm">&#128172; 308</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://try.cloudflare.com/" target="_blank" rel="noopener">原文 &#183; try.cloudflare.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49754785" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">「The Secret Life of Circuits」正式出版</h3>
+          </div>
+          <p class="card-sum">lcamtuf (Michal Zalewski) 的新书上市: 全彩精装 / 近 300 张专门绘制的插图, 讲的是「如何自己设计电路」而不是抄别人的方案, 且不要求先啃一年微积分. 对 HN 常客来说, 作者的博客文风就是这本书的预告.</p>
+          <div class="card-tags"><span class="tag tag-rank">#10</span><span class="tag tag-score">&#9650; 279</span><span class="tag tag-comm">&#128172; 71</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://blog.coredump.cx/p/the-secret-life-of-circuits-is-here" target="_blank" rel="noopener">原文 &#183; blog.coredump.cx &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49720143" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">TIN: 为 Postgres 带来全文检索</h3>
+          </div>
+          <p class="card-sum">PlanetScale 发布 GA 版 Postgres 全文索引扩展 TIN (Text INdex), 支持布尔 / 短语 / 跨度查询, 模糊匹配与正则, 大小写与重音折叠, COUNT(*) 以及 BM25 打分 top-k, 并正确解决 MVCC 可见性. 作者称既有的三种 Postgres 文本索引都不同时满足这些要求.</p>
+          <div class="card-tags"><span class="tag tag-rank">#12</span><span class="tag tag-score">&#9650; 180</span><span class="tag tag-comm">&#128172; 70</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://planetscale.com/blog/introducing-tin" target="_blank" rel="noopener">原文 &#183; planetscale.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49766611" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">英语里的 a 与 an</h3>
+          </div>
+          <p class="card-sum">程序化文本生成的老坑: 判断用 a 还是 an 靠的是发音而不是首字母 (an hour / a unicorn). 作者花一天用 cmudict 数据做统计与可视化, 发现 32455 个单词里只有 129 个需要特例处理 - 比想象中干净得多.</p>
+          <div class="card-tags"><span class="tag tag-rank">#15</span><span class="tag tag-score">&#9650; 98</span><span class="tag tag-comm">&#128172; 116</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.redblobgames.com/blog/2026-09-16-english-a-vs-an/" target="_blank" rel="noopener">原文 &#183; redblobgames.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49769944" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">Hacker News 的排名机制是怎么算的 (2013)</h3>
+          </div>
+          <p class="card-sum">Ken Shirriff 对 HN 排名公式的经典逆向: 分数与时间衰减, 争议贴 (评论数远高于投票数) 的降权, 以及各类惩罚因子. 任何做内容排序的人都值得重读一遍.</p>
+          <div class="card-tags"><span class="tag tag-rank">#17</span><span class="tag tag-score">&#9650; 89</span><span class="tag tag-comm">&#128172; 47</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.righto.com/2013/11/how-hacker-news-ranking-really-works.html" target="_blank" rel="noopener">原文 &#183; righto.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49770293" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">用编译器式优化思路加速 Skia 绘图</h3>
+          </div>
+          <p class="card-sum">一篇把编译器那一套 (IR, 优化 pass, 等价变换) 搬到 Skia 图形绘制流水线上的论文, 目标是在不改变渲染结果的前提下自动消除冗余绘制指令.</p>
+          <div class="card-tags"><span class="tag tag-rank">#22</span><span class="tag tag-score">&#9650; 53</span><span class="tag tag-comm">&#128172; 15</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://arxiv.org/abs/2603.23696" target="_blank" rel="noopener">原文 &#183; arxiv.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49743934" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-dev">编程</span>
+            <h3 class="card-title">单片机电路调试历险记</h3>
+          </div>
+          <p class="card-sum">一次从现象出发 / 逐步定位到根因的单片机电路排错实录, 适合喜欢看硬件调试思路的人.</p>
+          <div class="card-tags"><span class="tag tag-rank">#26</span><span class="tag tag-score">&#9650; 31</span><span class="tag tag-comm">&#128172; 8</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.bigmessowires.com/2026/08/30/adventures-in-microcontroller-circuit-debugging/" target="_blank" rel="noopener">原文 &#183; bigmessowires.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49745049" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+      </div>
+    </section>
+    <section class="block">
+      <h2 class="block-title sec-sec">&#128274; 安全 &amp; 政策<span class="count">4 篇</span></h2>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-sec">安全</span>
+            <h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> Android 17 是 3.x 以来首个「不开源就加 API」的版本</h3>
+          </div>
+          <p class="card-sum">GrapheneOS 指出: Android 17 QPR1 首次自 Honeycomb (3.x) 以来, 在没有向 AOSP 发布源码的情况下为开发者新增 API, 这些新 API 目前只存在于 Pixel 的系统镜像里, 其他 OEM 拿不到. 评论区把它视为 Google 收紧 Android 开放性的又一信号, 并梳理了 Google「半年一次给 OEM 与公众同步源码, 却每季度发 Pixel 更新」的节奏.</p>
+          <div class="card-tags"><span class="tag tag-rank">#2</span><span class="tag tag-score">&#9650; 1110</span><span class="tag tag-comm">&#128172; 655</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://grapheneos.social/@GrapheneOS/117282080803799576" target="_blank" rel="noopener">原文 &#183; grapheneos.social &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49758736" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-sec">安全</span>
+            <h3 class="card-title">微软总监称 AI 抓取是「人类历史上最大的劳动盗窃」</h3>
+          </div>
+          <p class="card-sum">纽约时报诉讼中披露的法律文书显示: 微软一位总监把 AI 抓取行为形容为「人类历史上最大的劳动盗窃」, 而 OpenAI 高管则把 ChatGPT 称为对出版商的「生存威胁」. 两边的内部表态与公开叙事存在明显落差.</p>
+          <div class="card-tags"><span class="tag tag-rank">#14</span><span class="tag tag-score">&#9650; 105</span><span class="tag tag-comm">&#128172; 29</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.tomshardware.com/tech-industry/artificial-intelligence/microsoft-director-called-ai-scraping-the-largest-theft-of-labor-in-human-history-while-openai-head-brands-chatgpt-an-existential-threat-to-publishers-revelations-come-from-legal-briefs-filed-in-nyt-lawsuit" target="_blank" rel="noopener">原文 &#183; tomshardware.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49768921" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-sec">安全</span>
+            <h3 class="card-title">测量互联网审查, 共建最大的开放数据集</h3>
+          </div>
+          <p class="card-sum">OONI 呼吁用户安装探针贡献数据. 测量聚焦 IP 可达性等第 3 层信号, 而非平台层内容审核. 评论区争议不小: 不少人认为大多数审查其实发生在 OSI 第 4 到 7 层的平台内部, 这类工具测不到; 也有人建议加入跨协议延迟与吞吐以检测违背网络中立的行为.</p>
+          <div class="card-tags"><span class="tag tag-rank">#19</span><span class="tag tag-score">&#9650; 77</span><span class="tag tag-comm">&#128172; 40</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://ooni.org/install" target="_blank" rel="noopener">原文 &#183; ooni.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49769676" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-sec">安全</span>
+            <h3 class="card-title">ZK-JPEG: 零知识图像编辑与压缩</h3>
+          </div>
+          <p class="card-sum">相机签名能证明照片来自真实相机, 但只要经过 JPEG 有损压缩 / 局部模糊或打码就会失效. 该论文用零知识证明把「这张已发布的图是从某个被承诺的原图正确压缩而来」变成可验证命题, 让编辑历史在有损编码下依然可证, 正面应对深度伪造溯源.</p>
+          <div class="card-tags"><span class="tag tag-rank">#23</span><span class="tag tag-score">&#9650; 49</span><span class="tag tag-comm">&#128172; 7</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://eprint.iacr.org/2026/2039" target="_blank" rel="noopener">原文 &#183; eprint.iacr.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49769405" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+      </div>
+    </section>
+    <section class="block">
+      <h2 class="block-title sec-misc">&#127919; 其他值得关注<span class="count">12 篇</span></h2>
+      <div class="grid">
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">斯坦福研究: 人脑其实是两个独立器官</h3>
+          </div>
+          <p class="card-sum">推翻了「全脑源自单一前体细胞」的经典发育模型: 前脑与后脑来自两类完全不同的神经外胚层前体细胞, 相当于两套古老神经系统被精巧地打包在一起 (一套管心跳呼吸, 一套让人会写诗做数学). 这有望解释为何某些脑细胞始终难以在培养皿中长出, 并为 SMA / ALS 等脑干疾病研究开路.</p>
+          <div class="card-tags"><span class="tag tag-rank">#6</span><span class="tag tag-score">&#9650; 603</span><span class="tag tag-comm">&#128172; 234</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://med.stanford.edu/news/all-news/2026/09/two-separate-brains.html" target="_blank" rel="noopener">原文 &#183; med.stanford.edu &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49763697" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">旧金山洋葱期货公司</h3>
+          </div>
+          <p class="card-sum">一个半认真的项目: 私下出售「未来实物交割黄洋葱」的可转让合约, 每颗 3 到 12 美元, 卖点正是美国法典 7 U.S.C. 13-1 条禁止洋葱期货交易 - 而它自称不是「交易所」所以合法. HN 的年度快乐源泉之一.</p>
+          <div class="card-tags"><span class="tag tag-rank">#7</span><span class="tag tag-score">&#9650; 367</span><span class="tag tag-comm">&#128172; 154</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://onionfutures.com/" target="_blank" rel="noopener">原文 &#183; onionfutures.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49763296" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">如果数学不只是证明, 我们就该更好地表彰其余部分</h3>
+          </div>
+          <p class="card-sum">3Blue1Brown 的 Grant Sanderson 在陶哲轩博客上的客座文章: 当机器能生成证明, 证明作为「推动人类理解」这一真正目标的代理指标就失效了. 他建议明确「有动机的解释」这一标准, 并给予它与解出开放问题同等的学术认可.</p>
+          <div class="card-tags"><span class="tag tag-rank">#9</span><span class="tag tag-score">&#9650; 301</span><span class="tag tag-comm">&#128172; 232</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://terrytao.wordpress.com/2026/09/18/if-math-is-more-than-proof-we-need-to-better-celebrate-the-rest-of-it/" target="_blank" rel="noopener">原文 &#183; terrytao.wordpress.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49763928" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">图坦卡蒙墓外侧疑似存在密室的新证据</h3>
+          </div>
+          <p class="card-sum">Nature 独家报道: 地球物理勘测给出「诱人」数据, 可能指向娜芙蒂蒂的埋葬地点. 作者同时强调, 现在下结论为时过早.</p>
+          <div class="card-tags"><span class="tag tag-rank">#16</span><span class="tag tag-score">&#9650; 95</span><span class="tag tag-comm">&#128172; 40</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.nature.com/articles/d41586-026-02621-2" target="_blank" rel="noopener">原文 &#183; nature.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49742697" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">黑洞还是「黑洞星」? 天文学家为韦布望远镜的小红点吵起来了</h3>
+          </div>
+          <p class="card-sum">韦布望远镜在早期宇宙里到处发现神秘的「小红点」, 一个新理论认为它们是比整个太阳系还大几十倍的恒星. 「黑洞星」假说正在天体物理界引发激烈争论.</p>
+          <div class="card-tags"><span class="tag tag-rank">#18</span><span class="tag tag-score">&#9650; 85</span><span class="tag tag-comm">&#128172; 44</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.quantamagazine.org/black-holes-or-black-hole-stars-astronomers-spar-over-webb-telescopes-little-red-dots-20260914/" target="_blank" rel="noopener">原文 &#183; quantamagazine.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49756121" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">Suzanne Ciani 的 Buchla 食谱</h3>
+          </div>
+          <p class="card-sum">关于合成器先驱 Suzanne Ciani 与 Buchla 模块合成器工作方法的专题文章, 包含她对音色设计与现场即兴的理念, 是模块圈的一手资料.</p>
+          <div class="card-tags"><span class="tag tag-rank">#21</span><span class="tag tag-score">&#9650; 56</span><span class="tag tag-comm">&#128172; 21</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://echo.orpheusinstituut.be/article/suzannes-buchla-cookbook" target="_blank" rel="noopener">原文 &#183; echo.orpheusinstituut.be &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49735010" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">1970 年英剧「UFO」主页</h3>
+          </div>
+          <p class="card-sum">一个保存完好的古典互联网遗迹: 1970 年英国科幻剧 UFO 的影迷站首页, 评论区集体怀旧.</p>
+          <div class="card-tags"><span class="tag tag-rank">#24</span><span class="tag tag-score">&#9650; 45</span><span class="tag tag-comm">&#128172; 29</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://ufoseries.com/" target="_blank" rel="noopener">原文 &#183; ufoseries.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49754194" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">「Deodand」: 给致人死亡的物品标价的中世纪法律</h3>
+          </div>
+          <p class="card-sum">中世纪英格兰的怪制度: 导致人死亡的物品 (deodand) 会被没收或折价上缴. 本文讲铁路时代如何终结了这条古老法律, 以及它背后的道德逻辑.</p>
+          <div class="card-tags"><span class="tag tag-rank">#25</span><span class="tag tag-score">&#9650; 34</span><span class="tag tag-comm">&#128172; 12</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://daily.jstor.org/how-the-railways-killed-a-medieval-law/" target="_blank" rel="noopener">原文 &#183; daily.jstor.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49731996" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">用整数溢出击败「时空之旅」里的 Dream Devourer</h3>
+          </div>
+          <p class="card-sum">一个邪道通关技巧: 把游戏机制当成一段有 bug 的程序来逆向, 用整数溢出打掉这个强力 Boss. 老游戏逆向的经典乐趣.</p>
+          <div class="card-tags"><span class="tag tag-rank">#27</span><span class="tag tag-score">&#9650; 24</span><span class="tag tag-comm">&#128172; 10</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://chrono.fandom.com/wiki/Dream_Devourer" target="_blank" rel="noopener">原文 &#183; chrono.fandom.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49770256" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">Mayday Mysteries</h3>
+          </div>
+          <p class="card-sum">集中整理 Mayday mystery 的站点 - 源自 1980 年代「亚利桑那每日野猫报」上长期刊登的离奇加密广告谜题, 至今仍有解谜社群在追.</p>
+          <div class="card-tags"><span class="tag tag-rank">#28</span><span class="tag tag-score">&#9650; 22</span><span class="tag tag-comm">&#128172; 3</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="http://www.maydaymystery.org/mayday/" target="_blank" rel="noopener">原文 &#183; maydaymystery.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49770362" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">「Lemmings」系列凄凉的晚年</h3>
+          </div>
+          <p class="card-sum">Digital Antiquarian 的游戏史长文: DMA Design 的经典之作 Lemmings 在接连成功之后的续作与授权中, 是如何一步步被消耗殆尽的.</p>
+          <div class="card-tags"><span class="tag tag-rank">#29</span><span class="tag tag-score">&#9650; 5</span><span class="tag tag-comm">&#128172; 2</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://www.filfre.net/2026/09/the-lamentable-later-life-of-lemmings/" target="_blank" rel="noopener">原文 &#183; filfre.net &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49767242" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <span class="badge sec-misc">其他</span>
+            <h3 class="card-title">Supabase (YC S20) 正在为 OrioleDB 招聘</h3>
+          </div>
+          <p class="card-sum">YC 招聘贴: Supabase 为 OrioleDB (Postgres 存储引擎) 招人. 该帖没有讨论区, 得分仅 1 分, 属于热榜里的招聘位.</p>
+          <div class="card-tags"><span class="tag tag-rank">#30</span><span class="tag tag-score">&#9650; 1</span><span class="tag tag-comm muted">&#128172; n/a</span></div>
+          <div class="card-links"><a class="btn btn-orig" href="https://supabase.link/orioledbjob" target="_blank" rel="noopener">原文 &#183; supabase.link &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49768220" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div>
+        </article>
+      </div>
+    </section>
+
+  <section class="block">
+    <h2 class="block-title sec-hot">&#128172; 今日最热讨论</h2>
+    <div class="hot">
+      <p class="hot-title">1. AI 生成的活动海报不一定难看 - <span style="color:#9aa7b4">AI-generated posters don't have to be horrible</span></p>
+      <div class="hot-meta">&#9650; 1326 分 &middot; &#128172; 735 条评论 &middot; 作者 ereiamjh &middot;
+        <a href="https://news.ycombinator.com/item?id=49764791" target="_blank" rel="noopener">进入讨论 &#8599;</a>
+      </div>
+      <ul>
+        <li><b>ajjenkins</b>(37 条回复) 评论区很多人认为文中「更好的例子」依然平庸 / 一眼能看出是 AI. 但以他的实际经验, 网上普通自由设计师的产出往往明显不如 AI - 真正该对比的是顶尖设计师, 而不是平均水平.</li>
+        <li><b>vova_hn2</b>(11 条回复) 即使是最强模型, 在创意任务上也很难跳出表层联想: 你说「日式极简海报」, 它就给樱花加日本国旗 - 而人类设计师会本能避开这种太俗套的符号.</li>
+        <li><b>JSR_FDED</b>(13 条回复) 默认风格本身就是「低投入」信号. 但真正激怒人的是另一层: 这是低投入假装成高投入. 如果海报就是简单 Comic Sans, 至少还诚实得可爱.</li>
+        <li><b>mrob</b> 细节一多就露馅: 文中那个「90 年代 drum n bass 演出传单 + 早期 3D 分形」的例子, 顶部线框球渲染是错的 - 风格对, 几何错.</li>
+      </ul>
+      <div class="take">
+        <b>一句话总结:</b> 这场 735 条评论的争论并不是「AI 会不会做设计」, 而是<b>「重复的默认审美」与「低投入伪装成高投入」</b>两件事叠加后的信任崩塌.
+        作者本人的解法很朴素 - 明确要求换一套美学体系 (他试了包豪斯 / 现代主义), 产出立刻脱离「AI 味」. 评论区反过来提醒: 这个技巧之所以有效, 恰恰说明模型能力没问题, 问题出在默认值.
+      </div>
+
+      <h4 class="mini">亚军讨论: Android 17 首次「不开源就加 API」- 655 条评论</h4>
+      <ul>
+        <li><b>wps</b>(28 条回复) Google 给 GrapheneOS 设的障碍已经离谱: 延迟上游源码补丁, embargo, attestation 问题等. 结论直白 - Google 只是后悔 Android 开源了.</li>
+        <li><b>bri3d</b>(4 条回复) 给出了最干净的技术梳理: Google 每半年向 OEM 与公众同步「真正的」Android 源码, 但 Pixel 一年发四次更新 (含文档与 SDK); 现在又在这条 Pixel 独占通道里加新 API, 于是出现了「Pixel 独占 API」这一新物种.</li>
+        <li><b>largbae</b>(10 条回复) 半开玩笑地算账: 要把 Google 依赖彻底摘掉, token 预算得多少? Play Services 的等价物, 签名与发布工具链, 以及 - 要不要说服 Valve 来做一个 Play Store 的可扩展替代品.</li>
+      </ul>
+
+      <h4 class="mini">季军讨论: How to Write with an LLM - 372 条评论</h4>
+      <ul>
+        <li><b>semiquaver</b>(8 条回复) 两年前的我会觉得这想法疯了, 但我现在坚持自己写所有 commit message 和 PR 描述, 只让 agent 做事实核查, 不让它改写. 慢一点, 但极大加深了我对 agent 生成代码的理解.</li>
+        <li><b>S-E-P</b>(20 条回复) 担心未来人会读得更少, 因为大家越来越愿意在写作上偷工减料: 「如果你连写的时间都不愿意花, 别人凭什么读?」</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div>数据来源: Hacker News Firebase API (topstories + item) &middot; 抓取时间 2026-09-20 08:07:39 CST</div>
+    <div>榜单为 HN 官方热榜 Top 30 快照, 得分与评论数随时间变化, 仅供趋势参考.</div>
+    <div>中文摘要由 AI 依据原文页面内容整理; 标注「未能抓取正文」处为站点访问失败, 请以原文为准.</div>
+    <div>生成: Hermes Reviewer Profile &middot; 每日 08:00 CST 自动出刊 &middot; 可直接部署至 GitHub Pages</div>
+  </footer>
+
+</div>
+</body>
+</html>
