@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年09月22日</title>
+<meta name="description" content="Hacker News Top 30 中文简报，2026年09月22日，含中文摘要、分类与得分评论数据。">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card-2:#1c2129; --line:#21262d;
+  --text:#e6edf3; --muted:#8b949e; --dim:#6e7681;
+  --accent:#58a6ff; --accent-2:#a371f7;
+  --score:#3fb950; --comment:#d29922;
+  --ai:#7c3aed; --code:#0ea5e9; --sec:#ef4444; --misc:#f59e0b;
+  --radius:14px; --shadow:0 8px 24px rgba(0,0,0,.45);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(900px 500px at 12% -8%,rgba(88,166,255,.10),transparent 60%),
+                   radial-gradient(800px 460px at 92% 0%,rgba(124,58,237,.12),transparent 62%);
+  background-attachment:fixed}
+.wrap{max-width:1080px;margin:0 auto;padding:48px 20px 72px}
+header.hero{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:34px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);border:1px solid rgba(88,166,255,.35);background:rgba(88,166,255,.08);
+  padding:5px 12px;border-radius:999px;font-weight:600}
+h1{margin:18px 0 8px;font-size:clamp(26px,4.6vw,42px);line-height:1.25;letter-spacing:-.02em}
+h1 .date{background:linear-gradient(92deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin:0;color:var(--muted);font-size:14.5px}
+h2{font-size:21px;margin:52px 0 18px;padding-left:14px;border-left:4px solid var(--accent);letter-spacing:-.01em}
+h2 .cnt{font-size:13px;color:var(--muted);font-weight:400}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin:30px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 16px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.stat .k{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.stat .v{font-size:30px;font-weight:700;font-family:var(--mono);margin-top:6px;line-height:1.2}
+.stat .n{font-size:12px;color:var(--dim);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grid{display:grid;gap:16px}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(430px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;
+  box-shadow:var(--shadow);transition:transform .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-3px);border-color:#30363d}
+.card.featured{border-color:rgba(88,166,255,.32);background:linear-gradient(180deg,rgba(88,166,255,.06),transparent 42%),var(--card)}
+.card-head{display:flex;gap:14px;align-items:flex-start}
+.rank{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--dim);min-width:34px;line-height:1.5}
+.featured .rank{color:var(--accent)}
+.head-text{flex:1;min-width:0}
+h3{margin:0 0 2px;font-size:17px;line-height:1.45;letter-spacing:-.005em}
+.card .en{margin:0;font-family:var(--mono);font-size:11.5px;color:var(--dim);word-break:break-word}
+.star{font-size:11px;color:#ffd33d;font-weight:600;white-space:nowrap}
+.summary{margin:12px 0 0;font-size:14.2px;color:#c9d1d9}
+.summary em{color:#ffd7a8;font-style:normal;font-weight:600}
+.summary code{font-family:var(--mono);font-size:12.6px;background:rgba(110,118,129,.22);padding:1px 6px;border-radius:5px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+.tag-score{color:var(--score);background:rgba(63,185,80,.12);border-color:rgba(63,185,80,.3)}
+.tag-comments{color:var(--comment);background:rgba(210,153,34,.12);border-color:rgba(210,153,34,.3)}
+.tag-cat{color:var(--c);border-color:var(--c);background:rgba(255,255,255,.04);opacity:.95}
+.links{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap}
+.links a{font-size:12.5px;color:var(--accent);text-decoration:none;border-bottom:1px dashed rgba(88,166,255,.4);padding-bottom:1px}
+.links a:hover{color:#79c0ff;border-bottom-style:solid}
+.hot{background:linear-gradient(180deg,rgba(239,68,68,.08),transparent 46%),var(--card);
+  border:1px solid rgba(239,68,68,.3);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.hot h3{margin:0 0 6px;font-size:19px}
+.hot .meta{color:var(--muted);font-size:13px;font-family:var(--mono);margin:0 0 16px}
+.analysis{font-size:14.4px;color:#c9d1d9;margin:0 0 18px}
+.analysis strong{color:#ffd7a8}
+.quote{border-left:3px solid rgba(239,68,68,.5);padding:10px 14px;margin:12px 0;background:rgba(110,118,129,.07);border-radius:0 10px 10px 0}
+.quote p{margin:0;font-size:13.6px;color:#b9c2cc}
+.quote .who{display:block;margin-top:6px;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px;
+  display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between}
+footer a{color:var(--muted)}
+@media (max-width:640px){
+  .wrap{padding:32px 15px 56px}
+  .grid.two{grid-template-columns:1fr}
+  .stat .v{font-size:25px}
+  .card{padding:16px}
+  .rank{font-size:17px;min-width:28px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <span class="kicker">Hacker News Daily Digest</span>
+  <h1>Hacker News 每日简报<br><span class="date">2026年09月22日</span></h1>
+  <p class="sub">Top 30 热榜 · 主题分类 · 中文摘要 · 数据取自 HN Firebase API</p>
+</header>
+
+
+<h2>📊 今日概况</h2>
+<section class="stats">
+  <div class="stat"><div class="k">收录文章</div><div class="v">30</div><div class="n">Top 30 热榜</div></div>
+  <div class="stat"><div class="k">最高得分</div><div class="v">552</div><div class="n">Attention is all you have</div></div>
+  <div class="stat"><div class="k">最热讨论</div><div class="v">385</div><div class="n">Grok 4.7 条评论</div></div>
+  <div class="stat"><div class="k">高分文章 (>=50)</div><div class="v">21</div><div class="n">占 70%</div></div>
+  <div class="stat"><div class="k">热议文章 (>=30 评)</div><div class="v">15</div><div class="n">中位分 85 / 均分 149.3</div></div>
+</section>
+
+<h2>🔥 必读 Top 5</h2>
+<div class="grid">
+      <article class="card featured">
+        <div class="card-head"><span class="rank">01</span>
+          <div class="head-text"><h3>小米 MiMo-V2.6：全面开源的大模型 <span class="star">⭐ 必读</span></h3><p class="en">Xiaomi MiMo v2.6</p></div></div>
+        <p class="summary">小米发布 MiMo-V2.6 系列（Pro 1.02T 总参 / 42B 激活，Flash 309B / 15B 激活），全面开源权重、技术报告与 RL 训练代码，并把训练过程的实时指标面板公开。讨论普遍称赞这种透明度，Pro 一度登上 Artificial Analysis 开源模型榜首，也有人反映实测 API 的 token 效率与超时问题。</p>
+        <div class="tags"><span class="tag tag-score">▲ 442</span><span class="tag tag-comments">💬 222</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://mimo.xiaomi.com/mimo-v2-6" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49792730" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card featured">
+        <div class="card-head"><span class="rank">02</span>
+          <div class="head-text"><h3>Sun 到底做错了什么 <span class="star">⭐ 必读</span></h3><p class="en">What Sun got wrong</p></div></div>
+        <p class="summary">Bryan Cantrill 复盘 Sun 的失败，核心论断：<em>Sun 对「经营一家公司」这件事本身感到厌倦</em>——技术一流，但销售机制、新客户入门路径与商业纪律长期被轻视。评论区补上更硬的证据：2002 年放弃 Solaris on x86、错失与 Google 的交易、面对 Dell 与云计算商品化时毫无还手之力。</p>
+        <div class="tags"><span class="tag tag-score">▲ 482</span><span class="tag tag-comments">💬 264</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://bcantrill.dtrace.org/2026/09/20/what-sun-got-wrong/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49787436" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card featured">
+        <div class="card-head"><span class="rank">03</span>
+          <div class="head-text"><h3>你所拥有的只有注意力 <span class="star">⭐ 必读</span></h3><p class="en">Attention is all you have</p></div></div>
+        <p class="summary">借「俄罗斯方块效应」批评算法对注意力的劫持：我们不再主动挑选想看什么，而是让以停留时长和广告点击为目标的推荐系统替我们决定。评论区共鸣集中在「回归有意识的媒体使用」——峰值互联网正是那段需要主动登录、用完就断线的时光。</p>
+        <div class="tags"><span class="tag tag-score">▲ 552</span><span class="tag tag-comments">💬 158</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://alicegg.tech/2026/09/21/attention" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49787726" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card featured">
+        <div class="card-head"><span class="rank">04</span>
+          <div class="head-text"><h3>xAI 发布 Grok 4.7 <span class="star">⭐ 必读</span></h3><p class="en">Grok 4.7</p></div></div>
+        <p class="summary">xAI 称 Grok 4.7 是面向编码与知识工作的最强模型：基座更大、RL 训练更长，价格与速度与 4.6 持平，CursorBench 4.0 达 46.3%。但 HN 实测反馈分歧巨大——「更慢更贵、像是靠烧 token 刷榜」，且发布时机卡在 Opus 5.5 传闻前一天，被解读为抢跑。</p>
+        <div class="tags"><span class="tag tag-score">▲ 470</span><span class="tag tag-comments">💬 385</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://x.ai/news/grok-4-7" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49788838" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card featured">
+        <div class="card-head"><span class="rank">05</span>
+          <div class="head-text"><h3>Kev：可自行训练的 Jev 式小型决策模型 <span class="star">⭐ 必读</span></h3><p class="en">Kev: Tiny Jev-like family of decision models built on top of Qwen3.5</p></div></div>
+        <p class="summary">jaredpalmer 开源 Kev：基于 Qwen3.5 的 Jev 式小型决策模型家族，可自行训练、本地部署，API 兼容 TypeSafe 的 System One（不生成文本，直接返回选择 / 分数 / 概率）。讨论聚焦「分类与决策任务根本不必上大模型」，以及 Jev 类项目爆发式增长的可持续性。</p>
+        <div class="tags"><span class="tag tag-score">▲ 398</span><span class="tag tag-comments">💬 175</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://github.com/jaredpalmer/kev" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49783999" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+</div>
+
+<h2 style="border-left-color:#7c3aed">🤖 AI 相关动态 <span class="cnt">/ 5 篇</span></h2>
+<div class="grid two">
+      <article class="card">
+        <div class="card-head"><span class="rank">06</span>
+          <div class="head-text"><h3>可视化讲解 Transformer</h3><p class="en">Transformers Explained Visually</p></div></div>
+        <p class="summary">佐治亚理工 Polo Club 的交互式 Transformer 可视化讲解，把注意力机制与前向传播逐层拆开，适合作为入门与教学材料。</p>
+        <div class="tags"><span class="tag tag-score">▲ 152</span><span class="tag tag-comments">💬 25</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://poloclub.github.io/transformer-explainer/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49792342" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">07</span>
+          <div class="head-text"><h3>我不想读你没亲手写的东西</h3><p class="en">I don&#x27;t want to read what you didn&#x27;t write</p></div></div>
+        <p class="summary">Colin Breck 吐槽 AI 生成的设计文档与 PR 说明：它们不是用来凝聚共识的提案，而是对已完成工作的机器式复述，细节爆炸却没人回答「为什么做、想让我关注什么」。</p>
+        <div class="tags"><span class="tag tag-score">▲ 116</span><span class="tag tag-comments">💬 39</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://blog.colinbreck.com/i-dont-want-to-read-what-you-didnt-write/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49794330" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">08</span>
+          <div class="head-text"><h3>在你自己的硬件上跑前沿 AI</h3><p class="en">Frontier AI on Your Own Hardware</p></div></div>
+        <p class="summary">Tim Dettmers 主张学术界的「文艺复兴」：研究的单位不再是论文而是开源生态，算力受限反而可能逼出更有影响力的工作。</p>
+        <div class="tags"><span class="tag tag-score">▲ 83</span><span class="tag tag-comments">💬 43</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://timdettmers.com/2026/09/21/dlab-open-source-week/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791647" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">09</span>
+          <div class="head-text"><h3>陶哲轩：数学与人工智能咨询小组</h3><p class="en">The Advisory Group on Mathematics and Artificial Intelligence</p></div></div>
+        <p class="summary">陶哲轩介绍数学与 AI 咨询小组的定位与工作方式，讨论 AI 进入数学研究的工具化路径、验证标准与风险。</p>
+        <div class="tags"><span class="tag tag-score">▲ 71</span><span class="tag tag-comments">💬 36</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://terrytao.wordpress.com/2026/09/21/advisory-group-on-mathematics-and-artificial-intelligence/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791997" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">10</span>
+          <div class="head-text"><h3>Roboharm：机器人会拒绝不安全指令吗？</h3><p class="en">Roboharm: Do frontier robot policies refuse unsafe instructions?</p></div></div>
+        <p class="summary">针对前沿机器人策略的安全评估：测试它们面对不安全指令时是否会拒绝，结果显示机器人层面的对齐仍相当脆弱。</p>
+        <div class="tags"><span class="tag tag-score">▲ 29</span><span class="tag tag-comments">💬 14</span><span class="tag tag-cat" style="--c:#7c3aed">AI</span></div>
+        <div class="links"><a href="https://robocurve.org/roboharm/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791720" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+</div>
+
+<h2 style="border-left-color:#0ea5e9">💻 编程 &amp; 开源 <span class="cnt">/ 8 篇</span></h2>
+<div class="grid two">
+      <article class="card">
+        <div class="card-head"><span class="rank">11</span>
+          <div class="head-text"><h3>AI 编码让 CI 成了瓶颈，Linear 重做了 CI</h3><p class="en">AI coding has made CI a bottleneck, so we reworked ours to keep up</p></div></div>
+        <p class="summary">AI 让代码产出暴涨，但每个 PR 仍要过 CI。Linear 在测试套件规模翻了近四倍的情况下，把 PR 等待时间从 6 分钟降到 5 分钟出头，单测试机时近乎减半。</p>
+        <div class="tags"><span class="tag tag-score">▲ 115</span><span class="tag tag-comments">💬 98</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://linear.app/now/ci-bottleneck-reworked" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49792067" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">12</span>
+          <div class="head-text"><h3>Cloudflare Python Workers 正式 GA</h3><p class="en">Python Workers are now generally available</p></div></div>
+        <p class="summary">Python 成为 Cloudflare 平台一等公民：基于 Pyodide 的解释器可直接跑 FastAPI / Django / Flask，并无缝连接 Workers AI、R2、D1、Durable Objects 等。</p>
+        <div class="tags"><span class="tag tag-score">▲ 175</span><span class="tag tag-comments">💬 28</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://blog.cloudflare.com/python-workers-ga/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49787142" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">13</span>
+          <div class="head-text"><h3>在浏览器里启动 Apple Copland D11E4</h3><p class="en">Apple Copland D11E4 Booting in the Browser</p></div></div>
+        <p class="summary">在浏览器中启动 Apple 夭折的 Copland 操作系统 D11E4 版本，一次带着仿真细节的怀旧考古。</p>
+        <div class="tags"><span class="tag tag-score">▲ 84</span><span class="tag tag-comments">💬 23</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://www.pagetable.com/300" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791125" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">14</span>
+          <div class="head-text"><h3>除以深度，即时 3D</h3><p class="en">Divide by depth for instant 3D</p></div></div>
+        <p class="summary">从投影数学讲起的小技巧：仅仅「除以深度」就能得到透视 3D 效果，短文但把原理讲得很清楚。</p>
+        <div class="tags"><span class="tag tag-score">▲ 64</span><span class="tag tag-comments">💬 6</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://gabrieloc.com/2026/09/15/perspective.html" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49769561" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">15</span>
+          <div class="head-text"><h3>寻找自稳定性的组合理论</h3><p class="en">In Search of a Compositional Theory of Self-Stabilization</p></div></div>
+        <p class="summary">分布式系统博客探讨自稳定性质如何组合：能否从组件的局部稳定性推导出系统级保证。</p>
+        <div class="tags"><span class="tag tag-score">▲ 41</span><span class="tag tag-comments">💬 3</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="http://muratbuffalo.blogspot.com/2026/09/in-search-of-compositional-theory-of.html" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791797" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">16</span>
+          <div class="head-text"><h3>TXR：为数据整理而生的编程语言</h3><p class="en">TXR: An Original, New Programming Language for Convenient Data Munging</p></div></div>
+        <p class="summary">TXR 是一门原创的文本处理语言，把抽取、模板匹配与数据清洗做成一等公民，适合替代一大堆 awk / sed 流水线。</p>
+        <div class="tags"><span class="tag tag-score">▲ 15</span><span class="tag tag-comments">💬 1</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://www.nongnu.org/txr/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49783274" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">17</span>
+          <div class="head-text"><h3>Show HN: Foremerge — 捕获并行编码 agent 的意图冲突</h3><p class="en">Show HN: Foremerge – Catch intent conflicts between parallel coding agents</p></div></div>
+        <p class="summary">同时跑多个编码 agent 时，常见事故是语义打架而非文本冲突；Foremerge 试图在合并前捕获这类意图层面的冲突。</p>
+        <div class="tags"><span class="tag tag-score">▲ 33</span><span class="tag tag-comments">💬 0</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://github.com/naw103/foremerge" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49789356" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">18</span>
+          <div class="head-text"><h3>Godot 4 从零写第一个着色器</h3><p class="en">First Shader from Zero in Godot 4</p></div></div>
+        <p class="summary">GDQuest 的入门教程：在 Godot 4 里从零写出第一个 shader，用最少的代码做出传送门效果。</p>
+        <div class="tags"><span class="tag tag-score">▲ 9</span><span class="tag tag-comments">💬 0</span><span class="tag tag-cat" style="--c:#0ea5e9">编程 / 开源</span></div>
+        <div class="links"><a href="https://www.gdquest.com/library/first_shader_godot4_portal/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49785609" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+</div>
+
+<h2 style="border-left-color:#ef4444">🔒 安全 &amp; 政策 <span class="cnt">/ 6 篇</span></h2>
+<div class="grid two">
+      <article class="card">
+        <div class="card-head"><span class="rank">19</span>
+          <div class="head-text"><h3>如何在 Mac 上关闭并限制 Apple Intelligence</h3><p class="en">Turn off and restrict access to Apple Intelligence features on Mac</p></div></div>
+        <p class="summary">Apple 官方支持文档说明如何在 Mac 上关闭并限制 Apple Intelligence 的访问权限。评论延伸到端侧与云端 AI 的隐私边界，以及在受管设备上如何合规禁用。</p>
+        <div class="tags"><span class="tag tag-score">▲ 229</span><span class="tag tag-comments">💬 152</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://support.apple.com/guide/mac-help/turn-restrict-access-apple-intelligence-mchlb2e44f94/mac" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49790409" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">20</span>
+          <div class="head-text"><h3>美国东海岸机场因通信中断停飞</h3><p class="en">US halts flights at busy East Coast airports, says fiber line cut</p></div></div>
+        <p class="summary">FAA 因通信故障暂停东海岸多个繁忙机场的航班，官方称一根光纤线路被切断。讨论集中在关键基础设施的单点故障与冗余设计。</p>
+        <div class="tags"><span class="tag tag-score">▲ 181</span><span class="tag tag-comments">💬 101</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://www.reuters.com/world/us/faa-halts-some-us-east-coast-flights-due-communication-issues-2026-09-21/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791509" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">21</span>
+          <div class="head-text"><h3>一个 npm 数学库为什么需要加密加载器？</h3><p class="en">Why does mathmain need an encrypted loader?</p></div></div>
+        <p class="summary">SafeDep 披露 npm 包 <code>mathmain</code>（mathjs 的仿冒品）内置加密加载器：只有当程序用该库解出某个特定方程时才解密并执行远控载荷，C2 信道借助公共聊天服务与区块链网络。</p>
+        <div class="tags"><span class="tag tag-score">▲ 97</span><span class="tag tag-comments">💬 27</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://safedep.io/mathmain-encrypted-loader/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791378" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">22</span>
+          <div class="head-text"><h3>800 美元免税额度豁免被暂停</h3><p class="en">Suspension of the de minimis administrative exemption for imports $800 or less</p></div></div>
+        <p class="summary">美国暂停 800 美元以下进口的 de minimis 行政豁免，对跨境电商、小包裹清关成本与个人进口的影响值得关注。</p>
+        <div class="tags"><span class="tag tag-score">▲ 115</span><span class="tag tag-comments">💬 73</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://www.personalimportation.org/advocacy" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49793322" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">23</span>
+          <div class="head-text"><h3>爱尔兰 DPC 因位置数据处理罚 Google 4.03 亿欧元</h3><p class="en">Data Protection Commission fines Google €403M over processing of location data</p></div></div>
+        <p class="summary">爱尔兰数据保护委员会结束对 Google 位置数据处理的调查，罚款 4.03 亿欧元，再度聚焦同意机制与位置数据的合规边界。</p>
+        <div class="tags"><span class="tag tag-score">▲ 51</span><span class="tag tag-comments">💬 14</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49794354" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">24</span>
+          <div class="head-text"><h3>要「间谍标记」，不要水印</h3><p class="en">Spymarks, Not Watermarks</p></div></div>
+        <p class="summary">提出 spymarks 概念：与其给 AI 生成内容打可见水印，不如嵌入可供审计溯源的隐蔽标记，文章比较两条路线在鲁棒性与可检测性上的取舍。</p>
+        <div class="tags"><span class="tag tag-score">▲ 18</span><span class="tag tag-comments">💬 7</span><span class="tag tag-cat" style="--c:#ef4444">安全 / 政策</span></div>
+        <div class="links"><a href="https://brand.io/article/spymarks/" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49794615" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+</div>
+
+<h2 style="border-left-color:#f59e0b">🎯 其他值得关注 <span class="cnt">/ 6 篇</span></h2>
+<div class="grid two">
+      <article class="card">
+        <div class="card-head"><span class="rank">25</span>
+          <div class="head-text"><h3>NASA 火星取样返回任务宣告终止</h3><p class="en">NASA&#x27;s Mars Sample Return mission is dead</p></div></div>
+        <p class="summary">NASA 火星取样返回任务被宣告终止。评论区直指 JPL 成本失控（预算涨到 110 亿美元、返回时间推到 2040 年），并对比中国的天问三号计划在 2028 年实施取样返回。</p>
+        <div class="tags"><span class="tag tag-score">▲ 274</span><span class="tag tag-comments">💬 200</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://www.science.org/content/article/nasa-s-mars-sample-return-mission-dead" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791939" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">26</span>
+          <div class="head-text"><h3>HERMES 无线电：远距离语音与数据传输</h3><p class="en">HERMES radio enables voice and data communication over vast distances</p></div></div>
+        <p class="summary">IEEE Spectrum 报道 HERMES 短波无线电系统，可在极远距离上同时承载语音与数据通信，对应急与无基础设施场景有吸引力。</p>
+        <div class="tags"><span class="tag tag-score">▲ 86</span><span class="tag tag-comments">💬 37</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://spectrum.ieee.org/hermes-shortwave-radio-digital-data" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49789228" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">27</span>
+          <div class="head-text"><h3>交通信号灯是如何工作的</h3><p class="en">How do Traffic Signals Work (2019)</p></div></div>
+        <p class="summary">Practical Engineering 的经典科普：从感应线圈到相位配时，讲清交通信号灯背后的控制逻辑。旧文今日再热。</p>
+        <div class="tags"><span class="tag tag-score">▲ 57</span><span class="tag tag-comments">💬 36</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://practical.engineering/blog/2019/5/11/how-do-traffic-signals-work" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49789081" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">28</span>
+          <div class="head-text"><h3>时间触发通信系统中如何避免「胡言乱语」故障</h3><p class="en">Avoiding the babbling-idiot failure in a time-triggered communication system</p></div></div>
+        <p class="summary">IEEE 论文讨论 babbling-idiot（节点疯狂占用总线）故障模式，以及时间触发通信系统中如何隔离与规避这类节点。</p>
+        <div class="tags"><span class="tag tag-score">▲ 23</span><span class="tag tag-comments">💬 6</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://ieeexplore.ieee.org/document/689473" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49791117" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">29</span>
+          <div class="head-text"><h3>纽约 100 万块路牌是怎么造出来的</h3><p class="en">There Are Over 1M NYC Street Signs. Here is How They Are Made.</p></div></div>
+        <p class="summary">纽约时报探访纽约市路牌工坊：超过 100 万块路牌的制作、印刷与维护流程。</p>
+        <div class="tags"><span class="tag tag-score">▲ 8</span><span class="tag tag-comments">💬 1</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://www.nytimes.com/2026/08/15/nyregion/nyc-street-sign-shop.html" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49770455" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+      <article class="card">
+        <div class="card-head"><span class="rank">30</span>
+          <div class="head-text"><h3>一只候鸟的迁徙之旅</h3><p class="en">The Journey of a Migratory Shorebird</p></div></div>
+        <p class="summary">纽约客讲述一只迁徙鸻鹬类候鸟的长途旅程，以及追踪技术如何改变我们对迁徙的理解。</p>
+        <div class="tags"><span class="tag tag-score">▲ 10</span><span class="tag tag-comments">💬 0</span><span class="tag tag-cat" style="--c:#f59e0b">其他</span></div>
+        <div class="links"><a href="https://www.newyorker.com/magazine/2026/09/21/the-incredible-journey-of-a-migratory-shorebird" target="_blank" rel="noopener">原文 ↗</a><a href="https://news.ycombinator.com/item?id=49776382" target="_blank" rel="noopener">HN 讨论 ↗</a></div>
+      </article>
+</div>
+
+<h2>💬 今日最热讨论</h2>
+<section class="hot">
+  <h3>Grok 4.7</h3>
+  <p class="meta">▲ 470 分 / 💬 385 条评论 / by meetpateltech / <a href="https://news.ycombinator.com/item?id=49788838" target="_blank" rel="noopener" style="color:#58a6ff">进入讨论 ↗</a></p>
+  <p class="analysis"><strong>争议焦点：</strong>Grok 4.7 以「更大基座 + 同价同速」的姿态发布，把讨论推向两个方向。一方认为参数增加约 40% 而价格不变、发布日期又推迟了近两周，说明 xAI 自己对结果并不满意；另一方在真实任务里体感「更慢、更贵、更像靠烧 token 冲榜」。编码与图像转 HTML 确有进步，但普遍认为仍不敌 Astra / Opus 级别的模型。再加上发布时机卡在 Opus 5.5 传闻提前一天，抢跑意味明显。</p>
+  <p class="analysis"><strong>同期另一条值得看的工程实践：</strong>在 Kev 的讨论串里，有工程师分享了代理层方案——把请求指向 Jev 负责工具裁剪、再交给前沿模型执行，实测工具调用量减少约 60%。这类「小模型做决策、大模型做生成」的分工，正是本轮 Jev 类项目讨论的核心价值主张。</p>
+  <div class="quote"><p>Apparently Grok 4.7 has 40% more weights than Grok 4.6, but the price is the same. Given the decrease in their margin and the fact they delayed the release almost two weeks past the original date, xAI must not have been happy with the results.</p><span class="who">— moojacob</span></div>
+  <div class="quote"><p>Grok 4.6 just did not really hack it for any usecase I tried... 4.7 is definitely slower and more expensive. It feels kind of like they really had it burn tokens to claw up the benchmarks.</p><span class="who">— mchusma</span></div>
+  <div class="quote"><p>It is definitely gotten better at image&#8594;HTML workflows. Here is a test comparing Astra (currently SOTA at this) vs Grok 4.7.</p><span class="who">— jjcm</span></div>
+</section>
+
+<footer>
+  <span>数据来源：<a href="https://news.ycombinator.com/" target="_blank" rel="noopener">Hacker News</a> / Firebase API (topstories + item) / 共 30 篇</span>
+  <span>生成时间：2026-09-22 08:14 CST / 简报日期：2026年09月22日</span>
+</footer>
+</div>
+</body>
+</html>
