@@ -104,7 +104,7 @@ hr{border:0;border-top:1px solid var(--bd);margin:34px 0}
   <div class="card">
     <span class="pill pb">F2 · 机制</span>
     <div style="font-weight:700;margin:8px 0 6px">「头号错误源」其实是活动计数器</div>
-    <div style="font-size:13.5px;color:var(--tx2)"><code>tools.approval</code> 占日总量 68.6%，但本期自测显示它 ≈ <b>工具调用次数</b>：本会话 12 次 terminal 调用 → 14 条警告；被阻断调用 2 次 → <code>pending_approval</code> 记录 <b class="up">精确 2 条（1:1）</b>。跨 7 日 r(警告, tokens)=<b>0.861</b>，tokens/警告 ≈ 46.6k ≈ 单轮累积上下文。</div>
+    <div style="font-size:13.5px;color:var(--tx2)"><code>tools.approval</code> 占日总量 68.6%，但本期自测显示它 ≈ <b>工具调用次数</b>：本会话 15 次 terminal 调用 → 20 条警告（<b>≈1.3/次，同阶但非严格 1:1</b>）；被阻断调用 2 次 → <code>pending_approval</code> 记录 <b class="up">精确 2 条（1:1）</b>。跨 7 日 r(警告, tokens)=<b>0.861</b>，tokens/警告 ≈ 46.6k ≈ 单轮累积上下文。</div>
   </div>
   <div class="card">
     <span class="pill py">F4 · 自我修正</span>
@@ -169,14 +169,15 @@ hr{border:0;border-top:1px solid var(--bd);margin:34px 0}
   <p style="font-size:13.5px;color:var(--tx2)"><code>tools.approval</code> 长期占据日总量 62–69%（本期 70 条 = 68.6%），一直是报告里的「头号真实错误源」。本期用<b>本作业自身</b>做了一次仪器化测量：</p>
   <table>
     <tr><th>测量项</th><th class="num">实测</th><th>含义</th></tr>
-    <tr><td>本会话 terminal 调用数</td><td class="num">12</td><td>09:00:52 → 09:04:09 之间的工具调用</td></tr>
-    <tr><td>同期 09h <code>approval</code> 警告</td><td class="num">14</td><td>≈ 1 条/调用（±2，同阶）</td></tr>
+    <tr><td>本会话 terminal 调用数</td><td class="num">15</td><td>全程 09:00:52 → 收尾（含 2 次被安全层阻断）</td></tr>
+    <tr><td>同期 09h <code>approval</code> 警告（3 次采样）</td><td class="num">20</td><td>12（9 次调用）→ 14（11 次）→ 20（15 次）</td></tr>
+    <tr><td>比例（告警 / terminal 调用）</td><td class="num">1.33</td><td><b>同阶但非严格 1:1</b>（实测 1.0–1.5）→ 仅可作「活动代理」，不可作精确计数</td></tr>
     <tr><td>被安全层阻断的调用</td><td class="num">2</td><td><code>python3 -c</code>、heredoc 各 1 次</td></tr>
     <tr><td><code>pending_approval</code> 记录</td><td class="num up">2</td><td><b>1:1 精确对应</b>（无其他来源）</td></tr>
     <tr><td>r(approval, HN tokens) 跨 7 日</td><td class="num">0.861</td><td>高于 r(08h 簇, tokens) = 0.792</td></tr>
     <tr><td>tokens / 警告</td><td class="num">46,643</td><td>≈ 单轮累积上下文规模</td></tr>
   </table>
-  <p style="font-size:13.5px;color:var(--tx2)"><b>机制：</b><code>approvals.mode: 'auto'</code> 是非法值 → 每次工具调用都触发一次「回退到 manual」告警 → 告警数 = 调用数。因此：</p>
+  <p style="font-size:13.5px;color:var(--tx2)"><b>机制：</b><code>approvals.mode: 'auto'</code> 是非法值 → 每次进入审批评估的工具调用都触发一次「回退到 manual」告警 → 告警数与调用数<b>同阶</b>（实测 1.0–1.5 倍，非严格相等；差值与采样时刻/日志写入时序有关）。因此：</p>
   <ul style="font-size:13.5px;color:var(--tx2)">
     <li>它是 <b>INFRA-activity</b>，与系统健康<b>零因果</b>；正确目标不是「降到 0」，而是「<b>修好 mode 后降到 ~0–1 条/作业</b>」</li>
     <li>这同时解释了 P116 测到的 r=0.79：<b>不是「簇 ∝ 被拦截调用」，而是「簇 ∝ 工具调用数」</b>——被拦截者是子集。P116 的结论需修正为更一般的形式</li>
