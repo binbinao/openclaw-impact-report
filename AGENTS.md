@@ -4,9 +4,9 @@
 
 `openclaw-impact-report` is a **content-only static site**: Chinese-language deep-research reports (深度调研报告) and daily self-evolution briefs (自进化简报), published via GitHub Pages at <https://binbinao.github.io/openclaw-impact-report/>.
 
-There is **no application code, no build step, no package manager, no tests, and no CI**. Every artifact is hand-authored HTML (plus an optional Markdown source). The only executable in the repo is `tools/sync-daily.py` — a stdlib-only layout normalizer, not a build step. Other tracked non-content files are `.gitignore` and `README.md`.
+There is **no application code, no build step, no package manager, and no CI**. Every artifact is hand-authored HTML (plus an optional Markdown source). `tools/` holds stdlib-only helpers — a material router, a layout normalizer, and a test suite — none of which are a build step.
 
-Practical consequence: an "implementation" here means editing HTML literals and committing. Nothing regenerates, minifies, or validates anything, so drift is normal and expected — your job when touching `index.html` is to not add more.
+Practical consequence: an "implementation" here means editing HTML literals and committing, plus running `tools/` to route and normalize new material. Drift is normal and expected; the tools exist to absorb it.
 
 ## Architecture & Data Flow
 
@@ -40,7 +40,7 @@ reports/2026-09-24-hf-cross-vendor-models/hf-cross-vendor-models-2026-09-24.md
 | `reports/<slug>/images/` \| `imgs/` \| `diagrams/` | Asset dirs — 5 / 3 / 3 dirs respectively. Naming is **not** standardized; pick the one matching the report you are editing. |
 | `briefs/<YYYY-MM>/` | Monthly brief archive, **all briefs live here**: `2026-05` (4), `2026-06` (30), `2026-07` (30, missing 07-20), `2026-08` (31), `2026-09` (25 evolution + 6 `hn-brief`). Total 126. |
 | repo root | **Only 4 files**: `index.html`, `README.md`, `AGENTS.md`, `.gitignore`, plus the `tools/` dir. Nothing else belongs here — briefs go to `briefs/<YYYY-MM>/`, reports to `reports/<date>-<slug>/`. |
-| `tools/` | `sync-daily.py` — see *Development Commands*. The only script in the repo. |
+| `tools/` | `classify-material.py` (content router), `sync-daily.py` (layout normalizer), `test_tools.py` (21 tests), `hooks/pre-commit` (root guard). |
 
 All tracked files, by extension (374 total): `html` 263, `md` 40, `png` 47, `mmd` 18, `py` 2, `json` 1, `xlsx` 1, `svg` 1, `.gitignore` 1.
 
@@ -48,25 +48,54 @@ All tracked files, by extension (374 total): `html` 263, `md` 40, `png` 47, `mmd
 
 ## Development Commands
 
-**There is no build.** The one script is a layout normalizer:
+**There is no build.** Three stdlib-only helpers live in `tools/`:
 
 ```bash
-python3 tools/sync-daily.py          # fix layout + regenerate #daily
-python3 tools/sync-daily.py --check  # exit 1 if anything is out of sync (CI/pre-push gate)
+# 1. Decide where new material belongs (reads its content)
+python3 tools/classify-material.py  NEW.html          # propose only (exit 1)
+python3 tools/classify-material.py  --explain NEW.html  # + full score table
+python3 tools/classify-material.py  --apply --yes NEW.html   # place + insert index card
+python3 tools/classify-material.py  --section truck NEW.html # override the section
+python3 tools/classify-material.py  --eval            # report classifier accuracy
+
+# 2. Normalize layout (idempotent)
+python3 tools/sync-daily.py          # relocate stray briefs, rebuild #daily, fix badges
+python3 tools/sync-daily.py --check  # exit 1 if out of sync
+
+# 3. Test suite (no network)
+python3 tools/test_tools.py
 ```
 
-It is idempotent and safe to run from any subdirectory. It fixes exactly the two
-things the daily-brief generator gets wrong, plus stale badges:
+### Routing new material — content first, path second
 
-1. **Stray briefs at the repo root** → moved into `briefs/<YYYY-MM>/`
-   (the generator writes `evolution-brief-YYYY-MM-DD.html` to the repo root).
-2. **`#daily` out of sync** → the whole section is regenerated from the
-   filesystem, so month groups, their labels, and the badge can never drift.
-3. **Section `count` badges** that disagree with their `.report` card count.
+`classify-material.py` reads the file, extracts its title and body, scores all 15
+sections with IDF-weighted keyword patterns, and only then derives a path. It
+detects daily briefs first and sends them to `briefs/<YYYY-MM>/` + `#daily`.
 
-**Run it after every brief generation, before committing.** The host that
-generates briefs does not run it automatically, so either invoke it in that
-pipeline or run it here before pushing.
+Accuracy, measured with `--eval` over this repo's own 132 curated reports:
+
+| metric | value |
+|---|---|
+| top-1 | **77.3%** |
+| top-3 | **93.2%** |
+
+Because a single guess is wrong about one time in four, the default is
+**propose, do not apply**. Read the proposal, add `--section <id>` when the
+runner-up looks plausible, then `--apply --yes`. The tool prints the top share
+and the margin so you can see when it is guessing.
+
+### Keep new material out of the repo root
+
+The repo root holds only `index.html`, `README.md`, `AGENTS.md`, `.gitignore`
+and `tools/`. Enable the guard once per clone:
+
+```bash
+git config core.hooksPath tools/hooks
+```
+
+The tracked `tools/hooks/pre-commit` rejects newly added root-level files and
+prints the exact command that routes them correctly. It only inspects **added**
+files, so it never fights existing history. Override with `git commit --no-verify`.
 
 To preview locally, any static server works — but note that **root-relative references are relative paths**, so serve from the repo root:
 

@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# pre-commit: keep new material out of the repo root.
+#
+# The brief generator and ad-hoc agent output both tend to write HTML to the
+# repo root. This hook refuses that, and says where the material belongs by
+# reading its content.
+#
+# Install once per clone:
+#     git config core.hooksPath tools/hooks
+# Bypass when you know better:
+#     git commit --no-verify
+#
+# Only NEWLY ADDED files are checked, so existing history is untouched and
+# partial staging is respected. Written for bash 3.2 (macOS default): no
+# mapfile, no associative arrays.
+
+set -u
+
+root=$(git rev-parse --show-toplevel) || exit 0
+cd "$root" || exit 0
+
+
+count=0
+files=()
+while IFS= read -r f; do
+  [ -n "$f" ] || continue
+  case "$f" in
+    */*) continue ;;                                          # nested: fine
+    index.html|README.md|AGENTS.md|.gitignore) continue ;;     # the allowed set
+  esac
+  files[${#files[@]}]="$f"
+  count=$((count + 1))
+done < <(git diff --cached --name-only --diff-filter=A)
+
+if [ "$count" -eq 0 ]; then
+  exit 0
+fi
+
+echo ""
+echo "pre-commit: $count new file(s) would land in the repo root."
+
+# Names go in via argv: the heredoc below owns stdin.
+python3 - "$root" "${files[@]}" <<'PY'
+import importlib.util
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+names = sys.argv[2:]
+
+spec = importlib.util.spec_from_file_location(
+    "classify-material", root / "tools" / "classify-material.py")
+cm = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cm)
+
+idf = cm.pattern_idf(root)
+for name in names:
+    path = root / name
+    if not path.is_file():
+        continue
+    title, body = cm.extract_text(path)
+    kind = cm.detect_brief(name, title)
+    if kind:
+        target = name if cm.BRIEF_RE.match(name) else f"{kind}-brief-<YYYY-MM-DD>.html"
+        print(f"  {name}")
+        print(f"    daily brief -> briefs/<YYYY-MM>/{target}")
+        print(f"    fix: python3 tools/classify-material.py --apply --yes {name}")
+        continue
+    ranked = cm.rank_sections(title, body, idf)
+    sid, share = ranked[0][0], ranked[0][1]
+    date = cm.derive_date(path, f"{title} {body}")
+    slug, _ = cm.derive_slug(path, title, date, sid)
+    print(f"  {name}")
+    print(f"    -> #{sid} ({share:.0%}) -> reports/{date}-{slug}/{slug}{path.suffix}")
+    print(f"    fix: python3 tools/classify-material.py --apply --yes {name}")
+PY
+
+cat <<'EOF'
+
+Nothing may live in the repo root except index.html, README.md, AGENTS.md
+and .gitignore. Run the suggested command, or `git commit --no-verify` to
+override.
+EOF
+
+exit 1
