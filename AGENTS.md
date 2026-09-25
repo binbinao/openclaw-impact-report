@@ -35,10 +35,10 @@ reports/2026-09-24-hf-cross-vendor-models/hf-cross-vendor-models-2026-09-24.md
 
 | Path | Purpose |
 |---|---|
-| `index.html` | Whole site index. 1322 lines, one inline `<style>` (**tag colors at 44–59**), **zero `<script>`**, 15 `<section>`, 138 `.report` cards, 273 hrefs (132 report links, 124 brief links, 2 external). |
+| `index.html` | Whole site index. 1322 lines, one inline `<style>` (**tag colors at 44–59**), **zero `<script>`**, 15 `<section>`, 138 `.report` cards, 274 hrefs (132 report links, 125 brief links, 2 external). |
 | `reports/` | 134 dated leaf dirs `2026-03-11` → `2026-09-24`. Each self-contains its HTML, optional `.md`, optional asset subdir. |
 | `reports/<slug>/images/` \| `imgs/` \| `diagrams/` | Asset dirs — 5 / 3 / 3 dirs respectively. Naming is **not** standardized; pick the one matching the report you are editing. |
-| `briefs/<YYYY-MM>/` | Monthly brief archive, **all briefs live here**: `2026-05` (4), `2026-06` (30), `2026-07` (30, missing 07-20), `2026-08` (31), `2026-09` (24 evolution + 5 `hn-brief`). Total 124. |
+| `briefs/<YYYY-MM>/` | Monthly brief archive, **all briefs live here**: `2026-05` (4), `2026-06` (30), `2026-07` (30, missing 07-20), `2026-08` (31), `2026-09` (24 evolution + 6 `hn-brief`). Total 125. |
 | repo root | **Only 4 files**: `index.html`, `README.md`, `AGENTS.md`, `.gitignore`. Nothing else belongs here — briefs go to `briefs/<YYYY-MM>/`, reports to `reports/<date>-<slug>/`. |
 
 All tracked files, by extension (370 total): `html` 261, `md` 39, `png` 47, `mmd` 18, `py` 1, `json` 1, `xlsx` 1, `svg` 1, `.gitignore` 1.
@@ -99,7 +99,7 @@ print("repo root files (expect exactly 4):", loose)
 PY
 ```
 
-Expect: `0` broken, `True`, all `OK`/`desc-order=True`, empty missing-CSS, `132/132`, `124/124`, and 4 root files. The `.md`-only dirs are excluded from coverage on purpose (see *Adding a `.md`-only entry*).
+Expect: `0` broken, `True`, all `OK`/`desc-order=True`, empty missing-CSS, `132/132`, `125/125`, and 4 root files. The `.md`-only dirs are excluded from coverage on purpose (see *Adding a `.md`-only entry*).
 
 Rendered check (catches unstyled pills and overflow that regex cannot):
 
@@ -173,9 +173,9 @@ Pick the section by dominant topic — see the table below; ambiguous cases hist
 | `society` | 🎓 教育 &amp; 社会 | 5 |
 | `think` | 💡 思考 &amp; 人文 | 2 |
 | `healthcare` | 🏥 医疗信息化 | 1 |
-| `daily` | 📰 每日简报 | 6 组 / 124 链接 |
+| `daily` | 📰 每日简报 | 6 组 / 125 链接 |
 
-**Every badge equals its actual card count** — keep it that way when adding a card. Cards carry `<span class="date">MM-DD</span>`. Exception: `daily` groups many briefs per card, so its badge is `6 组 / 124 篇` (group count / total brief links) — update the second number whenever a brief is added.
+**Every badge equals its actual card count** — keep it that way when adding a card. Cards carry `<span class="date">MM-DD</span>`. Exception: `daily` groups many briefs per card, so its badge is `6 组 / 125 篇` (group count / total brief links) — update the second number whenever a brief is added.
 
 The old `zhangyu-power-synapx-*` file that lived at the repo root is now `reports/2026-09-14-zhangyu-synapx/zhangyu-power-synapx-deep-dive-2026-09-14.html`.
 
@@ -300,7 +300,7 @@ Leave these alone unless asked; they are pre-existing and orthogonal to any norm
 **Resolved — do not re-introduce:**
 
 - Section badges equal card counts; cards are date-descending; nav order matches document order; pill colors follow the section (first reorg).
-- All briefs live under `briefs/<YYYY-MM>/` and **all 124 are index-linked** — repo root holds only 4 files (second reorg).
+- All briefs live under `briefs/<YYYY-MM>/` and **all 125 are index-linked** — repo root holds only 4 files (second reorg).
 - The 4 broken report back-links are fixed (`../../index.html`).
 - The 2 loose `reports/*.md` were filed into dated dirs; `reports/` root has no loose files.
 
