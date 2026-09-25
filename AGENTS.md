@@ -4,7 +4,7 @@
 
 `openclaw-impact-report` is a **content-only static site**: Chinese-language deep-research reports (深度调研报告) and daily self-evolution briefs (自进化简报), published via GitHub Pages at <https://binbinao.github.io/openclaw-impact-report/>.
 
-There is **no application code, no build step, no package manager, no tests, and no CI**. Every artifact is hand-authored HTML (plus an optional Markdown source). The only tracked non-content files are `.gitignore`, `README.md`, one vestigial Python script, and one orphaned JSON config.
+There is **no application code, no build step, no package manager, no tests, and no CI**. Every artifact is hand-authored HTML (plus an optional Markdown source). The only executable in the repo is `tools/sync-daily.py` — a stdlib-only layout normalizer, not a build step. Other tracked non-content files are `.gitignore` and `README.md`.
 
 Practical consequence: an "implementation" here means editing HTML literals and committing. Nothing regenerates, minifies, or validates anything, so drift is normal and expected — your job when touching `index.html` is to not add more.
 
@@ -39,15 +39,34 @@ reports/2026-09-24-hf-cross-vendor-models/hf-cross-vendor-models-2026-09-24.md
 | `reports/` | 134 dated leaf dirs `2026-03-11` → `2026-09-24`. Each self-contains its HTML, optional `.md`, optional asset subdir. |
 | `reports/<slug>/images/` \| `imgs/` \| `diagrams/` | Asset dirs — 5 / 3 / 3 dirs respectively. Naming is **not** standardized; pick the one matching the report you are editing. |
 | `briefs/<YYYY-MM>/` | Monthly brief archive, **all briefs live here**: `2026-05` (4), `2026-06` (30), `2026-07` (30, missing 07-20), `2026-08` (31), `2026-09` (25 evolution + 6 `hn-brief`). Total 126. |
-| repo root | **Only 4 files**: `index.html`, `README.md`, `AGENTS.md`, `.gitignore`. Nothing else belongs here — briefs go to `briefs/<YYYY-MM>/`, reports to `reports/<date>-<slug>/`. |
+| repo root | **Only 4 files**: `index.html`, `README.md`, `AGENTS.md`, `.gitignore`, plus the `tools/` dir. Nothing else belongs here — briefs go to `briefs/<YYYY-MM>/`, reports to `reports/<date>-<slug>/`. |
+| `tools/` | `sync-daily.py` — see *Development Commands*. The only script in the repo. |
 
-All tracked files, by extension (370 total): `html` 261, `md` 39, `png` 47, `mmd` 18, `py` 1, `json` 1, `xlsx` 1, `svg` 1, `.gitignore` 1.
+All tracked files, by extension (374 total): `html` 263, `md` 40, `png` 47, `mmd` 18, `py` 2, `json` 1, `xlsx` 1, `svg` 1, `.gitignore` 1.
 
 `reports/` holds 134 directories — 132 with an `index.html` card, plus 2 holding only a `.md` (no HTML, deliberately unindexed: `2026-03-24-hf-modelscope-tracking`, `2026-09-20-ai-platform-weekly`).
 
 ## Development Commands
 
-**There are none.** No build, lint, test, format, or serve command exists or is required. `.gitignore` (`.DS_Store`, `._*`, `.idea/`, `.vscode/`, `*.swp`) is the entire config surface.
+**There is no build.** The one script is a layout normalizer:
+
+```bash
+python3 tools/sync-daily.py          # fix layout + regenerate #daily
+python3 tools/sync-daily.py --check  # exit 1 if anything is out of sync (CI/pre-push gate)
+```
+
+It is idempotent and safe to run from any subdirectory. It fixes exactly the two
+things the daily-brief generator gets wrong, plus stale badges:
+
+1. **Stray briefs at the repo root** → moved into `briefs/<YYYY-MM>/`
+   (the generator writes `evolution-brief-YYYY-MM-DD.html` to the repo root).
+2. **`#daily` out of sync** → the whole section is regenerated from the
+   filesystem, so month groups, their labels, and the badge can never drift.
+3. **Section `count` badges** that disagree with their `.report` card count.
+
+**Run it after every brief generation, before committing.** The host that
+generates briefs does not run it automatically, so either invoke it in that
+pipeline or run it here before pushing.
 
 To preview locally, any static server works — but note that **root-relative references are relative paths**, so serve from the repo root:
 
@@ -55,7 +74,11 @@ To preview locally, any static server works — but note that **root-relative re
 python3 -m http.server 8000    # then open http://localhost:8000/
 ```
 
-The only meaningful QA is link/count integrity. Link checking **must** use `python3`, not shell `[ -e ]` — non-ASCII paths (`2026-05-11-智驾百草枯_...`) produce false positives under a non-UTF-8 shell locale:
+**macOS caveat:** `python3 -m http.server` can hang for ~30s at startup because
+`http.server` calls `socket.getfqdn()`; if it never binds, either wait, add
+`127.0.0.1` to `/etc/hosts` pointing at localhost, or override `address_string()`.
+
+The rest of QA is link/count integrity. Link checking **must** use `python3`, not shell `[ -e ]` — non-ASCII paths (`2026-05-11-智驾百草枯_...`) produce false positives under a non-UTF-8 shell locale:
 
 ```bash
 # index.html invariants — expect all clean
@@ -197,12 +220,17 @@ Add a new section → add its `.tag.<id>` rule in the `<style>` block (lines 44�
 
 ### Adding a brief
 
-Daily briefs are **not** standalone cards — they are listed as date links inside the `#daily` month groups.
+Daily briefs are **not** standalone cards — they are listed as date links inside the `#daily` month groups. **You normally do not edit `#daily` by hand**: write the brief, then run `python3 tools/sync-daily.py`, which regenerates the section from disk.
 
-1. Write `briefs/<YYYY-MM>/evolution-brief-<YYYY-MM-DD>.html` (or `hn-brief-<YYYY-MM-DD>.html` for the HN digest). **Never** write briefs to the repo root; that was the historical mistake and 22 files were relocated.
-2. Add a dated `<a>` into the matching month's group card `<div class="desc">`, keeping the ` · ` separator and **descending** date order.
-3. Bump the group label `NN月简报（N篇）` and the `daily` badge total (`6 组 / N 篇`).
-4. New month → add a whole new group card above the previous month's.
+1. Write `briefs/<YYYY-MM>/evolution-brief-<YYYY-MM-DD>.html` (or `hn-brief-<YYYY-MM-DD>.html` for the HN digest).
+   If the generator drops it at the repo root, run `python3 tools/sync-daily.py` to relocate it — do not commit a root-level brief.
+2. Run `python3 tools/sync-daily.py` — it adds the date link to the right month group, bumps the group label and the badge, and creates a new group for a new month.
+3. Verify with `python3 tools/sync-daily.py --check` (exit 0 = in sync).
+4. Commit the brief and `index.html` together.
+
+**The known failure mode:** the daily-brief generator writes to the repo root and
+never touches `index.html`. Both symptoms are what `tools/sync-daily.py` repairs;
+running it after generation is the whole fix.
 
 Briefs are relocation-safe: they carry no cross-directory asset references, and the only brief-to-brief links (`evolution-brief-2026-09-20` → `-09-19`, `-09-23` → `-09-22`) are same-directory, so moving a whole month together preserves them.
 

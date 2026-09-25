@@ -7,11 +7,12 @@
 ```
 index.html                              # 站点索引（所有链接均指向下方三层结构）
 AGENTS.md                               # 仓库约定（分类规则、命名、校验脚本）
+tools/sync-daily.py                     # 归档散落简报 + 重建 #daily + 修正徽标
 reports/<YYYY-MM-DD>-<slug>/            # 深度调研报告（HTML 必需，.md 可选）
 briefs/<YYYY-MM>/                       # 每日简报（按月归档）
 ```
 
-仓库根目录只保留 `index.html` / `README.md` / `AGENTS.md` / `.gitignore`，其余内容一律归入 `reports/` 或 `briefs/`。
+仓库根目录只保留 `index.html` / `README.md` / `AGENTS.md` / `.gitignore` 与 `tools/`，其余内容一律归入 `reports/` 或 `briefs/`。
 
 ## 板块（15）
 
@@ -49,7 +50,22 @@ briefs/<YYYY-MM>/                       # 每日简报（按月归档）
 3. 该板块 `count` 徽标数字 +1。
 4. 提交报告目录与 `index.html`。
 
-## 校验
+## 归档与校验
+
+每日简报由外部流程生成，**它会把文件写到仓库根目录且不更新索引**。生成后执行：
+
+```bash
+python3 tools/sync-daily.py          # 归档散落简报 + 依据磁盘重建 #daily + 修正徽标
+python3 tools/sync-daily.py --check  # 仅检查，退出码 1 表示不同步
+```
+
+脚本幂等，可在任意子目录运行。它会：
+
+1. 把根目录散落的 `*-brief-<日期>.html` 移入 `briefs/<YYYY-MM>/`；
+2. 依据磁盘上实际存在的简报**重建** `index.html` 的 `#daily` 区（月份分组、组标签、徽标一并校正）；
+3. 修正与卡片数不符的板块徽标。
+
+随后做链接校验：
 
 ```bash
 python3 - <<'PY'
@@ -63,9 +79,3 @@ PY
 ```
 
 预期输出 `broken links: 0 []`。完整校验（徽标、排序、标签配色、覆盖率）见 `AGENTS.md`。
-
-## 部署
-
-GitHub Pages 直接从 `main` 分支根目录发布，无构建步骤，无 CI：<https://binbinao.github.io/openclaw-impact-report/>
-
-推送即生效。**改动文件路径会让已发布的外链失效**，重命名目录前需确认外部引用。
