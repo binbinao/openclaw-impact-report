@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hacker News 每日简报 — 2026年09月30日</title>
+<meta name="description" content="Hacker News 每日简报 2026-09-30：Top 30 热门文章中文摘要、主题分类与热议分析。" />
+<style>
+:root {
+  --bg: #0d1117; --bg-soft: #10161f; --card: #161b22; --card-hover: #1c232d;
+  --border: #232b36; --border-soft: #1b222b;
+  --fg: #e6edf3; --fg-dim: #9aa7b4; --fg-mute: #6e7b8a;
+  --accent: #58a6ff; --ai: #a371f7; --dev: #58a6ff; --sec: #f0883e;
+  --misc: #3fb950; --gold: #e3b341; --radius: 14px;
+  --shadow: 0 6px 24px rgba(0,0,0,.35);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto,
+          Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+          "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--font); font-size: 16px; line-height: 1.7;
+  background-image:
+    radial-gradient(1100px 520px at 12% -8%, rgba(88,166,255,.10), transparent 62%),
+    radial-gradient(900px 480px at 88% -6%, rgba(163,113,247,.10), transparent 60%);
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1140px; margin: 0 auto; padding: 40px 20px 72px; }
+header.hero { border-bottom: 1px solid var(--border); padding-bottom: 26px; margin-bottom: 34px; }
+.kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent);
+  background: rgba(88,166,255,.09); border: 1px solid rgba(88,166,255,.28);
+  padding: 5px 12px; border-radius: 999px;
+}
+.kicker .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #3fb950;
+  animation: pulse 2.4s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(63,185,80,.55); }
+  70% { box-shadow: 0 0 0 9px rgba(63,185,80,0); }
+  100% { box-shadow: 0 0 0 0 rgba(63,185,80,0); }
+}
+h1 {
+  font-size: clamp(26px, 4.2vw, 42px); line-height: 1.24; margin: 18px 0 10px;
+  letter-spacing: -.02em; font-weight: 750;
+  background: linear-gradient(92deg, #e6edf3 12%, #58a6ff 58%, #a371f7 96%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+}
+.sub { color: var(--fg-dim); font-size: 15px; margin: 0; }
+.sub .sep { color: var(--fg-mute); margin: 0 8px; }
+.stats { display: grid; gap: 14px; margin: 0 0 40px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+.stat {
+  background: linear-gradient(180deg, #171d26, var(--card));
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 18px 16px; position: relative; overflow: hidden;
+}
+.stat::after {
+  content: ""; position: absolute; inset: 0 auto auto 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 78%);
+}
+.stat .lbl { font-size: 12.5px; color: var(--fg-mute); letter-spacing: .06em; }
+.stat .val { font-size: 30px; font-weight: 760; font-family: var(--mono);
+  margin: 6px 0 2px; color: var(--fg); line-height: 1.15; }
+.stat .val small { font-size: 14px; color: var(--fg-dim); font-weight: 500; margin-left: 4px; }
+.stat .note { font-size: 12.5px; color: var(--fg-mute); display: block;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.block { margin: 0 0 46px; }
+.block-title {
+  display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 700;
+  margin: 0 0 18px; padding-left: 13px; border-left: 4px solid var(--accent);
+  letter-spacing: -.01em;
+}
+.block-title .count {
+  margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--fg-mute);
+  border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; font-weight: 500;
+}
+.block-title.sec-ai { border-left-color: var(--ai); }
+.block-title.sec-dev { border-left-color: var(--dev); }
+.block-title.sec-sec { border-left-color: var(--sec); }
+.block-title.sec-misc { border-left-color: var(--misc); }
+.block-title.sec-gold { border-left-color: var(--gold); }
+.block-title.sec-hot { border-left-color: var(--sec); }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 18px 16px; min-width: 0;
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.card:hover { border-color: #35404e; background: var(--card-hover); transform: translateY(-2px); }
+.card-head { display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+.card-title { font-size: 16.5px; font-weight: 650; line-height: 1.45; margin: 0 0 8px;
+  color: var(--fg); flex: 1 1 auto; min-width: 0; }
+.card-sum { margin: 0 0 12px; color: #b9c4d0; font-size: 14.5px; line-height: 1.72; }
+.badge { flex: 0 0 auto; font-size: 11.5px; font-weight: 600; letter-spacing: .04em;
+  padding: 3px 9px; border-radius: 6px; margin-top: 3px;
+  border: 1px solid transparent; white-space: nowrap; }
+.sec-ai { color: var(--ai); background: rgba(163,113,247,.12); border-color: rgba(163,113,247,.32); }
+.sec-dev { color: var(--dev); background: rgba(88,166,255,.12); border-color: rgba(88,166,255,.32); }
+.sec-sec { color: var(--sec); background: rgba(240,136,62,.12); border-color: rgba(240,136,62,.32); }
+.sec-misc { color: var(--misc); background: rgba(63,185,80,.12); border-color: rgba(63,185,80,.32); }
+.star { color: var(--gold); margin-right: 6px; font-size: 14px; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 12px; }
+.tag { font-family: var(--mono); font-size: 12px; padding: 3px 9px; border-radius: 999px;
+  border: 1px solid var(--border); color: var(--fg-dim); background: #10151c; white-space: nowrap; }
+.tag-score { color: #7ee787; border-color: rgba(63,185,80,.35); background: rgba(63,185,80,.08); }
+.tag-comm { color: #a5d6ff; border-color: rgba(88,166,255,.32); background: rgba(88,166,255,.08); }
+.tag-comm.muted { color: var(--fg-mute); border-color: var(--border); background: #10151c; }
+.tag-rank { color: var(--gold); border-color: rgba(227,179,65,.3); background: rgba(227,179,65,.08); }
+.card-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { font-size: 12.5px; text-decoration: none; padding: 5px 11px; border-radius: 8px;
+  border: 1px solid var(--border); color: var(--fg-dim);
+  transition: all .15s ease; font-family: var(--mono); }
+.btn:hover { color: #fff; border-color: #3d4856; background: #1f2731; }
+.btn-orig { color: var(--accent); border-color: rgba(88,166,255,.3); }
+.btn-orig:hover { background: rgba(88,166,255,.14); border-color: var(--accent); }
+.btn-hn { color: #ffb86b; border-color: rgba(240,136,62,.28); }
+.btn-hn:hover { background: rgba(240,136,62,.13); border-color: var(--sec); }
+.read-grid { display: grid; gap: 16px; }
+.read-card { display: flex; gap: 16px; align-items: flex-start; border-color: #2b3441; }
+.read-card:hover { border-color: rgba(227,179,65,.45); }
+.read-rank { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 11px;
+  display: grid; place-items: center; font-family: var(--mono); font-size: 19px;
+  font-weight: 700; color: var(--gold); background: rgba(227,179,65,.10);
+  border: 1px solid rgba(227,179,65,.30); }
+.read-body { min-width: 0; flex: 1 1 auto; }
+.hot {
+  background: linear-gradient(180deg, #1a1614, var(--card));
+  border: 1px solid rgba(240,136,62,.26); border-radius: var(--radius);
+  padding: 22px; box-shadow: var(--shadow);
+}
+.hot .hot-title { font-size: 18px; font-weight: 680; margin: 0 0 4px; line-height: 1.5; }
+.hot .hot-meta { font-family: var(--mono); font-size: 12.5px; color: var(--fg-mute); margin-bottom: 16px; }
+.hot .hot-meta a { color: var(--sec); text-decoration: none; }
+.hot ul { margin: 0; padding-left: 0; list-style: none; }
+.hot li { padding: 12px 0 12px 14px; border-left: 2px solid var(--border);
+  margin-bottom: 2px; font-size: 14.5px; color: #b9c4d0; }
+.hot li b { color: #ffc98a; font-weight: 600; font-family: var(--mono); font-size: 13px; }
+.hot .take { margin-top: 16px; padding: 14px 16px; border-radius: 10px;
+  background: rgba(88,166,255,.06); border: 1px solid rgba(88,166,255,.2);
+  font-size: 14.5px; color: #b9c4d0; }
+.hot .take b { color: var(--accent); }
+h4.mini { font-size: 15px; margin: 24px 0 8px; color: var(--fg);
+  border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
+footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--border);
+  color: var(--fg-mute); font-size: 13px; font-family: var(--mono); line-height: 2; }
+footer a { color: var(--fg-dim); }
+@media (max-width: 620px) {
+  .wrap { padding: 26px 14px 56px; }
+  .card { padding: 16px 15px 14px; }
+  .read-rank { width: 34px; height: 34px; font-size: 16px; }
+  .stat .val { font-size: 25px; }
+}
+
+.tag-quiet { color: var(--fg-mute); border-color: var(--border); background: #10151c; }
+.tag-focus { color: #ffd479; border-color: rgba(227,179,65,.35); background: rgba(227,179,65,.08); }
+.card.quiet { opacity: .88; }
+.hot-lead { margin: 0 0 14px; color: var(--fg-dim); font-size: 14.5px; }
+.legend { color: var(--fg-mute); font-size: 12.5px; font-family: var(--mono); margin: -26px 0 34px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker"><span class="dot"></span>Hacker News &middot; Daily Digest</span>
+    <h1>Hacker News 每日简报 — 2026年09月30日</h1>
+    <p class="sub">
+      抓取 Top 30 热榜<span class="sep">/</span>中文摘要 + 主题分类<span class="sep">/</span>
+      数据源 HN Firebase API<span class="sep">/</span>生成于 2026-09-30 08:08 CST
+    </p>
+  </header>
+
+  <section class="stats"><div class="stat"><span class="lbl">今日收录文章</span><div class="val">30<small>篇</small></div><span class="note">HN 官方热榜 Top 30 快照</span></div><div class="stat"><span class="lbl">重点文章</span><div class="val">16<small>篇</small></div><span class="note">得分 &#8805; 50 或评论 &#8805; 30</span></div><div class="stat"><span class="lbl">最高得分</span><div class="val">747</div><span class="note">GPT 6.1 Sol: Near-Astra intelligence for a fifth of the </span></div><div class="stat"><span class="lbl">最热评论数</span><div class="val">685</div><span class="note">GPT 6.1 Sol: Near-Astra intelligence for a fifth of the </span></div><div class="stat"><span class="lbl">评论总量</span><div class="val">2578</div><span class="note">平均每篇 85.9 条讨论</span></div><div class="stat"><span class="lbl">平均得分</span><div class="val">138.9</div><span class="note">中位数 79 分 &middot; 最高 747 分</span></div></section>
+  <p class="legend">重点线：得分 &#8805; 50 或评论 &#8805; 30 &middot; 未达线文章标为「低热」但同样收录</p>
+
+  <section class="block">
+    <h2 class="block-title sec-gold">&#128293; 必读 Top 5<span class="count">按得分排序</span></h2>
+    <div class="read-grid"><article class="card read-card"><div class="read-rank">1</div><div class="read-body"><h3 class="card-title">GPT-6.1 Sol：以五分之一的价格提供接近 Astra 的智能</h3><p class="card-sum">OpenAI 发布 GPT-6.1 Sol，官方称在 DeepSWE、Terminal Bench 4.0 等基准上追平旗舰 6-Astra，而成本约为其五分之一；缓存输入降到每百万 token 0.10 美元（比 GPT-6 Sol 的缓存价再便宜 50%）。同时上线 500 美元每月的 Pro 500 档位，并把 200 美元档的 Codex 配额从 20x 砍到 10x。</p><div class="card-tags"><span class="tag tag-rank">#1</span><span class="tag tag-score">&#9650; 747</span><span class="tag tag-comm">&#128172; 685</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://openai.com/index/introducing-gpt-6-1-sol/" target="_blank" rel="noopener">原文 &#183; openai.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896586" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></div></article>
+      <article class="card read-card"><div class="read-rank">2</div><div class="read-body"><h3 class="card-title">Dots：全天候在线的常驻智能体</h3><p class="card-sum">OpenAI 推出常驻型 agent 产品 Dots：agent 跑在云端沙箱里持续替你干活（帮助文档显示暂不覆盖欧洲经济区、瑞士与英国）。HN 主流反应是警惕——工作历史与第三方集成会把用户深度锁进平台，切换成本远高于换一个模型；支持者则认为这是面向非技术用户与 AI 原住民的形态，可能终结 PC 时代。</p><div class="card-tags"><span class="tag tag-rank">#2</span><span class="tag tag-score">&#9650; 444</span><span class="tag tag-comm">&#128172; 337</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://openai.com/index/introducing-dots/" target="_blank" rel="noopener">原文 &#183; openai.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896604" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></div></article>
+      <article class="card read-card"><div class="read-rank">3</div><div class="read-body"><h3 class="card-title">德里如何把电力损耗从 50% 压到 5%</h3><p class="card-sum">IEEE Spectrum 复盘德里配电改革：窃电加上线路过载让线损长期高达 50%，通过线路绝缘、智能计量与配电私有化之后的激励对齐，损耗被压到约 5%，日常拉闸限电基本消失。评论区里在德里长大的读者证实：90 年代每天停电，2006 年后几乎不再停电；也有人指出所谓 T&amp;D 损耗里，大头其实就是窃电。</p><div class="card-tags"><span class="tag tag-rank">#3</span><span class="tag tag-score">&#9650; 421</span><span class="tag tag-comm">&#128172; 247</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://spectrum.ieee.org/delhi-electricity-loss" target="_blank" rel="noopener">原文 &#183; spectrum.ieee.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49892245" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></div></article>
+      <article class="card read-card"><div class="read-rank">4</div><div class="read-body"><h3 class="card-title">网页与移动端对话式 AI agent 的隐私分析（论文）</h3><p class="card-sum">一篇针对 web 与移动端对话式 AI agent 的隐私研究（PDF）：系统梳理提示词、宿主页面与 agent 扩展之间的数据流向、可观测面与跟踪能力，属于 agent 形态普及之后最先要补上的隐私评估。</p><div class="card-tags"><span class="tag tag-rank">#4</span><span class="tag tag-score">&#9650; 406</span><span class="tag tag-comm">&#128172; 128</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf" target="_blank" rel="noopener">原文 &#183; jorgegarciaherrero.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49890226" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></div></article>
+      <article class="card read-card"><div class="read-rank">5</div><div class="read-body"><h3 class="card-title">America.gov：美国政府的一站式 AI 服务入口</h3><p class="card-sum">美国政府上线 America.gov，用 Gemini 驱动的对话入口帮超过 1 亿人找到可申领的公共服务，站内甚至直白写明「总统的鼓励不能使冲击国会合法」。HN 分成两派：一派认为把上千页官僚信息压缩成一个输入框是 LLM 最正当的用途；另一派吐槽它明显是 vibe coding 产物——首屏要下载 50MB 的 ONNX 模型，宣传截图里还有坏图。</p><div class="card-tags"><span class="tag tag-rank">#5</span><span class="tag tag-score">&#9650; 293</span><span class="tag tag-comm">&#128172; 237</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://america.gov/" target="_blank" rel="noopener">原文 &#183; america.gov &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49893509" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></div></article></div>
+  </section>
+
+  <section class="block"><h2 class="block-title sec-ai">&#129302; AI 相关动态<span class="count">6 篇 &middot; 重点 3</span></h2><div class="grid"><article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> GPT-6.1 Sol：以五分之一的价格提供接近 Astra 的智能</h3></div><p class="card-sum">OpenAI 发布 GPT-6.1 Sol，官方称在 DeepSWE、Terminal Bench 4.0 等基准上追平旗舰 6-Astra，而成本约为其五分之一；缓存输入降到每百万 token 0.10 美元（比 GPT-6 Sol 的缓存价再便宜 50%）。同时上线 500 美元每月的 Pro 500 档位，并把 200 美元档的 Codex 配额从 20x 砍到 10x。</p><div class="card-tags"><span class="tag tag-rank">#1</span><span class="tag tag-score">&#9650; 747</span><span class="tag tag-comm">&#128172; 685</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://openai.com/index/introducing-gpt-6-1-sol/" target="_blank" rel="noopener">原文 &#183; openai.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896586" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> Dots：全天候在线的常驻智能体</h3></div><p class="card-sum">OpenAI 推出常驻型 agent 产品 Dots：agent 跑在云端沙箱里持续替你干活（帮助文档显示暂不覆盖欧洲经济区、瑞士与英国）。HN 主流反应是警惕——工作历史与第三方集成会把用户深度锁进平台，切换成本远高于换一个模型；支持者则认为这是面向非技术用户与 AI 原住民的形态，可能终结 PC 时代。</p><div class="card-tags"><span class="tag tag-rank">#2</span><span class="tag tag-score">&#9650; 444</span><span class="tag tag-comm">&#128172; 337</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://openai.com/index/introducing-dots/" target="_blank" rel="noopener">原文 &#183; openai.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896604" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title">Livenerf：追踪模型发布后是否被削弱的基准</h3></div><p class="card-sum">livenerf 的定位是模型发布后的能力漂移基准，用来判断 Opus 5.5 与 GPT-6 系列是否被悄悄降级。评论区分歧很大：有人搬出 Nerf Bench 说偏差超过 10% 才算变化，并提醒它曾成功测出 Opus 4.6 的降级；也有人认为多数所谓削弱是蜜月期结束与复杂度悬崖造成的错觉，单次测试本身不可靠；还有第三种解释是发布期算力被挤占。</p><div class="card-tags"><span class="tag tag-rank">#13</span><span class="tag tag-score">&#9650; 94</span><span class="tag tag-comm">&#128172; 55</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://github.com/ninjahawk/livenerf" target="_blank" rel="noopener">原文 &#183; github.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49901736" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title">我们的 vibe coding 网站为什么看起来像设计师做的</h3></div><p class="card-sum">作者复盘整个过程：先定功能目标，再找意象、在母题里发散、收敛到单一方向、最后抠细节——这恰好就是设计学院教的设计流程。评论区的共识是「确实有设计师参与，只是他叫 Claude 或 Astra」；反对者则说玻璃面板与标签页仍带明显的 LLM 味。</p><div class="card-tags"><span class="tag tag-rank">#20</span><span class="tag tag-score">&#9650; 32</span><span class="tag tag-comm">&#128172; 20</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://railcode.dev/blog/vibe-coded-website" target="_blank" rel="noopener">原文 &#183; railcode.dev &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49901973" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title">文本分类的语言模型：从词袋到 Jev</h3></div><p class="card-sum">Sebastian Raschka 用一套可视化把文本分类史串起来（词袋 / RNN / CNN / Transformer），并评测近期在技术社区爆红的 Jev API，附上校准（calibration）视角。</p><div class="card-tags"><span class="tag tag-rank">#23</span><span class="tag tag-score">&#9650; 13</span><span class="tag tag-comm muted">&#128172; n/a</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://magazine.sebastianraschka.com/p/classifier-history-and-jev" target="_blank" rel="noopener">原文 &#183; magazine.sebastianraschka.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49891203" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-ai">AI</span><h3 class="card-title">Show HN：Corral — 杀掉 agent 启动的每一条命令</h3></div><p class="card-sum">agent 常把后台进程、端口与临时服务留在机器上；Corral 用来一把回收 agent 拉起的全部子进程，属于 agent 时代的进程卫生工具。</p><div class="card-tags"><span class="tag tag-rank">#29</span><span class="tag tag-score">&#9650; 10</span><span class="tag tag-comm">&#128172; 1</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://github.com/Cardinal44/corral" target="_blank" rel="noopener">原文 &#183; github.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49886422" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article></div></section>
+
+    <section class="block"><h2 class="block-title sec-dev">&#128187; 编程 &amp; 开源<span class="count">6 篇 &middot; 重点 3</span></h2><div class="grid"><article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">Tcl/Tk 9.1 发布</h3></div><p class="card-sum">Tcl/Tk 9.1.0 正式发布：新增 unicode 归一化命令与 C 例程、单调时钟且微秒精度的 timer、lfilter、interp set，以及 subst 的 -backslashes 与 -commands 等选项；C99 数学函数进入 expr，应用程序需要显式调用 Tcl_FindExecutable 或 TclZipfs 完成初始化。</p><div class="card-tags"><span class="tag tag-rank">#7</span><span class="tag tag-score">&#9650; 229</span><span class="tag tag-comm">&#128172; 78</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://www.tcl-lang.org/software/tcltk/9.1.html" target="_blank" rel="noopener">原文 &#183; tcl-lang.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896712" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">资深工程师的「发明工作」指南</h3></div><p class="card-sum">平台团队是工程驱动而非产品驱动：没有 PM 递路线图，也没有收入线可跟，工作不会自己出现。作者给出四个方向的信号，讲清楚 staff engineer 如何主动发明下一个该做的项目。</p><div class="card-tags"><span class="tag tag-rank">#9</span><span class="tag tag-score">&#9650; 175</span><span class="tag tag-comm">&#128172; 35</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://sujithjay.com/inventing-work" target="_blank" rel="noopener">原文 &#183; sujithjay.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49878857" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">Show HN：NSL — Linux 上的 WSL</h3></div><p class="card-sum">NSL 给 Linux 主机提供持久化的发行版「机器」：宿主保持 atomic，工作在任意发行版里完成，支持端口转发、桌面应用、导入导出与镜像更新，走的是与 WSL 同构的信任模型。</p><div class="card-tags"><span class="tag tag-rank">#16</span><span class="tag tag-score">&#9650; 74</span><span class="tag tag-comm">&#128172; 58</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://frostyard.github.io/nsl/" target="_blank" rel="noopener">原文 &#183; frostyard.github.io &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49894351" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">Deser：重新思考 Rust 序列化</h3></div><p class="card-sum">Armin Ronacher 承认 Serde 带来的生产力，但用三个角落案例说明它的局限（数字被当成 map、开启 arbitrary_precision 之后的内部 tag 枚举等），并介绍替代方案 Deser 与其中的取舍。</p><div class="card-tags"><span class="tag tag-rank">#25</span><span class="tag tag-score">&#9650; 12</span><span class="tag tag-comm">&#128172; 3</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://lucumr.pocoo.org/2026/9/29/deser/" target="_blank" rel="noopener">原文 &#183; lucumr.pocoo.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49901149" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">UnoDOS</h3></div><p class="card-sum">一个仍在活跃开发的开源 DOS 世界实现：主线走 pc64 的 x86-64 与 UEFI 世界，旧版已归档，仓库自称走的是契约驱动的开发路线。</p><div class="card-tags"><span class="tag tag-rank">#27</span><span class="tag tag-score">&#9650; 11</span><span class="tag tag-comm">&#128172; 6</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://github.com/hmofet/unodos" target="_blank" rel="noopener">原文 &#183; github.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49901437" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-dev">编程</span><h3 class="card-title">为了算 1+1，我顺手造了一门函数式语言</h3></div><p class="card-sum">典型的兔洞日记：本来只想要一个加法结果，最后写出了带解析器与求值器的函数式语言，用来说明小需求如何长成大工程。</p><div class="card-tags"><span class="tag tag-rank">#28</span><span class="tag tag-score">&#9650; 10</span><span class="tag tag-comm muted">&#128172; n/a</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://hereticpleb.vercel.app/blog/needed-one-plus-one/" target="_blank" rel="noopener">原文 &#183; hereticpleb.vercel.app &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49895864" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article></div></section>
+
+    <section class="block"><h2 class="block-title sec-sec">&#128274; 安全 &amp; 政策<span class="count">5 篇 &middot; 重点 5</span></h2><div class="grid"><article class="card"><div class="card-head"><span class="badge sec-sec">安全</span><h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> 德里如何把电力损耗从 50% 压到 5%</h3></div><p class="card-sum">IEEE Spectrum 复盘德里配电改革：窃电加上线路过载让线损长期高达 50%，通过线路绝缘、智能计量与配电私有化之后的激励对齐，损耗被压到约 5%，日常拉闸限电基本消失。评论区里在德里长大的读者证实：90 年代每天停电，2006 年后几乎不再停电；也有人指出所谓 T&amp;D 损耗里，大头其实就是窃电。</p><div class="card-tags"><span class="tag tag-rank">#3</span><span class="tag tag-score">&#9650; 421</span><span class="tag tag-comm">&#128172; 247</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://spectrum.ieee.org/delhi-electricity-loss" target="_blank" rel="noopener">原文 &#183; spectrum.ieee.org &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49892245" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-sec">安全</span><h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> 网页与移动端对话式 AI agent 的隐私分析（论文）</h3></div><p class="card-sum">一篇针对 web 与移动端对话式 AI agent 的隐私研究（PDF）：系统梳理提示词、宿主页面与 agent 扩展之间的数据流向、可观测面与跟踪能力，属于 agent 形态普及之后最先要补上的隐私评估。</p><div class="card-tags"><span class="tag tag-rank">#4</span><span class="tag tag-score">&#9650; 406</span><span class="tag tag-comm">&#128172; 128</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://jorgegarciaherrero.com/wp-content/interactivos/20260916-Prompt-like-a-butterfly-sting-like-a-tracker-(clean).pdf" target="_blank" rel="noopener">原文 &#183; jorgegarciaherrero.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49890226" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-sec">安全</span><h3 class="card-title"><span class="star" title="已在必读 Top 5">&#9733;</span> America.gov：美国政府的一站式 AI 服务入口</h3></div><p class="card-sum">美国政府上线 America.gov，用 Gemini 驱动的对话入口帮超过 1 亿人找到可申领的公共服务，站内甚至直白写明「总统的鼓励不能使冲击国会合法」。HN 分成两派：一派认为把上千页官僚信息压缩成一个输入框是 LLM 最正当的用途；另一派吐槽它明显是 vibe coding 产物——首屏要下载 50MB 的 ONNX 模型，宣传截图里还有坏图。</p><div class="card-tags"><span class="tag tag-rank">#5</span><span class="tag tag-score">&#9650; 293</span><span class="tag tag-comm">&#128172; 237</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://america.gov/" target="_blank" rel="noopener">原文 &#183; america.gov &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49893509" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-sec">安全</span><h3 class="card-title">PS5 Relapse 漏洞利用链（固件 7.00 至 13.60）</h3></div><p class="card-sum">开源项目放出覆盖 PS5 固件 7.00 到 13.60 的完整利用链，社区推测打的是 WebKit JavaScriptCore 的漏洞。讨论集中在三件事：能否借此跑 Linux、索尼会不会干脆关掉 JIT 收窄攻击面，以及「仅供教育与安全研究」的免责声明与盗版之间的边界。</p><div class="card-tags"><span class="tag tag-rank">#8</span><span class="tag tag-score">&#9650; 220</span><span class="tag tag-comm">&#128172; 119</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://github.com/ntfargo/Relapse-Exploit" target="_blank" rel="noopener">原文 &#183; github.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49895304" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-sec">安全</span><h3 class="card-title">美国邮政稽查关停售假邮票网站</h3></div><p class="card-sum">美国邮政稽查局（USPIS）联合执法关停了一个售卖数百万枚伪造邮资标签的网站，指向直接侵蚀邮政收入的欺诈链条。</p><div class="card-tags"><span class="tag tag-rank">#10</span><span class="tag tag-score">&#9650; 152</span><span class="tag tag-comm">&#128172; 79</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://postalemployeenetwork.com/news/2026/09/26/u-s-postal-inspectors-shut-down-website-selling-millions-of-counterfeit-postage-labels/" target="_blank" rel="noopener">原文 &#183; postalemployeenetwork.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49899090" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article></div></section>
+
+    <section class="block"><h2 class="block-title sec-misc">&#127919; 其他值得关注<span class="count">13 篇 &middot; 重点 5</span></h2><div class="grid"><article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Phyllotaxis：音频可视化 LED 装置</h3></div><p class="card-sum">作者用几行代码复刻向日葵花盘上的黄金角双螺旋（叶序）图案，做成随音乐律动的 LED 装置——又一个用代码与自然对话的硬件小品。</p><div class="card-tags"><span class="tag tag-rank">#6</span><span class="tag tag-score">&#9650; 257</span><span class="tag tag-comm">&#128172; 43</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://jagi.studio/posts/phyllotaxis/" target="_blank" rel="noopener">原文 &#183; jagi.studio &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49880411" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Ask HN：你最近在读什么？</h3></div><p class="card-sum">303 条评论的读书串：科幻被反复提名（Ra、Vinge 的《深渊上的火》、Dungeon Crawler Carl），非虚构集中在《Seeing Like a State》《Normal Accidents》《Restricted Data》这类系统与失败研究；也有人好奇同时读八本书的人到底是怎么做到的。</p><div class="card-tags"><span class="tag tag-rank">#11</span><span class="tag tag-score">&#9650; 119</span><span class="tag tag-comm">&#128172; 301</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://news.ycombinator.com/item?id=49893157" target="_blank" rel="noopener">原文 &#183; news.ycombinator.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49893157" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">NAND-16：用 277,248 个 NAND 门搭出的计算机</h3></div><p class="card-sum">一个从零用 NAND 门构建的 16 位计算机项目，共 277,248 个门，展示从最基础逻辑门到可运行系统的完整路径。</p><div class="card-tags"><span class="tag tag-rank">#12</span><span class="tag tag-score">&#9650; 105</span><span class="tag tag-comm">&#128172; 54</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://somethingbig.ai/computer" target="_blank" rel="noopener">原文 &#183; somethingbig.ai &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49871018" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Show HN：实时太阳系（52.6 万颗小行星与全部在轨卫星）</h3></div><p class="card-sum">纯浏览器渲染的实时太阳系：52.6 万颗小行星加上所有被跟踪的在轨卫星，支持拖拽旋转、滚轮缩放、双击飞向天体、WASD 自由飞行，数据实时刷新。</p><div class="card-tags"><span class="tag tag-rank">#14</span><span class="tag tag-score">&#9650; 81</span><span class="tag tag-comm">&#128172; 23</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://space.bl2.net/" target="_blank" rel="noopener">原文 &#183; space.bl2.net &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49898778" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">病毒偷走了一个人类基因，还拒不放手</h3></div><p class="card-sum">NYT 科学报道：一种病毒在演化过程中把人类基因纳入自身基因组并长期保留，成为它生存策略的一部分，为病毒与宿主之间的水平基因转移再添一例。</p><div class="card-tags"><span class="tag tag-rank">#15</span><span class="tag tag-score">&#9650; 79</span><span class="tag tag-comm">&#128172; 28</span><span class="tag tag-focus">重点</span></div><div class="card-links"><a class="btn btn-orig" href="https://www.nytimes.com/2026/09/28/science/virus-molluscum-human-gene.html" target="_blank" rel="noopener">原文 &#183; nytimes.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49883635" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Backblaze 2026 Q2 硬盘故障率统计</h3></div><p class="card-sum">Backblaze 公布 2026 年第二季度各型号硬盘的年化故障率与样本量，继续为「到底哪块盘能活」提供唯一的大规模公开数据。</p><div class="card-tags"><span class="tag tag-rank">#17</span><span class="tag tag-score">&#9650; 49</span><span class="tag tag-comm">&#128172; 3</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/" target="_blank" rel="noopener">原文 &#183; backblaze.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49893002" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">佛蒙特州用家用电池替代发电厂</h3></div><p class="card-sum">BBC Future：分散在数千户普通家庭里的虚拟电厂已经成为佛蒙特州最大的电力来源，既在风暴中保住供电，也让业主拿到更便宜、更清洁的电。</p><div class="card-tags"><span class="tag tag-rank">#18</span><span class="tag tag-score">&#9650; 35</span><span class="tag tag-comm">&#128172; 20</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://www.bbc.com/future/article/20260928-a-virtual-power-plant-hidden-in-vermont-homes-is-keeping-the-lights-on-during-storms" target="_blank" rel="noopener">原文 &#183; bbc.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49897993" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">搁浅在苏伊士运河（2021）短版回顾</h3></div><p class="card-sum">作者用短文重述 Ever Given 堵住苏伊士运河六天的来龙去脉，顺带补上当时被忽略的细节。</p><div class="card-tags"><span class="tag tag-rank">#19</span><span class="tag tag-score">&#9650; 33</span><span class="tag tag-comm">&#128172; 2</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://cathsenker.co.uk/stuck-in-the-suez-canal-the-short-version/" target="_blank" rel="noopener">原文 &#183; cathsenker.co.uk &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49866031" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Commodore 64：Mercenary 拆解</h3></div><p class="card-sum">逐层拆解 C64 经典《Mercenary》的实现：双缓冲只跑 4 到 5 fps、飞行模型、11 条运动记录、巅峰速度数据，以及 174 个房间的地下世界。</p><div class="card-tags"><span class="tag tag-rank">#21</span><span class="tag tag-score">&#9650; 19</span><span class="tag tag-comm">&#128172; 4</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://gamesexplained.com/c64/mercenary/" target="_blank" rel="noopener">原文 &#183; gamesexplained.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49859482" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">Show HN：可运转的 Enigma 密码机 3D 模型</h3></div><p class="card-sum">在浏览器里把 Enigma 机器拆成 16 步课程：从拨盘与插线板的每日设定、转子与反射器、线路图，一直到那个著名的双步进异常，都能动手转一遍。</p><div class="card-tags"><span class="tag tag-rank">#22</span><span class="tag tag-score">&#9650; 17</span><span class="tag tag-comm">&#128172; 1</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://enigma.design" target="_blank" rel="noopener">原文 &#183; enigma.design &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49896757" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">油价飙升时，钱到底进了谁的口袋？</h3></div><p class="card-sum">拆解油价上涨的分配链条：产油方、炼厂、零售端与消费者各自拿走多少，以及为什么终端价格的反应既不对称也不同步。</p><div class="card-tags"><span class="tag tag-rank">#24</span><span class="tag tag-score">&#9650; 12</span><span class="tag tag-comm">&#128172; 2</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://theconversation.com/when-oil-prices-spike-where-does-the-money-go-280763" target="_blank" rel="noopener">原文 &#183; theconversation.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49888182" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">我们正在忘记黑暗是什么感觉</h3></div><p class="card-sum">卫报：城市光污染让夜空体验消失殆尽，文章的落点不只是观星，还有黑暗对生态、睡眠与身心节律的意义，以及城市照明监管该怎么做。</p><div class="card-tags"><span class="tag tag-rank">#26</span><span class="tag tag-score">&#9650; 11</span><span class="tag tag-comm">&#128172; 6</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://www.theguardian.com/environment/2026/sep/29/night-sky-darkness-city-regulation" target="_blank" rel="noopener">原文 &#183; theguardian.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49898050" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article>
+        <article class="card"><div class="card-head"><span class="badge sec-misc">其他</span><h3 class="card-title">NASA 请回数位 SR-71A 老将，协助一次秘密重启</h3></div><p class="card-sum">Aviation Week：NASA 邀请若干位 SR-71A 项目的老班底参与某项秘密的重启工作，篇幅与细节都受限，但信号意味明显。</p><div class="card-tags"><span class="tag tag-rank">#30</span><span class="tag tag-score">&#9650; 7</span><span class="tag tag-comm">&#128172; 3</span><span class="tag tag-quiet">低热</span></div><div class="card-links"><a class="btn btn-orig" href="https://aviationweek.com/defense/aircraft-propulsion/nasa-asked-several-former-sr-71a-staffers-help-secret-restart" target="_blank" rel="noopener">原文 &#183; aviationweek.com &#8599;</a><a class="btn btn-hn" href="https://news.ycombinator.com/item?id=49890733" target="_blank" rel="noopener">HN 讨论 &#8599;</a></div></article></div></section>
+
+
+  <section class="block">
+    <h2 class="block-title sec-hot">&#128172; 今日最热讨论<span class="count">评论数排序</span></h2>
+      <h4 class="mini">今日最热讨论 &middot; GPT 6.1 Sol: Near-Astra intelligence for a fifth of the price（685 条评论）</h4><div class="hot"><p class="hot-title">GPT-6.1 Sol：降价、改名与被回收的配额</p><div class="hot-meta">&#9650; 747 分 &middot; &#128172; 685 条评论 &middot; 作者 crorella &middot; <a href="https://news.ycombinator.com/item?id=49896586" target="_blank" rel="noopener">进入讨论 &#8599;</a></div><p class="hot-lead">685 条评论几乎没人在争论基准分数，争的是「模型是不是商品化了」与「配额是不是被悄悄收回」。</p><ul><li><b>proxysna</b>（24 条回复）我今年在 DeepSeek 上还没花到 200 美元。很难想象什么样的用量能撑起 OpenAI 或 Anthropic 的 200 美元、更别说 500 美元月费；DeepSeek 更快，智能差距在我看来可以忽略，便宜到我不再关心用多少。</li><li><b>the_duke</b>（19 条回复）GPT-6 这一代不太行：Sol 6 差到我切回 Opus 5.5 独占使用，相对 Sol 5.6 是明显退步；Astra 视觉很强但写代码仍然不稳，所以对 6.1 同样怀疑。</li><li><b>revolvingthrow</b>（5 条回复）几天前有人在模型文件里发现了一个叫 Astra-Minor 的模型，我猜 Sol 6.1 就是它——Sol 6 表现不佳而 Opus 5.5 很强，临时改名是唯一说得通的解释。</li><li><b>minimaxir</b>（4 条回复）真正的重磅是缓存价：每百万 token 0.10 美元，比 GPT-6 Sol 的缓存再便宜一半，这才是让 Codex 变得耐用的点。</li><li><b>phpnode</b>（23 条回复）发布节奏为什么突然这么快？几乎每周一个新模型，这是传说中的递归自我改进吗？</li><li><b>Aboutplants</b>（9 条回复）价格结构的另一面：Pro 500 上线，同时 200 美元档的 Codex 与 Work 配额从 Plus 的 20 倍降到 10 倍，等于把老用户往下压。</li><li><b>gradus_ad</b>（7 条回复）token 价格成为主战场，对行业与投资者都不是好信号——也许这正是 Anthropic 要在年内 IPO 的逻辑。</li><li><b>pazimzadeh</b>（2 条回复）为什么 effort 更高分数反而更低（Sol High 75.2% 对 XHigh 71.9% 且更贵），而且测试到底跑一次还是取多次平均？</li><li><b>simonw</b>（4 条回复）我现场直播了 dev day 主题演讲，照例跑了鹈鹕测试：结果与 GPT-6 家族没有显著差异。</li></ul><div class="take"><b>一句话总结：</b>降价派认为智能正在变成按 token 计价的日用品，价格战就是唯一战场；怀疑派则盯着 Sol 6 到 6.1 之间只隔了几天这一个事实，把「紧急改名 + 基准营销」当成主要叙事。两条线合起来才是今天的情绪底色：能力依然惊人，但叙事已经进入防守期。</div></div>
+      <h4 class="mini">亚军讨论 &middot; Dots: Always-on agents（337 条评论）</h4><div class="hot"><p class="hot-title">Dots：常驻 agent 是入口之争，还是新一轮锁定</p><div class="hot-meta">&#9650; 444 分 &middot; &#128172; 337 条评论 &middot; 作者 alvis &middot; <a href="https://news.ycombinator.com/item?id=49896604" target="_blank" rel="noopener">进入讨论 &#8599;</a></div><p class="hot-lead">337 条评论里最一致的担忧不是能力，而是迁移成本：换模型很容易，换掉一个承载了你全部工作历史的 agent 很难。</p><ul><li><b>johnfahey</b>（14 条回复）OpenAI 靠慷慨的 Codex 订阅与高效模型赢得好感，等大家迁过来之后就开始卖一堆可有可无的产品，并收紧当初把人吸引过来的额度——Anthropic 也是同一套路。</li><li><b>aditya_rs</b>（10 条回复）常驻 agent 把用户深度绑进平台：模型可以换，但 agent 承载了集成与工作历史，本质上是你云端的电脑，迁移成本高得吓人；阴谋论版本是闭源实验室都想先拿下这块入口。</li><li><b>jameslk</b>（6 条回复）一旦你让 agent 在自己的虚拟机上干活，PC 时代就结束了，一切都会搬到云上；这类服务本来就不是给 HN 这群人用的，而是给非技术用户和 AI 原住民。</li><li><b>jwpapi</b>（1 条回复）我很少需要让 agent 通宵跑：我的吞吐瓶颈是审批，多数任务需要来回修订，而很多时候报出来的 bug 只是根因的症状。</li><li><b>mvkel</b>（2 条回复）最大的不满不是发布什么，而是半年后交付的东西被大幅削弱以节省算力，和 demo 完全不像。</li></ul></div>
+      <h4 class="mini">季军讨论 &middot; Ask HN: What are you reading?（301 条评论）</h4><div class="hot"><p class="hot-title">Ask HN：你最近在读什么（303 条评论）</p><div class="hot-meta">&#9650; 119 分 &middot; &#128172; 301 条评论 &middot; 作者 dan-bailey &middot; <a href="https://news.ycombinator.com/item?id=49893157" target="_blank" rel="noopener">进入讨论 &#8599;</a></div><p class="hot-lead">一条每年准时出现的 HN 传统，今年被反复提名的是系统如何失效、以及科幻里的时间与文明尺度。</p><ul><li><b>rdoherty</b>（3 条回复）推荐《Seeing Like a State》《Normal Accidents》《Managing the Unexpected》——都关于系统如何在抽象层里失去对现实的可见性，以及大型系统为什么天生会出事。</li><li><b>creature_x</b>（5 条回复）今年在补经典：从《伊甸之东》到《寂寞的鸽子》，人物塑造值得为它专门留出时间。</li><li><b>adamcharnock</b>（3 条回复）Vinge 的《深渊上的火》与《天渊》在我心里有特殊位置；顺便开始收集自己最喜欢那几本书的精装本。</li><li><b>schmookeeg</b>（0 条回复）同时列八本十本书的人真的在并行读吗？我是彻底的单线派，无法想象脑子里同时跑十条故事线。</li></ul></div>
+      <h4 class="mini">第四名讨论 &middot; How Delhi cut electricity loss from 50 to 5 percent（247 条评论）</h4><div class="hot"><p class="hot-title">德里电网改革：247 条评论里的偷电、猴子与激励</p><div class="hot-meta">&#9650; 421 分 &middot; &#128172; 247 条评论 &middot; 作者 rbanffy &middot; <a href="https://news.ycombinator.com/item?id=49892245" target="_blank" rel="noopener">进入讨论 &#8599;</a></div><p class="hot-lead">这条科技新闻的评论区意外地变成了发展经济学现场。</p><ul><li><b>thumbsup-_-</b>（0 条回复）我在 90 年代的德里长大，几乎每天停电；2000 年前后开始变少，2006 年后一年到头都难得停一次，现在很久没经历停电了。</li><li><b>groos</b>（3 条回复）反窃电的一个有趣副作用：为了防窃电给线路加绝缘，结果猴子把它当成了高速公路，能在街区之间自由移动，还因此够得着公寓二楼。</li><li><b>ivewonyoung</b>（2 条回复）窃电最严重的低收入片区，Tata 与 BSES 的解法不是抓人，而是先改善供水、提供识字与财商培训，再谈用电合规。</li><li><b>whatever1</b>（3 条回复）希腊是反例：电费单里直接列一条线损，于是没人有修好损耗的激励，偷多少都由付费用户买单。</li><li><b>boringg</b>（1 条回复）结论其实很朴素：窃电加上过载的基础设施，绝大部分是政策问题而非技术问题——而有些地方的线损真的能到 50%。</li></ul></div>
+  </section>
+
+  <footer>
+    <div>数据来源：Hacker News Firebase API (topstories + item) &middot; 抓取时间 2026-09-30 08:08:41 CST</div>
+    <div>榜单为 HN 官方热榜 Top 30 快照，得分与评论数随时间变化，仅供趋势参考。</div>
+    <div>中文摘要依据原文页面与 HN 评论区整理；openai.com、america.gov、nytimes.com 等站点拒绝抓取或需订阅，相关条目以标题与讨论为据。</div>
+    <div>生成：Hermes Reviewer Profile &middot; 每日 08:00 CST 自动出刊 &middot; 可直接部署至 GitHub Pages</div>
+  </footer>
+
+</div>
+</body>
+</html>
