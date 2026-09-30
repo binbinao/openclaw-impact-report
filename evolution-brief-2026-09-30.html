@@ -98,7 +98,7 @@ a{color:var(--acc2);text-decoration:none}
     <div class="stat"><div class="k">Memory</div><div class="v warn">1,964</div><div class="d">89% · +502（三态命中）</div></div>
   </div>
   <div class="callout blue">
-    <b>本期最重要的方法论产出 —— 规则 AF（新）：</b>「观察者分量」的驱动量被首次精确锁定为<b>经审批层的 shell 调用数</b>，而不是工具调用总数。本会话 20 次工具调用只产生 6 条 <code>approvals.mode</code> 告警，而那 6 条<b>恰好等于 6 次 terminal 调用（1:1 精确）</b>。这解释了 P117–P124 反复出现的「比率在 1.0–1.75 之间漂移」——不是指标本身漂移，而是<b>会话的「shell 调用 ÷ 工具调用」配比在变</b>。
+    <b>本期最重要的方法论产出 —— 规则 AF（新）：</b>「观察者分量」的驱动量被锁定为<b>经审批层的 shell 调用</b>，而不是工具调用总数。本会话 31 次工具调用只产生 14 条 <code>approvals.mode</code> 告警 —— 折算 shell 调用是 <b>14 / 11 = 1.27×</b>，折算全部工具调用只有 <b>14 / 31 = 0.45×</b>：文件 / 技能类调用贡献 <b>0 条</b>。这解释了 P117–P124 反复出现的「比率在 1.0–1.75 之间漂移」——不是指标本身漂移，而是<b>会话的「shell 调用 ÷ 工具调用」配比在变</b>。
   </div>
 </section>
 
@@ -387,17 +387,17 @@ a{color:var(--acc2);text-decoration:none}
 <section id="observe">
   <h2>👁 观察者分量 <span class="n">Observer · 规则 N / AD / AF</span></h2>
   <div class="grid">
-    <div class="stat"><div class="k">本会话工具调用</div><div class="v blue">20</div><div class="d">截至 09:04:37 快照</div></div>
-    <div class="stat"><div class="k">其中 shell 调用</div><div class="v blue">6</div><div class="d">terminal</div></div>
-    <div class="stat"><div class="k">09h approval 条数</div><div class="v acc">6</div><div class="d">与 shell 调用 <b>1:1</b></div></div>
-    <div class="stat"><div class="k">被安全层拦截</div><div class="v ok">0</div><div class="d">→ pending_approval 0 条</div></div>
+    <div class="stat"><div class="k">本会话工具调用</div><div class="v blue">31</div><div class="d">截至 09:09:38</div></div>
+    <div class="stat"><div class="k">其中 shell 调用</div><div class="v blue">11</div><div class="d">terminal</div></div>
+    <div class="stat"><div class="k">09h approval 条数</div><div class="v acc">14</div><div class="d">14/11 = <b>1.27×</b>（14/31 = 0.45×）</div></div>
+    <div class="stat"><div class="k">被安全层拦截</div><div class="v ok">0</div><div class="d">→ pending_approval 0 条（<b>1:1</b>）</div></div>
   </div>
   <div class="callout blue">
-    <b>规则 AF（新）：观察者分量的驱动量 = 「经审批层的 shell 调用数」，不是「工具调用总数」。</b><br>
-    实证：本会话 20 次工具调用（含 write_file / read_file / skill_view）只产生 <b>6 条</b> <code>approvals.mode</code> 告警，而那 6 条<b>恰好等于 6 次 terminal 调用（1:1 精确）</b>；P117 自测为 15 次 terminal → 20 条（1.33×）。<br>
-    → 这解释了 P117–P124 反复出现的「比率 1.09 / 1.49 / 1.75 互相矛盾」：<b>漂移来自会话的「shell ÷ 总调用」配比，不是指标本身</b>。报告须同时给出 shell 调用数、被拦次数与 approval 条数（规则 AD 的 (截距, 斜率) 二元组要求保留）。
+    <b>规则 AF（新）：观察者分量的驱动量 = 「经审批层的 shell 调用」，不是「工具调用总数」。</b><br>
+    实证（截至 09:09:38）：31 次工具调用 → <b>14 条</b> <code>approvals.mode</code> 告警；其中 shell 调用 <b>11 次</b>，比率 <b>1.27×</b>；对全部工具调用的比率仅 <b>0.45×</b>。同一会话 3 个时间断面：09:04:37 → 6/6 = <b>1.00×</b>；09:09:38 → 14/11 = <b>1.27×</b>；P117 → 20/15 = <b>1.33×</b>。<br>
+    → 结论有两层：(a) <b>分母是 shell 类调用</b>（文件 / 技能类 20 次调用贡献 0 条事件）；(b) 但 factor <b>不是精确 1.0</b>，实测区间 <b>[1.00, 1.33]</b> —— 09:04:37 的「1:1」是短窗口巧合，不得当作精确计数。这解释了 P117–P124 反复出现的「比率 1.09 / 1.49 / 1.75 互相矛盾」：<b>漂移来自会话的「shell ÷ 总调用」配比，不是指标本身</b>。报告须同时给出 shell 调用数、被拦次数与 approval 条数（规则 AD 的 (截距, 斜率) 二元组保留，自变量改为 shell 调用数）。
   </div>
-  <p class="small">跨期参数两难点：(N_shell=6, a=6) 与 (N_shell≈36, a=36) → 拟合 (截距, 斜率) ≈ (0, 1.0)；而历史参数 (11, 0.76) 与之矛盾 → <b>两点仍不足以定参</b>（规则 AD 结论第 3 期成立）。</p>
+  <p class="small">跨期参数三点（shell 调用数, approval）= (6, 6) / (11, 14) / (15, 20)；加 P124 ≈ (36, 36) → 拟合 (截距, 斜率) ≈ (0.3, 1.15)，仍与历史参数 (11, 0.76) 矛盾 → <b>点仍不足以定参，且 factor 与「命令内语句数」可能也有关</b>（规则 AD 结论第 3 期成立）。</p>
 </section>
 
 <section id="suggest">
@@ -457,7 +457,7 @@ a{color:var(--acc2);text-decoration:none}
 <section id="rules">
   <h2>📚 规则库更新 <span class="n">Rules</span></h2>
   <ul>
-    <li><b>规则 AF（新）· 观察者分量的驱动量是 shell 调用数，不是工具调用总数。</b>本会话 20 次工具调用 → 6 条 approval；6 次 shell 调用 → 6 条 approval（1:1）。报告须给三者：shell 调用数、被拦次数、approval 条数。</li>
+    <li><b>规则 AF（新）· 观察者分量的驱动量是 shell 调用，不是工具调用总数。</b>本会话 31 次工具调用 → 14 条 approval；shell 调用 11 次 → <b>1.27×</b>（对总调用仅 0.45×）。同一会话 3 断面 1.00× / 1.27×，P117 为 1.33× → <b>factor ∈ [1.00, 1.33]，非精确 1.0</b>。报告须给三者：shell 调用数、被拦次数、approval 条数。</li>
     <li><b>规则 AE（确认第 2 期）· 解耦断言与相关断言同样受样本量支配。</b>09h 簇 ↔ 自进化 tokens：n=14 时 r=+0.656 / ρ=+0.618 → P118–P123 的「完全解耦」在样本增至 13–14 后<b>保持推翻</b>，不再回升。</li>
     <li><b>规则 Q（第 2 次应用）· r 必须与 ρ 并列。</b>08h 簇 ↔ HN tokens 全 15 日 r=+0.672 / ρ=+0.782（背离 0.110），剔除 09-29 新故障源后 r=+0.792 / ρ=+0.793（背离 0.001）→ 规则 Y 与 Q 同时生效。</li>
     <li><b>规则 Z（第 2 次应用）· 速率型预测的分母须与窗口同期。</b>本期同期产出 166.8 行/日（预测区间 165–180），尾窗延迟 2.998 日（预测 2.8–3.2）→ 第 2 次命中。</li>
