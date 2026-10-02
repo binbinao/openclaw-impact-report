@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年10月02日</title>
+<meta name="description" content="Hacker News 热门内容中文简报：Top 30 文章分类精选、必读 Top 5、AI 动态、编程开源、安全政策与今日最热讨论。">
+<style>
+:root{
+  --bg:#0d1117;
+  --card:#161b22;
+  --card-hi:#1c2333;
+  --border:#30363d;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --accent:#58a6ff;
+  --accent2:#79c0ff;
+  --green:#3fb950;
+  --green-soft:#7ee787;
+  --orange:#d29922;
+  --red:#f85149;
+  --purple:#bc8cff;
+  --pink:#ff7b72;
+  --cyan:#39d2c0;
+  --radius:12px;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.68;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% -8%,rgba(88,166,255,.13),transparent 42%),radial-gradient(circle at 88% 0%,rgba(188,140,255,.10),transparent 38%);
+  background-repeat:no-repeat;background-attachment:fixed;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:30px 18px 64px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{
+  border:1px solid var(--border);border-radius:18px;padding:26px 26px 22px;
+  background:linear-gradient(160deg,rgba(88,166,255,.10),rgba(22,27,34,.96) 55%);
+  box-shadow:0 8px 34px rgba(0,0,0,.35);
+}
+.hero .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent2);font-weight:700}
+.hero h1{margin:.35em 0 .25em;font-size:clamp(1.42rem,3.6vw,2.05rem);line-height:1.28;letter-spacing:-.01em}
+.hero .sub{color:var(--muted);font-size:.95rem;margin:0}
+.hero .sub b{color:var(--green-soft)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:14px;margin:22px 0 8px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:15px 17px}
+.stat .v{font-size:1.72rem;font-weight:800;letter-spacing:-.02em;color:var(--accent);line-height:1.2}
+.stat .v.g{color:var(--green-soft)}
+.stat .v.o{color:var(--orange)}
+.stat .v.p{color:var(--purple)}
+.stat .k{font-size:.8rem;color:var(--muted);margin-top:4px}
+.stat .n{font-size:.72rem;color:var(--muted);opacity:.75;margin-top:2px}
+section{margin-top:40px}
+h2.sec{display:flex;align-items:center;gap:10px;font-size:1.2rem;margin:0 0 6px;letter-spacing:-.01em}
+h2.sec .cnt{font-size:.75rem;font-weight:600;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 10px}
+.sec-note{color:var(--muted);font-size:.85rem;margin:0 0 16px}
+.card{display:flex;gap:14px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--border);border-radius:var(--radius);padding:15px 18px;margin-bottom:12px;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.card:hover{transform:translateY(-2px);border-color:var(--accent);background:var(--card-hi)}
+.card.top{border-left-color:var(--orange)}
+.card.ai{border-left-color:var(--purple)}
+.card.dev{border-left-color:var(--green)}
+.card.secx{border-left-color:var(--red)}
+.card.etc{border-left-color:var(--cyan)}
+.rank{flex:0 0 46px;font:800 1.02rem/1.5 var(--mono);color:var(--muted);text-align:right}
+.card.top .rank{color:var(--orange)}
+.cbody{flex:1;min-width:0}
+.cbody h3{margin:0 0 2px;font-size:1.03rem;line-height:1.45}
+.cbody h3 a{color:var(--text)}
+.card:hover .cbody h3 a{color:var(--accent2)}
+.orig{font-size:.78rem;color:var(--muted);margin:0 0 7px;font-family:var(--mono);word-break:break-word}
+.sum{margin:0 0 10px;font-size:.92rem;color:#c9d1d9}
+.meta{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--border);background:rgba(110,118,129,.12);color:var(--muted);white-space:nowrap}
+.tag.score{color:var(--orange);border-color:rgba(210,153,34,.45);background:rgba(210,153,34,.10)}
+.tag.cmt{color:var(--accent2);border-color:rgba(88,166,255,.40);background:rgba(88,166,255,.10)}
+.tag.cat-ai{color:var(--purple);border-color:rgba(188,140,255,.45);background:rgba(188,140,255,.10)}
+.tag.cat-dev{color:var(--green-soft);border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.10)}
+.tag.cat-sec{color:var(--pink);border-color:rgba(248,81,73,.45);background:rgba(248,81,73,.10)}
+.tag.cat-pol{color:var(--cyan);border-color:rgba(57,210,192,.45);background:rgba(57,210,192,.10)}
+.tag.cat-etc{color:#d2a8ff;border-color:rgba(210,168,255,.35);background:rgba(210,168,255,.08)}
+.tag.hot{color:var(--red);border-color:rgba(248,81,73,.5);background:rgba(248,81,73,.12)}
+.tag.disc{color:var(--accent);border-color:rgba(88,166,255,.5);background:rgba(88,166,255,.12)}
+.tag.disc:hover{text-decoration:none;background:rgba(88,166,255,.22)}
+.hot-box{background:linear-gradient(150deg,rgba(248,81,73,.10),rgba(22,27,34,.95));border:1px solid var(--border);border-left:3px solid var(--red);border-radius:var(--radius);padding:18px 20px}
+.hot-box h3{margin:0 0 10px;font-size:1.06rem}
+.hot-box p{margin:0 0 10px;font-size:.93rem;color:#c9d1d9}
+.hot-box ul{margin:8px 0 0;padding-left:20px;font-size:.9rem;color:#c9d1d9}
+.hot-box li{margin-bottom:5px}
+footer{margin-top:46px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem}
+footer code{font-family:var(--mono);color:var(--accent2);background:rgba(110,118,129,.15);padding:1px 6px;border-radius:5px}
+@media (max-width:560px){
+  .wrap{padding:20px 13px 48px}
+  .card{padding:13px 13px;gap:10px}
+  .rank{flex:0 0 34px;font-size:.9rem}
+  .hero{padding:20px 18px}
+  .stat .v{font-size:1.45rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="kicker">Hacker News Daily Brief</div>
+  <h1>Hacker News 每日简报 — 2026年10月02日</h1>
+  <p class="sub">抓取时间 08:00 CST（UTC+8）· Top 30 热门文章 · <b>22 篇</b>达到「得分 ≥ 50 或评论 ≥ 30」重点线 · 已按主题归入 6 个板块</p>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="v">30</div><div class="k">总文章数</div><div class="n">榜单前 30 名</div></div>
+  <div class="stat"><div class="v o">654</div><div class="k">最高得分</div><div class="n">Pi 1.0</div></div>
+  <div class="stat"><div class="v g">265</div><div class="k">最热评论数</div><div class="n">Ask HN: Who wants to be hired?</div></div>
+  <div class="stat"><div class="v p">142.7</div><div class="k">平均得分</div><div class="n">中位数 98 分</div></div>
+  <div class="stat"><div class="v">2009</div><div class="k">评论总量</div><div class="n">上榜文章合计</div></div>
+  <div class="stat"><div class="v g">22</div><div class="k">重点文章</div><div class="n">≥50 分或 ≥30 评论</div></div>
+</div>
+
+<section id="top5">
+  <h2 class="sec">🔥 必读 Top 5 <span class="cnt">按得分排序</span></h2>
+  <p class="sec-note">今日分数最高的五篇，均为主线级发布或高质量技术长文。</p>
+
+  <article class="card top">
+    <div class="rank">#1</div>
+    <div class="cbody">
+      <h3><a href="https://earendil.com/posts/pi-1-0/" target="_blank" rel="noopener">Pi 1.0：极简、可扩展的编码 Agent 框架迎来首个正式版</a></h3>
+      <p class="orig">Pi 1.0 — earendil.com</p>
+      <p class="sum">Earendil 发布 Pi 1.0，官方称其为「经过加固、极简、可扩展」的 agent harness，全球已有数十万人每周使用。本次加入 Codemode（原生 MCP 与非 LLM 模型）、虚拟模型扩展、延迟工具加载、Anthropic 缓存预热、对话中系统消息与新 TUI 主题，同时强调对「新特性」保持克制。</p>
+      <div class="meta"><span class="tag score">▲ 654 分</span><span class="tag cmt">💬 216 评论</span><span class="tag cat-ai">AI / Agent</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926069" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card top">
+    <div class="rank">#2</div>
+    <div class="cbody">
+      <h3><a href="https://github.com/streetcomplete/StreetComplete/issues/5421" target="_blank" rel="noopener">StreetComplete iOS 版进入公开测试：Kotlin Multiplatform + Compose 移植</a></h3>
+      <p class="orig">StreetComplete on iOS is now in public beta</p>
+      <p class="sum">这款 OpenStreetMap 众包地图编辑应用正式开放 iOS 公测，master ticket 的 11 项任务已全部完成。技术路线是把 100% Kotlin 代码库用 Kotlin Multiplatform 与 Compose Multiplatform 复用，UI 需逐步在 Compose 中重建，以最小化平台相关代码。</p>
+      <div class="meta"><span class="tag score">▲ 506 分</span><span class="tag cmt">💬 121 评论</span><span class="tag cat-dev">编程 / 开源</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49920160" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card top">
+    <div class="rank">#3</div>
+    <div class="cbody">
+      <h3><a href="https://blog.cloudflare.com/clef-decision-models/" target="_blank" rel="noopener">Cloudflare 开源决策模型 Clef / Clef-flash，并推出 RL 微调平台</a></h3>
+      <p class="orig">Clef: Open-weight decision models, and new RL fine-tuning platform</p>
+      <p class="sum">Cloudflare 发布两个自研「决策模型」并在 Workers AI 上托管：它们以低成本、低延迟产出有界（typed）结构化输出，用于分类与 agent 工作流路由，而非开放式文本生成，官方称 Clef 在 Jev Decision Index 上领先。模型以 Apache 2.0 在 Hugging Face 完全开源，同时首次推出让客户用自有数据微调 Clef 的强化学习产品。</p>
+      <div class="meta"><span class="tag score">▲ 400 分</span><span class="tag cmt">💬 154 评论</span><span class="tag cat-ai">AI / 决策模型</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49923692" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card top">
+    <div class="rank">#4</div>
+    <div class="cbody">
+      <h3><a href="https://turbopuffer.com/blog/rip-vector-database" target="_blank" rel="noopener">RIP，向量数据库：turbopuffer 重构存储架构，标注向量索引降为二级索引</a></h3>
+      <p class="orig">RIP, vector database — turbopuffer.com</p>
+      <p class="sum">turbopuffer 宣布 v3 将彻底重做存储布局：不再以 ANN 向量索引为主索引，而把它变成「普通」二级索引，从而同时加速文本、正则与向量检索，并让更多 SQL 查询（如 GROUP BY 与聚合）跑得动。作者回顾了 v1（ID + 向量、SPANN/SPFresh）到 v2（强文本检索）的演进，称向量优先架构已被推到极限。</p>
+      <div class="meta"><span class="tag score">▲ 261 分</span><span class="tag cmt">💬 75 评论</span><span class="tag cat-dev">数据库 / 基础设施</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49923466" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card top">
+    <div class="rank">#5</div>
+    <div class="cbody">
+      <h3><a href="https://nnethercote.github.io/2026/09/30/how-to-speed-up-the-rust-compiler-in-september-2026.html" target="_blank" rel="noopener">2026 年 9 月如何加速 Rust 编译器：两个月平均墙钟时间下降 4.57%</a></h3>
+      <p class="orig">How to speed up the Rust compiler in September 2026</p>
+      <p class="sum">Nicholas Nethercote 的例行性能复盘：7/29–9/28 期间 629 项基准中 555 项改善、仅 74 项回退，平均墙钟时间降低 4.57%。亮点包括 Clippy 启用 PGO（最佳提升 18%）、升级到 LLVM 23（均值 -1.2%），以及为新的 Polonius Alpha 借用检查器消除开销（serde 指令数 -3~5%）。</p>
+      <div class="meta"><span class="tag score">▲ 225 分</span><span class="tag cmt">💬 112 评论</span><span class="tag cat-dev">编程 / Rust</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49920896" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+</section>
+<section id="ai">
+  <h2 class="sec">🤖 AI 相关动态 <span class="cnt">8 篇</span></h2>
+  <p class="sec-note">今日 AI 板块的关键词：Agent 工程化（harness / 路由 / 通信）、模型专精化（决策模型），以及 AI 对科研流程的冲击。</p>
+
+  <article class="card ai">
+    <div class="rank">#7</div>
+    <div class="cbody">
+      <h3><a href="https://earendil.com/posts/pi-durable/" target="_blank" rel="noopener">Pi Durable：为「长时间运行、可持久」的 Agent 设计的实验性运行时</a></h3>
+      <p class="orig">Pi Durable — earendil.com</p>
+      <p class="sum">与 Pi 1.0 同日发布的实验性包，目标是让 agent 在任何地方运行、可被多种界面访问、支持无限长对话、可承受内外部灾难性故障，并允许多人同时操舵同一个 agent。官方强调它不是替代编码 agent，而是一套构建任意 agentic 应用的框架，与 Pi 共享 pi-ai 等代码及极简、可塑的原则。</p>
+      <div class="meta"><span class="tag score">▲ 186 分</span><span class="tag cmt">💬 19 评论</span><span class="tag cat-ai">AI / Agent</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49925969" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#28</div>
+    <div class="cbody">
+      <h3><a href="https://news.synopsys.com/2026-09-30-OpenAI-and-Synopsys-Announce-GPT-Synopsys-Frontier-Intelligence-to-Revolutionize-Chip-Design" target="_blank" rel="noopener">OpenAI 与 Synopsys 联合发布 GPT-Synopsys，瞄准芯片设计</a></h3>
+      <p class="orig">GPT-Synopsys: Frontier Intelligence to Revolutionize Chip Design</p>
+      <p class="sum">两家公司宣布以「前沿智能」改造芯片设计流程的联合产品 GPT-Synopsys，属于 EDA 与基础模型结合的典型案例。消息在社区引发热议，讨论集中在 AI 能否真正缩短流片周期，以及它对 EDA 工具三大厂格局的影响。</p>
+      <div class="meta"><span class="tag score">▲ 164 分</span><span class="tag cmt">💬 96 评论</span><span class="tag cat-ai">AI / EDA</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49919910" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#25</div>
+    <div class="cbody">
+      <h3><a href="https://arxiv.org/abs/2609.37725" target="_blank" rel="noopener">Context Language Models：让模型自己管理上下文（把上下文当作文件）</a></h3>
+      <p class="orig">Context Language Models — arXiv:2609.37725</p>
+      <p class="sum">论文提出 CLM：把上下文视为一个文件，允许模型对其做无限制更新，从而自主学习「什么值得留在上下文中」，并自然延伸到多 agent 场景（多个 agent 的上下文并存为文件）。据摘要，用现有模型零样本构建 CLM，在 BrowseComp-Plus 上以少 21.5% FLOPs 取得高 11.4% 的准确率，12 小时 EdgeBench 上以少 59% FLOPs 提升 5%，并用在线 RL 让 Qwen3.5-9B 在 BrowseComp-Plus 上提升 47.6%。</p>
+      <div class="meta"><span class="tag score">▲ 98 分</span><span class="tag cmt">💬 23 评论</span><span class="tag cat-ai">AI / 论文</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49922437" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#21</div>
+    <div class="cbody">
+      <h3><a href="https://news.ycombinator.com/item?id=49911500" target="_blank" rel="noopener">Show HN：开源编码 Agent 模型路由 Weave Router 2.0，宣称「Astra 级」表现</a></h3>
+      <p class="orig">Show HN: Open-source model routing for coding agents at Astra-level performance</p>
+      <p class="sum">作者称路由器可插入任意编码 agent（Claude Code / Codex）并按任务在多个 LLM 间切换，例如复杂调试交给 Astra、简单前端改动交给 DeepSeek v4 Flash。对比 GPT-6 Astra：Terminal Bench 4.0 与 SWE Atlas 上通过率持平，成本分别约 52% / 54%，速度快 2.2x / 2.5x；改进来自新架构、更大训练集与更聪明的缓存驱逐收益计算。</p>
+      <div class="meta"><span class="tag score">▲ 74 分</span><span class="tag cmt">💬 21 评论</span><span class="tag cat-ai">AI / 路由</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49911500" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#16</div>
+    <div class="cbody">
+      <h3><a href="https://stoppels.ch/goalposts/" target="_blank" rel="noopener">投票：Hacker News 当年给 AI 出的「挑战」，哪些已经被兑现？</a></h3>
+      <p class="orig">Vote on which of Hacker News' challenges for AI have been met</p>
+      <p class="sum">一个交互式页面，把社区历年对 AI 的质疑逐条列出并让读者投票（已实现 / 不确定 / 未实现），投票现已关闭并可查看结果。它记录的是「移动的球门柱」现象——每次 AI 达到某标准后，标准本身也会随之上移。</p>
+      <div class="meta"><span class="tag score">▲ 71 分</span><span class="tag cmt">💬 69 评论</span><span class="tag cat-ai">AI / 社区</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49924618" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#4</div>
+    <div class="cbody">
+      <h3><a href="https://github.com/Vibra-Ingenn/Janus" target="_blank" rel="noopener">Show HN：Janus —— 用 Go 写的单二进制本地 LLM 服务，经 Vulkan 跑 GGUF</a></h3>
+      <p class="orig">Show HN: Janus – Go binary that runs GGUF models via Vulkan on AMD/Intel/Nvidia</p>
+      <p class="sum">单个 Go 二进制即可在本机（GPU 或 CPU）运行 .gguf 模型，暴露 OpenAI 兼容 API，不需要 Python、Docker 或 Ollama。支持 AMD/Intel/NVIDIA 的 Vulkan 后端与 CPU 回退、模型热切换、thinking 模型 reasoning_content 拆分、以及从 GGUF 元数据自动识别 chat 模板。</p>
+      <div class="meta"><span class="tag score">▲ 44 分</span><span class="tag cmt">💬 4 评论</span><span class="tag cat-ai">AI / 本地推理</span><span class="tag cat-dev">开源</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926773" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#10</div>
+    <div class="cbody">
+      <h3><a href="https://resobscura.substack.com/p/using-opus-55-to-discover-a-new-eyewitness" target="_blank" rel="noopener">用 Opus 5.5 发掘出一份关于渡渡鸟的新目击史料</a></h3>
+      <p class="orig">Using Opus 5.5 to discover a new eyewitness record of the dodo</p>
+      <p class="sum">一篇史学研究随笔，作者借助 Claude Opus 5.5 在史料中定位到此前未被识别的关于渡渡鸟的目击记录。它更像「AI 用于人文学科原始资料挖掘」的个例演示，而非产品发布。</p>
+      <div class="meta"><span class="tag score">▲ 36 分</span><span class="tag cmt">💬 2 评论</span><span class="tag cat-ai">AI / 人文研究</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926917" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card ai">
+    <div class="rank">#12</div>
+    <div class="cbody">
+      <h3><a href="https://aweb.ai" target="_blank" rel="noopener">Aweb：给 AI Agent 用的通信层（稳定身份 + 持久邮件/聊天 + 唤醒事件）</a></h3>
+      <p class="orig">Aweb – Communication for AI Agents</p>
+      <p class="sum">MIT 许可、可自托管、支持联邦的 agent 通信协议：为 agent 提供稳定身份、跨会话/运行时/机器的持久邮件与聊天，以及唤醒（wake-up）事件；消息是服务端的持久状态，落后一方离线时消息会等待。已为 Claude Code 与 Pi 提供维护中的唤醒集成，其他运行时可通过事件流接入。</p>
+      <div class="meta"><span class="tag score">▲ 11 分</span><span class="tag cmt">💬 5 评论</span><span class="tag cat-ai">AI / 协议</span><span class="tag cat-dev">开源</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49927587" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+</section>
+<section id="dev">
+  <h2 class="sec">💻 编程 &amp; 开源 <span class="cnt">8 篇</span></h2>
+  <p class="sec-note">从 Git 3.0 的哈希默认值之争，到框架大版本（SvelteKit 3 / Effect 4.0）与工具链新作，今日编程板块信息量很足。</p>
+
+  <article class="card dev">
+    <div class="rank">#15</div>
+    <div class="cbody">
+      <h3><a href="https://blog.gitbutler.com/git-3-sha-256" target="_blank" rel="noopener">Git 3.0 将默认改用 SHA-256，作者称这是「代价高昂的错误」</a></h3>
+      <p class="orig">Git 3.0's upcoming SHA-256 default will be a costly mistake — Butler's Log</p>
+      <p class="sum">Scott Chacon 长文（17 分钟阅读）反对 Git 3.0 把默认哈希从 SHA-1 换成 SHA-256：他认为这是一次「难以想象的昂贵、最终无价值且本可避免的全球性折腾」，而几乎没人意识到即将发生什么。文章先回顾 Git 作为内容寻址数据库的哈希原理与 SHA-1 二十年来的实际表现，再展开反对理由；这也是今日评论数第二高（204 条）的技术争论。</p>
+      <div class="meta"><span class="tag score">▲ 177 分</span><span class="tag cmt">💬 204 评论</span><span class="tag cat-dev">编程 / Git</span><span class="tag hot">🔥 热议</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49924179" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#23</div>
+    <div class="cbody">
+      <h3><a href="https://molily.de/web-dev-education/" target="_blank" rel="noopener">Web 开发教育的消亡：GenAI 如何摧毁了独立教育者的生意</a></h3>
+      <p class="orig">The death of web development education</p>
+      <p class="sum">文章梳理 Baldur Bjarnason 等人的观察：培训与教程需求崩塌，开发者转向「易出错、面向过去、非确定性的聊天机器人」来做所谓的学习。文中引用 Axel Rauschmayer（2ality）的自述——图书收入从 2024 年足以维生变为 2026 年的零，博客/免费书流量几乎全部来自 AI 爬虫而无广告收入，因此他选择下线内容。</p>
+      <div class="meta"><span class="tag score">▲ 134 分</span><span class="tag cmt">💬 104 评论</span><span class="tag cat-dev">行业 / 教育</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49927100" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#22</div>
+    <div class="cbody">
+      <h3><a href="https://con.racket-lang.org/" target="_blank" rel="noopener">RacketCon 就在本周六</a></h3>
+      <p class="orig">RacketCon Is Saturday</p>
+      <p class="sum">Racket 语言年度大会本周六举行，站点公布了议程与参与方式。属于小而稳定的语言社区活动，今日仍以 121 分进入前列。</p>
+      <div class="meta"><span class="tag score">▲ 121 分</span><span class="tag cmt">💬 33 评论</span><span class="tag cat-dev">语言 / 社区</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49922515" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#3</div>
+    <div class="cbody">
+      <h3><a href="https://svelte.dev/blog/sveltekit-3-is-here" target="_blank" rel="noopener">SvelteKit 3 发布：更少累赘、更强类型，配置移入 vite.config.ts</a></h3>
+      <p class="orig">SvelteKit 3 — svelte.dev</p>
+      <p class="sum">官方应用框架 SvelteKit 升至 3.0，定位是「同一个框架，多一点打磨、多一点类型安全、少一点垃圾」。主要破坏性变更：配置从 svelte.config.js 迁到 vite.config.ts、$lib 别名改为 #lib、环境变量更强、service worker 样板更少；提供 sv migrate 自动迁移并生成 TODO，远程函数（remote functions）仍需 Async Svelte 实验开关。Svelte Summit 将于 11/19–20 在卢布尔雅那举行，兼庆 Svelte 十周年。</p>
+      <div class="meta"><span class="tag score">▲ 88 分</span><span class="tag cmt">💬 24 评论</span><span class="tag cat-dev">前端 / 框架</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926536" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#19</div>
+    <div class="cbody">
+      <h3><a href="https://tangled.org/burrito.space/bez" target="_blank" rel="noopener">Bez：用「规范 + 测试」生成浏览器引擎</a></h3>
+      <p class="orig">Bez: Generating a browser engine from specs and tests</p>
+      <p class="sum">一个实验性项目（Tangled 上托管，主体为 Rust），思路是把 Web 规范与测试套件当作输入来生成浏览器引擎实现。仓库中可见大量 aspect-ratio、viewport-units、logical-properties、tables-fixed-layout 等规范切片与对照结果，探索「以测试为规格」的引擎生成路径。</p>
+      <div class="meta"><span class="tag score">▲ 83 分</span><span class="tag cmt">💬 31 评论</span><span class="tag cat-dev">编程 / 浏览器</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49925036" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#30</div>
+    <div class="cbody">
+      <h3><a href="https://effect.website/blog/releases/effect/40" target="_blank" rel="noopener">Effect 4.0 发布：核心零依赖、按地重建，绑定体积缩小 5 倍</a></h3>
+      <p class="orig">Effect 4.0</p>
+      <p class="sum">官方称这是史上最激进的一次发布：Effect 被彻底重写，核心包零运行时依赖，并采用单一版本、同步发布的「一个生态」。对比 3.x：并发任务吞吐 6.4 倍、每 fiber 内存减少 86%、最小程序体积从 35.6 kB 降至 7.1 kB；官方称 4.x 周下载已达 43.9M、采用率 56% 已超过 3.x。</p>
+      <div class="meta"><span class="tag score">▲ 42 分</span><span class="tag cmt">💬 21 评论</span><span class="tag cat-dev">TypeScript / 框架</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49925812" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#6</div>
+    <div class="cbody">
+      <h3><a href="https://www.cssbed.com" target="_blank" rel="noopener">CSS Bed：无 class 的 CSS 主题合集，做网页的「不那么丑」起点</a></h3>
+      <p class="orig">CSS Bed: Classless CSS themes to use as starting points in web development</p>
+      <p class="sum">一个 classless CSS 片段画廊：把一段样式贴进 &lt;head&gt; 即可让原生 HTML 直接好看，内置 pico.css、water.css、sakura、tufte、bootstrap 等 30 余套主题并可一键切换预览。卖点是响应式、体积小（多数几 KB）、无需学习 class 体系，适合文档页与原型。</p>
+      <div class="meta"><span class="tag score">▲ 38 分</span><span class="tag cmt">💬 9 评论</span><span class="tag cat-dev">CSS / 前端</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49927212" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card dev">
+    <div class="rank">#29</div>
+    <div class="cbody">
+      <h3><a href="https://rhun.app/" target="_blank" rel="noopener">Show HN：Rhun —— 用汇编写的开源代码编辑器</a></h3>
+      <p class="orig">Show HN: Rhun, an open-source code editor written in assembly</p>
+      <p class="sum">跨 Windows/Linux/macOS 的小体积编辑器，官方口号是「让 AI 干重活，让编辑器保持轻量」：支持标签页、语法高亮、模糊搜索与可选 Vim 模式，可在代码旁运行构建、shell 命令与编码 agent，并跟随 Claude Code / Codex 会话，内置 39 套主题。</p>
+      <div class="meta"><span class="tag score">▲ 28 分</span><span class="tag cmt">💬 9 评论</span><span class="tag cat-dev">工具 / 编辑器</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926726" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+</section>
+<section id="sec">
+  <h2 class="sec">🔒 安全 &amp; 政策 <span class="cnt">4 篇</span></h2>
+  <p class="sec-note">AI 时代的开放获取治理、联网汽车的数据隐私、以及硬件层面的「隐藏能力」，共同构成本板块主线。</p>
+
+  <article class="card secx">
+    <div class="rank">#17</div>
+    <div class="cbody">
+      <h3><a href="https://www.rtl-sdr.com/various-projects-independently-find-hidden-sdr-capabilities-in-esp32-microcontrollers/" target="_blank" rel="noopener">多个项目独立发现 ESP32 的隐藏 SDR 能力：可抓原始 IQ 采样</a></h3>
+      <p class="orig">Various Projects Find Hidden SDR Capabilities in ESP32 Microcontrollers</p>
+      <p class="sum">ESPARGOS 团队发现多款 ESP32 芯片有未公开特性，可绕过固定 WiFi/蓝牙功能直接捕获原始 IQ 基带采样，使芯片变成覆盖 2.2–2.7 GHz（C5 另加 4.8–6.0 GHz）、采样率至 80 MS/s 的内置 SDR。受限于输出带宽，通常只能做频谱快照而非连续解调，例外是新 ESP32-S31 可经千兆网口以 16 MS/s 连续流式输出；ESP-WebSDR 支持直接从浏览器刷固件并查看实时频谱与瀑布图。团队还提到相位相干采样已可行，但不会实现相干发射，因为「可能被滥用」。</p>
+      <div class="meta"><span class="tag score">▲ 152 分</span><span class="tag cmt">💬 25 评论</span><span class="tag cat-sec">安全 / 硬件</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49922674" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card secx">
+    <div class="rank">#14</div>
+    <div class="cbody">
+      <h3><a href="https://automatictransmission.khoury.northeastern.edu/index.html" target="_blank" rel="noopener">「自动传输」：联网汽车数据隐私实证研究（21 辆车 / 30 个 App）</a></h3>
+      <p class="orig">Automatic Transmission – a data-privacy study of connected vehicles</p>
+      <p class="sum">东北大学团队在 2024-10 至 2025-08 间，在受控环境中测试 21 款美国市场车辆与 30 个配套手机 App，通过 Raspberry Pi 伪 AP + tcpdump 抓取车辆 WiFi 流量，回答「传了什么个人数据、传给谁、厂商如何回应」。核心结论：数据一旦离开设备，消费者便失去控制，常被分享或出售给未披露的第三方；这是今日评论数第三高（128 条）的讨论。</p>
+      <div class="meta"><span class="tag score">▲ 132 分</span><span class="tag cmt">💬 128 评论</span><span class="tag cat-sec">隐私 / 安全</span><span class="tag hot">🔥 热议</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926628" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card secx">
+    <div class="rank">#11</div>
+    <div class="cbody">
+      <h3><a href="https://blog.arxiv.org/2026/10/01/updated-rate-limit-policy/" target="_blank" rel="noopener">arXiv 更新全站投稿限流政策：AI 驱动的投稿洪峰</a></h3>
+      <p class="orig">ArXiv's Updated Rate Limit Policy</p>
+      <p class="sum">自 2026-10-01 起 arXiv 对所有投稿人与分类实施新的限流规则，作为 AI 工具普及期的临时措施。官方数据：2016 年 9 月投稿 9,869 篇 → 2024 年 9 月 20,569 篇 → 2026 年 9 月 40,363 篇（创纪录，且产生近 9,000 个支持工单）；审稿人正观察到大量内容单薄的「薄论文」，政策目标是给改进审核工具争取时间。</p>
+      <div class="meta"><span class="tag score">▲ 60 分</span><span class="tag cmt">💬 16 评论</span><span class="tag cat-pol">科技政策 / 学术</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49926512" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card secx">
+    <div class="rank">#18</div>
+    <div class="cbody">
+      <h3><a href="https://www.theapplepost.com/2026/10/01/72882/apples-smart-home-camera-reportedly-wont-record-video/" target="_blank" rel="noopener">传闻称苹果智能家居摄像头「不录像」，改用 AI 理解家中活动</a></h3>
+      <p class="orig">Apple's smart home camera reportedly won't record video</p>
+      <p class="sum">据 Bloomberg 的 Mark Gurman，苹果首款家用摄像头（内部代号 J450）将不做视频录制，而是以低帧率摄像头 + 人脸识别与红外传感器识别人与宠物，输出「检测到的事件」并驱动自动化（如人离开房间自动关灯）。若属实，隐私将成为其与 Ring / Nest 的核心差异点。</p>
+      <div class="meta"><span class="tag score">▲ 7 分</span><span class="tag cmt">💬 1 评论</span><span class="tag cat-sec">隐私 / 硬件</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49928054" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+</section>
+
+<section id="etc">
+  <h2 class="sec">🎯 其他值得关注 <span class="cnt">4 篇</span></h2>
+  <p class="sec-note">招聘季固定贴、海洋生物学新解，以及一则「美国式」地方趣闻。</p>
+
+  <article class="card etc">
+    <div class="rank">#5</div>
+    <div class="cbody">
+      <h3><a href="https://news.ycombinator.com/item?id=49922569" target="_blank" rel="noopener">Ask HN：谁在招聘？（2026 年 10 月）</a></h3>
+      <p class="orig">Ask HN: Who is hiring? (October 2026)</p>
+      <p class="sum">HN 每月固定的招聘帖，本次 138 分、142 条评论，发布者是 whoishiring 官方账号。据评论区结构，可见大量远程岗位与 AI / 基础设施方向需求，是观察当期就业市场的一手样本。</p>
+      <div class="meta"><span class="tag score">▲ 138 分</span><span class="tag cmt">💬 142 评论</span><span class="tag cat-etc">社区 / 招聘</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49922569" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card etc">
+    <div class="rank">#24</div>
+    <div class="cbody">
+      <h3><a href="https://news.ycombinator.com/item?id=49922568" target="_blank" rel="noopener">Ask HN：谁想被雇佣？（2026 年 10 月）</a></h3>
+      <p class="orig">Ask HN: Who wants to be hired? (October 2026)</p>
+      <p class="sum">与招聘帖配对的求职帖，以 265 条评论成为今日评论数最高的条目（得分 85）。求职者以固定格式列出所在地、是否接受远程、技术栈与联系方式，是观察人才供给与技能分布的窗口。</p>
+      <div class="meta"><span class="tag score">▲ 85 分</span><span class="tag cmt">💬 265 评论</span><span class="tag hot">🔥 最热讨论</span><span class="tag cat-etc">社区 / 招聘</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49922568" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card etc">
+    <div class="rank">#13</div>
+    <div class="cbody">
+      <h3><a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2026AV002570" target="_blank" rel="noopener">缺氧水下区域或许不是「死亡区」，而是早期生命的线索</a></h3>
+      <p class="orig">Oxygen-deprived underwater zones may not be "dead zones" but clue to early life</p>
+      <p class="sum">AGU 期刊论文提出对海洋缺氧区的新解读：这类低氧水体不一定只是生态灾难的「死亡区」，其化学环境可能为理解早期生命起源提供线索。今日科学类条目中得分最高的一篇（72 分），但讨论不多。</p>
+      <div class="meta"><span class="tag score">▲ 72 分</span><span class="tag cmt">💬 3 评论</span><span class="tag cat-etc">科学 / 地球</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49925742" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+
+  <article class="card etc">
+    <div class="rank">#27</div>
+    <div class="cbody">
+      <h3><a href="https://locaterodeo.net/" target="_blank" rel="noopener">2026 国际公用设施定位竞技大会（Utility Locate Rodeo）</a></h3>
+      <p class="orig">2026 International Utility Locate Rodeo</p>
+      <p class="sum">地下管线定位技师的职业技能竞赛，比的是谁能最准确地标出埋地管线与电缆——一个平时少被讨论却关乎施工安全与断网事故的行业。纯趣味条目，7 分、0 评论上榜，属于 HN 的「冷知识」时刻。</p>
+      <div class="meta"><span class="tag score">▲ 7 分</span><span class="tag cmt">💬 0 评论</span><span class="tag cat-etc">其他 / 趣闻</span><span class="tag disc"><a href="https://news.ycombinator.com/item?id=49927844" target="_blank" rel="noopener" style="color:inherit">HN 讨论 →</a></span></div>
+    </div>
+  </article>
+</section>
+<section id="hot">
+  <h2 class="sec">💬 今日最热讨论 <span class="cnt">按评论数</span></h2>
+  <div class="hot-box">
+    <h3>评论数榜首：Ask HN「谁想被雇佣？」（265 条）—— 结构性热点，而非技术争论</h3>
+    <p>今日评论数第一的是每月固定的求职帖（85 分 / 265 条），它靠的是逐条自荐的累积流量，而非观点交锋；与之配对的招聘帖（138 分 / 142 条）同日上榜。这两帖反映的是一种稳定的社区「基础设施」，不宜当作当日技术风向标。</p>
+    <p><b>真正有实质争辩的是这三场：</b></p>
+    <ul>
+      <li><b>Pi 1.0（216 条）</b>——极简 agent harness 的「克制哲学」引发争论：在 agentic 工具每周剧变的当下，只采纳已被验证的特性，究竟是稳健还是保守？讨论自然延伸到与 Claude Code / Codex 的定位比较。</li>
+      <li><b>Git 3.0 默认 SHA-256（204 条）</b>——今日最有价值的分歧：反对者认为这是一次全球性的昂贵迁移、收益近乎为零；支持者则强调哈希迁移性的长期风险。值得注意的是这只是一个 177 分的帖子，却产生了远超得分比例的深度讨论。</li>
+      <li><b>联网汽车隐私研究（128 条）</b>——实证数据（21 辆车 / 30 个 App）让「数据一旦离开设备便失控」的论断有了证据，讨论聚焦于厂商责任与监管可行性。</li>
+    </ul>
+    <p style="margin-bottom:0"><b>另两个高热话题：</b>Clef 决策模型（154 条）让人重新审视「小模型做有界分类」与 LLM 的边界；StreetComplete iOS 公测（121 条）则把 Kotlin Multiplatform 的实战可行性推上台面。</p>
+  </div>
+</section>
+
+<footer>
+  <p><b>数据来源：</b>Hacker News 官方 Firebase API（<code>topstories</code> / <code>item</code>，v0），取榜单前 30 条并在生成时刻采集得分与评论数。<b>抓取时间：</b>2026-10-02 08:00 CST（UTC+8）。</p>
+  <p><b>筛选口径：</b>重点文章 = 得分 ≥ 50 或评论数 ≥ 30，共 22 篇入选本简报（另有 8 篇未达线者未收录）；分类为人工判读，可能与你心目中的归类不同。得分与评论数为快照值，会随时间变化。</p>
+  <p><b>摘要说明：</b>中文摘要依据原文页面（标题、描述与正文首段）撰写，未做外部推测；个别页面因抓取受限（SSL / 403）仅依据官方标题与描述概括，已尽量标明不确定性。原文链接指向文章本体，每篇同时提供 HN 讨论入口。</p>
+  <p>本简报由 Hermes Agent（reviewer profile）自动生成 · Hacker News 每日简报 · 2026年10月02日</p>
+</footer>
+</div>
+</body>
+</html>
