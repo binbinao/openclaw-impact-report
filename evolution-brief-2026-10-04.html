@@ -143,8 +143,8 @@
   <p class="small">尾窗出现一个此前历史上从未出现过的 logger：<code>tools.browser_supervisor: CDP supervisor cron:9ec6cb79e14d:38be…: connect failed (attempt N): [Errno 111] Connect call failed ('127.0.0.1', 44785)</code>。全文件<b>首次出现 = 2026-10-04 09:03:14</b>，会话 id 正是<b>本简报自身</b>。</p>
   <ul class="small">
     <li><b>触发链：</b>本会话第一次调用 <code>browser_exec</code>（一次探针式调用）→ 浏览器工具现场装配 venv（<i>Downloading cryptography 4.5MiB / Installed 104 packages</i>）并拉起 CDP supervisor → 随后 chrome 侧 CDP 端点（44785）不可达 → supervisor 以 <b>精确 10 秒</b>间隔无限重试。</li>
-    <li><b>实测（截至 09:06:10，attempt 21 仍在继续）：</b>09:03:14 → 09:05:59 共 21 条 / 176 s = <b>1 条 / 8.4 s ≈ 10,300 条/日</b>；同期 reviewer <code>errors.log</code> 增速实测 <b>+28.8 B/s ≈ +2.49 MB/日</b>。</li>
-    <li><b class="r">后果：</b>按该速率，reviewer <code>errors.log</code>（1,578,022 B / 75.2%）将在 <b>约 5.0 小时</b>内（≈ 10-04 14:00 CST）撞上 2 MiB 阈值并触发<b>提前轮转</b> —— 本文 §5 中「reviewer ETA ≈39 日」的估算<b>在写成后 3 分钟内即被本会话自身的行为推翻</b>。</li>
+    <li><b>实测（截至 09:08:49，attempt 36 仍在继续）：</b>09:03:14 → 09:08:39 共 36 条 / 331 s = <b>1 条 / 9.0 s ≈ 9,600 条/日</b>；同期 reviewer <code>errors.log</code> 增速实测 <b>+23 B/s ≈ +2.0 MB/日</b>。</li>
+    <li><b class="r">后果：</b>按该速率，reviewer <code>errors.log</code>（1,581,683 B / 75.4%）将在 <b>约 6.2 小时</b>内（≈ 10-04 15:15 CST）撞上 2 MiB 阈值并触发<b>提前轮转</b> —— 本文 §5 中「reviewer ETA ≈39 日」的估算<b>在写成后 3 分钟内即被本会话自身的行为推翻</b>。</li>
     <li><b>定性（规则 K/O/AB）：</b>等间隔 + message 描述失败 ⇒ 故障循环；但循环的<b>制造者是观察者</b>（规则 N 的新形态：观察者不仅放大计数，还能<b>创造新的尾窗成分与新的增长源</b>）。该 logger 的计数<b>不得</b>计入任何系统状态判定。</li>
     <li><b>不确定性声明：</b>循环是否随本 cron 会话结束而终止<b>尚未验证</b>（本期只观测到其持续 ≥3 分钟）。若其跨会话存活，则这是一条<b>无上界的自造日志源</b>，优先级应高于任何既存噪声源。</li>
   </ul>
@@ -157,7 +157,7 @@
   <tr><td><code>tools.registry</code></td><td class="n">78</td><td class="n">15.6%</td><td>INFRA · 恒 13/日，check_fn 可用性探测</td></tr>
   <tr><td><code>agent.tool_executor</code></td><td class="n">37</td><td class="n">7.4%</td><td>混合容器：23 pending(INFRA) / <b>9 other</b> / <b>5 ddgs FUNC</b></td></tr>
   <tr><td><code>hermes_cli.plugins</code></td><td class="n">33</td><td class="n">6.6%</td><td>INFRA · 恒 6/日（superpowers plugin.json 解析失败）</td></tr>
-  <tr><td><code>tools.browser_supervisor</code></td><td class="n">≥21</td><td class="n">≈4%</td><td><b class="r">观察者分量 · 10s 等间隔故障循环</b>（本期首现，仍在生长）</td></tr>
+  <tr><td><code>tools.browser_supervisor</code></td><td class="n">≥36</td><td class="n">≈7%</td><td><b class="r">观察者分量 · 10s 等间隔故障循环</b>（本期首现，仍在生长）</td></tr>
   <tr><td><code>cron.scheduler</code></td><td class="n">6</td><td class="n">1.2%</td><td>INFRA · 1/日</td></tr>
 </table>
 <p class="small"><b>INFRA 474 / FUNC 14</b> → 传统公式分 <b>85.0</b> / 审查后公式分 <b>99.58</b>（差距 14.58，与 P127 的 14.34 / P128 的 14.58 连续 3 期恒定）。<br>
@@ -179,7 +179,7 @@
   <tr><td>10-04*</td><td class="n">20</td><td class="n a">53</td><td class="n">73</td><td class="n">40</td><td class="n">1</td><td class="n muted">—</td><td class="n muted">—</td></tr>
 </table>
 <p class="small"><b>*</b> 部分日，快照 <b>09:04:46</b>（09h 簇仍在增长，见规则 N）。<b>双簇第 19 日零例外</b>（08h/09h 之外恒 0）。<br>
-其它组件解释：09-26 差 2 = <code>chat_completion_helpers</code>；09-29 差 8 = <code>plugins.web.ddgs.provider 4 + tools.web_tools 4</code>；10-04 = <code>tools.browser_supervisor</code>（观察者，10s 循环，≥21 条且在生长）。</p>
+其它组件解释：09-26 差 2 = <code>chat_completion_helpers</code>；09-29 差 8 = <code>plugins.web.ddgs.provider 4 + tools.web_tools 4</code>；10-04 = <code>tools.browser_supervisor</code>（观察者，10s 循环，≥36 条且在生长）。</p>
 
 <div class="two">
   <div class="card">
@@ -197,7 +197,7 @@
   <tr><th>profile</th><th class="n">文件字节</th><th class="n">%2MiB</th><th class="n">ERROR 合计</th><th class="n">live ERROR/日</th><th>状态</th></tr>
   <tr><td><b>writer</b></td><td class="n">2,024,397</td><td class="n r">96.53%</td><td class="n">16,202</td><td class="n r">144</td><td>weixin 第 86 天 · <b>ETA 4.81 日 ≈ 10-09</b></td></tr>
   <tr><td><b>default</b></td><td class="n">448,388</td><td class="n">21.38%</td><td class="n">1,450</td><td class="n r">144 + 403</td><td>weixin 第 10 天 · 403 循环第 19 日</td></tr>
-  <tr><td>reviewer</td><td class="n">1,578,022</td><td class="n a">75.24%</td><td class="n">545</td><td class="n g">0</td><td>545 条全为 09-14/15 风暴残余（第 19 日零新增）；<b class="r">但增速已被本会话自造的 10s 循环接管 → 实测 ETA ≈5 小时</b></td></tr>
+  <tr><td>reviewer</td><td class="n">1,581,683</td><td class="n a">75.42%</td><td class="n">545</td><td class="n g">0</td><td>545 条全为 09-14/15 风暴残余（第 19 日零新增）；<b class="r">但增速已被本会话自造的 10s 循环接管 → 实测 ETA ≈6.2 小时</b></td></tr>
   <tr><td>analyst</td><td class="n">1,002,926</td><td class="n">47.82%</td><td class="n">5,450</td><td class="n">0</td><td class="muted">冻结 19 日（09-15 08:11）</td></tr>
   <tr><td>researcher</td><td class="n">213,144</td><td class="n">10.16%</td><td class="n">1,144</td><td class="n">0</td><td class="muted">冻结 19 日</td></tr>
   <tr><td>orchestrator</td><td class="n">88,704</td><td class="n">4.23%</td><td class="n">464</td><td class="n">0</td><td class="muted">冻结 19 日</td></tr>
@@ -247,7 +247,7 @@
     <li><b>factor ≈ 1.39</b>（以 shell 为分母）—— <span class="a">首次落在 [1.00, 1.33] 区间之外</span>。</li>
     <li>本会话特征：<b>大量复合命令</b>（<code>cd … &amp;&amp; …</code>、多段 <code>;</code> 串联、管道 + 重定向）。⇒ 这是规则 AF「factor 或与 shell 命令内部语句数有关（待测）」的<b>首个超上界样本</b>，支持该假设。</li>
     <li>被拦截次数 = <b>0</b> → <code>pending_approval</code> = 0（该对比项仍精确 1:1）。</li>
-    <li><b>新形态：</b>观察者分量本期注入了新 logger（<code>tools.browser_supervisor</code>，10s 等间隔循环，≥21 条）⇒ 「观察者」不只放大既有计数，还能<b>创造新的尾窗成分与新的增长源</b>，且该源增速（+2.49 MB/日）<b>超过系统内任何既存噪声源</b>。</li>
+    <li><b>新形态：</b>观察者分量本期注入了新 logger（<code>tools.browser_supervisor</code>，10s 等间隔循环，≥36 条）⇒ 「观察者」不只放大既有计数，还能<b>创造新的尾窗成分与新的增长源</b>，且该源增速（+2.0 MB/日）<b>超过系统内任何既存噪声源</b>。</li>
   </ul>
 </div>
 
@@ -292,7 +292,7 @@
   <tr><th>级别</th><th>建议</th><th>执行者 / 说明</th></tr>
   <tr><td><b class="r">报告项</b></td><td>人工重新扫码登录 weixin（writer + default 两处）</td><td>需人类在终端动作 —— 消除 <b>288 ERROR/日（系统 96%）</b>。跨 profile，本作业无写权限（规则 R）</td></tr>
   <tr><td><b class="r">报告项</b></td><td>修复 default provider 凭证（403 retCode 10101）</td><td>两个业务作业已连续 19–20 日零产出；跨 profile</td></tr>
-  <tr><td><b class="a">P1（可执行）</b></td><td><b>核查 / 抑制 <code>tools.browser_supervisor</code> 的 10s 重试循环</b>：确认其是否随会话终止；若跨会话存活，应加最大重试上限 + 指数退避</td><td>本 profile，可写。实测 +2.49 MB/日 → reviewer 日志 <b>约 5 小时</b>内提前轮转。这是本系统首次出现「观测动作直接制造高增速故障循环」</td></tr>
+  <tr><td><b class="a">P1（可执行）</b></td><td><b>核查 / 抑制 <code>tools.browser_supervisor</code> 的 10s 重试循环</b>：确认其是否随会话终止；若跨会话存活，应加最大重试上限 + 指数退避</td><td>本 profile，可写。实测 +2.0 MB/日 → reviewer 日志 <b>约 6 小时</b>内提前轮转。这是本系统首次出现「观测动作直接制造高增速故障循环」</td></tr>
   <tr><td><b class="a">P1（可执行）</b></td><td>arXiv 采集加固：<code>knowledge_ingest.py</code> 加 <b>超时重试 ×3 + 指数退避</b>，并登记 Semantic Scholar 备选源</td><td>本 profile 脚本，可写。本期失败证明 15s 单次超时对重查询过于激进</td></tr>
   <tr><td><b class="a">P1（可执行）</b></td><td>HN 作业 prompt 显式禁止裸域名字面量（<code>.dev</code>/<code>.app</code>）与 heredoc</td><td>避免 tirith lookalike-TLD 拦截（P128 实证）</td></tr>
   <tr><td><b class="a">P2</b></td><td><code>weakness_scan.py</code> 增加 <b>WARNING 级聚合规则</b>：同一签名 ≥10 次/500 行 ⇒ medium 弱点</td><td>WARNING 盲区已 60 期；建议连续多期未执行，属可见性驱动的修复优先级陷阱（规则 L）</td></tr>
