@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker News 每日简报 — 2026年10月05日</title>
+<style>
+:root {
+  --bg:#0d1117; --card:#161b22; --card2:#1c2230; --border:#30363d;
+  --fg:#e6edf3; --muted:#8b949e; --accent:#2f81f7;
+  --green:#3fb950; --red:#f85149; --purple:#7c3aed; --amber:#d29922;
+  --radius:12px; --shadow:0 1px 3px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.25);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.65; font-size:15px;
+}
+.wrap { max-width:1080px; margin:0 auto; padding:28px 18px 60px; }
+header.hero {
+  background:radial-gradient(1200px 400px at 20% -20%,rgba(47,129,247,.18),transparent),var(--card);
+  border:1px solid var(--border); border-radius:var(--radius);
+  padding:30px 26px; margin-bottom:26px; box-shadow:var(--shadow);
+}
+.hero h1 { margin:0 0 8px; font-size:clamp(21px,3.6vw,30px); letter-spacing:.3px; }
+.hero h1 .em { background:linear-gradient(90deg,#58a6ff,#a371f7); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.hero .meta { color:var(--muted); font-size:13.5px; display:flex; flex-wrap:wrap; gap:8px 16px; }
+.hero .meta b { color:var(--fg); font-weight:600; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin-bottom:30px; }
+.stat { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 16px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.stat::before { content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--c,var(--accent)); }
+.stat .v { font-size:26px; font-weight:700; letter-spacing:.5px; }
+.stat .l { color:var(--muted); font-size:12.5px; margin-top:2px; }
+.section { margin-bottom:34px; }
+.sec-title { font-size:19px; margin:0 0 16px; padding-left:12px; border-left:4px solid var(--accent); display:flex; align-items:center; gap:10px; }
+.sec-title .count { font-size:12px; color:var(--muted); background:var(--card2); border:1px solid var(--border); border-radius:20px; padding:1px 10px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:14px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px 16px 13px; box-shadow:var(--shadow); display:flex; flex-direction:column; transition:border-color .15s,transform .15s; }
+.card:hover { border-color:#4b5a6b; transform:translateY(-2px); }
+.card-head { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.rank { font-weight:700; color:#03121f; background:linear-gradient(135deg,#58a6ff,#a371f7); border-radius:6px; padding:1px 8px; font-size:13px; }
+.key { font-size:11px; color:var(--amber); border:1px solid rgba(210,153,34,.5); border-radius:20px; padding:0 8px; }
+.idx { font-size:12px; color:var(--muted); margin-left:auto; }
+.card-title { font-size:15.5px; margin:0 0 4px; line-height:1.45; }
+.card-title a { color:var(--fg); text-decoration:none; }
+.card-title a:hover { color:#58a6ff; }
+.card-sub { font-size:12px; color:#6e7681; margin:0 0 8px; font-style:italic; }
+.card-sum { font-size:13.5px; color:#c9d1d9; margin:0 0 12px; flex:1; }
+.card-foot { display:flex; flex-wrap:wrap; align-items:center; gap:7px; font-size:12px; border-top:1px solid var(--border); padding-top:10px; }
+.tag { border-radius:20px; padding:1px 9px; font-variant-numeric:tabular-nums; }
+.tag.score { background:rgba(210,153,34,.14); color:#e3b341; }
+.tag.comm { background:rgba(47,129,247,.14); color:#79c0ff; }
+.by { color:var(--muted); }
+.src { margin-left:auto; color:#58a6ff; text-decoration:none; }
+.src + .src { margin-left:10px; }
+.src:hover { text-decoration:underline; }
+.hot { background:linear-gradient(135deg,rgba(248,81,73,.10),rgba(210,153,34,.06)),var(--card); border:1px solid rgba(248,81,73,.35); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); }
+.hot h3 { margin:0 0 6px; font-size:17px; }
+.hot .sub { color:var(--muted); font-size:12.5px; font-style:italic; margin:0 0 10px; }
+.hot .body { color:#c9d1d9; font-size:14px; }
+.hot .bars { margin-top:14px; display:flex; flex-direction:column; gap:9px; }
+.bar { display:grid; grid-template-columns:1fr; gap:4px; }
+.bar .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); }
+.bar .track { height:8px; background:var(--card2); border-radius:6px; overflow:hidden; }
+.bar .fill { height:100%; border-radius:6px; background:linear-gradient(90deg,#f85149,#d29922); }
+footer { margin-top:40px; border-top:1px solid var(--border); padding-top:18px; color:var(--muted); font-size:12.5px; }
+footer a { color:#58a6ff; text-decoration:none; }
+footer p { margin:4px 0; }
+@media(max-width:560px) { .grid { grid-template-columns:1fr; } .wrap { padding:18px 12px 44px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Hacker News 每日简报 — <span class="em">2026年10月05日</span></h1>
+  <div class="meta">
+    <span>📅 生成时间：<b>2026-10-05 08:04 CST</b></span>
+    <span>🗂 来源：<b>HN Firebase API · top 30</b></span>
+    <span>🏷 重点条目：<b>18</b> 篇（得分 ≥ 50 或评论 ≥ 30）</span>
+  </div>
+</header>
+
+<section class="section">
+  <h2 class="sec-title" style="--accent:var(--green)">📊 今日概况</h2>
+  <div class="stats">
+  <div class="stat" style="--c:var(--accent)"><div class="v">30</div><div class="l">📰 收录文章总数</div></div>
+  <div class="stat" style="--c:var(--amber)"><div class="v">795</div><div class="l">🔥 最高得分</div></div>
+  <div class="stat" style="--c:var(--red)"><div class="v">289</div><div class="l">💬 最热评论数</div></div>
+  <div class="stat" style="--c:var(--green)"><div class="v">18</div><div class="l">⭐ 重点文章</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="sec-title" style="--accent:#d29922">🔥 必读 Top 5<span class="count">按得分</span></h2>
+  <div class="grid">
+<article class="card">
+  <div class="card-head"><span class="rank">#1</span><span class="idx">795</span></div>
+  <h3 class="card-title"><a href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">Tell HN：科技专栏作家 Bob Cringely 去世</a></h3>
+  <p class="card-sub">Tell HN: Bob Cringely has died</p>
+  <p class="card-sum">知名科技专栏作家、《Accidental Empires》作者 Bob Cringely 去世，HN 社区集体悼念。今日最高分（795）。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 795</span>
+    <span class="tag comm">💬 172</span>
+    <span class="by">@paveworld</span>
+    <a class="src" href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="rank">#2</span><span class="idx">568</span></div>
+  <h3 class="card-title"><a href="https://github.com/Niko1221/Strata" target="_blank" rel="noopener">在消费级硬件（RTX 4090）上以 100T/s 运行 Qwen 3.8 Flash Next（125B）</a></h3>
+  <p class="card-sub">Run Qwen 3.8 Flash Next (125B) on consumer hardware (RTX 4090) at 100T/s</p>
+  <p class="card-sum">开源项目 Strata 演示在单张 RTX 4090 上运行 125B 参数的 Qwen 3.8 Flash Next，吞吐达 100 tokens/s，主打用消费级显卡跑大模型。今日最高分技术帖。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 568</span>
+    <span class="tag comm">💬 270</span>
+    <span class="by">@snehesht</span>
+    <a class="src" href="https://github.com/Niko1221/Strata" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49953495" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="rank">#3</span><span class="idx">456</span></div>
+  <h3 class="card-title"><a href="https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU" target="_blank" rel="noopener">Valve 工程师 Timur Kristóf 改善 Linux 上老旧 AMD 显卡的工作</a></h3>
+  <p class="card-sub">The work by Valve&#x27;s Timur Kristóf on improving old AMD GPUs on Linux</p>
+  <p class="card-sum">Phoronix 报道 Valve 开发者 Timur Kristóf 持续为 Linux 上的老款 AMD GPU 做驱动优化，显著改善体验。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 456</span>
+    <span class="tag comm">💬 92</span>
+    <span class="by">@speckx</span>
+    <a class="src" href="https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49946895" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="rank">#4</span><span class="idx">342</span></div>
+  <h3 class="card-title"><a href="https://liao.gg/blog/agents-dont-need-memory" target="_blank" rel="noopener">AI Agent 不需要「记忆」，它们需要的是「文档」</a></h3>
+  <p class="card-sub">Agents don&#x27;t need memory, they need documentation</p>
+  <p class="card-sum">观点文章：与其给 Agent 堆叠记忆机制，不如提供结构化文档作为可靠上下文，更简单也更可控。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 342</span>
+    <span class="tag comm">💬 210</span>
+    <span class="by">@kmeh</span>
+    <a class="src" href="https://liao.gg/blog/agents-dont-need-memory" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49945933" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="rank">#5</span><span class="idx">292</span></div>
+  <h3 class="card-title"><a href="https://github.com/omlahore/RemoveMacAI" target="_blank" rel="noopener">在 macOS 27 上关闭 Apple Intelligence，并回收被占用的磁盘空间</a></h3>
+  <p class="card-sub">Turn off Apple Intelligence on macOS 27 and get its disk space back</p>
+  <p class="card-sum">开源工具 RemoveMacAI 帮助在 macOS 27 中彻底关闭 Apple Intelligence，并释放其占用的可观磁盘空间。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 292</span>
+    <span class="tag comm">💬 176</span>
+    <span class="by">@privacyisntdead</span>
+    <a class="src" href="https://github.com/omlahore/RemoveMacAI" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49957116" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="sec-title" style="--accent:#7c3aed">🤖 AI 相关动态<span class="count">6</span></h2>
+  <div class="grid">
+<article class="card">
+  <div class="card-head"><span class="idx">568</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://github.com/Niko1221/Strata" target="_blank" rel="noopener">在消费级硬件（RTX 4090）上以 100T/s 运行 Qwen 3.8 Flash Next（125B）</a></h3>
+  <p class="card-sub">Run Qwen 3.8 Flash Next (125B) on consumer hardware (RTX 4090) at 100T/s</p>
+  <p class="card-sum">开源项目 Strata 演示在单张 RTX 4090 上运行 125B 参数的 Qwen 3.8 Flash Next，吞吐达 100 tokens/s，主打用消费级显卡跑大模型。今日最高分技术帖。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 568</span>
+    <span class="tag comm">💬 270</span>
+    <span class="by">@snehesht</span>
+    <a class="src" href="https://github.com/Niko1221/Strata" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49953495" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">292</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://github.com/omlahore/RemoveMacAI" target="_blank" rel="noopener">在 macOS 27 上关闭 Apple Intelligence，并回收被占用的磁盘空间</a></h3>
+  <p class="card-sub">Turn off Apple Intelligence on macOS 27 and get its disk space back</p>
+  <p class="card-sum">开源工具 RemoveMacAI 帮助在 macOS 27 中彻底关闭 Apple Intelligence，并释放其占用的可观磁盘空间。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 292</span>
+    <span class="tag comm">💬 176</span>
+    <span class="by">@privacyisntdead</span>
+    <a class="src" href="https://github.com/omlahore/RemoveMacAI" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49957116" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">134</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://github.com/allenv0/SCM" target="_blank" rel="noopener">Show HN：macOS 本地 AI 搜索，覆盖每张照片与视频的每一帧</a></h3>
+  <p class="card-sub">Show HN: AI search for every photo and every frame of video on macOS</p>
+  <p class="card-sum">项目 SCM 在 macOS 上做本地 AI 检索，可为每张照片乃至视频的每一帧建立语义索引并支持自然语言搜索。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 134</span>
+    <span class="tag comm">💬 64</span>
+    <span class="by">@allenleee</span>
+    <a class="src" href="https://github.com/allenv0/SCM" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49952111" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">342</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://liao.gg/blog/agents-dont-need-memory" target="_blank" rel="noopener">AI Agent 不需要「记忆」，它们需要的是「文档」</a></h3>
+  <p class="card-sub">Agents don&#x27;t need memory, they need documentation</p>
+  <p class="card-sum">观点文章：与其给 Agent 堆叠记忆机制，不如提供结构化文档作为可靠上下文，更简单也更可控。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 342</span>
+    <span class="tag comm">💬 210</span>
+    <span class="by">@kmeh</span>
+    <a class="src" href="https://liao.gg/blog/agents-dont-need-memory" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49945933" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">46</span></div>
+  <h3 class="card-title"><a href="https://www.youtube.com/watch?v=eZ8WWZzoaR0" target="_blank" rel="noopener">Homa：AI 集群中 TCP 的终结者（视频）</a></h3>
+  <p class="card-sub">Homa: The end of TCP for AI clusters [video]</p>
+  <p class="card-sum">演讲介绍 Homa 传输协议，为 AI 集群低延迟、高吞吐场景设计，可能取代 TCP 在数据中心内的地位。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 46</span>
+    <span class="tag comm">💬 12</span>
+    <span class="by">@signa11</span>
+    <a class="src" href="https://www.youtube.com/watch?v=eZ8WWZzoaR0" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49957117" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">43</span></div>
+  <h3 class="card-title"><a href="https://www.youtube.com/watch?v=GLvFTMtw4Jk" target="_blank" rel="noopener">如何用 AI 同时扩展意图、质量与艺术性（视频）</a></h3>
+  <p class="card-sub">How to scale intent, quality, and artistry with AI [video]</p>
+  <p class="card-sum">演讲探讨借助 AI 在规模化产出的同时，保持意图表达、质量与艺术水准。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 43</span>
+    <span class="tag comm">💬 13</span>
+    <span class="by">@simonjgreen</span>
+    <a class="src" href="https://www.youtube.com/watch?v=GLvFTMtw4Jk" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49951891" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+  </div>
+</section>
+<section class="section">
+  <h2 class="sec-title" style="--accent:#2f81f7">💻 编程 &amp; 开源<span class="count">10</span></h2>
+  <div class="grid">
+<article class="card">
+  <div class="card-head"><span class="idx">456</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU" target="_blank" rel="noopener">Valve 工程师 Timur Kristóf 改善 Linux 上老旧 AMD 显卡的工作</a></h3>
+  <p class="card-sub">The work by Valve&#x27;s Timur Kristóf on improving old AMD GPUs on Linux</p>
+  <p class="card-sum">Phoronix 报道 Valve 开发者 Timur Kristóf 持续为 Linux 上的老款 AMD GPU 做驱动优化，显著改善体验。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 456</span>
+    <span class="tag comm">💬 92</span>
+    <span class="by">@speckx</span>
+    <a class="src" href="https://www.phoronix.com/news/XDC-2026-Valve-Timur-AMDGPU" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49946895" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">272</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://nolanlawson.com/2026/10/03/why-dont-more-developers-use-the-platform/" target="_blank" rel="noopener">为什么更多开发者不愿「使用平台原生能力」？</a></h3>
+  <p class="card-sub">Why don&#x27;t more developers “use the platform”?</p>
+  <p class="card-sum">Nolan Lawson 撰文探讨开发者为何倾向绕开 Web 平台原生 API 而依赖框架/库，剖析其中的激励与历史原因。今日讨论最热之一。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 272</span>
+    <span class="tag comm">💬 285</span>
+    <span class="by">@vinhnx</span>
+    <a class="src" href="https://nolanlawson.com/2026/10/03/why-dont-more-developers-use-the-platform/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49950554" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">69</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://blog.janestreet.com/asic-puzzle-results/" target="_blank" rel="noopener">ASIC 硬件解谜题的结果公布</a></h3>
+  <p class="card-sub">Results from the ASIC puzzle</p>
+  <p class="card-sum">Jane Street 公布其 ASIC 设计解谜题的解题结果，展示如何用硬件逻辑求解复杂谜题。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 69</span>
+    <span class="tag comm">💬 30</span>
+    <span class="by">@eru</span>
+    <a class="src" href="https://blog.janestreet.com/asic-puzzle-results/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49934078" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">123</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://github.com/PowderworksCode/headstart" target="_blank" rel="noopener">提前输出元数据，可使 Rust 构建/检查提速最高一倍</a></h3>
+  <p class="card-sub">Emitting metadata early makes building/checking Rust up to twice as fast</p>
+  <p class="card-sum">项目 headstart 通过提前生成元数据，让 Rust 的构建与类型检查速度最高提升约 2 倍。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 123</span>
+    <span class="tag comm">💬 30</span>
+    <span class="by">@knuckleheads</span>
+    <a class="src" href="https://github.com/PowderworksCode/headstart" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49951218" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">81</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://movq.de/blog/postings/2026-09-30/0/POSTING-en.html" target="_blank" rel="noopener">cp 命令该用 -r 还是 -R？</a></h3>
+  <p class="card-sub">cp: -r or -R?</p>
+  <p class="card-sum">一篇考据文，探究 cp 命令 -r 与 -R 选项的历史差异与语义，解答日常疑惑。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 81</span>
+    <span class="tag comm">💬 92</span>
+    <span class="by">@zdw</span>
+    <a class="src" href="https://movq.de/blog/postings/2026-09-30/0/POSTING-en.html" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49910465" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">44</span></div>
+  <h3 class="card-title"><a href="https://wieslawsoltes.github.io/VB6/" target="_blank" rel="noopener">浏览器原生的经典 Visual Basic VB6 IDE</a></h3>
+  <p class="card-sub">A browser-native classic Visual Basic VB6 IDE</p>
+  <p class="card-sum">一个可在浏览器中运行的 VB6 集成开发环境，让经典 Visual Basic 6 代码在网页里编写与运行。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 44</span>
+    <span class="tag comm">💬 18</span>
+    <span class="by">@wiso</span>
+    <a class="src" href="https://wieslawsoltes.github.io/VB6/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49956681" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">37</span></div>
+  <h3 class="card-title"><a href="https://frn.sh/pagetables/" target="_blank" rel="noopener">页表的内存消耗</a></h3>
+  <p class="card-sub">Page Table Memory Consumption</p>
+  <p class="card-sum">深入分析操作系统页表（page table）在各级别下的内存开销及其对系统容量的影响。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 37</span>
+    <span class="tag comm">💬 6</span>
+    <span class="by">@shellpipe</span>
+    <a class="src" href="https://frn.sh/pagetables/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49916753" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">26</span></div>
+  <h3 class="card-title"><a href="https://vincent.bernat.ch/en/blog/2026-http-over-ssh" target="_blank" rel="noopener">用 SSH 与 Nginx 自建 HTTP 隧道</a></h3>
+  <p class="card-sub">Self-hosted HTTP tunnels with SSH and Nginx</p>
+  <p class="card-sum">教程演示仅用 SSH 与 Nginx 搭建自托管 HTTP 隧道，实现内网穿透而无需第三方隧道服务。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 26</span>
+    <span class="tag comm">💬 5</span>
+    <span class="by">@renehsz</span>
+    <a class="src" href="https://vincent.bernat.ch/en/blog/2026-http-over-ssh" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49958569" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">21</span></div>
+  <h3 class="card-title"><a href="https://scimigo.com/en/learn/build-with-python/01-draw-with-python" target="_blank" rel="noopener">Show HN：用 Python 创作——代码即绘图的入门课程</a></h3>
+  <p class="card-sub">Show HN: Build with Python – a beginner course where your code draws</p>
+  <p class="card-sum">面向初学者的 Python 课程，通过「代码画出图形」的即时反馈路径降低入门门槛。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 21</span>
+    <span class="tag comm">💬 5</span>
+    <span class="by">@davidwshao</span>
+    <a class="src" href="https://scimigo.com/en/learn/build-with-python/01-draw-with-python" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49956771" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">4</span></div>
+  <h3 class="card-title"><a href="https://alexalejandre.com/interviews/peter-bex/" target="_blank" rel="noopener">专访 Chicken Scheme 维护者 Peter Bex</a></h3>
+  <p class="card-sub">Interview with Chicken Scheme Maintainer Sjamaan/Peter Bex</p>
+  <p class="card-sum">对 Scheme 方言 Chicken Scheme 维护者 Peter Bex 的访谈，谈项目演进与 Lisp 生态。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 4</span>
+    <span class="tag comm">💬 1</span>
+    <span class="by">@veqq</span>
+    <a class="src" href="https://alexalejandre.com/interviews/peter-bex/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49939308" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+  </div>
+</section>
+<section class="section">
+  <h2 class="sec-title" style="--accent:#f85149">🔒 安全 &amp; 政策<span class="count">4</span></h2>
+  <div class="grid">
+<article class="card">
+  <div class="card-head"><span class="idx">195</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://www.1011now.com/2026/09/30/more-questions-than-answers-about-lincolns-google-data-center-water-electricity-usage/" target="_blank" rel="noopener">脱敏不当，Google 数据中心的用水与用电数据被曝光</a></h3>
+  <p class="card-sub">Improper redaction reveals Google Data Center water and electricity usage</p>
+  <p class="card-sum">一份文件因脱敏处理不当，泄露了 Google 数据中心的用水量与电力消耗数据，引发对数据中心环境影响的关注。今日评论数最高（289）。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 195</span>
+    <span class="tag comm">💬 289</span>
+    <span class="by">@sensanaty</span>
+    <a class="src" href="https://www.1011now.com/2026/09/30/more-questions-than-answers-about-lincolns-google-data-center-water-electricity-usage/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49957068" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">34</span></div>
+  <h3 class="card-title"><a href="https://github.com/net4people/bbs/issues/672" target="_blank" rel="noopener">Xray-core 隐瞒了一个证书校验绕过漏洞</a></h3>
+  <p class="card-sub">Xray-core concealed a certificate verification bypass vulnerability</p>
+  <p class="card-sum">安全披露：代理工具 Xray-core 被发现隐瞒一处证书校验绕过漏洞，引发供应链信任讨论。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 34</span>
+    <span class="tag comm">💬 0</span>
+    <span class="by">@timbill</span>
+    <a class="src" href="https://github.com/net4people/bbs/issues/672" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49956003" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">32</span></div>
+  <h3 class="card-title"><a href="https://www.msoos.org/2026/10/incentives-in-academic-research/" target="_blank" rel="noopener">学术研究中的激励机制</a></h3>
+  <p class="card-sub">Incentives in Academic Research</p>
+  <p class="card-sum">探讨学术研究中的激励结构如何影响选题、方法与结论的可靠性。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 32</span>
+    <span class="tag comm">💬 14</span>
+    <span class="by">@zero_k</span>
+    <a class="src" href="https://www.msoos.org/2026/10/incentives-in-academic-research/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49956035" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">53</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://www.economist.com/international/2026/10/01/how-effective-altruism-conquered-the-world" target="_blank" rel="noopener">有效利他主义（EA）的演变</a></h3>
+  <p class="card-sub">The evolution of effective altruism</p>
+  <p class="card-sum">《经济学人》梳理有效利他主义运动的演变及其近年争议与转向。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 53</span>
+    <span class="tag comm">💬 114</span>
+    <span class="by">@bazzmt</span>
+    <a class="src" href="https://www.economist.com/international/2026/10/01/how-effective-altruism-conquered-the-world" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49953777" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+  </div>
+</section>
+<section class="section">
+  <h2 class="sec-title" style="--accent:#3fb950">🎯 其他值得关注<span class="count">10</span></h2>
+  <div class="grid">
+<article class="card">
+  <div class="card-head"><span class="idx">795</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">Tell HN：科技专栏作家 Bob Cringely 去世</a></h3>
+  <p class="card-sub">Tell HN: Bob Cringely has died</p>
+  <p class="card-sum">知名科技专栏作家、《Accidental Empires》作者 Bob Cringely 去世，HN 社区集体悼念。今日最高分（795）。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 795</span>
+    <span class="tag comm">💬 172</span>
+    <span class="by">@paveworld</span>
+    <a class="src" href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49949438" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">188</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://mcmansionhell.com/post/829127919552151552/what-is-going-on-with-ceiling-fans" target="_blank" rel="noopener">吊扇到底是怎么回事</a></h3>
+  <p class="card-sub">What is going on with ceiling fans</p>
+  <p class="card-sum">一篇围绕吊扇的空气动力学与设计考据，讨论其为何鲜有真正改良。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 188</span>
+    <span class="tag comm">💬 160</span>
+    <span class="by">@colinprince</span>
+    <a class="src" href="https://mcmansionhell.com/post/829127919552151552/what-is-going-on-with-ceiling-fans" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49917536" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">155</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://mapped.earth/lighthouses/world" target="_blank" rel="noopener">全世界每一座灯塔的地图</a></h3>
+  <p class="card-sub">A map of every lighthouse</p>
+  <p class="card-sum">一个交互式地图收录了全球所有灯塔的位置与信息，视觉与资料兼具。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 155</span>
+    <span class="tag comm">💬 71</span>
+    <span class="by">@karakoram</span>
+    <a class="src" href="https://mapped.earth/lighthouses/world" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49933461" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">160</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://niklasroy.com/gtc/" target="_blank" rel="noopener">Show HN：用垃圾打造的 30 分钟周期摆钟</a></h3>
+  <p class="card-sub">Show HN: Glashütte Trash Clock – A 30-minute pendulum clock made from trash</p>
+  <p class="card-sum">制作者用废弃材料手工打造出一台 30 分钟周期的摆钟（Glashütte Trash Clock）。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 160</span>
+    <span class="tag comm">💬 21</span>
+    <span class="by">@r0r0</span>
+    <a class="src" href="https://niklasroy.com/gtc/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49930439" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">125</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://sjg.io/writing/binrange-have-you-actually-put-the-bins-out/" target="_blank" rel="noopener">你的垃圾桶想必也装了超宽带无线电吧？</a></h3>
+  <p class="card-sub">Surely you have ultra-wideband radios on your bins too?</p>
+  <p class="card-sum">半调侃的技术观察，讨论超宽带（UWB）无线电正悄然渗透进各类日常设备。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 125</span>
+    <span class="tag comm">💬 69</span>
+    <span class="by">@simonjgreen</span>
+    <a class="src" href="https://sjg.io/writing/binrange-have-you-actually-put-the-bins-out/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49947472" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">67</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://www.nytimes.com/2026/09/30/technology/william-draper-dead.html" target="_blank" rel="noopener">风险投资先驱 Bill Draper 去世</a></h3>
+  <p class="card-sub">Bill Draper has died</p>
+  <p class="card-sum">硅谷风投先驱、Draper 家族成员 Bill Draper 去世，回顾其对创投行业的贡献。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 67</span>
+    <span class="tag comm">💬 17</span>
+    <span class="by">@bookofjoe</span>
+    <a class="src" href="https://www.nytimes.com/2026/09/30/technology/william-draper-dead.html" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49953288" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">52</span><span class="key">重点</span></div>
+  <h3 class="card-title"><a href="https://www.historytoday.com/archive/review/neanderthals-among-us-peter-sahlins-review" target="_blank" rel="noopener">书评：《Neanderthals Among Us》</a></h3>
+  <p class="card-sub">&#x27;Neanderthals Among Us&#x27; review</p>
+  <p class="card-sum">对《Neanderthals Among Us》一书的评论，涉及尼安德特人与现代人类的关联。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 52</span>
+    <span class="tag comm">💬 45</span>
+    <span class="by">@pepys</span>
+    <a class="src" href="https://www.historytoday.com/archive/review/neanderthals-among-us-peter-sahlins-review" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49947565" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">18</span></div>
+  <h3 class="card-title"><a href="https://birdshistory.com/how-long-to-declare-a-bird-extinct/" target="_blank" rel="noopener">宣告一种鸟灭绝：从最后一次目击起中位等待 36 年</a></h3>
+  <p class="card-sub">Declaring a bird extinct: The median wait is 36 years after the last sighting</p>
+  <p class="card-sum">统计显示，从鸟类最后一次被目击到正式宣告灭绝，中位间隔长达 36 年，凸显灭绝认定的滞后。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 18</span>
+    <span class="tag comm">💬 7</span>
+    <span class="by">@Heidi_70</span>
+    <a class="src" href="https://birdshistory.com/how-long-to-declare-a-bird-extinct/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49948738" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">5</span></div>
+  <h3 class="card-title"><a href="https://filmstories.co.uk/news/tippett-studios-in-the-wake-of-its-closure-a-digital-archive-of-animated-materials-appears-online/" target="_blank" rel="noopener">工作室关闭后，动画资料数字档案上线</a></h3>
+  <p class="card-sub">In the wake of closure, a digital archive of animated materials appears online</p>
+  <p class="card-sum">一家动画工作室停运后，其动画制作资料被整理成数字档案公开，供人检索与研究。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 5</span>
+    <span class="tag comm">💬 1</span>
+    <span class="by">@rdmuser</span>
+    <a class="src" href="https://filmstories.co.uk/news/tippett-studios-in-the-wake-of-its-closure-a-digital-archive-of-animated-materials-appears-online/" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49957812" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+<article class="card">
+  <div class="card-head"><span class="idx">47</span></div>
+  <h3 class="card-title"><a href="https://blog.zarfhome.com/2026/10/infidel-goes-wild" target="_blank" rel="noopener">《Infidel》的失控结局</a></h3>
+  <p class="card-sub">Infidel goes wild</p>
+  <p class="card-sum">互动小说作者 Andrew Plotkin（Zarf）撰文重温经典 Infocom 文字冒险游戏《Infidel》及其争议性的结局设计。</p>
+  <div class="card-foot">
+    <span class="tag score">▲ 47</span>
+    <span class="tag comm">💬 3</span>
+    <span class="by">@tobr</span>
+    <a class="src" href="https://blog.zarfhome.com/2026/10/infidel-goes-wild" target="_blank" rel="noopener">原文 ↗</a>
+    <a class="src" href="https://news.ycombinator.com/item?id=49943637" target="_blank" rel="noopener">讨论 ↗</a>
+  </div>
+</article>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="sec-title" style="--accent:var(--red)">💬 今日最热讨论</h2>
+  <div class="hot">
+    <h3><a href="https://www.1011now.com/2026/09/30/more-questions-than-answers-about-lincolns-google-data-center-water-electricity-usage/" target="_blank" rel="noopener" style="color:#e6edf3;text-decoration:none">脱敏不当，Google 数据中心的用水与用电数据被曝光</a></h3>
+    <p class="sub">Improper redaction reveals Google Data Center water and electricity usage</p>
+    <div class="body">一份文件因脱敏处理不当，泄露了 Google 数据中心的用水量与电力消耗数据，引发对数据中心环境影响的关注。今日评论数最高（289）。</div>
+    <div class="bars">
+      <div class="bar"><div class="row"><span>💬 评论数</span><span>289</span></div><div class="track"><div class="fill" style="width:100%"></div></div></div>
+      <div class="bar"><div class="row"><span>▲ 得分</span><span>195</span></div><div class="track"><div class="fill" style="width:25%"></div></div></div>
+      <div class="bar"><div class="row"><span>对比：最高分条目</span><span>795</span></div><div class="track"><div class="fill" style="width:100%;opacity:.4"></div></div></div>
+    </div>
+    <p style="margin:14px 0 0"><a class="src" href="https://news.ycombinator.com/item?id=49957068" target="_blank" rel="noopener">→ 前往 HN 讨论页</a></p>
+  </div>
+</section>
+
+<footer>
+  <p>📡 数据来源：Hacker News 官方 Firebase API（<a href="https://github.com/HackerNews/API" target="_blank" rel="noopener">github.com/HackerNews/API</a>），取 <code>topstories</code> 前 30 条。</p>
+  <p>🕒 生成时间：2026-10-05 08:04 CST ｜ 分类与中文摘要由自动化流程生成，仅供速览。</p>
+  <p>本页面为静态 HTML，可直接部署至 GitHub Pages。</p>
+</footer>
+
+</div>
+</body>
+</html>
