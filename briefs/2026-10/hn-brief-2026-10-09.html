@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hacker News 每日简报 2026-10-08，Top 30 热门文章中文摘要与分类。">
+<title>Hacker News 每日简报 — 2026年10月08日</title>
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card2:#1c2330; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --accent2:#1f6feb;
+  --green:#3fb950; --orange:#f0883e; --red:#f85149; --purple:#bc8cff; --yellow:#d29922;
+  --radius:14px; --shadow:0 1px 0 rgba(255,255,255,.02), 0 8px 24px rgba(1,4,9,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text); line-height:1.68;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.wrap{max-width:940px;margin:0 auto;padding:26px 16px 64px}
+/* header */
+header{
+  position:relative; overflow:hidden; text-align:center;
+  padding:40px 20px 32px; border:1px solid var(--border); border-radius:var(--radius);
+  background:radial-gradient(120% 140% at 50% -20%, rgba(88,166,255,.16), transparent 62%), linear-gradient(160deg,#161b22,#0d1117 72%);
+  box-shadow:var(--shadow);
+}
+header::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(88,166,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(88,166,255,.05) 1px,transparent 1px);background-size:34px 34px;mask-image:radial-gradient(circle at 50% 0%,#000,transparent 78%);pointer-events:none}
+header .kicker{position:relative;display:inline-block;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(88,166,255,.4);border-radius:999px;padding:4px 14px;margin-bottom:16px;background:rgba(88,166,255,.07)}
+header h1{position:relative;font-size:clamp(21px,4.4vw,32px);font-weight:800;letter-spacing:.4px;background:linear-gradient(92deg,#e6edf3,#58a6ff 55%,#bc8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header .sub{position:relative;margin-top:12px;color:var(--muted);font-size:13.5px}
+header .sub b{color:var(--text);font-weight:600}
+/* section */
+section{margin-top:34px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.sec-head .bar{width:5px;height:22px;border-radius:3px;background:var(--accent)}
+.sec-head h2{font-size:19px;font-weight:700;letter-spacing:.3px}
+.sec-head .count{margin-left:auto;font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:2px 11px;background:var(--card)}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;text-align:center;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+.stat.g::before{background:var(--green)} .stat.o::before{background:var(--orange)} .stat.p::before{background:var(--purple)}
+.stat .num{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.stat .num.g{color:var(--green)} .stat .num.o{color:var(--orange)} .stat .num.p{color:var(--purple)}
+.stat .lbl{margin-top:4px;font-size:12.5px;color:var(--muted)}
+/* item card */
+.list{display:flex;flex-direction:column;gap:11px}
+.item{display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;transition:border-color .18s,transform .18s,box-shadow .18s;box-shadow:var(--shadow)}
+.item:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 10px 30px rgba(1,4,9,.6)}
+.rank{flex:0 0 30px;height:30px;display:grid;place-items:center;border-radius:9px;font-size:13px;font-weight:800;color:var(--muted);background:var(--card2);border:1px solid var(--border);font-variant-numeric:tabular-nums}
+.rank.top{color:#0d1117;background:linear-gradient(140deg,#f2cc60,#f0883e);border-color:transparent}
+.item .body{flex:1;min-width:0}
+.item .title{font-size:15px;font-weight:650;color:var(--text);line-height:1.5}
+.item .desc{margin-top:5px;font-size:13px;color:#a9b4c0;line-height:1.62}
+.item .meta{margin-top:9px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.tag{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;border:1px solid var(--border);background:var(--card2);color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag.score{color:var(--orange);border-color:rgba(240,136,62,.35);background:rgba(240,136,62,.08)}
+.tag.cmt{color:var(--accent);border-color:rgba(88,166,255,.35);background:rgba(88,166,255,.08)}
+.tag.hot{color:var(--red);border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.1)}
+.tag.src{color:#7d8590;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+/* category accents */
+.cat-ai .sec-head .bar{background:var(--purple)} .cat-ai .tag.k{color:var(--purple);border-color:rgba(188,140,255,.35);background:rgba(188,140,255,.08)}
+.cat-dev .sec-head .bar{background:var(--green)} .cat-dev .tag.k{color:var(--green);border-color:rgba(63,185,80,.35);background:rgba(63,185,80,.08)}
+.cat-sec .sec-head .bar{background:var(--red)} .cat-sec .tag.k{color:var(--red);border-color:rgba(248,81,73,.35);background:rgba(248,81,73,.08)}
+.cat-misc .sec-head .bar{background:var(--yellow)} .cat-misc .tag.k{color:var(--yellow);border-color:rgba(210,153,34,.35);background:rgba(210,153,34,.08)}
+/* hot discussion */
+.hot-card{background:linear-gradient(150deg,rgba(248,81,73,.1),var(--card) 55%);border:1px solid rgba(248,81,73,.35);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.hot-card h3{font-size:16.5px;font-weight:700;margin-bottom:8px}
+.hot-card p{font-size:13.5px;color:#a9b4c0}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+footer a{color:var(--accent);text-decoration:none}
+@media (max-width:560px){.item{padding:12px 13px;gap:11px}.rank{flex-basis:26px;height:26px;font-size:12px}.stat .num{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <span class="kicker">Hacker News Daily</span>
+  <h1>Hacker News 每日简报</h1>
+  <div class="sub">2026 年 10 月 09 日（CST） · 取自官方 Top Stories 前 30 名 · <b>数据源：Hacker News Firebase API</b></div>
+</header>
+
+<section>
+  <div class="sec-head"><span class="bar"></span><h2>📊 今日概况</h2></div>
+  <div class="stats">
+    <div class="stat"><div class="num">30</div><div class="lbl">抓取文章总数</div></div>
+    <div class="stat o"><div class="num o">802</div><div class="lbl">最高得分</div></div>
+    <div class="stat g"><div class="num g">1379</div><div class="lbl">最热评论数</div></div>
+    <div class="stat p"><div class="num p">164.3</div><div class="lbl">平均得分</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="bar"></span><h2>🔥 必读 Top 5</h2><span class="count">按得分排序</span></div>
+  <div class="list">
+
+    <a class="item" href="https://apnews.com/article/h1b-visa-program-vance-microsoft-e7b3a407f822702b269ee277d21343ea" target="_blank" rel="noopener">
+      <div class="rank top">1</div>
+      <div class="body">
+        <div class="title">特朗普政府暂停微软参与绿卡（H-1B）项目</div>
+        <div class="desc">美联社报道，白宫将微软移出这一带有绿色通道性质的签证项目，剑指 H-1B 体系被滥用；帖子同时拿下当日最高分与最热讨论，评论区围绕移民政策、科技用工与决策动机激烈交锋。</div>
+        <div class="meta"><span class="tag score">▲ 802</span><span class="tag cmt">💬 1379</span><span class="tag hot">最热</span><span class="tag src">apnews.com</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://cactuscompute.com/blog/whistle" target="_blank" rel="noopener">
+      <div class="rank top">2</div>
+      <div class="body">
+        <div class="title">Whistle：仅 16.9 MB 的语音转文字模型</div>
+        <div class="desc">一个体积极小的端侧语音识别实现，16.9 MB 即可在本地完成转写，主打低延迟与隐私不上云；社区热议其体积、精度与部署形态的取舍。</div>
+        <div class="meta"><span class="tag score">▲ 474</span><span class="tag cmt">💬 110</span><span class="tag src">cactuscompute.com</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/" target="_blank" rel="noopener">
+      <div class="rank top">3</div>
+      <div class="body">
+        <div class="title">为什么业界对 DeepSeek 4.1 Flash 毫无反应？</div>
+        <div class="desc">作者认为 4.1 Flash 在成本与性能上的冲击被业界低估，质疑为何没有引发当初那样的震荡；评论区就此展开「模型竞争力」与商业模式两条线的辩论。</div>
+        <div class="meta"><span class="tag score">▲ 347</span><span class="tag cmt">💬 296</span><span class="tag hot">高讨论</span><span class="tag src">dgt.is</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://quesma.com/blog/invisible-cities-one-shot/" target="_blank" rel="noopener">
+      <div class="rank top">4</div>
+      <div class="body">
+        <div class="title">给 Opus 5.5 一个提示、六小时：把《看不见的城市》可视化</div>
+        <div class="desc">作者放手让 Claude Opus 5.5 自主运行六小时，为卡尔维诺《看不见的城市》生成可视化作品，实录了长时程自主代理在创意工程中的能力边界与翻车点。</div>
+        <div class="meta"><span class="tag score">▲ 344</span><span class="tag cmt">💬 175</span><span class="tag src">quesma.com</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.dexerto.com/entertainment/man-discovers-his-parents-coffee-machine-used-1tb-of-data-in-10-days-3416399/" target="_blank" rel="noopener">
+      <div class="rank top">5</div>
+      <div class="body">
+        <div class="title">父母家的咖啡机，10 天吃掉 1TB 流量</div>
+        <div class="desc">一台联网咖啡机在十天内上传了约 1TB 数据，直接引爆对 IoT 设备数据采集黑洞与家庭网络隐私的集体吐槽。</div>
+        <div class="meta"><span class="tag score">▲ 334</span><span class="tag cmt">💬 203</span><span class="tag src">dexerto.com</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="cat-ai">
+  <div class="sec-head"><span class="bar"></span><h2>🤖 AI 相关动态</h2><span class="count">5 篇</span></div>
+  <div class="list">
+
+    <a class="item" href="https://cactuscompute.com/blog/whistle" target="_blank" rel="noopener">
+      <div class="rank">1</div>
+      <div class="body">
+        <div class="title">Whistle：16.9 MB 的端侧语音转文字</div>
+        <div class="desc">迷你语音识别模型，体积小到可随页面分发，讨论集中在「小模型够不够用」与浏览器内推理的可行性。</div>
+        <div class="meta"><span class="tag k">AI</span><span class="tag score">▲ 474</span><span class="tag cmt">💬 110</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/" target="_blank" rel="noopener">
+      <div class="rank">3</div>
+      <div class="body">
+        <div class="title">DeepSeek 4.1 Flash 为何无人惊呼</div>
+        <div class="desc">作者质疑业界对 4.1 Flash 性价比冲击的反应过于冷淡，是当日 AI 板块的争议中心。</div>
+        <div class="meta"><span class="tag k">AI</span><span class="tag score">▲ 347</span><span class="tag cmt">💬 296</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://quesma.com/blog/invisible-cities-one-shot/" target="_blank" rel="noopener">
+      <div class="rank">23</div>
+      <div class="body">
+        <div class="title">Opus 5.5 自主六小时的可视化实验</div>
+        <div class="desc">一次长时程代理能力实测：一个提示换来六小时的自动创作，过程与结果都被完整复盘。</div>
+        <div class="meta"><span class="tag k">AI</span><span class="tag score">▲ 344</span><span class="tag cmt">💬 175</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://openrouter.ai/stepfun/step-5-preview" target="_blank" rel="noopener">
+      <div class="rank">14</div>
+      <div class="body">
+        <div class="title">阶跃星辰 Step 5 预览版现身 OpenRouter</div>
+        <div class="desc">StepFun 的 1M 上下文 MoE 模型以预览形态上架 OpenRouter，长上下文服务竞争再添一员。</div>
+        <div class="meta"><span class="tag k">AI</span><span class="tag score">▲ 80</span><span class="tag cmt">💬 23</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://biohub.org/news/virtual-biology-initiative-expansion/" target="_blank" rel="noopener">
+      <div class="rank">6</div>
+      <div class="body">
+        <div class="title">18 亿美元押注「适配 AI 的生物数据」</div>
+        <div class="desc">Biohub 宣布扩展虚拟生物学生态，承诺投入 18 亿美元打造可被模型直接消费的标准化生物数据基础设施。</div>
+        <div class="meta"><span class="tag k">AI</span><span class="tag score">▲ 51</span><span class="tag cmt">💬 4</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="cat-dev">
+  <div class="sec-head"><span class="bar"></span><h2>💻 编程 &amp; 开源</h2><span class="count">5 篇</span></div>
+  <div class="list">
+
+    <a class="item" href="https://newsletter.dancohen.org/archive/the-slow-formation-of-durable-software/" target="_blank" rel="noopener">
+      <div class="rank">29</div>
+      <div class="body">
+        <div class="title">耐久软件的缓慢成形</div>
+        <div class="desc">Dan Cohen 反思真正长寿命的软件是如何在漫长时间里长出来的，是对「快速交付」文化的一次温和反驳。</div>
+        <div class="meta"><span class="tag k">工程</span><span class="tag score">▲ 247</span><span class="tag cmt">💬 109</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://htmx.org/essays/yes-and/" target="_blank" rel="noopener">
+      <div class="rank">10</div>
+      <div class="body">
+        <div class="title">htmx 随笔：Yes, and</div>
+        <div class="desc">借用即兴戏剧的「Yes, and」原则讲渐进增强与超媒体思维，是前端路线之争的又一注脚。</div>
+        <div class="meta"><span class="tag k">前端</span><span class="tag score">▲ 114</span><span class="tag cmt">💬 49</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://github.com/duckdb/ducklake" target="_blank" rel="noopener">
+      <div class="rank">19</div>
+      <div class="body">
+        <div class="title">DuckDB DuckLake</div>
+        <div class="desc">DuckDB 的新实验项目 DuckLake，把数据湖的表格式与事务能力搬进单机分析引擎，继续侵蚀传统数据仓库的边界。</div>
+        <div class="meta"><span class="tag k">数据库</span><span class="tag score">▲ 105</span><span class="tag cmt">💬 14</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://mitchellh.com/writing/program-status-osc7501" target="_blank" rel="noopener">
+      <div class="rank">11</div>
+      <div class="body">
+        <div class="title">终端协议新提案：OSC 7501</div>
+        <div class="desc">Mitchell Hashimoto 提出用转义序列 OSC 7501 上报程序运行状态，让 shell、提示符与终端模拟器趋于协同。</div>
+        <div class="meta"><span class="tag k">终端</span><span class="tag score">▲ 83</span><span class="tag cmt">💬 31</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://naturalsystems.io/eth68" target="_blank" rel="noopener">
+      <div class="rank">12</div>
+      <div class="body">
+        <div class="title">ETH-68：给 Linux 用的以太网音频接口</div>
+        <div class="desc">一个面向 Linux 的以太网音频方案，用网络承载多声道低延迟音频，挑战 USB 音频的传统地位。</div>
+        <div class="meta"><span class="tag k">硬件</span><span class="tag score">▲ 70</span><span class="tag cmt">💬 51</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="cat-sec">
+  <div class="sec-head"><span class="bar"></span><h2>🔒 安全 &amp; 政策</h2><span class="count">3 篇</span></div>
+  <div class="list">
+
+    <a class="item" href="https://apnews.com/article/h1b-visa-program-vance-microsoft-e7b3a407f822702b269ee277d21343ea" target="_blank" rel="noopener">
+      <div class="rank">28</div>
+      <div class="body">
+        <div class="title">微软被暂停参与绿卡（H-1B）项目</div>
+        <div class="desc">签证与用工政策收紧的标志性事件，政策外溢直接影响科技人才流动，评论量为全天第一。</div>
+        <div class="meta"><span class="tag k">政策</span><span class="tag score">▲ 802</span><span class="tag cmt">💬 1379</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://newgtldprogram-aps.icann.org/applications/CD2694T-T26351/summary" target="_blank" rel="noopener">
+      <div class="rank">30</div>
+      <div class="body">
+        <div class="title">.lan 顶级域申请引发 DNS 隐患担忧</div>
+        <div class="desc">有人向 ICANN 申请 .lan 新通用顶级域，而 .lan 长期被用作内网命名；一旦进入公网根区，可能与私有解析约定冲突。</div>
+        <div class="meta"><span class="tag k">安全</span><span class="tag score">▲ 97</span><span class="tag cmt">💬 116</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://thequietus.com/news/us-man-given-prison-sentence-for-bot-farming-music-streams/" target="_blank" rel="noopener">
+      <div class="rank">20</div>
+      <div class="body">
+        <div class="title">美国男子因机器人刷音乐播放量获刑</div>
+        <div class="desc">批量机器人刷流媒体播放量被判监禁，自动化欺诈首次落到实刑，为脚本与 AI 滥用划出一条法律红线。</div>
+        <div class="meta"><span class="tag k">法律</span><span class="tag score">▲ 88</span><span class="tag cmt">💬 139</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="cat-misc">
+  <div class="sec-head"><span class="bar"></span><h2>🎯 其他值得关注</h2><span class="count">12 篇</span></div>
+  <div class="list">
+
+    <a class="item" href="https://www.dexerto.com/entertainment/man-discovers-his-parents-coffee-machine-used-1tb-of-data-in-10-days-3416399/" target="_blank" rel="noopener">
+      <div class="rank">5</div>
+      <div class="body">
+        <div class="title">联网咖啡机 10 天传 1TB 数据</div>
+        <div class="desc">家用 IoT 设备的数据采集规模被摆上台面，评论区顺势清算智能家居的隐私代价。</div>
+        <div class="meta"><span class="tag k">隐私</span><span class="tag score">▲ 334</span><span class="tag cmt">💬 203</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://antonfrolov.substack.com/p/i-hired-an-illustrator-to-draw-my" target="_blank" rel="noopener">
+      <div class="rank">8</div>
+      <div class="body">
+        <div class="title">请插画师画下自家房子，做成 Home Assistant 面板</div>
+        <div class="desc">作者用一张手绘房屋插画重构智能家居仪表盘，展示了可视化界面的另一种审美路径。</div>
+        <div class="meta"><span class="tag k">创意</span><span class="tag score">▲ 323</span><span class="tag cmt">💬 43</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://vale.rocks/posts/dvd-menus" target="_blank" rel="noopener">
+      <div class="rank">15</div>
+      <div class="body">
+        <div class="title">DVD 菜单之美</div>
+        <div class="desc">回顾实体影碟时代菜单设计的巧思与交互创意，一篇典型的「媒介考古」怀旧文。</div>
+        <div class="meta"><span class="tag k">怀旧</span><span class="tag score">▲ 245</span><span class="tag cmt">💬 144</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.theranos.world/" target="_blank" rel="noopener">
+      <div class="rank">2</div>
+      <div class="body">
+        <div class="title">Theranos.world</div>
+        <div class="desc">一个围绕 Theranos 的互动网站，梳理这家血液检测公司的崛起与崩塌，讨论落在硅谷叙事与监管失灵。</div>
+        <div class="meta"><span class="tag k">商业</span><span class="tag score">▲ 228</span><span class="tag cmt">💬 102</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://orkut.com/" target="_blank" rel="noopener">
+      <div class="rank">27</div>
+      <div class="body">
+        <div class="title">Orkut.com</div>
+        <div class="desc">Google 早期社交网络的域名重新出现，唤起一代网民对 Orkut 时代的集体回忆。</div>
+        <div class="meta"><span class="tag k">怀旧</span><span class="tag score">▲ 133</span><span class="tag cmt">💬 93</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2025.1697900/full" target="_blank" rel="noopener">
+      <div class="rank">9</div>
+      <div class="body">
+        <div class="title">ADHD 或为昼夜节律紊乱：证据与时间疗法含义</div>
+        <div class="desc">论文把注意缺陷多动障碍重新解释为昼夜节律问题，并讨论按生物钟给药的 chronotherapy 路径，评论区评价两极。</div>
+        <div class="meta"><span class="tag k">科学</span><span class="tag score">▲ 122</span><span class="tag cmt">💬 96</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://ken.arneson.name/2015/11/the-value-of-not-getting-to-the-point/" target="_blank" rel="noopener">
+      <div class="rank">4</div>
+      <div class="body">
+        <div class="title">不直奔主题的价值（2015）</div>
+        <div class="desc">旧文重提：绕弯子的表达为何常常更有效，写作与沟通方法论的经典讨论。</div>
+        <div class="meta"><span class="tag k">写作</span><span class="tag score">▲ 102</span><span class="tag cmt">💬 34</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.smithsonianmag.com/science-nature/archaeologists-are-reconstructing-the-invisible-technologies-of-the-stone-age-from-rope-to-thread-and-twine-180989534/" target="_blank" rel="noopener">
+      <div class="rank">25</div>
+      <div class="body">
+        <div class="title">考古学家复现石器时代的隐形技术</div>
+        <div class="desc">绳索、线、麻绳这类不易留存的材料，如何在考古学中被复原，牵出史前技术的全新图景。</div>
+        <div class="meta"><span class="tag k">考古</span><span class="tag score">▲ 93</span><span class="tag cmt">💬 45</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="http://scottbezek.blogspot.com/2026/10/making-flexible-neon-t-shirt-with-leds.html" target="_blank" rel="noopener">
+      <div class="rank">18</div>
+      <div class="body">
+        <div class="title">用 LED 灯丝做一件柔性「霓虹」T 恤</div>
+        <div class="desc">Show HN：作者把柔性 LED 灯丝缝进衣服，做成可穿戴的霓虹灯效果，附带完整的材料与制作记录。</div>
+        <div class="meta"><span class="tag k">DIY</span><span class="tag score">▲ 91</span><span class="tag cmt">💬 17</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://news.ycombinator.com/item?id=49985548" target="_blank" rel="noopener">
+      <div class="rank">21</div>
+      <div class="body">
+        <div class="title">Ask HN：你在 5 美元的 VPS 上长期跑什么？</div>
+        <div class="desc">高信息密度的运维经验帖，答案从 DNS、监控、备份一路排到自建邮件与小型服务，堪称「小机器大用处」合集。</div>
+        <div class="meta"><span class="tag k">运维</span><span class="tag score">▲ 89</span><span class="tag cmt">💬 106</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.techspot.com/article/3178-oled-burn-in-test/" target="_blank" rel="noopener">
+      <div class="rank">16</div>
+      <div class="body">
+        <div class="title">OLED 烧屏长测：30 个月更新</div>
+        <div class="desc">持续两年半的 OLED 烧屏实证测试更新，用数据回答显示器与电视到底耐不耐用。</div>
+        <div class="meta"><span class="tag k">硬件</span><span class="tag score">▲ 88</span><span class="tag cmt">💬 52</span></div>
+      </div>
+    </a>
+
+    <a class="item" href="https://www.nature.com/articles/s41586-026-10546-z" target="_blank" rel="noopener">
+      <div class="rank">13</div>
+      <div class="body">
+        <div class="title">深海发现 530 万年前的鲸落坟场</div>
+        <div class="desc">《自然》论文报告 Diamantina 海区的深海鲸骨群落，为深海生态系统的演化提供罕见样本。</div>
+        <div class="meta"><span class="tag k">科学</span><span class="tag score">▲ 68</span><span class="tag cmt">💬 2</span></div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="bar" style="background:var(--red)"></span><h2>💬 今日最热讨论</h2></div>
+  <div class="hot-card">
+    <h3>🔴 特朗普政府暂停微软参与绿卡（H-1B）项目 —— 1379 条评论，得分 802</h3>
+    <p>全天唯一的「双榜第一」：既是最高得分，也是最热讨论。一条政策新闻压过所有技术帖，本身说明移民与用工议题在 HN 社区的情绪浓度。</p>
+    <p>讨论大致沿三条线展开：其一，合规边界——企业是否滥用了本意为解决人才短缺而设的签证通道；其二，实际冲击——依赖签证的团队、外包链条与招聘节奏如何调整；其三，决策动机的政治解读，正反双方几乎各占一半，出现罕见的高比例对立票型而少有共识。评论区大量亲历者的签证口述，让这场讨论兼具政策辩论与行业口述史的价值。技术社区对「人」的问题的关注，在这一天彻底压过了对模型与代码的关注。</p>
+  </div>
+</section>
+
+<footer>
+  <div>📡 数据来源：<a href="https://github.com/HackerNews/API" target="_blank" rel="noopener">Hacker News Firebase API</a>（topstories + item）· 原文链接指向各站点</div>
+  <div>🧾 抓取范围：Top Stories 前 30 篇 · 重点筛选：得分 ≥ 50 或评论 ≥ 30（共 25 篇）</div>
+  <div>🕒 生成时间：2026-10-09 08:05 CST · 简报由 Hermes Agent 自动生成 · 深色主题 / 响应式</div>
+</footer>
+</div>
+</body>
+</html>
