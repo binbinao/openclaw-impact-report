@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Hacker News top 30 daily brief, categorized with Chinese summaries">
+<title>Hacker News 每日简报 — 2026年10月12日</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2128;--bd:#30363d;--tx:#e6edf3;--mu:#8b949e;--ac:#58a6ff;--gr:#3fb950;--or:#d29922;--rd:#f85149;--pu:#bc8cff;--cy:#39c5cf;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;background-image:radial-gradient(720px 320px at 12% -4%,rgba(88,166,255,.12),transparent),radial-gradient(620px 300px at 88% -2%,rgba(188,140,255,.10),transparent);background-attachment:fixed}
+a{color:var(--ac);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1040px;margin:0 auto;padding:30px 20px 64px}
+.hero{border:1px solid var(--bd);background:linear-gradient(160deg,rgba(88,166,255,.13),rgba(188,140,255,.06) 60%,transparent);border-radius:16px;padding:28px 26px;margin-bottom:24px}
+.hero .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);border:1px solid rgba(88,166,255,.35);background:rgba(88,166,255,.08);border-radius:999px;padding:4px 12px}
+.hero h1{font-size:clamp(24px,4.2vw,38px);line-height:1.25;margin:14px 0 8px;background:linear-gradient(92deg,#e6edf3,#58a6ff 55%,#bc8cff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero .date{color:var(--mu);font-size:14px}
+.hero .sub{color:var(--mu);font-size:14px;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0 10px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 14px;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--ac)}
+.stat.g::after{background:var(--gr)}.stat.o::after{background:var(--or)}.stat.p::after{background:var(--pu)}.stat.c::after{background:var(--cy)}
+.stat .k{font-size:12px;color:var(--mu);letter-spacing:.06em}
+.stat .v{font-size:26px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.3}
+.stat .n{font-size:11px;color:var(--mu)}
+h2.sec{display:flex;align-items:center;gap:10px;font-size:19px;margin:36px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--bd)}
+h2.sec .count{margin-left:auto;font-size:12px;color:var(--mu);font-weight:400}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;display:flex;gap:16px;transition:border-color .18s,transform .18s,background .18s}
+.card:hover{border-color:#4a5568;background:var(--card2);transform:translateY(-2px)}
+.card+.card{margin-top:12px}
+.rank{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;font-weight:700;color:var(--mu);min-width:34px;height:34px;border:1px solid var(--bd);border-radius:9px;display:flex;align-items:center;justify-content:center;background:#0b0f14;flex:0 0 auto}
+.card.top .rank{color:#0d1117;background:linear-gradient(135deg,#e3b341,#f778ba);border-color:transparent}
+.card .content{min-width:0;flex:1}
+.card h3{font-size:16.5px;line-height:1.5;font-weight:600}
+.card h3 a{color:var(--tx)}.card h3 a:hover{color:var(--ac)}
+.card .orig{font-size:12px;color:var(--mu);margin-top:2px;word-break:break-word}
+.card .sum{font-size:14px;color:#c9d1d9;margin-top:8px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.badge{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--bd);background:#0b0f14;color:var(--mu)}
+.badge.score{color:#e3b341;border-color:rgba(227,179,65,.35);background:rgba(227,179,65,.10)}
+.badge.cmt{color:var(--cy);border-color:rgba(57,197,207,.35);background:rgba(57,197,207,.10)}
+.tag{font-size:11.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--bd)}
+.t-ai{color:#bc8cff;border-color:rgba(188,140,255,.4);background:rgba(188,140,255,.10)}
+.t-dev{color:#58a6ff;border-color:rgba(88,166,255,.4);background:rgba(88,166,255,.10)}
+.t-sec{color:#f85149;border-color:rgba(248,81,73,.4);background:rgba(248,81,73,.10)}
+.t-pol{color:#d29922;border-color:rgba(210,153,34,.4);background:rgba(210,153,34,.10)}
+.t-oth{color:#3fb950;border-color:rgba(63,185,80,.4);background:rgba(63,185,80,.10)}
+.src{margin-left:auto;font-size:12px;color:var(--mu)}
+.src:hover{color:var(--ac)}
+.item{display:flex;gap:12px;padding:12px 14px;border:1px solid transparent;border-radius:10px;background:rgba(22,27,34,.55)}
+.item+.item{margin-top:8px}
+.item:hover{border-color:var(--bd);background:var(--card)}
+.item .idx{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--mu);min-width:26px;padding-top:3px}
+.item .content{flex:1;min-width:0}
+.item h3{font-size:15px;font-weight:600}
+.item h3 a{color:var(--tx)}.item h3 a:hover{color:var(--ac)}
+.item .orig{font-size:11.5px;color:var(--mu);margin-top:2px}
+.item .sum{font-size:13.5px;color:#adbac7;margin-top:4px}
+.discuss{background:linear-gradient(150deg,rgba(248,81,73,.10),rgba(22,27,34,.92));border:1px solid rgba(248,81,73,.35);border-radius:14px;padding:20px 22px}
+.discuss h3{font-size:17px;margin-bottom:4px}
+.discuss h3 a{color:#ffa198}
+.discuss .lead{color:var(--mu);font-size:13px;margin-bottom:12px}
+.discuss p{font-size:14px;color:#c9d1d9;margin-bottom:8px}
+.discuss ul{margin:8px 0 8px 18px}
+.discuss li{font-size:14px;color:#c9d1d9;margin-bottom:6px}
+.note{font-size:12px;color:var(--mu);margin-top:10px}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--bd);color:var(--mu);font-size:12.5px}
+footer .row{margin-bottom:6px}
+@media(max-width:640px){.wrap{padding:20px 14px 48px}.hero{padding:22px 18px}.card{padding:14px;gap:12px}.card h3{font-size:15.5px}.src{margin-left:0;flex-basis:100%}.stats{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<span class="kicker">⬢ HN DAILY DIGEST</span>
+<h1>Hacker News 每日简报</h1>
+<p class="date">2026 年 10 月 12 日 · 星期一 · 数据抓取 08:00 CST (UTC+8)</p>
+<p class="sub">本次采集 topstories 前 30 条，按主题归类并附中文摘要。重点筛选阈值为得分 ≥ 50 或评论 ≥ 30。</p>
+</header>
+<section class="stats">
+<div class="stat">
+<div class="k">采集条目</div>
+<div class="v">30</div>
+<div class="n">topstories 前 30</div>
+</div>
+<div class="stat o">
+<div class="k">最高得分</div>
+<div class="v">337</div>
+<div class="n">IRCv3</div>
+</div>
+<div class="stat c">
+<div class="k">最热讨论</div>
+<div class="v">355</div>
+<div class="n">Math 2.0 评论数</div>
+</div>
+<div class="stat">
+<div class="k">评论总数</div>
+<div class="v">2,006</div>
+<div class="n">30 条合计</div>
+</div>
+<div class="stat p">
+<div class="k">平均得分</div>
+<div class="v">108.9</div>
+<div class="n">最高 / 最低 337 / 1</div>
+</div>
+<div class="stat g">
+<div class="k">重点条目</div>
+<div class="v">17</div>
+<div class="n">达到入选阈值</div>
+</div>
+</section>
+<section id="top5">
+<h2 class="sec">🔥 必读 Top 5<span class="count">综合得分与讨论热度</span>
+</h2>
+<article class="card top">
+<div class="rank">01</div>
+<div class="content">
+<h3>
+<a href="https://teorth.github.io/tao-web/slides/math-2-0-caltech-2026.pdf" target="_blank" rel="noopener">陶哲轩：数学进入 2.0 时代，证明不再稀缺</a>
+</h3>
+<div class="orig">Terence Tao: Math 2.0 [pdf] · teorth.github.io</div>
+<p class="sum">Fields 奖得主陶哲轩在 Caltech 讲座中宣告「证明稀缺」的时代结束：AI 让自动解题变得廉价，若整个学科的评价体系只盯着攻破开放问题，人的理解与数学共同体的再生产都会被反噬。他主张转向 Math 2.0——用 AI 支撑文献、形式化验证、教学与协作。</p>
+<div class="meta">
+<span class="badge score">▲ 297 分</span>
+<span class="badge cmt">💬 355 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50043026" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</article>
+<article class="card top">
+<div class="rank">02</div>
+<div class="content">
+<h3>
+<a href="https://ircv3.net/" target="_blank" rel="noopener">IRCv3：老协议的现代化标准集</a>
+</h3>
+<div class="orig">IRCv3 · ircv3.net</div>
+<p class="sum">由 IRC 客户端与服务端作者组成的工作组，负责为 1988 年的 IRC 协议定义现代扩展（SASL 认证、消息标签、多行消息、批次等）。今日登顶：一半评论在怀旧，一半在感慨现代 IM 在开放性与自托管上的倒退。</p>
+<div class="meta">
+<span class="badge score">▲ 337 分</span>
+<span class="badge cmt">💬 288 评论</span>
+<span class="tag t-dev">开源</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50041540" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</article>
+<article class="card top">
+<div class="rank">03</div>
+<div class="content">
+<h3>
+<a href="https://nanolathe.gg" target="_blank" rel="noopener">《横扫千军》：用现代引擎重制</a>
+</h3>
+<div class="orig">Total Annihilation, rebuilt for modern computers · nanolathe.gg</div>
+<p class="sum">开源 MIT 许可的 2.5D RTS 引擎 Nanolathe：现代 GPU 渲染，浏览器里可直接试玩原版三关 Demo，另有原生 beta 客户端，不需要原游戏文件——代码可读、可改、可二次构建。</p>
+<div class="meta">
+<span class="badge score">▲ 319 分</span>
+<span class="badge cmt">💬 136 评论</span>
+<span class="tag t-dev">开源</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50045984" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</article>
+<article class="card top">
+<div class="rank">04</div>
+<div class="content">
+<h3>
+<a href="https://www.nyc.gov/main/click-to-cancel" target="_blank" rel="noopener">纽约「一键取消」订阅规则正式生效</a>
+</h3>
+<div class="orig">NYC Click to Cancel rule is now in effect · nyc.gov</div>
+<p class="sum">纽约市新规要求订阅服务提供与注册同样简便的取消路径，线上开通的订阅不能再只留电话退订这一条路。HN 讨论聚焦执法边界、对小团队的合规成本，以及这类规则是否会成为全美模板。</p>
+<div class="meta">
+<span class="badge score">▲ 314 分</span>
+<span class="badge cmt">💬 151 评论</span>
+<span class="tag t-pol">政策</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50045946" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</article>
+<article class="card top">
+<div class="rank">05</div>
+<div class="content">
+<h3>
+<a href="https://twitter.com/karpathy/status/2109361546505966046" target="_blank" rel="noopener">Karpathy：对 LLM 能力的认知鸿沟正在扩大</a>
+</h3>
+<div class="orig">The gap in shared understanding of LLM capability is widening · x.com/karpathy</div>
+<p class="sum">他把四月的旧帖翻出来重发：公众与从业者对 LLM 到底能做什么的理解，已从「两拨人各说各话」演变成「一道陡峭的漏斗」。评论区就谁在低估、谁在高估，以及这如何影响职业选择吵了 277 条。</p>
+<div class="meta">
+<span class="badge score">▲ 184 分</span>
+<span class="badge cmt">💬 277 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50047422" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</article>
+</section>
+<section id="ai">
+<h2 class="sec">🤖 AI 相关动态<span class="count">4 条</span>
+</h2>
+<div class="item">
+<div class="idx">20</div>
+<div class="content">
+<h3>
+<a href="https://momo5502.com/posts/2026-10-09-game-decompilation/" target="_blank" rel="noopener">烧掉 5000 亿 token，让 AI 智能体反编译一款 FPS</a>
+</h3>
+<div class="orig">500B+ tokens later: Letting AI agents decompile a first-person shooter</div>
+<p class="sum">作者花三个月、消耗 5000 亿以上 token，让 AI 智能体反编译一款知名第一人称射击游戏。目标不是能跑的 PoC，而是精确、稳定、功能完整的重制版本——目前最硬核的「AI 干真实工程」案例之一。</p>
+<div class="meta">
+<span class="badge score">▲ 137 分</span>
+<span class="badge cmt">💬 103 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50039092" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">23</div>
+<div class="content">
+<h3>
+<a href="https://betterwispr.com/" target="_blank" rel="noopener">BetterWispr：macOS 上的免费本地听写</a>
+</h3>
+<div class="orig">Show HN: BetterWispr – Free, open-source dictation for Mac</div>
+<p class="sum">按住快捷键说话，本地语音模型直接输出干净文本：自动去口癖与废话、按人名拼写专有名词、为每个应用设定文风，还带会议记录与要点。开源、免费、无账号，语音不出本机。</p>
+<div class="meta">
+<span class="badge score">▲ 140 分</span>
+<span class="badge cmt">💬 89 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50042333" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">4</div>
+<div class="content">
+<h3>
+<a href="https://pub.sakana.ai/mass/" target="_blank" rel="noopener">MASS：用集体智能实现递归自我改进</a>
+</h3>
+<div class="orig">Recursive self-improvement through collective intelligence · Sakana AI</div>
+<p class="sum">让同一个语言模型既解题、又设计多智能体工作流、还评估结果，再把多智能体协作中涌现的「集体智能」蒸馏成自监督信号，用于递归自我改进。论文称在科研基准上提升了单位 token 得分。</p>
+<div class="meta">
+<span class="badge score">▲ 31 分</span>
+<span class="badge cmt">💬 5 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048522" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">24</div>
+<div class="content">
+<h3>
+<a href="https://github.com/julianjohnson-web/julianflux-research" target="_blank" rel="noopener">JulianFlux：向量检索 + 因果路由的实验仓库</a>
+</h3>
+<div class="orig">JulianFlux: Electrodynamic vector retrieval and causal routing for AI</div>
+<p class="sum">一个概念先行的研究仓库，试图把类「电动力学」的向量检索与因果路由结合成 AI 的检索层，目前尚无实验结果，热度极低（5 分）——仅作方向记录。</p>
+<div class="meta">
+<span class="badge score">▲ 5 分</span>
+<span class="badge cmt">💬 0 评论</span>
+<span class="tag t-ai">AI</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048702" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+</section>
+<section id="dev">
+<h2 class="sec">💻 编程 &amp; 开源<span class="count">9 条</span>
+</h2>
+<div class="item">
+<div class="idx">27</div>
+<div class="content">
+<h3>
+<a href="https://news.ycombinator.com/item?id=50042362" target="_blank" rel="noopener">Valen 的内存安全：另一种借用检查</a>
+</h3>
+<div class="orig">Valen Memory Safety: A New Kind of Borrow Checking · verdagon 博客</div>
+<p class="sum">Valen 语言提出「分组借用」（group borrowing）：以更宽松、更可组合的模型替代 Rust 式逐个引用的借用检查，试图在保住内存安全的同时减少与借用检查器的搏斗。</p>
+<div class="meta">
+<span class="badge score">▲ 131 分</span>
+<span class="badge cmt">💬 80 评论</span>
+<span class="tag t-dev">编程</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50042362" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">22</div>
+<div class="content">
+<h3>
+<a href="https://github.com/rogerbinns/apsw" target="_blank" rel="noopener">apsw：更贴近 C 层的 Python SQLite 封装</a>
+</h3>
+<div class="orig">apsw: Another Python SQLite Wrapper · github.com/rogerbinns/apsw</div>
+<p class="sum">老牌库，暴露近乎完整的 SQLite C API：自定义 VFS、虚拟表、语句执行状态、增量 BLOB I/O 等，标准库 sqlite3 做不到的事它基本都能做，性能与可控性更强。</p>
+<div class="meta">
+<span class="badge score">▲ 51 分</span>
+<span class="badge cmt">💬 13 评论</span>
+<span class="tag t-dev">开源</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50045273" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">17</div>
+<div class="content">
+<h3>
+<a href="https://anderegg.ca/2026/10/08/i-guess-im-using-webp-now" target="_blank" rel="noopener">看来我最终还是用上 WebP 了</a>
+</h3>
+<div class="orig">I guess I am using WebP now? · anderegg.ca</div>
+<p class="sum">用了二十多年同样几个图片格式的作者，如今发现自己已经习惯了 WebP，回顾它从 2010 年被质疑、到 2020 年 Safari 补齐支持、再成为默认选项的全过程，并讨论下一站（AVIF 等）会多快到。</p>
+<div class="meta">
+<span class="badge score">▲ 58 分</span>
+<span class="badge cmt">💬 65 评论</span>
+<span class="tag t-dev">技术</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50021989" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">25</div>
+<div class="content">
+<h3>
+<a href="http://epestr.com/blog/reverse-engineering-a-commercial-spatial-audio-effect/" target="_blank" rel="noopener">逆向一个商业空间音频效果器</a>
+</h3>
+<div class="orig">How I reverse engineered a commercial spatial audio effect · epestr.com</div>
+<p class="sum">作者想在 Linux（PipeWire）上复刻某商业音效那种「更远、更轻、信息仍在」的听感：从设计测试信号、排除干扰，到逐步还原出滤波器结构，完整示范了一次音频 DSP 的黑盒拆解。</p>
+<div class="meta">
+<span class="badge score">▲ 88 分</span>
+<span class="badge cmt">💬 31 评论</span>
+<span class="tag t-dev">编程</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50044272" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">26</div>
+<div class="content">
+<h3>
+<a href="https://news.ycombinator.com/item?id=50046864" target="_blank" rel="noopener">NixOS 里 Vex 的「不可思议的有效性」</a>
+</h3>
+<div class="orig">The Unreasonable Effectiveness of Vex in NixOS · kammel 博客</div>
+<p class="sum">作者记录在 NixOS 中用 Vex 生成与管理配置的实践：原本笨重的声明式配置，被一层模板化生成逻辑收拾得意外顺手。小众工具组合，热度低但有参考价值。</p>
+<div class="meta">
+<span class="badge score">▲ 43 分</span>
+<span class="badge cmt">💬 1 评论</span>
+<span class="tag t-dev">开源</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50046864" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">18</div>
+<div class="content">
+<h3>
+<a href="https://shnatsel.github.io/safe-simd-in-rust-even-on-the-inside/" target="_blank" rel="noopener">Rust 里的安全 SIMD，连内部实现也要安全</a>
+</h3>
+<div class="orig">Safe SIMD in Rust, even on the inside · shnatsel.github.io</div>
+<p class="sum">讨论如何让 SIMD 加速代码在追求性能的同时，不把 unsafe 泄漏给调用方：靠类型层面的封装与不变量检查，把「危险的内部、安全的接口」做扎实。</p>
+<div class="meta">
+<span class="badge score">▲ 21 分</span>
+<span class="badge cmt">💬 1 评论</span>
+<span class="tag t-dev">编程</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50033601" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">21</div>
+<div class="content">
+<h3>
+<a href="https://tommyb3ll.github.io/FlowCE/" target="_blank" rel="noopener">FlowCE：把微积分装进 TI-84 Plus CE</a>
+</h3>
+<div class="orig">FlowCE: Calculus on your TI-84 Plus CE · tommyb3ll.github.io</div>
+<p class="sum">给 TI-84 Plus CE 计算器写的微积分工具，帮学生把符号推导与数值计算塞进考试允许的设备里。计算器编程的复古浪漫，讨论量不大但很受欢迎。</p>
+<div class="meta">
+<span class="badge score">▲ 21 分</span>
+<span class="badge cmt">💬 6 评论</span>
+<span class="tag t-dev">编程</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50033486" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">29</div>
+<div class="content">
+<h3>
+<a href="https://github.com/clainstone/cbirds" target="_blank" rel="noopener">Cbirds：终端里飞出一群鸟</a>
+</h3>
+<div class="orig">Cbirds: A flock of birds in your terminal · github.com/clainstone/cbirds</div>
+<p class="sum">单个 C99 文件、零依赖，用盲文点阵在任意终端渲染 Craig Reynolds 的 boids 鸟群模拟；Kitty / Ghostty 下还能切换成精灵图。纯粹的周末快乐项目。</p>
+<div class="meta">
+<span class="badge score">▲ 16 分</span>
+<span class="badge cmt">💬 10 评论</span>
+<span class="tag t-dev">开源</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50036023" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">15</div>
+<div class="content">
+<h3>Ask HN：你会想要一台预装 DD-WRT 的路由器吗？</h3>
+<div class="orig">Ask HN: Do you want a router that has DD-WRT pre-installed?</div>
+<p class="sum">有人直接问市场意愿：是否需要一台出厂即装开源固件的路由器。背后是对厂商固件锁定、云强制绑定与遥测的不满，评论区多数表态愿意为开放固件多付钱。</p>
+<div class="meta">
+<span class="badge score">▲ 6 分</span>
+<span class="badge cmt">💬 3 评论</span>
+<span class="tag t-oth">讨论</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50039291" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</div>
+</section>
+<section id="sec">
+<h2 class="sec">🔒 安全 &amp; 政策<span class="count">6 条</span>
+</h2>
+<div class="item">
+<div class="idx">19</div>
+<div class="content">
+<h3>
+<a href="https://disconnect3d.pl//2026/10/02/dont-put-tilde-in-your-path/" target="_blank" rel="noopener">PATH 里的 ~ 未必是你的 HOME</a>
+</h3>
+<div class="orig">The tilde in your PATH may not be your HOME · disconnect3d.pl</div>
+<p class="sum">export PATH="$PATH:~/.local/bin" 里引号内的 ~ 根本不会展开，于是 PATH 中多了一个字面量相对目录。作者从沙箱工具的一条告警顺藤摸瓜，讲清 shell 引号、波浪号展开顺序，以及这如何变成 agent 沙箱的可写路径风险。</p>
+<div class="meta">
+<span class="badge score">▲ 201 分</span>
+<span class="badge cmt">💬 140 评论</span>
+<span class="tag t-sec">安全</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50042425" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">11</div>
+<div class="content">
+<h3>
+<a href="https://nonfunctional.substack.com/p/passkeys-are-a-trap-do-not-use-them" target="_blank" rel="noopener">Passkey 是陷阱，别用</a>
+</h3>
+<div class="orig">Passkeys are a trap. Do not use them · nonfunctional</div>
+<p class="sum">作者主张 passkey 把账户恢复的最终控制权交给平台、把人锁死在特定生态里，长期看是「陷阱」而非进步。评论区激烈反驳：一边承认平台锁定与备份难题，一边强调钓鱼抗性带来的净安全收益。</p>
+<div class="meta">
+<span class="badge score">▲ 152 分</span>
+<span class="badge cmt">💬 73 评论</span>
+<span class="tag t-sec">安全</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048312" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">12</div>
+<div class="content">
+<h3>
+<a href="https://www.inc.com/chloe-rosenberg/a-remote-employee-refused-160-webcam-photos-a-day-her-employer-fired-her/91415963" target="_blank" rel="noopener">拒绝每天 160 次摄像头抓拍，她被解雇了</a>
+</h3>
+<div class="orig">A Remote Employee Refused 160 Webcam Photos a Day. Her Employer Fired Her · inc.com</div>
+<p class="sum">Inc. 报道的劳资纠纷：远程员工因拒绝高频摄像头抓拍被开除，引发对「数字监工」、居家办公隐私边界与劳动合规的讨论——技术可及性远快于规则的约束。</p>
+<div class="meta">
+<span class="badge score">▲ 114 分</span>
+<span class="badge cmt">💬 75 评论</span>
+<span class="tag t-pol">政策</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50047825" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">8</div>
+<div class="content">
+<h3>
+<a href="https://news.ycombinator.com/item?id=50048642" target="_blank" rel="noopener">指纹正在成为新的 Cookie</a>
+</h3>
+<div class="orig">Fingerprints Are the New Cookies · royfish 博客</div>
+<p class="sum">第三方 Cookie 退场后，设备指纹成为跨站追踪的主力：文章梳理它的技术原理、与「无痕模式」的对抗关系，以及现有浏览器缓解手段为何总是慢半拍。</p>
+<div class="meta">
+<span class="badge score">▲ 24 分</span>
+<span class="badge cmt">💬 6 评论</span>
+<span class="tag t-sec">安全</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048642" target="_blank" rel="noopener">HN 讨论 ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">16</div>
+<div class="content">
+<h3>
+<a href="https://www.theguardian.com/technology/2026/oct/06/google-datacentres-finland-temporary-halt-environmental-impact-assessment" target="_blank" rel="noopener">谷歌被指违规伐林建数据中心</a>
+</h3>
+<div class="orig">Google is illegaly cutting forest to build data centers · theguardian.com</div>
+<p class="sum">卫报报道：芬兰一处 Google 数据中心因环境影响评估问题被要求暂停施工，当地指责其违规清理林地。AI 算力扩张与土地、能源、生态之间的张力再次成为焦点。</p>
+<div class="meta">
+<span class="badge score">▲ 45 分</span>
+<span class="badge cmt">💬 6 评论</span>
+<span class="tag t-pol">政策</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048638" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">6</div>
+<div class="content">
+<h3>
+<a href="https://datacenters.google/locations/" target="_blank" rel="noopener">谷歌全球数据中心地图</a>
+</h3>
+<div class="orig">Google Data Centers around the world · datacenters.google</div>
+<p class="sum">谷歌官方披露的全球数据中心分布与选址信息页。单看是宣传材料，配合上一条芬兰争议一起看，更能体会算力基建背后的地缘与资源博弈。</p>
+<div class="meta">
+<span class="badge score">▲ 29 分</span>
+<span class="badge cmt">💬 17 评论</span>
+<span class="tag t-oth">基建</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50048768" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+</section>
+<section id="other">
+<h2 class="sec">🎯 其他值得关注<span class="count">6 条</span>
+</h2>
+<div class="item">
+<div class="idx">7</div>
+<div class="content">
+<h3>
+<a href="https://theonion.com/archivehunt/" target="_blank" rel="noopener">《洋葱报》公开征集纸质过刊</a>
+</h3>
+<div class="orig">So, You Would Like To Sell Your Print Issues Of The Onion? · theonion.com</div>
+<p class="sum">洋葱报正式向收藏者收购历史纸本，并贴心给出期号识别指南，用来数字化保存这份讽刺报纸的实体档案。评论区一片「我妈差点扔掉的箱子原来值钱」。</p>
+<div class="meta">
+<span class="badge score">▲ 225 分</span>
+<span class="badge cmt">💬 29 评论</span>
+<span class="tag t-oth">文化</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50047055" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">2</div>
+<div class="content">
+<h3>
+<a href="https://cartographers-nk.wonyoung.so/" target="_blank" rel="noopener">朝鲜的地图绘制者们</a>
+</h3>
+<div class="orig">Cartographers of North Korea · wonyoung.so</div>
+<p class="sum">一次基于 OpenStreetMap 数据的「地图考古」：谁在给朝鲜标注道路与建筑？作者分析贡献者身份、编辑模式与数据可信度，讨论了封闭国家如何被外部志愿者逐步测绘。</p>
+<div class="meta">
+<span class="badge score">▲ 158 分</span>
+<span class="badge cmt">💬 27 评论</span>
+<span class="tag t-oth">研究</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50047091" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">10</div>
+<div class="content">
+<h3>
+<a href="https://www.ways-of-seeing.com/ch1" target="_blank" rel="noopener">《观看之道》第一章（在线全文）</a>
+</h3>
+<div class="orig">Chapter 1 of Ways of Seeing by John Berger · ways-of-seeing.com</div>
+<p class="sum">约翰·伯格经典开篇的在线阅读版：借本雅明的机械复制理论，论证复制技术如何改变我们与图像、艺术乃至权威的关系。放在生成式图像泛滥的今天读，格外应景。</p>
+<div class="meta">
+<span class="badge score">▲ 63 分</span>
+<span class="badge cmt">💬 10 评论</span>
+<span class="tag t-oth">文化</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50046241" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">3</div>
+<div class="content">
+<h3>
+<a href="https://www.americanscientist.org/article/whatever-became-of-holography" target="_blank" rel="noopener">全息摄影后来怎么了？</a>
+</h3>
+<div class="orig">Whatever became of holography? (2011) · americanscientist.org</div>
+<p class="sum">2011 年的旧文回顾：全息技术足够惊艳，却始终停在实验室与光学柜台，卡在成本、观看条件与内容供给上。今天重上榜单，讨论的是「好技术也会困在场景里」。</p>
+<div class="meta">
+<span class="badge score">▲ 6 分</span>
+<span class="badge cmt">💬 0 评论</span>
+<span class="tag t-oth">科技史</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50049411" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">30</div>
+<div class="content">
+<h3>
+<a href="https://www.playgrnd.tools/" target="_blank" rel="noopener">Playgrnd：一堆奇怪又好看的小工具</a>
+</h3>
+<div class="orig">Playgrnd – tiny tools for making weird, beautiful things · playgrnd.tools</div>
+<p class="sum">一批免费、单一用途的生成式设计工具，全部在浏览器本地运行：不注册、不上传、不留存，导出即所得。作者把「小而美工具」的交付体验做得很干净。</p>
+<div class="meta">
+<span class="badge score">▲ 49 分</span>
+<span class="badge cmt">💬 9 评论</span>
+<span class="tag t-oth">工具</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50044989" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+<div class="item">
+<div class="idx">28</div>
+<div class="content">
+<h3>
+<a href="https://jobs.ashbyhq.com/weave-os" target="_blank" rel="noopener">Weave（YC W25）在招 ML / AI / 产品 / 设计工程师</a>
+</h3>
+<div class="orig">Weave (YC W25) is hiring ML, AI, product, and design engineers · jobs.ashbyhq.com</div>
+<p class="sum">招聘帖，得分 1 分，是今日榜单里唯一的招聘信息——通常意味着当天优质内容供给较强，招聘帖挤不进前排。仅为完整性收录。</p>
+<div class="meta">
+<span class="badge score">▲ 1 分</span>
+<span class="badge cmt">💬 0 评论</span>
+<span class="tag t-oth">招聘</span>
+<a class="src" href="https://news.ycombinator.com/item?id=50042330" target="_blank" rel="noopener">HN ↗</a>
+</div>
+</div>
+</div>
+</section>
+<section id="hottest">
+<h2 class="sec">💬 今日最热讨论<span class="count">355 条评论 · 今日第一</span>
+</h2>
+<div class="discuss">
+<h3>
+<a href="https://news.ycombinator.com/item?id=50043026" target="_blank" rel="noopener">陶哲轩「Math 2.0」：当证明不再稀缺，数学该优化什么？</a>
+</h3>
+<p class="lead">297 分 · 355 条评论 · hn item 50043026 · Caltech 讲座 27 页幻灯片</p>
+<p>陶哲轩把数学分为两段历史：Math 1.0 是「证明稀缺」的时代，学科的评价体系、声誉与训练方式都围绕攻破开放问题搭建；而 AI 让自动解题迅速廉价之后，这套体系开始失灵。他的判断是：如果整个行业把激励继续押在「机器证出更多定理」上，微观上会挤出人的理解与审美，宏观上会削弱数学共同体自身的再生产。</p>
+<p>对应地，他提出 Math 2.0：把 AI 当成支撑工具（文献梳理、形式化验证、教学、协作与发现），同时重新定义什么算数学贡献——从「解决了什么」扩展到「让人理解了什么」。</p>
+<p>HN 的 355 条评论大致分成三派：</p>
+<ul>
+<li>认可派：证明只是载体，理解与问题品味才是数学的核心资产，AI 解放的是重复劳动而非判断力；</li>
+<li>怀疑派：AI 生成的证明如何验证、错了谁负责，形式化与审核成本可能反而更高，容易得到「正确的废话」；</li>
+<li>现实派：青年数学家的训练路径与经费分配已被 AI 改写，Math 2.0 需要制度方案，而不只是换工具。</li>
+</ul>
+<p class="note">同一议题的另一面是排名第 5 的 Karpathy 帖（277 条评论）：不同群体对 LLM 能力的认知差异正在扩大，两场讨论合起来读，能看到 2026 年技术圈的信心分裂。</p>
+</div>
+</section>
+<footer>
+<div class="row">数据来源：Hacker News 官方 Firebase API — /v0/topstories.json 取前 30 条，逐条请求 /v0/item/{id}.json 获取标题、链接、得分、评论数与作者。</div>
+<div class="row">抓取与生成时间：2026-10-12 08:00 CST（UTC+8）。得分与评论数为抓取时刻快照，会随时间变化。</div>
+<div class="row">筛选说明：重点条目阈值为 得分 ≥ 50 或 评论 ≥ 30；未达阈值但有趣的低热条目也一并收录，以保证 30 条完整覆盖。</div>
+<div class="row">生成方式：Hermes Agent（reviewer profile）自动生成 · 中文摘要为编辑性概述，请以原文为准。</div>
+</footer>
+</div>
+</body>
+</html>
