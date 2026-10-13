@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年10月13日</title>
+<meta name="description" content="Hacker News Top 30 热榜中文简报：必读 Top 5、AI 动态、编程开源、安全政策，附中文摘要与得分/评论数据。">
+<style>
+:root{
+  --bg:#0d1117; --bg-grad:#0d1117 0%,#111827 100%;
+  --card:#161b22; --card2:#1c2430; --border:#30363d;
+  --fg:#e6edf3; --fg-dim:#c9d1d9; --muted:#8b949e;
+  --accent:#58a6ff; --green:#3fb950; --purple:#bc8cff;
+  --orange:#ffa657; --red:#f85149; --yellow:#d29922; --cyan:#39d0d8;
+  --radius:14px;
+  --shadow:0 1px 3px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:linear-gradient(180deg,var(--bg-grad)) fixed, #0d1117;
+  color:var(--fg); line-height:1.65;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  padding:0 16px 56px;
+}
+.wrap{max-width:1060px;margin:0 auto}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{
+  padding:52px 8px 26px; text-align:center;
+  border-bottom:1px solid var(--border); margin-bottom:30px;
+}
+.kicker{
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.28em;
+  color:var(--accent); text-transform:uppercase; margin-bottom:14px;
+}
+.hero h1{
+  font-size:clamp(1.7rem,4.6vw,2.6rem); line-height:1.25; font-weight:800;
+  background:linear-gradient(92deg,#58a6ff 0%,#bc8cff 45%,#39d0d8 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  letter-spacing:-.5px;
+}
+.hero .date{margin-top:12px;font-size:1.02rem;color:var(--fg-dim);font-weight:600}
+.hero .sub{margin-top:6px;font-size:.85rem;color:var(--muted)}
+.stats{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:14px; margin-bottom:40px;
+}
+.stat{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 16px; text-align:center; box-shadow:var(--shadow);
+  position:relative; overflow:hidden;
+}
+.stat::before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:3px;background:var(--accent);opacity:.75}
+.stat.s2::before{background:var(--green)} .stat.s3::before{background:var(--purple)}
+.stat.s4::before{background:var(--orange)} .stat.s5::before{background:var(--cyan)}
+.stat .num{font-size:1.75rem;font-weight:800;font-family:var(--mono);letter-spacing:-1px}
+.stat.s1 .num{color:var(--accent)} .stat.s2 .num{color:var(--green)}
+.stat.s3 .num{color:var(--purple)} .stat.s4 .num{color:var(--orange)}
+.stat.s5 .num{color:var(--cyan)}
+.stat .lbl{font-size:.76rem;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+section{margin-bottom:44px}
+h2{
+  font-size:1.28rem; font-weight:700; margin-bottom:18px; padding-bottom:10px;
+  border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px;
+}
+h2 .count{
+  font-size:.72rem; font-family:var(--mono); font-weight:600; color:var(--muted);
+  border:1px solid var(--border); border-radius:99px; padding:2px 9px;
+}
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:12px; box-shadow:var(--shadow);
+  border-left:3px solid var(--accent); transition:transform .15s ease,border-color .15s ease;
+}
+.card:hover{transform:translateX(3px); border-color:#3d444d}
+.card.ai{border-left-color:var(--purple)}
+.card.dev{border-left-color:var(--green)}
+.card.sec{border-left-color:var(--red)}
+.card.misc{border-left-color:var(--orange)}
+.card .top{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.rank{
+  font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--muted);
+  background:var(--card2); border:1px solid var(--border); border-radius:7px;
+  padding:2px 8px; flex:0 0 auto; margin-top:3px;
+}
+.card .title{font-size:1.0rem;font-weight:700;line-height:1.45;flex:1 1 260px}
+.card .title a{color:var(--fg)}
+.card .title a:hover{color:var(--accent);text-decoration:none}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.tag{
+  font-family:var(--mono); font-size:.71rem; font-weight:600;
+  border-radius:99px; padding:2px 9px; border:1px solid transparent; white-space:nowrap;
+}
+.tag.score{color:var(--green);background:rgba(63,185,80,.12);border-color:rgba(63,185,80,.3)}
+.tag.cmt{color:var(--purple);background:rgba(188,140,255,.12);border-color:rgba(188,140,255,.3)}
+.tag.by{color:var(--muted);background:rgba(139,148,158,.1);border-color:var(--border)}
+.tag.cat{color:var(--accent);background:rgba(88,166,255,.12);border-color:rgba(88,166,255,.3)}
+.tag.star{color:var(--yellow);background:rgba(210,153,34,.14);border-color:rgba(210,153,34,.35)}
+.tag.hot{color:var(--orange);background:rgba(255,166,87,.14);border-color:rgba(255,166,87,.35)}
+.summary{margin-top:10px;font-size:.9rem;color:var(--fg-dim)}
+.summary b{color:var(--fg)}
+.src{margin-top:9px;font-size:.76rem;font-family:var(--mono);color:var(--muted);word-break:break-all}
+.src a{color:#6e7f96}
+.src a:hover{color:var(--accent)}
+.top5 .card{padding:20px 20px 18px}
+.top5 .card .title{font-size:1.08rem}
+.spot{
+  background:linear-gradient(135deg,rgba(255,166,87,.10),rgba(248,81,73,.06));
+  border:1px solid rgba(255,166,87,.28); border-left:3px solid var(--orange);
+}
+.spot .title a{color:var(--orange)}
+.footer{
+  margin-top:52px; padding-top:22px; border-top:1px solid var(--border);
+  text-align:center; font-size:.78rem; color:var(--muted); line-height:2;
+}
+.footer code{font-family:var(--mono);font-size:.74rem;color:var(--fg-dim)}
+@media(max-width:600px){
+  .hero{padding:36px 4px 20px}
+  .card{padding:14px 14px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .card .title{font-size:.96rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="kicker">Hacker News · Daily Digest</div>
+  <h1>Hacker News 每日简报</h1>
+  <div class="date">2026 年 10 月 13 日 · 星期二</div>
+  <div class="sub">Top 30 热榜 · 中文摘要 · 主题分类 · 阈值：得分 ≥ 50 或评论 ≥ 30</div>
+</header>
+
+<section class="stats">
+  <div class="stat s1"><div class="num">30</div><div class="lbl">抓取文章数</div></div>
+  <div class="stat s2"><div class="num">499</div><div class="lbl">最高得分 · Muse Wonder</div></div>
+  <div class="stat s3"><div class="num">615</div><div class="lbl">最热评论 · 超市冷柜攻击</div></div>
+  <div class="stat s4"><div class="num">22</div><div class="lbl">达标重点文章</div></div>
+  <div class="stat s5"><div class="num">164</div><div class="lbl">Top 30 平均得分</div></div>
+</section>
+
+<section class="top5">
+  <h2>🔥 必读 Top 5<span class="count">按得分排序</span></h2>
+
+  <div class="card ai">
+    <div class="top">
+      <span class="rank">#1</span>
+      <div class="title"><a href="https://research.meta.ai/blog/muse-wonder" target="_blank" rel="noopener">Muse Wonder：面向个人与专业代理的前沿模型</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 499</span><span class="tag cmt">💬 269</span>
+      <span class="tag cat">AI</span><span class="tag star">今日最高分</span><span class="tag by">by meetpateltech</span>
+    </div>
+    <p class="summary">Meta Research 发布 Muse Wonder 系列（Muse Wonder / Muse Wonder Full），主打 <b>Active Memory + Active Focus</b>，称在个人与专业代理任务上达到 SOTA，训练自 GW 级 Prometheus 数据中心，可通过 Meta Model API 与 Muse Code 使用。HN 讨论并未围着基准跑分转，而是集中在 <b>对 Meta 的信任赤字、多家前沿实验室竞争是否优于一家独大，以及递归自我改进（RSI）的可行性与验证难题</b>。</p>
+    <div class="src">research.meta.ai/blog/muse-wonder</div>
+  </div>
+
+  <div class="card sec">
+    <div class="top">
+      <span class="rank">#2</span>
+      <div class="title"><a href="https://github.com/openai/codex/issues/48195" target="_blank" rel="noopener">Codex CLI 默认安装持久化、可自我更新的后台守护进程</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 424</span><span class="tag cmt">💬 222</span>
+      <span class="tag cat">安全</span><span class="tag hot">争议焦点</span><span class="tag by">by whimblepop</span>
+    </div>
+    <p class="summary">有人翻出 OpenAI Codex CLI 的默认行为：它会安装一个<b>常驻后台守护进程并自动更新自身</b>，用户未必知情、也未被明确告知如何彻底卸载。议题迅速从"便利性"升级为<b>隐蔽持久化、供应链与最小授权原则</b>——一个开发者工具凭什么在执行前就获得长期驻留权？</p>
+    <div class="src">github.com/openai/codex/issues/48195</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top">
+      <span class="rank">#3</span>
+      <div class="title"><a href="https://z.ai/blog/glm-legal" target="_blank" rel="noopener">GLM-Legal：智谱发布法律领域专用模型</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 399</span><span class="tag cmt">💬 225</span>
+      <span class="tag cat">AI</span><span class="tag by">by ilreb</span>
+    </div>
+    <p class="summary">Z.ai（智谱）推出面向法律场景的 GLM-Legal。评论区高赞经验是：<b>LLM 在合同红线标注、模板化条款审阅上已强过初级律师甚至资深律师</b>，但讨论随即转向隐患——如果入门级的"体力活"被外包给模型，<b>下一代从业者该在哪里练出专业判断力</b>与失败模式的直觉。</p>
+    <div class="src">z.ai/blog/glm-legal</div>
+  </div>
+
+  <div class="card sec">
+    <div class="top">
+      <span class="rank">#4</span>
+      <div class="title"><a href="https://www.tomshardware.com/tech-industry/cyber-security/unprecedented-cyberattack-cripples-supermarket-fridges-across-europe-as-hackers-activate-automatic-defrosting-delivery-and-store-prices-also-impacted-by-incident" target="_blank" rel="noopener">黑客远程开启自动除霜，欧洲超市冷链大面积瘫痪</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 392</span><span class="tag cmt">💬 615</span>
+      <span class="tag cat">安全</span><span class="tag hot">今日最热讨论</span><span class="tag by">by Zeekaas</span>
+    </div>
+    <p class="summary">一场被形容为"前所未有"的网络攻击波及法国、比利时、荷兰的超市：攻击者操控制冷设备<b>反复触发自动除霜</b>，导致冷链失效，并连带冲击配送与门店定价。讨论量 615 条为全场第一，核心是 <b>IoT/OT 设备的默认弱口令、远程管理面暴露，以及把关键基础设施交给联网温控器的代价</b>。</p>
+    <div class="src">tomshardware.com · tech-industry/cyber-security</div>
+  </div>
+
+  <div class="card dev">
+    <div class="top">
+      <span class="rank">#5</span>
+      <div class="title"><a href="https://prophitt.me/writing/a-modern-web-app-in-c" target="_blank" rel="noopener">用 C 写一个现代 Web 应用：CGI + SQLite + 单个二进制</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 358</span><span class="tag cmt">💬 155</span>
+      <span class="tag cat">编程</span><span class="tag by">by prophittcorey</span>
+    </div>
+    <p class="summary">作者以 <code>marketyour.games</code> 为实例证明：<b>1994 年的 CGI 模型今天依然能撑起商用产品</b>——用户账户、创作者搜索面板、Stripe 支付、Postmark 事务邮件一应俱全，走渐进增强路线、不依赖前端框架、不需要一行 JS、无容器。"没有框架，没有容器，没有后悔"。</p>
+    <div class="src">prophitt.me/writing/a-modern-web-app-in-c</div>
+  </div>
+</section>
+
+<section>
+  <h2>🤖 AI 相关动态<span class="count">8 篇</span></h2>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#1</span><div class="title"><a href="https://research.meta.ai/blog/muse-wonder" target="_blank" rel="noopener">Muse Wonder</a></div></div>
+    <div class="tags"><span class="tag score">▲ 499</span><span class="tag cmt">💬 269</span><span class="tag star">已入选必读</span></div>
+    <p class="summary">Meta 最强代理模型系列，Active Memory / Active Focus 双机制，Meta Model API 与 Muse Code 即刻可用。</p>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#2</span><div class="title"><a href="https://z.ai/blog/glm-legal" target="_blank" rel="noopener">GLM-Legal</a></div></div>
+    <div class="tags"><span class="tag score">▲ 399</span><span class="tag cmt">💬 225</span><span class="tag star">已入选必读</span></div>
+    <p class="summary">法律垂域模型，评论区把它当成"AI 是否在掏空初级岗位成长路径"的样本案例。</p>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#3</span><div class="title"><a href="https://arstechnica.com/ai/2026/10/ai-coding-agents-generate-more-code-but-not-more-software/" target="_blank" rel="noopener">AI 编码代理产出更多代码，但没有产出更多软件</a></div></div>
+    <div class="tags"><span class="tag score">▲ 297</span><span class="tag cmt">💬 254</span><span class="tag cat">AI</span><span class="tag by">by gumby</span></div>
+    <p class="summary">论点：代理让代码量、PR 数与提交频率飙升，<b>但可交付、可维护的软件并没有同比增加</b>——多出来的是审查负担、隐性复杂度与技术债。254 条评论几乎是"体感验证"。</p>
+    <div class="src">arstechnica.com/ai/2026/10</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#4</span><div class="title"><a href="https://www.spinellis.gr/blog/20261008/?li261008" target="_blank" rel="noopener">思考将变成一种爱好</a></div></div>
+    <div class="tags"><span class="tag score">▲ 208</span><span class="tag cmt">💬 272</span><span class="tag cat">AI</span><span class="tag hot">第二热讨论</span><span class="tag by">by pranitha_m</span></div>
+    <p class="summary">Diomidis Spinellis 的短文：当推理本身可以外包，"思考"会不会像手写信、下棋一样退化为小众爱好？272 条评论在<b>认知能力退化 vs. 工具解放</b>之间几乎打成平手。</p>
+    <div class="src">spinellis.gr/blog/20261008</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#5</span><div class="title"><a href="https://yyhh.org/blog/2026/10/ai-is-a-tool/" target="_blank" rel="noopener">AI 是工具，用好它需要技能（回应 Rich Hickey）</a></div></div>
+    <div class="tags"><span class="tag score">▲ 179</span><span class="tag cmt">💬 166</span><span class="tag cat">AI</span><span class="tag by">by layer8</span></div>
+    <p class="summary">作者 Huahai（Clojure 社区）反驳 Hickey：<b>"工具"与"自动化"并非互斥</b>，LLM 同样可被人驾驭，而"驾驭"本身就是技能——拿起锯子不保证切得直，握紧凿子也成不了雕塑家。好用的前提是反馈与判断。</p>
+    <div class="src">yyhh.org/blog/2026/10/ai-is-a-tool</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#6</span><div class="title"><a href="https://www.linkedin.com/pulse/ai-tool-rich-hickey-kjl8e" target="_blank" rel="noopener">Rich Hickey：「AI」不是工具</a></div></div>
+    <div class="tags"><span class="tag score">▲ 172</span><span class="tag cmt">💬 80</span><span class="tag cat">AI</span><span class="tag by">by svieira</span></div>
+    <p class="summary">Clojure 作者 Hickey（10 月 11 日）的核心论断：工具的特点是<b>可被主动、精确地操控</b>，而 LLM 只能被"提示"，因此它属于自动化而非工具。上文即是对此的直接反击——今天 HN 的 AI 讨论基本是这场论战的延长线。</p>
+    <div class="src">linkedin.com/pulse/ai-tool-rich-hickey</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#7</span><div class="title"><a href="https://taylor.town/kk-ai-2026" target="_blank" rel="noopener">Kevin Kelly 2016 年的 AI 预言，十年后回看</a></div></div>
+    <div class="tags"><span class="tag score">▲ 118</span><span class="tag cmt">💬 36</span><span class="tag cat">AI</span><span class="tag by">by surprisetalk</span></div>
+    <p class="summary">摘录《必然》中的 AI 章节逐条对表：<b>"到 2026 年 Google 的主产品不再是搜索而是 AI"、"会形成两三家通用云端智能的寡头"、"AI 更像 AWS"、"绝大多数 AI 会是专用软件大脑"</b>。命中率相当惊人，也提醒我们：十年前就已看清的方向，仍被当成新闻。</p>
+    <div class="src">taylor.town/kk-ai-2026</div>
+  </div>
+
+  <div class="card ai">
+    <div class="top"><span class="rank">#8</span><div class="title"><a href="https://news.ycombinator.com/item?id=50059096" target="_blank" rel="noopener">Launch HN: Agent37（YC F26）— 低成本 agent 沙箱</a></div></div>
+    <div class="tags"><span class="tag score">▲ 83</span><span class="tag cmt">💬 58</span><span class="tag cat">AI</span><span class="tag by">by vishnukool</span></div>
+    <p class="summary">YC F26 项目在 HN 自我发布：主打<b>廉价、可隔离的运行沙箱</b>，让代理执行任意代码时不至于带走宿主机。评论区的追问集中在逃逸边界、网络策略与按秒计费的真实成本。</p>
+    <div class="src">news.ycombinator.com/item?id=50059096</div>
+  </div>
+</section>
+
+<section>
+  <h2>💻 编程 &amp; 开源<span class="count">6 篇</span></h2>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#1</span><div class="title"><a href="https://prophitt.me/writing/a-modern-web-app-in-c" target="_blank" rel="noopener">用 C 写一个现代 Web 应用</a></div></div>
+    <div class="tags"><span class="tag score">▲ 358</span><span class="tag cmt">💬 155</span><span class="tag star">已入选必读</span></div>
+    <p class="summary">C + CGI + SQLite + 单二进制的商用站点，无框架、无容器、无 JS。</p>
+  </div>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#2</span><div class="title"><a href="https://github.com/snuri00/ps2-web-recomp" target="_blank" rel="noopener">Show HN：把 PS2 游戏静态重编译成 WebAssembly</a></div></div>
+    <div class="tags"><span class="tag score">▲ 260</span><span class="tag cmt">💬 140</span><span class="tag cat">开源</span><span class="tag by">by deadxwarrior</span></div>
+    <p class="summary">将 PS2 游戏<b>静态重编译</b>为 Wasm 并配套原生运行时，目标是在浏览器里直接跑起来（仓库已 359 星）。讨论绕不开三件事：重编译路线相比模拟器在性能上到底赢多少、EE/VU 指令覆盖度，以及 ROM 与版权的灰色地带。</p>
+    <div class="src">github.com/snuri00/ps2-web-recomp</div>
+  </div>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#3</span><div class="title"><a href="https://github.com/h0m3us3r/w1700k-sdr" target="_blank" rel="noopener">把 WiFi 7 路由器改造成 320 Msps 软件定义无线电接收机</a></div></div>
+    <div class="tags"><span class="tag score">▲ 242</span><span class="tag cmt">💬 61</span><span class="tag cat">硬件</span><span class="tag by">by djfergus</span></div>
+    <p class="summary">利用 WiFi 7 路由器（W1700K）现成的宽带射频前端与采样链路做 SDR 接收，达到 <b>320 Msps</b>。评论聚焦采样时钟的同步精度、前端滤波器带宽限制，以及"消费级硬件当仪器用"的校准困难。</p>
+    <div class="src">github.com/h0m3us3r/w1700k-sdr</div>
+  </div>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#4</span><div class="title"><a href="https://purplesyringa.moe/blog/who-is-vfmaddrnd231pd/" target="_blank" rel="noopener">vfmaddrnd231pd 到底是谁？</a></div></div>
+    <div class="tags"><span class="tag score">▲ 84</span><span class="tag cmt">💬 3</span><span class="tag cat">底层</span><span class="tag by">by pngmangi</span></div>
+    <p class="summary">x86 指令集考古：FMA 家族里出现一个反常助记符 <b>VFMADDRND231PD</b>——通用形式是 <code>vfmadd231pd</code>，多出来的 <code>rnd</code> 指向"带舍入控制"的变体，其立即数字节还同时管着 DAZ、FTZ 与异常抑制位域。作者顺着 SDM 与反汇编器把它挖了出来。</p>
+    <div class="src">purplesyringa.moe/blog/who-is-vfmaddrnd231pd</div>
+  </div>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#5</span><div class="title"><a href="https://www.markround.com/blog/2026/zx-spectrum-intro" target="_blank" rel="noopener">为 ZX Spectrum 写一段 Demoscene 片头</a></div></div>
+    <div class="tags"><span class="tag score">▲ 64</span><span class="tag cmt">💬 6</span><span class="tag cat">复古计算</span><span class="tag by">by zdw</span></div>
+    <p class="summary">在一台 40 年前的 8 位机上做 demoscene：如何用最少的字节挤出视觉与音效效果，附完整实现与思路拆解。</p>
+    <div class="src">markround.com/blog/2026/zx-spectrum-intro</div>
+  </div>
+
+  <div class="card dev">
+    <div class="top"><span class="rank">#6</span><div class="title"><a href="https://lunarwatcher.codeberg.page/til/firefox/resumable-big-downloads.html" target="_blank" rel="noopener">Firefox 如何让大文件下载可续传</a></div></div>
+    <div class="tags"><span class="tag score">▲ 61</span><span class="tag cmt">💬 17</span><span class="tag cat">浏览器</span><span class="tag by">by speckx</span></div>
+    <p class="summary">一篇 TIL：拆解 Firefox 大文件下载的断点续传——哪些元数据必须持久化、跨会话如何校验已下载区段、失败重试与服务器 Range 支持的配合。</p>
+    <div class="src">lunarwatcher.codeberg.page/til/firefox/resumable-big-downloads</div>
+  </div>
+</section>
+
+<section>
+  <h2>🔒 安全 &amp; 政策<span class="count">2 篇</span></h2>
+
+  <div class="card sec">
+    <div class="top"><span class="rank">#1</span><div class="title"><a href="https://github.com/openai/codex/issues/48195" target="_blank" rel="noopener">Codex CLI 默认安装持久化后台守护进程</a></div></div>
+    <div class="tags"><span class="tag score">▲ 424</span><span class="tag cmt">💬 222</span><span class="tag star">已入选必读</span></div>
+    <p class="summary">一个开发工具在未明确告知的情况下取得长期驻留 + 自我更新能力，这条 issue 把"便利"重新翻译成了"攻击面"。</p>
+  </div>
+
+  <div class="card sec">
+    <div class="top"><span class="rank">#2</span><div class="title"><a href="https://www.tomshardware.com/tech-industry/cyber-security/unprecedented-cyberattack-cripples-supermarket-fridges-across-europe-as-hackers-activate-automatic-defrosting-delivery-and-store-prices-also-impacted-by-incident" target="_blank" rel="noopener">欧洲超市冷链遭"前所未有"的网络攻击</a></div></div>
+    <div class="tags"><span class="tag score">▲ 392</span><span class="tag cmt">💬 615</span><span class="tag star">已入选必读</span><span class="tag hot">今日最热讨论</span></div>
+    <p class="summary">法国、比利时、荷兰受影响；攻击者远程触发自动除霜，连带影响配送与门店定价。见文末「今日最热讨论」的评论区拆解。</p>
+  </div>
+
+  <p class="summary" style="color:#8b949e;font-size:.85rem">今日 Top 30 中没有达标（得分 ≥ 50 或评论 ≥ 30）的科技政策类条目；AI 治理相关的讨论均在上述 AI 板块内展开。</p>
+</section>
+
+<section>
+  <h2>🎯 其他值得关注<span class="count">6 篇</span></h2>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#1</span><div class="title"><a href="https://www.bbc.com/news/articles/c620r33plgppo" target="_blank" rel="noopener">雪铁龙让 2CV 在电动时代复活</a></div></div>
+    <div class="tags"><span class="tag score">▲ 246</span><span class="tag cmt">💬 301</span><span class="tag cat">汽车</span><span class="tag by">by scrlk</span></div>
+    <p class="summary">经典"国民车" 2CV 以电动形态回归。301 条评论真正在吵的是：<b>今天的车市还需要一台便宜、简陋、可修、能跑烂路的车吗</b>——还是只剩智能化堆料这一条路。</p>
+    <div class="src">bbc.com/news/articles/c620r33plgppo</div>
+  </div>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#2</span><div class="title"><a href="https://www.sciencealert.com/secret-of-orange-cats-finally-revealed-after-60-year-search" target="_blank" rel="noopener">橘猫毛色之谜：追了 60 年后终于解开</a></div></div>
+    <div class="tags"><span class="tag score">▲ 218</span><span class="tag cmt">💬 172</span><span class="tag cat">科学</span><span class="tag by">by bookofjoe</span></div>
+    <p class="summary">橘猫为什么是橘的——这个悬置 60 年的遗传学问题终于有了分子层面的答案。172 条评论从"橘猫性格学"一路聊到毛色基因与发育通路。</p>
+    <div class="src">sciencealert.com</div>
+  </div>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#3</span><div class="title"><a href="https://pixelatron.com/blog/the-making-of-super-mario-64-full-giles-goddard-interview-ngc/" target="_blank" rel="noopener">《超级马力欧 64》诞生记：Giles Goddard 完整访谈（2001）</a></div></div>
+    <div class="tags"><span class="tag score">▲ 213</span><span class="tag cmt">💬 83</span><span class="tag cat">游戏史</span><span class="tag by">by gregsadetsky</span></div>
+    <p class="summary">关于 3D 平台游戏奠基之作的一手开发回忆：从摇杆手感、相机系统到 Mario 面部的实现取舍。老访谈每隔几年被翻出来，说明里面仍有工程直觉可学。</p>
+    <div class="src">pixelatron.com/blog/the-making-of-super-mario-64</div>
+  </div>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#4</span><div class="title"><a href="https://jacobin.com/2026/10/books-publishing-reading-mass-market-paperback" target="_blank" rel="noopener">出版业杀死了平装书，然后怪罪读者</a></div></div>
+    <div class="tags"><span class="tag score">▲ 102</span><span class="tag cmt">💬 67</span><span class="tag cat">文化</span><span class="tag by">by PaulHoule</span></div>
+    <p class="summary">论点：大众平装书市场的萎缩源于出版业自身的定价与渠道策略（精装优先、批发压价、货架收缩），责任不在"读者不读书"。</p>
+    <div class="src">jacobin.com/2026/10/books-publishing-reading-mass-market-paperback</div>
+  </div>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#5</span><div class="title"><a href="https://www.nationalgeographic.com/environment/article/balcony-plug-in-solar-panels-renewable-energy" target="_blank" rel="noopener">插到墙上的太阳能板</a></div></div>
+    <div class="tags"><span class="tag score">▲ 94</span><span class="tag cmt">💬 79</span><span class="tag cat">能源</span><span class="tag by">by speckx</span></div>
+    <p class="summary">阳台插电式光伏（plug-in solar）在欧美快速铺开：几百美元、自己接线、即插即用，讨论聚焦反送电与电网安全、计量合规，以及各国监管如何跟上这种"散装电站"。</p>
+    <div class="src">nationalgeographic.com/environment</div>
+  </div>
+
+  <div class="card misc">
+    <div class="top"><span class="rank">#6</span><div class="title"><a href="https://news.sky.com/story/breaking-bad-star-rj-mitte-dies-aged-34-13598332" target="_blank" rel="noopener">《绝命毒师》演员 RJ Mitte 去世，年仅 34 岁</a></div></div>
+    <div class="tags"><span class="tag score">▲ 83</span><span class="tag cmt">💬 24</span><span class="tag cat">人物</span><span class="tag by">by austinallegro</span></div>
+    <p class="summary">饰演 Walter Jr. 的演员 RJ Mitte 离世。他本人患有脑瘫，长期为此类角色的真实呈现与残障者权益发声。</p>
+    <div class="src">news.sky.com</div>
+  </div>
+</section>
+
+<section>
+  <h2>💬 今日最热讨论<span class="count">616 条评论</span></h2>
+
+  <div class="card spot">
+    <div class="top">
+      <span class="rank">TOP</span>
+      <div class="title"><a href="https://www.tomshardware.com/tech-industry/cyber-security/unprecedented-cyberattack-cripples-supermarket-fridges-across-europe-as-hackers-activate-automatic-defrosting-delivery-and-store-prices-also-impacted-by-incident" target="_blank" rel="noopener">黑客开启自动除霜，欧洲超市冷链大面积瘫痪</a></div>
+    </div>
+    <div class="tags">
+      <span class="tag score">▲ 394</span><span class="tag cmt">💬 616</span><span class="tag hot">全场最热</span><span class="tag by">by Zeekaas · 11 小时前</span>
+    </div>
+    <p class="summary">今日唯一评论数破 500 的帖子（616 条，且仍在增长），讨论很快脱离新闻本身，变成一场关于 <b>OT/IoT 安全的成本与责任分配</b> 的现场辩论，主线有四条：</p>
+    <ul class="summary" style="margin-top:10px;padding-left:22px">
+      <li><b>设备太老，且没人愿意付钱换。</b>被点名的疑似受控设备包括 Danfoss SM800（2021 年 EOL）与 SC355（2016 年 EOL）等 15 至 20 年前的控制器。高赞评论直言：超市毛利薄如刀片，本世纪以来私募又把包括「被黑」在内的外部性一路外包出去，安全评审与加固在账上从来不是一行预算。</li>
+      <li><b>低成本隔离本可避免。</b>多条高赞指出不必动控制器：只要把脆弱设备放到 VPN 或额外鉴权层之后，就能大幅收窄攻击面，最坏也只是改几个网络设置。「既然这么关键，为什么连最低限度都没做？」</li>
+      <li><b>风险定价刚刚从 0 起步。</b>数十年来这类风险被当成理论风险、定价约为 0；如今大规模事件把它重新标价。争议点是纯经济账（持续维护成本 vs 期望损失）能否自洽，以及保险是否真能兜底，有人分享了自己 25 万美元网络索赔相对顺利的理赔经历。</li>
+      <li><b>OT 与 IT 的文化冲突。</b>一位 SCADA 开发者现身说法：关键基础设施上「快速试错」是不可承受之重，流程慢是刻意为之。在互联网大厂推错更新只意味着回滚，在控制回路里推错更新则可能直接变成实体损失。</li>
+    </ul>
+    <div class="src">news.ycombinator.com/item?id=50055304 · tomshardware.com</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>数据来源：<code>Hacker News Firebase API</code> · <code>hacker-news.firebaseio.com/v0</code>（topstories 取前 30 条）</div>
+  <div>数据抓取 / 页面生成时间：<code>2026-10-13 08:05 CST</code>（北京时间 UTC+8）</div>
+  <div>分类口径：AI · 编程开源 · 安全政策 · 其他；入选阈值：得分 50 以上或评论 30 以上（30 篇中 22 篇达标）</div>
+  <div>中文标题与摘要由 AI 整理，含基于原文与评论区上下文的编辑推断，事实以原文链接为准。</div>
+  <div>Generated by <code>Hermes Agent · reviewer profile</code></div>
+</footer>
+</div>
+</body>
+</html>
