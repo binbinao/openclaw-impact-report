@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker News 每日简报 — 2026年10月16日</title>
+<meta name="description" content="Hacker News Top 30 中文每日简报（2026-10-16）：必读 Top 5、AI 动态、编程与开源、安全与政策、今日最热讨论。">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card2:#1c2128; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff;
+  --green:#3fb950; --orange:#f0883e; --purple:#bc8cff; --red:#f85149; --yellow:#e3b341; --cyan:#39c5cf;
+  --radius:14px; --shadow:0 6px 22px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 60px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+header.hero{background:linear-gradient(135deg,#161b22 0%,#1b2233 55%,#241b2f 100%);border:1px solid var(--border);
+  border-radius:var(--radius);padding:30px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+header.hero:before{content:"";position:absolute;top:-40%;right:-10%;width:340px;height:340px;
+  background:radial-gradient(circle,rgba(88,166,255,.20),transparent 65%);pointer-events:none}
+h1{margin:0 0 8px;font-size:clamp(21px,3.2vw,30px);letter-spacing:.3px;position:relative}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:12px;color:var(--muted);border:1px solid var(--border);background:rgba(255,255,255,.03);padding:4px 10px;border-radius:999px}
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+nav.toc a{font-size:13px;background:var(--card);border:1px solid var(--border);padding:6px 12px;border-radius:999px;color:var(--text)}
+nav.toc a:hover{border-color:var(--accent);text-decoration:none}
+h2.sec{font-size:19px;margin:34px 0 14px;padding-left:12px;border-left:4px solid var(--accent);
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+h2.sec .cnt{font-size:12px;color:var(--muted);font-weight:400}
+h2.sec.sec-ai{border-color:var(--purple)} h2.sec.sec-prog{border-color:var(--accent)}
+h2.sec.sec-sec{border-color:var(--red)} h2.sec.sec-other{border-color:var(--green)} h2.sec.sec-hot{border-color:var(--cyan)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(152px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.stat .k{font-size:12px;color:var(--muted);letter-spacing:.4px}
+.stat .v{font-size:26px;font-weight:700;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.stat .n{font-size:12px;color:var(--muted)}
+.stat.a .v{color:var(--accent)} .stat.b .v{color:var(--orange)} .stat.c .v{color:var(--purple)}
+.stat.d .v{color:var(--green)} .stat.e .v{color:var(--cyan)} .stat.f .v{color:var(--yellow)}
+.item{display:flex;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;margin:10px 0;transition:border-color .15s,transform .15s}
+.item:hover{border-color:#4b5563;transform:translateY(-1px)}
+.rank{flex:0 0 44px;font-weight:700;color:var(--muted);font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+.item .body{min-width:0;flex:1}
+.item h3{margin:0 0 6px;font-size:16px;line-height:1.45}
+.item h3 .orig{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:3px}
+.sum{margin:6px 0 10px;font-size:14px;color:#c9d1d9}
+.meta{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.badge{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--border);color:var(--muted);background:rgba(255,255,255,.02)}
+.badge.score{color:var(--orange);border-color:rgba(240,136,62,.42)}
+.badge.cmt{color:var(--cyan);border-color:rgba(57,197,207,.42)}
+.badge.hot{color:var(--red);border-color:rgba(248,81,73,.45)}
+.badge.src{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.tag{font-size:11px;padding:3px 9px;border-radius:6px;font-weight:600;white-space:nowrap}
+.tag.ai{color:#d2a8ff;background:rgba(188,140,255,.12);border:1px solid rgba(188,140,255,.35)}
+.tag.prog{color:#79c0ff;background:rgba(88,166,255,.12);border:1px solid rgba(88,166,255,.35)}
+.tag.sec{color:#ff7b72;background:rgba(248,81,73,.12);border:1px solid rgba(248,81,73,.35)}
+.tag.pol{color:#e3b341;background:rgba(227,179,65,.12);border:1px solid rgba(227,179,65,.35)}
+.tag.other{color:#56d364;background:rgba(63,185,80,.12);border:1px solid rgba(63,185,80,.35)}
+.top5{border-left:3px solid var(--orange)}
+.top5 .rank{color:var(--orange)}
+.why{font-size:12.5px;color:var(--muted);border-left:2px solid var(--border);padding-left:10px;margin:0 0 10px}
+.quote{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--purple);border-radius:10px;padding:12px 14px;margin:10px 0}
+.quote .who{font-size:12px;color:var(--purple);margin-bottom:5px;font-weight:600}
+.quote p{margin:0;font-size:13.5px;color:#c9d1d9}
+.quote .en{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px}
+table.rank-tbl{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-size:13.5px}
+table.rank-tbl th,table.rank-tbl td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--border)}
+table.rank-tbl th{color:var(--muted);font-weight:600;font-size:12px;background:var(--card2)}
+table.rank-tbl tr:last-child td{border-bottom:none}
+table.rank-tbl td.num{font-variant-numeric:tabular-nums;text-align:right;color:var(--cyan)}
+.note{font-size:12.5px;color:var(--muted);background:var(--card);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;margin:12px 0}
+footer{margin-top:40px;border-top:1px solid var(--border);padding-top:18px;color:var(--muted);font-size:12.5px}
+footer code{background:var(--card2);padding:1px 6px;border-radius:5px;color:#c9d1d9}
+@media(max-width:560px){
+  .item{padding:14px;gap:10px}.rank{flex-basis:34px;font-size:13px}
+  .stat .v{font-size:22px}.wrap{padding:18px 12px 44px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <h1>Hacker News 每日简报 — 2026年10月16日</h1>
+  <p class="sub">Top 30 热门条目 · 中文摘要 · 得分 / 评论双指标筛选 · 深色主题可直接发布</p>
+  <div class="pills">
+    <span class="pill">📅 2026-10-16（CST）</span>
+    <span class="pill">🔗 数据源：HN Firebase API（topstories + item）</span>
+    <span class="pill">⏱ 抓取窗口：08:00–08:20 CST</span>
+    <span class="pill">🎯 重点阈值：得分 ≥ 50 或评论 ≥ 30</span>
+    <span class="pill">🗂 排名口径：按得分降序</span>
+  </div>
+  <nav class="toc">
+    <a href="#stats">📊 今日概况</a>
+    <a href="#top5">🔥 必读 Top 5</a>
+    <a href="#ai">🤖 AI 相关动态</a>
+    <a href="#prog">💻 编程 &amp; 开源</a>
+    <a href="#sec">🔒 安全 &amp; 政策</a>
+    <a href="#other">🎯 其他值得关注</a>
+    <a href="#hot">💬 今日最热讨论</a>
+  </nav>
+</header>
+
+<h2 class="sec" id="stats">📊 今日概况 <span class="cnt">HN 首页 Top 30 快照</span></h2>
+<div class="grid">
+  <div class="stat a"><div class="k">收录文章</div><div class="v">30</div><div class="n">topstories 前 30 条</div></div>
+  <div class="stat b"><div class="k">最高得分</div><div class="v">1851</div><div class="n">确诊癌症后的实务清单</div></div>
+  <div class="stat c"><div class="k">最热评论</div><div class="v">545</div><div class="n">AI 冲击数学界的争论</div></div>
+  <div class="stat d"><div class="k">平均得分</div><div class="v">258.2</div><div class="n">中位数 191</div></div>
+  <div class="stat e"><div class="k">累计评论</div><div class="v">4,477</div><div class="n">篇均 149.2 条</div></div>
+  <div class="stat f"><div class="k">重点文章</div><div class="v">27</div><div class="n">得分 ≥ 50 或评论 ≥ 30</div></div>
+</div>
+<div class="note">
+  <strong>今日主线</strong>：① Meta 放开权重（Muse Spark Open）却仍被指在开放模型赛道落后 Qwen/GLM；② 可解释性出现"网络本来就是干净的"这一方法论级主张；③ 广告投放链路被证实可作零点击间谍软件通道（Citizen Lab）；④ 「AI 替代数学研究者」引发当日最激烈的 545 条辩论；⑤ 一篇癌症确诊经验帖以 1851 分断层登顶，评论区成为一手经验合集。
+</div>
+
+<h2 class="sec" id="top5">🔥 必读 Top 5 <span class="cnt">按得分排序 · 附"为什么必读"</span></h2>
+
+<article class="item top5">
+  <div class="rank">#1</div>
+  <div class="body">
+    <h3>确诊癌症后，你该知道的那些事（2026 版）
+      <span class="orig">Things to know when you get cancer — jjmaxwell4.com</span></h3>
+    <p class="sum">作者 2026 年 5 月确诊口腔鳞状细胞癌后写下的实战清单：预约必须"死磕"（拿到排期后几天再打电话问取消名额，作者靠这招把 4 周的 ENT 排期压到当周）、AI 模型会反复把病情往"你不会有癌症"的方向弱化，以及一堆没人提前告诉你的流程细节。</p>
+    <p class="why">必读理由：1851 分是当日第二名的 3.2 倍，442 条评论把帖子本身扩写成患者与家属的一手经验库——信息密度与实用性都远超常规科技新闻。</p>
+    <div class="meta">
+      <span class="badge score">▲ 1851</span><span class="badge cmt">💬 442</span>
+      <span class="tag other">健康 &amp; 人生</span>
+      <span class="badge src">jjmaxwell4.com</span>
+      <a href="https://jjmaxwell4.com/writing/things-to-know-when-you-get-cancer/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50093568">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item top5">
+  <div class="rank">#2</div>
+  <div class="body">
+    <h3>Meta 发布 Muse Spark Open，开放权重赛道再添一员
+      <span class="orig">Muse Spark Open — research.meta.ai / huggingface.co/meta-models</span></h3>
+    <p class="sum">Meta 以 Muse Spark Open 之名放出开放权重模型，HN 讨论中引用的 Hugging Face 仓库标注为 <code>816B-A42B</code>（816B 总参数 / 42B 激活的 MoE）。评论区并不客气：Artificial Analysis 上它落后于 Qwen3.8 Flash Next 与 GLM 5.3 Flash——后两者单张 B300 就能跑，Meta 被指在开放权重领域"还要追赶"。<em>（官方页面本机抓取超时，规格取自 HN 讨论中引用的模型仓库名。）</em></p>
+    <p class="why">必读理由：当日产业含义最重的一条（326 条评论），直接给出开放权重阵营的排位观察：分发现能力也分不过中国实验室的"单卡可跑"路线。</p>
+    <div class="meta">
+      <span class="badge score">▲ 577</span><span class="badge cmt">💬 326</span>
+      <span class="tag ai">AI 大模型</span>
+      <span class="badge src">research.meta.ai</span>
+      <a href="https://research.meta.ai/blog/muse-spark-open">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50107379">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item top5">
+  <div class="rank">#3</div>
+  <div class="body">
+    <h3>DEsk：一个走拟物风（skeuomorphic）的 Wayland Linux 桌面
+      <span class="orig">Wayland desktop for Linux with skeuomorphic design — github.com/fyzugx/DEsk</span></h3>
+    <p class="sum">在清一色扁平化设计之外，DEsk 把材质、光影与实体按钮的视觉语言重新带回 Wayland 桌面；MIT 许可，仓库当前 757 star、22 fork、7 次提交，处于极早期但关注度很高。</p>
+    <p class="why">必读理由：474 分 / 190 评论，代表了"设计反叛"这条每年都会回潮的支线——评论区分歧不在技术，而在拟物风究竟是美学回归还是可维护性债。</p>
+    <div class="meta">
+      <span class="badge score">▲ 474</span><span class="badge cmt">💬 190</span>
+      <span class="tag prog">开源项目</span>
+      <span class="badge src">github.com</span>
+      <a href="https://github.com/fyzugx/DEsk">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50103338">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item top5">
+  <div class="rank">#4</div>
+  <div class="body">
+    <h3>神经网络本来就是"干净"的：论多义性质疑
+      <span class="orig">Neural networks are already clean — already-clean.goodfire.com</span></h3>
+    <p class="sum">Goodfire 的 Nick Cammarata 提出工作假设：让整个领域相信"多义性源于叠加（superposition）、网络在任意打包概念"的经典证据其实被误读了；看起来随意的打包多是"递归泛化（recursive generalization）"，危害小得多。结论是网络自身的机制就是可读的构块，机制可解释性可以直接研究网络本身，而不必先做"解纠缠"——他称前景比原先设想的乐观得多（长文，约 65 分钟阅读，附纯文本版）。</p>
+    <p class="why">必读理由：466 分。这不是一篇解读，而是对可解释性研究前提（"网络本质杂乱"）的直接挑战；若成立，整个子领域的方法论路线要重排。</p>
+    <div class="meta">
+      <span class="badge score">▲ 466</span><span class="badge cmt">💬 179</span>
+      <span class="tag ai">可解释性</span>
+      <span class="badge src">goodfire.com</span>
+      <a href="https://already-clean.goodfire.com/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50105647">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item top5">
+  <div class="rank">#5</div>
+  <div class="body">
+    <h3>AdFection：定向广告被改造成零点击雇佣兵间谍软件的投递管线
+      <span class="orig">AdFection — citizenlab.ca（Guardian 同步报道）</span></h3>
+    <p class="sum">多伦多大学 Citizen Lab 报告称，以色列广告公司 Discover-Tech 的 <code>Controlium</code> 平台可先"大规模画像并去匿名化"互联网用户，再悄悄向目标投递第三方间谍软件，全程无需受害者点击；研究者在半岛电视台（Al Jazeera）数十台设备上找到了被广告链路入侵的证据。与钓鱼式感染不同，这条路径寄生在正常的广告投放里。</p>
+    <p class="why">必读理由：365 分拿下 531 条评论（当日讨论热度第二）。它把"广告技术 = 攻击面"从担忧变成有取证细节的结论，也重新点燃对广告业与国家网络战力关系的争论。</p>
+    <div class="meta">
+      <span class="badge score">▲ 365</span><span class="badge cmt">💬 531</span>
+      <span class="tag sec">安全</span><span class="tag pol">地缘</span>
+      <span class="badge src">citizenlab.ca</span>
+      <a href="https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50101813">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<h2 class="sec sec-ai" id="ai">🤖 AI 相关动态 <span class="cnt">4 篇 + 2 篇见必读 / 最热</span></h2>
+
+<article class="item">
+  <div class="rank">#9</div>
+  <div class="body">
+    <h3>让新的"决策模型"Jev 去解电车难题
+      <span class="orig">Jev meets the Trolley Problem — zachlandes.com</span></h3>
+    <p class="sum">近期走红的 Jev 属"决策模型"这一新类别：不输出文字，而输出带概率的<strong>选择</strong>，号称比 Claude 一类 LLM 便宜、快数十甚至上百倍，却具备（低阶）前沿模型的判断力。作者把经典伦理思想实验（1967 年 Philippa Foot 提出）直接喂给它，观察这类高频廉价决策器在道德边界上的选择分布与置信度。</p>
+    <div class="meta">
+      <span class="badge score">▲ 263</span><span class="badge cmt">💬 124</span>
+      <span class="tag ai">决策模型</span><span class="badge src">zachlandes.com</span>
+      <a href="https://zachlandes.com/trolley-problem/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50106023">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#12</div>
+  <div class="body">
+    <h3>Krea 3：为"规模化编辑"而生的图像模型（开放公测）
+      <span class="orig">Krea 3 – An image model built for editing at scale — krea.ai</span></h3>
+    <p class="sum">Krea 在 HN 自述：Krea 3 已开放公测，主打<strong>原生区域编辑</strong>（regional edits）、像素级低退化的精确修改，以及比同代前沿编辑模型更快的推理；内部评测认为在速度与成本上"可以无脑替换 NBP / GPT Image"，基准仍在补齐。团队表示后续会考虑 LoRA 微调、甚至开放权重。</p>
+    <div class="meta">
+      <span class="badge score">▲ 230</span><span class="badge cmt">💬 78</span>
+      <span class="tag ai">图像生成</span><span class="badge src">krea.ai</span>
+      <a href="https://www.krea.ai/krea-3">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50105648">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#13</div>
+  <div class="body">
+    <h3>西蒙斯基金会掏 1500 万美元，帮数学家适应 AI 时代
+      <span class="orig">Simons Foundation launches $15M effort to help mathematicians navigate AI era</span></h3>
+    <p class="sum">基金会宣布投入 1500 万美元，为数学家在 AI 重塑研究节奏的当下提供新的研究方向、协作方式与工具支持。它与当日同样走红的"数学家在哭泣"形成互文：一边是情绪，一边是资金与组织层面的回应。</p>
+    <div class="meta">
+      <span class="badge score">▲ 224</span><span class="badge cmt">💬 179</span>
+      <span class="tag ai">科研资助</span><span class="tag pol">学术生态</span>
+      <span class="badge src">simonsfoundation.org</span>
+      <a href="https://www.simonsfoundation.org/news/simons-foundation-launches-15m-effort-to-help-mathematicians-navigate-ai-era/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50104654">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#24</div>
+  <div class="body">
+    <h3>用 AI 逆向硬件：为一台被 Linux 抛弃的底片扫描仪写驱动
+      <span class="orig">Using AI to reverse engineer hardware — blogs.gnome.org/uraeus（Christian Schaller）</span></h3>
+    <p class="sum">作者整理母亲遗物时买了 Plustek 8200i 底片扫描仪（当时 Linux 支持良好），结果开箱发现芯片组已更换、驱动失效。放弃数月后，他受同行"用 AI 修好鼠标驱动"的帖子启发，让 AI 编码代理接管逆向工作，最终推进到可用状态——一篇少见的"AI 代理做系统级逆向"的一手记录。</p>
+    <div class="meta">
+      <span class="badge score">▲ 91</span><span class="badge cmt">💬 102</span>
+      <span class="tag ai">AI 辅助开发</span><span class="tag prog">Linux 驱动</span>
+      <span class="badge src">blogs.gnome.org</span>
+      <a href="https://blogs.gnome.org/uraeus/2026/10/15/aiandreverseengineerhardware/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50104299">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<div class="note">另见：<a href="#top5">🔥 必读 #2 Muse Spark Open</a>（开放权重格局）与 <a href="#top5">#4 神经网络本来就是干净的</a>（可解释性方法论）；数学界与 AI 的正面冲突见 <a href="#hot">💬 今日最热讨论</a>。</div>
+
+<h2 class="sec sec-prog" id="prog">💻 编程 &amp; 开源 <span class="cnt">8 篇 + DEsk 见必读</span></h2>
+
+<article class="item">
+  <div class="rank">#8</div>
+  <div class="body">
+    <h3>Steam 客户端现在比 Epic 那个"氛围编程"出来的新启动器更快
+      <span class="orig">Steam Client is now faster than Epic's new vibe coded launcher — respawnfirst.com</span></h3>
+    <p class="sum">文章把两款启动器的启动速度与响应做了实测对比，并把矛头指向"vibe coded"（靠感觉让 AI 生成）的开发方式：功能上线快，但性能账最终还是要还。270 条评论里既有基准方法学的争论，也有对 AI 生成代码进主干的行业性吐槽。</p>
+    <div class="meta">
+      <span class="badge score">▲ 270</span><span class="badge cmt">💬 270</span>
+      <span class="tag prog">性能工程</span><span class="badge src">respawnfirst.com</span>
+      <a href="https://respawnfirst.com/steam-client-is-now-faster-than-epics-new-vibe-coded-launcher/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50105635">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#10</div>
+  <div class="body">
+    <h3>Libreboot 26.10 "Ominous Olive"：补齐完整 UEFI 支持
+      <span class="orig">Libreboot 26.10 "Ominous Olive" released with UEFI, Chromebook support — libreboot.org</span></h3>
+    <p class="sum">Leah Rowe 于 10 月 15 日发布 Libreboot 26.10。最大变化是<strong>完整 UEFI 支持</strong>——因此连 Windows 也能启动；同时扩展了对 Chromebook 机型的支持。自由引导固件在 Intel / AMD / ARM64 平台上的可用面继续变宽。</p>
+    <div class="meta">
+      <span class="badge score">▲ 250</span><span class="badge cmt">💬 145</span>
+      <span class="tag prog">开源固件</span><span class="badge src">libreboot.org</span>
+      <a href="https://libreboot.org/news/libreboot2610.html">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50102923">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#14</div>
+  <div class="body">
+    <h3>Fortran 70 岁生日
+      <span class="orig">Celebrating 70 Years of Fortran — fortran-lang.org</span></h3>
+    <p class="sum">距离首份 Fortran 手册出版（1957-10-15）整整 70 年。作者来自剑桥大学气候计算研究所，用一组回顾说明这门"最老的现代语言"为何仍在数值计算与高性能场景里活着——评论区顺带成了老工程师的 Fortran 怀旧现场。</p>
+    <div class="meta">
+      <span class="badge score">▲ 204</span><span class="badge cmt">💬 93</span>
+      <span class="tag prog">语言</span><span class="badge src">fortran-lang.org</span>
+      <a href="https://fortran-lang.org/news/2026/09-15-Fortran-birthday/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50104726">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#15</div>
+  <div class="body">
+    <h3>我到底在自托管什么（以及不托管什么、为什么）
+      <span class="orig">What I Self-Host — viceconsole.fyi</span></h3>
+    <p class="sum">从大学宿舍床底那台被室友嫌吵而关机的 Linux 服务器，到在印度过惯廉价流媒体、回西方后不愿再付订阅价的落差，作者复盘了自托管的真实动机：不只是省钱，而是"厌倦了参与度跑步机"，想给孩子限定可看内容。文中同时列出自托管的隐性成本与最终放弃的部分。</p>
+    <div class="meta">
+      <span class="badge score">▲ 195</span><span class="badge cmt">💬 101</span>
+      <span class="tag prog">自托管</span><span class="badge src">viceconsole.fyi</span>
+      <a href="https://viceconsole.fyi/blog/2026/10/10/what-i-self-host/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50109715">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#19</div>
+  <div class="body">
+    <h3>C++26 契约（Contracts）入门：前置与后置条件
+      <span class="orig">C++26 Contracts: Introduction to Preconditions and Postconditions — cppstories.com</span></h3>
+    <p class="sum">从 <code>cassert</code> 的朴素写法出发，把前置/后置条件搬进函数声明与定义，再覆盖编译期选项、检查语义与几处容易踩的细节；作者承诺这将是系列文章的第一篇。</p>
+    <div class="meta">
+      <span class="badge score">▲ 124</span><span class="badge cmt">💬 111</span>
+      <span class="tag prog">C++</span><span class="badge src">cppstories.com</span>
+      <a href="https://www.cppstories.com/2026/cpp26_contracts/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50103164">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#21</div>
+  <div class="body">
+    <h3>Show HN：Flipflop —— 基于 Iroh 的常驻隧道文件互传
+      <span class="orig">Show HN: Flipflop – Iroh-powered persistent tunnels for filesharing — github.com/andunieee/flipflop</span></h3>
+    <p class="sum">作者因 LocalSend / DashBeam 不好用而自建：用 Iroh 建立可长期保持的隧道，给"信任的外部对象"留一条常开通道，界面用 Slint 写，追求速度；定位是"为肉身世界设计的文件分享"（GPL-3.0，140 star）。</p>
+    <div class="meta">
+      <span class="badge score">▲ 105</span><span class="badge cmt">💬 59</span>
+      <span class="tag prog">Rust</span><span class="tag prog">P2P</span>
+      <span class="badge src">github.com</span>
+      <a href="https://github.com/andunieee/flipflop">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50099136">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#25</div>
+  <div class="body">
+    <h3>Show HN：Proa —— 一个组件、多个渲染目标的 Rust Web 框架
+      <span class="orig">Show HN: Proa – A Rust web framework with fast SSR and multi-target rendering — proa.so</span></h3>
+    <p class="sum">卖点是"一个对象、所有渲染目标"：同一个类型化组件即可输出 HTML、Markdown 等（<code>html_sync!</code> / <code>md_sync!</code> 宏），配合快速 SSR；官方给出两个演示视频与一组基准（proa-benchmarks 仓库）。</p>
+    <div class="meta">
+      <span class="badge score">▲ 87</span><span class="badge cmt">💬 23</span>
+      <span class="tag prog">Rust / Web</span><span class="badge src">proa.so</span>
+      <a href="https://proa.so/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50105467">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#28</div>
+  <div class="body">
+    <h3>多人版《生命游戏》：Python + 超媒体，无重前端
+      <span class="orig">Game of Life – But Multiplayer, Hypermedia and Python — stario.dev</span></h3>
+    <p class="sum">服务端渲染 + 超媒体交互实现的多人协作生命游戏，页面实时显示在线玩家数、存活细胞数与演进频率（打开时是 25 人 / 2754 个存活细胞 / 5 Hz）。一个很小但很完整的"超媒体优先"实践样本。</p>
+    <div class="meta">
+      <span class="badge score">▲ 46</span><span class="badge cmt">💬 18</span>
+      <span class="tag prog">超媒体 / Python</span><span class="badge src">stario.dev</span>
+      <a href="https://stario.dev/apps/life">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50085171">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<div class="note">另见：<a href="#top5">🔥 必读 #3 DEsk</a>（Wayland 拟物桌面，474 分）；安全区还收录了一篇"只想下载 ISO，结果给自己路由器写了内核漏洞"的排查长文。</div>
+
+<h2 class="sec sec-sec" id="sec">🔒 安全 &amp; 政策 <span class="cnt">6 篇 + AdFection 见必读</span></h2>
+
+<article class="item">
+  <div class="rank">#6</div>
+  <div class="body">
+    <h3>只想下载个 ISO，结果给自己路由器写了个内核漏洞利用
+      <span class="orig">Wanted to download an ISO, ended up writing a kernel exploit — blog.dfb.sh</span></h3>
+    <p class="sum">作者的 TP-Link EAP770 v1 在 Wi-Fi 下会静默损坏大文件下载（rsync 报 MAC 错误），而该型号在他拆封之前就已被厂商 EOL。修复本身只需往 sysfs 写两个零，但厂商 shell 不让写——于是他给自家这台 AP 写了个内核 exp 拿 root。文末他补充：至少还有 <strong>13 个 in-tree 驱动</strong>属同一 bug 类，它们在 x86 上工作正常、在 ARM 等非一致性（non-coherent）架构上静默损坏数据，而他没有硬件可以逐一验证。</p>
+    <div class="meta">
+      <span class="badge score">▲ 344</span><span class="badge cmt">💬 169</span>
+      <span class="tag sec">内核 / 硬件</span><span class="tag prog">Linux</span>
+      <span class="badge src">blog.dfb.sh</span>
+      <a href="https://blog.dfb.sh/blog/eap770-root-for-two-zeros/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50070625">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#16</div>
+  <div class="body">
+    <h3>有人在种子站上反复折腾我的 Sonarr
+      <span class="orig">Someone on Torrent Sites Kept Fucking with My Sonarr — thereallo.dev</span></h3>
+    <p class="sum">有人把一个恶意 EXE 改名成《南方公园》剧集上传到公共种子站，还带着 <strong>2,392 个做种</strong>；Sonarr 照单抓取，然后每 90 秒重试导入一次那个失败文件。作者做了逆向分析，确认是"脚本小子级"恶意软件，顺带给 *arr 全自动下载管线提了醒：自动化的信任边界比你想的宽。</p>
+    <div class="meta">
+      <span class="badge score">▲ 187</span><span class="badge cmt">💬 73</span>
+      <span class="tag sec">恶意软件</span><span class="tag prog">Homelab</span>
+      <span class="badge src">thereallo.dev</span>
+      <a href="https://thereallo.dev/blog/someone-on-torrent-sites-kept-fucking-with-my-sonarr-setup">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50108872">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#26</div>
+  <div class="body">
+    <h3>HTTP 响应头里的提示注入：2.17 亿个响应告诉我们什么
+      <span class="orig">Prompt injection in HTTP headers: what 217M web responses show — signalscorps.com</span></h3>
+    <p class="sum">Signals Corps 读取了 Common Crawl 九月抓取（21.7 亿页）中的 10%，共 <strong>217,097,223</strong> 个响应头，专找"写给 AI 看"的文本：7,959 个站点确实这么干了，其中 7,271 个是"指路"（6,989 个用 <code>x-llms-txt</code> 指向 llms.txt 或 MCP 服务），30 个是注入尝试（24 个藏在 <code>X-AI</code> 头里，多为恶作剧）。核心结论：响应头已经是 agent 的输入面，防御起点是"你的抓取工具把响应里的哪些部分交给了模型"。</p>
+    <div class="meta">
+      <span class="badge score">▲ 81</span><span class="badge cmt">💬 16</span>
+      <span class="tag sec">AI Agent 安全</span><span class="badge src">signalscorps.com</span>
+      <a href="https://www.signalscorps.com/blog/prompt-injection-in-http-headers/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50104310">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#18</div>
+  <div class="body">
+    <h3>Withings 新用户要为 Apple Health 同步付 99 美元/年
+      <span class="orig">New Withings Users Must Pay $99/Year for Apple Health Syncing — support.withings.com</span></h3>
+    <p class="sum">Withings 官方社区帖的标题直接写着"Unacceptable"：Apple Health 数据同步对新账号被放到了 $99/年 的订阅之后。评论区延续了老争论——买断硬件再给基础功能上锁，这条边界该划在哪里。</p>
+    <div class="meta">
+      <span class="badge score">▲ 135</span><span class="badge cmt">💬 112</span>
+      <span class="tag pol">消费政策</span><span class="tag other">订阅制</span>
+      <span class="badge src">withings.com</span>
+      <a href="https://support.withings.com/hc/en-us/community/posts/51887047154577-Unacceptable-Apple-Health-Sync-is-now-behind-a-99-year-paywall-for-new-accounts">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50109375">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#22</div>
+  <div class="body">
+    <h3>我为什么写了 PGP（1991，1999 修订）
+      <span class="orig">Why I Wrote PGP — philzimmermann.com</span></h3>
+    <p class="sum">Phil Zimmermann 的经典自述重回首页：加密工具与公民自由的关系、出口管制与"把人权写进代码"的由来。配合当日 Citizen Lab 的广告链路投毒报道一起读，说服力比平时更强。</p>
+    <div class="meta">
+      <span class="badge score">▲ 99</span><span class="badge cmt">💬 37</span>
+      <span class="tag sec">密码学</span><span class="tag pol">公民自由</span>
+      <span class="badge src">philzimmermann.com</span>
+      <a href="https://philzimmermann.com/EN/essays/WhyIWrotePGP.html">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50084674">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#30</div>
+  <div class="body">
+    <h3>ICQ 重大安全漏洞（1998 年邮件列表存档）
+      <span class="orig">Major ICQ security hole (1998) — opennet.ru</span></h3>
+    <p class="sum">一篇 1998 年的邮件列表原文：国民级即时通讯客户端当年的重大漏洞是怎么被公开、被讨论的。今日热度最低（19 分 / 9 评论），但正好是"客户端即攻击面"这个命题的考古样本。</p>
+    <div class="meta">
+      <span class="badge score">▲ 19</span><span class="badge cmt">💬 9</span>
+      <span class="tag sec">安全考古</span><span class="badge src">opennet.ru</span>
+      <a href="https://opennet.ru/base/maillist/169.txt.html">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50069439">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<div class="note">另见：<a href="#top5">🔥 必读 #5 AdFection</a>——Citizen Lab 关于"定向广告 → 零点击间谍软件"的取证报告（531 条评论）。</div>
+
+<h2 class="sec sec-other" id="other">🎯 其他值得关注 <span class="cnt">6 篇</span></h2>
+
+<article class="item">
+  <div class="rank">#11</div>
+  <div class="body">
+    <h3>Show HN：Unfenced —— 与公共土地接壤的在售地块
+      <span class="orig">Show HN: Unfenced – Land for sale that borders public land — unfenced.land</span></h3>
+    <p class="sum">不信任房源描述，直接用官方边界地图核对：平台已从 695,439 条活跃挂牌中找出 <strong>13,626 块</strong>与公共林地、野生动物管理区、荒野相邻的地块，覆盖 49 个区域（DC 与 ND 暂无），约每周刷新，地图上可直接看测量到的边界长度。</p>
+    <div class="meta">
+      <span class="badge score">▲ 248</span><span class="badge cmt">💬 167</span>
+      <span class="tag other">Show HN / 数据</span><span class="badge src">unfenced.land</span>
+      <a href="https://unfenced.land/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50102247">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#17</div>
+  <div class="body">
+    <h3>达美的 Biscoff 饼干本来只是临时供应品
+      <span class="orig">Delta's Biscoff cookies were supposed to be temporary — seriouseats.com</span></h3>
+    <p class="sum">Serious Eats 的复盘：这款饼干当年只是替代方案，最后却成了北美航空体验里最有辨识度的品牌资产之一，甚至反向塑造了 Biscoff 这个品类——"临时决定变成长期心智"的经典案例。</p>
+    <div class="meta">
+      <span class="badge score">▲ 169</span><span class="badge cmt">💬 141</span>
+      <span class="tag other">商业 &amp; 品牌</span><span class="badge src">seriouseats.com</span>
+      <a href="https://www.seriouseats.com/biscoff-history-12168161">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50080155">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#20</div>
+  <div class="body">
+    <h3>E Ink Kaleido 4：彩色电子纸再迭代
+      <span class="orig">E Ink Kaleido 4 — eink.com</span></h3>
+    <p class="sum">元太发布新一代彩色电子纸平台 Kaleido 4，继续推进彩色墨水屏在显示效果与刷新上的迭代。HN 讨论依旧绕不开那个老问题：彩色电子纸距离"替代平板"还有多远（原文链接指向 web.archive.org 存档页）。</p>
+    <div class="meta">
+      <span class="badge score">▲ 116</span><span class="badge cmt">💬 68</span>
+      <span class="tag other">硬件</span><span class="badge src">eink.com</span>
+      <a href="https://www.eink.com/news/detail/EInk-Launches-Latest-Version-of-Color-ePaper-Platform-E-Ink-Kaleido-4">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50108229">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#23</div>
+  <div class="body">
+    <h3>Elevation Lab 的一封道歉信：下架 AirTag 消音器
+      <span class="orig">An Apology — elevationlab.com（Casey Hopkins，10-13）</span></h3>
+    <p class="sum">公司此前推出一款 AirTag"消音"配件（为自家自行车上的 AirTag 而做），事后意识到它会让被追踪者的 iPhone 收不到通知，等于给跟踪者递刀。道歉信宣布<strong>下架产品</strong>，并声明将用自家专利阻止任何人再做出同类产品——"做了、认了、封死这条路"的少见处理。</p>
+    <div class="meta">
+      <span class="badge score">▲ 98</span><span class="badge cmt">💬 115</span>
+      <span class="tag other">产品伦理</span><span class="tag pol">隐私</span>
+      <span class="badge src">elevationlab.com</span>
+      <a href="https://www.elevationlab.com/blogs/news/an-apology">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50099121">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#27</div>
+  <div class="body">
+    <h3>铰接公交车为什么能"折"起来
+      <span class="orig">The engineering that allows articulated buses to bend — theautopian.com</span></h3>
+    <p class="sum">在不增加车高的前提下提升载客量的最有效办法，就是把车身分成两节并加一个枢轴点。文章拆解了铰接机构、转向与动力学如何协同，尤其是后置发动机布局下的处理——原文自带 60 条读者讨论，HN 侧 35 条。</p>
+    <div class="meta">
+      <span class="badge score">▲ 64</span><span class="badge cmt">💬 35</span>
+      <span class="tag other">工程</span><span class="badge src">theautopian.com</span>
+      <a href="https://www.theautopian.com/you-wont-believe-the-incredible-engineering-that-allows-articulated-buses-to-bend/">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50097843">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<article class="item">
+  <div class="rank">#29</div>
+  <div class="body">
+    <h3>夏威夷国家公园里那条 8 英里长的裂缝
+      <span class="orig">The 8-mile hole in a Hawaii national park that no one can explain — sfgate.com</span></h3>
+    <p class="sum">SFGate 报道夏威夷火山国家公园中一条约 8 英里长的裂缝，"没人能解释"它的成因。当日最冷门的条目之一（30 分 / 19 评论），适合当尾盘闲读。</p>
+    <div class="meta">
+      <span class="badge score">▲ 30</span><span class="badge cmt">💬 19</span>
+      <span class="tag other">地球科学</span><span class="badge src">sfgate.com</span>
+      <a href="https://www.sfgate.com/national-parks/article/hawaii-volcanoes-park-great-crack-22358849.php">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50082637">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<h2 class="sec sec-hot" id="hot">💬 今日最热讨论 <span class="cnt">评论数第一 · 545 条</span></h2>
+
+<article class="item">
+  <div class="rank">#7</div>
+  <div class="body">
+    <h3>「我知道数学家为什么哭泣」——AI 时代最激烈的一场身份辩论
+      <span class="orig">I know why the mathematicians weep — derekthompson.org（334 分 / 545 评论）</span></h3>
+    <p class="sum">Derek Thompson 写的不是"AI 算得比人快"，而是当"以发现真理为职业身份"的人被工具替代时那种失位感。帖子本身 334 分，却拿下当日<strong>评论数第一（545 条）</strong>，同情、反驳与职业类比三分天下：一派谈"地位与生计被商品化"的普遍性焦虑；一派认为作者根本不懂纯数学的动机（引爱因斯坦、引 Strogatz 的"Google Translate 不懂语言学"）；还有软件工程师直言"我们已经在被裁员了，很难共情有教职的人"。</p>
+    <p class="why">为什么值得读评论：它其实是"AI 是否在替代创造力"这一争论第一次以<em>具体职业社群</em>为单位展开，双方都拿出了可检验的论证（社会认识论、历史类比、行业就业数据），比一般的 AI 乐观/悲观口水战信息量高得多。</p>
+    <div class="meta">
+      <span class="badge score">▲ 334</span><span class="badge cmt hot">💬 545（当日第一）</span>
+      <span class="tag ai">AI × 学术</span><span class="tag other">社会</span>
+      <span class="badge src">derekthompson.org</span>
+      <a href="https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep">原文 ↗</a>
+      <a href="https://news.ycombinator.com/item?id=50103630">HN 讨论 ↗</a>
+    </div>
+  </div>
+</article>
+
+<div class="quote">
+  <div class="who">atleastoptimal（共鸣派）</div>
+  <p>真正让人恐惧的不是被裁员，而是"给你地位、声望和生计的那套东西被商品化"——那是整套存在架构层面的不安。</p>
+  <div class="en">“the notion of the thing that grants you status, prestige, and a living wage being commodified would spark in anyone a profound sense of dread”</div>
+</div>
+
+<div class="quote">
+  <div class="who">ozozozd（哀悼的是"求真"本身）</div>
+  <p>他哀悼的不是职位，而是"求真的欲望"消失：一切不再被验证或检验，只看形态、可信感，甚至只看音量。有人一次性丢出 100+ 篇没人读的论文。</p>
+  <div class="en">“the loss of the desire to seek truth in tech, math etc. Nothing is validated or tested anymore.”</div>
+</div>
+
+<div class="quote">
+  <div class="who">randcraw（反驳派）</div>
+  <p>汤普森并不真正理解纯数学与理论科学这类事业。引爱因斯坦：我只想知道上帝如何创造这个世界，其余的只是细节。</p>
+</div>
+
+<div class="quote">
+  <div class="who">antics（反驳派 · 方法论）</div>
+  <p>被反复引用的"Google Translate 很厉害，但它没教我们任何语言学"并不成立——这恰恰是当下横跨多个领域那场大辩论的核心分歧点。</p>
+</div>
+
+<div class="quote">
+  <div class="who">flowerlad（跨行业对照）</div>
+  <p>作为软件工程师很难产生共情：工程师正因为 AI 被裁员，而数学家在学校里有教职保护，并不会因为某个难题被模型解掉就失业。</p>
+</div>
+
+<div class="quote">
+  <div class="who">RGS1811（给出理论框架）</div>
+  <p>文章绕了一圈却没点名的，是 Brandom 的"道义记分"（deontic scorekeeping）：概念体系之所以能存在，靠的是社会情境里理由的给予与索取——AI 一旦绕开这个环节，受影响的不只是就业。</p>
+</div>
+
+<div class="quote">
+  <div class="who">KaiserPro（历史类比）</div>
+  <p>历史对落后者并不温柔。中世纪织工曾是英格兰最强势的行会之一（羊毛教堂、低地国家的织工行会甚至煽动过革命），后来同样被技术与组织变迁抛下。</p>
+</div>
+
+<h3 style="font-size:15px;margin:22px 0 10px;color:var(--muted)">评论数 Top 5（今日）</h3>
+<table class="rank-tbl">
+  <thead><tr><th>排名</th><th>文章</th><th style="text-align:right">评论</th><th style="text-align:right">得分</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><a href="https://www.derekthompson.org/p/i-know-why-the-mathematicians-weep">I know why the mathematicians weep</a></td><td class="num">545</td><td class="num">334</td></tr>
+    <tr><td>2</td><td><a href="https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/">AdFection（广告 → 零点击间谍软件）</a></td><td class="num">531</td><td class="num">365</td></tr>
+    <tr><td>3</td><td><a href="https://jjmaxwell4.com/writing/things-to-know-when-you-get-cancer/">Things to know when you get cancer</a></td><td class="num">442</td><td class="num">1851</td></tr>
+    <tr><td>4</td><td><a href="https://research.meta.ai/blog/muse-spark-open">Muse Spark Open</a></td><td class="num">326</td><td class="num">577</td></tr>
+    <tr><td>5</td><td><a href="https://respawnfirst.com/steam-client-is-now-faster-than-epics-new-vibe-coded-launcher/">Steam Client vs Epic's vibe coded launcher</a></td><td class="num">270</td><td class="num">270</td></tr>
+  </tbody>
+</table>
+<div class="note">观察：得分榜与评论榜几乎是两套故事。1851 分的癌症经验帖靠"工具性价值"断层领先；而真正激发辩论的是 AI 与人的关系（数学界 545 条、广告投毒 531 条），这类帖子的 score 只有 334 / 365——<strong>评论密度比得分更能指示"今日争议点"</strong>。</div>
+
+<footer>
+  <p>📡 <strong>数据来源</strong>：Hacker News 官方 Firebase API —— <code>/v0/topstories.json</code>（取前 30 个 ID）与 <code>/v0/item/{id}.json</code>（title / url / score / descendants / by / text），公开无鉴权。得分与评论数为<strong>抓取瞬间快照</strong>，此后仍会持续变化。</p>
+  <p>🧭 <strong>口径说明</strong>：① 条目按 API 返回的 <code>score</code> 降序排名（即本文中的 #1–#30）；② 分类（AI / 编程开源 / 安全政策 / 其他）由本流程依内容判定，一篇可跨类；③「重点文章」指得分 ≥ 50 或评论 ≥ 30，共 27 篇，低热度条目亦保留在对应板块尾部；④ 中文摘要基于标题、原文正文（含抓取失败时 HN 讨论中的引用）与评论区写成，1–2 句为限，可能存在偏差，请以原文为准。</p>
+  <p>⏱ <strong>抓取窗口</strong>：<span id="fetched">2026-10-16 08:00–08:08 CST</span> · <strong>页面生成</strong>：2026-10-16 08:07 CST</p>
+  <p>🗂 <strong>发布位置</strong>：<code>briefs/2026-10/hn-brief-2026-10-16.html</code>（GitHub Pages，深色主题，单文件无外链依赖）· 知乎体/摘要由 AI 生成，链接均指向原文与 HN 讨论页。</p>
+</footer>
+
+</div>
+</body>
+</html>
