@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker News 每日简报 — 2026年10月19日</title>
+<meta name="description" content="Hacker News Top 30 中文简报 · 2026年10月19日 · 含 AI、编程开源、安全政策分类摘要">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card-hi:#1c2128; --border:#30363d;
+  --text:#c9d1d9; --muted:#8b949e; --accent:#58a6ff;
+  --score:#f0883e; --green:#3fb950; --purple:#a371f7; --red:#f85149;
+  --radius:14px; --shadow:0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(900px 500px at 15% -10%, rgba(88,166,255,.10), transparent 60%),
+    radial-gradient(800px 450px at 90% 0%, rgba(163,113,247,.10), transparent 60%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px 64px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{padding:56px 0 28px;border-bottom:1px solid var(--border)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);border:1px solid var(--border);
+  background:rgba(22,27,34,.7);padding:5px 12px;border-radius:999px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+h1{font-size:clamp(1.7rem,4.2vw,2.7rem);line-height:1.25;letter-spacing:-.02em;font-weight:750}
+h1 .grad{background:linear-gradient(92deg,#58a6ff 0%,#a371f7 55%,#f0883e 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);margin-top:12px;font-size:14.5px}
+.sub strong{color:var(--text);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:28px 0 44px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;position:relative;overflow:hidden;transition:.25s ease}
+.stat:hover{transform:translateY(-3px);border-color:#3d444d}
+.stat::after{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(88,166,255,.7),transparent)}
+.stat .k{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.stat .v{font-size:31px;font-weight:750;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .n{font-size:12px;color:var(--muted);margin-top:2px}
+.v.or{color:var(--score)} .v.bl{color:var(--accent)} .v.pu{color:var(--purple)} .v.gr{color:var(--green)}
+section{margin:0 0 46px}
+.shead{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.shead h2{font-size:1.22rem;font-weight:700;letter-spacing:-.01em}
+.shead .bar{width:3px;height:22px;border-radius:2px;background:var(--accent)}
+.shead .count{font-size:12px;color:var(--muted);border:1px solid var(--border);
+  border-radius:999px;padding:2px 9px}
+.sdesc{color:var(--muted);font-size:13.5px;margin:0 0 18px 15px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:14px;transition:.22s ease;box-shadow:var(--shadow)}
+.card:hover{background:var(--card-hi);border-color:#3d444d;transform:translateY(-2px)}
+.item{display:grid;grid-template-columns:46px 1fr;gap:16px}
+.rank{font-size:24px;font-weight:750;color:#3d444d;font-variant-numeric:tabular-nums;
+  line-height:1.15;text-align:center}
+.rank.top{background:linear-gradient(180deg,#f0883e,#a371f7);-webkit-background-clip:text;
+  background-clip:text;color:transparent}
+.t{font-size:16.5px;font-weight:650;letter-spacing:-.01em;line-height:1.45}
+.t a{color:var(--text)}
+.t a:hover{color:var(--accent);text-decoration:none}
+.en{font-size:12.5px;color:#6e7681;margin-top:3px;line-height:1.5}
+.sum{font-size:14px;color:#adb6c0;margin-top:9px}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:13px}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
+  border-radius:999px;padding:3px 10px;font-variant-numeric:tabular-nums;
+  border:1px solid transparent;white-space:nowrap}
+.b-score{color:var(--score);background:rgba(240,136,62,.12);border-color:rgba(240,136,62,.3)}
+.b-com{color:var(--accent);background:rgba(88,166,255,.12);border-color:rgba(88,166,255,.3)}
+.b-tag{font-weight:600}
+.b-hn{color:var(--muted);background:transparent;border-color:var(--border)}
+.b-hn:hover{color:var(--text);border-color:#4b535d}
+.b-hot{color:var(--red);background:rgba(248,81,73,.12);border-color:rgba(248,81,73,.35)}
+.top-card{position:relative;border-left:3px solid var(--accent)}
+.top-card .badge-top{position:absolute;top:-1px;right:18px;font-size:11px;font-weight:750;
+  letter-spacing:.1em;color:#0d1117;background:linear-gradient(92deg,#58a6ff,#a371f7);
+  padding:3px 10px;border-radius:0 0 8px 8px}
+.hotbox{background:linear-gradient(180deg,rgba(248,81,73,.08),rgba(22,27,34,0) 60%),var(--card);
+  border:1px solid rgba(248,81,73,.28)}
+.hotlist{list-style:none;margin-top:16px}
+.hotlist li{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed #262c34;font-size:13.5px}
+.hotlist li:first-child{border-top:0}
+.hotlist .idx{width:20px;color:#4b535d;font-weight:700;font-variant-numeric:tabular-nums}
+.hotlist .bar{flex:1;height:6px;border-radius:3px;background:#21262d;overflow:hidden}
+.hotlist .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#f85149,#f0883e)}
+.hotlist .num{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12.5px;min-width:52px;text-align:right}
+footer{border-top:1px solid var(--border);padding-top:22px;color:#6e7681;font-size:12.5px}
+footer p{margin-bottom:6px}
+footer code{background:#1b2028;border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#adb6c0}
+@media (max-width:640px){
+  .wrap{padding:0 14px 48px}
+  .hero{padding:36px 0 22px}
+  .item{grid-template-columns:34px 1fr;gap:11px}
+  .rank{font-size:19px}
+  .card{padding:16px;border-radius:12px}
+  .stat .v{font-size:26px}
+  .t{font-size:15.5px}
+  .en{font-size:11.5px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="eyebrow"><span class="dot"></span>Hacker News Daily Digest</span>
+    <h1>Hacker News 每日简报<br><span class="grad">2026年10月19日</span></h1>
+    <p class="sub">今日 Top 30 全量抓取，按主题分类并附中文摘要 · 数据快照
+      <strong>2026-10-19 08:02 CST</strong></p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="k">总文章数</div><div class="v bl">30</div><div class="n">Top Stories 前 30 条</div></div>
+    <div class="stat"><div class="k">最高得分</div><div class="v or">531</div><div class="n">DeepSeek 开放 Search &amp; Fetch API…</div></div>
+    <div class="stat"><div class="k">最热评论数</div><div class="v pu">499</div><div class="n">Elizabeth Holmes 纪录片争议</div></div>
+    <div class="stat"><div class="k">达标重点文章</div><div class="v gr">23</div><div class="n">得分 &ge; 50 或评论 &ge; 30</div></div>
+  </div>
+
+  <section id="top5">
+    <div class="shead"><span class="bar" style="background:var(--purple)"></span>
+      <h2>&#128293; 必读 Top 5</h2><span class="count">按得分</span></div>
+    <p class="sdesc">今天分数最高的五条，覆盖检索 API 价格战、域名封禁、纪录片伦理与微米级 3D 打印。</p>
+    
+    <article class="card top-card">
+      <div class="badge-top">TOP 1</div>
+      <div class="item">
+        <div class="rank top" title="HN 原始排名">09</div>
+        <div>
+          <div class="t"><a href="https://api-docs.deepseek.com/guides/search/" target="_blank" rel="noopener">DeepSeek 开放 Search &amp; Fetch API：每千次成功请求 0.75 美元</a></div>
+          <div class="en">DeepSeek search and fetch – $0.75 per 1000 successful requests</div>
+          <p class="sum">DeepSeek 上线自研搜索引擎的 Search 与 Fetch 接口，按成功请求计费、失败不计费，1k 次 0.75 美元。价格直接压到 Tavily、Exa、Brave 之下——模型厂商开始把检索层也收进自己的栈。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 531 分</span>
+            <span class="badge b-com">&#128172; 253 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50138531" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card top-card">
+      <div class="badge-top">TOP 2</div>
+      <div class="item">
+        <div class="rank top" title="HN 原始排名">19</div>
+        <div>
+          <div class="t"><a href="https://www.reddit.com/r/sysadmin/comments/1x8cycd/namecheap_just_seized_and_disabled_all_my_domains/" target="_blank" rel="noopener">Namecheap 突然扣押并停用了我名下的所有域名</a></div>
+          <div class="en">Namecheap just seized and disabled all my domains</div>
+          <p class="sum">r/sysadmin 热帖：用户称 Namecheap 一次性封禁其全部域名，无预警、无有效申诉通道。评论区普遍在讨论注册商单方面停权的合规边界，以及把域名分散到多家注册商的业务连续性做法。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 386 分</span>
+            <span class="badge b-com">&#128172; 186 条评论</span>
+            <span class="badge b-tag" style="color:#f85149;background:#f851491f;border-color:#f8514955">🔒 安全 &amp; 政策</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50142866" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card top-card">
+      <div class="badge-top">TOP 3</div>
+      <div class="item">
+        <div class="rank top" title="HN 原始排名">24</div>
+        <div>
+          <div class="t"><a href="https://www.readtheprofile.com/p/elizabeth-holmes-documentary-you-can-see-everything" target="_blank" rel="noopener">Elizabeth Holmes 纪录片《You Can See Everything》正在欺骗你</a></div>
+          <div class="en">The Elizabeth Holmes documentary “You Can See Everything” is deceiving</div>
+          <p class="sum">影评人看完后的反转结论：被操纵的不是 Holmes，而是观众。文章纠了一个常被忽略的事实——她四项涉及患者的欺诈指控被判无罪，入狱是因为误导了投入逾 7 亿美元的投资者。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 355 分</span>
+            <span class="badge b-com">&#128172; 499 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50137620" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card top-card">
+      <div class="badge-top">TOP 4</div>
+      <div class="item">
+        <div class="rank top" title="HN 原始排名">05</div>
+        <div>
+          <div class="t"><a href="https://github.com/VikOlliver/RepRapMicron/wiki" target="_blank" rel="noopener">RepRapMicron：用常见材料造一台微米级 3D 打印机</a></div>
+          <div class="en">RepRapMicron</div>
+          <p class="sum">µRepRap 想用易得材料复刻出能打印微米结构的自复制 3D 打印机。PIKA V0.02 已做到约 1µm 重复定位，并沉积出小至 4µm 的紫外树脂点，附 4µm 层高的 0.5mm Benchy 样件。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 321 分</span>
+            <span class="badge b-com">&#128172; 51 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50141076" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card top-card">
+      <div class="badge-top">TOP 5</div>
+      <div class="item">
+        <div class="rank top" title="HN 原始排名">02</div>
+        <div>
+          <div class="t"><a href="https://karrisaarinen.com/posts/someone-behind-the-software/" target="_blank" rel="noopener">软件背后，得有人</a></div>
+          <div class="en">Someone behind the software</div>
+          <p class="sum">Linear 联合创始人 Karri Saarinen 的产品观：好产品带着制作者的经验、取舍与品味，而不是流程的产物。他批评当下产品只会做加法，并质疑用 agent 把整条研发流水线自动化的思路。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 278 分</span>
+            <span class="badge b-com">&#128172; 117 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50142573" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  
+  <section id="ai">
+    <div class="shead"><span class="bar" style="background:#a371f7"></span>
+      <h2>🤖 AI 相关动态</h2><span class="count">6 篇</span></div>
+    <p class="sdesc">按得分排序，仅列出该分类下抓取到的条目。</p>
+    
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">09</div>
+        <div>
+          <div class="t"><a href="https://api-docs.deepseek.com/guides/search/" target="_blank" rel="noopener">DeepSeek 开放 Search &amp; Fetch API：每千次成功请求 0.75 美元</a></div>
+          <div class="en">DeepSeek search and fetch – $0.75 per 1000 successful requests</div>
+          <p class="sum">DeepSeek 上线自研搜索引擎的 Search 与 Fetch 接口，按成功请求计费、失败不计费，1k 次 0.75 美元。价格直接压到 Tavily、Exa、Brave 之下——模型厂商开始把检索层也收进自己的栈。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 531 分</span>
+            <span class="badge b-com">&#128172; 253 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50138531" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">29</div>
+        <div>
+          <div class="t"><a href="https://sphinx-six-theta.vercel.app/" target="_blank" rel="noopener">Show HN：Sphinx——提交 AI 写的代码前，先被测验一遍</a></div>
+          <div class="en">Show HN: Sphinx – A hook that quizzes you on your AI&#x27;s code before shipping</div>
+          <p class="sum">一个 git hook：在你 push AI 生成的代码前，就这段代码对你出一套小测验，答不上来就别提交。用强制回忆对抗「看不懂也敢合」的幻觉式协作。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 239 分</span>
+            <span class="badge b-com">&#128172; 81 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50137950" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">01</div>
+        <div>
+          <div class="t"><a href="https://arxiv.org/abs/2610.18861" target="_blank" rel="noopener">混合推理智能体：在隐空间思考，用文本行动</a></div>
+          <div class="en">Hybrid Reasoning Agents: LLM agents that think in latent space, act through text</div>
+          <p class="sum">论文提出让智能体在连续隐空间中完成推演，只把必要结论解码为文本动作，试图绕开冗长的显式思维链。评论区的争点在于：隐式推理是真更强，还是把不可观测的猜测包装成了能力。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 155 分</span>
+            <span class="badge b-com">&#128172; 92 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50145337" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">21</div>
+        <div>
+          <div class="t"><a href="https://www.nytimes.com/2026/10/16/us/math-ai-terence-tao.html" target="_blank" rel="noopener">「我处在战时状态」：陶哲轩与数学界的危机</a></div>
+          <div class="en">&quot;I&#x27;m on a war footing&quot;: Terry Tao and the crisis in math</div>
+          <p class="sum">NYT 长报道：陶哲轩称数学界已进入战时节奏——AI 让猜想生成与证明产出的速度剧变，而同行评审、成果验证与人才培养体系都来不及跟上。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 59 分</span>
+            <span class="badge b-com">&#128172; 83 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50118165" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">13</div>
+        <div>
+          <div class="t"><a href="https://blog.picheta.me/post/killswitch-lang/" target="_blank" rel="noopener">我造了一门 LLM 用不了的编程语言</a></div>
+          <div class="en">I built a programming language that LLMs can&#x27;t use</div>
+          <p class="sum">作者按让模型无法正确生成代码的目标反向设计了一门语言（killswitch-lang），从语法与语义上刻意偏离训练分布。讨论延伸到：这种反 AI 的语言设计到底有没有实际价值。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 58 分</span>
+            <span class="badge b-com">&#128172; 53 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50135762" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">08</div>
+        <div>
+          <div class="t"><a href="https://github.com/finereli/whatsapp-mcp" target="_blank" rel="noopener">Show HN：在 Cloudflare 上免费跑 WhatsApp MCP</a></div>
+          <div class="en">Show HN: WhatsApp MCP running free on Cloudflare</div>
+          <p class="sum">用 Cloudflare Workers 的免费额度跑一个 WhatsApp MCP 服务端，让模型直接读写聊天。评论主要担心账号封禁风险与消息隐私边界。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 25 分</span>
+            <span class="badge b-com">&#128172; 13 条评论</span>
+            <span class="badge b-tag" style="color:#a371f7;background:#a371f71f;border-color:#a371f755">🤖 AI 相关动态</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50145715" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+  
+  <section id="code">
+    <div class="shead"><span class="bar" style="background:#58a6ff"></span>
+      <h2>💻 编程 &amp; 开源</h2><span class="count">8 篇</span></div>
+    <p class="sdesc">按得分排序，仅列出该分类下抓取到的条目。</p>
+    
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">27</div>
+        <div>
+          <div class="t"><a href="https://t3.at/blog/2026-10-17-parser-combinators/" target="_blank" rel="noopener">解析器组合子</a></div>
+          <div class="en">Parser Combinators</div>
+          <p class="sum">一篇从零推导解析器组合子的长文：从 Parser 的类型签名出发，用几个组合子拼出可读的语法解析器，并讨论错误恢复与性能边界。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 219 分</span>
+            <span class="badge b-com">&#128172; 77 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50139067" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">15</div>
+        <div>
+          <div class="t"><a href="https://neilmadden.blog/2026/04/24/java-sealed-classes-and-exhaustive-pattern-matching/" target="_blank" rel="noopener">Java 的密封类与穷尽模式匹配</a></div>
+          <div class="en">Java sealed classes and exhaustive pattern matching</div>
+          <p class="sum">Neil Madden 梳理 sealed class + switch 模式匹配在 Java 里如何实现编译期穷尽性检查，以及它与代数数据类型、后续语言演进（如值类型）之间的关系。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 128 分</span>
+            <span class="badge b-com">&#128172; 99 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50141579" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">04</div>
+        <div>
+          <div class="t"><a href="https://www.getlazarus.org/dynamic/" target="_blank" rel="noopener">Free Pascal 编译器开始支持动态包</a></div>
+          <div class="en">Free Pascal compiler now supports dynamic packages</div>
+          <p class="sum">Lazarus / Free Pascal 引入动态包机制，可像插件一样在运行时加载卸载模块，向 Delphi 的包体系看齐。对长期维护大型 Object Pascal 桌面应用的团队是实质性升级。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 101 分</span>
+            <span class="badge b-com">&#128172; 14 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50144066" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">26</div>
+        <div>
+          <div class="t"><a href="https://thunk.blog/posts/types-of-types-haskell-kind-system/" target="_blank" rel="noopener">类型的类型：Haskell 的 Kind 系统</a></div>
+          <div class="en">Types of types: Haskell&#x27;s Kind system</div>
+          <p class="sum">从 * 到 Type 再到 DataKinds，逐层解释 Haskell 中 kind 如何给类型分类，以及它为什么是理解高阶类型与类型级编程的前提。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 93 分</span>
+            <span class="badge b-com">&#128172; 72 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50090927" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">07</div>
+        <div>
+          <div class="t"><a href="https://github.com/ardiri/palmos-lemmings" target="_blank" rel="noopener">把《Lemmings》移植回 PalmOS</a></div>
+          <div class="en">PalmOS Lemmings</div>
+          <p class="sum">硬核复古移植：在 Palm OS 掌机的低分辨率、低内存约束下重写经典解谜游戏 Lemmings，仓库里附了移植过程与内存布局的处理细节。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 80 分</span>
+            <span class="badge b-com">&#128172; 22 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50143536" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">20</div>
+        <div>
+          <div class="t"><a href="https://www.davepacheco.net/blog/2025/developing-for-debugging-dns-propagation/" target="_blank" rel="noopener">为可调试性而设计：DNS 记录传播的教训</a></div>
+          <div class="en">Developing for Debugging (2025)</div>
+          <p class="sum">Dave Pacheco 以 DNS 传播为例，说明系统设计阶段就该为「出问题时怎么查」留出路径：可观测的中间状态、可复现的输入，比事后加日志更有效。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 24 分</span>
+            <span class="badge b-com">&#128172; 0 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50131053" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">30</div>
+        <div>
+          <div class="t"><a href="https://github.com/Netflix/vmaf" target="_blank" rel="noopener">Netflix VMAF：基于多方法融合的感知视频质量评估</a></div>
+          <div class="en">Netflix vmaf: Perceptual video quality assessment based on multi-method fusion</div>
+          <p class="sum">Netflix 开源的视频质量指标，把多个基础度量融合成一个贴近主观感受的分数，已成为编码器调优与 ABR 策略评估的行业基线。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 14 分</span>
+            <span class="badge b-com">&#128172; 6 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50145295" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">14</div>
+        <div>
+          <div class="t"><a href="https://verdagon.dev/blog/reverse-borrow-checking" target="_blank" rel="noopener">换个方向想借用检查</a></div>
+          <div class="en">A new way to think about borrow checking (in reverse)</div>
+          <p class="sum">Vale 作者提出反向借用检查的思路：不从头验证每个引用，而是从使用点反推所需的权限与生命周期约束，试图降低借用检查器的实现与报错复杂度。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 7 分</span>
+            <span class="badge b-com">&#128172; 3 条评论</span>
+            <span class="badge b-tag" style="color:#58a6ff;background:#58a6ff1f;border-color:#58a6ff55">💻 编程 &amp; 开源</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50140383" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+  
+  <section id="sec">
+    <div class="shead"><span class="bar" style="background:#f85149"></span>
+      <h2>🔒 安全 &amp; 政策</h2><span class="count">3 篇</span></div>
+    <p class="sdesc">按得分排序，仅列出该分类下抓取到的条目。</p>
+    
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">19</div>
+        <div>
+          <div class="t"><a href="https://www.reddit.com/r/sysadmin/comments/1x8cycd/namecheap_just_seized_and_disabled_all_my_domains/" target="_blank" rel="noopener">Namecheap 突然扣押并停用了我名下的所有域名</a></div>
+          <div class="en">Namecheap just seized and disabled all my domains</div>
+          <p class="sum">r/sysadmin 热帖：用户称 Namecheap 一次性封禁其全部域名，无预警、无有效申诉通道。评论区普遍在讨论注册商单方面停权的合规边界，以及把域名分散到多家注册商的业务连续性做法。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 386 分</span>
+            <span class="badge b-com">&#128172; 186 条评论</span>
+            <span class="badge b-tag" style="color:#f85149;background:#f851491f;border-color:#f8514955">🔒 安全 &amp; 政策</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50142866" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">25</div>
+        <div>
+          <div class="t"><a href="https://hoaspy.com/hoa/fl/florida-hoa-housing-crisis.html" target="_blank" rel="noopener">佛罗里达的 HOA 与公寓协会正在加剧住房危机</a></div>
+          <div class="en">Florida&#x27;s HOAs and condo associations are making the housing crisis worse</div>
+          <p class="sum">长文梳理 HOA 与公寓协会的罚款权、保险要求与审批流程如何推高持有成本、抑制供给，把社区治理结构变成了住房危机的放大器。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 154 分</span>
+            <span class="badge b-com">&#128172; 263 条评论</span>
+            <span class="badge b-tag" style="color:#f85149;background:#f851491f;border-color:#f8514955">🔒 安全 &amp; 政策</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50144005" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">10</div>
+        <div>
+          <div class="t"><a href="https://quentinkaiser.be/security/2026/10/16/one-parser-two-bugs/" target="_blank" rel="noopener">一个解析器两个洞，波及一片路由器：跨 eCos 与 Linux 的 Broadcom WiFi 漏洞</a></div>
+          <div class="en">One parser, two bugs, many routers: Exploiting Broadcom WiFi across eCos, Linux</div>
+          <p class="sum">研究者披露 Broadcom WiFi 驱动中共享解析逻辑带来的两个漏洞，可同时打击 eCos 与 Linux 设备，影响大量家用路由器与嵌入式终端。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 35 分</span>
+            <span class="badge b-com">&#128172; 9 条评论</span>
+            <span class="badge b-tag" style="color:#f85149;background:#f851491f;border-color:#f8514955">🔒 安全 &amp; 政策</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50122058" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+  
+  <section id="other">
+    <div class="shead"><span class="bar" style="background:#3fb950"></span>
+      <h2>🎯 其他值得关注</h2><span class="count">13 篇</span></div>
+    <p class="sdesc">按得分排序，仅列出该分类下抓取到的条目。</p>
+    
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">24</div>
+        <div>
+          <div class="t"><a href="https://www.readtheprofile.com/p/elizabeth-holmes-documentary-you-can-see-everything" target="_blank" rel="noopener">Elizabeth Holmes 纪录片《You Can See Everything》正在欺骗你</a></div>
+          <div class="en">The Elizabeth Holmes documentary “You Can See Everything” is deceiving</div>
+          <p class="sum">影评人看完后的反转结论：被操纵的不是 Holmes，而是观众。文章纠了一个常被忽略的事实——她四项涉及患者的欺诈指控被判无罪，入狱是因为误导了投入逾 7 亿美元的投资者。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 355 分</span>
+            <span class="badge b-com">&#128172; 499 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50137620" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">05</div>
+        <div>
+          <div class="t"><a href="https://github.com/VikOlliver/RepRapMicron/wiki" target="_blank" rel="noopener">RepRapMicron：用常见材料造一台微米级 3D 打印机</a></div>
+          <div class="en">RepRapMicron</div>
+          <p class="sum">µRepRap 想用易得材料复刻出能打印微米结构的自复制 3D 打印机。PIKA V0.02 已做到约 1µm 重复定位，并沉积出小至 4µm 的紫外树脂点，附 4µm 层高的 0.5mm Benchy 样件。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 321 分</span>
+            <span class="badge b-com">&#128172; 51 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50141076" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">02</div>
+        <div>
+          <div class="t"><a href="https://karrisaarinen.com/posts/someone-behind-the-software/" target="_blank" rel="noopener">软件背后，得有人</a></div>
+          <div class="en">Someone behind the software</div>
+          <p class="sum">Linear 联合创始人 Karri Saarinen 的产品观：好产品带着制作者的经验、取舍与品味，而不是流程的产物。他批评当下产品只会做加法，并质疑用 agent 把整条研发流水线自动化的思路。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 278 分</span>
+            <span class="badge b-com">&#128172; 117 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50142573" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">22</div>
+        <div>
+          <div class="t"><a href="https://github.com/0x23/MicroManipulatorStepper" target="_blank" rel="noopener">Open MicroManipulator：亚微米级三维运动控制平台</a></div>
+          <div class="en">Open MicroManipulator – A sub-micrometer 3D motion control plattform</div>
+          <p class="sum">开源硬件项目：用步进电机搭出亚微米级三轴运动平台，成本远低于商用纳米位移台，可用于显微操作与精密装配。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 170 分</span>
+            <span class="badge b-com">&#128172; 13 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50140001" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">18</div>
+        <div>
+          <div class="t"><a href="https://legendofhyrule.com/" target="_blank" rel="noopener">Show HN：在《时之笛》重制版之前补完塞尔达时间线</a></div>
+          <div class="en">Show HN: The Zelda timeline to catch up before the Ocarina of Time remake</div>
+          <p class="sum">一个交互式塞尔达时间线站点，把官方三分支时间轴与各作品前后关系可视化，供玩家在重制版发售前快速补齐剧情顺序。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 156 分</span>
+            <span class="badge b-com">&#128172; 93 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50140769" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">23</div>
+        <div>
+          <div class="t"><a href="https://eddieabbondanz.io/post/shop/drill-powered-scooter/" target="_blank" rel="noopener">我用一把电钻把滑板车改成了电动的</a></div>
+          <div class="en">I electrified my push scooter with a power drill</div>
+          <p class="sum">把电钻当动力源的荒诞改造：拆掉钻头接上传动，实测噪声巨大但确实能跑。工程趣味大于实用性。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 117 分</span>
+            <span class="badge b-com">&#128172; 47 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50093020" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">03</div>
+        <div>
+          <div class="t"><a href="https://www.youtube.com/watch?v=LKrwhjOI8Nc" target="_blank" rel="noopener">现在是学数学最好的时代（3blue1brown）</a></div>
+          <div class="en">There&#x27;s never been a better time to go into math (by: 3blue1brown) [video]</div>
+          <p class="sum">3blue1brown 的新视频：为什么现在是最适合投身数学的时候——从工具链、算力与 AI 辅助带来的变化谈起，论证这个领域的进入成本与回报结构已经改变。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 114 分</span>
+            <span class="badge b-com">&#128172; 58 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50136150" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">17</div>
+        <div>
+          <div class="t"><a href="https://www.iwm.org.uk/history/iwm/cwr/telephone" target="_blank" rel="noopener">SIGSALY：丘吉尔与罗斯福之间的绝密电话</a></div>
+          <div class="en">SIGSALY: Churchill&#x27;s top secret hotline to the president</div>
+          <p class="sum">帝国战争博物馆讲述 SIGSALY 的故事：用一次性密钥与本底噪声掩盖语音的跨大西洋加密电话系统，比公钥密码早了数十年，也直接催生了 vocoder。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 103 分</span>
+            <span class="badge b-com">&#128172; 32 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50096110" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">06</div>
+        <div>
+          <div class="t"><a href="https://www.sciencealert.com/dogs-seem-to-agree-with-humans-that-bouba-is-round-and-kiki-is-spiky" target="_blank" rel="noopener">狗也认为 bouba 是圆的、kiki 是尖的</a></div>
+          <div class="en">Dogs seem to agree with humans that &#x27;bouba&#x27; is round and &#x27;kiki&#x27; is spiky</div>
+          <p class="sum">跨物种实验显示狗对 bouba/kiki 的音—形联觉与人类一致，暗示这种语音象征不是语言习得的副产品，而有更底层的感知基础。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 102 分</span>
+            <span class="badge b-com">&#128172; 71 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50136979" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">16</div>
+        <div>
+          <div class="t"><a href="https://www.righto.com/2026/10/8087-addition-subtraction-microcode.html" target="_blank" rel="noopener">Intel 8087 芯片：浮点加减法是怎么用微码实现的</a></div>
+          <div class="en">The Intel 8087 chip: floating-point addition and subtraction</div>
+          <p class="sum">Ken Shirriff 拆解 8087 协处理器的微码：一次浮点加减如何靠指数对齐、尾数移位与规格化在硬件里走完。硬件考古的教科书级文章。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 85 分</span>
+            <span class="badge b-com">&#128172; 27 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50142449" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">28</div>
+        <div>
+          <div class="t"><a href="https://www.youtube.com/watch?v=QH_LPimUJMs" target="_blank" rel="noopener">不止俄罗斯方块：Alexey Pajitnov 的其他游戏</a></div>
+          <div class="en">Beyond Tetris: The other games of Alexey Pajitnov [video]</div>
+          <p class="sum">纪录片回看 Pajitnov 在俄罗斯方块之外的作品——从 El-Fish 到 Pandora&#x27;s Box，以及他对解谜机制的持续偏好。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 53 分</span>
+            <span class="badge b-com">&#128172; 4 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50136017" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">11</div>
+        <div>
+          <div class="t"><a href="https://www.youtube.com/watch?v=OJ1WYyO2jdY" target="_blank" rel="noopener">DIY 16 位磁芯存储器，完整可用</a></div>
+          <div class="en">16-bit fully functional DIY magnetic core memory</div>
+          <p class="sum">视频记录了一块 16 位、可实际读写的磁芯内存从制作到跑通的全过程。对想理解 1950 年代存储原理的人来说，这是最直观的一手教具。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 22 分</span>
+            <span class="badge b-com">&#128172; 12 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50098148" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="card ">
+      
+      <div class="item">
+        <div class="rank" title="HN 原始排名">12</div>
+        <div>
+          <div class="t"><a href="https://unsung.aresluna.org/traditional-but-puzzling/" target="_blank" rel="noopener">传统，但令人费解：那句 Not a typewriter 是怎么来的</a></div>
+          <div class="en">&quot;Traditional, but Puzzling&quot;</div>
+          <p class="sum">Marcin Wichary 考据 Unix 时代那句经典报错 550 ... User unknown: Not a typewriter：sendmail 把用户名强制小写导致查无此人，错误处理例程又机械拼上系统 errno（ENOTTY），而 tty 一词本身就是电传打字机的遗迹。</p>
+          <div class="meta">
+            <span class="badge b-score">&#9650; 10 分</span>
+            <span class="badge b-com">&#128172; 0 条评论</span>
+            <span class="badge b-tag" style="color:#3fb950;background:#3fb9501f;border-color:#3fb95055">🎯 其他值得关注</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50123123" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="hot">
+    <div class="shead"><span class="bar" style="background:var(--red)"></span>
+      <h2>&#128172; 今日最热讨论</h2><span class="count">499 条评论</span></div>
+    <p class="sdesc">评论数最高的条目，以及今日讨论热度前五。</p>
+    <article class="card hotbox">
+      <div class="item">
+        <div class="rank top">24</div>
+        <div>
+          <div class="t"><a href="https://www.readtheprofile.com/p/elizabeth-holmes-documentary-you-can-see-everything" target="_blank" rel="noopener">Elizabeth Holmes 纪录片《You Can See Everything》正在欺骗你</a></div>
+          <div class="en">The Elizabeth Holmes documentary “You Can See Everything” is deceiving</div>
+          <p class="sum">纪录片本身成了最大的争议点：一部讲述「如何操纵叙事」的片子，被指在拍摄手法上重复了同一套操纵。499 条评论里真正被反复讨论的不是 Holmes 本人，而是「我们对他人的判断有多少来自二手影像」以及纪录片伦理的边界。</p>
+          <div class="meta">
+            <span class="badge b-hot">&#128293; 最热讨论</span>
+            <span class="badge b-score">&#9650; 355 分</span>
+            <span class="badge b-com">&#128172; 499 条评论</span>
+            <a class="badge b-hn" href="https://news.ycombinator.com/item?id=50137620" target="_blank" rel="noopener">HN 讨论 &#8599;</a>
+          </div>
+        </div>
+      </div>
+      <ul class="hotlist"><li><span class="idx">24</span><a href="https://www.readtheprofile.com/p/elizabeth-holmes-documentary-you-can-see-everything" target="_blank" rel="noopener" style="flex:2;color:var(--text);font-size:13px">Elizabeth Holmes 纪录片《You Can See Everything》正在欺骗你</a>
+    <span class="bar"><i style="width:100%"></i></span><span class="num">499 条</span></li><li><span class="idx">25</span><a href="https://hoaspy.com/hoa/fl/florida-hoa-housing-crisis.html" target="_blank" rel="noopener" style="flex:2;color:var(--text);font-size:13px">佛罗里达的 HOA 与公寓协会正在加剧住房危机</a>
+    <span class="bar"><i style="width:53%"></i></span><span class="num">263 条</span></li><li><span class="idx">09</span><a href="https://api-docs.deepseek.com/guides/search/" target="_blank" rel="noopener" style="flex:2;color:var(--text);font-size:13px">DeepSeek 开放 Search &amp; Fetch API：每千次成功请求 0.75 美元</a>
+    <span class="bar"><i style="width:51%"></i></span><span class="num">253 条</span></li><li><span class="idx">19</span><a href="https://www.reddit.com/r/sysadmin/comments/1x8cycd/namecheap_just_seized_and_disabled_all_my_domains/" target="_blank" rel="noopener" style="flex:2;color:var(--text);font-size:13px">Namecheap 突然扣押并停用了我名下的所有域名</a>
+    <span class="bar"><i style="width:37%"></i></span><span class="num">186 条</span></li><li><span class="idx">02</span><a href="https://karrisaarinen.com/posts/someone-behind-the-software/" target="_blank" rel="noopener" style="flex:2;color:var(--text);font-size:13px">软件背后，得有人</a>
+    <span class="bar"><i style="width:23%"></i></span><span class="num">117 条</span></li></ul>
+    </article>
+  </section>
+
+  <footer>
+    <p>数据来源：<code>hacker-news.firebaseio.com/v0</code> · topstories + item 接口，共抓取 30 条。</p>
+    <p>得分为 Hacker News 抓取时刻的快照，会随时间继续变化；括号内评论数同理。</p>
+    <p>中文标题与摘要为编辑加工，非官方翻译；原文链接指向原始来源，HN 讨论链接指向评论区。</p>
+    <p>生成时间 2026-10-19 08:02 CST · 每日自动生成</p>
+  </footer>
+
+</div>
+</body>
+</html>
