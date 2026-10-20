@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年10月20日</title>
+<meta name="description" content="Hacker News 每日热门内容中文简报：Top 5 必读、AI 动态、编程与开源、安全与政策。">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card-hover:#1c2230; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --dim:#6e7681;
+  --accent:#58a6ff; --top5:#ffa657; --ai:#a371f7; --code:#3fb950;
+  --sec:#f85149; --other:#39c5cf; --score:#f0b429; --comment:#79c0ff;
+  --radius:14px; --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",
+          "Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--sans);
+  line-height:1.7; -webkit-font-smoothing:antialiased; font-size:16px;
+  background-image:radial-gradient(900px 420px at 15% -10%,rgba(88,166,255,.10),transparent 60%),
+                   radial-gradient(700px 380px at 88% 0%,rgba(163,113,247,.09),transparent 60%);
+  background-repeat:no-repeat;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 72px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* header */
+header{padding:56px 0 34px;border-bottom:1px solid var(--border);margin-bottom:38px}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--code);
+  box-shadow:0 0 0 4px rgba(63,185,80,.15);animation:pulse 2.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+h1{font-size:clamp(1.7rem,4.4vw,2.7rem);line-height:1.22;font-weight:800;letter-spacing:-.02em}
+h1 .accent{background:linear-gradient(96deg,#58a6ff,#a371f7 55%,#39c5cf);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);margin-top:14px;font-size:15px;max-width:760px}
+.meta-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.pill{font-family:var(--mono);font-size:11.5px;padding:4px 11px;border:1px solid var(--border);
+  border-radius:999px;color:var(--muted);background:#10151c}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:14px;margin-bottom:52px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 18px;position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent);opacity:.85}
+.stat:nth-child(2)::before{background:var(--score)}
+.stat:nth-child(3)::before{background:var(--comment)}
+.stat:nth-child(4)::before{background:var(--ai)}
+.stat:nth-child(5)::before{background:var(--code)}
+.stat .k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase}
+.stat .v{font-size:30px;font-weight:800;line-height:1.25;margin-top:6px;font-variant-numeric:tabular-nums}
+.stat .n{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* section */
+section{margin-bottom:52px}
+h2{font-size:1.32rem;display:flex;align-items:center;gap:10px;margin-bottom:6px;letter-spacing:-.01em}
+h2 .cnt{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);
+  border:1px solid var(--border);border-radius:999px;padding:1px 9px}
+.sec-note{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+.rule{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin-bottom:20px}
+
+/* cards */
+.cards{display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 22px;transition:border-color .18s,transform .18s,background .18s;position:relative}
+.card:hover{border-color:#484f58;background:var(--card-hover);transform:translateY(-2px)}
+.card h3{font-size:1.03rem;line-height:1.5;font-weight:700;margin-bottom:6px}
+.card h3 a{color:var(--text)}
+.card h3 a:hover{color:var(--accent);text-decoration:none}
+.card .orig{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-bottom:10px;
+  word-break:break-word}
+.card .orig .dom{color:var(--accent);opacity:.85}
+.card p{font-size:14.3px;color:#c3ccd6;margin-bottom:12px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tag{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:6px;
+  border:1px solid transparent;white-space:nowrap}
+.t-score{color:#fdf6e3;background:rgba(240,180,41,.15);border-color:rgba(240,180,41,.35)}
+.t-cmt{color:var(--comment);background:rgba(121,192,255,.12);border-color:rgba(121,192,255,.3)}
+.t-ai{color:var(--ai);background:rgba(163,113,247,.13);border-color:rgba(163,113,247,.32)}
+.t-code{color:var(--code);background:rgba(63,185,80,.12);border-color:rgba(63,185,80,.3)}
+.t-sec{color:var(--sec);background:rgba(248,81,73,.12);border-color:rgba(248,81,73,.32)}
+.t-other{color:var(--other);background:rgba(57,197,207,.12);border-color:rgba(57,197,207,.3)}
+.t-top{color:var(--top5);background:rgba(255,166,87,.13);border-color:rgba(255,166,87,.34)}
+.t-link{margin-left:auto;color:var(--muted);border-color:var(--border);background:#10151c}
+.t-link:hover{color:var(--accent);border-color:var(--accent);text-decoration:none}
+
+/* top5 */
+.top-card{border-left:3px solid var(--top5)}
+.top-head{display:flex;gap:16px;align-items:flex-start}
+.rank{font-family:var(--mono);font-size:26px;font-weight:800;line-height:1;
+  color:transparent;-webkit-text-stroke:1.4px var(--top5);min-width:40px;padding-top:2px;
+  font-variant-numeric:tabular-nums}
+.rank.solid{color:var(--top5);-webkit-text-stroke:0}
+.top-card h3{font-size:1.09rem}
+.zh{display:block;font-size:12.5px;color:var(--dim);font-weight:500;margin-top:3px}
+
+/* hot discussion */
+.hot{border:1px solid rgba(255,166,87,.4);background:
+  linear-gradient(180deg,rgba(255,166,87,.07),rgba(22,27,34,0) 55%),var(--card)}
+.hot .badge{font-family:var(--mono);font-size:11px;color:var(--top5);
+  border:1px solid rgba(255,166,87,.4);border-radius:999px;padding:2px 10px;display:inline-block;margin-bottom:12px}
+.hot h3{font-size:1.16rem}
+.analysis{margin-top:14px;padding:14px 16px;background:#0f141b;border:1px solid var(--border);
+  border-radius:10px;font-size:14px;color:#c3ccd6}
+.analysis b{color:var(--text)}
+.also{list-style:none;display:grid;gap:8px;margin-top:16px}
+.also li{display:flex;gap:12px;align-items:baseline;font-size:14px;color:#c3ccd6;
+  padding:9px 14px;background:#10151c;border:1px solid var(--border);border-radius:9px}
+.also .idx{font-family:var(--mono);font-size:11px;color:var(--dim)}
+
+/* footer */
+footer{border-top:1px solid var(--border);padding-top:26px;color:var(--dim);font-size:12.8px}
+footer .source{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:8px}
+footer a{color:var(--muted)}
+@media(max-width:560px){
+  .wrap{padding:0 15px 56px}
+  header{padding:38px 0 26px}
+  .stat .v{font-size:25px}
+  .rank{font-size:21px;min-width:32px}
+  .card{padding:17px 17px}
+  .t-link{margin-left:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker"><span class="dot"></span>Hacker News · Daily Digest</div>
+  <h1>Hacker News 每日简报<br><span class="accent">2026 年 10 月 20 日</span></h1>
+  <p class="sub">今日 30 条热门故事里，模型发布与「AI 写码之后该怎么办」占据了两端：一边是 Mistral、MiniMax、Inception 三家在同一天放出新模型，一边是工程师在问——上线自己看不懂的代码，我们到底该怎么活。</p>
+  <div class="meta-line">
+    <span class="pill">数据源 hacker-news.firebaseio.com</span>
+    <span class="pill">样本 top 30</span>
+    <span class="pill">生成 2026-10-20 08:05 CST</span>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="k">抓取文章</div><div class="v">30</div><div class="n">Top Stories 前 30 条</div></div>
+  <div class="stat"><div class="k">最高得分</div><div class="v">531</div><div class="n">Timestral（Mistral）</div></div>
+  <div class="stat"><div class="k">最热评论</div><div class="v">382</div><div class="n">It's still OK to enjoy programming</div></div>
+  <div class="stat"><div class="k">总评论数</div><div class="v">2,185</div><div class="n">平均 72.8 条 / 篇</div></div>
+  <div class="stat"><div class="k">入选重点</div><div class="v">21</div><div class="n">得分 ≥ 50 或评论 ≥ 30</div></div>
+</div>
+
+<section id="top5">
+  <h2>🔥 必读 Top 5 <span class="cnt">按得分排序</span></h2>
+  <p class="sec-note">今日得分榜前五，覆盖 AI 基础设施、操作系统兼容层、工程师心态与硬件巧思四个方向。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card top-card">
+      <div class="top-head">
+        <div class="rank solid">01</div>
+        <div>
+          <h3><a href="https://mistral.ai/news/timestral/" target="_blank" rel="noopener">Mistral 发布 Timestral：时间序列基础模型<span class="zh">Timestral: Mistral's time-series foundation models</span></a></h3>
+          <div class="orig">mistral.ai</div>
+          <p>把「预训练基础模型」的思路搬到时序预测：它想用一个通用模型替掉需求预测、容量规划里那些按业务逐个训练的 ARIMA / LSTM。真正的看点是它能否在长尾业务上省掉特征工程——这恰是时序落地的成本大头。</p>
+          <div class="tags">
+            <span class="tag t-score">▲ 531 分</span>
+            <span class="tag t-cmt">💬 98 评论</span>
+            <span class="tag t-ai">AI / 模型</span>
+            <a class="tag t-link" href="https://mistral.ai/news/timestral/" target="_blank" rel="noopener">原文 ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card top-card">
+      <div class="top-head">
+        <div class="rank solid">02</div>
+        <div>
+          <h3><a href="https://marc.info/?l=openbsd-ports&amp;m=179236125692175" target="_blank" rel="noopener">Wine 被移植到 OpenBSD<span class="zh">Wine ported to OpenBSD</span></a></h3>
+          <div class="orig">marc.info · openbsd-ports 邮件列表</div>
+          <p>OpenBSD ports 树收到 Wine 的移植提交，OpenBSD 用户第一次有望不靠 Linux 兼容层直接跑 Windows 二进制。争议也很 OpenBSD：W^X、pledge/unveil 这套强隔离设计与一个庞大兼容层天然别扭，评论里不少人在讨论如何既开箱子又不破安全模型。</p>
+          <div class="tags">
+            <span class="tag t-score">▲ 484 分</span>
+            <span class="tag t-cmt">💬 162 评论</span>
+            <span class="tag t-code">开源 / 系统</span>
+            <a class="tag t-link" href="https://marc.info/?l=openbsd-ports&amp;m=179236125692175" target="_blank" rel="noopener">原文 ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card top-card">
+      <div class="top-head">
+        <div class="rank solid">03</div>
+        <div>
+          <h3><a href="https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming" target="_blank" rel="noopener">喜欢写代码这件事，依然没问题<span class="zh">It's still OK to enjoy programming</span></a></h3>
+          <div class="orig">chriskiehl.com</div>
+          <p>作者正面回应「AI 时代手写代码已无意义」的悲观论调：作为工作，手写代码的经济性确实变了；但作为生活，他周末仍在手写一个碰撞检测很烂的 Breakout 克隆，而且 Claude 能一发搞定并不影响这件事的意义。今日评论最多的文章。</p>
+          <div class="tags">
+            <span class="tag t-score">▲ 403 分</span>
+            <span class="tag t-cmt">💬 382 评论</span>
+            <span class="tag t-code">编程文化</span>
+            <a class="tag t-link" href="https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming" target="_blank" rel="noopener">原文 ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card top-card">
+      <div class="top-head">
+        <div class="rank solid">04</div>
+        <div>
+          <h3><a href="https://www.minimax.io/blog/minimax-m31f" target="_blank" rel="noopener">MiniMax M3.1 Flash：把 Agent 任务的成本打下来<span class="zh">MiniMax M3.1 Flash</span></a></h3>
+          <div class="orig">minimax.io</div>
+          <p>官方称它在 agentic 任务、编码、Computer Use 与网络安全上升了一个代际，同时在线推理快近 3 倍、使用成本降 70%。最有趣的一条背景是：早期版本曾以匿名身份「Space Bunny」跑了超过 200 万亿 token 的真实流量压测。</p>
+          <div class="tags">
+            <span class="tag t-score">▲ 346 分</span>
+            <span class="tag t-cmt">💬 151 评论</span>
+            <span class="tag t-ai">AI / 模型</span>
+            <a class="tag t-link" href="https://www.minimax.io/blog/minimax-m31f" target="_blank" rel="noopener">原文 ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card top-card">
+      <div class="top-head">
+        <div class="rank solid">05</div>
+        <div>
+          <h3><a href="https://www.youtube.com/watch?v=Ndftcft6XhU" target="_blank" rel="noopener">我用一个电机造了一台无人机 [视频]<span class="zh">I built a drone with only one motor [video]</span></a></h3>
+          <div class="orig">youtube.com</div>
+          <p>只用单个电机实现可控飞行的无人机，靠机械结构与舵面分配推力与力矩——典型的「约束逼出巧思」型硬件工程。评论区一半在算控制理论，一半在惊叹机械结构的想象力。</p>
+          <div class="tags">
+            <span class="tag t-score">▲ 339 分</span>
+            <span class="tag t-cmt">💬 63 评论</span>
+            <span class="tag t-other">硬件 / 工程</span>
+            <a class="tag t-link" href="https://www.youtube.com/watch?v=Ndftcft6XhU" target="_blank" rel="noopener">原文 ↗</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="ai">
+  <h2>🤖 AI 相关动态 <span class="cnt">4 条</span></h2>
+  <p class="sec-note">三家实验室同日发模型之外，更值得读的是社区自己造基准、以及「AI 写的代码无人能懂」这个已经开始计息的债。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card">
+      <h3><a href="https://news.ycombinator.com/item?id=50151036" target="_blank" rel="noopener">Ask HN：上线了自己看不懂的 AI 代码，怎么办？<span class="zh">How to deal with shipping AI-written code you don't understand?</span></a></h3>
+      <div class="orig">news.ycombinator.com</div>
+      <p>从一位 Meta 工程师「我写的代码像黑盒，我从未如此不安」的帖子出发的集体讨论。两条主流答案：一是把审查重心从逐行读码转向行为契约 + 测试覆盖，二是强制给 AI 生成的部分补设计文档与责任人签名。</p>
+      <div class="tags"><span class="tag t-score">▲ 225 分</span><span class="tag t-cmt">💬 366 评论</span><span class="tag t-ai">AI / 工程实践</span><a class="tag t-link" href="https://news.ycombinator.com/item?id=50151036" target="_blank" rel="noopener">讨论 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://www.inceptionlabs.ai/blog/introducing-mercury-3" target="_blank" rel="noopener">Mercury 3：扩散模型开始规模化<span class="zh">Mercury 3: Diffusion at Scale</span></a></h3>
+      <div class="orig">inceptionlabs.ai</div>
+      <p>Inception Labs 称这是迄今最强的扩散式 LLM：质量超过 GPT-6 Luna 与 Claude Haiku 5.5，同时在 1000+ token/s 下快 4–8 倍。扩散路线第一次在「质量 + 吞吐」上同时叫板自回归，重点看它能否守住长上下文与工具调用。</p>
+      <div class="tags"><span class="tag t-score">▲ 212 分</span><span class="tag t-cmt">💬 83 评论</span><span class="tag t-ai">AI / 推理架构</span><a class="tag t-link" href="https://www.inceptionlabs.ai/blog/introducing-mercury-3" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://www.youtube.com/watch?v=cNm4zyUtWj0" target="_blank" rel="noopener">RuneScape Bench：拿 MMO 当 Agent 的考场 [视频]<span class="zh">RuneScape Bench: MMOs for Agents</span></a></h3>
+      <div class="orig">youtube.com · 关联 LostCityRS/Server</div>
+      <p>用 RuneScape 当 agent 基准：任务长程、状态部分可观测、还要跟 NPC 与经济系统周旋，比一问一答的评测更接近真实复杂度。作者基于开源服务端 LostCityRS 搭试验床，这条路子好在可复现、成本低。</p>
+      <div class="tags"><span class="tag t-score">▲ 138 分</span><span class="tag t-cmt">💬 54 评论</span><span class="tag t-ai">AI / 评测</span><a class="tag t-link" href="https://www.youtube.com/watch?v=cNm4zyUtWj0" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://news.ycombinator.com/item?id=50154029" target="_blank" rel="noopener">Launch HN：Laminar 用 RL 训了个模型，专查 Agent 调用链里的错<span class="zh">Laminar (YC S24) – RL-trained model that finds errors in agent traces</span></a></h3>
+      <div class="orig">news.ycombinator.com · laminar.sh</div>
+      <p>开源 agent 可观测性项目 Laminar 放出 flow-1：用强化学习训练、专门在 trace 里定位错误。官方基准称检测质量与 GPT-6-sol 持平、成本低 23 倍——如果成立，agent 的线上排障成本结构会变。</p>
+      <div class="tags"><span class="tag t-score">▲ 44 分</span><span class="tag t-cmt">💬 22 评论</span><span class="tag t-ai">AI / 可观测性</span><a class="tag t-link" href="https://news.ycombinator.com/item?id=50154029" target="_blank" rel="noopener">讨论 ↗</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="code">
+  <h2>💻 编程 &amp; 开源 <span class="cnt">5 条</span></h2>
+  <p class="sec-note">Bold Moves 一览：把 Android 运行时搬进 macOS、把 Linux DRM 驱动搬进 OpenBSD，以及 PostgreSQL 19 的「回滚潮」复盘。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card">
+      <h3><a href="https://github.com/kksimp/Mac.apk" target="_blank" rel="noopener">Android 应用原生跑在 Apple Silicon macOS 上<span class="zh">Mac.apk — Run Android apps natively on Apple Silicon Macs</span></a></h3>
+      <div class="orig">github.com/kksimp/Mac.apk</div>
+      <p>不套模拟器，把 Android 应用原生跑在 Apple Silicon 上：项目含 runtime、launcher、签名与构建脚本，62 次提交。工程量集中在 ART/运行时移植、应用签名校验与传感器、图形桥接。</p>
+      <div class="tags"><span class="tag t-score">▲ 239 分</span><span class="tag t-cmt">💬 111 评论</span><span class="tag t-code">开源 / 跨平台</span><a class="tag t-link" href="https://github.com/kksimp/Mac.apk" target="_blank" rel="noopener">仓库 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://josie.lol/blog/linux-rtx-spark" target="_blank" rel="noopener">不想注册微软账号，于是我把 Linux 装进了这台笔记本<span class="zh">Putting Linux on my RTX Spark laptop because I don't have a Microsoft account</span></a></h3>
+      <div class="orig">josie.lol</div>
+      <p>在 ASUS ProArt P16（128 GB 内存、6144 CUDA 核）上装 Arch Linux ARM 的完整记录：做了可引导安装镜像、补丁已公开，7-Zip 成绩与 Windows 持平，并向 OS 与 CUDA 报告同样的 116 GiB 可访问显存，最后本地跑起了 Qwen。</p>
+      <div class="tags"><span class="tag t-score">▲ 152 分</span><span class="tag t-cmt">💬 68 评论</span><span class="tag t-code">Linux / 硬件</span><a class="tag t-link" href="https://josie.lol/blog/linux-rtx-spark" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://bsd.network/@brynet/117407035545900963" target="_blank" rel="noopener">OpenBSD 8.0 将带上来自 Linux 6.18 的 DRM 驱动<span class="zh">OpenBSD 8.0 will have inteldrm/radeondrm/amdgpu drivers from Linux 6.18</span></a></h3>
+      <div class="orig">bsd.network · @brynet</div>
+      <p>OpenBSD 直接同步上游 Linux 6.18 的 inteldrm/radeondrm/amdgpu，显卡支持这块长期短板在被系统性补齐。对想在 BSD 上跑新硬件、或者做图形栈实验的人是明显利好。</p>
+      <div class="tags"><span class="tag t-score">▲ 62 分</span><span class="tag t-cmt">💬 10 评论</span><span class="tag t-code">开源 / 内核</span><a class="tag t-link" href="https://bsd.network/@brynet/117407035545900963" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="http://peter.eisentraut.org/blog/2026/10/09/the-reverts-will-continue-until-morale-improves" target="_blank" rel="noopener">PostgreSQL 19 的「回滚潮」复盘<span class="zh">The reverts will continue until morale improves</span></a></h3>
+      <div class="orig">peter.eisentraut.org</div>
+      <p>Peter Eisentraut 坦言：beta 期开始后已有约 8–10 个重要特性被回退，数量异常且部分回退得很晚，他自己既是提交者也是受影响者。文章反思的是发布纪律、评审带宽与「赶进版本」的组织激励，而不是技术谁对谁错。</p>
+      <div class="tags"><span class="tag t-score">▲ 178 分</span><span class="tag t-cmt">💬 30 评论</span><span class="tag t-code">数据库 / 社区治理</span><a class="tag t-link" href="http://peter.eisentraut.org/blog/2026/10/09/the-reverts-will-continue-until-morale-improves" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://vt100.net/dec/vt100/rom/" target="_blank" rel="noopener">VT100 固件注释版：8 KiB 里的终端史<span class="zh">The Annotated VT100 Firmware (2022)</span></a></h3>
+      <div class="orig">vt100.net</div>
+      <p>对 1978 年 VT100 终端 8 KiB Intel 8080 固件的完整注释反汇编，逐段解释转义序列的实现。所谓「VT100 兼容」的标准定义，源头就在这份代码里——读它是理解现代终端怪癖最省力的办法。</p>
+      <div class="tags"><span class="tag t-score">▲ 62 分</span><span class="tag t-cmt">💬 3 评论</span><span class="tag t-code">系统 / 历史</span><a class="tag t-link" href="https://vt100.net/dec/vt100/rom/" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="security">
+  <h2>🔒 安全 &amp; 政策 <span class="cnt">3 条</span></h2>
+  <p class="sec-note">一条在野利用、一条证书签发规则收紧、一条监管空白——都是「你家里/你证书链上那台没人管的机器」的故事。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card">
+      <h3><a href="https://community.letsencrypt.org/t/lets-encrypt-is-adding-two-additional-remote-perspectives-for-domain-validation/252166" target="_blank" rel="noopener">Let's Encrypt 为域名验证新增两个远程视角<span class="zh">Let's Encrypt is adding two additional remote perspectives for domain validation</span></a></h3>
+      <div class="orig">community.letsencrypt.org</div>
+      <p>为满足 CA/B 基线要求（2026-12-15 起签发必须使用至少 5 个网络视角做 Multi-Perspective Issuance Corroboration），LE 扩充多视角校验。实质是提高 BGP 劫持类攻击伪造域控的难度，代价是验证链更长、失败模式更复杂。</p>
+      <div class="tags"><span class="tag t-score">▲ 238 分</span><span class="tag t-cmt">💬 76 评论</span><span class="tag t-sec">安全 / PKI</span><a class="tag t-link" href="https://community.letsencrypt.org/t/lets-encrypt-is-adding-two-additional-remote-perspectives-for-domain-validation/252166" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="http://www.boredhackerblog.info/2026/10/plex-vulnerabilities-being-exploited-in.html" target="_blank" rel="noopener">Plex 漏洞遭在野利用，用于投放挖矿程序<span class="zh">Plex vulnerabilities being exploited in the wild to drop a cryptominer</span></a></h3>
+      <div class="orig">boredhackerblog.info</div>
+      <p>作者按时间线还原了攻击链与暴露面：Plex 这类常驻家庭网络、长期不打补丁、又对公网开放的服务，是理想跳板。可执行的结论很朴素——先把它从公网撤下来，或者至少确认版本。</p>
+      <div class="tags"><span class="tag t-score">▲ 139 分</span><span class="tag t-cmt">💬 65 评论</span><span class="tag t-sec">安全 / 应急响应</span><a class="tag t-link" href="http://www.boredhackerblog.info/2026/10/plex-vulnerabilities-being-exploited-in.html" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://insideclimatenews.org/news/14102026/ethoxyquin-fire-retardant-in-seafood-chain/" target="_blank" rel="noopener">海鲜供应链里的阻燃剂：Ethoxyquin 的监管空白<span class="zh">The fire retardant in the seafood chain</span></a></h3>
+      <div class="orig">insideclimatenews.org</div>
+      <p>Inside Climate News 的调查：作为饲料抗氧化剂（兼阻燃剂）的 Ethoxyquin 在水产养殖链条中残留，而各国限量标准与检测口径长期不统一。这类「合法但不透明」的残留，比明令禁用的物质更难追责。</p>
+      <div class="tags"><span class="tag t-score">▲ 99 分</span><span class="tag t-cmt">💬 32 评论</span><span class="tag t-sec">政策 / 调查报道</span><a class="tag t-link" href="https://insideclimatenews.org/news/14102026/ethoxyquin-fire-retardant-in-seafood-chain/" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="other">
+  <h2>🎯 其他值得关注 <span class="cnt">5 条</span></h2>
+  <p class="sec-note">从冰川漂砾到战场医疗撤离，今天非技术区里的信息密度意外地高。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card">
+      <h3><a href="https://spectrum.ieee.org/alternatives-to-animal-testing" target="_blank" rel="noopener">动物实验的替代方案终于开始起飞<span class="zh">Alternatives to animal testing are finally taking off</span></a></h3>
+      <div class="orig">spectrum.ieee.org</div>
+      <p>IEEE Spectrum 梳理类器官、器官芯片与 in-silico 模型的进展：监管路径松动叠加成本下降，让替代方案从实验室概念走向产业化。真正的瓶颈已不是科学可行性，而是验证标准与药监接受度。</p>
+      <div class="tags"><span class="tag t-score">▲ 309 分</span><span class="tag t-cmt">💬 92 评论</span><span class="tag t-other">生物科技</span><a class="tag t-link" href="https://spectrum.ieee.org/alternatives-to-animal-testing" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://starcraft-shooter-2026.pages.dev/" target="_blank" rel="noopener">星际争霸：Ashfall —— 粉丝做的射击项目<span class="zh">Starcraft: Ashfall</span></a></h3>
+      <div class="orig">starcraft-shooter-2026.pages.dev</div>
+      <p>以星际争霸宇宙为背景的射击项目，部署在静态托管上、浏览器里直接能玩。评论区的情绪很统一：一半在怀念被暴雪取消的 StarCraft: Ghost，一半在讨论这类同人项目的 IP 边界。</p>
+      <div class="tags"><span class="tag t-score">▲ 273 分</span><span class="tag t-cmt">💬 96 评论</span><span class="tag t-other">游戏</span><a class="tag t-link" href="https://starcraft-shooter-2026.pages.dev/" target="_blank" rel="noopener">试玩 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://simpleflying.com/chicago-ohare-digs-up-50-ton-boulder-public-names/" target="_blank" rel="noopener">芝加哥 O'Hare 挖出 50 吨巨石，向公众征名<span class="zh">Chicago O'Hare digs up 50-ton boulder under airfield, asks public for name ideas</span></a></h3>
+      <div class="orig">simpleflying.com</div>
+      <p>机场施工时在跑道下方挖出一块 50 吨重的巨石（多半是冰川漂砾），机场索性公开征名。今日评论/得分比最高的「快乐条目」——工程现场 + 命名民主化的组合很难不好笑。</p>
+      <div class="tags"><span class="tag t-score">▲ 97 分</span><span class="tag t-cmt">💬 81 评论</span><span class="tag t-other">趣闻</span><a class="tag t-link" href="https://simpleflying.com/chicago-ohare-digs-up-50-ton-boulder-public-names/" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://www.nbcnews.com/world/ukraine/ukraine-first-drone-evacuation-wounded-soldier-frontlines-hexacopter-rcna604310" target="_blank" rel="noopener">乌克兰称完成首次无人机伤员撤离<span class="zh">Ukraine claims first drone evacuation of wounded soldier</span></a></h3>
+      <div class="orig">nbcnews.com</div>
+      <p>用六旋翼无人载具从前线撤出伤员，被乌方称为首次。战场后勤自动化又推进一格：同样的载具既能投弹也能运人，技术中立性在这类报道里总是最先消失的东西。</p>
+      <div class="tags"><span class="tag t-score">▲ 61 分</span><span class="tag t-cmt">💬 64 评论</span><span class="tag t-other">军事 / 无人机</span><a class="tag t-link" href="https://www.nbcnews.com/world/ukraine/ukraine-first-drone-evacuation-wounded-soldier-frontlines-hexacopter-rcna604310" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+    <article class="card">
+      <h3><a href="https://thefloatingcontinent.com/blog/credit-is-due/" target="_blank" rel="noopener">署名与归属：Dartmouth 教务长能给 LLM 时代上的一课<span class="zh">Credit Where Credit is Due</span></a></h3>
+      <div class="orig">thefloatingcontinent.com</div>
+      <p>借 Dartmouth 教务长处理学术诚信的具体案例，讨论 LLM 时代「贡献如何认定、功劳该记给谁」。当生成过程不可复现时，学术与工程界那套基于「可追溯作者」的评价体系就开始漏风。</p>
+      <div class="tags"><span class="tag t-score">▲ 56 分</span><span class="tag t-cmt">💬 36 评论</span><span class="tag t-other">AI 伦理 / 学术</span><a class="tag t-link" href="https://thefloatingcontinent.com/blog/credit-is-due/" target="_blank" rel="noopener">原文 ↗</a></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="hot">
+  <h2>💬 今日最热讨论 <span class="cnt">382 条评论</span></h2>
+  <p class="sec-note">评论数最高的几篇，指向的其实是同一个焦虑：当写代码不再是稀缺能力，工程师的价值锚点放在哪。</p>
+  <div class="rule"></div>
+  <div class="cards">
+
+    <article class="card hot">
+      <span class="badge">评论数 TOP 1</span>
+      <h3><a href="https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming" target="_blank" rel="noopener">It's still OK to enjoy programming<span class="zh">403 分 · 382 评论 · chriskiehl.com</span></a></h3>
+      <p>一篇语气平缓的短文，却引出了今日最长的讨论串。作者把两件事拆开：作为职业，手写代码的经济性确实被重估；作为爱好，写一个烂碰撞检测的 Breakout 依然值得，因为「Claude 能一发搞定」并不构成反对理由。</p>
+      <div class="analysis">
+        <b>为什么炸：</b>它精准踩在当下工程师的身份裂缝上。讨论大致分成三派——「工作归工作，乐趣归乐趣」的隔离派；「乐趣会被工具侵蚀，因为不再有练手机会」的悲观派；以及「真正的稀缺是判断力与品味，不是敲键盘速度」的重构派。<br><br>
+        <b>值得带走的判断：</b>把「写代码」和「造东西」解绑，是这轮变化里成本最低的心理调整；而组织层面真正该补的，是让新人仍能获得「从零到一被卡住」的训练场——否则五年后没人有能力审查 AI 的产出。
+      </div>
+      <div class="tags">
+        <span class="tag t-score">▲ 403 分</span>
+        <span class="tag t-cmt">💬 382 评论</span>
+        <span class="tag t-top">今日最热</span>
+        <a class="tag t-link" href="https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+  </div>
+
+  <ul class="also">
+    <li><span class="idx">02</span><span><b>Ask HN：上线自己看不懂的 AI 代码怎么办</b> — 366 评论。同一焦虑的实操版本：讨论重心从「该不该禁止」转向「审查流程怎么改」。</span></li>
+    <li><span class="idx">03</span><span><b>Wine 移植到 OpenBSD</b> — 162 评论。技术争论密度最高：兼容层与强制访问控制如何共存。</span></li>
+    <li><span class="idx">04</span><span><b>MiniMax M3.1 Flash</b> — 151 评论。焦点是 70% 降本背后的定价策略，以及匿名压测这种发布方式本身。</span></li>
+  </ul>
+</section>
+
+<footer>
+  <div class="source">DATA SOURCE · Hacker News Firebase API (topstories + item) · 采集时间 2026-10-20 08:03 CST</div>
+  <p>本期样本为 Top Stories 前 30 条，其中 21 条达到「得分 ≥ 50 或评论 ≥ 30」的入选阈值；榜单与分数随时间变动，以 <a href="https://news.ycombinator.com/" target="_blank" rel="noopener">news.ycombinator.com</a> 实时数据为准。分类与中文摘要由 AI 依据原文标题、站点与正文首段归纳，可能与作者本意有偏差，引用请回原文核对。得分为采集时刻快照。</p>
+  <p style="margin-top:10px">生成时间 2026-10-20 08:07 CST · Hacker News 每日简报 · 深色主题 / 响应式 / 单文件无外部依赖</p>
+</footer>
+
+</div>
+</body>
+</html>
