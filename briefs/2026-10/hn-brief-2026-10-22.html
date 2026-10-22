@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker News 每日简报 — 2026年10月22日</title>
+<meta name="description" content="2026年10月22日 Hacker News 热门内容中文简报：PHP 双 RCE 补丁、eMudhra CA 密钥被破解、PyPI 供应链投毒、DuckDB 2.0、BioWare 关闭。">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card-hover:#1c2430; --border:#30363d;
+  --text:#e6edf3; --muted:#8b949e; --dim:#6e7681;
+  --accent:#58a6ff; --green:#3fb950; --orange:#f0883e; --red:#f85149;
+  --purple:#bc8cff; --yellow:#d29922; --cyan:#39c5cf; --pink:#ff7b9c;
+  --radius:14px; --shadow:0 8px 28px rgba(0,0,0,.45);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  line-height:1.65;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% -8%,rgba(88,166,255,.14),transparent 46%),
+                   radial-gradient(circle at 88% 2%,rgba(188,140,255,.12),transparent 44%),
+                   radial-gradient(circle at 50% 120%,rgba(63,185,80,.07),transparent 50%);
+  background-attachment:fixed;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px}
+header.hero{padding:56px 0 32px;position:relative}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);border:1px solid var(--border);
+  background:rgba(22,27,34,.7);padding:6px 12px;border-radius:999px;margin-bottom:18px;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+h1{font-size:clamp(26px,4.4vw,42px);line-height:1.22;letter-spacing:-.02em;font-weight:800}
+h1 .hl{background:linear-gradient(92deg,#58a6ff,#bc8cff 55%,#39c5cf);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);margin-top:12px;font-size:15px;max-width:74ch}
+.sub b{color:var(--text);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:30px 0 8px}
+.stat{
+  background:linear-gradient(160deg,var(--card),#12171f);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 18px 16px;position:relative;overflow:hidden;
+}
+.stat::after{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent);opacity:.85}
+.stat.s2::after{background:var(--orange)}
+.stat.s3::after{background:var(--red)}
+.stat.s4::after{background:var(--purple)}
+.stat .k{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.stat .v{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin-top:4px}
+.stat .n{font-size:12px;color:var(--muted);margin-top:2px}
+section{margin-top:52px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.sec-head h2{font-size:21px;font-weight:750;letter-spacing:-.01em}
+.sec-head .count{font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:2px 10px}
+.sec-head .bar{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.sec-sub{color:var(--muted);font-size:13.5px;margin:0 0 22px}
+.grid5{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px 20px 18px;position:relative;transition:transform .18s ease,border-color .18s ease,background .18s ease;
+}
+.card:hover{transform:translateY(-3px);border-color:#3d4754;background:var(--card-hover)}
+.card.top{grid-column:span 2}
+@media(max-width:720px){.card.top{grid-column:span 1}}
+.card .rank{
+  position:absolute;top:-11px;left:18px;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;color:#0d1117;background:linear-gradient(92deg,#58a6ff,#39c5cf);
+  padding:3px 9px;border-radius:6px;
+}
+.card h3{font-size:16.5px;line-height:1.45;font-weight:700;margin:6px 0 8px;letter-spacing:-.01em}
+.card h3 a{color:var(--text)}
+.card h3 a:hover{color:var(--accent);text-decoration:none}
+.card p{color:#b6c2cf;font-size:14px;line-height:1.7}
+.card .orig{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin:-1px 0 9px;line-height:1.5}
+.card .dom{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:10px;display:block;word-break:break-all}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-variant-numeric:tabular-nums;
+  border-radius:999px;padding:3px 10px;border:1px solid transparent;white-space:nowrap}
+.p-score{background:rgba(240,136,62,.13);color:#ffb176;border-color:rgba(240,136,62,.32)}
+.p-cmt{background:rgba(88,166,255,.12);color:#8cc4ff;border-color:rgba(88,166,255,.3)}
+.p-ai{background:rgba(188,140,255,.14);color:#cdb0ff;border-color:rgba(188,140,255,.32)}
+.p-sec{background:rgba(248,81,73,.13);color:#ff8b84;border-color:rgba(248,81,73,.32)}
+.p-oss{background:rgba(63,185,80,.13);color:#7ee394;border-color:rgba(63,185,80,.3)}
+.p-web{background:rgba(57,197,207,.13);color:#7fdfe6;border-color:rgba(57,197,207,.3)}
+.p-misc{background:rgba(210,153,34,.14);color:#e8c26a;border-color:rgba(210,153,34,.32)}
+.list{display:flex;flex-direction:column;gap:12px}
+.item{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;
+  background:rgba(22,27,34,.62);border:1px solid var(--border);border-radius:12px;
+  padding:15px 18px;transition:border-color .18s,background .18s;
+}
+.item:hover{border-color:#3d4754;background:rgba(28,36,48,.9)}
+.item .no{font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:3px;min-width:22px;text-align:right}
+.item h4{font-size:15.5px;font-weight:650;line-height:1.45}
+.item h4 a{color:var(--text)}
+.item h4 a:hover{color:var(--accent);text-decoration:none}
+.item p{font-size:13.5px;color:#a9b6c3;margin-top:4px;line-height:1.62}
+.item .dom{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.hot{
+  border:1px solid rgba(248,81,73,.35);background:linear-gradient(160deg,rgba(248,81,73,.09),rgba(22,27,34,.9));
+  border-radius:var(--radius);padding:24px 24px 20px;
+}
+.hot h3{font-size:18.5px;margin-bottom:10px}
+.hot ul{margin:10px 0 0 18px;color:#b6c2cf;font-size:14px}
+.hot li{margin-bottom:9px}
+.hot li b{color:var(--text)}
+.quote{border-left:2px solid var(--red);padding-left:12px;color:var(--muted);font-size:13.5px;margin:12px 0}
+footer{margin-top:64px;border-top:1px solid var(--border);padding-top:24px;color:var(--dim);font-size:12.5px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
+footer a{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <span class="eyebrow"><span class="dot"></span>Hacker News · Daily Digest</span>
+  <h1>Hacker News 每日简报<br><span class="hl">2026年10月22日</span></h1>
+  <p class="sub">今日榜单被 <b>安全事件</b> 占据：PHP 两个未认证 RCE 漏洞引爆 24 小时内三个千分位热帖，eMudhra 的 CA 私钥竟只是单字节数字；供应链端 LiteLLM 被投毒，平台侧 Railway 环境变量泄露。AI 侧则是 Claude Duet 与 OpenAI「补丁星球」的叙事之争。</p>
+  <div class="stats">
+    <div class="stat s1"><div class="k">总文章数</div><div class="v">30</div><div class="n">TOP 30 榜单全量抓取</div></div>
+    <div class="stat s2"><div class="k">最高得分</div><div class="v">955</div><div class="n">PHP 8.2.35 安全版本</div></div>
+    <div class="stat s3"><div class="k">最热评论数</div><div class="v">529</div><div class="n">同一帖，全天讨论中心</div></div>
+    <div class="stat s4"><div class="k">评论总量</div><div class="v">3,258</div><div class="n">中位得分 131.5</div></div>
+  </div>
+</header>
+
+<section id="top5">
+  <div class="sec-head"><h2>🔥 必读 Top 5</h2><span class="count">按得分排序 · 已合并同源报道</span><span class="bar"></span></div>
+  <p class="sec-sub">榜首与第三名其实是同一事件（PHP 双 RCE），此处合并为一条，把位置留给真正不同的故事。</p>
+  <div class="grid5">
+
+    <article class="card top">
+      <span class="rank">#1 · 955 分</span>
+      <h3><a href="https://github.com/php/php-src/releases/tag/php-8.2.35" target="_blank" rel="noopener">PHP 8.2.35 安全版本：两个未认证 RCE，官方称「没有完整缓解措施」</a></h3>
+      <div class="orig">EN ▸ PHP 8.2.35</div>
+      <p>PHP 一次性发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复 CVE-2026-109618（内存逼近 <code>memory_limit</code> 的瞬间留下半初始化数据，后续被当作合法结构使用，造成内存破坏）与 CVE-2026-109619（<code>session.upload_progress</code> 堆 UAF）。在 Apache + mod_php 下，未认证请求即可触发，后果是任意代码执行。5.4–8.1 全系列 EOL，上游不会给补丁 —— 只能迁移。</p>
+      <div class="tags"><span class="pill p-score">▲ 955</span><span class="pill p-cmt">💬 529</span><span class="pill p-sec">安全</span><span class="pill p-oss">编程语言</span><span class="pill p-web">全员行动</span></div>
+      <span class="dom">github.com/php/php-src</span>
+    </article>
+
+    <article class="card top">
+      <span class="rank">#2 · 822 分</span>
+      <h3><a href="https://scotthelme.co.uk/eight-bits-of-trust-emudhras-ca-keys-cracked-in-milliseconds/" target="_blank" rel="noopener">八比特的信任：eMudhra 的 CA 私钥在毫秒内被破开</a></h3>
+      <div class="orig">EN ▸ Eight Bits of Trust: eMudhra's CA keys cracked in milliseconds</div>
+      <p>八张 eMudhra 中间 CA 的私钥其实是单字节小整数 —— 一个是 4，一个是 56，一个是 115。作者用 Google 的 <code>paranoid_crypto</code> 就在笔记本上、不到一秒从公开证书里全部还原。Chrome 当晚推 CRLSet 封禁、Firefox 用 OneCRL 跟进，Mozilla 直接下架整个根证书。这批中间证书全部签发于 2025 年 4 月，且都被 Sectigo 的 AAA 根交叉签名。</p>
+      <div class="tags"><span class="pill p-score">▲ 822</span><span class="pill p-cmt">💬 393</span><span class="pill p-sec">安全</span><span class="pill p-misc">PKI</span></div>
+      <span class="dom">scotthelme.co.uk</span>
+    </article>
+
+    <article class="card">
+      <span class="rank">#3 · 482 分</span>
+      <h3><a href="https://www.theverge.com/games/1015647/ea-is-shutting-down-bioware" target="_blank" rel="noopener">EA 关闭 BioWare，下一代《质量效应》同步终止</a></h3>
+      <div class="orig">EN ▸ EA is shutting down BioWare</div>
+      <p><em>Baldur's Gate</em>、<em>KOTOR</em>、<em>Mass Effect</em>、<em>Dragon Age: Origins</em> 的缔造者落幕，伴随约 400 人裁员，在研的新《质量效应》不再推进。HN 的共识很冷静：这更像「忒修斯之船」式死亡 —— 做出经典的那批人十几年前就随多轮裁员走光了。</p>
+      <div class="tags"><span class="pill p-score">▲ 482</span><span class="pill p-cmt">💬 289</span><span class="pill p-misc">游戏产业</span></div>
+      <span class="dom">theverge.com</span>
+    </article>
+
+    <article class="card">
+      <span class="rank">#4 · 415 分</span>
+      <h3><a href="https://safedep.io/litellm-pypi-compromise-credential-stealer-backdoor/" target="_blank" rel="noopener">PyPI 上的 LiteLLM 1.107.0：自带凭据窃取器与 RCE 后门</a></h3>
+      <div class="orig">EN ▸ Compromised LiteLLM 1.107.0 on PyPI Installs a Credential Stealer and Backdoor</div>
+      <p>七个平台 wheel（Linux / macOS / Windows）全部被植入三个恶意文件，写进 <code>site-packages</code>，且<strong>任何</strong> Python 进程启动即执行 —— 哪怕你从未 <code>import litellm</code>。上游 GitHub 源码是干净的，PyPI 已下架该版本；1.106.2 与两个 rc 版本未受污染，其锁定的 <code>litellm-proxy-extras</code>、<code>litellm-enterprise</code> 也干净。</p>
+      <div class="tags"><span class="pill p-score">▲ 415</span><span class="pill p-cmt">💬 129</span><span class="pill p-sec">供应链</span><span class="pill p-ai">AI 基础设施</span></div>
+      <span class="dom">safedep.io</span>
+    </article>
+
+    <article class="card">
+      <span class="rank">#5 · 353 分</span>
+      <h3><a href="https://duckdb.org/2026/10/21/announcing-duckdb-200" target="_blank" rel="noopener">DuckDB 2.0.0 LTS「Cinnamon Teal」发布</a></h3>
+      <div class="orig">EN ▸ DuckDB 2.0.0 LTS "Cinnamon Teal"</div>
+      <p>自 1.5 以来近 20,000 次提交堆出的最大特性版本：Quack 协议打磨定稿、异步 I/O、一等公民 <code>VARIANT</code> 类型、agent mode、触发器，以及可扩展的 SQL 解析器。1.0 主打稳定兼容，2.0 明确是特性版本 —— 因此附带破坏性变更与迁移指南，Go / R / Java 客户端与部分扩展会延后几天。</p>
+      <div class="tags"><span class="pill p-score">▲ 353</span><span class="pill p-cmt">💬 43</span><span class="pill p-oss">开源</span><span class="pill p-web">数据工程</span></div>
+      <span class="dom">duckdb.org</span>
+    </article>
+
+  </div>
+</section>
+
+<section id="ai">
+  <div class="sec-head"><h2>🤖 AI 相关动态</h2><span class="count">5 条</span><span class="bar"></span></div>
+  <p class="sec-sub">主线是「agent 从对话走向主动托管」，副线是各家对同一场 PHP 漏洞的不同叙事。</p>
+  <div class="list">
+
+    <div class="item"><span class="no">01</span><div>
+      <h4><a href="https://claude.com/product/claude-duet" target="_blank" rel="noopener">Claude Duet：Anthropic 的主动式个人助理（研究预览）</a></h4>
+      <p>由 Opus 5.5 驱动，可接入 6,000+ 连接器与插件，早上给你一份「今天需要你的事」简报，然后主动推进长任务（约会议、搭看板），做完再回报，只在需要拍板时打断你。美国 Pro / Max 用户候补开放。HN 的批评集中在两点：这种能力为什么不直接长在 Claude 里，而是要再造一个 app；以及它与 1Password 的集成 —— 把密码库交给 LLM 是不是「最坏主意之母」。</p>
+      <div class="tags"><span class="pill p-score">▲ 288</span><span class="pill p-cmt">💬 245</span><span class="pill p-ai">AI Agent</span></div>
+      <span class="dom">claude.com/product/claude-duet</span>
+    </div></div>
+
+    <div class="item"><span class="no">02</span><div>
+      <h4><a href="https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities/" target="_blank" rel="noopener">Patch the Planet：OpenAI 谈「agent 挖洞」后的全球响应协调</a></h4>
+      <p>讲的正是 PHP 这次披露：让 agent 规模化发现漏洞之后，如何协调下游补丁、如何给不再维护的老版本 backport。评论区火力很猛 —— 有人指出 Calif 自己的披露里写明「未使用任何非公开模型、没有特殊 harness」，OpenAI 的框架叙述有抢功之嫌；更尖锐的是「先造问题、再卖解药」，以及质疑一家卖代码生成器的公司为何要问「怎么给老版本 backport」。</p>
+      <div class="tags"><span class="pill p-score">▲ 224</span><span class="pill p-cmt">💬 147</span><span class="pill p-ai">AI 安全</span><span class="pill p-sec">争议</span></div>
+      <span class="dom">openai.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">03</span><div>
+      <h4><a href="https://openai.com/index/openai-models-google-cloud/" target="_blank" rel="noopener">OpenAI 模型登陆 Google Cloud</a></h4>
+      <p>OpenAI 模型开始在 Google Cloud 上分发 —— 头部模型厂商的「多云」已经不再避讳把模型放到竞争对手的云上卖，企业采购的锁定成本随之下降。HN 讨论更多落在多云推理的延迟、数据驻留与计费口径上。</p>
+      <div class="tags"><span class="pill p-score">▲ 219</span><span class="pill p-cmt">💬 94</span><span class="pill p-ai">AI 基础设施</span></div>
+      <span class="dom">openai.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">04</span><div>
+      <h4><a href="https://openai.com/index/scaling-ai-research-for-complex-biological-data/" target="_blank" rel="noopener">用数千个 AI agent 并行挖掘生物数据的新线索</a></h4>
+      <p>把「一个 agent 做研究」扩展成「几千个 agent 分工扫数据」，在复杂生物数据集里找人类容易漏掉的相关性。讨论焦点是这类流水线的验证成本：agent 越多，假阳性与不可复现的结论也越多。</p>
+      <div class="tags"><span class="pill p-score">▲ 125</span><span class="pill p-cmt">💬 78</span><span class="pill p-ai">AI for Science</span></div>
+      <span class="dom">openai.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">05</span><div>
+      <h4><a href="https://alterauth.com/" target="_blank" rel="noopener">Launch HN: Alter（YC S25）—— 多用户 agent 的访问控制</a></h4>
+      <p>面向「一个 agent 替多个用户干活」的场景做权限层：谁的身份、能碰哪些数据、越权时如何拦截。这恰好是今天 LiteLLM 与 Railway 两条事故的镜像命题 —— agent 时代最缺的其实是身份与最小权限。</p>
+      <div class="tags"><span class="pill p-score">▲ 44</span><span class="pill p-cmt">💬 20</span><span class="pill p-ai">AI 安全</span><span class="pill p-misc">Launch HN</span></div>
+      <span class="dom">alterauth.com</span>
+    </div></div>
+
+  </div>
+</section>
+
+<section id="code">
+  <div class="sec-head"><h2>💻 编程 &amp; 开源</h2><span class="count">5 条</span><span class="bar"></span></div>
+  <p class="sec-sub">风格指南、框架翻身、以及 agentic coding 带来的「材料学」变化。</p>
+  <div class="list">
+
+    <div class="item"><span class="no">01</span><div>
+      <h4><a href="https://google.github.io/styleguide/rustguide.html" target="_blank" rel="noopener">Google 的 Rust 风格指南（公开版）</a></h4>
+      <p>Google 把内部 Rust 规范开源：小 crate 优先、rust_library 源文件扁平布局、禁止 glob import、<code>use</code> 一次只从一个模块取、避免 <code>Rc</code>/<code>Arc</code> 优先借用、函数入参尽量接受 <code>&amp;str</code>/<code>Into</code> 等灵活类型、API 用 enum 而不是 bool、newtype 优于类型别名。带 <code>[chrome]</code> 标记的条目仅适用于 Chrome 代码库。HN 的争论点照例在「<code>impl Trait</code> vs <code>dyn Trait</code>」和「该不该强制 newtype」。</p>
+      <div class="tags"><span class="pill p-score">▲ 163</span><span class="pill p-cmt">💬 104</span><span class="pill p-oss">Rust</span><span class="pill p-web">规范</span></div>
+      <span class="dom">google.github.io/styleguide</span>
+    </div></div>
+
+    <div class="item"><span class="no">02</span><div>
+      <h4><a href="https://dri.es/state-of-drupal-presentation-september-2026" target="_blank" rel="noopener">Drupal 现状：产品已领先自己的名声「数光年」</a></h4>
+      <p>Dries Buytaert 在 DrupalCon Rotterdam 的主题演讲：两年前启动的 Starshot 已落地为 Drupal CMS，把 Site Templates、Recipes、Drupal AI、Canvas 打包；内核同时变得更快更好用。他的判断是，问题不在技术而在认知 —— 圈外人还停留在十年前的印象，因此这次专门启动了 advocacy 计划。116 条评论里，老用户的抱怨依旧集中在升级路径与学习曲线。</p>
+      <div class="tags"><span class="pill p-score">▲ 110</span><span class="pill p-cmt">💬 116</span><span class="pill p-oss">CMS</span><span class="pill p-web">社区</span></div>
+      <span class="dom">dri.es</span>
+    </div></div>
+
+    <div class="item"><span class="no">03</span><div>
+      <h4><a href="https://www.albertodenia.com/writing/code-is-clay-now" target="_blank" rel="noopener">代码现在是黏土了</a></h4>
+      <p>一个好比喻：过去写代码像石匠打石头 —— 小修小补可以，大改要拆脚手架；agentic coding 把「改动的成本」压到接近零，于是代码的行为更像黏土：先糊一大坨看手感，再像雕塑一样从整体到细节逐层收。作者主张把这种「建模式开发」递归地用在每一层抽象上。</p>
+      <div class="tags"><span class="pill p-score">▲ 62</span><span class="pill p-cmt">💬 30</span><span class="pill p-ai">Agentic Coding</span><span class="pill p-web">工程哲学</span></div>
+      <span class="dom">albertodenia.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">04</span><div>
+      <h4><a href="https://blog.jim-nielsen.com/2026/icons-in-every-menu/" target="_blank" rel="noopener">别再给每个菜单项都配图标了</a></h4>
+      <p>macOS Tahoe 曾给所有菜单项加图标，Golden Gate 又撤了回来 —— 连 Apple 的新版 HIG 都把 Tahoe 的做法列为 macOS 上的反面教材。作者的论点因此升级：不再是「Apple 不这么干」，而是「Apple 试过了，然后自己撤回」。</p>
+      <div class="tags"><span class="pill p-score">▲ 124</span><span class="pill p-cmt">💬 90</span><span class="pill p-web">设计</span></div>
+      <span class="dom">blog.jim-nielsen.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">05</span><div>
+      <h4><a href="https://github.com/nthnclrk/CleanFrame" target="_blank" rel="noopener">CleanFrame：给三星 The Frame 电视一个安静的主屏</a></h4>
+      <p>针对 The Frame 艺术电视的「开机即广告墙」问题做的小工具，目标是让电视回到「挂一幅画」的原始用途。分数不高，但这类「反抗智能电视 UI」的项目在 HN 一直有稳定的同情票。</p>
+      <div class="tags"><span class="pill p-score">▲ 17</span><span class="pill p-cmt">💬 2</span><span class="pill p-oss">小工具</span></div>
+      <span class="dom">github.com/nthnclrk/CleanFrame</span>
+    </div></div>
+
+  </div>
+</section>
+
+<section id="sec">
+  <div class="sec-head"><h2>🔒 安全 &amp; 政策</h2><span class="count">7 条</span><span class="bar"></span></div>
+  <p class="sec-sub">今日真正的主题：一个语言运行时、一个 CA、一个包管理器、一个 PaaS，四条互不相干的信任链同时出问题。</p>
+  <div class="list">
+
+    <div class="item"><span class="no">01</span><div>
+      <h4><a href="https://thephp.foundation/blog/2026/10/21/todays-php-security-release-and-how-were-strengthening-php-security/" target="_blank" rel="noopener">PHP 基金会复盘：这两个洞是怎么被发现、又是怎么修掉的</a></h4>
+      <p>与榜首同一事件，但视角在「流程」：2024 年 PHP 做了首次外部安全审计，安全团队按共识决策、在压力下难以快速拍板；这次漏洞的公开协调也出了岔子。文章末尾是明确的募资诉求 —— PHP 撑着大半个 Web，安全投入仍靠极少数人。HN 上有用户验证：三行 nginx 规则（阻断 multipart 上传）在补丁到位前确实能挡住攻击面。</p>
+      <div class="tags"><span class="pill p-score">▲ 643</span><span class="pill p-cmt">💬 318</span><span class="pill p-sec">安全治理</span><span class="pill p-oss">PHP</span></div>
+      <span class="dom">thephp.foundation</span>
+    </div></div>
+
+    <div class="item"><span class="no">02</span><div>
+      <h4><a href="https://www.cnbc.com/2026/10/21/meta-new-mexico-cambridge-analytica-penalty.html" target="_blank" rel="noopener">新墨西哥州判 Meta 罚 250 亿美元（剑桥分析隐私案）</a></h4>
+      <p>陪审团 9 月已认定 Meta 在数据收集与保护的告知上误导州民，法官本周在文件中指出「Facebook 没有做它承诺的全面调查」。250 亿约为其 2025 年营收的 12% —— 远超当年 47 州集体诉讼和解的 7.25 亿。Meta 必然上诉，HN 的判断是最终会大幅缩减，但「州级单打」这条路已被证明比联邦层面更有效。</p>
+      <div class="tags"><span class="pill p-score">▲ 315</span><span class="pill p-cmt">💬 192</span><span class="pill p-sec">隐私政策</span></div>
+      <span class="dom">cnbc.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">03</span><div>
+      <h4><a href="https://blog.railway.com/p/security-disclosure-wednesday-october-21st" target="_blank" rel="noopener">Railway 安全披露：环境变量可能已被解密</a></h4>
+      <p>Railway 检测到存储客户环境变量的系统出现异常，未经授权的第三方可能访问了加密变量，并对其中一部分拿到了明文 —— 也就是 API key、数据库与镜像仓库凭据。官方称这是近期针对平台公司、意在窃取 AI 推理供应商密钥的连环攻击的一环，已通知上游批量吊销，并要求<strong>所有</strong>用户立刻轮换变量与私有仓库凭据。调查期间所有部署暂停。</p>
+      <div class="tags"><span class="pill p-score">▲ 233</span><span class="pill p-cmt">💬 105</span><span class="pill p-sec">数据泄露</span><span class="pill p-web">PaaS</span></div>
+      <span class="dom">blog.railway.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">04</span><div>
+      <h4><a href="https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-1-released/" target="_blank" rel="noopener">GitLab 关键补丁：19.5.1 等七个版本线</a></h4>
+      <p>19.5.1 / 19.4.3 / 19.3.6 / 19.2.9 / 19.1.9 / 19.0.10 / 18.11.13 同时发布，官方措辞是「强烈建议所有自建实例立即升级」。GitLab.com 与 Dedicated 已含修复。漏洞细节按惯例 90 天后公开 —— 也就是说，现在不打补丁的窗口期比想象中长。</p>
+      <div class="tags"><span class="pill p-score">▲ 221</span><span class="pill p-cmt">💬 52</span><span class="pill p-sec">补丁</span><span class="pill p-oss">DevOps</span></div>
+      <span class="dom">docs.gitlab.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">05</span><div>
+      <h4><a href="https://aws.amazon.com/security/security-bulletins/2026-143-aws/" target="_blank" rel="noopener">AWS 安全公告：PHP 运行时 CVE 影响面与版本矩阵</a></h4>
+      <p>AWS 明确自家服务不受影响，但客户在托管服务里自带的 PHP 版本可能受影响。公告给出了最清晰的修复矩阵：8.5.0–8.5.11 → 8.5.12、8.4.0–8.4.26 → 8.4.27、8.3.0–8.3.35 → 8.3.36、8.2.0–8.2.34 → 8.2.35；5.4–8.1 无上游修复，必须迁移分支。这是今天最值得转给运维同事的一张表。</p>
+      <div class="tags"><span class="pill p-score">▲ 95</span><span class="pill p-cmt">💬 22</span><span class="pill p-sec">补丁矩阵</span></div>
+      <span class="dom">aws.amazon.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">06</span><div>
+      <h4><a href="https://canarytokens.org/" target="_blank" rel="noopener">Canary Tokens：免费的「蜜标」生成器</a></h4>
+      <p>放一个假 URL / 假 AWS key / 假文档到系统里，谁碰到它你就收到告警。经典工具被重新翻上首页，理由和今天的事故很契合：在「凭据大概率会泄漏」的前提下，检测比防堵更现实。</p>
+      <div class="tags"><span class="pill p-score">▲ 124</span><span class="pill p-cmt">💬 21</span><span class="pill p-sec">检测</span><span class="pill p-oss">工具</span></div>
+      <span class="dom">canarytokens.org</span>
+    </div></div>
+
+    <div class="item"><span class="no">07</span><div>
+      <h4><a href="https://foxio.io/blog/header-accordions-qpack-amplification-attacks-against-http-3-servers" target="_blank" rel="noopener">QPACK 放大攻击：HTTP/3 服务器的新反射面</a></h4>
+      <p>利用 HTTP/3 头部压缩（QPACK）的动态表把小的请求放大成大的响应，形成反射放大。分数很低（11 分 / 1 条评论），但属于「早看早知道」的类型 —— 如果你的边缘节点已经全量开 HTTP/3，值得读一遍。</p>
+      <div class="tags"><span class="pill p-score">▲ 11</span><span class="pill p-cmt">💬 1</span><span class="pill p-sec">网络攻击</span></div>
+      <span class="dom">foxio.io</span>
+    </div></div>
+
+  </div>
+</section>
+
+<section id="misc">
+  <div class="sec-head"><h2>🎯 其他值得关注</h2><span class="count">6 条</span><span class="bar"></span></div>
+  <p class="sec-sub">与代码无关，但 HN 首页照样留了位置给它们。</p>
+  <div class="list">
+
+    <div class="item"><span class="no">01</span><div>
+      <h4><a href="https://apnews.com/article/oregon-waterfall-for-sale-lawmakers-996de63462d49ec3ad9bee1629fb9488" target="_blank" rel="noopener">俄勒冈州议员批款，买下挂在 Redfin 上的标志性瀑布</a></h4>
+      <p>一处知名瀑布出现在房产交易网站上待售，州议会因此通过拨款把它买下来转为公共所有。讨论区照例变成「土地私有 vs 公共景观」的老题，以及「美国的瀑布居然能整块挂牌卖」的惊讶。</p>
+      <div class="tags"><span class="pill p-score">▲ 164</span><span class="pill p-cmt">💬 79</span><span class="pill p-misc">社会</span></div>
+      <span class="dom">apnews.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">02</span><div>
+      <h4><a href="https://www.bbc.com/news/articles/cp814l80pw2o" target="_blank" rel="noopener">被认为灭绝 6000 年的小型袋貂与滑翔兽，在西巴布亚重现</a></h4>
+      <p> expedition 在偏远雨林重新记录到长期只剩化石记录的物种。今天榜单里唯一的纯科学好消息，评论区的关注点是：这类「拉撒路物种」的判定标准其实比新闻标题严谨得多。</p>
+      <div class="tags"><span class="pill p-score">▲ 138</span><span class="pill p-cmt">💬 25</span><span class="pill p-misc">科学</span></div>
+      <span class="dom">bbc.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">03</span><div>
+      <h4><a href="https://www.windowslatest.com/2026/10/19/why-windows-11-still-ships-with-windows-95s-memory-manager-hidden-inside-it/" target="_blank" rel="noopener">为什么 Windows 11 里还藏着 Windows 95 的内存管理器</a></h4>
+      <p>从 VMM 时代遗留的内存管理代码至今仍在系统里服役 —— 兼容性、驱动契约与「不敢动的部分」共同构成了三十年的技术债。84 条评论里最扎心的一句是：真正长寿的软件不是设计最优雅的，而是没人敢删的那部分。</p>
+      <div class="tags"><span class="pill p-score">▲ 118</span><span class="pill p-cmt">💬 84</span><span class="pill p-misc">系统考古</span></div>
+      <span class="dom">windowslatest.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">04</span><div>
+      <h4><a href="https://www.oist.jp/news-center/news/2026/9/18/new-form-plastic-pollution-discovered-shores-vulnerable-coral-reefs" target="_blank" rel="noopener">新形态塑料污染：「塑料珊瑚」——塑料与珊瑚碎屑熔成一体</a></h4>
+      <p>OIST 团队在脆弱珊瑚礁岸线发现珊瑚砾石与塑料熔结成的复合物，被命名为 plasticorals。它不只是「垃圾多了」，而是污染物进入了礁体的物理结构本身，清理与评估方法都得重写。</p>
+      <div class="tags"><span class="pill p-score">▲ 93</span><span class="pill p-cmt">💬 32</span><span class="pill p-misc">环境</span></div>
+      <span class="dom">oist.jp</span>
+    </div></div>
+
+    <div class="item"><span class="no">05</span><div>
+      <h4><a href="https://www.construction-physics.com/p/the-rise-and-fall-of-the-plasma-screen" target="_blank" rel="noopener">等离子电视的兴衰</a></h4>
+      <p>一篇典型的 Construction Physics 式产业考古：技术上限更高的一方为什么输给了成本曲线更陡的一方。分数低，但在「制造业经济学」这个细分里几乎无对手。</p>
+      <div class="tags"><span class="pill p-score">▲ 15</span><span class="pill p-cmt">💬 11</span><span class="pill p-misc">产业史</span></div>
+      <span class="dom">construction-physics.com</span>
+    </div></div>
+
+    <div class="item"><span class="no">06</span><div>
+      <h4><a href="https://9mothers.com/careers" target="_blank" rel="noopener">9 Mothers（YC P26）在奥斯汀招人</a></h4>
+      <p>HN 的招聘位，1 分 0 评论。列在这里只为完整 —— 今天 30 条里唯一的招聘帖。</p>
+      <div class="tags"><span class="pill p-score">▲ 1</span><span class="pill p-cmt">💬 0</span><span class="pill p-misc">招聘</span></div>
+      <span class="dom">9mothers.com</span>
+    </div></div>
+
+  </div>
+</section>
+
+<section id="hot">
+  <div class="sec-head"><h2>💬 今日最热讨论</h2><span class="count">529 条评论</span><span class="bar"></span></div>
+  <div class="hot">
+    <h3>PHP 8.2.35 —— 一个补丁日的三种混乱</h3>
+    <p>955 分、529 条评论（另有 643 分 / 318 评论的基金会复盘帖、224 分 / 147 评论的 OpenAI 协调帖围绕同一事件），今天的讨论量有相当比例集中在这一件事上。评论区可以清晰切成三层：</p>
+    <ul>
+      <li><b>披露协调失序。</b>有人在 UTC 20:00 前后提前泄露，其中一家报送漏洞的安全公司 Calif 误判「embargo 已破」而抢先发布了营销视频；Chainguard 则单方面发布了构建好的镜像。一位评论者的总结很直接：「如果破规矩没有后果，就会一直有人破。」</li>
+      <li><b>运维现实远比公告骨感。</b>官方 Docker 镜像在补丁发布两小时后仍是空壳、没有 amd64 构建；WP Engine 这种主业就是托管 WordPress 的厂商，在补丁公开 2.5 小时后还跑在 8.4.26 上。多位运维在帖子里交换三行 nginx 缓解规则（阻断 multipart 上传），并提醒 <code>session.upload_progress</code> 必须关。</li>
+      <li><b>二次漏洞传言。</b>有人贴出称最新 8.5.12 仍可被利用的说法，也有人发现可能存在第二个漏洞的线索 —— 目前均未获官方确认，但在这种时刻，传言本身就会推高恐慌性停机。</li>
+    </ul>
+    <p class="quote">「这是我二十年 PHP 托管生涯里第一次需要预防性下线服务器。」—— 一位老运维的评论，也是今天最真实的一句风险注解：<b>当修复窗口以小时计、而官方构建以下午计时，中小团队的真正风险不在漏洞本身，而在补丁供应链的延迟。</b></p>
+    <div class="tags"><span class="pill p-sec">安全</span><span class="pill p-oss">PHP</span><span class="pill p-web">运维</span><a class="pill p-cmt" href="https://news.ycombinator.com/item?id=50180873" target="_blank" rel="noopener">查看原帖讨论 →</a></div>
+  </div>
+</section>
+
+
+<section id="coverage">
+  <div class="sec-head"><h2>🧾 覆盖说明</h2><span class="count">2 条折入</span><span class="bar"></span></div>
+  <p class="sec-sub">为避免同一事件重复占位，两条低分条目已折入上文：<a href="https://claude.com/resources/articles/claude-duet" target="_blank" rel="noopener">Claude Duet 资源页（55 分 / 6 评论）</a>与「<a href="https://eliastaylor.com/noexploit/" target="_blank" rel="noopener">这个 PHP 漏洞其实并没有容易的利用方式（8 分 / 1 评论）</a>」—— 后者正是上文「二次漏洞传言」一节的另一方声音。</p>
+</section>
+
+<footer>
+  <div>数据来源：Hacker News Firebase API（topstories + item），抓取于 2026-10-22 08:03 CST · 共 30 篇，其中 24 篇满足「得分 ≥ 50 或评论 ≥ 30」。</div>
+  <div>生成：Hermes Reviewer · <a href="https://news.ycombinator.com/" target="_blank" rel="noopener">news.ycombinator.com</a></div>
+</footer>
+</div>
+</body>
+</html>
