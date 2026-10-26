@@ -535,14 +535,16 @@
 
   <div class="grid2">
     <div class="card">
-      <h4>🔭 本会话自证</h4>
+      <h4>🔭 本会话自证 · 两个断面</h4>
       <p style="margin:6px 0 0">
-        shell 调用 <b>17</b> 次 · 被安全层拦截 <b>0</b> 次 · <code>approvals.mode</code> 告警 <b>14</b> 条（09:00:46–09:03:29）
+        <b>09:03:29</b> → shell <b>17</b> · 拦截 <b>0</b> · 告警 <b>14</b> ⇒ factor <b>0.82</b><br>
+        <b>09:06:42</b> → shell <b>19</b> · 拦截 <b>0</b> · 告警 <b>18</b> ⇒ factor <b>0.95</b>
       </p>
       <p style="margin:9px 0 0;font-size:13px;color:var(--dim)">
-        factor = 14 / 17 = <b>0.82</b>，落在历史区间 [1.00, 1.33] <b>之外</b> ——
-        因为本期全部为「单条命令、无复合」的 <code>python3 脚本文件</code> 调用（P129 曾观测到复合命令把 factor 推到 1.39–1.50）。
-        factor 不是常数，它随<b>命令构造方式</b>变。
+        两个断面都在历史区间 [1.00, 1.33] <b>下沿附近</b>，但 factor 的<u>分母</u>才是关键：
+        本期全部为「单条命令 + <code>python3 脚本文件</code>」调用，无复合命令（P129 曾观测复合命令把 factor 推高到 1.39–1.50）。
+        <br><br><b>告警数在会话内单调增长 ⇒ 只有 (值, 时刻) 二元组有意义</b>，单点值不可跨期比较（规则 AD′ / BS）。
+        会话结束后的真实总量只能由<b>下期</b>从日志枚举 09h 全量得到 —— 本期不追。
       </p>
     </div>
     <div class="card">
