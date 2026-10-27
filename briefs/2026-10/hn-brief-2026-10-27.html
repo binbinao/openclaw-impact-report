@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年10月27日</title>
+<meta name="description" content="2026年10月27日 Hacker News 热门内容中文简报：Anthropic S-1 招股书、微软 25% 员工买断、OpenAI 宣称 ETH 为假。">
+<style>
+:root{
+  --bg:#0d1117; --bg-soft:#010409; --card:#161b22; --card-hover:#1c2128;
+  --border:#30363d; --border-soft:#21262d;
+  --text:#c9d1d9; --text-strong:#f0f6fc; --muted:#8b949e;
+  --accent:#58a6ff; --hn:#ff6600; --green:#3fb950; --red:#f85149;
+  --purple:#bc8cff; --yellow:#d29922; --cyan:#39c5cf; --pink:#f778ba;
+  --radius:12px; --shadow:0 8px 24px rgba(1,4,9,.6);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  line-height:1.65;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 15% -10%,rgba(88,166,255,.10),transparent 60%),
+                   radial-gradient(900px 500px at 90% 0%,rgba(255,102,0,.09),transparent 55%);
+  background-repeat:no-repeat;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 72px}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- header ---------- */
+.hero{position:relative;padding:56px 0 34px;border-bottom:1px solid var(--border-soft);margin-bottom:34px}
+.hero::after{content:"";position:absolute;left:0;bottom:-1px;width:210px;height:3px;
+  background:linear-gradient(90deg,var(--hn),var(--accent),transparent);border-radius:3px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--hn);
+  border:1px solid rgba(255,102,0,.35);background:rgba(255,102,0,.08);
+  padding:5px 12px;border-radius:999px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--hn);box-shadow:0 0 10px var(--hn);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:clamp(28px,4.6vw,44px);line-height:1.18;color:var(--text-strong);letter-spacing:-.7px;font-weight:800}
+h1 .thin{color:var(--muted);font-weight:500}
+.hero p.sub{margin-top:14px;color:var(--muted);font-size:15px;max-width:760px}
+.hero .date{font-family:var(--mono);color:var(--accent);font-size:14px}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:44px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 18px 16px;position:relative;overflow:hidden;transition:.22s}
+.stat:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.stat::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;
+  background:linear-gradient(90deg,var(--accent),transparent)}
+.stat .lbl{font-size:12px;color:var(--muted);letter-spacing:.05em;display:flex;align-items:center;gap:6px}
+.stat .val{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--text-strong);line-height:1.2;margin-top:6px}
+.stat .hint{font-size:11.5px;color:var(--muted);margin-top:2px}
+.stat.o::before{background:linear-gradient(90deg,var(--hn),transparent)}
+.stat.g::before{background:linear-gradient(90deg,var(--green),transparent)}
+.stat.p::before{background:linear-gradient(90deg,var(--purple),transparent)}
+.stat.y::before{background:linear-gradient(90deg,var(--yellow),transparent)}
+
+/* ---------- sections ---------- */
+section{margin-bottom:52px}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.sec-head h2{font-size:21px;color:var(--text-strong);font-weight:700;letter-spacing:-.3px}
+.sec-head .ico{font-size:20px}
+.sec-head .count{font-family:var(--mono);font-size:11.5px;color:var(--muted);
+  border:1px solid var(--border);border-radius:999px;padding:2px 9px}
+.sec-head .line{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);min-width:24px}
+
+/* ---------- cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 18px 14px;display:flex;flex-direction:column;gap:9px;transition:.2s;position:relative}
+.card:hover{border-color:var(--accent);background:var(--card-hover);transform:translateY(-2px);box-shadow:var(--shadow)}
+.card .top{display:flex;align-items:flex-start;gap:10px}
+.rank{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);
+  background:var(--bg-soft);border:1px solid var(--border-soft);border-radius:6px;
+  padding:1px 7px;flex-shrink:0;margin-top:3px}
+.card h3{font-size:15.5px;line-height:1.45;color:var(--text-strong);font-weight:650}
+.card .en{font-size:11.5px;color:#6e7681;font-family:var(--mono);line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .sum{font-size:13.5px;color:#a9b1ba;flex:1}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+.badge{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;
+  border:1px solid;display:inline-flex;align-items:center;gap:4px}
+.b-score{color:var(--green);border-color:rgba(63,185,80,.35);background:rgba(63,185,80,.08)}
+.b-cmt{color:var(--purple);border-color:rgba(188,140,255,.32);background:rgba(188,140,255,.08)}
+.b-hot{color:var(--hn);border-color:rgba(255,102,0,.4);background:rgba(255,102,0,.1)}
+.tag{font-size:10.5px;font-family:var(--mono);letter-spacing:.04em;padding:2px 8px;border-radius:5px;
+  text-transform:uppercase;font-weight:700}
+.t-ai{color:var(--purple);background:rgba(188,140,255,.13);border:1px solid rgba(188,140,255,.3)}
+.t-code{color:var(--accent);background:rgba(88,166,255,.13);border:1px solid rgba(88,166,255,.3)}
+.t-oss{color:var(--green);background:rgba(63,185,80,.13);border:1px solid rgba(63,185,80,.3)}
+.t-sec{color:var(--red);background:rgba(248,81,73,.13);border:1px solid rgba(248,81,73,.3)}
+.t-pol{color:var(--yellow);background:rgba(210,153,34,.13);border:1px solid rgba(210,153,34,.3)}
+.t-misc{color:var(--cyan);background:rgba(57,197,207,.13);border:1px solid rgba(57,197,207,.3)}
+.link{margin-left:auto;font-size:12px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+.card:hover .link{color:var(--accent)}
+
+/* ---------- top5 ---------- */
+.top5{display:flex;flex-direction:column;gap:14px}
+.hero-card{background:linear-gradient(135deg,rgba(255,102,0,.07),rgba(88,166,255,.05) 45%,transparent);
+  border:1px solid var(--border);border-radius:14px;padding:20px 22px;display:flex;gap:18px;transition:.2s}
+.hero-card:hover{border-color:var(--hn);box-shadow:var(--shadow)}
+.hero-card .big{font-family:var(--mono);font-size:34px;font-weight:800;line-height:1;
+  color:transparent;-webkit-text-stroke:1.4px var(--hn);flex-shrink:0;min-width:52px}
+.hero-card.first .big{-webkit-text-stroke:1.8px var(--hn)}
+.hero-card .body{flex:1;min-width:0}
+.hero-card h3{font-size:17px;color:var(--text-strong);margin-bottom:4px;line-height:1.4}
+.hero-card .sum{font-size:13.5px;color:#a9b1ba;margin:7px 0 10px}
+/* ---------- table ---------- */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--bg-soft);color:var(--muted);font-size:11px;letter-spacing:.09em;
+  text-transform:uppercase;font-weight:600;text-align:left;padding:11px 14px;border-bottom:1px solid var(--border)}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border-soft);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(88,166,255,.05)}
+td.num{font-family:var(--mono);color:var(--muted)}
+td.sc{font-family:var(--mono);color:var(--green);font-weight:700;text-align:right}
+td.cm{font-family:var(--mono);color:var(--purple);text-align:right}
+td.tt{color:#d5dde5}
+td.rk{font-family:var(--mono);font-weight:800;color:var(--hn);width:44px}
+
+/* ---------- hot discussion ---------- */
+.hot{background:linear-gradient(160deg,rgba(255,102,0,.09),var(--card) 55%);
+  border:1px solid rgba(255,102,0,.32);border-radius:14px;padding:24px 24px 20px}
+.hot .hdr{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.hot h3{font-size:19px;color:var(--text-strong)}
+.hot .metrics{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.hot ul{list-style:none;display:grid;gap:11px}
+.hot li{position:relative;padding-left:20px;font-size:13.5px;color:#a9b1ba}
+.hot li::before{content:"▸";position:absolute;left:2px;color:var(--hn);font-weight:700}
+.hot li b{color:var(--text-strong)}
+.hot .quote{margin-top:16px;padding:12px 16px;border-left:3px solid var(--hn);
+  background:rgba(1,4,9,.45);border-radius:0 8px 8px 0;font-family:var(--mono);font-size:12.5px;color:#9aa4ae}
+
+/* ---------- sub threshold ---------- */
+.mini{background:var(--card);border:1px dashed var(--border);border-radius:var(--radius);padding:16px 18px}
+.mini ul{list-style:none;display:grid;gap:8px;margin-top:10px}
+.mini li{font-size:13px;color:#98a1ab;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.mini li .m-sc{font-family:var(--mono);font-size:11px;color:var(--muted);flex-shrink:0}
+.mini h4{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.04em}
+
+/* ---------- footer ---------- */
+footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border-soft);
+  color:var(--muted);font-size:12.5px;display:grid;gap:7px}
+footer .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+footer code{font-family:var(--mono);font-size:11.5px;background:var(--bg-soft);
+  border:1px solid var(--border-soft);border-radius:5px;padding:1px 6px;color:#9aa4ae}
+.note{font-size:12px;color:#6e7681;margin-top:14px;line-height:1.6}
+
+/* ---------- responsive ---------- */
+@media (max-width:720px){
+  .wrap{padding:0 14px 56px}
+  .hero{padding:38px 0 26px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
+  .stat .val{font-size:24px}
+  .grid{grid-template-columns:1fr}
+  .hero-card{flex-direction:column;gap:8px;padding:18px}
+  .hero-card .big{font-size:26px}
+  table{font-size:12px}
+  thead th,tbody td{padding:9px 10px}
+  td.tt{max-width:180px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker"><span class="dot"></span> Hacker News · Top Stories</div>
+  <h1>Hacker News 每日简报<br><span class="thin">2026 年 10 月 27 日 · 周二</span></h1>
+  <p class="sub">从 topstories 前 30 条中筛出 <strong>23 条</strong>重点。今日主线三条：<strong>Anthropic 递交 S-1 招股书</strong>（1,437 分 / 1,403 评论，独占今日近三分之一下半场讨论）、<strong>微软向约四分之一员工发出买断方案</strong>，以及 <strong>OpenAI 宣称三连突破</strong>——包括"指数时间假说（ETH）为假"。</p>
+  <p class="sub date">数据抓取：2026-10-27 08:00 CST · 来源：HN Firebase API</p>
+</header>
+
+<section id="overview">
+  <div class="stats">
+    <div class="stat">
+      <div class="lbl">📥 抓取文章</div>
+      <div class="val">30</div>
+      <div class="hint">topstories 前 30 条</div>
+    </div>
+    <div class="stat o">
+      <div class="lbl">🏆 最高得分</div>
+      <div class="val">1437</div>
+      <div class="hint">Anthropic S-1</div>
+    </div>
+    <div class="stat g">
+      <div class="lbl">💬 最热评论</div>
+      <div class="val">1403</div>
+      <div class="hint">同一条，占总量 33.7%</div>
+    </div>
+    <div class="stat p">
+      <div class="lbl">📊 平均得分</div>
+      <div class="val">244.9</div>
+      <div class="hint">评论总量 4,163 条</div>
+    </div>
+    <div class="stat y">
+      <div class="lbl">✅ 达标条目</div>
+      <div class="val">23</div>
+      <div class="hint">得分≥50 或 评论≥30</div>
+    </div>
+  </div>
+</section>
+<section id="top5">
+  <div class="sec-head"><span class="ico">🔥</span><h2>必读 Top 5</h2><span class="count">按得分排序</span><span class="line"></span></div>
+  <div class="top5">
+
+    <article class="hero-card first">
+      <div class="big">01</div>
+      <div class="body">
+        <h3>Anthropic 递交 S-1 招股书，财务底牌首次全公开</h3>
+        <div class="en">Anthropic S-1 · sec.gov</div>
+        <p class="sum">营收曲线惊人但正在减速：2026 Q1 47.3 亿美元 → Q2 115.6 亿（环比 +144%）→ Q3 168 亿（环比 +45%），增速掉档被普遍解读为此刻启动 IPO 的直接原因。同时披露约 5,050 亿美元算力承诺（Google 1,140 亿、AWS 1,100 亿、Broadcom 1,610 亿、SpaceX 1,200 亿），前五大客户贡献约四分之一营收，且约八成收入来自按量计费。</p>
+        <div class="meta">
+          <span class="badge b-score">▲ 1437</span>
+          <span class="badge b-cmt">💬 1403</span>
+          <span class="badge b-hot">今日第一</span>
+          <span class="tag t-ai">AI</span>
+          <a class="link" href="https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm" target="_blank" rel="noopener">原文 ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="hero-card">
+      <div class="big">02</div>
+      <div class="body">
+        <h3>微软向约四分之一员工发出买断方案</h3>
+        <div class="en">Microsoft offers mass buyouts for roughly a quarter of its workforce · seattletimes.com</div>
+        <p class="sum">涉及约 6 万人。社区最扎心的对比是时间线：不到一周前微软总裁 Brad Smith 才在 LinkedIn 视频里说"我们始终与员工站在一起"。前员工自述长期 reorg 导致产出低下，评论者则担心买断精准放走最有市场竞争力的人，并把数万求职者同时推入市场。</p>
+        <div class="meta">
+          <span class="badge b-score">▲ 704</span>
+          <span class="badge b-cmt">💬 608</span>
+          <span class="badge b-hot">争议最大</span>
+          <span class="tag t-pol">政策/商业</span>
+          <a class="link" href="https://www.seattletimes.com/business/microsoft/microsoft-offers-mass-buyouts-for-roughly-a-quarter-of-its-workforce/" target="_blank" rel="noopener">原文 ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="hero-card">
+      <div class="big">03</div>
+      <div class="body">
+        <h3>Raschka 放出《从零构建推理模型》完整视频课</h3>
+        <div class="en">Sebastian Raschka's from-scratch video course on building reasoning models · magazine.sebastianraschka.com</div>
+        <p class="sum">8 集、11 小时以上编码，用 PyTorch 从预训练模型出发，手写评测、推理期扩展（inference-time scaling）、强化学习与蒸馏。是他去年《Coding LLMs from the Ground Up》的续作，不要求前置。</p>
+        <div class="meta">
+          <span class="badge b-score">▲ 523</span>
+          <span class="badge b-cmt">💬 79</span>
+          <span class="badge b-hot">收藏级</span>
+          <span class="tag t-ai">AI</span>
+          <a class="link" href="https://magazine.sebastianraschka.com/p/building-reasoning-models" target="_blank" rel="noopener">原文 ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="hero-card">
+      <div class="big">04</div>
+      <div class="body">
+        <h3>观鸟能重塑大脑、延缓认知衰退</h3>
+        <div class="en">Birdwatching rewires the brain and slows cognitive decline · bbc.com</div>
+        <p class="sum">BBC Future 综述：观鸟这类"注意力朝外 + 深度沉浸自然"的活动与大脑网络重组相关，长期观察者在认知衰退指标上表现更慢——也是今日少见的非技术高分帖。</p>
+        <div class="meta">
+          <span class="badge b-score">▲ 496</span>
+          <span class="badge b-cmt">💬 193</span>
+          <span class="tag t-misc">科学</span>
+          <a class="link" href="https://www.bbc.com/future/article/20261019-birdwatching-rewires-the-brain-and-slows-cognitive-decline" target="_blank" rel="noopener">原文 ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="hero-card">
+      <div class="big">05</div>
+      <div class="body">
+        <h3>OpenAI 发布中端模型 GPT-6.1 Terra</h3>
+        <div class="en">GPT-6.1 Terra · openai.com</div>
+        <p class="sum">定价输入 $1 / 输出 $5（百万 token，缓存读 $0.05），主打 cost-per-task 而非绝对能力。评论区集中在两点：命名谱系（Luna→Terra→Sol→Astra）已经混乱到没人说得清定位；Terra 夹在"变强了的 Luna"与"大幅降价的 Sol"之间，实测有人发现 max effort 反而更贵更差。</p>
+        <div class="meta">
+          <span class="badge b-score">▲ 471</span>
+          <span class="badge b-cmt">💬 295</span>
+          <span class="badge b-hot">定价战</span>
+          <span class="tag t-ai">AI</span>
+          <a class="link" href="https://openai.com/index/introducing-gpt-6-1-terra/" target="_blank" rel="noopener">原文 ↗</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="ai">
+  <div class="sec-head"><span class="ico">🤖</span><h2>AI 相关动态</h2><span class="count">3 条</span><span class="line"></span></div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="top"><span class="rank">#1</span><h3>OpenAI 宣称数学/CS/物理三连突破</h3></div>
+      <div class="en">Working with academic communities to build scientific understanding</div>
+      <p class="sum">官方博文标题温和，正文却是三项目前无人解决的结果：调和分析中的局部光滑与 Kakeya 猜想、复杂性理论中的"指数时间假说为假"、量子场论（Yang–Mills 存在性与 QCD）。文中称模型先在 9/9 给出 Yang–Mills 的自然语言证明，为等 Lean 形式化完成才推迟发布。评论区有人直接对照自己的"500 大开放问题"清单数命中数。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 241</span><span class="badge b-cmt">💬 102</span>
+        <span class="tag t-ai">AI</span>
+        <a class="link" href="https://openai.com/index/building-scientific-understanding-with-academic-communities/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#2</span><h3>预印本：《指数时间假说为假》</h3></div>
+      <div class="en">The Exponential Time Hypothesis Is False [pdf]</div>
+      <p class="sum">上述三连突破中的第二项的论文，挂在 openai/math 仓库。ETH 是参数化复杂性与下界证明里被普遍当作前提的假设，它被推翻意味着大量"在 ETH 下成立"的结论需要重估。评论区的关键澄清：这并不蕴含 NP ⊆ SUBEXP——2^o(n) 的界在一般多项式归约下不传递。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 141</span><span class="badge b-cmt">💬 57</span>
+        <span class="tag t-ai">AI</span>
+        <a class="link" href="https://github.com/openai/math/blob/main/preprints/The-Exponential-Time-Hypothesis-is-False-October-25-2026/paper.pdf" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#4</span><h3>CorridorKey 2.0：神经网络抠像正式商用</h3></div>
+      <div class="en">CorridorKey 2.0</div>
+      <p class="sum">Corridor Digital 的首个商业插件：一键完成绿幕/蓝幕抠像，本质是本地跑的神经网络模型。买断制 $49.50（Beta 价至 11/20），一次购买覆盖 Resolve / Nuke / After Effects / Premiere / Blender，无订阅，支持原生 4K HDR 与浮点色深。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 161</span><span class="badge b-cmt">💬 51</span>
+        <span class="tag t-ai">AI</span>
+        <a class="link" href="https://corridorkey.com/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+<section id="code">
+  <div class="sec-head"><span class="ico">💻</span><h2>编程 &amp; 开源</h2><span class="count">8 条</span><span class="line"></span></div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="top"><span class="rank">#6</span><h3>微软公开 Type Server Protocol：把"类型服务"从编辑器里拆出来</h3></div>
+      <div class="en">Type Server Protocol · microsoft/pylance-release</div>
+      <p class="sum">一个用 JSON-RPC 向"类型服务器"索取 Python 分析数据的协议：查询协议版本、快照、搜索路径、导入解析，以及 computed / declared / expected 三类类型。数据结构复用 LSP 的 Position/Range 与 URI 约定，方法统一 <code>typeServer/</code> 前缀，当前 0.4.1 已加入多连接协商。132 条评论，是今日工程性最强的一帖。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 178</span><span class="badge b-cmt">💬 132</span>
+        <span class="tag t-code">编程</span>
+        <a class="link" href="https://github.com/microsoft/pylance-release/blob/main/docs/tsp/type-server-protocol.md" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#9</span><h3>CSS-Tricks 重回独立运营</h3></div>
+      <div class="en">CSS-Tricks has a new owner</div>
+      <p class="sum">DigitalOcean 2022 年从创始人 Chris Coyier 手里买下这个 2007 年上线的站点，如今由在该站工作 12 年的老编辑接手。作者直言要把它做成"真正的社区"，也承认得靠广告养站。一个技术媒体品牌的归属变迁，折射出独立内容在今天的经济学。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 363</span><span class="badge b-cmt">💬 85</span>
+        <span class="tag t-oss">开源/社区</span>
+        <a class="link" href="https://css-tricks.com/css-tricks-has-a-new-owner/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#10</span><h3>Nietzschian Debugger：只向你提问、永不给你答案的调试器</h3></div>
+      <div class="en">Nietzschian Debugger · DilawarShafiq</div>
+      <p class="sum">"反 AI"工具：你贴上报错，它不修，而是质问你的假设、拆解你在回避的证据，把"啊哈时刻"还给你自己。梗做得极认真——三档强度 <code>socrates</code> / <code>nietzsche</code> / <code>zarathustra</code>，当然，底层还是调 Anthropic API（自带 key）。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 118</span><span class="badge b-cmt">💬 37</span>
+        <span class="tag t-oss">开源</span>
+        <a class="link" href="https://github.com/DilawarShafiq/nietzschian-debugger" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#12</span><h3>在 Windows 11 上还能跑的最老 GUI 程序：1992 年的 CDPLAYER.EXE</h3></div>
+      <div class="en">Oldest GUI application that still runs on Windows 11</div>
+      <p class="sum">64 位 Windows 没有 NTVDM，16 位程序全灭，作者于是往早期 NT 3.1 预发布版里挖：1991 版用的还是草稿 PE 格式，1992 年中的构建还在用 cdecl 调用约定（参数被 pop 两次直接崩）。最终 Build 347（1992-11-16）的 <code>CDPLAYER.EXE</code> 能跑——因为它链接的是系统的 <code>crtdll.dll</code>，而 SysWOW64 里至今还带着这个 DLL。差不多 34 年。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 247</span><span class="badge b-cmt">💬 154</span>
+        <span class="tag t-code">编程</span>
+        <a class="link" href="https://blog.enlyth.com/posts/oldest-windows-gui-app-win-11/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#13</span><h3>Show HN：Hob —— 本地跑的开源版 Claude / ChatGPT 桌面端</h3></div>
+      <div class="en">Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT</div>
+      <p class="sum">免费、MIT 许可、离线可用：Hob 会自动挑出"你这台机器还能跑得动的最强开放权重模型"并装好，主打用 AI 处理 PDF 与长文档。由 Frigade 团队出品，Mac / Windows / Linux 三平台。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 95</span><span class="badge b-cmt">💬 23</span>
+        <span class="tag t-oss">开源</span>
+        <a class="link" href="https://github.com/FrigadeHQ/hob" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#16</span><h3>在 2 美元的 MCU 上做 SIMD 加速计算机视觉</h3></div>
+      <div class="en">SIMD-accelerated computer vision on a $2 microcontroller</div>
+      <p class="sum">作者翻 ESP32-S3 技术手册时发现它藏着 128 位 SIMD 指令，于是手写了加速版 FAST 角点检测：约为参考实现的两倍性能，QVGA（320×240）一帧约 6ms。过程中为了绕开芯片的古怪限制，顺手写了个寄存器分配器 <code>basm</code>。双核 240MHz + Wi-Fi/BLE，比一杯咖啡还便宜。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 165</span><span class="badge b-cmt">💬 51</span>
+        <span class="tag t-code">编程</span>
+        <a class="link" href="https://shraiwi.com/blog/simd-fast-esp32s3/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#21</span><h3>Pharo 14 发布</h3></div>
+      <div class="en">Pharo 14 · pharo.org</div>
+      <p class="sum">纯面向对象语言与小世界环境的第 14 个大版本，本次三件事：开发工具现代化（新增 Mission Control、以 Pulse 取代 Spotter、重写 Method Browser 与 Settings Browser，Epicea/ProfStef 并入 NewTools）、重构/命令基础设施改为驱动式架构、继续向 Spec 工具栈迁移。仍是 MIT 许可、对象与消息到底。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 233</span><span class="badge b-cmt">💬 59</span>
+        <span class="tag t-oss">开源</span>
+        <a class="link" href="https://pharo.org/news/2026-10-26-Pharo14Release.html" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#24</span><h3>《来自未来的人》：为什么我们停不下抽象</h3></div>
+      <div class="en">A Man from the Future: Why Johnny Can't Stop Abstracting</div>
+      <p class="sum">Murat Demirbaş 读完 Ananyo Bhattacharya 的冯·诺依曼传记后的随笔。清单确实吓人：集合论与数学基础、量子力学的数学表述、算子代数（至今叫冯·诺依曼代数）、遍历理论、博弈论、期望效用、蒙特卡洛、存储程序计算机、数值天气预报、容错计算、自复制自动机——53 年，几乎每一门都留了指纹。文章真正追问的是那种跨领域迁移能力从哪来。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 101</span><span class="badge b-cmt">💬 56</span>
+        <span class="tag t-code">编程</span>
+        <a class="link" href="http://muratbuffalo.blogspot.com/2026/10/the-man-from-future-why-johnny-cant.html" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="security">
+  <div class="sec-head"><span class="ico">🔒</span><h2>安全 &amp; 政策</h2><span class="count">4 条</span><span class="line"></span></div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="top"><span class="rank">#22</span><h3>泄露录音里，Flock CEO 告诉警方"反对声浪根本不存在"</h3></div>
+      <div class="en">In Leaked Audio, Flock CEO Tells Cops Backlash to the Company Isn't Real</div>
+      <p class="sum">404 Media 拿到的通话录音显示，这家车牌识别监控公司在向警方客户做危机公关时，把外界对其大规模布控的质疑定性为不真实的噪声。155 条评论，是今日监控议题最集中的一处。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 269</span><span class="badge b-cmt">💬 155</span>
+        <span class="tag t-sec">隐私</span>
+        <a class="link" href="https://www.404media.co/in-leaked-audio-flock-ceo-tells-cops-backlash-to-the-company-isnt-real/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#25</span><h3>EPA 正在悄悄拆掉自己的网络档案库</h3></div>
+      <div class="en">The EPA Is Quietly Killing Its Web Archive</div>
+      <p class="sum">Mother Jones 调查：环保署的在线档案正在被成批下线/删除，涉及 Camp Lejeune 供水污染、清洁电力法规等高度敏感的公共记录。没有公告、没有迁移路径——对依赖这些一手数据的研究者和记者来说，等于把历史抹掉。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 207</span><span class="badge b-cmt">💬 40</span>
+        <span class="tag t-pol">政策</span>
+        <a class="link" href="https://www.motherjones.com/environment/2026/10/epa-online-archive-deletion-zeldin-camp-lejeune-trump-clean-power/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#27</span><h3>美国将氦气列为关键材料</h3></div>
+      <div class="en">US designates helium as a critical material</div>
+      <p class="sum">氦不只是气球：半导体制造、MRI 超导磁体、光纤拉丝、低温科研全指着它，且几乎无法替代、无法合成。把氦列入关键材料清单意味着供应链与储备政策会跟着变——评论区关心的是价格与半导体产能。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 166</span><span class="badge b-cmt">💬 96</span>
+        <span class="tag t-pol">政策</span>
+        <a class="link" href="https://apnews.com/article/energy-critical-materials-minerals-helium-43da160adc1bad389fba0b9ffbd14c3c" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#30</span><h3>谁杀死了 EV 证书：一桩万圣节浏览器疑案</h3></div>
+      <div class="en">Who killed the EV cert? A browser whodunit for Halloween</div>
+      <p class="sum">十年前地址栏里那块绿色公司名，如今埋在几次点击之后，只有爱好者才看。作者用侦探小说的写法复盘嫌疑人：主流浏览器（界面去特殊化）、会犯错的人类、出于善意推动 HTTPS 普及的非营利组织，以及一家肯塔基公司 Stripe。结论是合谋——代价是"已验证的企业身份"从 Web 上被切掉了，而欧盟新标准与 AI agent 的普及可能让它还魂。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 20</span><span class="badge b-cmt">💬 32</span>
+        <span class="tag t-sec">安全</span>
+        <a class="link" href="https://qwac.com/blog/who-killed-the-ev-cert" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+<section id="misc">
+  <div class="sec-head"><span class="ico">🎯</span><h2>其他值得关注</h2><span class="count">3 条</span><span class="line"></span></div>
+  <div class="grid">
+
+    <article class="card">
+      <div class="top"><span class="rank">#29</span><h3>瑞士，一比一，用方块堆出来</h3></div>
+      <div class="en">Switzerland. Block by block. At 1:1 scale</div>
+      <p class="sum">有人把整个瑞士搬进了 Minecraft：1 方块 = 1 米，地形、冰川、湖泊、森林、水坝全部来自 swisstopo 的开放地理数据，马特洪峰和现实一样高一样陡。41,285 km² 国土、杜富尔峰 4,634 格高、全量 24 GB，用 Cubic Chunks 撑起超高高程。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 455</span><span class="badge b-cmt">💬 213</span>
+        <span class="tag t-misc">硬核玩具</span>
+        <a class="link" href="https://blocks.manifold3d.ch/" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#20</span><h3>金刚石晶体管：开关速度快 50 倍</h3></div>
+      <div class="en">Diamond Transistor · Diamond Foundry</div>
+      <p class="sum">Diamond Foundry 与斯坦福合作的"全金刚石 MOSFET"，靠表面转移掺杂（氢终止后电子亲和势为负，价带电子转移到表面受主）在表面几纳米内形成二维空穴气，无需离子注入、不产生晶格缺陷。官方称亚阈值摆幅已追平最先进的 3nm 硅器件，并对外供应金刚石衬底。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 116</span><span class="badge b-cmt">💬 61</span>
+        <span class="tag t-misc">硬件</span>
+        <a class="link" href="https://www.df.com/diamond-transistor" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><span class="rank">#19</span><h3>帕斯卡发明了固定线路公共交通</h3></div>
+      <div class="en">Blaise Pascal invented fixed route public transport (2024)</div>
+      <p class="sum">Human Transit 的旧文重提：1662 年帕斯卡在巴黎搞出 <em>carrosses à cinq sols</em>——五苏马车，固定路线、固定班次、按段计价，被视为现代公交的原型。评论区照例延伸到"为什么今天的公交还是这个逻辑"。</p>
+      <div class="meta">
+        <span class="badge b-score">▲ 256</span><span class="badge b-cmt">💬 135</span>
+        <span class="tag t-misc">历史</span>
+        <a class="link" href="https://humantransit.org/2024/12/one-of-the-greatest-inventions-in-the-history-of-human-transport.html" target="_blank" rel="noopener">原文 ↗</a>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="mini" style="margin-top:14px">
+    <h4>未过阈值但值得一看（得分 &lt; 50 且评论 &lt; 30）</h4>
+    <ul>
+      <li><span class="m-sc">36 / 8</span><a href="https://blog.cloudflare.com/kv-cache-exposure-remediation/" target="_blank" rel="noopener">Cloudflare 披露 GLM-5.3 跨请求 KV 缓存泄漏</a>——8/27–9/9 共 155 条响应串了别人的上下文，触发条件是 prompt 超过 681,280 token，与 SGLang 协同披露</li>
+      <li><span class="m-sc">39 / 19</span><a href="https://nautil.us/just-imagining-a-workout-can-make-you-stronger-236068" target="_blank" rel="noopener">光靠想象训练也能变强</a>——运动想象（motor imagery）的实证</li>
+      <li><span class="m-sc">28 / 6</span><a href="https://twitter.com/macrofying/status/2112904628509528219" target="_blank" rel="noopener">一台在纸上打印的打印机</a>——纯机械解构</li>
+      <li><span class="m-sc">27 / 7</span><a href="https://categorica.io/blog/2026.10.16_nginx-stats-prometheus/" target="_blank" rel="noopener">Nginx 原生 Prometheus 集成</a>——不必再挂 exporter</li>
+      <li><span class="m-sc">37 / 6</span><a href="https://dbohdan.github.io/glider/" target="_blank" rel="noopener">Glider 4.0 网页版</a>——经典 Mac 小游戏的移植</li>
+      <li><span class="m-sc">7 / 0</span><a href="https://t3x.org/lisp64k/index.html" target="_blank" rel="noopener">64K 内存里能做的 LISPy 事</a> · <span class="m-sc">10 / 0</span> <a href="https://arxiv.org/abs/2512.13908" target="_blank" rel="noopener">超导量子处理器上的 magic state cultivation</a></li>
+    </ul>
+  </div>
+</section>
+
+<section id="ranking">
+  <div class="sec-head"><span class="ico">📈</span><h2>今日榜单 Top 20</h2><span class="count">按得分排序</span><span class="line"></span></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>标题</th><th style="text-align:right">得分</th><th style="text-align:right">评论</th><th>分类</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">1</td><td class="tt">Anthropic S-1 招股书</td><td class="sc">1437</td><td class="cm">1403</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">2</td><td class="tt">微软向约四分之一员工发出买断</td><td class="sc">704</td><td class="cm">608</td><td><span class="tag t-pol">政策</span></td></tr>
+        <tr><td class="rk">3</td><td class="tt">Raschka《从零构建推理模型》视频课</td><td class="sc">523</td><td class="cm">79</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">4</td><td class="tt">观鸟重塑大脑、延缓认知衰退</td><td class="sc">496</td><td class="cm">193</td><td><span class="tag t-misc">科学</span></td></tr>
+        <tr><td class="rk">5</td><td class="tt">GPT-6.1 Terra</td><td class="sc">471</td><td class="cm">295</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">6</td><td class="tt">瑞士 1:1 搬进 Minecraft</td><td class="sc">455</td><td class="cm">213</td><td><span class="tag t-misc">其他</span></td></tr>
+        <tr><td class="rk">7</td><td class="tt">CSS-Tricks 重回独立运营</td><td class="sc">363</td><td class="cm">85</td><td><span class="tag t-oss">社区</span></td></tr>
+        <tr><td class="rk">8</td><td class="tt">Flock CEO 泄露录音</td><td class="sc">269</td><td class="cm">155</td><td><span class="tag t-sec">隐私</span></td></tr>
+        <tr><td class="rk">9</td><td class="tt">帕斯卡与固定线路公交</td><td class="sc">256</td><td class="cm">135</td><td><span class="tag t-misc">历史</span></td></tr>
+        <tr><td class="rk">10</td><td class="tt">Win11 上最老的 GUI 程序（1992）</td><td class="sc">247</td><td class="cm">154</td><td><span class="tag t-code">编程</span></td></tr>
+        <tr><td class="rk">11</td><td class="tt">OpenAI 学术合作：三连突破公告</td><td class="sc">241</td><td class="cm">102</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">12</td><td class="tt">Pharo 14 发布</td><td class="sc">233</td><td class="cm">59</td><td><span class="tag t-oss">开源</span></td></tr>
+        <tr><td class="rk">13</td><td class="tt">EPA 拆掉自己的网络档案</td><td class="sc">207</td><td class="cm">40</td><td><span class="tag t-pol">政策</span></td></tr>
+        <tr><td class="rk">14</td><td class="tt">微软 Type Server Protocol</td><td class="sc">178</td><td class="cm">132</td><td><span class="tag t-code">编程</span></td></tr>
+        <tr><td class="rk">15</td><td class="tt">美国将氦气列为关键材料</td><td class="sc">166</td><td class="cm">96</td><td><span class="tag t-pol">政策</span></td></tr>
+        <tr><td class="rk">16</td><td class="tt">2 美元 MCU 上的 SIMD 计算机视觉</td><td class="sc">165</td><td class="cm">51</td><td><span class="tag t-code">编程</span></td></tr>
+        <tr><td class="rk">17</td><td class="tt">CorridorKey 2.0 神经网络抠像</td><td class="sc">161</td><td class="cm">51</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">18</td><td class="tt">预印本：指数时间假说为假</td><td class="sc">141</td><td class="cm">57</td><td><span class="tag t-ai">AI</span></td></tr>
+        <tr><td class="rk">19</td><td class="tt">Nietzschian Debugger</td><td class="sc">118</td><td class="cm">37</td><td><span class="tag t-oss">开源</span></td></tr>
+        <tr><td class="rk">20</td><td class="tt">金刚石晶体管</td><td class="sc">116</td><td class="cm">61</td><td><span class="tag t-misc">硬件</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="hot">
+  <div class="sec-head"><span class="ico">💬</span><h2>今日最热讨论</h2><span class="count">1403 条评论</span><span class="line"></span></div>
+  <div class="hot">
+    <div class="hdr">
+      <h3>Anthropic S-1：一场关于"AI 收入是不是真的"的公开审判</h3>
+    </div>
+    <div class="metrics">
+      <span class="badge b-score">▲ 1437 分</span>
+      <span class="badge b-cmt">💬 1403 条评论</span>
+      <span class="badge b-hot">占今日 30 条总评论量的 33.7%</span>
+      <span class="tag t-ai">AI</span>
+    </div>
+    <ul>
+      <li><b>核心分岐只有一句话：需求是真的吗。</b>乐观派的逻辑链是"Q2 把需求与算力匹配做对了、毛利漂亮、于是重仓下注"——已承诺约 5,050 亿美元算力（Google 1,140 亿 / AWS 1,100 亿 / Broadcom 1,610 亿 / SpaceX 1,200 亿），只要盛宴继续，从 500 亿营收走到 5,000 亿就自洽。</li>
+      <li><b>增速掉档被读成 IPO 时点的理由。</b>有人拉出季度表：Q1 47.31 亿 → Q2 115.55 亿（+144.1% QoQ）→ Q3 168 亿（+45.4% QoQ）。曲线依然陡，但二阶导数已经翻转。</li>
+      <li><b>客户集中度与"护城河"质疑。</b>截至 2026-09-30 的九个月里，约四分之一营收来自五个客户；且约八成收入是按量计费——这意味着收入随客户用量波动，缺乏多年期锁定的确定性。</li>
+      <li><b>单位经济学有两种读法。</b>乐观解读：每 1 美元算力换来 2.08 美元营收（2025 Q1 仅 0.40），算力回本期不到一年，堪称印钞机。怀疑解读：大量可转债/股权被付给算力供应商，因而不计入算力成本；免费额度塞进销售费用美化毛利；Q3 完整数据还没出。"味道不太对。"</li>
+      <li><b>文本层面也被逐条抠。</b>有人指出风险因素里"若模型被滥用造成伤害"仍写作 if，而现实早已是 when；也有人注意到全文三处提到"open source"，却没有把开放权重模型列为核心业务风险。</li>
+    </ul>
+    <div class="quote">"Ant generates $2.08 in revenue for every $1 spent on compute, up from just $0.40 in Q1 2025. The payback period for compute is just insane." — jialatsia</div>
+    <p class="note">观察：这条帖子的讨论结构非常整齐——三派（看好需求派 / 会计怀疑派 / 护城河怀疑派）几乎不互相说服，各自拿招股书里的不同章节当弹药。Anthropic 把 505B 的算力承诺写进公开文件，本身就是把"AI 资本开支是否可持续"这个行业级问题，变成了可被逐行审计的会计问题。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="row"><strong style="color:#c9d1d9">数据来源</strong> Hacker News Firebase API · <code>v0/topstories.json</code> 前 30 条 + <code>v0/item/{id}.json</code></div>
+  <div class="row"><strong style="color:#c9d1d9">抓取时间</strong> 2026-10-27 08:00 CST（UTC+8）</div>
+  <div class="row"><strong style="color:#c9d1d9">生成时间</strong> 2026-10-27 08:07 CST · 单文件静态页，无外部依赖</div>
+  <div class="row"><strong style="color:#c9d1d9">筛选规则</strong> 得分 ≥ 50 或 评论 ≥ 30 计入正文；得分与评论数为抓取瞬间快照，会持续增长</div>
+  <p class="note">中文标题与摘要为人工撰写/机器辅助改写，力求信息密度但可能与原文细节有出入，请以原文链接为准。</p>
+</footer>
+
+</div>
+</body>
+</html>
