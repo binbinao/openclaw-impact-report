@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年10月29日</title>
+<meta name="description" content="Hacker News 每日热门内容中文简报：2026-10-29，Top 30 榜单、必读 Top 5、AI / 编程开源 / 安全政策分类精选。">
+<style>
+:root{
+  --bg:#0d1117; --bg-soft:#0f141b; --card:#161b22; --card-hover:#1b2230;
+  --border:#21262d; --border-strong:#30363d;
+  --text:#e6edf3; --text-dim:#9aa7b4; --text-faint:#6e7b8b;
+  --accent:#58a6ff; --accent-2:#7ee787; --accent-3:#d2a8ff;
+  --ai:#d2a8ff; --code:#7ee787; --sec:#ff7b72; --misc:#f2cc60;
+  --score:#ffa657; --comment:#79c0ff;
+  --radius:14px; --radius-sm:8px;
+  --shadow:0 8px 28px rgba(0,0,0,.45);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; padding:0 18px 72px;
+  background:
+    radial-gradient(1100px 520px at 12% -8%, rgba(88,166,255,.16), transparent 60%),
+    radial-gradient(900px 480px at 88% -12%, rgba(210,168,255,.13), transparent 62%),
+    var(--bg);
+  color:var(--text); font-family:var(--sans);
+  font-size:16px; line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto}
+a{color:var(--accent);text-decoration:none;transition:color .18s ease}
+a:hover{color:#8cc8ff;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- header ---------- */
+header.site{padding:64px 0 30px;border-bottom:1px solid var(--border);margin-bottom:34px}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);background:rgba(88,166,255,.1);
+  border:1px solid rgba(88,166,255,.32);border-radius:999px;padding:6px 14px;margin-bottom:20px;
+}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 10px var(--accent-2)}
+h1{
+  margin:0 0 14px;font-size:clamp(30px,5.2vw,46px);line-height:1.16;letter-spacing:-.6px;font-weight:800;
+  background:linear-gradient(100deg,#ffffff 8%,#a8d0ff 52%,#d2a8ff 94%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sub{color:var(--text-dim);font-size:15.5px;max-width:760px;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-family:var(--mono);font-size:12.5px;color:var(--text-faint)}
+.meta-row span strong{color:var(--text-dim);font-weight:600}
+
+/* ---------- section titles ---------- */
+section{margin:0 0 46px}
+h2{
+  display:flex;align-items:center;gap:12px;
+  font-size:22px;margin:0 0 6px;letter-spacing:-.2px;font-weight:750;
+}
+h2 .bar{width:4px;height:22px;border-radius:3px;background:var(--accent)}
+h2 .count{font-family:var(--mono);font-size:12px;color:var(--text-faint);border:1px solid var(--border-strong);border-radius:999px;padding:2px 9px;font-weight:500}
+.sec-note{color:var(--text-faint);font-size:13.5px;margin:0 0 20px;padding-left:16px}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:16px}
+.stat{
+  background:linear-gradient(160deg,var(--card),#131820);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;position:relative;overflow:hidden;
+}
+.stat::after{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.stat .label{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint)}
+.stat .value{font-size:30px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.stat .hint{font-size:12.5px;color:var(--text-dim);line-height:1.5}
+.stat.s1 .value{color:#fff}
+.stat.s2 .value{color:var(--score)}
+.stat.s3 .value{color:var(--comment)}
+.stat.s4 .value{color:var(--accent-2)}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:16px}
+.grid.top5{grid-template-columns:1fr}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{
+  background:var(--card);border:1px solid var(--border);border-left:3px solid var(--border-strong);
+  border-radius:var(--radius);padding:20px 22px;transition:transform .16s ease,border-color .16s ease,background .16s ease;
+}
+.card:hover{transform:translateY(-2px);background:var(--card-hover);border-color:var(--border-strong)}
+.card.c-ai{border-left-color:var(--ai)}
+.card.c-code{border-left-color:var(--code)}
+.card.c-sec{border-left-color:var(--sec)}
+.card.c-misc{border-left-color:var(--misc)}
+.card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.rank{
+  flex:0 0 auto;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text-faint);
+  background:rgba(255,255,255,.045);border:1px solid var(--border-strong);
+  border-radius:7px;min-width:34px;height:28px;display:grid;place-items:center;
+}
+.card h3{margin:0;font-size:17.5px;line-height:1.45;font-weight:700;letter-spacing:-.15px}
+.card h3 a{color:var(--text)}
+.card h3 a:hover{color:var(--accent);text-decoration:none}
+.en-title{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin:4px 0 12px;padding-left:46px;word-break:break-word}
+.card p.sum{margin:0 0 14px;color:var(--text-dim);font-size:14.5px;line-height:1.78}
+.pills{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{
+  font-family:var(--mono);font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 10px;
+  border:1px solid transparent;white-space:nowrap;
+}
+.pill.score{color:var(--score);background:rgba(255,166,87,.1);border-color:rgba(255,166,87,.28)}
+.pill.comment{color:var(--comment);background:rgba(121,192,255,.1);border-color:rgba(121,192,255,.28)}
+.pill.tag{color:var(--text-dim);background:rgba(255,255,255,.04);border-color:var(--border-strong)}
+.pill.t-ai{color:var(--ai);background:rgba(210,168,255,.1);border-color:rgba(210,168,255,.3)}
+.pill.t-code{color:var(--code);background:rgba(126,231,135,.1);border-color:rgba(126,231,135,.3)}
+.pill.t-sec{color:var(--sec);background:rgba(255,123,114,.1);border-color:rgba(255,123,114,.3)}
+.pill.t-misc{color:var(--misc);background:rgba(242,204,96,.1);border-color:rgba(242,204,96,.3)}
+.pill.warn{color:#ffb3ad;background:rgba(255,123,114,.12);border-color:rgba(255,123,114,.4)}
+
+/* ---------- hot discussion ---------- */
+.hot{
+  background:linear-gradient(150deg,rgba(88,166,255,.09),rgba(210,168,255,.05) 55%,var(--card));
+  border:1px solid rgba(88,166,255,.26);border-radius:var(--radius);padding:26px 28px;
+}
+.hot h3{margin:0 0 6px;font-size:21px;letter-spacing:-.2px}
+.hot .en-title{padding-left:0;margin-bottom:16px}
+.hot p{color:var(--text-dim);font-size:14.8px;line-height:1.82;margin:0 0 12px}
+.hot p:last-child{margin-bottom:0}
+.hot strong{color:var(--text);font-weight:650}
+.bars{margin-top:20px;display:grid;gap:9px}
+.bar-row{display:grid;grid-template-columns:1fr 88px 46px;align-items:center;gap:10px;font-size:13px;color:var(--text-dim)}
+.bar-row .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:7px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-3))}
+.bar-row .num{font-family:var(--mono);text-align:right;color:var(--text-faint);font-size:12px}
+
+/* ---------- table ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:13.8px;min-width:640px}
+thead th{
+  text-align:left;padding:12px 14px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-faint);background:rgba(255,255,255,.025);border-bottom:1px solid var(--border-strong);
+  white-space:nowrap;font-weight:600;
+}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(88,166,255,.045)}
+td.num{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.rk{font-family:var(--mono);color:var(--text-faint);width:44px}
+td .tlink{color:var(--text)}
+td .tlink:hover{color:var(--accent);text-decoration:none}
+td .sub-en{display:block;font-family:var(--mono);font-size:10.8px;color:var(--text-faint);margin-top:2px}
+
+/* ---------- footer ---------- */
+footer{margin-top:52px;padding-top:26px;border-top:1px solid var(--border);color:var(--text-faint);font-size:13px}
+footer .frow{display:flex;flex-wrap:wrap;gap:8px 26px;margin-bottom:10px}
+footer code{font-family:var(--mono);font-size:12px;color:var(--text-dim);background:rgba(255,255,255,.045);padding:1px 6px;border-radius:5px}
+footer .fine{font-size:12.2px;line-height:1.75;color:#5b6675}
+
+@media (max-width:640px){
+  body{padding:0 14px 56px;font-size:15.5px}
+  header.site{padding:42px 0 24px}
+  .card{padding:17px 17px}
+  .card-head{gap:10px}
+  .en-title{padding-left:0}
+  .stat .value{font-size:26px}
+  .hot{padding:20px}
+  .bar-row{grid-template-columns:1fr 64px 40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="site">
+  <div class="kicker"><span class="dot"></span>HN Daily Digest · Top 30</div>
+  <h1>Hacker News 每日简报 — 2026年10月29日</h1>
+  <p class="sub">今日榜单被「终端工具 + 前沿模型 + 供应链安全」三股力量同时占据：Ghostty 1.4 以 1290 分登顶，Gemini 4 Carbon 与 Genie 4 双模型同日霸榜，而 Apple 工具链仍在信任已失陷的证书，成了开发者今天最该动手自查的一件事。</p>
+  <div class="meta-row">
+    <span><strong>数据源</strong> HN Firebase API（topstories）</span>
+    <span><strong>快照</strong> 2026-10-29 08:05 CST</span>
+    <span><strong>样本</strong> 前 30 条 · 29 篇有效投稿</span>
+  </div>
+</header>
+
+<section id="overview">
+  <h2><span class="bar"></span>📊 今日概况</h2>
+  <p class="sec-note">口径：topstories 前 30 条 ID 全量抓取，剔除 1 条招聘帖（job）后统计 29 篇投稿。</p>
+  <div class="stats">
+    <div class="stat s1">
+      <div class="label">总文章数</div>
+      <div class="value">29</div>
+      <div class="hint">其中 21 篇达到重点门槛<br>（得分 ≥ 50 或评论 ≥ 30）</div>
+    </div>
+    <div class="stat s2">
+      <div class="label">最高得分</div>
+      <div class="value">1290</div>
+      <div class="hint">Ghostty 1.4 发布说明<br>7 个月 · 2889 次提交</div>
+    </div>
+    <div class="stat s3">
+      <div class="label">最热评论</div>
+      <div class="value">821</div>
+      <div class="hint">MacBook Pro PROLED XDR<br>硬件话题依旧是评论区永动机</div>
+    </div>
+    <div class="stat s4">
+      <div class="label">讨论总量</div>
+      <div class="value">4,696</div>
+      <div class="hint">29 篇投稿累计评论数<br>中位得分 106 · 均分 301.5</div>
+    </div>
+  </div>
+</section>
+
+<section id="top5">
+  <h2><span class="bar"></span>🔥 必读 Top 5</h2>
+  <p class="sec-note">按得分排序，兼顾信息密度与「今天读了就能用上」的实用度。</p>
+  <div class="grid top5">
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">01</div>
+        <h3><a href="https://ghostty.org/docs/install/release-notes/1-4-0" target="_blank" rel="noopener">Ghostty 1.4：性能重写 + 100% 完整 Kitty 图形协议</a></h3>
+      </div>
+      <div class="en-title">Ghostty 1.4 — ghostty.org</div>
+      <p class="sum">7 个月、172 位贡献者、2889 次提交攒出的大版本：大幅性能与内存优化，成为首个完整实现 Kitty 图形协议（含动画与相对定位）的非 Kitty 终端，并改进 SSH 集成。发布说明同时修掉一个粘贴保护漏洞（GHSA-4hwh-wx3w-3fqg）——回车未被当作换行，可能让粘贴内容在未确认的情况下直接执行。</p>
+      <div class="pills">
+        <span class="pill score">▲ 1290</span>
+        <span class="pill comment">💬 412</span>
+        <span class="pill tag t-code">编程 &amp; 开源</span>
+        <span class="pill tag">终端</span>
+      </div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">02</div>
+        <h3><a href="https://emudhra.we-have-a-problem.com/apple.html" target="_blank" rel="noopener">Apple 自带的 git 仍信任已失陷的 eMudhra 证书</a></h3>
+      </div>
+      <div class="en-title">Apple's git still trusts the compromised eMudhra certificates</div>
+      <p class="sum">macOS 随附的 git / curl / python3 至今仍信任 10 月 17 日通报的 eMudhra 失陷证书，10 月 26 日发布的 macOS 27.2 不但没修，还回滚了用户手工打的补丁。影响直达供应链：HTTPS 克隆可被投递攻击者代码、推送可在途中被改写、GitHub Token 可被截获。作者给了一条自查命令，见下方「安全 &amp; 政策」。忙不忙都先跑一次。</p>
+      <div class="pills">
+        <span class="pill score">▲ 1021</span>
+        <span class="pill comment">💬 375</span>
+        <span class="pill tag t-sec">安全</span>
+        <span class="pill tag">TLS / 供应链</span>
+      </div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">03</div>
+        <h3><a href="https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/" target="_blank" rel="noopener">Genie 4：首个原生生成音频的实时世界模型</a></h3>
+      </div>
+      <div class="en-title">Genie 4: A new generation of world simulation — Google DeepMind</div>
+      <p class="sum">实时交互模拟的写实度再上一档：空气动力学、碰撞等物理场景更可信，人物动作与响应被重点强化；这也是 Genie 系列首次原生生成环境音与可交互对话（角色能实时接话）。仍以研究预览形式先给可信测试者，全部输出带 SynthID 水印，长时一致性、文字渲染仍是短板。</p>
+      <div class="pills">
+        <span class="pill score">▲ 1019</span>
+        <span class="pill comment">💬 576</span>
+        <span class="pill tag t-ai">AI</span>
+        <span class="pill tag">世界模型</span>
+      </div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">04</div>
+        <h3><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/" target="_blank" rel="noopener">Gemini 4 Carbon：主打网安与长任务的前沿模型</a></h3>
+      </div>
+      <div class="en-title">Introducing Gemini 4 Carbon — Google</div>
+      <p class="sum">距 Gemini 4 Argon 仅两周又推一版：Artificial Analysis 智能指数 v5.0 拿下 59 分居首，SEC-bench Pro 漏洞发现 88.2%、ExploitGym 利用 54.8%、CWE-bench 修复 71.0%，WebDev Arena 升 89 elo 至第 4。内部数据显示安全代码生成成功率翻倍、Terminal-Bench 4.0 作弊成功率降至 0%，先向「网络防御者」限量开放，价格与 Argon 持平（$2 / $10 每百万 token）。</p>
+      <div class="pills">
+        <span class="pill score">▲ 763</span>
+        <span class="pill comment">💬 625</span>
+        <span class="pill tag t-ai">AI</span>
+        <span class="pill tag">前沿模型</span>
+      </div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">05</div>
+        <h3><a href="https://nullpt.rs/fingerprinting-bioweapons" target="_blank" rel="noopener">一个指纹脚本为什么在「制造生物武器」？</a></h3>
+      </div>
+      <div class="en-title">Why is this fingerprinting script creating bioweapons? — nullpt.rs</div>
+      <p class="sum">作者爬了 1 万个站点收集 canvas 指纹（做成了 fingerprint.garden），发现某个反爬脚本里有 <code>computeRicinLethalDosageForWaterSupply</code> 这类惊悚函数名——结果是一场针对 AI 的解混淆陷阱：用误导性命名字符串加隐形 Unicode 载荷，把「SYSTEM OVERRIDE」提示注入塞给抓取页面的模型。Astra 与 Daybreak Blue 都拒绝处理，GLM-5.3 照做了；脚本归属疑似指向一家俄罗斯流量清洗服务商。</p>
+      <div class="pills">
+        <span class="pill score">▲ 731</span>
+        <span class="pill comment">💬 167</span>
+        <span class="pill tag t-sec">安全</span>
+        <span class="pill tag">提示注入</span>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="ai">
+  <h2><span class="bar" style="background:var(--ai)"></span>🤖 AI 相关动态 <span class="count">5 篇</span></h2>
+  <p class="sec-note">今日主线：模型评测从「聊天好不好用」转向「能不能连续几天把活干完」。</p>
+  <div class="grid two">
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">12</div>
+        <h3><a href="https://surgehq.ai/blog/dayjob-tax" target="_blank" rel="noopener">Dayjob: Tax —— 用 50 个真实税务任务考 AI Agent</a></h3>
+      </div>
+      <div class="en-title">surgehq.ai</div>
+      <p class="sum">50 个环境、1789 份文件，从客户初次咨询一路做到交付：指令不全、记录互相矛盾、真正要紧的问题没人提。考的不是税率知识，而是「自己搞清该干什么」的主动性与专业判断——这正是当前 Agent 最容易翻车的地方。</p>
+      <div class="pills"><span class="pill score">▲ 190</span><span class="pill comment">💬 112</span><span class="pill tag t-ai">AI</span><span class="pill tag">Agent 评测</span></div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">17</div>
+        <h3><a href="https://cursor.com/blog/agent-sdk" target="_blank" rel="noopener">Cursor 推出 Agent SDK：把 Agent 写进代码</a></h3>
+      </div>
+      <div class="en-title">cursor.com</div>
+      <p class="sum">主张「用代码定义 Agent」：绑定到团队现有工作流，在 PR、合规流程、事故排查等事件触发时自动行动，而不是让工程师在对话框里反复复述上下文。方向与今日模型厂商的「长任务」叙事完全同频。</p>
+      <div class="pills"><span class="pill score">▲ 89</span><span class="pill comment">💬 107</span><span class="pill tag t-ai">AI</span><span class="pill tag">开发者工具</span></div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">15</div>
+        <h3><a href="https://huggingface.co/blog/nvidia/nemotron-transcribe-granary" target="_blank" rel="noopener">NVIDIA Nemotron 3.5 Transcribe：可提示的 40 语种开源 ASR</a></h3>
+      </div>
+      <div class="en-title">huggingface.co</div>
+      <p class="sum">配套 Granary v2 数据集，强调用提示词定制转写行为（术语、格式、领域偏置），把开源 ASR 从「固定管线」推向「可编程组件」。权重开放，落地门槛低，是今天最实用的一篇工程向发布。</p>
+      <div class="pills"><span class="pill score">▲ 106</span><span class="pill comment">💬 17</span><span class="pill tag t-ai">AI</span><span class="pill tag">开源模型</span></div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">04</div>
+        <h3><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/" target="_blank" rel="noopener">Gemini 4 Carbon 的另一面：对齐指标也被拿来宣传</a></h3>
+      </div>
+      <div class="en-title">blog.google</div>
+      <p class="sum">除能力外，文档罕见地细列了「少走捷径」的量化结果：严重错位告警降约 80%、无依据断言减半、遇到歧义先取证再动手。若这些内部数据可复现，说明「可靠性」正在取代「聪明」成为前沿模型的卖点。</p>
+      <div class="pills"><span class="pill score">▲ 763</span><span class="pill comment">💬 625</span><span class="pill tag t-ai">AI</span><span class="pill tag">对齐</span></div>
+    </article>
+
+    <article class="card c-ai">
+      <div class="card-head">
+        <div class="rank">†</div>
+        <h3><a href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener">Sleep 框架：让 LLM 在持续学习中「睡一觉」巩固知识</a></h3>
+      </div>
+      <div class="en-title">research.google</div>
+      <p class="sum">借生物睡眠中的记忆巩固机制，把新知识在离线阶段回放重整，缓解持续学习里的灾难性遗忘。分数不高（28 分 / 3 评论）但思路有意思，属于「低热度高信息密度」的一类。</p>
+      <div class="pills"><span class="pill score">▲ 28</span><span class="pill comment">💬 3</span><span class="pill tag t-ai">AI</span><span class="pill tag warn">低热度 · 研究向</span></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="code">
+  <h2><span class="bar" style="background:var(--code)"></span>💻 编程 &amp; 开源 <span class="count">5 篇</span></h2>
+  <p class="sec-note">老家伙过生日（Emacs 50 岁）、新架构拒绝 AI 生成代码（AlpineBSD），中间夹着一本免费教材。</p>
+  <div class="grid two">
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">09</div>
+        <h3><a href="https://www.technologyreview.com/2026/10/20/1145399/emacs-turns-50/" target="_blank" rel="noopener">Emacs 50 岁：MIT AI Lab 的编辑器如何催生自由软件运动</a></h3>
+      </div>
+      <div class="en-title">technologyreview.com · Simson Garfinkel</div>
+      <p class="sum">从 1981 年 Stallman 手写手册（封面后来是骑牦牛的中世纪骑士）讲到 GNU 的起点：一个「可无限扩展的编辑器」如何变成黑客文化的公共基础设施。今天读它，更像在读一台时间机器的说明书。</p>
+      <div class="pills"><span class="pill score">▲ 393</span><span class="pill comment">💬 168</span><span class="pill tag t-code">编程 &amp; 开源</span><span class="pill tag">历史</span></div>
+    </article>
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">14</div>
+        <h3><a href="https://wiki.alpinebsd.org" target="_blank" rel="noopener">AlpineBSD：NetBSD 内核 + Alpine 用户空间，「尽量不用 AI 生成代码」</a></h3>
+      </div>
+      <div class="en-title">wiki.alpinebsd.org</div>
+      <p class="sum">明确写入 AI 政策：基础系统与主仓库不含任何 LLM 输出。目前仍无安装器、硬件支持受 NetBSD 拖累，但「可审计的软件来源」这个立场本身，正成为一部分用户选发行版的理由。</p>
+      <div class="pills"><span class="pill score">▲ 169</span><span class="pill comment">💬 150</span><span class="pill tag t-code">编程 &amp; 开源</span><span class="pill tag">操作系统</span></div>
+    </article>
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">06</div>
+        <h3><a href="https://vertex.degree/" target="_blank" rel="noopener">Start Doing Graph Theory：可免费下载的图论入门教材</a></h3>
+      </div>
+      <div class="en-title">vertex.degree · Mikhail Lavrov</div>
+      <p class="sum">CC BY-SA 4.0 授权，在线可读亦有 PDF，从解谜切入再过渡到定理证明，适合当「刷题前的补课材料」。562 分说明 HN 对高质量免费教材始终给面子。</p>
+      <div class="pills"><span class="pill score">▲ 562</span><span class="pill comment">💬 123</span><span class="pill tag t-code">编程 &amp; 开源</span><span class="pill tag">教材</span></div>
+    </article>
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">20</div>
+        <h3><a href="https://slidebyside.com/" target="_blank" rel="noopener">Show HN: SlideBySide —— 不共享屏幕也能一起讲 PPT</a></h3>
+      </div>
+      <div class="en-title">slidebyside.com</div>
+      <p class="sum">上传 PDF / PPT 换一个链接，所有人同步翻页，带实时光标、共同控制与标注，免注册、纯浏览器。把「共享屏幕」这个带宽与隐私都不划算的老方案换成了状态同步——小而准的产品切口。</p>
+      <div class="pills"><span class="pill score">▲ 53</span><span class="pill comment">💬 21</span><span class="pill tag t-code">编程 &amp; 开源</span><span class="pill tag">Show HN</span></div>
+    </article>
+
+    <article class="card c-code">
+      <div class="card-head">
+        <div class="rank">18</div>
+        <h3><a href="https://www.magnopus.com/blog/gaussiansplats-part-3-theres-always-a-bigger-scene" target="_blank" rel="noopener">Gaussian Splats 第三篇：总还有更大的场景</a></h3>
+      </div>
+      <div class="en-title">magnopus.com</div>
+      <p class="sum">Magnopus 把 Unreal 的 splat 渲染器从 Niagara 里扒出来重写后的踩坑实录：流式加载、LOD、多场景合成。做 3D / 数字孪生的可以直接抄作业，其余人当技术散文读也够味。</p>
+      <div class="pills"><span class="pill score">▲ 98</span><span class="pill comment">💬 20</span><span class="pill tag t-code">图形</span><span class="pill tag">工程实践</span></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="sec">
+  <h2><span class="bar" style="background:var(--sec)"></span>🔒 安全 &amp; 政策 <span class="count">6 篇</span></h2>
+  <p class="sec-note">今天最值得动手的不是阅读，是自查——证书信任链、PDF 密钥熵、以及你自己的 CI 凭据。</p>
+  <div class="grid two">
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">02</div>
+        <h3><a href="https://emudhra.we-have-a-problem.com/apple.html" target="_blank" rel="noopener">自查：你的 git 是否还在信任失陷证书</a></h3>
+      </div>
+      <div class="en-title">emudhra.we-have-a-problem.com</div>
+      <p class="sum">一条命令即可判定：报证书错误说明你的 git 是安全的；若正常列出 commit，则所有 HTTPS 远端（含 GitHub）都可能被中间人改写。<strong>推送时泄露 GitHub Token 是最直接的后果</strong>。</p>
+      <pre style="margin:0 0 14px;padding:12px 14px;background:#0b0f16;border:1px solid var(--border-strong);border-radius:8px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;color:#8cc8ff">git ls-remote https://git-emudhra.we-have-a-problem.com/check.git</pre>
+      <div class="pills"><span class="pill score">▲ 1021</span><span class="pill comment">💬 375</span><span class="pill tag t-sec">安全</span><span class="pill tag">TLS</span></div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">19</div>
+        <h3><a href="https://v12.sh/blog/the-case-of-the-9bit-aes-key" target="_blank" rel="noopener">9 位熵的「AES-256」：PDF 加密的实现级塌陷</a></h3>
+      </div>
+      <div class="en-title">v12.sh · Rick de Jager</div>
+      <p class="sum">多个 PDF 实现宣称 AES-256，实际只从极小状态空间取随机数：MuPDF 里真正影响 256 位密钥的随机状态只有 9 bit，可离线枚举；Foxit 则用时间作随机源，同样秒破。规范与实现的鸿沟，又一次成了安全边界。</p>
+      <div class="pills"><span class="pill score">▲ 61</span><span class="pill comment">💬 31</span><span class="pill tag t-sec">安全</span><span class="pill tag">密码学</span></div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">†</div>
+        <h3><a href="https://www.wired.com/story/massive-leak-exposes-41000-homeland-security-workers-including-undercover-ice-agents/" target="_blank" rel="noopener">41,000 名美国国土安全部雇员数据外泄，含 ICE 卧底</a></h3>
+      </div>
+      <div class="en-title">wired.com（Reuters 亦有报道）</div>
+      <p class="sum">泄露记录包含 ICE 与 CBP 设施位置、员工手机号，以及监听项目、Palantir 软件、xAI Grok 相关小组成员名单。对执法与情报岗位而言，这类「人员—设施」映射的杀伤力远高于普通账号库。</p>
+      <div class="pills"><span class="pill score">▲ 253</span><span class="pill comment">💬 112</span><span class="pill tag t-sec">安全</span><span class="pill tag">数据泄露</span></div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">08</div>
+        <h3><a href="https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/" target="_blank" rel="noopener">肯塔基州首例：人文主义者以「信仰」获准豁免使用 AI</a></h3>
+      </div>
+      <div class="en-title">religionnews.com</div>
+      <p class="sum">一名无神论/人文主义者成功主张「拒绝 AI」属于宗教信仰豁免——首例意味着「AI 使用」正在被制度性地当作可异议的规范，而非中性工具。456 条评论里争的其实是：技术强制与个人自主的边界在哪。</p>
+      <div class="pills"><span class="pill score">▲ 412</span><span class="pill comment">💬 456</span><span class="pill tag t-sec">政策</span><span class="pill tag">伦理</span></div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">†</div>
+        <h3><a href="https://www.reuters.com/business/media-telecom/us-agency-approves-amazon-leos-115-billion-acquisition-globalstar-2026-10-27/" target="_blank" rel="noopener">美国监管批准 Amazon Leo 以 115 亿美元收购 Globalstar</a></h3>
+      </div>
+      <div class="en-title">reuters.com</div>
+      <p class="sum">卫星直连手机赛道的整合落地：Amazon 借 Globalstar 的频谱与在轨资产补齐 Leo（原 Kuiper）的移动直连能力，与 Starlink 的正面竞争进入监管放行阶段。基础设施层的集中度继续上升。</p>
+      <div class="pills"><span class="pill score">▲ 222</span><span class="pill comment">💬 100</span><span class="pill tag t-sec">政策</span><span class="pill tag">卫星通信</span></div>
+    </article>
+
+    <article class="card c-sec">
+      <div class="card-head">
+        <div class="rank">—</div>
+        <h3><a href="https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html" target="_blank" rel="noopener">Alpine Linux 遭 GitLab 漏洞利用尝试，实例已重建</a></h3>
+      </div>
+      <div class="en-title">alpinelinux.org</div>
+      <p class="sum">攻击者在补丁发布一周后尝试利用 CVE-2026-97229，「差一点成功」。官方未发现成功证据但无法排除，遂按已被入侵处理：实例从零重建、全员密码重置。aports 与 10 月 21 日发布的包经核查未被篡改——这份「假设已被攻破」的处置模板值得抄。</p>
+      <div class="pills"><span class="pill score">▲ 4</span><span class="pill comment">💬 0</span><span class="pill tag t-sec">安全</span><span class="pill tag warn">低热度 · 高价值</span></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="misc">
+  <h2><span class="bar" style="background:var(--misc)"></span>🎯 其他值得关注 <span class="count">5 篇</span></h2>
+  <p class="sec-note">硬件、制造与「数字考古」：评论区最热闹的几个话题都不在软件里。</p>
+  <div class="grid two">
+
+    <article class="card c-misc">
+      <div class="card-head">
+        <div class="rank">07</div>
+        <h3><a href="https://www.apple.com/macbook-pro/proled-xdr-display/" target="_blank" rel="noopener">MacBook Pro 上新：PROLED XDR 屏 + 触控 + M5 Pro/Max</a></h3>
+      </div>
+      <div class="en-title">apple.com</div>
+      <p class="sum">苹果把「笔记本最好的屏幕」作为主卖点，同时补上触控、灵动岛与最高 24 小时续航，11 月 6 日开售。821 条评论说明真正的争议点从来不是参数，而是「Mac 到底该不该有触屏」这道十年老题。</p>
+      <div class="pills"><span class="pill score">▲ 475</span><span class="pill comment">💬 821</span><span class="pill tag t-misc">硬件</span><span class="pill tag">今日最热</span></div>
+    </article>
+
+    <article class="card c-misc">
+      <div class="card-head">
+        <div class="rank">11</div>
+        <h3><a href="https://www.circuithub.com/post/unveiling-the-grid" target="_blank" rel="noopener">The Grid：马萨诸塞州那台「按需造 PCB」的工厂级机器人</a></h3>
+      </div>
+      <div class="en-title">circuithub.com</div>
+      <p class="sum">CircuitHub 藏了五年的产线公开：用机器人产线把美国本土 PCB 交付速度做到深圳的两倍。「电子制造回流」第一次有了可复用的单位经济学样本，而不是口号。</p>
+      <div class="pills"><span class="pill score">▲ 400</span><span class="pill comment">💬 193</span><span class="pill tag t-misc">制造</span><span class="pill tag">自动化</span></div>
+    </article>
+
+    <article class="card c-misc">
+      <div class="card-head">
+        <div class="rank">10</div>
+        <h3><a href="https://carmelitegothic.com/cnc-stone-carving/" target="_blank" rel="noopener">加尔默罗会修士用 CNC 雕刻哥特式石作</a></h3>
+      </div>
+      <div class="en-title">carmelitegothic.com</div>
+      <p class="sum">一群修士用数控机床复刻中世纪石匠工艺，理由朴素得动人：中世纪的建造者本来就是当时技术的先锋，想让哥特建筑「成为现实而不是锁在脑子里的浪漫」。技术与传统最不拧巴的一次相遇。</p>
+      <div class="pills"><span class="pill score">▲ 386</span><span class="pill comment">💬 112</span><span class="pill tag t-misc">手工艺</span><span class="pill tag">CNC</span></div>
+    </article>
+
+    <article class="card c-misc">
+      <div class="card-head">
+        <div class="rank">16</div>
+        <h3><a href="https://formlabs.com/products/form-studio-1-basic-founders-edition/" target="_blank" rel="noopener">Formlabs 把专业级树脂 3D 打印机打到 699 美元</a></h3>
+      </div>
+      <div class="en-title">formlabs.com</div>
+      <p class="sum">Form Studio 1 以 699 美元切入桌面级市场，把 SLA 的精度叙事带进「买得起的价位」。耗材与后处理生态是否同样下沉，是这类硬件能否真正普及的关键变量。</p>
+      <div class="pills"><span class="pill score">▲ 90</span><span class="pill comment">💬 70</span><span class="pill tag t-misc">硬件</span><span class="pill tag">3D 打印</span></div>
+    </article>
+
+    <article class="card c-misc">
+      <div class="card-head">
+        <div class="rank">13</div>
+        <h3><a href="https://www.reddit.com/r/Seattle/comments/1xhf6qp/archivetoday_links_going_forward/" target="_blank" rel="noopener">Archive.today 链接何去何从：社区版主的实操讨论</a></h3>
+      </div>
+      <div class="en-title">reddit.com/r/Seattle</div>
+      <p class="sum">一个地方版块关于「今后如何处理 archive.today 链接」的公告式讨论，折射出更大的问题：当存档站本身变得不稳定、不可信，引用链路的长期可验证性该由谁兜底。</p>
+      <div class="pills"><span class="pill score">▲ 182</span><span class="pill comment">💬 115</span><span class="pill tag t-misc">互联网治理</span><span class="pill tag">存档</span></div>
+    </article>
+
+  </div>
+</section>
+
+<section id="hot">
+  <h2><span class="bar" style="background:var(--accent-3)"></span>💬 今日最热讨论</h2>
+  <p class="sec-note">按评论数排序，并给出「评论数 / 得分」比——比值越高，说明争议度越大、共识越少。</p>
+  <div class="hot">
+    <h3>MacBook Pro with PROLED XDR Display and Touch</h3>
+    <div class="en-title">821 条评论 · 475 分 · 讨论热度指数 1.73（全站均值 0.54）</div>
+    <p>今天评论数最高的不是模型、也不是漏洞，而是一台笔记本。<strong>它的评论/得分比是全场均值的 3.2 倍</strong>：475 分说明「点赞的人觉得这事值得看」，821 条评论却说明「看到的人彼此并不认同」。硬件话题在 HN 上长期是这种结构——参数没有争议，取舍全是争议。</p>
+    <p>争议集中在三处：<strong>触控</strong>（Mac 十年「不该有触屏」的教条是否该翻篇）、<strong>PROLED 面板</strong>（亮度与对比度换来的是烧屏与成本风险）、以及<strong>价格与产品线切割</strong>（M5 Pro / M5 Max 之间那道越来越宽的沟）。值得注意的是，同一批人昨天还在为 Ghostty 的性能优化鼓掌——工具链上的极端理性，与硬件偏好上的极端感性，在同一个论坛里并存得毫不违和。</p>
+    <p>对照来看：Gemini 4 Carbon（625 条 / 763 分，指数 0.82）与 Genie 4（576 条 / 1.02 分 / 指数 0.57）的讨论更像「集体验货」，肯塔基 AI 豁免案（456 条 / 指数 1.11）则是价值判断之争。而 Ghostty（指数 0.32）与 Apple 证书问题（指数 0.37）几乎没人吵架——一个是「好用，谢谢」，一个是「我这就去自查」。</p>
+    <div class="bars">
+      <div class="bar-row"><span class="name">MacBook Pro PROLED XDR</span><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span><span class="num">821</span></div>
+      <div class="bar-row"><span class="name">Gemini 4 Carbon</span><span class="bar-track"><span class="bar-fill" style="width:76%"></span></span><span class="num">625</span></div>
+      <div class="bar-row"><span class="name">Genie 4</span><span class="bar-track"><span class="bar-fill" style="width:70%"></span></span><span class="num">576</span></div>
+      <div class="bar-row"><span class="name">肯塔基 AI 信仰豁免</span><span class="bar-track"><span class="bar-fill" style="width:56%"></span></span><span class="num">456</span></div>
+      <div class="bar-row"><span class="name">Ghostty 1.4</span><span class="bar-track"><span class="bar-fill" style="width:50%"></span></span><span class="num">412</span></div>
+      <div class="bar-row"><span class="name">Apple git / eMudhra</span><span class="bar-track"><span class="bar-fill" style="width:46%"></span></span><span class="num">375</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="board">
+  <h2><span class="bar" style="background:var(--text-faint)"></span>📋 完整榜单</h2>
+  <p class="sec-note">达到重点门槛的全部条目，按得分降序。† 标记为第 31–35 位的扩展观察项，不计入上方统计。</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>标题</th><th>分类</th><th style="text-align:right">得分</th><th style="text-align:right">评论</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="rk">1</td><td><a class="tlink" href="https://ghostty.org/docs/install/release-notes/1-4-0" target="_blank" rel="noopener">Ghostty 1.4 发布</a><span class="sub-en">Ghostty 1.4</span></td><td><span class="pill t-code">编程 &amp; 开源</span></td><td class="num">1290</td><td class="num">412</td></tr>
+        <tr><td class="rk">2</td><td><a class="tlink" href="https://emudhra.we-have-a-problem.com/apple.html" target="_blank" rel="noopener">Apple 的 git 仍信任已失陷的 eMudhra 证书</a><span class="sub-en">Apple's git still trusts the compromised eMudhra certificates</span></td><td><span class="pill t-sec">安全</span></td><td class="num">1021</td><td class="num">375</td></tr>
+        <tr><td class="rk">3</td><td><a class="tlink" href="https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/" target="_blank" rel="noopener">Genie 4：新一代世界模拟</a><span class="sub-en">Genie 4</span></td><td><span class="pill t-ai">AI</span></td><td class="num">1019</td><td class="num">576</td></tr>
+        <tr><td class="rk">4</td><td><a class="tlink" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/" target="_blank" rel="noopener">Gemini 4 Carbon：下一代前沿模型</a><span class="sub-en">Introducing Gemini 4 Carbon</span></td><td><span class="pill t-ai">AI</span></td><td class="num">763</td><td class="num">625</td></tr>
+        <tr><td class="rk">5</td><td><a class="tlink" href="https://nullpt.rs/fingerprinting-bioweapons" target="_blank" rel="noopener">这个指纹脚本为什么在制造生物武器？</a><span class="sub-en">Why is this fingerprinting script creating bioweapons?</span></td><td><span class="pill t-sec">安全</span></td><td class="num">731</td><td class="num">167</td></tr>
+        <tr><td class="rk">6</td><td><a class="tlink" href="https://vertex.degree/" target="_blank" rel="noopener">开始学图论（免费教材）</a><span class="sub-en">Start Doing Graph Theory</span></td><td><span class="pill t-code">编程 &amp; 开源</span></td><td class="num">562</td><td class="num">123</td></tr>
+        <tr><td class="rk">7</td><td><a class="tlink" href="https://www.apple.com/macbook-pro/proled-xdr-display/" target="_blank" rel="noopener">MacBook Pro：PROLED XDR 屏与触控</a><span class="sub-en">MacBook Pro with PROLED XDR Display and Touch</span></td><td><span class="pill t-misc">硬件</span></td><td class="num">475</td><td class="num">821</td></tr>
+        <tr><td class="rk">8</td><td><a class="tlink" href="https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/" target="_blank" rel="noopener">首例：人文主义者获准以宗教理由豁免使用 AI</a><span class="sub-en">Kentucky man becomes the first humanist granted religious exemption from AI</span></td><td><span class="pill t-sec">政策</span></td><td class="num">412</td><td class="num">456</td></tr>
+        <tr><td class="rk">9</td><td><a class="tlink" href="https://www.circuithub.com/post/unveiling-the-grid" target="_blank" rel="noopener">The Grid：马萨诸塞州的按需 PCB 工厂机器人</a><span class="sub-en">The Grid, a factory-scale robot that builds PCBs on demand</span></td><td><span class="pill t-misc">制造</span></td><td class="num">400</td><td class="num">193</td></tr>
+        <tr><td class="rk">10</td><td><a class="tlink" href="https://www.technologyreview.com/2026/10/20/1145399/emacs-turns-50/" target="_blank" rel="noopener">Emacs 五十岁</a><span class="sub-en">Emacs Turns 50</span></td><td><span class="pill t-code">编程 &amp; 开源</span></td><td class="num">393</td><td class="num">168</td></tr>
+        <tr><td class="rk">11</td><td><a class="tlink" href="https://carmelitegothic.com/cnc-stone-carving/" target="_blank" rel="noopener">CNC 石雕：加尔默罗会的哥特复兴</a><span class="sub-en">CNC Stone Carving</span></td><td><span class="pill t-misc">手工艺</span></td><td class="num">386</td><td class="num">112</td></tr>
+        <tr><td class="rk">12</td><td><a class="tlink" href="https://surgehq.ai/blog/dayjob-tax" target="_blank" rel="noopener">Dayjob: Tax —— 用 50 个真实任务评测 AI Agent</a><span class="sub-en">Dayjob: Tax</span></td><td><span class="pill t-ai">AI</span></td><td class="num">190</td><td class="num">112</td></tr>
+        <tr><td class="rk">13</td><td><a class="tlink" href="https://www.reddit.com/r/Seattle/comments/1xhf6qp/archivetoday_links_going_forward/" target="_blank" rel="noopener">Archive.today 链接的后续处理</a><span class="sub-en">Archive.today links going forward</span></td><td><span class="pill t-misc">互联网治理</span></td><td class="num">182</td><td class="num">115</td></tr>
+        <tr><td class="rk">14</td><td><a class="tlink" href="https://wiki.alpinebsd.org" target="_blank" rel="noopener">AlpineBSD：NetBSD 内核 + Alpine 用户空间</a><span class="sub-en">AlpineBSD wiki</span></td><td><span class="pill t-code">开源</span></td><td class="num">169</td><td class="num">150</td></tr>
+        <tr><td class="rk">15</td><td><a class="tlink" href="https://huggingface.co/blog/nvidia/nemotron-transcribe-granary" target="_blank" rel="noopener">Nemotron 3.5 Transcribe：40 语种开源 ASR</a><span class="sub-en">Nvidia Nemotron 3.5 Transcribe</span></td><td><span class="pill t-ai">AI</span></td><td class="num">106</td><td class="num">17</td></tr>
+        <tr><td class="rk">16</td><td><a class="tlink" href="https://www.magnopus.com/blog/gaussiansplats-part-3-theres-always-a-bigger-scene" target="_blank" rel="noopener">Gaussian Splats 第三篇</a><span class="sub-en">Gaussian Splats part 3</span></td><td><span class="pill t-code">图形</span></td><td class="num">98</td><td class="num">20</td></tr>
+        <tr><td class="rk">17</td><td><a class="tlink" href="https://formlabs.com/products/form-studio-1-basic-founders-edition/" target="_blank" rel="noopener">Formlabs Studio 1：699 美元树脂 3D 打印机</a><span class="sub-en">Formlabs Studio 1</span></td><td><span class="pill t-misc">硬件</span></td><td class="num">90</td><td class="num">70</td></tr>
+        <tr><td class="rk">18</td><td><a class="tlink" href="https://cursor.com/blog/agent-sdk" target="_blank" rel="noopener">Cursor 发布 Agent SDK</a><span class="sub-en">The Agent SDK</span></td><td><span class="pill t-ai">AI</span></td><td class="num">89</td><td class="num">107</td></tr>
+        <tr><td class="rk">19</td><td><a class="tlink" href="https://v12.sh/blog/the-case-of-the-9bit-aes-key" target="_blank" rel="noopener">9 位 AES 密钥疑案</a><span class="sub-en">The case of the 9 bit AES key</span></td><td><span class="pill t-sec">安全</span></td><td class="num">61</td><td class="num">31</td></tr>
+        <tr><td class="rk">20</td><td><a class="tlink" href="https://slidebyside.com/" target="_blank" rel="noopener">Show HN: SlideBySide</a><span class="sub-en">Show HN: SlideBySide</span></td><td><span class="pill t-code">Show HN</span></td><td class="num">53</td><td class="num">21</td></tr>
+        <tr><td class="rk">21</td><td><a class="tlink" href="https://www.reuters.com/legal/government/leak-website-releases-data-tens-thousands-dhs-employees-2026-10-28/" target="_blank" rel="noopener">泄露网站公布数万名 DHS 雇员数据</a><span class="sub-en">Leak website releases data on DHS employees</span></td><td><span class="pill t-sec">安全</span></td><td class="num">50</td><td class="num">6</td></tr>
+        <tr><td class="rk">†</td><td><a class="tlink" href="https://www.wired.com/story/massive-leak-exposes-41000-homeland-security-workers-including-undercover-ice-agents/" target="_blank" rel="noopener">41,000 名 DHS 雇员泄露，含 ICE 卧底</a><span class="sub-en">WIRED</span></td><td><span class="pill t-sec">安全</span></td><td class="num">253</td><td class="num">112</td></tr>
+        <tr><td class="rk">†</td><td><a class="tlink" href="https://www.reuters.com/business/media-telecom/us-agency-approves-amazon-leos-115-billion-acquisition-globalstar-2026-10-27/" target="_blank" rel="noopener">Amazon Leo 115 亿美元收购 Globalstar 获批</a><span class="sub-en">Reuters</span></td><td><span class="pill t-sec">政策</span></td><td class="num">222</td><td class="num">100</td></tr>
+        <tr><td class="rk">†</td><td><a class="tlink" href="https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/" target="_blank" rel="noopener">Sleep 框架：LLM 持续学习中的知识巩固</a><span class="sub-en">Google Research</span></td><td><span class="pill t-ai">AI</span></td><td class="num">28</td><td class="num">3</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="frow">
+    <span>数据来源：<a href="https://news.ycombinator.com/" target="_blank" rel="noopener">Hacker News</a> · Firebase API v0（<code>/v0/topstories.json</code> + <code>/v0/item/{id}.json</code>）</span>
+    <span>生成时间：<code>2026-10-29 08:05 CST</code></span>
+  </div>
+  <div class="frow">
+    <span>统计口径：topstories 前 30 条，剔除 1 条招聘帖后为 29 篇投稿；重点门槛为得分 ≥ 50 或评论 ≥ 30（共 21 篇）。</span>
+  </div>
+  <p class="fine">分数与评论数为抓取时刻的快照，会随投票持续变化；中文标题与摘要由编辑加工撰写，非官方译文，摘要基于原文内容提炼，个别条目（Reuters / Technology Review 等）因站点反爬仅依据标题与公开背景撰写。† 标记的三条位于榜单第 31–35 位，作为扩展观察收录，不计入上方统计卡片。页面由 Hermes reviewer 定时任务自动生成。</p>
+</footer>
+
+</div>
+</body>
+</html>
