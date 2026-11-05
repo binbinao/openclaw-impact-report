@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年11月5日</title>
+<meta name="theme-color" content="#0d1117">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacker News 每日简报 — 2026年11月5日">
+<meta property="og:description" content="从 HN 前 30 条热帖里挑出真正值得读的部分：模型发布、技术债、硬件封锁与一个正在被重写的行业。">
+<meta property="og:site_name" content="Hacker News 每日简报">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128240;</text></svg>">
+<meta name="description" content="Hacker News 每日简报 2026年11月5日：HN 前 30 条热帖精选，含中文摘要、得分与评论数据。">
+<style>
+  :root{
+    --bg:#0d1117; --card:#161b22; --card2:#1c2128; --border:#21262d; --border2:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --dim:#6e7681;
+    --ai:#a371f7; --code:#58a6ff; --sec:#f85149; --other:#3fb950; --gold:#d29922;
+    --radius:14px; --maxw:1080px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.7; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(900px 420px at 50% -8%,rgba(88,166,255,.10),transparent 70%),
+                     radial-gradient(700px 380px at 92% 4%,rgba(163,113,247,.08),transparent 72%);
+    background-repeat:no-repeat;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+  header.hero{padding:64px 0 30px;border-bottom:1px solid var(--border)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;color:var(--code);text-transform:uppercase;margin-bottom:14px}
+  h1{font-size:clamp(28px,4.4vw,46px);line-height:1.22;letter-spacing:-.02em;font-weight:800}
+  h1 .accent{background:linear-gradient(100deg,#58a6ff,#a371f7 55%,#3fb950);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:16px;max-width:64ch}
+  .dateline{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .dateline span.b{color:var(--muted);border:1px solid var(--border2);border-radius:999px;padding:3px 10px}
+
+  nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:18px 0;border-bottom:1px solid var(--border);position:sticky;top:0;
+          background:rgba(13,17,23,.86);backdrop-filter:blur(10px);z-index:9}
+  nav.toc a{font-size:13px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:5px 12px;transition:.18s}
+  nav.toc a:hover{color:var(--text);border-color:var(--border2);background:var(--card)}
+
+  section{padding:44px 0 6px;scroll-margin-top:64px}
+  .sechead{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+  .sechead h2{font-size:21px;font-weight:700;letter-spacing:-.01em}
+  .sechead h2::after{content:"";display:block;height:2px;width:38px;margin-top:9px;background:var(--c,var(--code));border-radius:2px}
+  .sechead .cnt{font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px;margin:26px 0 6px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 16px 14px;position:relative;overflow:hidden}
+  .stat::before{content:"";position:absolute;inset:0 auto auto 0;width:100%;height:2px;background:linear-gradient(90deg,var(--code),transparent)}
+  .stat .k{font-size:12px;color:var(--muted);letter-spacing:.02em}
+  .stat .v{font-family:var(--mono);font-size:27px;font-weight:700;margin-top:6px;letter-spacing:-.02em}
+  .stat .v small{font-size:12px;color:var(--dim);font-weight:400;margin-left:4px}
+  .stat.gold::before{background:linear-gradient(90deg,var(--gold),transparent)}
+  .stat.gold .v{color:var(--gold)}
+  .stat.red::before{background:linear-gradient(90deg,var(--sec),transparent)}
+  .stat.red .v{color:#ff9b95}
+
+  .topcard{display:flex;gap:18px;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--c);
+           border-radius:var(--radius);padding:22px 22px 18px;margin-bottom:14px;transition:.2s}
+  .topcard:hover{background:var(--card2);border-color:var(--border2);transform:translateY(-1px)}
+  .toprank{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--c);opacity:.55;line-height:1;min-width:44px}
+  .topbody{flex:1;min-width:0}
+  .catline{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+  .catline .dot{width:7px;height:7px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+  .catline .sep{opacity:.4}
+  .catline .host{color:var(--muted);text-transform:none;letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56vw}
+  .catline .rk{margin-left:auto;color:var(--dim)}
+  .topcard h3{font-size:19.5px;line-height:1.4;margin:8px 0 4px;font-weight:700;letter-spacing:-.01em}
+  .topcard .en{overflow-wrap:anywhere;font-size:12.5px;color:var(--dim);font-family:var(--mono);margin-bottom:10px}
+  .topcard .sum{color:#c9d1d9;font-size:14.5px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:.18s;display:flex;flex-direction:column}
+  .card:hover{background:var(--card2);border-color:var(--border2);transform:translateY(-1px)}
+  .card h4{font-size:16px;line-height:1.45;margin:8px 0 4px;font-weight:650}
+  .card .en{overflow-wrap:anywhere;font-size:11.5px;color:var(--dim);font-family:var(--mono);margin-bottom:9px;word-break:break-word}
+  .card .sum{font-size:13.8px;color:#b9c2cc;flex:1}
+  .topcard .sum,.card .sum{text-wrap:pretty}
+
+  .meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .pill{font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 9px;border:1px solid var(--border2);color:var(--muted);white-space:nowrap;line-height:1.6}
+  .pill.score{color:#7ee787;border-color:rgba(126,231,135,.28);background:rgba(63,185,80,.08)}
+  .pill.cmt{color:#a5d6ff;border-color:rgba(88,166,255,.26);background:rgba(88,166,255,.07)}
+  .pill.low{color:var(--gold);border-color:rgba(210,153,34,.3);background:rgba(210,153,34,.08)}
+  .pill.link{color:var(--text);border-color:var(--border2);transition:.16s}
+  .pill.link:hover{background:var(--border);border-color:var(--dim)}
+  .pill.link.ghost{color:var(--dim)}
+  .pill.link.ghost:hover{color:var(--text)}
+
+  .hotbox{background:linear-gradient(180deg,rgba(248,81,73,.06),rgba(22,27,34,0) 60%),var(--card);
+          border:1px solid rgba(248,81,73,.28);border-radius:var(--radius);padding:26px}
+  .hotbox .tag{font-family:var(--mono);font-size:11px;color:var(--sec);letter-spacing:.16em;text-transform:uppercase}
+  .hotbox h3{font-size:20px;line-height:1.45;margin:10px 0 14px;font-weight:700}
+  .hotbox p{color:#c0c8d2;font-size:14.5px;margin-bottom:11px}
+  .hotbox p:last-of-type{margin-bottom:0}
+  .hotbox .en{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:4px}
+
+  footer{margin-top:56px;border-top:1px solid var(--border);padding:28px 0 54px;color:var(--dim);font-size:12.5px}
+  footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer a{color:var(--muted);border-bottom:1px dotted var(--border2)}
+  footer a:hover{color:var(--text)}
+  .note{font-size:12px;color:var(--dim);margin-top:10px}
+
+  @media (max-width:720px){
+    header.hero{padding:44px 0 22px}
+    .topcard{padding:18px 16px;gap:12px}
+    .toprank{font-size:22px;min-width:32px}
+    .grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    nav.toc{overflow-x:auto;flex-wrap:nowrap}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">DAILY DIGEST · TOP 30</div>
+  <h1>Hacker News 每日简报<span class="accent"> — 2026年11月5日</span></h1>
+  <p class="sub">从 HN 前 30 条热帖里挑出真正值得读的部分：模型发布、技术债、硬件封锁与一个正在被重写的行业。</p>
+  <div class="dateline">
+    <span class="b">TOP 30</span>
+    <span class="b">2506 评论</span>
+    <span>2026-11-05 08:08 CST</span>
+  </div>
+</header>
+
+<nav class="toc"><a href="#top5">🔥 必读 Top 5</a><a href="#sec_ai">🤖 AI 相关动态</a><a href="#sec_code">💻 编程 & 开源</a><a href="#sec_sec">🔒 安全 & 政策</a><a href="#sec_other">🎯 其他值得关注</a><a href="#hot">💬 今日最热讨论</a></nav>
+
+<section id="overview">
+  <div class="sechead" style="--c:var(--code)"><h2>📊 今日概况</h2><span class="cnt">统计口径：HN 官方 topstories 前 30 条，抓取时的实时得分与评论数。</span></div>
+  <div class="stats"><div class="stat"><div class="k">入榜文章</div><div class="v">30<small>条</small></div></div><div class="stat gold"><div class="k">最高得分</div><div class="v">1015<small>分</small></div></div><div class="stat red"><div class="k">最热讨论</div><div class="v">612<small>条</small></div></div><div class="stat"><div class="k">评论总数</div><div class="v">2506<small>条</small></div></div><div class="stat"><div class="k">平均得分</div><div class="v">172<small>分</small></div></div><div class="stat"><div class="k">得分中位数</div><div class="v">90<small>分</small></div></div></div>
+  <p class="note">※ 标题为中文意译，摘要基于原文，非逐句翻译。</p>
+</section>
+
+<section id="top5">
+  <div class="sechead" style="--c:var(--gold)"><h2>🔥 必读 Top 5</h2><span class="cnt">按得分排序 · 门槛 &ge; 300 分</span></div>
+  
+    <article class="topcard" style="--c:var(--ai)">
+      <div class="toprank">01</div>
+      <div class="topbody">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">spectrum.ieee.org</span></div>
+        <h3>AI 正逼我们偿还 40 年的技术债</h3>
+        <p class="en">AI is forcing us to pay off 40 years of technical debt</p>
+        <p class="sum">PHP2Shell 让所有跑 WordPress / Drupal 的站点（NASA、维基百科、白宫在内）面临任意代码执行，所幸研究者抢先上报 PHP 基金会、在野外利用前完成修补。文章把这次险情当成预兆：AI 让挖掘四十年人类遗留代码漏洞的成本骤降，补丁节奏、依赖审计和“能用就别动”的行业习惯都得重写。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 1015 分</span><span class="pill cmt" title="comments">&#128172; 612 评论</span><a class="pill link" href="https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50364336" target="_blank" rel="noopener">HN 讨论</a></div>
+      </div>
+    </article>
+    <article class="topcard" style="--c:var(--ai)">
+      <div class="toprank">02</div>
+      <div class="topbody">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">mindstudio.ai</span></div>
+        <h3>Nvidia RTX Spark 加密固件让 Linux 推理只剩 35% 速度</h3>
+        <p class="en">Nvidia RTX Spark encrypted firmware slows inference speed to 35% on Linux</p>
+        <p class="sum">实机双系统测试：Linux 下插电后 GPU 被压在 780MHz（Windows 约 2.2GHz），GPT-OSS-120B 从 65.4 掉到 13.9 tok/s。根因是一个 Windows 独占的电源管理组件——它的功耗表被加密，只有 Windows 驱动能解开；96GB 统一内存的分配比例同样只有 Windows 可调。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 582 分</span><span class="pill cmt" title="comments">&#128172; 266 评论</span><a class="pill link" href="https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50362905" target="_blank" rel="noopener">HN 讨论</a></div>
+      </div>
+    </article>
+    <article class="topcard" style="--c:var(--sec)">
+      <div class="toprank">03</div>
+      <div class="topbody">
+        <div class="catline"><span class="dot"></span><span>安全 / 政策</span><span class="sep">/</span><span class="host">layer3intel.com</span></div>
+        <h3>白宫网络被检测到住宅代理流量</h3>
+        <p class="en">Residential proxies detected on White House network</p>
+        <p class="sum">Layer3 Intel 的住宅代理观测台上线数日，随机取样时撞见白宫网络（AS2650，总统行政办公室）出口：10 月 5 日至 11 月 3 日共 236 次，来自 6 个 IP、涉及 28 家代理服务，30 天里 26 天命中。流量集中在美东傍晚到午夜、清晨几乎为零，更像是某位夜间常驻者的设备被植入了代理 SDK，而不是公共访客 Wi-Fi；作者强调数据只暴露出口，不指向具体的人。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 507 分</span><span class="pill cmt" title="comments">&#128172; 148 评论</span><a class="pill link" href="https://layer3intel.com/blog/residential-proxies-white-house-network" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50371246" target="_blank" rel="noopener">HN 讨论</a></div>
+      </div>
+    </article>
+    <article class="topcard" style="--c:var(--other)">
+      <div class="toprank">04</div>
+      <div class="topbody">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">tomshardware.com</span></div>
+        <h3>AMD 预计 Q4 营收首次超过 Intel</h3>
+        <p class="en">AMD expects to outsell Intel in Q4 for the first time in history</p>
+        <p class="sum">AMD 给出 170 亿美元季度指引，将首次在单季营收上压过 Intel；Epyc 与 Instinct 同比近乎翻倍，客户端与游戏业务则因内存涨价面临双位数下滑。x86 双雄半个世纪的格局在这一季翻转。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 441 分</span><span class="pill cmt" title="comments">&#128172; 155 评论</span><a class="pill link" href="https://www.tomshardware.com/pc-components/cpus/amd-expects-to-outsell-intel-in-q4-for-the-first-time-in-history-usd17b-guidance-would-exceed-intels-projections" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50367125" target="_blank" rel="noopener">HN 讨论</a></div>
+      </div>
+    </article>
+    <article class="topcard" style="--c:var(--ai)">
+      <div class="toprank">05</div>
+      <div class="topbody">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">huggingface.co</span></div>
+        <h3>Kimi K3.1 Pro 开放权重发布</h3>
+        <p class="en">Kimi K3.1 Pro model weights are out</p>
+        <p class="sum">月之暗面放出 Kimi K3.1 Pro：MoE 总参数 2.8T 的原生多模态 agentic 模型，100 万 token 上下文，由 K3 经数百个下游领域的大规模联合强化学习后训练而来，主打编码、3D 创作、金融研究与事实准确性。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 332 分</span><span class="pill cmt" title="comments">&#128172; 87 评论</span><a class="pill link" href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366999" target="_blank" rel="noopener">HN 讨论</a></div>
+      </div>
+    </article>
+</section>
+
+  <section id="ai">
+    <div class="sechead" style="--c:var(--ai)"><h2>🤖 AI 相关动态</h2><span class="cnt">11 篇 · 从 65B 开源模型到可验证推理</span></div>
+    <div class="grid">
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">spectrum.ieee.org</span><span class="rk">#3</span></div>
+        <h4>AI 正逼我们偿还 40 年的技术债</h4>
+        <p class="en">AI is forcing us to pay off 40 years of technical debt</p>
+        <p class="sum">PHP2Shell 让所有跑 WordPress / Drupal 的站点（NASA、维基百科、白宫在内）面临任意代码执行，所幸研究者抢先上报 PHP 基金会、在野外利用前完成修补。文章把这次险情当成预兆：AI 让挖掘四十年人类遗留代码漏洞的成本骤降，补丁节奏、依赖审计和“能用就别动”的行业习惯都得重写。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 1015 分</span><span class="pill cmt" title="comments">&#128172; 612 评论</span><a class="pill link" href="https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50364336" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">mindstudio.ai</span><span class="rk">#13</span></div>
+        <h4>Nvidia RTX Spark 加密固件让 Linux 推理只剩 35% 速度</h4>
+        <p class="en">Nvidia RTX Spark encrypted firmware slows inference speed to 35% on Linux</p>
+        <p class="sum">实机双系统测试：Linux 下插电后 GPU 被压在 780MHz（Windows 约 2.2GHz），GPT-OSS-120B 从 65.4 掉到 13.9 tok/s。根因是一个 Windows 独占的电源管理组件——它的功耗表被加密，只有 Windows 驱动能解开；96GB 统一内存的分配比例同样只有 Windows 可调。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 582 分</span><span class="pill cmt" title="comments">&#128172; 266 评论</span><a class="pill link" href="https://www.mindstudio.ai/blog/linux-nvidia-rtx-spark-laptop" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50362905" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">huggingface.co</span><span class="rk">#6</span></div>
+        <h4>Kimi K3.1 Pro 开放权重发布</h4>
+        <p class="en">Kimi K3.1 Pro model weights are out</p>
+        <p class="sum">月之暗面放出 Kimi K3.1 Pro：MoE 总参数 2.8T 的原生多模态 agentic 模型，100 万 token 上下文，由 K3 经数百个下游领域的大规模联合强化学习后训练而来，主打编码、3D 创作、金融研究与事实准确性。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 332 分</span><span class="pill cmt" title="comments">&#128172; 87 评论</span><a class="pill link" href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366999" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">ricursive.com</span><span class="rk">#2</span></div>
+        <h4>Ripple-65B 预览版：美国开放权重模型在 Agent 编程上登顶</h4>
+        <p class="en">Ripple-65B Preview: U.S. Open-Weight SOTA on Agentic Coding</p>
+        <p class="sum">Ricursive Intelligence 放出 65B dense 预览模型，TerminalBench 2.1 拿到 80.52，压过体量大得多的 Reflection Beam 501B（80.1）和 Meta Muse Spark Open 816B（76.4）。12 万亿 token 预训练、100 万上下文，小体量能跑在 DGX Spark 上，官方称训练成本约为同级的十分之一。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 199 分</span><span class="pill cmt" title="comments">&#128172; 67 评论</span><a class="pill link" href="https://www.ricursive.com/ripple" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50369925" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">hy.tencent.ai</span><span class="rk">#23</span></div>
+        <h4>腾讯混元 Hy4</h4>
+        <p class="en">Tencent Hy4</p>
+        <p class="sum">腾讯混元 Hy4 研究页上线。页面为空壳（未渲染出参数与基准），能确认的只有发布本身。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 168 分</span><span class="pill cmt" title="comments">&#128172; 55 评论</span><a class="pill link" href="https://hy.tencent.ai/research/hy4" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50365780" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">anthropic.com</span><span class="rk">#12</span></div>
+        <h4>大模型可验证推理的进展</h4>
+        <p class="en">Progress on provable inference for large language models</p>
+        <p class="sum">Anthropic 用 zkSNARK 为推理过程生成密码学证明：用户不必信任路由服务，就能确认回复确实来自所声称的那个模型，token 流也没有被中途篡改。这是把“模型身份”从信任问题降级成验证问题的一次尝试。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 166 分</span><span class="pill cmt" title="comments">&#128172; 83 评论</span><a class="pill link" href="https://www.anthropic.com/research/provable-inference" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50368626" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">openai.com</span><span class="rk">#21</span></div>
+        <h4>OpenAI 将收购 Pierre Computer Company</h4>
+        <p class="en">OpenAI to acquire Pierre Computer Company</p>
+        <p class="sum">OpenAI 发布收购公告（金额未披露），Pierre 是代码评审协作工具。公告页需要 JS 才能渲染，具体条款以官方为准。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 159 分</span><span class="pill cmt" title="comments">&#128172; 52 评论</span><a class="pill link" href="https://openai.com/index/openai-to-acquire-pierre/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366863" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">qualcomm.com</span><span class="rk">#8</span></div>
+        <h4>高通 Cloud AI 100 Ultra：150W、128GB、548GB/s 的推理卡</h4>
+        <p class="en">Qualcomm Cloud AI 100 Ultra – 150W AI Accelerator Card with 128GB at 548GB/s</p>
+        <p class="sum">面向数据中心的推理加速卡，150W 功耗下给出 128GB 显存与 548GB/s 带宽。卖点不是峰值算力，而是每瓦吞吐和能塞进单卡的大模型上下文。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 81 分</span><span class="pill cmt" title="comments">&#128172; 39 评论</span><a class="pill link" href="https://www.qualcomm.com/data-center/products/cloud-ai-100-ultra" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50370654" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">news.ycombinator.com</span><span class="rk">#24</span></div>
+        <h4>Ask HN：你现在的 AI Agent 配置是什么？</h4>
+        <p class="en">Ask HN: What&#x27;s your current AI agentic setup?</p>
+        <p class="sum">楼主列了一串问题：个人在付哪些订阅、什么档位、有没有重复购买、如何在日常工作里编排 agent。83 条回答拼出了一份 2026 年的工具链快照。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 77 分</span><span class="pill cmt" title="comments">&#128172; 83 评论</span><a class="pill link" href="https://news.ycombinator.com/item?id=50366117" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366117" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">news.ycombinator.com</span><span class="rk">#11</span></div>
+        <h4>Launch HN：Kino AI（YC S23）——AI 媒体管理与视频剪辑</h4>
+        <p class="en">Launch HN: Kino AI (YC S23) – AI media manager and video editor</p>
+        <p class="sum">把素材存储、视频编辑器和审阅链接打包成一套，让 Codex / Claude Code 与人类同事在同一条时间线上协作，评论意见和原始素材留在同一处。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 65 分</span><span class="pill cmt" title="comments">&#128172; 26 评论</span><a class="pill link" href="https://news.ycombinator.com/item?id=50368804" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50368804" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--ai)">
+        <div class="catline"><span class="dot"></span><span>AI</span><span class="sep">/</span><span class="host">openai.com</span><span class="rk">#15</span></div>
+        <h4>OpenAI 发布 Images 2.6</h4>
+        <p class="en">Introducing Images 2.6</p>
+        <p class="sum">OpenAI 图像生成模型的一次小版本更新，发布数小时仍在榜尾，几乎没人讨论——本身也是今天的一个信号。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 8 分</span><span class="pill cmt" title="comments">&#128172; 0 评论</span><a class="pill link" href="https://openai.com/index/introducing-images-2-6/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50372945" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+    </div>
+  </section>
+  <section id="code">
+    <div class="sechead" style="--c:var(--code)"><h2>💻 编程 & 开源</h2><span class="cnt">5 篇 · Go 的 JSON 重做与工具链迁徙</span></div>
+    <div class="grid">
+      <article class="card" style="--c:var(--code)">
+        <div class="catline"><span class="dot"></span><span>编程 / 开源</span><span class="sep">/</span><span class="host">go.dev</span><span class="rk">#7</span></div>
+        <h4>Go 官方推出全新的 JSON API</h4>
+        <p class="en">A new Go API for JSON</p>
+        <p class="sum">Go 团队在官方博客介绍 encoding/json 的新一代接口：正面处理旧包的历史包袱，在默认行为、性能与可扩展性上重做编解码路径。对一个被无数服务端依赖的包来说，这是少见的底层改动。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 202 分</span><span class="pill cmt" title="comments">&#128172; 86 评论</span><a class="pill link" href="https://go.dev/blog/jsonv2" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50369106" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--code)">
+        <div class="catline"><span class="dot"></span><span>编程 / 开源</span><span class="sep">/</span><span class="host">conductor.build</span><span class="rk">#10</span></div>
+        <h4>Conductor 加入 Meta</h4>
+        <p class="en">Conductor is joining Meta</p>
+        <p class="sum">能在 Mac 上并行跑多个编码 agent 的客户端 Conductor 宣布被 Meta 收编。128 条评论大多在讨论：独立开发工具被大厂吸纳之后，还剩多少自主性。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 84 分</span><span class="pill cmt" title="comments">&#128172; 128 评论</span><a class="pill link" href="https://www.conductor.build/announcement" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50369503" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--code)">
+        <div class="catline"><span class="dot"></span><span>编程 / 开源</span><span class="sep">/</span><span class="host">dbushell.com</span><span class="rk">#29</span></div>
+        <h4>XSLT 之死</h4>
+        <p class="en">Death Comes for XSLT</p>
+        <p class="sum">随着浏览器与工具链陆续移除支持，XSLT 这一代 XML 变换技术走向退场。作者回顾它为什么没能进入现代 Web，以及它带走了哪种编程习惯。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 25 分</span><span class="pill cmt" title="comments">&#128172; 3 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://dbushell.com/2026/11/03/xslt-rip/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50371408" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--code)">
+        <div class="catline"><span class="dot"></span><span>编程 / 开源</span><span class="sep">/</span><span class="host">squid-protocol.github.io</span><span class="rk">#30</span></div>
+        <h4>Show HN：DOOM 的 DNA——代码结构如何横跨 44 个移植版存活</h4>
+        <p class="en">Show HN: The DNA of DOOM – How code structure survives across 44 ports</p>
+        <p class="sum">作者用自建的结构提取引擎比对 44 个 DOOM 移植版：哪些函数活了下来、关键字结构是否保持、调用网络还能不能对上。这是一次关于代码形态如何跨平台遗传的实验。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 9 分</span><span class="pill cmt" title="comments">&#128172; 10 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://squid-protocol.github.io/gitgalaxy/museum-of-code/doom-dna/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50339183" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--code)">
+        <div class="catline"><span class="dot"></span><span>编程 / 开源</span><span class="sep">/</span><span class="host">github.com</span><span class="rk">#20</span></div>
+        <h4>Show HN：Gauge——递归改进文档的开源 CLI</h4>
+        <p class="en">Show HN: Gauge – Open-Source CLI to recursively improve your docs</p>
+        <p class="sum">给 coding agent 布置“只看你的文档能不能完成这个任务”的考题，再据此反推文档哪里没说清，形成爬山式迭代；本地执行，无需注册账号。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 8 分</span><span class="pill cmt" title="comments">&#128172; 1 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://github.com/gauge-sh/gauge-cli" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50371090" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+    </div>
+  </section>
+  <section id="sec">
+    <div class="sechead" style="--c:var(--sec)"><h2>🔒 安全 & 政策</h2><span class="cnt">3 篇 · 白宫代理流量见必读 #01</span></div>
+    <div class="grid">
+      <article class="card" style="--c:var(--sec)">
+        <div class="catline"><span class="dot"></span><span>安全 / 政策</span><span class="sep">/</span><span class="host">layer3intel.com</span><span class="rk">#1</span></div>
+        <h4>白宫网络被检测到住宅代理流量</h4>
+        <p class="en">Residential proxies detected on White House network</p>
+        <p class="sum">Layer3 Intel 的住宅代理观测台上线数日，随机取样时撞见白宫网络（AS2650，总统行政办公室）出口：10 月 5 日至 11 月 3 日共 236 次，来自 6 个 IP、涉及 28 家代理服务，30 天里 26 天命中。流量集中在美东傍晚到午夜、清晨几乎为零，更像是某位夜间常驻者的设备被植入了代理 SDK，而不是公共访客 Wi-Fi；作者强调数据只暴露出口，不指向具体的人。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 507 分</span><span class="pill cmt" title="comments">&#128172; 148 评论</span><a class="pill link" href="https://layer3intel.com/blog/residential-proxies-white-house-network" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50371246" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--sec)">
+        <div class="catline"><span class="dot"></span><span>安全 / 政策</span><span class="sep">/</span><span class="host">icode4.coffee</span><span class="rk">#5</span></div>
+        <h4>攻破 Xbox 360 Hypervisor 第三部分：Bad Update 的改进</h4>
+        <p class="en">Hacking the Xbox 360 Hypervisor Part 3: Bad Update Improvements</p>
+        <p class="sum">icode4.coffee 系列逆向笔记第三篇，讲如何在 Bad Update 这条路径上继续改进对 hypervisor 的利用，属于复古主机的硬核破解连载。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 39 分</span><span class="pill cmt" title="comments">&#128172; 2 评论</span><a class="pill link" href="https://icode4.coffee/?p=1746" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50372164" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--sec)">
+        <div class="catline"><span class="dot"></span><span>安全 / 政策</span><span class="sep">/</span><span class="host">openai.com</span><span class="rk">#16</span></div>
+        <h4>Linux 中的本地提权漏洞</h4>
+        <p class="en">Local privilege escalation vulnerabilities in Linux</p>
+        <p class="sum">OpenAI 安全研究《A Thousand Fewer Paths to Root》，系统性梳理并推动修掉了一大批 Linux 本地提权路径。分数不高，但对任何跑多租户容器的人来说值得一读。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 11 分</span><span class="pill cmt" title="comments">&#128172; 4 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://openai.com/index/a-thousand-fewer-paths-to-root/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50372929" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+    </div>
+  </section>
+  <section id="other">
+    <div class="sechead" style="--c:var(--other)"><h2>🎯 其他值得关注</h2><span class="cnt">11 篇</span></div>
+    <div class="grid">
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">tomshardware.com</span><span class="rk">#25</span></div>
+        <h4>AMD 预计 Q4 营收首次超过 Intel</h4>
+        <p class="en">AMD expects to outsell Intel in Q4 for the first time in history</p>
+        <p class="sum">AMD 给出 170 亿美元季度指引，将首次在单季营收上压过 Intel；Epyc 与 Instinct 同比近乎翻倍，客户端与游戏业务则因内存涨价面临双位数下滑。x86 双雄半个世纪的格局在这一季翻转。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 441 分</span><span class="pill cmt" title="comments">&#128172; 155 评论</span><a class="pill link" href="https://www.tomshardware.com/pc-components/cpus/amd-expects-to-outsell-intel-in-q4-for-the-first-time-in-history-usd17b-guidance-would-exceed-intels-projections" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50367125" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">99percentinvisible.org</span><span class="rk">#18</span></div>
+        <h4>游击自行车道：旧金山把非法设施变成永久设施</h4>
+        <p class="en">Guerrilla bike lanes: San Francisco makes illicit infrastructure permanent (2016)</p>
+        <p class="sum">99% Invisible 的旧文重提：市民半夜用锥桶和花盆私自划出自行车道，市政最终把其中一部分正式合法化——自下而上的基础设施如何倒逼规划部门。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 242 分</span><span class="pill cmt" title="comments">&#128172; 172 评论</span><a class="pill link" href="https://99percentinvisible.org/article/guerrilla-bike-lanes-san-francisco-makes-illicit-infrastructure-permanent/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366522" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">blog.cosmos-institute.org</span><span class="rk">#28</span></div>
+        <h4>验证不等于知识：科学要的不只是答案</h4>
+        <p class="en">Verification Is Not Knowledge: Science needs more than answers</p>
+        <p class="sum">Jessica Hullman 的客座评论：把科学等同于“可验证的答案”会掏空它——理解才是知识得以整合、传播和纠错的前提。这也是 AI for science 热潮里最容易被忽略的成本。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 223 分</span><span class="pill cmt" title="comments">&#128172; 129 评论</span><a class="pill link" href="https://blog.cosmos-institute.org/p/verification-is-not-knowledge" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50363019" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">birdsoutsidemywindow.org</span><span class="rk">#4</span></div>
+        <h4>昆虫并不会被 LED 灯吸引成群</h4>
+        <p class="en">Insects don&#x27;t swarm at LED lights</p>
+        <p class="sum">作者从自家窗外的观察出发，质疑“昆虫扑向 LED 灯”这个流行解释，指出灯下的聚集现象被误读了，真正的机制另有其因。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 144 分</span><span class="pill cmt" title="comments">&#128172; 86 评论</span><a class="pill link" href="https://www.birdsoutsidemywindow.org/2026/11/03/insects-dont-swarm-at-led-lights/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50370610" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">longreads.com</span><span class="rk">#27</span></div>
+        <h4>我是不是和一个杀人犯成了朋友？</h4>
+        <p class="en">Have I befriended a murderer?</p>
+        <p class="sum">Longreads 长篇：一段亲密友谊里逐渐浮现的怀疑，以及人如何在“我认识的那个人”和“他做过的事”之间自处。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 99 分</span><span class="pill cmt" title="comments">&#128172; 56 评论</span><a class="pill link" href="https://longreads.com/2026/11/03/murder-friendship-doubt/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50369754" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">fireflyk64.github.io</span><span class="rk">#14</span></div>
+        <h4>Show HN：十年逆向，让 DOS 版《银河飞将》支持联机合作</h4>
+        <p class="en">Show HN: After a decade of reversing, I got co-op working in DOS Wing Commander</p>
+        <p class="sum">作者花十年逆向 DOS 时代的 Wing Commander，最终把双人合作模式跑了起来，页面提供可玩版本与实现说明。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 91 分</span><span class="pill cmt" title="comments">&#128172; 11 评论</span><a class="pill link" href="https://fireflyk64.github.io/wcmulti/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50369895" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">pcdealcheck.com</span><span class="rk">#26</span></div>
+        <h4>Show HN：把整机拆件估价的工具</h4>
+        <p class="en">Show HN: I built a tool that prices a pre-built PC part by part</p>
+        <p class="sum">粘贴一份二手整机 listing，返回价值评级、逐件按日更新的估价和可分享报告。AI 只负责读 listing，定价由自建引擎完成——这个分工本身很值得抄。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 88 分</span><span class="pill cmt" title="comments">&#128172; 60 评论</span><a class="pill link" href="https://pcdealcheck.com/" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366929" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">cnn.com</span><span class="rk">#22</span></div>
+        <h4>一波无塑咖啡胶囊与机器</h4>
+        <p class="en">A wave of plastic-free coffee pods and machines</p>
+        <p class="sum">CNN 报道可堆肥、无塑胶囊及配套机器的兴起。58 条评论在争论便利性、单杯成本，以及“可堆肥”在填埋场里到底成不成立。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 33 分</span><span class="pill cmt" title="comments">&#128172; 58 评论</span><a class="pill link" href="https://www.cnn.com/2026/11/02/food/coffee-machine-plastic-free" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50366853" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">argmin.net</span><span class="rk">#9</span></div>
+        <h4>比煤炭还不受欢迎</h4>
+        <p class="en">Less Popular Than Coal</p>
+        <p class="sum">argmin 博客借“比煤炭还招人嫌”这个说法，讨论某些研究方向在公共叙事与资金分配中的尴尬位置，以及这种不受欢迎本身如何塑造研究议程。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 31 分</span><span class="pill cmt" title="comments">&#128172; 18 评论</span><a class="pill link" href="https://www.argmin.net/p/less-popular-than-coal" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50372360" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">blog.samaltman.com</span><span class="rk">#19</span></div>
+        <h4>Successful People（2013）</h4>
+        <p class="en">Successful People (2013)</p>
+        <p class="sum">Sam Altman 2013 年的旧文被重新翻出，谈“成功者”的共性。放在今天的 HN 语境里读，评论区比原文更有意思。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 13 分</span><span class="pill cmt" title="comments">&#128172; 7 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://blog.samaltman.com/successful-people" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50372660" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+      <article class="card" style="--c:var(--other)">
+        <div class="catline"><span class="dot"></span><span>综合</span><span class="sep">/</span><span class="host">lrb.co.uk</span><span class="rk">#17</span></div>
+        <h4>好奇心对我们有好处吗？</h4>
+        <p class="en">Is Curiosity Good for Us?</p>
+        <p class="sum">Adam Phillips 在《伦敦书评》上谈好奇心的两面：它既是求知的引擎，也可能是越界的冲动，边界由谁划定从来不是自明的。</p>
+        <div class="meta"><span class="pill score" title="HN score">&#9650; 10 分</span><span class="pill cmt" title="comments">&#128172; 2 评论</span><span class="pill low">低热度 · 高信号</span><a class="pill link" href="https://www.lrb.co.uk/the-paper/v48/n20/adam-phillips/is-curiosity-good-for-us" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50356791" target="_blank" rel="noopener">HN 讨论</a></div>
+      </article>
+    </div>
+  </section>
+
+<section id="hot">
+  <div class="sechead" style="--c:var(--sec)"><h2>💬 今日最热讨论</h2><span class="cnt">#03 · 612 评论</span></div>
+  <div class="hotbox">
+    <div class="tag">#03 &nbsp;·&nbsp; 1015 分 &nbsp;·&nbsp; spectrum.ieee.org</div>
+    <h3>612 条评论，全部压在同一件事上：AI 把“找漏洞”变成了廉价劳动</h3>
+    <p class="en">AI is forcing us to pay off 40 years of technical debt</p>
+    <p>今天讨论量第一名不是模型发布，而是一篇关于 PHP2Shell 的 IEEE Spectrum 文章。争论的焦点不在某个 CVE 的细节，而在一个结构性判断：过去四十年人类写下的遗留代码，此刻正被一种成本极低的方式系统性扫描。</p><p>评论里反复出现三种立场。其一是工程现实派：补丁不是问题，问题是没人维护的依赖、没人敢动的老系统、以及“能跑就别升级”的组织惯性——AI 只是把账单提前了。其二是安全经济派：当挖洞的边际成本趋近于零，防御方必须从“逐个修”转向“默认不可信”，隔离与最小权限的价值会被重估。其三是悲观派：这次是白帽先发现，下一次未必。</p><p>值得注意的是它与今日头条的呼应——白宫网络上的住宅代理流量、Linux 上成批的本地提权路径，指向同一条主线：攻击面的自动化已经在跑，而修复仍然是手工的。</p>
+    <div class="meta"><span class="pill score" title="HN score">&#9650; 1015 分</span><span class="pill cmt" title="comments">&#128172; 612 评论</span><a class="pill link" href="https://spectrum.ieee.org/ai-in-cybersecurity-php2shell-vulnerability" target="_blank" rel="noopener">原文 &#8599;</a><a class="pill link ghost" href="https://news.ycombinator.com/item?id=50364336" target="_blank" rel="noopener">HN 讨论</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="row">
+    <div>数据来源：Hacker News 官方 Firebase API（topstories + item）<br>由 Hermes 自动生成 · 中文摘要为编辑整理，观点归原作者</div>
+    <div style="text-align:right">生成时间：2026年11月5日 08:08 CST<br><a href="#top">返回顶部 &#8593;</a></div>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
