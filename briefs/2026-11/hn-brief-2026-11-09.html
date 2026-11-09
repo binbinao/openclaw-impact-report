@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacker News 每日简报 — 2026 年 11 月 09 日">
+<meta property="og:description" content="HN 前 30 条中文速览：Claude Code 三连（Pi 迁移、凭据泄漏、高盛收回）、纯 CPU 跑 284B MoE、NVIDIA 董事会调查。">
+<meta name="twitter:card" content="summary">
+<meta name="description" content="Hacker News 2026-11-09 热门内容中文简报：Top 5 必读、AI 动态、编程与开源、安全与政策、最热讨论。">
+<title>Hacker News 每日简报 — 2026 年 11 月 09 日</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--card2:#1c2128;--bd:#30363d;--tx:#e6edf3;--mu:#8b949e;
+--ac:#58a6ff;--pu:#a371f7;--gr:#3fb950;--rd:#f85149;--or:#f0883e;--rad:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;line-height:1.65;
+background-image:radial-gradient(900px 420px at 12% -8%,rgba(88,166,255,.10),transparent 62%),radial-gradient(760px 380px at 88% -4%,rgba(163,113,247,.10),transparent 60%);background-repeat:no-repeat}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 64px}
+header{padding:56px 0 26px;border-bottom:1px solid var(--bd);margin-bottom:30px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);border:1px solid var(--bd);background:rgba(22,27,34,.8);padding:5px 12px;border-radius:999px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gr);box-shadow:0 0 10px var(--gr)}
+h1{font-size:clamp(26px,4.4vw,44px);line-height:1.2;margin:18px 0 10px;letter-spacing:-.02em;font-weight:800}
+h1 em{font-style:normal;background:linear-gradient(100deg,#58a6ff,#a371f7 55%,#f0883e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:var(--mu);font-size:15px;max-width:760px}
+.sub b{color:var(--tx);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin:26px 0 14px}
+.stat{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:var(--rad);padding:16px 16px 14px;position:relative;overflow:hidden}
+.stat:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,var(--ac),transparent)}
+.sv{font-size:26px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sv .unit{font-size:14px;color:var(--mu);font-weight:600}
+.sl{font-size:13px;color:var(--tx);margin-top:2px}
+.sn{font-size:11.5px;color:var(--mu);margin-top:2px}
+.dist{margin:6px 0 34px}
+.dbar{display:flex;height:8px;border-radius:999px;overflow:hidden;border:1px solid var(--bd);background:var(--card)}
+.dbar span{display:block;height:100%}
+.dlegend{display:flex;flex-wrap:wrap;gap:16px;margin-top:9px;font-size:12px;color:var(--mu)}
+.dlegend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.dlegend b{color:var(--tx)}
+.block{margin:0 0 40px}
+.h2{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;margin:0 0 16px;flex-wrap:wrap}
+.hline{flex:1;height:1px;background:linear-gradient(90deg,var(--c,var(--bd)),transparent);min-width:24px}
+.hint{font-size:11.5px;color:var(--mu);font-weight:400}
+.toplist{display:grid;gap:12px}
+.topcard{display:grid;grid-template-columns:74px 1fr;gap:0;background:linear-gradient(115deg,rgba(88,166,255,.08),transparent 45%),var(--card);border:1px solid var(--bd);border-left:3px solid var(--c);border-radius:var(--rad);overflow:hidden}
+.topcard:hover{border-color:#465061;transform:translateY(-1px)}
+.topcard{transition:.18s ease}
+.rank{display:flex;align-items:flex-start;justify-content:center;padding:20px 0 0;font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--c)}
+.topbody{padding:18px 20px 16px 4px}
+.topcard h3{font-size:18px;line-height:1.4;margin-bottom:4px}
+.topcard h3 a{color:var(--tx);text-decoration:none}
+.topcard h3 a:hover{color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:16px;transition:.18s ease;display:flex;flex-direction:column}
+.card:hover{border-color:#465061;background:var(--card2);transform:translateY(-1px)}
+.chead{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.idx{font-size:11px;color:var(--mu);font-variant-numeric:tabular-nums;font-weight:700}
+.tag{font-size:10.5px;padding:2px 8px;border-radius:999px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);border:1px solid color-mix(in srgb,var(--c) 34%,transparent);font-weight:600}
+.tag.t5{color:var(--mu);background:rgba(139,148,158,.1);border-color:rgba(139,148,158,.3);margin-left:auto}
+.card h4{font-size:15.5px;line-height:1.45;margin-bottom:3px}
+.card h4 a{color:var(--tx);text-decoration:none}
+.card h4 a:hover{color:var(--ac)}
+.orig{font-size:11.5px;color:#6e7681;margin-bottom:9px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.45}
+.summ{font-size:13.5px;color:#c9d1d9;flex:1}
+.summ code{background:#0b0f14;border:1px solid var(--bd);border-radius:4px;padding:1px 5px;font-size:12px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px;padding-top:11px;border-top:1px dashed #262d36;font-size:12px;color:var(--mu)}
+.m{white-space:nowrap}
+.score{color:var(--or);font-weight:700}
+.comms{color:#79c0ff;font-weight:600}
+.by{color:#7d8590}
+a.link{color:var(--mu);text-decoration:none;margin-left:auto;border-bottom:1px dotted #3d444d}
+a.link:hover{color:var(--ac);border-color:var(--ac)}
+.hotbox{background:linear-gradient(140deg,rgba(240,136,62,.10),transparent 50%),var(--card);border:1px solid var(--bd);border-left:3px solid var(--or);border-radius:var(--rad);padding:20px 22px}
+.hotbox h3{font-size:18px;margin-bottom:3px}
+.hotbox h3 a{color:var(--tx);text-decoration:none}
+.hotbox h3 a:hover{color:var(--or)}
+.hotmeta{display:flex;gap:14px;align-items:center;margin-top:14px;font-size:12.5px;color:var(--mu);flex-wrap:wrap}
+.after{font-size:12.5px;color:var(--mu);margin-top:12px;padding-left:2px;line-height:1.7}
+.rest{list-style:none;display:grid;gap:2px}
+.rest li{display:flex;gap:12px;align-items:baseline;padding:8px 10px;border-radius:8px;font-size:13.5px}
+.rest li:hover{background:var(--card)}
+.rest a{color:#c9d1d9;text-decoration:none;flex:1}
+.rest a:hover{color:var(--ac)}
+.rm{font-size:11.5px;color:var(--mu);font-variant-numeric:tabular-nums;white-space:nowrap}
+footer{border-top:1px solid var(--bd);margin-top:8px;padding-top:20px;font-size:12px;color:var(--mu);line-height:1.9}
+footer b{color:#c9d1d9;font-weight:600}
+footer .fg{display:flex;gap:18px;flex-wrap:wrap;margin-top:4px}
+@media(max-width:600px){
+ .wrap{padding:0 14px 48px}
+ header{padding:34px 0 20px}
+ .topcard{grid-template-columns:1fr}
+ .rank{padding:14px 18px 0;justify-content:flex-start}
+ .topbody{padding:8px 18px 16px}
+ .grid{grid-template-columns:1fr}
+ h1{font-size:26px}
+ .hint{display:none}
+ .stat{padding:13px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <span class="kicker"><span class="dot"></span>Hacker News Daily Brief</span>
+  <h1>Hacker News 每日简报 — <em>2026 年 11 月 09 日</em></h1>
+  <p class="sub">抓取 HN 首页 <b>top 30</b> 条实时数据，按主题重排为中文速览。今日主线其实是一条：<b>Claude Code 的三重压力测试</b>——有人把它从主力工作流里退役（675 分 / 424 条评论，双料第一）、它的「不再询问」把口令写进了 1,122 个公开仓库（578 分）、高盛把它从交易员手里收回（542 分）。技术侧最硬的一条是 <b>零 GPU 的 64 GB 内存跑起 284B MoE</b>。</p>
+</header>
+<section class="stats"><div class="stat"><div class="sv">30</div><div class="sl">抓取文章数</div><div class="sn">topstories 前 30 条</div></div><div class="stat"><div class="sv">675</div><div class="sl">最高得分</div><div class="sn">告别 Claude Code，把主力搬到 Pi</div></div><div class="stat"><div class="sv">424</div><div class="sl">最热讨论</div><div class="sn">评论数的全场最高</div></div><div class="stat"><div class="sv">23<span class='unit'>/30</span></div><div class="sl">达标重点文章</div><div class="sn">得分 ≥50 或评论 ≥30</div></div><div class="stat"><div class="sv">5,049</div><div class="sl">总得分</div><div class="sn">均值 168 / 中位数 91</div></div><div class="stat"><div class="sv">3,003</div><div class="sl">总评论数</div><div class="sn">均值 100 条 / 篇</div></div></section>
+<section class="dist"><div class="dbar"><span style="width:16.67%;background:#a371f7" title="🤖 AI 相关动态 5 条"></span><span style="width:23.33%;background:#58a6ff" title="💻 编程 &amp; 开源 7 条"></span><span style="width:20.00%;background:#f85149" title="🔒 安全 &amp; 政策 6 条"></span><span style="width:40.00%;background:#3fb950" title="🎯 其他值得关注 12 条"></span><span style="width:23.33%;background:#8b949e" title="未达重点线 7 条"></span></div><div class="dlegend"><span><i style="background:#a371f7"></i>🤖 AI 相关动态 <b>5</b></span><span><i style="background:#58a6ff"></i>💻 编程 &amp; 开源 <b>7</b></span><span><i style="background:#f85149"></i>🔒 安全 &amp; 政策 <b>6</b></span><span><i style="background:#3fb950"></i>🎯 其他值得关注 <b>12</b></span><span><i style="background:#8b949e"></i>未达重点线 <b>7</b></span></div></section>
+<section class="block"><h2 class="h2"><span>🔥</span>必读 Top 5<span class="hline"></span><span class="hint">按得分排序 · 摘要为本简报撰写</span></h2><div class="toplist"><article class="topcard" style="--c:#a371f7">
+  <div class="rank">TOP 1</div>
+  <div class="topbody">
+    <h3><a href="https://caleb.software/posts/claude-to-pi.html" target="_blank" rel="noopener">告别 Claude Code，把主力搬到 Pi</a></h3>
+    <p class="orig">Goodbye Claude, hello Pi</p>
+    <p class="summ">作者用了一年多 Claude Code 后决定退役它，理由不是某次翻车，而是一串小摩擦的累积：CLAUDE.md 在几十个仓库里各自复制、行为随版本漂移、扩展要绕开人家的边界；换到 Pi 后他看重的是 harness 完全握在自己手里。评论区裂成两半——一半人说「决定产出效率的其实是 harness 而不是模型」，另一半人直接指出原文事实不准：Claude 早就在读 AGENTS.md，而且拿第三方 harness 配 Anthropic 订阅有 ToS 封号风险。</p>
+    <div class="meta"><span class="m score">▲ 675</span><span class="m comms">💬 424</span><span class="m by">@karagenit</span><a class="m link" href="https://caleb.software/posts/claude-to-pi.html" target="_blank" rel="noopener">caleb.software ↗</a></div>
+  </div>
+</article><article class="topcard" style="--c:#f85149">
+  <div class="rank">TOP 2</div>
+  <div class="topbody">
+    <h3><a href="https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again" target="_blank" rel="noopener">Claude Code 的「不再询问」把口令写进了 1,122 个公开仓库</a></h3>
+    <p class="orig">Claude Code&#x27;s &quot;Don&#x27;t Ask Again&quot; exposes passwords in 1,122 public GitHub files</p>
+    <p class="summ">Apiiro 扫描 GitHub 上 10.4 万份公开的 <code>.claude/settings.local.json</code>，其中 1,122 份含有真实口令或 API key：用户点「Yes, and don't ask again」时，整条带密钥的命令被原样存盘，然后跟着仓库一起提交。The Hacker News 的统计口径更大（1,994 个仓库、2,539 条凭据）；补救只有一条路——把进过 git 历史的凭据全部轮换。</p>
+    <div class="meta"><span class="m score">▲ 578</span><span class="m comms">💬 390</span><span class="m by">@shmulc</span><a class="m link" href="https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again" target="_blank" rel="noopener">apiiro.com ↗</a></div>
+  </div>
+</article><article class="topcard" style="--c:#a371f7">
+  <div class="rank">TOP 3</div>
+  <div class="topbody">
+    <h3><a href="https://www.thestateofai.com/news/goldman-sachs-claude-code-traders-bankers" target="_blank" rel="noopener">高盛把 Claude Code 从交易员和银行家手里收回</a></h3>
+    <p class="orig">Goldman Sachs is pulling Claude Code from its bankers and traders</p>
+    <p class="summ">据 Bloomberg，高盛 10 月更新内部规定，把 Claude Code 与 GitHub Copilot 收回到约 1.2 万名工程师范围内，此前用它们建市场模型、盯客户流水的交易员与投行人员失去权限，官方口径是「生产力与风险管理」的权衡。评论区最锋利的一条直接点出致命三元组：能读私有数据 + 能接触不可信内容 + 有外发通道；也有人注意到时间点——高盛正是 Anthropic IPO 的 lead left。</p>
+    <div class="meta"><span class="m score">▲ 542</span><span class="m comms">💬 329</span><span class="m by">@TheWiggles</span><a class="m link" href="https://www.thestateofai.com/news/goldman-sachs-claude-code-traders-bankers" target="_blank" rel="noopener">thestateofai.com ↗</a></div>
+  </div>
+</article><article class="topcard" style="--c:#a371f7">
+  <div class="rank">TOP 4</div>
+  <div class="topbody">
+    <h3><a href="https://github.com/synchopate/llama-modchip" target="_blank" rel="noopener">llama-modchip：零 GPU，64 GB 内存跑 284B 的 DeepSeek-V4-Flash</a></h3>
+    <p class="orig">Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU</p>
+    <p class="summ">用 SwiGLU-H2 加 MoE 量化，在一台纯 CPU、64 GB 内存的机器上跑 284B MoE：占用低于 59 GiB、上下文 256K、生成 9–15 tok/s、预填充约 44 tok/s，还附带 13 ms 恢复 Claude Code 会话的补丁。同一套技巧也用在 30B MoE（25–111 tok/s）甚至 Stockfish 上，仓库 470 星。</p>
+    <div class="meta"><span class="m score">▲ 343</span><span class="m comms">💬 143</span><span class="m by">@joshcsimmons</span><a class="m link" href="https://github.com/synchopate/llama-modchip" target="_blank" rel="noopener">github.com ↗</a></div>
+  </div>
+</article><article class="topcard" style="--c:#f85149">
+  <div class="rank">TOP 5</div>
+  <div class="topbody">
+    <h3><a href="https://nvidianews.nvidia.com/news/statement-from-nvidia-board-of-directors" target="_blank" rel="noopener">NVIDIA 董事会就黄仁勋是否被外国情报机构锁定启动独立调查</a></h3>
+    <p class="orig">Nvidia Board of Directors Is Investigating Jensen Huang</p>
+    <p class="summ">11 月 8 日董事会声明：由独立董事组成委员会、另聘外部独立律师，调查「创始人兼 CEO 黄仁勋是外国情报行动目标」的相关报道，同时表示目前没有理由认为国家安全或公司机密受损。此前《纽约时报》报道他与一名美方视为情报资产的中国籍女性有密切关系，众议院中国问题特别委员会已要求他 11 月 18 日闭门作证。</p>
+    <div class="meta"><span class="m score">▲ 333</span><span class="m comms">💬 260</span><span class="m by">@vincentchau</span><a class="m link" href="https://nvidianews.nvidia.com/news/statement-from-nvidia-board-of-directors" target="_blank" rel="noopener">nvidianews.nvidia.com ↗</a></div>
+  </div>
+</article></div></section>
+<section class="block"><h2 class="h2"><span>🤖 AI 相关动态</span><span class="hline" style="--c:#a371f7"></span><span class="hint">模型能力、工具链与人的关系 · 本类共 5 条，Top 5 已在上方</span></h2><div class="grid"><article class="card" style="--c:#a371f7">
+  <div class="chead"><span class="idx">#29</span><span class="tag">AI 相关动态</span></div>
+  <h4><a href="https://www.lorekit.io/blog/open-agent-memory-format" target="_blank" rel="noopener">Agent 的记忆需要一个 OpenTelemetry 时刻</a></h4>
+  <p class="orig">Agent memory needs its OpenTelemetry moment</p>
+  <p class="summ">现在一台开发机上同时躺着 AGENTS.md、<code>.cursor/rules/*.mdc</code>、<code>/memories</code> 目录、Copilot 的仓库级事实、JSONL 知识图谱——四五种形状，谁也读不懂谁，CI agent 学到的经验编辑器 agent 用不上。作者主张照可观测性当年的路径走：先有共享数据模型与规范，工具才谈得上互通。</p>
+  <div class="meta"><span class="m score">▲ 164</span><span class="m comms">💬 102</span><span class="m by">@mthines</span><a class="m link" href="https://www.lorekit.io/blog/open-agent-memory-format" target="_blank" rel="noopener">lorekit.io ↗</a></div>
+</article><article class="card" style="--c:#a371f7">
+  <div class="chead"><span class="idx">#18</span><span class="tag">AI 相关动态</span></div>
+  <h4><a href="https://sergeykuhne.com/blog/fighting-ai-brain-fry" target="_blank" rel="noopener">我是怎么对抗「AI 脑雾」的</a></h4>
+  <p class="orig">How I Fight AI Brain Fry</p>
+  <p class="summ">同时开十几个 Claude Code / Codex 会话之后，作者把注意力崩溃归因为两个问题：排序与上下文——每个回复都需要一次澄清、一次追问、一个支线，于是你开始在 20 个上下文之间搬运大脑寄存器。他的解法是把工作重排成优先队列：限制并发、会话结束即回收上下文，而不是靠「多休息」这类建议。</p>
+  <div class="meta"><span class="m score">▲ 128</span><span class="m comms">💬 112</span><span class="m by">@kyunez</span><a class="m link" href="https://sergeykuhne.com/blog/fighting-ai-brain-fry" target="_blank" rel="noopener">sergeykuhne.com ↗</a></div>
+</article></div></section><section class="block"><h2 class="h2"><span>💻 编程 &amp; 开源</span><span class="hline" style="--c:#58a6ff"></span><span class="hint">语言、框架、系统与自建工具 · 本类共 7 条，Top 5 已在上方</span></h2><div class="grid"><article class="card" style="--c:#58a6ff">
+  <div class="chead"><span class="idx">#05</span><span class="tag">编程 &amp; 开源</span></div>
+  <h4><a href="https://declarative-dragging.github.io/" target="_blank" rel="noopener">声明式拖拽（UIST 2026 最佳论文）</a></h4>
+  <p class="orig">Declarative Dragging</p>
+  <p class="summ">不用写拖拽代码：对每个元素只声明「拖动它应该导向哪些未来状态」，系统投机渲染这些状态，算出它能去哪，再把多个可能世界合成一段平滑的拖拽交互。目标是让做图的教育者、游戏设计者、数学家不必为几何、反馈与动画手写一堆胶水。</p>
+  <div class="meta"><span class="m score">▲ 276</span><span class="m comms">💬 33</span><span class="m by">@smusamashah</span><a class="m link" href="https://declarative-dragging.github.io/" target="_blank" rel="noopener">declarative-dragging.github.io ↗</a></div>
+</article><article class="card" style="--c:#58a6ff">
+  <div class="chead"><span class="idx">#04</span><span class="tag">编程 &amp; 开源</span></div>
+  <h4><a href="https://duxlabs.dev/" target="_blank" rel="noopener">Dux：一个开源的 Wayland 桌面 shell</a></h4>
+  <p class="orig">Dux: Free, open-source Wayland desktop shell with file manager and theming</p>
+  <p class="summ">不是又一套库，而是带文件管理器与主题系统的完整桌面 shell，目标是把「装完就能用」当作设计约束——Wayland 生态里长期缺的正是这一层拼装好的默认体验。162 分 / 52 条讨论。</p>
+  <div class="meta"><span class="m score">▲ 162</span><span class="m comms">💬 52</span><span class="m by">@indigodaddy</span><a class="m link" href="https://duxlabs.dev/" target="_blank" rel="noopener">duxlabs.dev ↗</a></div>
+</article><article class="card" style="--c:#58a6ff">
+  <div class="chead"><span class="idx">#30</span><span class="tag">编程 &amp; 开源</span></div>
+  <h4><a href="https://linebender.org/blog/jit-bitmap-text/" target="_blank" rel="noopener">为微控制器做的 JIT 位图文字渲染</a></h4>
+  <p class="orig">JIT bitmap text rendering for microcontrollers</p>
+  <p class="summ">Linebender 团队把字形光栅化推迟到运行时按需生成：既省掉预烘焙字体占用的 ROM，又保住小字号下的清晰度，代价是一点点启动期算力——典型 MCU 场景下这笔交易很划算。</p>
+  <div class="meta"><span class="m score">▲ 91</span><span class="m comms">💬 17</span><span class="m by">@dmit</span><a class="m link" href="https://linebender.org/blog/jit-bitmap-text/" target="_blank" rel="noopener">linebender.org ↗</a></div>
+</article><article class="card" style="--c:#58a6ff">
+  <div class="chead"><span class="idx">#01</span><span class="tag">编程 &amp; 开源</span></div>
+  <h4><a href="https://ketchup3d.github.io/app/" target="_blank" rel="noopener">KetchUp：Rust + WebGPU 写的开源 SketchUp 替代品</a></h4>
+  <p class="orig">KetchUp – Open-source SketchUp alternative built with Rust and WebGPU</p>
+  <p class="summ">浏览器里直接跑的 3D 建模工具，复刻的是 SketchUp 那套「推拉就成形」的直觉交互，技术栈是 Rust 编译到 WASM 加 WebGPU 渲染。开源、免安装，是这个项目最实际的两个卖点。</p>
+  <div class="meta"><span class="m score">▲ 66</span><span class="m comms">💬 5</span><span class="m by">@dcoulmbe</span><a class="m link" href="https://ketchup3d.github.io/app/" target="_blank" rel="noopener">ketchup3d.github.io ↗</a></div>
+</article></div></section><section class="block"><h2 class="h2"><span>🔒 安全 &amp; 政策</span><span class="hline" style="--c:#f85149"></span><span class="hint">凭据、身份、合规与监管 · 本类共 6 条，Top 5 已在上方</span></h2><div class="grid"><article class="card" style="--c:#f85149">
+  <div class="chead"><span class="idx">#09</span><span class="tag">安全 &amp; 政策</span></div>
+  <h4><a href="https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-affair-email-to-company" target="_blank" rel="noopener">黄仁勋致员工信：承认对妻子不忠，支持董事会调查</a></h4>
+  <p class="orig">Nvidia CEO Jensen Huang&#x27;s letter to staff about affair</p>
+  <p class="summ">在《纽约时报》报道他与一名中国籍女性有密切关系后，黄仁勋周日给全员发信，承认「对妻子不忠」「我的行为伤害了她和我们的孩子，没有任何借口」，并为辜负信任道歉；信里同时强调「我热爱我们的国家」，承诺配合董事会调查、保护 NVIDIA 与美国国家安全。</p>
+  <div class="meta"><span class="m score">▲ 239</span><span class="m comms">💬 233</span><span class="m by">@karimf</span><a class="m link" href="https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-affair-email-to-company" target="_blank" rel="noopener">axios.com ↗</a></div>
+</article><article class="card" style="--c:#f85149">
+  <div class="chead"><span class="idx">#06</span><span class="tag">安全 &amp; 政策</span></div>
+  <h4><a href="https://mailroute.net/blog/outlook-rejecting-email-without-dmarc" target="_blank" rel="noopener">Outlook.com 开始静默拒收没有 DMARC 记录的域名的邮件</a></h4>
+  <p class="orig">Outlook.com Is Quietly Rejecting Email from Domains Without DMARC</p>
+  <p class="summ">自 11 月 5 日起，outlook.com / hotmail.com / live.com / msn.com 会拒收未发布 DMARC 记录域名的部分邮件，而且是静默生效，没有公告。命中人群不是群发垃圾邮件商，而是普通低量发件人；修复成本只有一条 DNS 记录，问题在于你根本不知道自己被拒了。</p>
+  <div class="meta"><span class="m score">▲ 200</span><span class="m comms">💬 160</span><span class="m by">@xmddmx</span><a class="m link" href="https://mailroute.net/blog/outlook-rejecting-email-without-dmarc" target="_blank" rel="noopener">mailroute.net ↗</a></div>
+</article><article class="card" style="--c:#f85149">
+  <div class="chead"><span class="idx">#17</span><span class="tag">安全 &amp; 政策</span></div>
+  <h4><a href="https://packethound.app/" target="_blank" rel="noopener">PacketHound：Windows 上的出站防火墙</a></h4>
+  <p class="orig">A Little Snitch for Windows</p>
+  <p class="summ">Windows 防火墙只管进来，PacketHound 专治出去：应用第一次联网时弹窗告诉你它要连谁、哪个端口，可以按应用/域名/IP 永久或临时放行，把防火墙变成 Little Snitch 式的「先问我」。系统自身组件默认放行，避免把你淹在确认框里。</p>
+  <div class="meta"><span class="m score">▲ 86</span><span class="m comms">💬 41</span><span class="m by">@BadBoyBubby</span><a class="m link" href="https://packethound.app/" target="_blank" rel="noopener">packethound.app ↗</a></div>
+</article><article class="card" style="--c:#f85149">
+  <div class="chead"><span class="idx">#19</span><span class="tag">安全 &amp; 政策</span></div>
+  <h4><a href="https://goldstein.lol/posts/deno-security/" target="_blank" rel="noopener">我不喜欢 Deno 的安全模型（2024）</a></h4>
+  <p class="orig">I&#x27;m not a fan of Deno&#x27;s security model (2024)</p>
+  <p class="summ">作者认为 Deno 的「默认安全」名不副实：权限粒度只在启动期成立，一旦放了 <code>--allow-net</code>，泄漏就等于开放；更糟的是用户看到权限清单会产生「已经安全了」的错觉，而真实攻击面在依赖的传递闭包里。文章写于 2024 年，今天被重提是因为同类思路正在 AI agent 沙箱里复刻。</p>
+  <div class="meta"><span class="m score">▲ 80</span><span class="m comms">💬 37</span><span class="m by">@maxloh</span><a class="m link" href="https://goldstein.lol/posts/deno-security/" target="_blank" rel="noopener">goldstein.lol ↗</a></div>
+</article></div></section><section class="block"><h2 class="h2"><span>🎯 其他值得关注</span><span class="hline" style="--c:#3fb950"></span><span class="hint">网络文化、界面、硬件与长阅读 · 本类共 12 条，Top 5 已在上方</span></h2><div class="grid"><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#14</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html" target="_blank" rel="noopener">写作作为一种思考工具</a></h4>
+  <p class="orig">Writing as a thinking tool</p>
+  <p class="summ">Murat Buffalo 的观点：写作不是把想清楚的东西记下来，而是让模糊直觉变成可检验命题的唯一渠道——写不下去的地方，通常就是没想明白的地方。258 分，评论区把它和「给 LLM 写提示词也算写作」并置讨论。</p>
+  <div class="meta"><span class="m score">▲ 258</span><span class="m comms">💬 77</span><span class="m by">@jruohonen</span><a class="m link" href="http://muratbuffalo.blogspot.com/2026/11/writing-as-thinking-tool.html" target="_blank" rel="noopener">muratbuffalo.blogspot.com ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#16</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://jrcpl.us/contrib/2020/gardening-for-engineers/" target="_blank" rel="noopener">写给工程师的种菜指南</a></h4>
+  <p class="orig">Show HN: Vegetable Gardening for Engineers</p>
+  <p class="summ">把种菜拆成工程问题：容器容积、光照、营养液 EC/pH、产量单位化，只写水培与容器种植（面向城市公寓阳台），资料来自农业推广项目、种子公司种植手册和室内大麻种植者的技巧。作者说写这个是因为园艺书细节太少、社交媒体废话太多。</p>
+  <div class="meta"><span class="m score">▲ 149</span><span class="m comms">💬 29</span><span class="m by">@jrcplus</span><a class="m link" href="https://jrcpl.us/contrib/2020/gardening-for-engineers/" target="_blank" rel="noopener">jrcpl.us ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#24</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://z1x.us/blog/four-hundred-bucks-of-e-waste" target="_blank" rel="noopener">为一台按键手机移植 Android 16：四百美元的电子垃圾</a></h4>
+  <p class="orig">Porting Android 16 to my blind mother&#x27;s keypad phone</p>
+  <p class="summ">作者的母亲视障，只认实体按键的手感，于是他用两个晚上、一堆 bootloop 和一个自编译 ROM，把 Android 16 塞进了一台按键机。结论诚实得刺人：还是电子垃圾，只是变快了。</p>
+  <div class="meta"><span class="m score">▲ 145</span><span class="m comms">💬 43</span><span class="m by">@z1xus</span><a class="m link" href="https://z1x.us/blog/four-hundred-bucks-of-e-waste" target="_blank" rel="noopener">z1x.us ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#02</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://news.ycombinator.com/item?id=50417407" target="_blank" rel="noopener">Ask HN：你最近在做什么？（2026 年 11 月）</a></h4>
+  <p class="orig">Ask HN: What are you working on? (November 2026)</p>
+  <p class="summ">HN 每月固定节目，350 条评论的「人类项目博览会」：副业、研究小工具、硬件、食谱、独立游戏混在一起，是观察当下独立开发者情绪与选题的最高密度样本。</p>
+  <div class="meta"><span class="m score">▲ 85</span><span class="m comms">💬 350</span><span class="m by">@david927</span><a class="m link" href="https://news.ycombinator.com/item?id=50417407" target="_blank" rel="noopener">news.ycombinator.com ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#25</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://www.bundesarchiv.de/en/stasi-records-archive/the-reconstruction-of-torn-documents/" target="_blank" rel="noopener">被撕碎文件的复原：斯塔西档案</a></h4>
+  <p class="orig">The Reconstruction of Torn Documents</p>
+  <p class="summ">东德国家安全部当年把档案手撕成碎片塞进 16,000 个袋子；1990 年代起档案局人工拼回 600 袋、170 万页并编目，另有计算机辅助复原试点，用程序在 23 个袋子里拼出约 9.1 万页。把「拼纸片」做成国家级工程，是数字图像匹配最早的规模化应用之一。</p>
+  <div class="meta"><span class="m score">▲ 84</span><span class="m comms">💬 48</span><span class="m by">@jacquesm</span><a class="m link" href="https://www.bundesarchiv.de/en/stasi-records-archive/the-reconstruction-of-torn-documents/" target="_blank" rel="noopener">bundesarchiv.de ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#26</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://www.spacex.com/launches/starship-flight-15" target="_blank" rel="noopener">Starship 第 15 次试飞：同时接住助推器与飞船</a></h4>
+  <p class="orig">Starship Flight 15 on 11/13 plans to catch both booster and ship</p>
+  <p class="summ">SpaceX 计划 11 月 13 日试飞，目标是让发射塔的机械臂在一次任务里同时接住超重型助推器和星舰飞船本体——接住助推器已经不算新闻，飞船回收才是这一版的关键跨越。</p>
+  <div class="meta"><span class="m score">▲ 71</span><span class="m comms">💬 28</span><span class="m by">@spikels</span><a class="m link" href="https://www.spacex.com/launches/starship-flight-15" target="_blank" rel="noopener">spacex.com ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#12</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://lithub.com/the-story-behind-edward-hoppers-iconic-painting-nighthawks/" target="_blank" rel="noopener">《夜游者》背后的故事</a></h4>
+  <p class="orig">Edward Hopper&#x27;s Iconic Painting, &quot;Nighthawks</p>
+  <p class="summ">Edward Hopper 这幅画如何从冷门变成美国孤独感的标准图像：原始草图、他自己写的说明、后世无数次挪用与抵押拍卖，Literary Hub 的考据长文。</p>
+  <div class="meta"><span class="m score">▲ 59</span><span class="m comms">💬 19</span><span class="m by">@prismatic</span><a class="m link" href="https://lithub.com/the-story-behind-edward-hoppers-iconic-painting-nighthawks/" target="_blank" rel="noopener">lithub.com ↗</a></div>
+</article><article class="card" style="--c:#3fb950">
+  <div class="chead"><span class="idx">#28</span><span class="tag">其他值得关注</span></div>
+  <h4><a href="https://www.epatters.org/post/e-graphs-1/" target="_blank" rel="noopener">如何用图证明等式（第一部分）</a></h4>
+  <p class="orig">How to prove equations using diagrams, part 1</p>
+  <p class="summ">把等式推理写成 string diagram / e-graph 上的重写：每个代数变形是一个可组合的图示步骤，于是「画个图就证完了」既有直觉又有可机器检验的形式。适合对范畴论与交互式证明都好奇的人。</p>
+  <div class="meta"><span class="m score">▲ 59</span><span class="m comms">💬 6</span><span class="m by">@frostbyte7</span><a class="m link" href="https://www.epatters.org/post/e-graphs-1/" target="_blank" rel="noopener">epatters.org ↗</a></div>
+</article></div></section>
+<section class="block"><h2 class="h2"><span>💬</span>今日最热讨论<span class="hline" style="--c:#f0883e"></span><span class="hint">424 条评论，全场第一</span></h2>
+<div class="hotbox">
+  <h3><a href="https://caleb.software/posts/claude-to-pi.html" target="_blank" rel="noopener">告别 Claude Code，把主力搬到 Pi</a></h3>
+  <p class="orig">Goodbye Claude, hello Pi · @karagenit</p>
+  <p class="summ">作者用了一年多 Claude Code 后决定退役它，理由不是某次翻车，而是一串小摩擦的累积：CLAUDE.md 在几十个仓库里各自复制、行为随版本漂移、扩展要绕开人家的边界；换到 Pi 后他看重的是 harness 完全握在自己手里。评论区裂成两半——一半人说「决定产出效率的其实是 harness 而不是模型」，另一半人直接指出原文事实不准：Claude 早就在读 AGENTS.md，而且拿第三方 harness 配 Anthropic 订阅有 ToS 封号风险。</p>
+  <div class="hotmeta"><span class="m score">▲ 675</span><span class="m comms">💬 424</span><a class="m link" href="https://news.ycombinator.com/item?id=50410107" target="_blank" rel="noopener">进入 HN 讨论 ↗</a></div>
+</div>
+<p class="after">评论区没有停在「换不换工具」，而是分成了三条线：<b>第一条</b>是「harness 才是真正的产品」——多人现身说法，模型能力趋同时，决定效率的是会话管理、扩展点和上下文控制，Pi 的卖点是「因为它是你自己的」；「从驾驶 agent 到编排 agent」这句话被反复引用。<b>第二条</b>是对原文的事实核查——有人指出 Claude 早就在读 <code>AGENTS.md</code>，作者抱怨的不少功能 Pi 反而没有，还有一条被顶上去的冷水：「评论区全是工具信仰，帖子本身并无逻辑」。<b>第三条</b>是合规风险：用第三方 harness 配 Anthropic 订阅可能违反 ToS 被封号，所以真正的问题变成「你愿不愿意为可控性改用 API 计费」。次热讨论依次是 Ask HN 十一月版（350 条，HN 的月度人类项目博览会）、高盛收回 Claude Code（329 条，围绕致命三元组与 IPO 时机）、NVIDIA 董事会调查（260 条）、黄仁勋致员工信（233 条）、Outlook DMARC 静默拒收（160 条，踩坑者现场对账）。</p>
+</section>
+<section class="block"><h2 class="h2"><span>📎</span>其余上榜<span class="hline" style="--c:#8b949e"></span><span class="hint">未达重点线，供速览</span></h2><ul class='rest'><li><a href="https://ftrain.com/aboard-the-web-is-more-than-enough" target="_blank" rel="noopener">Paul Ford：Web 已经足够</a><span class="rm">▲49 · 💬23</span></li><li><a href="https://chimera-vocal-synth.vercel.app/" target="_blank" rel="noopener">Chimera Vocal Synth</a><span class="rm">▲35 · 💬7</span></li><li><a href="https://www.delorie.com/djgpp/history.html" target="_blank" rel="noopener">DJGPP 的历史（1998）</a><span class="rm">▲32 · 💬9</span></li><li><a href="https://serd.es/2026/11/08/playing-with-stm32mp2.html" target="_blank" rel="noopener">折腾 STM32MP2</a><span class="rm">▲26 · 💬13</span></li><li><a href="https://kevinboone.me/cpmzork.html" target="_blank" rel="noopener">在 Linux 的 CP/M 模拟器上玩 Zork 1（2021）</a><span class="rm">▲26 · 💬12</span></li><li><a href="https://isocpp.org/files/papers/P4454R0.pdf" target="_blank" rel="noopener">Herb Sutter：当语言的创造者与它的所有者强烈分歧（PDF）</a><span class="rm">▲5 · 💬0</span></li><li><a href="https://nautil.us/the-kekul-problem-236574" target="_blank" rel="noopener">《凯库勒问题》——Cormac McCarthy</a><span class="rm">▲3 · 💬1</span></li></ul></section>
+<footer>
+  <div><b>数据来源</b>：Hacker News 官方 Firebase API（<code>/v0/topstories.json</code> 前 30 条 + <code>/v0/item/{id}.json</code>）</div>
+  <div><b>快照时间</b>：2026-11-09 08:05 CST ｜ 排名与分数为抓取瞬间值，HN 会持续变动 ｜ 分类与中文摘要为本简报编辑加工，原文以链接为准</div>
+  <div class="fg"><span>共 30 条 · 重点 23 条 · 其余 7 条</span><span>生成于 Hermes · reviewer profile</span></div>
+</footer>
+</div>
+</body>
+</html>
