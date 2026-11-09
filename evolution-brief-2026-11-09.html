@@ -132,13 +132,13 @@ footer b{color:var(--dim)}
     本期 arXiv 用<strong>脚本自身的查询形状</strong>返回了 HTTP 200 —— 但它用了 <b>31.21 秒</b>，
     是客户端 <code>REQUEST_TIMEOUT = 15</code> 的 <b>2.08 倍</b>。同一分钟，同一族查询还在 0.72 秒时被 429 快拒。
     「源不可用」这句话在两个分量上同时为假：源在线、也答得出，只是<b>比我们的耐心更慢</b>。
-    同期，reviewer <code>errors.log</code> 以 <b>99.95%</b> 走到 56 日未轮转的终点。
+    同期，reviewer <code>errors.log</code> 在 <b>09:06:55</b> 走完 56 日的等待 —— 就在这份报告生成的过程中。
   </p>
   <div class="meta">
     <span class="chip hi">📅 2026-11-09 周一</span>
     <span class="chip">🕘 快照 09:00–09:05 CST</span>
     <span class="chip">🔍 7 份 errors.log 全枚举</span>
-    <span class="chip bad">📊 AUTO 5/9</span>
+    <span class="chip bad">📊 AUTO 5–6/9</span>
     <span class="chip">🧪 arXiv 四臂探针</span>
   </div>
 </div>
@@ -162,7 +162,8 @@ footer b{color:var(--dim)}
 
   <div class="grid g4" style="margin-top:13px">
     <div class="card k-purple"><div class="c-label">现档 ERROR</div>
-      <div class="c-val">19,195</div><div class="c-note">live 12,115 + 冻结 7,080</div></div>
+      <div class="c-val">19,195</div><div class="c-note">live 12,115 + 冻结 7,080<br>
+      <span class="na">轮转后：<b>18,637</b>（reviewer 558 条已归档）</span></div></div>
     <div class="card k-ok"><div class="c-label">日增量 Δ</div>
       <div class="c-val">+300</div><div class="c-note">156 + 144 + <b>0</b> · 逐 profile 精确命中</div></div>
     <div class="card"><div class="c-label">Memory</div>
@@ -207,11 +208,16 @@ footer b{color:var(--dim)}
   <div class="cal bad">
     <div class="cal-t">⏱ 轮转状态 <span class="rule">DQ</span></div>
     <p>文件 <code>/root/.hermes/profiles/reviewer/logs/errors.log</code> · 阈值 <b>2 MiB = 2,097,152 B</b></p>
-    <p><b class="warn">未轮转</b> · 现档 2,096,567 B = <b>99.97%</b> · 余量 <b>585 B</b></p>
-    <p>未轮转天数 <b>56 日</b>（上次 09-14 17:10）· 本次轮转将一并清掉 <b>12,155 物理行</b>／<b>558 条历史 ERROR</b>／整个 500 行尾窗。</p>
-    <p style="margin-top:10px"><b>这正是不该写进报告的时刻。</b>P164 判定余量 16,555 B、ETA 1.18–1.46 日；
-    实测 24 h 增长 <b>+14,580 B</b>（16,555 → 1,975 @09:02），略低于所需 ⇒ 到了本期开盘仍差 1,975 B。
-    而本会话自身以约 <b>600 B/min</b> 写入，于是「差 1,975 B」在<b>同一份报告的生成过程中</b>被消耗掉。</p>
+    <p><b class="ok">✅ 已轮转</b> · <b>2026-11-09 09:06:55</b> · 归档 <code>errors.log.1</code> = <b>2,097,123 B</b> / 12,163 行 · 现档 417 B = <b>0.020%</b></p>
+    <p>未轮转天数 <b>56 日</b>（上次 09-14 17:10 → 本次 2026-11-09 09:06:55）· 本次轮转归档了
+    <b>12,163 物理行</b>／<b>558 条历史 ERROR</b>／整个 500 行尾窗。</p>
+    <p style="margin-top:10px"><b>它就在这份报告生成的过程中发生。</b>
+    09:02 余量 1,141 B；09:04 余量 585 B；09:06:22 首版 HTML 落盘时余 585 B（99.97%）；
+    09:06:50 余 168 B；<b>09:06:55 触发轮转</b>；09:07:03 现档 <b>417 B = 0.020%%</b>。</p>
+    <p style="margin-top:8px"><b>⇒ 本报告的全部窗口指标（500 行 / 89 条 / 现档 19,195 / 尾窗构成）都是轮转前的快照 (09:00–09:05)。</b>
+    它们在 09:06:55 之后已无法从 live 文件复核，只能从 <code>errors.log.1</code>（2,097,123 B）读取。
+    这也是规则 DQ 的完整教科书案例：<b>报告的对象在报告写完之前就变了</b>，
+    所以「取值 → 落盘 → 推送」的顺序必须是「先测、后写、写后不再改」（规则 BW）。</p>
   </div>
 
   <div class="tw">
@@ -219,10 +225,12 @@ footer b{color:var(--dim)}
       <thead><tr><th>文件（全路径为键 · 规则 M）</th><th class="m">当前</th><th class="m">阈值</th>
       <th class="m">占用</th><th class="m">余量</th><th>上次轮转</th><th class="m">ETA</th></tr></thead>
       <tbody>
-        <tr><td class="m">reviewer/logs/errors.log</td><td class="num">2096567</td><td class="num">2,097,152</td>
-            <td class="num bad">%(er_pct).2f%%</td><td class="num">585</td><td class="m">09-14 17:10（56 日）</td><td class="num bad">分钟级</td></tr>
-        <tr><td class="m">reviewer/logs/agent.log</td><td class="num">4166542</td><td class="num">5,242,880</td>
-            <td class="num">%(ag_pct).2f%%</td><td class="num">1076338</td><td class="m">10-28 00:10（12.4 日）</td><td class="num">≈3.2 日</td></tr>
+        <tr><td class="m">reviewer/logs/errors.log</td><td class="num">417<span class="na"> (轮转后)</span></td><td class="num">2,097,152</td>
+            <td class="num ok">0.020%%</td><td class="num">—</td><td class="m">11-09 09:06:55（间隔 56 日）</td><td class="num ok">已发生</td></tr>
+        <tr><td class="m">reviewer/logs/errors.log.1</td><td class="num">2,097,123</td><td class="num">2,097,152</td>
+            <td class="num">99.99%</td><td class="num">—</td><td class="m">（本次归档 · 12,163 行）</td><td class="num na">封存</td></tr>
+        <tr><td class="m">reviewer/logs/agent.log</td><td class="num">4179131</td><td class="num">5,242,880</td>
+            <td class="num">%(ag_pct).2f%%</td><td class="num">1063749</td><td class="m">10-28 00:10（12.4 日）</td><td class="num">≈3.2 日</td></tr>
         <tr><td class="m">default/logs/errors.log</td><td class="num">1,684,307</td><td class="num">2,097,152</td>
             <td class="num">80.31%</td><td class="num">412,845</td><td class="m">09-16 08:30（54 日）</td><td class="num">≈13 日</td></tr>
         <tr><td class="m">default/logs/agent.log</td><td class="num">677,918</td><td class="num">5,242,880</td>
@@ -417,8 +425,8 @@ footer b{color:var(--dim)}
 
 <!-- ============ 6. 预测评分 ============ -->
 <section>
-  <div class="sec-h"><h2>📈 上期预测验证</h2><span class="n">P164 → P165 · AUTO 5/9</span></div>
-  <p class="sec-sub">这一期最重要的发现不在数据里，在计分表里：<b>4 项失准全部是自家的算术，没有一项来自外部源。</b>
+  <div class="sec-h"><h2>📈 上期预测验证</h2><span class="n">P164 → P165 · AUTO 5/9（含 1 迟到 ≈ 6/9）</span></div>
+  <p class="sec-sub">这一期最重要的发现不在数据里，在计分表里：<b>3 项严格失准 + 1 项迟到，全部是自家的算术，没有一项来自外部源。</b>
   这是本项目历史上第一次出现「零外部源失准、全内部算术失准」的分布。</p>
 
   <div class="tw">
@@ -427,7 +435,7 @@ footer b{color:var(--dim)}
       <tbody>
         <tr><td class="m">1</td><td>四常量 45 / 81 / 300·日⁻¹ / 0（第 19 期）</td><td class="m">AUTO</td><td>45 / 81 / 300 / 0</td><td class="m hit">✓</td></tr>
         <tr><td class="m">2</td><td>现档 19,195（+300，逐 profile 156/144/0）</td><td class="m">AUTO</td><td><b>19,195</b>（精确）</td><td class="m hit">✓</td></tr>
-        <tr><td class="m">3</td><td>errors.log <b>必已轮转</b>；占用 ∈ [0.3%, 0.9%]</td><td class="m">AUTO</td><td>未轮转，<b>99.95%</b></td><td class="m miss">✗</td></tr>
+        <tr><td class="m">3</td><td>errors.log <b>必已轮转</b>；占用 ∈ [0.3%, 0.9%]</td><td class="m">AUTO</td><td>09:00 未轮转（99.95%）→ <b>09:06:55 轮转</b></td><td class="m na">≈ 迟到 7 分</td></tr>
         <tr><td class="m">4</td><td>轮转后基线重建 N=1</td><td class="m">AUTO</td><td>条件未触发</td><td class="m na">⊘</td></tr>
         <tr><td class="m">5</td><td>常量分量 20 条/日（第 12 日）</td><td class="m">AUTO</td><td>13 + 6 + 1 = 20</td><td class="m hit">✓</td></tr>
         <tr><td class="m">6</td><td>executions 111 / incidents 110</td><td class="m">AUTO·降档</td><td><b>112 / 111</b>（各 +2）</td><td class="m miss">✗</td></tr>
@@ -437,16 +445,18 @@ footer b{color:var(--dim)}
         <tr><td class="m">10</td><td>SKILL.md ∈ [94.4%, 94.7%]</td><td class="m">AUTO</td><td>94.54%（+0 chars）</td><td class="m hit">✓</td></tr>
         <tr><td class="m">11</td><td>[MANUAL] approvals.mode 仍非法</td><td class="m">MANUAL</td><td>仍非法（349 条）</td><td class="m na">✓ 默认</td></tr>
         <tr><td class="m">12</td><td>[MANUAL] web.extract_backend 仍未配置</td><td class="m">MANUAL</td><td>仍失败（2 条）</td><td class="m na">✓ 默认</td></tr>
-        <tr class="sum"><td>—</td><td>AUTO 计分（#4 条件未触发、⊘ 不计）</td><td class="m">—</td><td>5 中 / 9 计</td><td class="m">55.6%</td></tr>
+        <tr class="sum"><td>—</td><td>AUTO 计分（#4 条件未触发、⊘ 不计）</td><td class="m">—</td><td>5 中 / 1 迟到 / 3 失准</td><td class="m">5–6 / 9</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="cal bad">
-    <div class="cal-t">4 项失准的诊断：三项是「自己的规则没执行」</div>
+    <div class="cal-t">4 项未中（3 失准 + 1 迟到）的诊断：三项是「自己的规则没执行」</div>
     <ul>
-      <li><b>#3（轮转）违反规则 D。</b>P164 自己给出 ETA <b>1.18–1.46 日</b>，而它又把「必已轮转」写在第二天开盘 ——
-      1.18 日的下界意味着轮转最早发生在 11-10 09:xx。<b>同一张表内两个断言互相矛盾</b>，与外部无关，纯算术。</li>
+      <li><b>#3（轮转）本身写在错误的时刻口径上。</b>P164 给出的 ETA 是 <b>1.18–1.46 日</b>（⇒ 11-09 13:20 – 20:00），
+      但把「必已轮转」写在 11-09 <b>09:00</b> 的观察点上 —— 按它自己的 ETA 下界，那一刻<b>本就不该</b>轮转。
+      实测轮转于 <b>09:06:55</b>（间隔 <b>0.99 日</b>，低于 ETA 下界）：日历日上命中、观察时刻上迟到 7 分钟、
+      ETA 区间上仍然失准。<b>同一张表内三个口径给出三个答案</b> —— 这正是规则 D（逐项自洽）要防的形态。</li>
       <li><b>#6（计数器）违反规则 DS。</b>DS 是 P164 自己立的：「日增量 = 当日失败作业数，不是恒 1」。
       当日 default 有两个作业失败（08:00 / 08:30），应预测 +2，却写了 +1。<b>规则在同一期被立、被违。</b></li>
       <li><b>#7（default agent.log）违反规则 DN/CD。</b>P163 已记录该文件于 <b>11-07 08:25 轮转</b>，
@@ -530,7 +540,7 @@ footer b{color:var(--dim)}
         <tr><td class="m">P162</td><td class="m">11-06</td><td class="num">18,295</td><td class="num">11,215</td><td class="num">97.96%</td><td class="num">42,786</td><td class="num">53 日</td><td class="m">6/7</td></tr>
         <tr><td class="m">P163</td><td class="m">11-07</td><td class="num">18,595</td><td class="num">11,515</td><td class="num">98.63%</td><td class="num">28,694</td><td class="num">54 日</td><td class="m">7/8</td></tr>
         <tr><td class="m">P164</td><td class="m">11-08</td><td class="num">18,895</td><td class="num">11,815</td><td class="num">99.21%</td><td class="num">16,555</td><td class="num">55 日</td><td class="m">6/9</td></tr>
-        <tr class="sum"><td class="m">P165</td><td class="m">11-09</td><td class="num">19,195</td><td class="num">12,115</td><td class="num bad">99.95%</td><td class="num bad">1,141</td><td class="num">56 日</td><td class="m">5/9</td></tr>
+        <tr class="sum"><td class="m">P165</td><td class="m">11-09</td><td class="num">19,195</td><td class="num">12,115</td><td class="num bad">99.95% → 轮转</td><td class="num bad">0</td><td class="num">56 日</td><td class="m">5–6/9</td></tr>
       </tbody>
     </table>
   </div>
@@ -541,7 +551,7 @@ footer b{color:var(--dim)}
     这不是加速，而是<b>恒定速率走到边界</b> —— 斜率没变，是剩余距离在缩短。
     所以「容量占用率 96% → 98% → 99% → 100%」的加速感是<b>比率的分母在变小</b>造成的错觉，
     与规则 AZ（比率型「新高」须并列分子）同源：分子每天只涨 14 KB，占比却越涨越快。</p>
-    <p style="margin-top:8px">同一张表里，<b>live ERROR 300·日⁻¹ 连续 5 期零方差、现档误差 0</b>，而 AUTO 精度从 7/8 掉到 5/9。
+    <p style="margin-top:8px">同一张表里，<b>live ERROR 300·日⁻¹ 连续 5 期零方差、现档误差 0</b>，而 AUTO 精度从 7/8 掉到 5–6/9。
     <b>系统越静止，我们的预测反而越容易错</b> —— 因为剩下的可预测项全是自家的算术，而算术比外部源更容易被自己写错。</p>
   </div>
 </section>
@@ -564,9 +574,9 @@ footer b{color:var(--dim)}
       <thead><tr><th class="m">#</th><th>P166 预测（2026-11-10）</th><th class="m">类型</th></tr></thead>
       <tbody>
         <tr><td class="m">1</td><td>四常量 45 / 81 / 300·日⁻¹ / 0（第 20 期）</td><td class="m">AUTO</td></tr>
-        <tr><td class="m">2</td><td>reviewer errors.log <b>已轮转</b>（现档 &lt; 60,000 B，行数 &lt; 400）；轮转后首期基线 N=1</td><td class="m">AUTO</td></tr>
-        <tr><td class="m">3</td><td>现档 ERROR <b>≈ 12,115 + 300 = 12,415</b>（轮转清掉 558 条 reviewer ERROR；若未轮转则为 19,495）</td><td class="m">AUTO</td></tr>
-        <tr><td class="m">4</td><td>冻结残骸占比 <b>≥ 55%</b>（7,080 / ~12,700，轮转的分母效应）</td><td class="m">AUTO</td></tr>
+        <tr><td class="m">2</td><td>reviewer errors.log <b>仍处轮转后</b>（现档 &lt; 60,000 B，行数 &lt; 400）；轮转后基线 N=1 已建立</td><td class="m">AUTO</td></tr>
+        <tr><td class="m">3</td><td>现档 ERROR <b>≈ 18,937</b>（轮转后基座 18,637 + 300；逐 profile 156/144/0）</td><td class="m">AUTO</td></tr>
+        <tr><td class="m">4</td><td>冻结残骸占比 <b>37.3%–37.5%</b>（7,080 / 18,937；轮转已把 558 条移出分母）</td><td class="m">AUTO</td></tr>
         <tr><td class="m">5</td><td>executions / incidents 各 <b>+2</b>（114 / 113；按当日两个 default 失败作业重数）</td><td class="m">AUTO</td></tr>
         <tr><td class="m">6</td><td>default agent.log ∈ <b>[1,000,000, 1,020,000] B</b>（基座 677,918 + 334 KB/日）</td><td class="m">AUTO</td></tr>
         <tr><td class="m">7</td><td>reviewer agent.log 仍 <b>未轮转</b>，占用 ∈ <b>[88%, 89%]</b>（ETA 3.2 日，11-12 前后）</td><td class="m">AUTO</td></tr>
@@ -589,7 +599,7 @@ footer b{color:var(--dim)}
 </section>
 
 <footer>
-  <b>🧬 Self-Evolution Daily Brief No.165</b> · 生成于 2026-11-09 09:06 CST ·
+  <b>🧬 Self-Evolution Daily Brief No.165</b> · 生成于 2026-11-09 09:08 CST ·
   数据源：self_scan.py / weakness_scan.py / knowledge_ingest.py + 7 份 errors.log 全枚举 + arXiv 五臂探针 + HN top 10。<br>
   <b>口径声明</b>：所有窗口型指标为<b>轮转前快照 (09:00–09:05)</b>；记录口径 = 逻辑记录（traceback 续行已归父）；
   ERROR 合计逐 profile 分列，冻结档案单列不计入活跃速率（规则 BE / BF）。<br>
