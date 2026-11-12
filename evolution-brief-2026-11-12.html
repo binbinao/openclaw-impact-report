@@ -116,6 +116,11 @@
 </div>
 <p class="dim">方法论要点（规则 EF）：日级 ETA 只能断言「今天」，无法断言「几点」。最后一公里必须换成小时级余量 ÷ 小时级速率，并把观察者速率与环境速率分列 —— 否则「今天轮转」这句话在 09:03 读到 99.58% 时既不能被证实也不能被证伪。</p>
 
+<div class="callout okbox">
+<b>✅ 实测确认（09:13:02 复核）：轮转已于 <b>09:12:50</b> 发生。</b>旧档 <code>agent.log.1</code> = <b>5,242,810 B · 27,741 条记录 · 2026-10-28 00:11:26 → 2026-11-12 09:12:50</b>（<b>15.37 日</b>，均速 341 KB/日）；新 <code>agent.log</code> 首条时间戳 <code>2026-11-12 09:12:50</code>。
+<div class="dim" style="margin-top:6px">双速率预测的落点：含观察者 8.4 min → 预测 09:14（实测 09:12:50，<b>误差 −1.2 min</b>）；扣除观察者 1.6 h → 预测 10:36（未兑现，因本会话持续写入）。<b>结论：轮转时刻由观察者速率决定，环境速率只决定「最晚何时」。</b>这是规则 EF 四元组中「观察者速率」一列的直接兑现，也再次印证规则 N/AD：报告者在报告「能否等到轮转」时，自己就是那个让它发生的人。</div>
+</div>
+
 <h3>2.2 头条二：arXiv 的「参数顺序」结论<b>未跨日复现</b> —— 规则 EC 降级</h3>
 <p>P167 用脚本自身构造器取值后交替实测，得 A 序（脚本原样：<code>sortBy&amp;sortOrder</code> 在 <code>start&amp;max_results</code> 之前）<b>0/4</b>，B 序（仅换顺序）<b>5/5 200@0.40 s</b>，据此把 17 期失败归因为 URL 参数顺序。本期同法复测（同 UA、同分类、同一分钟、间隔 4 s 交替）：</p>
 <table>
@@ -269,9 +274,9 @@
 <table>
   <tr class="th"><td>#</td><td>断言</td><td>类型</td><td>置信</td></tr>
   
-        <tr><td class="num">#1</td><td>reviewer <code>agent.log</code> 于今日 09:14±10min 轮转（99.58% · 余 21,902 B · 含观察者 43.6 B/s）</td>
-        <td><span class="badge auto">AUTO</span></td><td class="num">高</td></tr>
-        <tr><td class="num">#2</td><td>P169 读到 <code>agent.log.first_ts</code> ≥ 2026-11-12 09:0x，且文件从 0 长到 ≈0.8–2.5 MB</td>
+        <tr><td class="num">#1</td><td>reviewer <code>agent.log</code> 于今日 09:14±10min 轮转（99.58% · 余 21,902 B · 含观察者 43.6 B/s）—— <b>已实测命中：09:12:50</b></td>
+        <td><span class="badge auto">AUTO</span></td><td class="num">✓ 命中</td></tr>
+        <tr><td class="num">#2</td><td>P169 读到 <code>agent.log</code> 首条时间戳 = 2026-11-12 09:12:50，且文件从 0 长到 ≈0.8–2.5 MB</td>
         <td><span class="badge auto">AUTO</span></td><td class="num">高</td></tr>
         <tr><td class="num">#3</td><td>现档 ERROR = <b>19,837</b>（19,537 + 156 + 144，确定性计数器给点值不给区间）</td>
         <td><span class="badge auto">AUTO</span></td><td class="num">高</td></tr>
