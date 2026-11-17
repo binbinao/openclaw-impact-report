@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年11月17日</title>
+<meta name="description" content="2026年11月17日 Hacker News Top 30 中文简报：亚马逊诱饵折扣、摩根大通网银宕机与 Optimizely 供应链投毒、CMU 免费公开课、Jiff 1.0。">
+<meta name="theme-color" content="#0d1117">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-soft: #010409;
+    --card: #161b22;
+    --card-hover: #1c2430;
+    --border: #30363d;
+    --border-soft: #21262d;
+    --text: #e6edf3;
+    --text-dim: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: rgba(88, 166, 255, 0.12);
+    --orange: #ffa657;
+    --orange-dim: rgba(255, 166, 87, 0.12);
+    --green: #3fb950;
+    --green-dim: rgba(63, 185, 80, 0.12);
+    --purple: #bc8cff;
+    --purple-dim: rgba(188, 140, 255, 0.12);
+    --red: #f85149;
+    --red-dim: rgba(248, 81, 73, 0.12);
+    --pink: #ff7b72;
+    --cyan: #56d4dd;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+            "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", Roboto, Helvetica, Arial, sans-serif;
+    --radius: 12px;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    padding: 0 20px 60px;
+    background: var(--bg);
+    background-image:
+      radial-gradient(900px 480px at 12% -8%, rgba(88, 166, 255, 0.10), transparent 70%),
+      radial-gradient(760px 420px at 92% 4%, rgba(188, 140, 255, 0.09), transparent 72%);
+    background-repeat: no-repeat;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+  header.site {
+    padding: 52px 0 30px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 34px;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(88, 166, 255, 0.28);
+    border-radius: 999px;
+    padding: 5px 13px;
+    margin-bottom: 18px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+  h1 {
+    margin: 0 0 12px;
+    font-size: clamp(1.6rem, 4.6vw, 2.55rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  h1 .accent {
+    background: linear-gradient(92deg, #58a6ff, #bc8cff 55%, #56d4dd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle { margin: 0; color: var(--muted); font-size: 0.95rem; max-width: 62ch; }
+  .header-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 20px;
+    margin-top: 18px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .header-meta span { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ---------- Section headings ---------- */
+  section { margin-bottom: 46px; }
+  .sec-head {
+    display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px;
+    margin: 0 0 6px;
+  }
+  .sec-head h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+  }
+  .sec-head .count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
+  .sec-note { margin: 0 0 20px; color: var(--muted); font-size: 0.88rem; }
+  .rule { height: 1px; background: linear-gradient(90deg, var(--border), transparent); margin: 0 0 18px; }
+
+  /* ---------- Stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-bottom: 46px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 18px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat::before {
+    content: "";
+    position: absolute; inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+  .stat.s-orange::before { background: var(--orange); }
+  .stat.s-purple::before { background: var(--purple); }
+  .stat.s-green::before { background: var(--green); }
+  .stat.s-cyan::before { background: var(--cyan); }
+  .stat .label {
+    font-size: 12px; letter-spacing: 0.04em;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .stat .value {
+    font-family: var(--mono);
+    font-size: 1.72rem;
+    font-weight: 600;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .unit { font-size: 0.8rem; color: var(--muted); margin-left: 5px; font-weight: 400; }
+  .stat .hint { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+
+  /* ---------- Cards ---------- */
+  .cards { display: grid; gap: 14px; }
+  .cards.two { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  }
+  .card:hover {
+    background: var(--card-hover);
+    border-color: #3d4551;
+  }
+  .card .title {
+    margin: 0 0 8px;
+    font-size: 1.03rem;
+    font-weight: 650;
+    line-height: 1.45;
+  }
+  .card .title a { color: var(--text); }
+  .card .title a:hover { color: var(--accent); text-decoration: none; }
+  .card .orig {
+    display: block;
+    font-size: 12.5px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-top: 3px;
+    font-weight: 400;
+  }
+  .card p.summary {
+    margin: 0 0 12px;
+    color: var(--text-dim);
+    font-size: 0.925rem;
+    line-height: 1.62;
+  }
+  .meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .pill.score { color: var(--orange); background: var(--orange-dim); border-color: rgba(255,166,87,0.25); }
+  .pill.comments { color: var(--accent); background: var(--accent-dim); border-color: rgba(88,166,255,0.25); }
+  .pill.domain { color: var(--muted); background: rgba(139,148,158,0.08); border-color: var(--border); }
+  .pill.tag-ai { color: var(--purple); background: var(--purple-dim); border-color: rgba(188,140,255,0.25); }
+  .pill.tag-code { color: var(--accent); background: var(--accent-dim); border-color: rgba(88,166,255,0.25); }
+  .pill.tag-sec { color: var(--red); background: var(--red-dim); border-color: rgba(248,81,73,0.25); }
+  .pill.tag-other { color: var(--green); background: var(--green-dim); border-color: rgba(63,185,80,0.25); }
+  .pill.hot { color: var(--pink); background: rgba(255,123,114,0.12); border-color: rgba(255,123,114,0.3); }
+
+  /* ---------- Top 5 ---------- */
+  .top5 { display: grid; gap: 16px; }
+  .top-card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px 20px 76px;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .top-card:hover { background: var(--card-hover); border-color: #454d59; }
+  .top-card .rank {
+    position: absolute;
+    left: 20px; top: 18px;
+    width: 40px;
+    font-family: var(--mono);
+    font-size: 1.72rem;
+    font-weight: 700;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.2px var(--accent);
+    opacity: 0.9;
+  }
+  .top-card:nth-child(1) .rank { -webkit-text-stroke-color: #ffd66b; }
+  .top-card:nth-child(2) .rank { -webkit-text-stroke-color: #d7dde5; }
+  .top-card:nth-child(3) .rank { -webkit-text-stroke-color: #e0955c; }
+  .top-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.13rem;
+    line-height: 1.42;
+    font-weight: 650;
+  }
+  .top-card h3 a { color: var(--text); }
+  .top-card h3 a:hover { color: var(--accent); text-decoration: none; }
+  .top-card .summary {
+    margin: 0 0 14px;
+    color: var(--text-dim);
+    font-size: 0.945rem;
+  }
+  .top-card .flag {
+    display: inline-block;
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    color: var(--pink);
+    border: 1px solid rgba(255,123,114,0.32);
+    background: rgba(255,123,114,0.10);
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin-bottom: 10px;
+  }
+
+  /* ---------- Discussion ---------- */
+  .discuss {
+    background: linear-gradient(180deg, rgba(88,166,255,0.07), rgba(22,27,34,0) 60%), var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .discuss h3 { margin: 0 0 4px; font-size: 1.15rem; }
+  .discuss .kicker { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .discuss ul { margin: 0; padding-left: 20px; color: var(--text-dim); font-size: 0.93rem; }
+  .discuss li { margin-bottom: 10px; }
+  .discuss li b { color: var(--text); }
+  .quote {
+    border-left: 3px solid var(--accent);
+    background: rgba(88,166,255,0.05);
+    padding: 10px 16px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+  }
+  .quote cite { display: block; margin-top: 6px; font-style: normal; color: var(--muted); font-family: var(--mono); font-size: 11.5px; }
+
+  /* ---------- Footer ---------- */
+  footer.site {
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-soft);
+    color: var(--muted);
+    font-size: 12.8px;
+  }
+  footer.site .row { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 6px; font-family: var(--mono); font-size: 12px; }
+  footer.site a { color: var(--text-dim); }
+
+  @media (max-width: 620px) {
+    body { padding: 0 14px 44px; font-size: 15.5px; }
+    header.site { padding-top: 36px; }
+    .top-card { padding: 20px 18px; }
+    .top-card .rank {
+      position: static;
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.35rem;
+    }
+    .stat .value { font-size: 1.5rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site">
+    <div class="eyebrow"><span class="dot"></span>Hacker News · Top 30 · Daily Digest</div>
+    <h1>Hacker News 每日简报 — <span class="accent">2026年11月17日</span></h1>
+    <p class="subtitle">今天榜单的主线只有一句：<b>信任层正在一起失效。</b>亚马逊把「折扣」做成诱饵（近 1/3 的黑五「Deal」等于没打折），摩根大通的网银与刷卡通路中断拖出全美多家银行，而评论区的归因指向同一个源头——第三方 JavaScript 供应商 Optimizely 被投毒，Zoom、BBC、CNN、Salesforce、GitLab 等 178 家站点在同一天对外分发恶意脚本。支付、定价、身份、邮件，四处同时漏风。</p>
+    <div class="header-meta">
+      <span>🕗 数据抓取 2026-11-17 08:01 CST</span>
+      <span>📡 来源 Firebase API v0</span>
+      <span>🔢 30 篇 / 24 篇达标</span>
+    </div>
+  </header>
+
+  <section aria-label="今日概况">
+    <div class="sec-head"><h2>📊 今日概况</h2></div>
+    <p class="sec-note">统计口径：HN <code>topstories</code> 前 30 条，抓取瞬时快照；得分与评论数仍在增长，与稍后读数会有差异。</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="label">收录文章</div>
+        <div class="value">30<span class="unit">篇</span></div>
+        <div class="hint">全部有效条目，均为 story</div>
+      </div>
+      <div class="stat s-orange">
+        <div class="label">最高得分</div>
+        <div class="value">806</div>
+        <div class="hint">亚马逊「诱饵折扣」调查</div>
+      </div>
+      <div class="stat s-purple">
+        <div class="label">最热评论</div>
+        <div class="value">550</div>
+        <div class="hint">摩根大通网银故障，评论/得分 0.80</div>
+      </div>
+      <div class="stat s-green">
+        <div class="label">达标文章</div>
+        <div class="value">24<span class="unit">/30</span></div>
+        <div class="hint">得分 ≥ 50 或评论 ≥ 30</div>
+      </div>
+      <div class="stat s-cyan">
+        <div class="label">分数中位数</div>
+        <div class="value">92</div>
+        <div class="hint">整体 30 条合计 4,843 分、2,635 评论</div>
+      </div>
+    </div>
+  </section>
+  <section aria-label="必读 Top 5">
+    <div class="sec-head"><h2>🔥 必读 Top 5</h2><span class="count">按得分排序</span></div>
+    <p class="sec-note">五篇分别对应今天的四条主线：消费信任（定价）、金融基础设施、免费 CS 教育、硬件维修知识、以及一个正式 1.0 的 Rust 基础设施库。</p>
+    <div class="rule"></div>
+    <div class="top5">
+
+      <article class="top-card">
+        <div class="rank">01</div>
+        <span class="flag">今日最高分 · 消费信任</span>
+        <h3><a href="http://groundworkcollaborative.org/news/amazons-decoy-deals-groundwork-investigation-reveals-nearly-1-in-3-black-friday-and-cyber-" target="_blank" rel="noopener">Many of Amazon&#8217;s Black Friday and Cyber Monday &#8220;deals&#8221; offered no savings<span class="orig">groundworkcollaborative.org</span></a></h3>
+        <p class="summary">Groundwork Collaborative 的调查报告《Deal or Decoy?》抽查了亚马逊在 2026 年黑五/网一期间主推为「年度最佳」的数百个折扣：近 1/3 的商品价格与平时毫无差别，近 1/10 的实际售价比平时更贵。评论区没有停在吐槽亚马逊，而是把「sale」这个词整体判了死刑——当几乎所有商品常年挂折扣标签，折扣就不再携带任何信息。</p>
+        <div class="meta">
+          <span class="pill score">▲ 806 分</span>
+          <span class="pill comments">💬 488 评论</span>
+          <span class="pill domain">groundworkcollaborative.org</span>
+          <span class="pill tag-other">消费 / 定价</span>
+        </div>
+      </article>
+
+      <article class="top-card">
+        <div class="rank">02</div>
+        <span class="flag">今日最热讨论 · 550 条评论</span>
+        <h3><a href="https://apnews.com/article/bank-outage-chase-wells-fargo-truist-50fee2693c22f597fa6ca51a97ef2cda" target="_blank" rel="noopener">Technical issue at JPMorgan Chase triggers online banking delays for US banks<span class="orig">apnews.com</span></a></h3>
+        <p class="summary">美联社报道摩根大通出现技术故障，导致 Chase 及 Wells Fargo、Truist 等多家美国银行的网银延迟、线下网点与借记卡交易受影响。HN 的 550 条评论迅速把事件与同日 Optimizely 供应链投毒并联——多位用户称在 Wells Fargo 首页看到相关标记，讨论从「哪家云挂了」转向「我们到底有多依赖第三方脚本」。</p>
+        <div class="meta">
+          <span class="pill score">▲ 689 分</span>
+          <span class="pill comments">💬 550 评论</span>
+          <span class="pill domain">apnews.com</span>
+          <span class="pill tag-sec">基础设施 / 安全</span>
+        </div>
+      </article>
+
+      <article class="top-card">
+        <div class="rank">03</div>
+        <span class="flag">教育 · 免费的顶级 CS 课</span>
+        <h3><a href="https://www.cs.cmu.edu/learn/" target="_blank" rel="noopener">Carnegie Mellon is putting computer science courses on YouTube for free<span class="orig">cs.cmu.edu</span></a></h3>
+        <p class="summary">CMU 上线 CS Learn，把七个系的常设课程成建制公开到 YouTube：首发包括 10-605《大规模机器学习》(William Cohen)、15-110《计算原理》、17-214《软件构造》，11 月起陆续首播 11-768《AI Agents》(Graham Neubig)、17-645《生产环境机器学习》(Christian Kästner)、17-643《质量管理》等，2027 年 1 月还有 15-259 概率与计算、11-777 多模态机器学习。</p>
+        <div class="meta">
+          <span class="pill score">▲ 452 分</span>
+          <span class="pill comments">💬 82 评论</span>
+          <span class="pill domain">cs.cmu.edu</span>
+          <span class="pill tag-ai">教育 / AI 课程</span>
+        </div>
+      </article>
+
+      <article class="top-card">
+        <div class="rank">04</div>
+        <span class="flag">硬件 · 2007 年的老帖被翻出</span>
+        <h3><a href="https://masnick.com/posts/the-secret-thinkpad-powerbutton-code-to-bring-dead-laptops-back-to-life/" target="_blank" rel="noopener">The Secret ThinkPad Powerbutton Code to Bring Dead Laptops Back to Life (2007)<span class="orig">masnick.com</span></a></h3>
+        <p class="summary">Mike Masnick 回忆自己的 ThinkPad z61t 在演讲前一小时彻底「死掉」：休眠灯不亮、插电不充电、机身却发烫——最后靠一套电源键的隐藏按法把机器救回来。这条 2007 年的旧文今天重新上榜，评论区转向一个更实用的现代问题：在电池不可拆、EC 被固件吞掉的今天，还有多少等效的硬件级复位手段可用。</p>
+        <div class="meta">
+          <span class="pill score">▲ 288 分</span>
+          <span class="pill comments">💬 114 评论</span>
+          <span class="pill domain">masnick.com</span>
+          <span class="pill tag-other">硬件 / 怀旧</span>
+        </div>
+      </article>
+
+      <article class="top-card">
+        <div class="rank">05</div>
+        <span class="flag">编程 · 生态级基础设施</span>
+        <h3><a href="https://burntsushi.net/jiff/" target="_blank" rel="noopener">Jiff 1.0: A datetime library for Rust<span class="orig">burntsushi.net</span></a></h3>
+        <p class="summary">Andrew Gallant（BurntSushi）宣布 Jiff 1.0。它的设计取向是「跳进成功之坑」：把时区与夏令时处理前置到 API 表面，而不是留给调用者记得处理。文章同时给出商业化之外的采用证据——uv、Cargo、Starship、fd、Nushell、mise、Jujutsu、uutils/coreutils 已在生产使用，AWS LLRT 的 Temporal 实现也以它为基座，作者承诺 1.0 语义长期稳定。</p>
+        <div class="meta">
+          <span class="pill score">▲ 284 分</span>
+          <span class="pill comments">💬 67 评论</span>
+          <span class="pill domain">burntsushi.net</span>
+          <span class="pill tag-code">编程 / Rust</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+  <section aria-label="AI 相关动态">
+    <div class="sec-head"><h2>🤖 AI 相关动态</h2><span class="count">3 篇</span></div>
+    <p class="sec-note">今天 Top 30 里纯 AI 条目明显偏少——榜单被基础设施故障与安全事件挤占（另见 Top 5 第 3 名的 CMU 免费 AI 课程）。这本身是个信号：当 AI 进入「运维期」，社区注意力就从能力展示转向它带来的故障面与责任面。</p>
+    <div class="cards">
+
+      <article class="card">
+        <h3 class="title"><a href="https://openai.com/index/strengthening-online-child-safety/" target="_blank" rel="noopener">Strengthening the fight against online child sexual abuse<span class="orig">openai.com</span></a></h3>
+        <p class="summary">OpenAI 官方博客谈如何加强对网络儿童性虐待内容的打击，涉及检测、拦截、举报与外部机构协作。199 条评论是今天第二热，争论集中在两端：平台侧的主动检测与用户隐私 / 端到端加密之间的冲突，以及误报与举报通道被滥用的代价该由谁承担。</p>
+        <div class="meta">
+          <span class="pill score">▲ 98 分</span>
+          <span class="pill comments">💬 199 评论</span>
+          <span class="pill domain">openai.com</span>
+          <span class="pill tag-ai">AI 治理</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.harmonic.fun/news/aristotle-rust-verification/" target="_blank" rel="noopener">Aristotle Expands into Rust<span class="orig">harmonic.fun</span></a></h3>
+        <p class="summary">Harmonic 的自动定理证明系统 Aristotle 从 Verilog、C 扩展到 Rust，对 Rust 代码生成可机器检验的证明，官网已挂出 Manifest 订单簿（28 条结论）与 Project 0 两个 Rust 案例。讨论真正卡住的地方不是「AI 会不会写证明」，而是「证明过了、规格写错了」这一老问题在 AI 时代的成本结构是否真的被改善了。</p>
+        <div class="meta">
+          <span class="pill score">▲ 95 分</span>
+          <span class="pill comments">💬 47 评论</span>
+          <span class="pill domain">harmonic.fun</span>
+          <span class="pill tag-ai">AI × 形式化验证</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://xusheng.dev/posts/windows-coding-agent-telemetry/" target="_blank" rel="noopener">Windows 11 Is Collecting Data on Which Coding Agents and Developer Tools You Use<span class="orig">xusheng.dev</span></a></h3>
+        <p class="summary">一篇逆向分析指出，Windows 11 的遥测会记录用户运行了哪些编码 agent 与开发工具——在开发者机器上，这等于把「你在用哪家 agent」变成了可上报字段。它同时踩中企业合规（软件清单属于资产信息）与竞争情报两条敏感线，也是本周「平台在观测你」叙事的又一块拼图。</p>
+        <div class="meta">
+          <span class="pill score">▲ 50 分</span>
+          <span class="pill comments">💬 16 评论</span>
+          <span class="pill domain">xusheng.dev</span>
+          <span class="pill tag-sec">AI 工具链 / 隐私</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section aria-label="编程与开源">
+    <div class="sec-head"><h2>💻 编程 &amp; 开源</h2><span class="count">5 篇</span></div>
+    <p class="sec-note">今日语言圈的三条暗线：Rust 继续向「默认选择」推进（Top 5 的 Jiff 已是生态级基础设施）、Clojure 绕开 JVM 用 Scheme 层重做运行时、图形栈在 WebGPU 上重建自己的 AAA 光照管线。</p>
+    <div class="cards">
+
+      <article class="card">
+        <h3 class="title"><a href="https://blog.startifact.com/posts/how-rust-changed-me/" target="_blank" rel="noopener">How Rust changed me as a developer<span class="orig">blog.startifact.com</span></a></h3>
+        <p class="summary">Martijn Faassen 写了六年 Rust（其中四年职业），复盘语言如何改造思维方式：所有权与借用检查把「运行时才发现」的一整类错误前移到编译期，人也就从「先写再调试」转向「先建模再写」。91 条评论照例滑向语言之争，但高赞多在算迁移成本与团队认知负担的账。</p>
+        <div class="meta">
+          <span class="pill score">▲ 158 分</span>
+          <span class="pill comments">💬 91 评论</span>
+          <span class="pill domain">blog.startifact.com</span>
+          <span class="pill tag-code">Rust</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://linebender.org/wiki/curves/squircle/" target="_blank" rel="noopener">Squircles<span class="orig">linebender.org</span></a></h3>
+        <p class="summary">Linebender（Vello / Parley / Xilem 背后的组织）整理了一页 squircle 百科：超椭圆只是其中一个解，真正的问题是「圆到方之间的曲线怎么参数化、怎么在 GPU 上稳定光栅化」。iOS 图标那种「看着像圆角矩形、其实不是」的观感差异，就藏在这些参数取舍里。</p>
+        <div class="meta">
+          <span class="pill score">▲ 109 分</span>
+          <span class="pill comments">💬 34 评论</span>
+          <span class="pill domain">linebender.org</span>
+          <span class="pill tag-code">图形 / 几何</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://jolt-lang.net/" target="_blank" rel="noopener">Jolt – Clojure that speaks C<span class="orig">jolt-lang.net</span></a></h3>
+        <p class="summary">Jolt 是自举的 Clojure 实现，跑在一层可移植 Scheme 之上（Chez 原生、Gambit 编译到 JS），完全不碰 JVM：多数 Clojure 代码可原样运行，<code>defcfn</code> 把 C 函数变成普通 Clojure 函数，<code>jolt build</code> 直接产出静态链接的单一二进制。对「要 Clojure 语义、但不想把 JVM 带进容器」的场景，这是一条新路。</p>
+        <div class="meta">
+          <span class="pill score">▲ 90 分</span>
+          <span class="pill comments">💬 27 评论</span>
+          <span class="pill domain">jolt-lang.net</span>
+          <span class="pill tag-code">Clojure / Scheme</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://ben3d.ca/blog/building-the-aaa-lighting-pipeline-in-threejs" target="_blank" rel="noopener">My Quest to push native Three.js quality match AAA Game Engines<span class="orig">ben3d.ca</span></a></h3>
+        <p class="summary">Ben Houston 把「3A 引擎级光照」拆成可验收的阶段——G-buffer、lightmap、光照探针、屏幕空间反射、时序上采样——逐段对照 Three.js 现状，标出哪些已有、哪些 PR 在审、哪些还得自己写。价值在于它是一份工程 checklist，而不是又一篇渲染炫技帖。</p>
+        <div class="meta">
+          <span class="pill score">▲ 77 分</span>
+          <span class="pill comments">💬 25 评论</span>
+          <span class="pill domain">ben3d.ca</span>
+          <span class="pill tag-code">WebGPU / 图形</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://opencode.ai/product/browse" target="_blank" rel="noopener">OpenCode Browse<span class="orig">opencode.ai</span></a></h3>
+        <p class="summary">OpenCode 推出 Browse：一个 MCP server 加一个 Chromium 扩展，让编码 agent 使用「真正的浏览器」而不是无头抓取。方向很明确——当 agent 的工作从改本地文件扩展到有登录态、需要交互的 Web 应用，无头浏览器那套伪装开始不够用了。</p>
+        <div class="meta">
+          <span class="pill score">▲ 69 分</span>
+          <span class="pill comments">💬 35 评论</span>
+          <span class="pill domain">opencode.ai</span>
+          <span class="pill tag-ai">AI 工具链</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+  <section aria-label="安全与政策">
+    <div class="sec-head"><h2>🔒 安全 &amp; 政策</h2><span class="count">6 篇</span></div>
+    <p class="sec-note">今天真正的技术头条在这块：一起针对 Web 实验平台的供应链投毒，把「可信第三方脚本」这个概念本身打穿了；其余是版权、邮件反滥用、协议层拦截与一条未达阈值但议题重要的军控新闻。</p>
+    <div class="cards">
+
+      <article class="card">
+        <h3 class="title"><a href="https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/" target="_blank" rel="noopener">World&#8217;s Largest Brands Infected With Malware Via Optimizely<span class="orig">blog.report-uri.com</span></a></h3>
+        <p class="summary">2026 年 11 月 16 日，攻击者通过 Optimizely Web 实验平台向 178 家机构的访客投递恶意 JavaScript，名单包括 Zoom、BBC、CNN、Salesforce、GitLab、IKEA、HSBC、Equifax、法航-荷航、Ledger、Peacock。载荷是多用途套件：替换加密钱包地址、侧录支付卡、窃取 Cookie 与截图，在 iPhone/iPad 上还投递 Coruna 与 DarkSword 两个 iOS 漏洞利用套件，链上已确认有资金被转走。</p>
+        <div class="meta">
+          <span class="pill score">▲ 99 分</span>
+          <span class="pill comments">💬 16 评论</span>
+          <span class="pill domain">blog.report-uri.com</span>
+          <span class="pill tag-sec">供应链攻击</span>
+          <span class="pill hot">今日关键事件</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.spamhaus.org/sender-guidelines/" target="_blank" rel="noopener">Spamhaus new email sender requirements in November<span class="orig">spamhaus.org</span></a></h3>
+        <p class="summary">Spamhaus 更新发件人要求并自 11 月起生效，方向与 Gmail / Yahoo 去年那轮「批量发件人」规则一致：更强的身份验证、更明确的退订与投诉率红线。对自建邮件服务的团队来说这是又一次「合规静默升级」——不改也能发，但进垃圾箱的概率会替你改。</p>
+        <div class="meta">
+          <span class="pill score">▲ 56 分</span>
+          <span class="pill comments">💬 46 评论</span>
+          <span class="pill domain">spamhaus.org</span>
+          <span class="pill tag-sec">邮件 / 反滥用</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://krebsonsecurity.com/2012/06/how-to-break-into-security-ptacek-edition/" target="_blank" rel="noopener">How to Break into Security, Ptacek Edition (2012)<span class="orig">krebsonsecurity.com</span></a></h3>
+        <p class="summary">Krebs 重提 2012 年对 Thomas Ptacek 的访谈：不要从考证书开始，去读代码、去复现漏洞、去写工具，把「能做出东西」当作入场券。这类「老建议」反复回榜，说明安全行业的入门路径十几年来没有实质变化，也说明招聘侧依旧缺少可验证的能力信号。</p>
+        <div class="meta">
+          <span class="pill score">▲ 57 分</span>
+          <span class="pill comments">💬 14 评论</span>
+          <span class="pill domain">krebsonsecurity.com</span>
+          <span class="pill tag-sec">职业 / 安全</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://interceptsuite.com/blog/intercept-http3-traffic-quic-qpack-explained/" target="_blank" rel="noopener">How to Intercept HTTP/3 Traffic: QUIC and Qpack<span class="orig">interceptsuite.com</span></a></h3>
+        <p class="summary">一篇实操向的技术说明：HTTP/3 跑在 QUIC（UDP + TLS 1.3）之上，传统中间人代理那套「解密 TCP 流」的做法失效，抓包得先处理 QUIC 的连接迁移与 QPACK 头压缩状态。对做安全测试、企业审计的人来说，这是必须补上的一课。</p>
+        <div class="meta">
+          <span class="pill score">▲ 52 分</span>
+          <span class="pill comments">💬 3 评论</span>
+          <span class="pill domain">interceptsuite.com</span>
+          <span class="pill tag-sec">协议 / 抓包</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://copyrightlately.com/michael-mann-heat-copyright-termination/" target="_blank" rel="noopener">Michael Mann&#8217;s &#8216;Heat&#8217; Copyright Fight Turns on a Deal with Himself<span class="orig">copyrightlately.com</span></a></h3>
+        <p class="summary">《盗火线》(Heat) 的版权终止之争，焦点落在一份「导演与自己签约」的旧合同上：这份合同是否影响 Mann 依版权法收回作品的权利。案子小，但它触及好莱坞反复出现的结构性难题——创作者早年签下的授权，能否被「终止权」翻盘。</p>
+        <div class="meta">
+          <span class="pill score">▲ 82 分</span>
+          <span class="pill comments">💬 35 评论</span>
+          <span class="pill domain">copyrightlately.com</span>
+          <span class="pill tag-other">版权 / 法律</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.newsweek.com/us-expected-to-block-killer-robot-treaty-talks-12722369" target="_blank" rel="noopener">US will say &#8220;no&#8221; to global ban on killer robots<span class="orig">newsweek.com</span></a></h3>
+        <p class="summary">报道称美国将在相关谈判中拒绝全球禁止致命性自主武器（LAWS）的提案，倾向于以「行为准则」而非条约禁令来约束。40 分 / 28 评论，未达本文的收录阈值，但它是今天唯一一条军控议题，且直接决定未来十年自动化武器的合法性边界，故单列。</p>
+        <div class="meta">
+          <span class="pill score">▲ 40 分</span>
+          <span class="pill comments">💬 28 评论</span>
+          <span class="pill domain">newsweek.com</span>
+          <span class="pill tag-other">科技政策 · 未达阈值</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section aria-label="其他值得关注">
+    <div class="sec-head"><h2>🎯 其他值得关注</h2><span class="count">6 篇</span></div>
+    <p class="sec-note">硬件、农业、互联网旧物与故障通报。今天「其他」这一栏的共同点是：都在讲某个我们习以为常的默认设施，其实一直在悄悄变化。</p>
+    <div class="cards">
+
+      <article class="card">
+        <h3 class="title"><a href="https://trmnl.com/blog/introducing-frame" target="_blank" rel="noopener">Frame – 31.5&#8243; color ePaper display<span class="orig">trmnl.com</span></a></h3>
+        <p class="summary">TRMNL 发布第三代产品 Frame：31.5 英寸全彩电子纸，装在手工木框里，定位是挂在墙上的「无干扰信息画框」。首批仅约 470 台，2026 年底开始少量发货、多数订单 2027 年初交付。186 条评论的实际议题是电子纸彩色的色域与刷新代价，以及「静态显示」这件事究竟有多少人愿意为它买单。</p>
+        <div class="meta">
+          <span class="pill score">▲ 270 分</span>
+          <span class="pill comments">💬 186 评论</span>
+          <span class="pill domain">trmnl.com</span>
+          <span class="pill tag-other">硬件 / 电子纸</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.bugmenot.com/" target="_blank" rel="noopener">BugMeNot has closed<span class="orig">bugmenot.com</span></a></h3>
+        <p class="summary">靠「共享账号绕过强制注册」活了二十年的 BugMeNot 正式关闭，首页只留一句「感谢所有想象过更好互联网的人」，以及一整面随机四位码——像给旧互联网立的一块碑。112 条评论的共识颇为悲观：登录墙与付费墙已经把开放 Web 切成碎片，而当年那套「用共享账号抵抗强制注册」的解法，今天既失效也不道德。</p>
+        <div class="meta">
+          <span class="pill score">▲ 230 分</span>
+          <span class="pill comments">💬 112 评论</span>
+          <span class="pill domain">bugmenot.com</span>
+          <span class="pill tag-other">互联网文化</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://news.cornell.edu/stories/2026/10/sheep-grazing-solar-fields-offers-farmers-economic-ecological-gains" target="_blank" rel="noopener">Grazing sheep in fields with solar arrays<span class="orig">news.cornell.edu</span></a></h3>
+        <p class="summary">康奈尔的研究给出「光伏 + 放牧」(agrivoltaics) 的量化结论：让羊在光伏阵列下吃草，既省掉割草与除草剂成本，又改善土壤与羊的福利，对农户是经济与生态的双重收益。192 条评论很务实——有人算单位面积收益，有人担心羊啃线缆与遮挡清洁，讨论质量高于平均。</p>
+        <div class="meta">
+          <span class="pill score">▲ 196 分</span>
+          <span class="pill comments">💬 192 评论</span>
+          <span class="pill domain">news.cornell.edu</span>
+          <span class="pill tag-other">能源 / 农业</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.theregister.com/saas/2026/11/16/microsoft-blames-monster-email-outage-on-software-defect-introduced-in-july-fix/531002" target="_blank" rel="noopener">Microsoft blames monster email outage on software defect introduced in July fix<span class="orig">theregister.com</span></a></h3>
+        <p class="summary">微软把一次大规模邮件中断归因于 7 月某个修复引入的软件缺陷——一次「修 bug 的补丁」在四个月后引爆了更大的故障。131 条评论的重心不在这次事故本身，而在它暴露的模式：超大规模 SaaS 的变更管理与回滚能力，依然是单点风险的放大器。</p>
+        <div class="meta">
+          <span class="pill score">▲ 193 分</span>
+          <span class="pill comments">💬 131 评论</span>
+          <span class="pill domain">theregister.com</span>
+          <span class="pill tag-sec">基础设施 / 可靠性</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://www.cnn.com/2026/11/16/us/united-airlines-outage" target="_blank" rel="noopener">United Airlines experiencing a widespread system outage, airline says<span class="orig">cnn.com</span></a></h3>
+        <p class="summary">美联航确认遭遇大范围系统故障，值机、航班运行等环节受影响。它和今天的银行、邮件、航班三起事故放在一起看才有意义：三个互不相关的行业，在同一周内各自撞上基础设施级故障，这正是 HN 评论区那种「系统性不安」的现实底座。</p>
+        <div class="meta">
+          <span class="pill score">▲ 133 分</span>
+          <span class="pill comments">💬 56 评论</span>
+          <span class="pill domain">cnn.com</span>
+          <span class="pill tag-other">基础设施 / 航空</span>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3 class="title"><a href="https://chillphysicsenjoyer.substack.com/p/chemistry-is-actually-geometry" target="_blank" rel="noopener">Chemistry is Actually Geometry<span class="orig">chillphysicsenjoyer.substack.com</span></a></h3>
+        <p class="summary">一篇科普随笔，主张化学的很多「规律」本质上是几何约束的投影：键角、轨道排布、空间位阻决定了反应为什么这样走。它的价值不在严格性，而在换视角——把需要背的经验规则还原成可以画出来、可以推理的形状。</p>
+        <div class="meta">
+          <span class="pill score">▲ 64 分</span>
+          <span class="pill comments">💬 14 评论</span>
+          <span class="pill domain">chillphysicsenjoyer.substack.com</span>
+          <span class="pill tag-other">科学</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+  <section aria-label="今日最热讨论">
+    <div class="sec-head"><h2>💬 今日最热讨论</h2><span class="count">550 条评论</span></div>
+    <div class="discuss">
+      <h3><a href="https://news.ycombinator.com/item?id=50521045" target="_blank" rel="noopener">Technical issue at JPMorgan Chase triggers online banking delays for US banks</a></h3>
+      <div class="kicker">689 分 · 550 评论 · 评论/得分 0.80 · apnews.com</div>
+      <p class="summary">一条 AP 的短消息能炸出 550 条评论，是因为它给今天所有零散的焦虑提供了一个共同容器。把高赞楼层拆开看，讨论其实沿着四层推进，而且最后一层直接改写了事件的性质：</p>
+      <ul>
+        <li><b>现象层（故障面有多大）：</b>有人报卡片刷不了、线下网点无人应答、网银挂掉；也有人（AstroNutt）在同一天用 Chase 卡在 Walmart 正常付款。techmunky 观察到「西海岸 3/5 服务可访问，但东海岸连回家里的 WireGuard 隧道都连不上」——这更像是某一区域的后端依赖出问题，而不是全国统一崩。A_D_E_P_T 则搬出欧洲 Revolut 上月的同类事故做参照：那次 12 小时修复，官方复盘是 Google Cloud 故障。</li>
+        <li><b>归因层（谁该负责）：</b>这是最有价值的部分。<b>silicon3383</b> 与 <b>mercurywells</b> 独立指出根源可能是被投毒的 Optimizely 脚本，后者还说自己「在 Wells Fargo 首页看到了相关标记」；<b>kpw94</b> 干脆把本站同日的 Optimizely 帖（item 50523300）贴了进来。也就是说，评论者在没有官方结论时就完成了跨事件并联——这与 Report URI 的披露（178 家站点、含多家银行与支付相关域名）方向一致。</li>
+        <li><b>情绪层（为什么会恐慌）：</b>子评论最多的一条来自 <b>bobson381</b>（31 条回复）：他的非技术同事把 Microsoft 365 邮件故障、FAA 引发的航班停飞、以及这次银行宕机感知成「一个互相关联的问题」。他认为这个判断「不完全是错的」——真正的风险不是单点故障，而是这些系统共享同一批供应商、同一批 CDN、同一批脚本。khriss 则直接提出针对性网络攻击的可能性。</li>
+        <li><b>反驳层（别急着怪 AI）：</b><b>danso</b> 的高赞反驳值得抄下来：为什么大家默认这是「AI vibe coding 写出坏代码」，而不是「有人拿着 AI 去批量找共性漏洞」？BoA、Chase、U.S. Bank 不太可能恰好在同一个周一各自上线了坏代码。配合 999900000999 那句「全行业里 QA 永远第一个被砍，做得好时没人看见」，这条线把事故从技术问题推到了组织问题。</li>
+      </ul>
+      <div class="quote">
+        「My nontechnical co-workers see the Microsoft 365 outage, the FAA ground stop, and things like this as one interconnected problem. They aren&#8217;t entirely wrong, but the general fear is hard to dismiss.」
+        <cite>— HN 用户 bobson381，item 50521045 评论区（该楼 31 条回复）</cite>
+      </div>
+      <p class="summary" style="margin-bottom:0"><b>一句话总结今天的 HN：</b>定价的信任被亚马逊的「诱饵折扣」透支，交易的信任被一次银行宕机打断，而这两件事与 178 家站点被投毒、微软邮件故障、美联航系统故障共享同一个底层病因——<b>我们把太多关键路径交给了不透明的第三方，并且默认它们永远可用。</b>今日最实用的一条建议反而来自评论区最不起眼的角落：「口袋里永远留点现金」。</p>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div class="row">
+      <span>数据来源：Hacker News Firebase API（<code>/v0/topstories.json</code> + <code>/v0/item/{id}.json</code>）</span>
+    </div>
+    <div class="row">
+      <span>抓取时间：2026-11-17 08:01 CST</span>
+      <span>生成时间：2026-11-17 08:04 CST</span>
+      <span>样本：Top 30 · 达标 24 篇（得分 ≥ 50 或评论 ≥ 30）</span>
+    </div>
+    <p style="margin:10px 0 0">收录 25 篇：5 篇未单列（4 篇低于阈值，1 篇为 Optimizely 事件的重复投稿）。摘要为编辑性中文转述，细节以原文为准；得分与评论数为抓取瞬时值，HN 上仍在增长。生成：Hermes Reviewer · hn-brief-2026-11-17</p>
+  </footer>
+
+</div>
+</body>
+</html>
