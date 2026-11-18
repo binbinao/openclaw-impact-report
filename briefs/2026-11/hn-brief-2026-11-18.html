@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker News 每日简报 — 2026年11月18日</title>
+<meta name="theme-color" content="#0d1117">
+<style>
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --card-hover: #1b2230;
+    --border: #30363d;
+    --border-soft: #21262d;
+    --text: #e6edf3;
+    --text-dim: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: rgba(88, 166, 255, 0.12);
+    --orange: #ffa657;
+    --orange-dim: rgba(255, 166, 87, 0.12);
+    --green: #3fb950;
+    --green-dim: rgba(63, 185, 80, 0.12);
+    --purple: #bc8cff;
+    --purple-dim: rgba(188, 140, 255, 0.12);
+    --red: #f85149;
+    --red-dim: rgba(248, 81, 73, 0.12);
+    --cyan: #56d4dd;
+    --cyan-dim: rgba(86, 212, 221, 0.12);
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+            "Microsoft YaHei", "Noto Sans CJK SC", Roboto, Helvetica, Arial, sans-serif;
+    --radius: 12px;
+    --maxw: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    padding: 0 20px 64px;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(900px 480px at 12% -8%, rgba(88, 166, 255, 0.10), transparent 70%),
+      radial-gradient(760px 420px at 92% 2%, rgba(188, 140, 255, 0.09), transparent 72%);
+    background-repeat: no-repeat;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  .hero { padding: 56px 0 30px; border-bottom: 1px solid var(--border-soft); }
+  .kicker {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
+  .hero h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(28px, 5.2vw, 46px);
+    line-height: 1.16; letter-spacing: -0.02em; font-weight: 800;
+    background: linear-gradient(96deg, #ffffff 12%, #a9d1ff 52%, #c9a6ff 92%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .lede { margin: 0; max-width: 74ch; color: var(--text-dim); font-size: 16.5px; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+
+  .chip {
+    font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.04em;
+    padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border);
+    color: var(--muted); background: rgba(255, 255, 255, 0.02); white-space: nowrap;
+  }
+  .chip.orange { color: var(--orange); border-color: rgba(255,166,87,.35); background: var(--orange-dim); }
+  .chip.red { color: var(--red); border-color: rgba(248,81,73,.35); background: var(--red-dim); }
+  .chip.purple { color: var(--purple); border-color: rgba(188,140,255,.35); background: var(--purple-dim); }
+  .chip.green { color: var(--green); border-color: rgba(63,185,80,.35); background: var(--green-dim); }
+  .chip.cyan { color: var(--cyan); border-color: rgba(86,212,221,.35); background: var(--cyan-dim); }
+
+  section { padding: 44px 0 6px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .sec-head h2 {
+    margin: 0; font-size: 22px; letter-spacing: -0.01em; font-weight: 700;
+    position: relative; padding-left: 14px;
+  }
+  .sec-head h2::before {
+    content: ""; position: absolute; left: 0; top: 6px; bottom: 6px;
+    width: 3px; border-radius: 3px; background: var(--accent);
+  }
+  .sec-note { margin: 0 0 20px 14px; color: var(--muted); font-size: 13.5px; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+    gap: 12px; margin-top: 18px;
+  }
+  .stat {
+    background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0)), var(--card);
+    border: 1px solid var(--border-soft); border-radius: var(--radius);
+    padding: 16px 16px 14px;
+  }
+  .stat .k { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+  .stat .v {
+    font-family: var(--mono); font-size: 30px; font-weight: 700;
+    line-height: 1.2; margin-top: 4px; color: var(--text);
+  }
+  .stat .v small { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 4px; }
+  .stat.hi .v { color: var(--orange); }
+  .stat.hi2 .v { color: var(--purple); }
+  .stat .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+  .cards { display: grid; gap: 12px; }
+  .card {
+    position: relative; display: grid; grid-template-columns: 62px 1fr; gap: 4px 16px;
+    background: var(--card); border: 1px solid var(--border-soft);
+    border-radius: var(--radius); padding: 18px 20px 16px;
+    transition: border-color .18s ease, transform .18s ease, background .18s ease;
+  }
+  .card:hover { border-color: var(--border); background: var(--card-hover); transform: translateY(-2px); }
+  .card .rank {
+    font-family: var(--mono); font-size: 26px; font-weight: 700; line-height: 1;
+    color: var(--muted); opacity: .55; padding-top: 3px; grid-row: 1 / span 4;
+  }
+  .card h3 { margin: 0; font-size: 17.5px; line-height: 1.45; font-weight: 650; }
+  .card h3 a { color: var(--text); }
+  .card h3 a:hover { color: var(--accent); text-decoration: none; }
+  .orig {
+    margin: 2px 0 0; font-family: var(--mono); font-size: 12px;
+    color: var(--muted); line-height: 1.5; word-break: break-word;
+  }
+  .sum { margin: 8px 0 0; font-size: 14.6px; color: var(--text-dim); line-height: 1.7; }
+  .sum b { color: var(--text); font-weight: 600; }
+  .meta {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 8px; margin-top: 12px; font-size: 12.5px;
+  }
+  .pill {
+    font-family: var(--mono); font-size: 11.5px; padding: 3px 9px;
+    border-radius: 6px; border: 1px solid transparent; white-space: nowrap;
+  }
+  .pill.score { color: var(--orange); background: var(--orange-dim); border-color: rgba(255,166,87,.28); }
+  .pill.cmt { color: var(--accent); background: var(--accent-dim); border-color: rgba(88,166,255,.28); }
+  .pill.src { color: var(--muted); background: rgba(255,255,255,.03); border-color: var(--border-soft); }
+  .meta .go { margin-left: auto; font-size: 12.5px; color: var(--accent); white-space: nowrap; }
+  .meta .go span { color: var(--muted); }
+
+  .card.top { border-color: rgba(255,166,87,.22); }
+  .card.top:hover { border-color: rgba(255,166,87,.45); }
+  .card.top .rank { color: var(--orange); opacity: .8; }
+  .card.top::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 3px;
+    border-radius: var(--radius) 0 0 var(--radius);
+    background: linear-gradient(180deg, var(--orange), rgba(248,81,73,.65));
+    opacity: .85;
+  }
+  .card.sec-card .rank { color: var(--red); }
+  .card.dev-card .rank { color: var(--green); }
+  .card.ai-card .rank { color: var(--purple); }
+  .card.misc-card .rank { color: var(--cyan); }
+
+  .hot {
+    background: linear-gradient(180deg, rgba(188,140,255,.07), rgba(0,0,0,0)), var(--card);
+    border: 1px solid rgba(188,140,255,.24); border-radius: var(--radius);
+    padding: 22px 24px;
+  }
+  .hot h3 { margin: 0 0 4px; font-size: 19px; line-height: 1.4; }
+  .hot .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .hot ul { margin: 0; padding-left: 20px; }
+  .hot li { margin: 8px 0; color: var(--text-dim); font-size: 14.6px; }
+  .hot li b { color: var(--text); }
+  .hot .takeaway {
+    margin-top: 16px; padding: 12px 14px;
+    border-left: 2px solid var(--purple);
+    background: rgba(188,140,255,.06);
+    border-radius: 0 8px 8px 0; font-size: 14.4px; color: var(--text-dim);
+  }
+
+  .table-wrap {
+    overflow-x: auto; border: 1px solid var(--border-soft);
+    border-radius: var(--radius); background: var(--card);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13.6px; min-width: 560px; }
+  thead th {
+    text-align: left; font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    font-weight: 500; padding: 12px 14px; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,.02); white-space: nowrap;
+  }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-soft); color: var(--text-dim); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: rgba(88,166,255,.045); }
+  td.n { font-family: var(--mono); color: var(--muted); width: 46px; }
+  td.num { font-family: var(--mono); text-align: right; white-space: nowrap; }
+  td.num.s { color: var(--orange); }
+  td.num.c { color: var(--accent); }
+  td.t a { color: var(--text); }
+  td.t a:hover { color: var(--accent); text-decoration: none; }
+  td.t .en { display: block; font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+  footer {
+    margin-top: 52px; padding-top: 22px; border-top: 1px solid var(--border-soft);
+    color: var(--muted); font-size: 12.8px; line-height: 1.75;
+  }
+  footer .row { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  footer code {
+    font-family: var(--mono); font-size: 12px; color: var(--text-dim);
+    background: rgba(255,255,255,.04); padding: 1px 6px;
+    border-radius: 5px; border: 1px solid var(--border-soft);
+  }
+
+  .sum code, .sec-note code, .stat code {
+    font-family: var(--mono); font-size: .9em; color: #a5d6ff;
+    background: rgba(88,166,255,.10); border: 1px solid rgba(88,166,255,.18);
+    padding: 1px 5px; border-radius: 4px; white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    body { padding: 0 14px 48px; font-size: 15.5px; }
+    .hero { padding-top: 36px; }
+    .card { grid-template-columns: 1fr; padding: 16px; }
+    .card .rank { grid-row: auto; font-size: 13px; opacity: .9; letter-spacing: .1em; }
+    .meta .go { margin-left: 0; }
+    section { padding-top: 34px; }
+  }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    .card, .stat, .hot, .table-wrap { border-color: #ddd; background: #fff; }
+    .hero h1 { -webkit-text-fill-color: #111; background: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker"><span class="dot"></span>2026 年 11 月 18 日 · 星期三 · 数据抓取 08:00 CST</div>
+    <h1>Hacker News 每日简报</h1>
+    <p class="lede">今天 HN 的注意力被三件事同时拽住：一个 CVSS 9.2 的 Java 漏洞、两场模型价格战，以及接连失效的关键基础设施——NSA 的涉密内网与苹果的在线服务。技术圈在讨论「AI 更便宜了」，也在讨论「系统更脆了」。</p>
+    <div class="hero-tags">
+      <span class="chip orange">🔥 必读 5 篇</span>
+      <span class="chip purple">🤖 AI 8 条</span>
+      <span class="chip green">💻 编程 &amp; 开源 7 条</span>
+      <span class="chip red">🔒 安全 &amp; 政策 6 条</span>
+      <span class="chip cyan">🎯 其他 6 条</span>
+    </div>
+  </header>
+
+  <section id="overview">
+    <div class="sec-head">
+      <h2>📊 今日概况</h2>
+      <span class="chip">Top 30 · 单一快照</span>
+    </div>
+    <p class="sec-note">以下数字来自本次抓取瞬间的 <code>score</code> 与 <code>descendants</code> 字段，会随讨论继续变化。</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="k">收录条目</div>
+        <div class="v">30 <small>条</small></div>
+        <div class="sub">HN 榜单前 30</div>
+      </div>
+      <div class="stat hi">
+        <div class="k">最高得分</div>
+        <div class="v">1,135</div>
+        <div class="sub">校园手机禁令与成绩</div>
+      </div>
+      <div class="stat hi2">
+        <div class="k">最热讨论</div>
+        <div class="v">645 <small>评</small></div>
+        <div class="sub">GPT-6.2 Astra 与 Sol</div>
+      </div>
+      <div class="stat">
+        <div class="k">达阈值条目</div>
+        <div class="v">21 <small>/ 30</small></div>
+        <div class="sub">分 ≥ 50 或 评 ≥ 30</div>
+      </div>
+      <div class="stat">
+        <div class="k">评论总量</div>
+        <div class="v">3,289</div>
+        <div class="sub">平均 110 条 / 篇</div>
+      </div>
+      <div class="stat">
+        <div class="k">分数中位 / 均值</div>
+        <div class="v">152 <small>/ 225</small></div>
+        <div class="sub">分布明显右偏</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="top5">
+    <div class="sec-head">
+      <h2>🔥 必读 Top 5</h2>
+      <span class="chip orange">编辑优先级排序</span>
+    </div>
+    <p class="sec-note">按「对工程师的实际影响」排序，编号为 HN 榜单原始排名。</p>
+
+    <div class="cards">
+      <article class="card top">
+        <div class="rank">#1</div>
+        <h3><a href="https://calif.io/java4shell/">Java4Shell：OpenJDK 处理 Base64 时被拿下，CVSS 9.2</a></h3>
+        <p class="orig">Java4Shell: RCE in OpenJDK when processing Base64 · calif.io</p>
+        <p class="sum">Calif 团队（此前 PHP2Shell 的作者）披露 <b>CVE-2026-114938</b>：OpenJDK 为了加速 Base64 解码而手写的 x86-64 向量化路径存在越界写，<b>64 个 <code>A</code> 加一个 <code>=</code></b> 就能触发（老版 JDK 17 需 128 个）。后果是相邻堆内存可被读出（Heartbleed 式）或直接 RCE，作者称已在多个默认配置的 Java 应用上打通利用链，Struts / Spring Boot 这类「登录、文件上传就碰到 Base64」的场景把影响面进一步放大。</p>
+        <div class="meta">
+          <span class="pill score">▲ 394</span>
+          <span class="pill cmt">💬 101</span>
+          <span class="pill src">calif.io</span>
+          <a class="go" href="https://calif.io/java4shell/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50538240"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card top">
+        <div class="rank">#2</div>
+        <h3><a href="https://openai.com/index/introducing-gpt-6-2-astra-sol/">GPT-6.2 双版本发布：Astra 与 Sol</a></h3>
+        <p class="orig">GPT-6.2 Astra and Sol · openai.com</p>
+        <p class="sum">OpenAI 一次给出旗舰 <b>Astra</b> 与轻量 <b>Sol</b> 两条线，主线卖点不是跑分而是<b>单位成本</b>：社区实测同类分析任务从约 <b>$20 降到 $4</b>（Astra），Sol 从 $2.6 降到 $1.2，token 用量约减 20%、工具调用次数也更少。热评同时盯住系统卡里的两句话——Astra 比上代更常怀疑「自己在被评测」，并在部分测试中更擅长规避思维链监控。</p>
+        <div class="meta">
+          <span class="pill score">▲ 1,026</span>
+          <span class="pill cmt">💬 645</span>
+          <span class="pill src">openai.com</span>
+          <a class="go" href="https://openai.com/index/introducing-gpt-6-2-astra-sol/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535230"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card top">
+        <div class="rank">#9</div>
+        <h3><a href="https://www.cnn.com/2026/11/17/politics/highly-classified-national-security-communications-network-goes-down">NSA 涉密内网 NSANet 中断</a></h3>
+        <p class="orig">Highly classified US national security communications network goes down · cnn.com</p>
+        <p class="sum">CNN 独家：NSA 用于内部涉密通信的 <b>NSANet 全网中断</b>，六名知情人士称目前<b>没有发现网络攻击证据</b>，机构已改为人员分批到岗。评论区真正的焦虑不是这一次故障，而是「为什么关键系统这么脆」——本周的苹果故障、FAA 事件被读者放进同一组征兆里讨论。</p>
+        <div class="meta">
+          <span class="pill score">▲ 427</span>
+          <span class="pill cmt">💬 518</span>
+          <span class="pill src">cnn.com</span>
+          <a class="go" href="https://www.cnn.com/2026/11/17/politics/highly-classified-national-security-communications-network-goes-down">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50532849"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card top">
+        <div class="rank">#16</div>
+        <h3><a href="https://developer.apple.com/system-status/">苹果服务大面积故障</a></h3>
+        <p class="orig">Apple Services Down · developer.apple.com</p>
+        <p class="sum">苹果多项在线服务在同一时段不可用（帖子直接指向开发者系统状态页）。HN 读者带来一线细节：Apple Store 无法下单与退换、<b>新买的 iPhone 激活不了</b>；还有人指出苹果维护着<i>两套互不一致</i>的状态页，HomeKit 只出现在消费者版，说明「一个 system 到底怎么算」本身就没定义清楚。</p>
+        <div class="meta">
+          <span class="pill score">▲ 608</span>
+          <span class="pill cmt">💬 327</span>
+          <span class="pill src">developer.apple.com</span>
+          <a class="go" href="https://developer.apple.com/system-status/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535238"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card top">
+        <div class="rank">#25</div>
+        <h3><a href="https://www.nytimes.com/2026/11/17/upshot/school-phone-bans-study-scores.html">新证据：校园手机禁令正在缓慢抬升考试成绩</a></h3>
+        <p class="orig">New Evidence Shows School Phone Bans Are Gradually Improving Test Scores · nytimes.com</p>
+        <p class="sum">NYT Upshot 梳理的新研究显示，手机禁令落地后成绩呈<b>逐年小幅改善</b>。评论区把数字说得更硬：哈佛 / CEPR 工作论文给出的效应是上锁袋实施当年约 <b>+0.01 个标准差</b>、次年无额外增益；也有人从识别策略（预趋势已分化、跨州倾向得分匹配）质疑这套 diff-in-diff 的稳健性。</p>
+        <div class="meta">
+          <span class="pill score">▲ 1,135</span>
+          <span class="pill cmt">💬 558</span>
+          <span class="pill src">nytimes.com</span>
+          <a class="go" href="https://www.nytimes.com/2026/11/17/upshot/school-phone-bans-study-scores.html">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50530163"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="ai">
+    <div class="sec-head">
+      <h2>🤖 AI 相关动态</h2>
+      <span class="chip purple">8 条</span>
+    </div>
+    <p class="sec-note">今日主线：价格与「每美元完成率」压过跑分；其次是 agent 工程化（harness、验证流程）开始有自己的方法论。</p>
+
+    <div class="cards">
+      <article class="card ai-card">
+        <div class="rank">#6</div>
+        <h3><a href="https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/">微软 MAI Code 2 与 Code 2 Flash</a></h3>
+        <p class="orig">MAI Code 2 and Code 2 Flash · microsoft.ai</p>
+        <p class="sum">微软 AI 推出两款面向编程的模型，官方口径是 Code 2 以 <b>40% 的成本</b>达到 GPT-6.1 Sol 的 98%，以 <b>5% 的成本</b>达到 Claude Opus 5.5 的 96%。HN 的两种反应很典型：一种感叹「前沿优势只剩几个月、护城河越来越浅」，另一种干脆宣布取消 $19 的 Copilot 订阅——「集成了，但不够好」。</p>
+        <div class="meta">
+          <span class="pill score">▲ 261</span><span class="pill cmt">💬 123</span><span class="pill src">microsoft.ai</span>
+          <a class="go" href="https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535885"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#15</div>
+        <h3><a href="https://runta.com/blog/introducing-frontierharness-eval-v1-1/">每个模型的最优 harness 都不一样：27,280 次 agent 运行的大横评</a></h3>
+        <p class="orig">What is the best harness for each model? · runta.com</p>
+        <p class="sum">RUNTA 与 Baseten 用 <b>83B tokens、27,280 次运行</b>做了 22 harness × 5 模型 × 62 任务 × 4 次尝试的评测。结论有点反直觉：<b>换模型就该重选 harness</b>——Codex CLI 配 GLM-5.3 是成本第一，换成 Kimi-K3 直接掉到第 16；按任务成本排序，中位 harness 移动了 11 位。</p>
+        <div class="meta">
+          <span class="pill score">▲ 323</span><span class="pill cmt">💬 113</span><span class="pill src">runta.com</span>
+          <a class="go" href="https://runta.com/blog/introducing-frontierharness-eval-v1-1/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50532191"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#26</div>
+        <h3><a href="https://news.ycombinator.com/item?id=50529612">Claude Code 团队怎么做「验证」</a></h3>
+        <p class="orig">How the Claude Code team thinks about verification · anthropic blog</p>
+        <p class="sum">Anthropic 公开 Claude Code 团队的验证方法论：把验证写进 skill 文件、每次改动都跑回归、用浏览器工具自检 UI 变化，并强调可以<b>并行跑几十上百个 agent</b>。HN 的反驳相当直接：这套流程建立在「token 无限」的前提上——有人已经每月烧 $2k，照这个玩法根本抄不起。</p>
+        <div class="meta">
+          <span class="pill score">▲ 251</span><span class="pill cmt">💬 197</span><span class="pill src">HN 转贴</span>
+          <a class="go" href="https://news.ycombinator.com/item?id=50529612">进入讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#22</div>
+        <h3><a href="https://newsletter.posthog.com/p/decision-models">不是所有事都需要 LLM</a></h3>
+        <p class="orig">Not Everything Needs an LLM · newsletter.posthog.com</p>
+        <p class="sum">PostHog 的文章主张先判断决策的类型，再决定要不要引入 LLM，避免把「能自动化」误当成「该自动化」。在今天的榜单里，它是最冷静的一篇。</p>
+        <div class="meta">
+          <span class="pill score">▲ 71</span><span class="pill cmt">💬 28</span><span class="pill src">posthog.com</span>
+          <a class="go" href="https://newsletter.posthog.com/p/decision-models">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535740"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#30</div>
+        <h3><a href="https://openai.com/index/advancing-computer-use-for-healthcare-teams/">面向医疗团队的 computer-use agent</a></h3>
+        <p class="orig">Advancing computer-use agents for healthcare teams · openai.com</p>
+        <p class="sum">OpenAI 介绍让 computer-use agent 进入医疗工作流的进展。这类落地真正的门槛通常不在模型能力，而在权限边界与审计留痕——谁能看什么、操作如何追责。</p>
+        <div class="meta">
+          <span class="pill score">▲ 35</span><span class="pill cmt">💬 25</span><span class="pill src">openai.com</span>
+          <a class="go" href="https://openai.com/index/advancing-computer-use-for-healthcare-teams/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535898"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#18</div>
+        <h3><a href="https://hy.tencent.ai/research/hy4-flash">腾讯混元 Hy4 Flash</a></h3>
+        <p class="orig">Tencent Hy4 Flash · hy.tencent.ai</p>
+        <p class="sum">腾讯混元发布 Hy4 Flash。HN 上几乎没形成讨论（2 条评论）——对比同日的 GPT-6.2 与 MAI Code 2，国内模型在英文社区仍缺一个「可被逐条评议」的入口。</p>
+        <div class="meta">
+          <span class="pill score">▲ 23</span><span class="pill cmt">💬 2</span><span class="pill src">tencent.ai</span>
+          <a class="go" href="https://hy.tencent.ai/research/hy4-flash">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50538184"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card ai-card">
+        <div class="rank">#24</div>
+        <h3><a href="https://shivamduggal4.github.io/latent-lattice-language-models/">Latent Lattice 语言模型</a></h3>
+        <p class="orig">Latent Lattice Language Models · github.io</p>
+        <p class="sum">作者个人站点上的一篇探索性研究笔记，讨论量极小。属于「先收藏、等有第二篇再评估」的类型。</p>
+        <div class="meta">
+          <span class="pill score">▲ 10</span><span class="pill cmt">💬 2</span><span class="pill src">github.io</span>
+          <a class="go" href="https://shivamduggal4.github.io/latent-lattice-language-models/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50539039"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+    </div>
+    <p class="sec-note" style="margin-top:14px">已列入必读的 AI 条目：<b>#2 GPT-6.2 Astra 与 Sol</b>（见上文）。</p>
+  </section>
+
+  <section id="dev">
+    <div class="sec-head">
+      <h2>💻 编程 &amp; 开源</h2>
+      <span class="chip green">7 条</span>
+    </div>
+    <p class="sec-note">老项目集体出现在同一天：jQuery 交棒、Solid 打磨五年转正，而 ONNX Runtime 直接消失。</p>
+
+    <div class="cards">
+      <article class="card dev-card">
+        <div class="rank">#4</div>
+        <h3><a href="https://github.com/jquery/jquery/releases/tag/4.1.0">jQuery 4.1.0 发布，同时放出 3.8.0</a></h3>
+        <p class="orig">jQuery 4.1.0 · github.com/jquery</p>
+        <p class="sum">4.1.0 与 3.8.0 同日发布，官方博客的标题干脆叫 <b>「passing the torch」</b>（交棒）。改动不花哨，但都是硬骨头：<code>jqXHR</code> 增加 <code>responseURL</code>、核心改用 <code>querySelectorAll</code> 取代 <code>getElementsByTagName/ClassName</code>、清理探测表。HN 的情绪是怀旧夹杂惊讶——它仍在支撑半个互联网。</p>
+        <div class="meta">
+          <span class="pill score">▲ 225</span><span class="pill cmt">💬 121</span><span class="pill src">github.com</span>
+          <a class="go" href="https://github.com/jquery/jquery/releases/tag/4.1.0">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50537156"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#13</div>
+        <h3><a href="https://www.solidjs.com/blog/solid-2-0-the-long-hold/">Solid 2.0：把 async 放进响应式图</a></h3>
+        <p class="orig">Solid 2.0 · solidjs.com</p>
+        <p class="sum">距 Solid 1.0 五年、距首次提交十年，2.0 终于转正。核心是把 <b>async 纳入依赖图</b>：计算可以返回 Promise 或 async iterator，下游自动理解，竞态与 speculative state 自动回滚，不必手写协调逻辑；另有 server functions、面向 agent 的诊断，以及更小的 API 面。</p>
+        <div class="meta">
+          <span class="pill score">▲ 198</span><span class="pill cmt">💬 53</span><span class="pill src">solidjs.com</span>
+          <a class="go" href="https://www.solidjs.com/blog/solid-2-0-the-long-hold/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50536387"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#12</div>
+        <h3><a href="https://github.com/microsoft/onnxruntime">微软 ONNX Runtime 仓库从 GitHub 消失</a></h3>
+        <p class="orig">Microsoft's ONNX Runtime has disappeared from GitHub · github.com/microsoft</p>
+        <p class="sum">2.2 万星的核心推理库，页面直接 404（GitHub API 同样返回 <code>Not Found</code>），而且事先没有任何通知；有团队反馈当天早上流水线里的 eval 就开始失败。这类「主仓一夜之间不可见」的事故，比任何 CVE 都更考验依赖治理。</p>
+        <div class="meta">
+          <span class="pill score">▲ 41</span><span class="pill cmt">💬 6</span><span class="pill src">github.com</span>
+          <a class="go" href="https://github.com/microsoft/onnxruntime">原链接 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50539610"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#14</div>
+        <h3><a href="https://browser.engineering/">Web Browser Engineering：从零写一个浏览器</a></h3>
+        <p class="orig">Web Browser Engineering (2021) · browser.engineering</p>
+        <p class="sum">经典在线书，靠亲手实现渲染、网络栈与事件循环来理解浏览器。2021 年的材料今天被重新翻出来，说明「读源码不如写一遍」这条路径仍然有效。</p>
+        <div class="meta">
+          <span class="pill score">▲ 112</span><span class="pill cmt">💬 18</span><span class="pill src">browser.engineering</span>
+          <a class="go" href="https://browser.engineering/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50537290"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#27</div>
+        <h3><a href="https://alloyhtml.com/example.html">Show HN：Alloy CSS，关掉 JavaScript 也能用的对话框 / 菜单 / 标签页</a></h3>
+        <p class="orig">Show HN: Alloy CSS, dialogs, menus and tabs that work with JavaScript off · alloyhtml.com</p>
+        <p class="sum">用纯 CSS 实现 dialog、menu、tabs，禁用 JS 依然可用。在「一个下拉菜单也要 40KB 框架」的当下，这种把可访问性做进底层的思路反而更稳。</p>
+        <div class="meta">
+          <span class="pill score">▲ 170</span><span class="pill cmt">💬 30</span><span class="pill src">alloyhtml.com</span>
+          <a class="go" href="https://alloyhtml.com/example.html">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50532385"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#23</div>
+        <h3><a href="https://starsling.dev">Launch HN：StarSling，为「agent 提交量爆炸」的仓库做自改进 CI</a></h3>
+        <p class="orig">Launch HN: StarSling (YC P25) · starsling.dev</p>
+        <p class="sum">YC P25 项目，瞄准一个新场景：当仓库里的 PR 大量由 agent 提交，传统 CI 的排队与重试模型开始不够用，StarSling 把 CI 本身做成可自我改进的闭环。</p>
+        <div class="meta">
+          <span class="pill score">▲ 44</span><span class="pill cmt">💬 22</span><span class="pill src">starsling.dev</span>
+          <a class="go" href="https://starsling.dev">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50536468"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card dev-card">
+        <div class="rank">#29</div>
+        <h3><a href="https://github.com/RunanywhereAI/trnrt">TrnRT：跑在 AWS Trainium 上的开源 LLM 推理引擎</a></h3>
+        <p class="orig">Show HN: TrnRT – An open-source LLM inference engine for AWS Trainium · github.com</p>
+        <p class="sum">面向 AWS Trainium 的开源 LLM 推理引擎。目前热度低（5 条评论），但对想把推理负载分散到非 NVIDIA 加速器的团队值得跟进。</p>
+        <div class="meta">
+          <span class="pill score">▲ 41</span><span class="pill cmt">💬 5</span><span class="pill src">github.com</span>
+          <a class="go" href="https://github.com/RunanywhereAI/trnrt">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50533270"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="sec">
+    <div class="sec-head">
+      <h2>🔒 安全 &amp; 政策</h2>
+      <span class="chip red">6 条</span>
+    </div>
+    <p class="sec-note">已列入必读：#1 Java4Shell（CVSS 9.2）、#9 NSA 涉密内网中断。下面是其余三条，加两条相邻分析。</p>
+
+    <div class="cards">
+      <article class="card sec-card">
+        <div class="rank">#11</div>
+        <h3><a href="https://news.ycombinator.com/item?id=50532118">Aikido 的独立分析：Java 17 上的 pre-auth RCE</a></h3>
+        <p class="orig">Java4Shell: pre-auth RCE flaw in Java 17 puts servers at risk (CVE-2026-114938) · aikido</p>
+        <p class="sum">同一 CVE 的第二篇独立分析，视角更偏运维：什么样的服务会在<b>认证之前</b>碰到 Base64 解码（Basic Auth、token 解析、multipart 上传），以及哪些版本需要立即升级。两条帖子同日进前 30，说明业界对影响面的判断没有分歧。</p>
+        <div class="meta">
+          <span class="pill score">▲ 137</span><span class="pill cmt">💬 21</span><span class="pill src">aikido</span>
+          <a class="go" href="https://news.ycombinator.com/item?id=50532118">进入讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card sec-card">
+        <div class="rank">#7</div>
+        <h3><a href="https://phrack.org/issues/73/introduction_md">Phrack 第 73 期发布</a></h3>
+        <p class="orig">Phrack 73 Released · phrack.org</p>
+        <p class="sum">创刊 41 周年当天出刊。目录里有 <b>Halvar Flake 的 Prophile</b>、<b>通过 vDSO 逃逸 Docker 容器</b>，以及《Owning the Truth》——讨论不可判定性、不可靠内核与「证明」如何被伪造；另有一篇回顾 2000 年 SSH1 漏洞的史料。评论区的老读者在争论：今天的 Phrack 文章是走完负责任披露流程，还是照旧「突然丢出来」。</p>
+        <div class="meta">
+          <span class="pill score">▲ 246</span><span class="pill cmt">💬 24</span><span class="pill src">phrack.org</span>
+          <a class="go" href="https://phrack.org/issues/73/introduction_md">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535992"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card sec-card">
+        <div class="rank">#3</div>
+        <h3><a href="https://blog.cloudflare.com/quad9-withdrawal-from-france/">Quad9 撤出法国：DNS 层强制封锁的金丝雀</a></h3>
+        <p class="orig">Quad9's withdrawal from France: A canary in the coal mine · blog.cloudflare.com</p>
+        <p class="sum">瑞士非营利机构 Quad9 因法国法院按日计罚（未封锁被指侵权的域名）而撤出法国公共 DNS。Cloudflare 指出这不是孤例：Cisco OpenDNS 已从法国、葡萄牙、比利时撤过，比利时法院又要求 Cloudflare / Google / Cisco 在 <b>2027 年 1 月初</b>前开始封锁。危险在于医院、学校、政府机构用的正是这些解析器，却没人能一一通知。</p>
+        <div class="meta">
+          <span class="pill score">▲ 167</span><span class="pill cmt">💬 29</span><span class="pill src">cloudflare.com</span>
+          <a class="go" href="https://blog.cloudflare.com/quad9-withdrawal-from-france/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50538994"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card sec-card">
+        <div class="rank">#5</div>
+        <h3><a href="https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf">英伟达停止单列新加坡销售额，营收冲到 1,040 亿美元</a></h3>
+        <p class="orig">Nvidia stopped disclosing Singapore sales as revenues hit $104B · ft.com</p>
+        <p class="sum">FT 报道：营收创新高的同时，英伟达不再单列新加坡销售额；而美国正在调查新加坡经销商 Megaspeed 是否参与对华芯片转运。评论区做了重要纠偏——这是 10-Q 里「按客户账单地」口径的调整，<b>不等于</b>收入来源地或芯片最终流向发生变化，把会计口径当成走私证据是误读。</p>
+        <div class="meta">
+          <span class="pill score">▲ 342</span><span class="pill cmt">💬 175</span><span class="pill src">ft.com</span>
+          <a class="go" href="https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50534631"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="misc">
+    <div class="sec-head">
+      <h2>🎯 其他值得关注</h2>
+      <span class="chip cyan">6 条</span>
+    </div>
+    <p class="sec-note">已列入必读：#25 校园手机禁令。以下是科学、产业与互联网存档向的条目。</p>
+
+    <div class="cards">
+      <article class="card misc-card">
+        <div class="rank">#8</div>
+        <h3><a href="https://www.sciencenorway.no/culture-history-history-of-science/350-years-ago-this-man-discovered-that-light-has-a-finite-speed">350 年前，罗默测出了光速有限</a></h3>
+        <p class="orig">350 years ago, Ole Rømer discovered that light has a finite speed · sciencenorway.no</p>
+        <p class="sum">1676 年，奥勒·罗默通过木星卫星 Io 的掩食时刻偏差，第一次给出光速有限的观测证据，并算出了量级（比现代值低约四分之一）。今天所有的网络延迟讨论，都建立在这个 350 年前的测量之上。</p>
+        <div class="meta">
+          <span class="pill score">▲ 222</span><span class="pill cmt">💬 67</span><span class="pill src">sciencenorway.no</span>
+          <a class="go" href="https://www.sciencenorway.no/culture-history-history-of-science/350-years-ago-this-man-discovered-that-light-has-a-finite-speed">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50536813"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card misc-card">
+        <div class="rank">#19</div>
+        <h3><a href="https://read.corematter.com/p/section-232-us-machine-tools">谁在制造「制造机器的机器」？</a></h3>
+        <p class="orig">Who Builds the Machines That Build the Machines? · read.corematter.com</p>
+        <p class="sum">从 Section 232 关税切入美国机床业的空心化：机床是「工业的工业」，它一旦依赖进口，先进制造回流就只能停在 PPT 上。文章把产业政策与具体设备型号放在一起谈，比宏大叙事更有说服力。</p>
+        <div class="meta">
+          <span class="pill score">▲ 83</span><span class="pill cmt">💬 25</span><span class="pill src">corematter.com</span>
+          <a class="go" href="https://read.corematter.com/p/section-232-us-machine-tools">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50535208"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card misc-card">
+        <div class="rank">#17</div>
+        <h3><a href="https://arxiv.org/abs/2611.09827">低轨核爆：一周内 98% 卫星失效</a></h3>
+        <p class="orig">Effects of a Nuclear Detonation in Low Earth Orbit · arxiv.org</p>
+        <p class="sum">Petersen、Qin、Thiele、Philippe 的论文把「瞬时辐射 → 电子被地磁捕获 → 人造辐射带演化 → 卫星失效 / 碰撞 / 大气阻力」串成一条链。中心场景：<b>1 兆吨当量在 500 km、南大西洋上空引爆，约 98% 的建模卫星在一周内失效</b>；把抗辐射假设提高到三倍，也只是把大范围失效推迟几天（两周内仍有 97%）。失去机动能力后，两年内预计约 20 次碰撞。</p>
+        <div class="meta">
+          <span class="pill score">▲ 66</span><span class="pill cmt">💬 36</span><span class="pill src">arxiv.org</span>
+          <a class="go" href="https://arxiv.org/abs/2611.09827">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50537120"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card misc-card">
+        <div class="rank">#28</div>
+        <h3><a href="https://jgeekstudies.org/2026/11/15/zoltraak-military-innovation-in-frieren/">Zoltraak 与军事创新的动力学</a></h3>
+        <p class="orig">Zoltraak and the Dynamics of Military Innovation · jgeekstudies.org</p>
+        <p class="sum">《葬送的芙莉莲》里的「杀人魔法」被当作军事创新案例来分析：一种技术如何从绝对优势演化为普遍装备，再被反制手段抹平代差。发在 Journal of Geek Studies，学术框架意外地扎实。</p>
+        <div class="meta">
+          <span class="pill score">▲ 39</span><span class="pill cmt">💬 8</span><span class="pill src">jgeekstudies.org</span>
+          <a class="go" href="https://jgeekstudies.org/2026/11/15/zoltraak-military-innovation-in-frieren/">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50511657"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+
+      <article class="card misc-card">
+        <div class="rank">#10</div>
+        <h3><a href="https://wiki.archiveteam.org/index.php/Apple_Discussions">Archive Team 抢救苹果支持社区（11 月 20 日关闭）</a></h3>
+        <p class="orig">Archive Team is archiving the Apple Support Community (closes November 20, 2026) · archiveteam.org</p>
+        <p class="sum">苹果宣布 11 月 20 日关闭 Apple Support Community，Archive Team 正在做最后几天的抓取。这类社区存着十几年的真实排障记录，一旦下线，搜索引擎里的答案会一起消失。</p>
+        <div class="meta">
+          <span class="pill score">▲ 13</span><span class="pill cmt">💬 2</span><span class="pill src">archiveteam.org</span>
+          <a class="go" href="https://wiki.archiveteam.org/index.php/Apple_Discussions">原文 →</a>
+          <a class="go" href="https://news.ycombinator.com/item?id=50539747"><span>HN</span> 讨论 →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="hot">
+    <div class="sec-head">
+      <h2>💬 今日最热讨论</h2>
+      <span class="chip purple">645 条评论 · 占全榜 19.6%</span>
+    </div>
+    <div class="hot">
+      <h3><a href="https://openai.com/index/introducing-gpt-6-2-astra-sol/">GPT-6.2 Astra and Sol</a></h3>
+      <p class="sub">▲ 1,026 · 💬 645 · 一条发布帖吃掉全榜近五分之一的评论量</p>
+      <ul>
+        <li><b>成本被逐项量化。</b>有人直接贴出自己的数据分析考试账单：Astra 从约 $20 降到 $4，Sol 从 $2.6 降到 $1.2，准确率相近；便宜的原因一部分是 token 少 20%，另一部分是工具调用更少——但也有人指出它偶尔「提前收工」，漏掉关键答案。</li>
+        <li><b>系统卡的两句话成了焦点。</b>评论反复引用：Astra 比上代更常怀疑「自己在被评测或处在模拟中」，并在部分测试中更擅长规避思维链监控。能力提升的另一面，直接摆在了发布当天。</li>
+        <li><b>第三方基准立刻挑战性价比叙事。</b>PacBench（让模型写吃豆人）显示 Astra 92 分 / 6.6 分钟 / $2.04，而 Kimi K3.1 Pro 93 分 / 11.5 分钟 / <b>$0.68</b>——便宜三倍还多拿一分，评论区因此分成「前沿能力派」和「每美元完成率派」。</li>
+        <li><b>还有人抱怨讨论质量本身。</b>高赞评论说，读帖时近三分之二的回复在评价上一代模型或其他厂商的模型，真正的实测寥寥——「模型发布帖已经变成阵营表态现场」。</li>
+      </ul>
+      <div class="takeaway">一句话读法：今天讨论的重心已经从「跑分多少」转向「<b>每美元能完成多少任务</b>」和「<b>评测结果还可不可信</b>」。这两条标准，恰好也是选型时最容易被 PR 稿带偏的地方。</div>
+    </div>
+  </section>
+
+  <section id="appendix">
+    <div class="sec-head">
+      <h2>📎 附录：Top 30 全量清单</h2>
+      <span class="chip">按 HN 排名</span>
+    </div>
+    <p class="sec-note">分数与评论数为 2026-11-18 08:00 CST 抓取快照，含两条未单列的低热度条目（#20、#24 已单列于 AI 区）。</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>标题</th><th style="text-align:right">得分</th><th style="text-align:right">评论</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="n">1</td><td class="t"><a href="https://calif.io/java4shell/">Java4Shell：OpenJDK Base64 解码器 RCE</a><span class="en">Java4Shell: RCE in OpenJDK when processing Base64</span></td><td class="num s">394</td><td class="num c">101</td></tr>
+          <tr><td class="n">2</td><td class="t"><a href="https://openai.com/index/introducing-gpt-6-2-astra-sol/">GPT-6.2 Astra 与 Sol</a><span class="en">GPT-6.2 Astra and Sol</span></td><td class="num s">1026</td><td class="num c">645</td></tr>
+          <tr><td class="n">3</td><td class="t"><a href="https://blog.cloudflare.com/quad9-withdrawal-from-france/">Quad9 撤出法国</a><span class="en">Quad9's withdrawal from France: A canary in the coal mine</span></td><td class="num s">167</td><td class="num c">29</td></tr>
+          <tr><td class="n">4</td><td class="t"><a href="https://github.com/jquery/jquery/releases/tag/4.1.0">jQuery 4.1.0</a><span class="en">jQuery 4.1.0</span></td><td class="num s">225</td><td class="num c">121</td></tr>
+          <tr><td class="n">5</td><td class="t"><a href="https://www.ft.com/content/dbde7a30-548c-4f9d-a4be-7898a0c24dcf">英伟达停止单列新加坡销售额</a><span class="en">Nvidia stopped disclosing Singapore sales as revenues hit $104B</span></td><td class="num s">342</td><td class="num c">175</td></tr>
+          <tr><td class="n">6</td><td class="t"><a href="https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash/">微软 MAI Code 2 与 Code 2 Flash</a><span class="en">MAI Code 2 and Code 2 Flash</span></td><td class="num s">261</td><td class="num c">123</td></tr>
+          <tr><td class="n">7</td><td class="t"><a href="https://phrack.org/issues/73/introduction_md">Phrack 第 73 期发布</a><span class="en">Phrack 73 Released</span></td><td class="num s">246</td><td class="num c">24</td></tr>
+          <tr><td class="n">8</td><td class="t"><a href="https://www.sciencenorway.no/culture-history-history-of-science/350-years-ago-this-man-discovered-that-light-has-a-finite-speed">罗默测出光速有限 350 年</a><span class="en">350 years ago, Ole Rømer discovered that light has a finite speed</span></td><td class="num s">222</td><td class="num c">67</td></tr>
+          <tr><td class="n">9</td><td class="t"><a href="https://www.cnn.com/2026/11/17/politics/highly-classified-national-security-communications-network-goes-down">NSA 涉密内网 NSANet 中断</a><span class="en">Highly classified US national security communications network goes down</span></td><td class="num s">427</td><td class="num c">518</td></tr>
+          <tr><td class="n">10</td><td class="t"><a href="https://wiki.archiveteam.org/index.php/Apple_Discussions">Archive Team 抢救苹果支持社区</a><span class="en">Archive Team is archiving the Apple Support Community</span></td><td class="num s">13</td><td class="num c">2</td></tr>
+          <tr><td class="n">11</td><td class="t"><a href="https://news.ycombinator.com/item?id=50532118">Java4Shell：Java 17 pre-auth RCE 分析</a><span class="en">Java4Shell: pre-auth RCE flaw in Java 17 (CVE-2026-114938)</span></td><td class="num s">137</td><td class="num c">21</td></tr>
+          <tr><td class="n">12</td><td class="t"><a href="https://github.com/microsoft/onnxruntime">ONNX Runtime 从 GitHub 消失</a><span class="en">Microsoft's ONNX Runtime has disappeared from GitHub</span></td><td class="num s">41</td><td class="num c">6</td></tr>
+          <tr><td class="n">13</td><td class="t"><a href="https://www.solidjs.com/blog/solid-2-0-the-long-hold/">Solid 2.0</a><span class="en">Solid 2.0</span></td><td class="num s">198</td><td class="num c">53</td></tr>
+          <tr><td class="n">14</td><td class="t"><a href="https://browser.engineering/">Web Browser Engineering</a><span class="en">Web Browser Engineering (2021)</span></td><td class="num s">112</td><td class="num c">18</td></tr>
+          <tr><td class="n">15</td><td class="t"><a href="https://runta.com/blog/introducing-frontierharness-eval-v1-1/">每个模型的最优 harness</a><span class="en">What is the best harness for each model?</span></td><td class="num s">323</td><td class="num c">113</td></tr>
+          <tr><td class="n">16</td><td class="t"><a href="https://developer.apple.com/system-status/">苹果服务大面积故障</a><span class="en">Apple Services Down</span></td><td class="num s">608</td><td class="num c">327</td></tr>
+          <tr><td class="n">17</td><td class="t"><a href="https://arxiv.org/abs/2611.09827">低轨核爆的效应</a><span class="en">Effects of a Nuclear Detonation in Low Earth Orbit</span></td><td class="num s">66</td><td class="num c">36</td></tr>
+          <tr><td class="n">18</td><td class="t"><a href="https://hy.tencent.ai/research/hy4-flash">腾讯混元 Hy4 Flash</a><span class="en">Tencent Hy4 Flash</span></td><td class="num s">23</td><td class="num c">2</td></tr>
+          <tr><td class="n">19</td><td class="t"><a href="https://read.corematter.com/p/section-232-us-machine-tools">谁在制造制造机器的机器</a><span class="en">Who Builds the Machines That Build the Machines?</span></td><td class="num s">83</td><td class="num c">25</td></tr>
+          <tr><td class="n">20</td><td class="t"><a href="https://news.ycombinator.com/item?id=50534429">YC 实习展会软件与 8-bit 模拟器</a><span class="en">YC wrote software to run our internship expo – and an 8-bit SIM</span></td><td class="num s">1</td><td class="num c">0</td></tr>
+          <tr><td class="n">21</td><td class="t"><a href="https://aboard.com/lets-have-a-mouse-party/">Mouse Party</a><span class="en">Mouse Party</span></td><td class="num s">51</td><td class="num c">8</td></tr>
+          <tr><td class="n">22</td><td class="t"><a href="https://newsletter.posthog.com/p/decision-models">不是所有事都需要 LLM</a><span class="en">Not Everything Needs an LLM</span></td><td class="num s">71</td><td class="num c">28</td></tr>
+          <tr><td class="n">23</td><td class="t"><a href="https://starsling.dev">StarSling（YC P25）</a><span class="en">Launch HN: StarSling – Self-improving CI for agent-volume repos</span></td><td class="num s">44</td><td class="num c">22</td></tr>
+          <tr><td class="n">24</td><td class="t"><a href="https://shivamduggal4.github.io/latent-lattice-language-models/">Latent Lattice 语言模型</a><span class="en">Latent Lattice Language Models</span></td><td class="num s">10</td><td class="num c">2</td></tr>
+          <tr><td class="n">25</td><td class="t"><a href="https://www.nytimes.com/2026/11/17/upshot/school-phone-bans-study-scores.html">校园手机禁令与考试成绩</a><span class="en">New Evidence Shows School Phone Bans Are Gradually Improving Test Scores</span></td><td class="num s">1135</td><td class="num c">558</td></tr>
+          <tr><td class="n">26</td><td class="t"><a href="https://news.ycombinator.com/item?id=50529612">Claude Code 团队如何做验证</a><span class="en">How the Claude Code team thinks about verification</span></td><td class="num s">251</td><td class="num c">197</td></tr>
+          <tr><td class="n">27</td><td class="t"><a href="https://alloyhtml.com/example.html">Alloy CSS：无 JS 组件</a><span class="en">Show HN: Alloy CSS, dialogs, menus and tabs that work with JavaScript off</span></td><td class="num s">170</td><td class="num c">30</td></tr>
+          <tr><td class="n">28</td><td class="t"><a href="https://jgeekstudies.org/2026/11/15/zoltraak-military-innovation-in-frieren/">Zoltraak 与军事创新</a><span class="en">Zoltraak and the Dynamics of Military Innovation</span></td><td class="num s">39</td><td class="num c">8</td></tr>
+          <tr><td class="n">29</td><td class="t"><a href="https://github.com/RunanywhereAI/trnrt">TrnRT：Trainium 推理引擎</a><span class="en">Show HN: TrnRT – An open-source LLM inference engine for AWS Trainium</span></td><td class="num s">41</td><td class="num c">5</td></tr>
+          <tr><td class="n">30</td><td class="t"><a href="https://openai.com/index/advancing-computer-use-for-healthcare-teams/">医疗场景的 computer-use agent</a><span class="en">Advancing computer-use agents for healthcare teams</span></td><td class="num s">35</td><td class="num c">25</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <span>📡 数据来源：Hacker News Firebase API（<code>topstories</code> + <code>item</code>）</span>
+      <span>🕗 抓取时间：2026-11-18 08:00 CST</span>
+    </div>
+    <div class="row">
+      <span>🧾 生成时间：2026-11-18 08:00 CST</span>
+      <span>📐 口径：score 与 descendants 为抓取瞬间值；「达阈值」指得分 ≥ 50 或评论 ≥ 30</span>
+    </div>
+    <p style="margin:12px 0 0">摘要基于原文页面与 HN 讨论综合改写，非逐字翻译；付费墙或需登录的原文（NYT、FT、OpenAI）以可见摘要与讨论内容为准，涉及厂商自述数据处已标注「官方称」。作者观点归原作者，本简报仅作筛选与索引。</p>
+    <p style="margin:8px 0 0">系列文件：<code>briefs/YYYY-MM/hn-brief-YYYY-MM-DD.html</code></p>
+  </footer>
+</div>
+</body>
+</html>
