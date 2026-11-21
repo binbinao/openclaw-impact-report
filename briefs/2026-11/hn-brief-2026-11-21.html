@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hacker News 每日简报 — 2026年11月21日</title>
+<meta name="description" content="2026-11-21 Hacker News top 30 中文简报：黎曼猜想双雄、AI 设计 CPU、Signal 收紧系统级 AI 助手访问。">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacker News 每日简报 — 2026年11月21日">
+<meta property="og:description" content="今日 HN top 30 中文简报：两份广义黎曼猜想证明草案、AI 设计的 CPU、Signal 收紧系统级 AI 助手访问。">
+<meta name="twitter:card" content="summary_large_image">
+<style>:root{
+  --bg:#0d1117; --bg2:#010409; --card:#161b22; --card2:#1c2129;
+  --border:#30363d; --border2:#21262d;
+  --fg:#e6edf3; --fg-dim:#9da7b3; --fg-mute:#6e7681;
+  --accent:#58a6ff; --accent2:#1f6feb;
+  --ai:#a371f7; --dev:#3fb950; --sec:#f85149; --misc:#d29922; --hot:#ff7b72;
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 8px 24px rgba(1,4,9,.6);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
+  font-size:16px;line-height:1.65;
+  background-image:radial-gradient(1200px 600px at 15% -10%,rgba(88,166,255,.10),transparent 60%),radial-gradient(900px 500px at 90% 0%,rgba(163,113,247,.10),transparent 55%);
+  background-repeat:no-repeat;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 64px}
+
+header.hero{padding:56px 0 28px;border-bottom:1px solid var(--border2);margin-bottom:34px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:rgba(31,111,235,.12);border:1px solid rgba(88,166,255,.35);padding:6px 12px;border-radius:999px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:18px 0 10px;letter-spacing:-.02em}
+h1 .date{background:linear-gradient(90deg,#58a6ff,#a371f7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--fg-dim);margin:0;max-width:760px;font-size:15px}
+.meta-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--fg-mute)}
+.meta-row span b{color:var(--fg-dim);font-weight:600}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:0 0 40px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 18px 16px;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--accent),transparent 70%);opacity:.7}
+.stat .v{font-size:30px;font-weight:700;letter-spacing:-.02em;font-family:var(--mono);line-height:1.15}
+.stat .k{font-size:12.5px;color:var(--fg-mute);margin-top:4px;letter-spacing:.04em}
+.stat.g .v{color:var(--dev)} .stat.p .v{color:var(--ai)} .stat.o .v{color:var(--misc)}
+
+section{margin:0 0 48px}
+h2.sec{display:flex;align-items:center;gap:10px;font-size:21px;margin:0 0 6px;letter-spacing:-.01em}
+h2.sec .bar{width:4px;height:22px;border-radius:2px;background:var(--accent)}
+h2.sec .n{font-family:var(--mono);font-size:12.5px;color:var(--fg-mute);font-weight:500}
+.sec-note{color:var(--fg-mute);font-size:13.5px;margin:0 0 18px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 16px 14px;display:flex;flex-direction:column;gap:10px;transition:border-color .18s,transform .18s,background .18s}
+.card:hover{border-color:#4a5462;background:var(--card2);transform:translateY(-2px)}
+.card .top{display:flex;align-items:flex-start;gap:10px}
+.rank{flex:0 0 auto;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--fg-mute);background:#0d1117;border:1px solid var(--border2);border-radius:6px;padding:2px 7px;min-width:34px;text-align:center;line-height:1.5}
+.card h3{margin:0;font-size:15.5px;line-height:1.45;font-weight:650}
+.card h3 a{color:var(--fg)}
+.card h3 a:hover{color:var(--accent);text-decoration:none}
+.card .orig{font-size:12px;color:var(--fg-mute);line-height:1.4;word-break:break-all}
+.card p.sum{margin:0;font-size:13.8px;color:var(--fg-dim)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:4px}
+a.tag{text-decoration:none}
+a.tag:hover{text-decoration:none;border-color:var(--accent);color:var(--accent)}
+.tag{font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);color:var(--fg-dim);background:#0d1117;white-space:nowrap}
+.tag.score{color:#e3b341;border-color:rgba(210,153,34,.45);background:rgba(210,153,34,.10)}
+.tag.cmt{color:#79c0ff;border-color:rgba(88,166,255,.45);background:rgba(88,166,255,.10)}
+.tag.cat-ai{color:var(--ai);border-color:rgba(163,113,247,.45);background:rgba(163,113,247,.10)}
+.tag.cat-dev{color:var(--dev);border-color:rgba(63,185,80,.45);background:rgba(63,185,80,.10)}
+.tag.cat-sec{color:var(--sec);border-color:rgba(248,81,73,.45);background:rgba(248,81,73,.10)}
+.tag.cat-misc{color:var(--misc);border-color:rgba(210,153,34,.45);background:rgba(210,153,34,.10)}
+.tag.key{color:var(--hot);border-color:rgba(255,123,114,.5);background:rgba(255,123,114,.10)}
+.tag.hn{color:var(--fg-mute)}
+
+/* Top 5 feature cards */
+.top5{display:grid;gap:16px}
+.feat{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);padding:20px 22px;display:grid;grid-template-columns:56px 1fr;gap:18px;box-shadow:var(--shadow)}
+.feat .num{font-family:var(--mono);font-size:26px;font-weight:800;color:var(--accent);opacity:.85;line-height:1}
+.feat h3{margin:0 0 6px;font-size:18px;line-height:1.4}
+.feat h3 a{color:var(--fg)}
+.feat h3 a:hover{color:var(--accent);text-decoration:none}
+.feat .orig{font-size:12px;color:var(--fg-mute);word-break:break-all;margin-bottom:10px}
+.feat p.sum{margin:0 0 12px;color:var(--fg-dim);font-size:14.5px}
+
+/* discussion block */
+.disc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:grid;gap:14px}
+.disc .head{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.disc h3{margin:0;font-size:17px}
+.quotes{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.quotes li{background:#0d1117;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 14px;font-size:13.8px;color:var(--fg-dim)}
+.quotes li b{color:var(--accent);font-family:var(--mono);font-size:12px;font-weight:600;display:block;margin-bottom:4px}
+
+footer{border-top:1px solid var(--border2);margin-top:8px;padding-top:22px;color:var(--fg-mute);font-size:12.5px;display:grid;gap:6px}
+footer code{font-family:var(--mono);color:var(--fg-dim);background:#0d1117;border:1px solid var(--border2);border-radius:4px;padding:1px 5px}
+@media (max-width:640px){
+  .wrap{padding:0 14px 48px}
+  header.hero{padding:34px 0 22px}
+  .feat{grid-template-columns:1fr;gap:10px;padding:16px}
+  .feat .num{font-size:20px}
+  .grid{grid-template-columns:1fr}
+  .stat{padding:14px}
+  .stat .v{font-size:25px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<main>
+
+<header class="hero">
+  <span class="kicker">Hacker News · Daily Digest</span>
+  <h1>Hacker News 每日简报 — <span class="date">2026年11月21日</span></h1>
+  <p class="lede">今日 HN 被数学接管：一天之内出现两份广义黎曼猜想的证明草案——一份由人独立完成，一份由人和 Claude 一起完成，外加一份 Navier–Stokes 有限时间爆破论文与 Lean 形式化。AI 侧的另一条线是硬件：一颗由 AI 从零设计到 GDS 的 CPU，以及一台只用 agent 就写出来的 FPGA 推理机。</p>
+  <div class="meta-row">
+    <span>生成时间 <b>2026-11-21 08:06</b></span>
+    <span>数据源 <b>HN Firebase API (topstories)</b></span>
+    <span>样本 <b>Top 30 · 30 篇入选</b></span>
+  </div>
+</header>
+
+<section>
+  <h2 class="sec"><span class="bar"></span>📊 今日概况 <span class="n">OVERVIEW</span></h2>
+  <p class="sec-note">得分中位数 91；23 篇文章达到「得分 ≥ 50 或评论 ≥ 30」的重点线，说明今天的样本整体热度偏高。</p>
+  <div class="stats"><div class="stat "><div class="v">30</div><div class="k">抓取文章数 (top 30)</div></div><div class="stat  p"><div class="v">2284</div><div class="k">最高得分</div></div><div class="stat  o"><div class="v">1548</div><div class="k">最热评论数</div></div><div class="stat  g"><div class="v">23</div><div class="k">重点文章 (≥50 分 / ≥30 评)</div></div><div class="stat "><div class="v">282</div><div class="k">平均得分</div></div><div class="stat "><div class="v">4322</div><div class="k">评论总量</div></div></div>
+</section>
+
+<section>
+  <h2 class="sec"><span class="bar"></span>🔥 必读 Top 5 <span class="n">按得分排序</span></h2>
+  <p class="sec-note">取今日 top 30 中得分最高的 5 篇；下列分类区域不再重复收录这 5 篇。</p>
+  <div class="top5"><article class="feat"><div class="num">01</div><div><h3><a href="https://alpo.ge/remark.pdf" target="_blank" rel="noopener">Levent Alpöge 声称证明了广义黎曼猜想</a></h3><div class="orig">alpo.ge · 原文英文标题：Levent Alpöge claims proof of the Generalized Riemann Hypothesis [pdf]</div><p class="sum">Alpöge 公开短篇手稿，称与 Claude 合作找到了黎曼猜想的证明，并顺势推到广义黎曼猜想（GRH），且声称已在「不引入额外假设」的前提下完成形式化。1548 条评论把讨论推向两个焦点：AI 参与的数学发现算不算「数学突破」，以及这种超长论证还能不能被人类读懂。</p><div class="tags"><span class="tag score">▲ 2284</span><span class="tag cmt">💬 1548</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50574968" target="_blank" rel="noopener">HN #3 · 讨论 ↗</a></div></div></article><article class="feat"><div class="num">02</div><div><h3><a href="https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/" target="_blank" rel="noopener">Ravi Vakil 紧急公布：Alessandro Masullo 的 GRH 证明草案</a></h3><div class="orig">math216.wordpress.com · 原文英文标题：Hurried Announcement: Alessandro Masullo GRH</div><p class="sum">斯坦福代数几何学家 Ravi Vakil 在 AMS 会议间隙紧急发文：Masullo 提出 GRH 证明，Brian Conrad 已细读数月并给出大量反馈、草案正被修订，「目前看是好的」。他特别强调这是纯人类工作、完全没有 AI 参与。</p><div class="tags"><span class="tag score">▲ 1381</span><span class="tag cmt">💬 634</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50579568" target="_blank" rel="noopener">HN #1 · 讨论 ↗</a></div></div></article><article class="feat"><div class="num">03</div><div><h3><a href="https://architectlabs.com/blog/frostbite" target="_blank" rel="noopener">Frostbite：一颗由 AI 从零发现、设计并验证的新 CPU 架构</a></h3><div class="orig">architectlabs.com · 原文英文标题：Frostbite: A new CPU architecture discovered, designed and verified by AI</div><p class="sum">Architect Labs 称其 AI 系统独立迭代了编译器、ISA、微架构、RTL 与验证，最终流片到 GDS：新指令集基于 interaction nets（每步局部、依赖显式、值单一所有者），在 25 个负载（含 15 个最后才揭晓的留出负载）上取得 4.59 倍性能/功耗比。</p><div class="tags"><span class="tag score">▲ 610</span><span class="tag cmt">💬 319</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50572503" target="_blank" rel="noopener">HN #19 · 讨论 ↗</a></div></div></article><article class="feat"><div class="num">04</div><div><h3><a href="https://kottke.org/17/06/if-you-cant-explain-something-in-simple-terms-you-dont-understand-it" target="_blank" rel="noopener">说不清就是没真懂（2017 年旧文重提）</a></h3><div class="orig">kottke.org · 原文英文标题：If you can't explain something in simple terms, you don't understand it (2017)</div><p class="sum">老文重提：能把一件事用简单语言讲清楚，是「真理解」最可靠的检验。评论把它延伸到今天的语境——LLM 能否被说成「理解」、专家为什么讲不清、以及教学本身就是最好的自测。</p><div class="tags"><span class="tag score">▲ 604</span><span class="tag cmt">💬 288</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50572355" target="_blank" rel="noopener">HN #14 · 讨论 ↗</a></div></div></article><article class="feat"><div class="num">05</div><div><h3><a href="https://thinkingmachines.ai/news/inkling-2-mini/" target="_blank" rel="noopener">Thinking Machines 发布 Inkling 2 Mini</a></h3><div class="orig">thinkingmachines.ai · 原文英文标题：Inkling 2 Mini</div><p class="sum">26.4B 总参、3.4B 激活的 MoE，套了个「循环式 transformer」：每个 token 把中间层跑三遍。官方卖点是「不把推理写出来也能多想」，在 &lt;100B 开源模型中 SWE 类基准领先，且小到能跑在笔记本上。</p><div class="tags"><span class="tag score">▲ 559</span><span class="tag cmt">💬 94</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581260" target="_blank" rel="noopener">HN #2 · 讨论 ↗</a></div></div></article></div>
+</section>
+
+<section><h2 class="sec"><span class="bar"></span>🤖 AI 相关动态 <span class="n">8 ITEMS</span></h2><p class="sec-note">共 8 篇，按得分降序。</p><div class="grid"><article class="card"><div class="top"><span class="rank">#8</span><div><h3><a href="https://arxiv.org/abs/2611.21885" target="_blank" rel="noopener">语言模型可以改写自己的权重</a></h3><div class="orig">arxiv.org · 原文英文标题：Language Models Can Rewrite Their Own Weights</div></div></div><p class="sum">arXiv 新论文称首次做到：开放 27B 模型拿到自己的权重、自己的评分和运行自己的能力后，无需梯度、无需训练即可诊断失败并改写自身权重，在没见过的题上准确率提升 6.6 分；连跑八轮只升不降，还能把一个被打坏的自身副本修回来。</p><div class="tags"><span class="tag score">▲ 320</span><span class="tag cmt">💬 106</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50577265" target="_blank" rel="noopener">HN #8 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#30</span><div><h3><a href="https://kobi.music/research/dettato" target="_blank" rel="noopener">Show HN：音频转 MIDI 模型，效率提升 60 倍</a></h3><div class="orig">kobi.music · 原文英文标题：Show HN: I made an audio-to-MIDI model 60x more efficient</div></div></div><p class="sum">作者把音高/音符转录模型做到 60 倍效率，公开了研究与实现细节；对做音乐工具链的人是可直接试的实用件。</p><div class="tags"><span class="tag score">▲ 224</span><span class="tag cmt">💬 48</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50526023" target="_blank" rel="noopener">HN #30 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#15</span><div><h3><a href="https://scottaaronson.blog/?p=10344" target="_blank" rel="noopener">Aaronson：随机鹦鹉好像把黎曼猜想给证了</a></h3><div class="orig">scottaaronson.blog · 原文英文标题：The stochastic parrots have apparently proved the Riemann Hypothesis</div></div></div><p class="sum">Scott Aaronson 把这轮 AI 参与数学发现放进他多年的框架里：如果结果成立，争论的重点就不再是「能不能」，而是「算不算」。152 条评论基本复刻了他预测的那套反应谱。</p><div class="tags"><span class="tag score">▲ 185</span><span class="tag cmt">💬 152</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581084" target="_blank" rel="noopener">HN #15 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#13</span><div><h3><a href="https://ankitg.me/blog/vibecoding-inference-chip/" target="_blank" rel="noopener">Vibe coding 一块推理芯片（其实是 FPGA 跑 LLM）</a></h3><div class="orig">ankitg.me · 原文英文标题：Vibecoding an inference chip</div></div></div><p class="sum">作者用编码 agent 从零把 LLM 推理搬进 FPGA，一半时间在经历 oh shit 时刻：硬件描述语言、时序、仿真验证都靠模型顶上去。结论是 agent 把「跨领域动手」的门槛降到了只差 token 预算。</p><div class="tags"><span class="tag score">▲ 101</span><span class="tag cmt">💬 33</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50579297" target="_blank" rel="noopener">HN #13 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#28</span><div><h3><a href="https://quebec.yarn.so" target="_blank" rel="noopener">Show HN：语音词级时间戳 API，75% 误差在 20ms 内</a></h3><div class="orig">quebec.yarn.so · 原文英文标题：Show HN: An API for word timestamps from speech, 75% within 20ms</div></div></div><p class="sum">面向字幕与音画对齐的接口：返回每个词的精确起止时间，四分之三的预测落在 20 毫秒误差内。</p><div class="tags"><span class="tag score">▲ 51</span><span class="tag cmt">💬 8</span><span class="tag cat-ai">AI</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50532515" target="_blank" rel="noopener">HN #28 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#9</span><div><h3><a href="https://github.com/google-deepmind/math-horizon" target="_blank" rel="noopener">Google DeepMind 悄悄建了个 math-horizon 仓库</a></h3><div class="orig">github.com · 原文英文标题：A few hours ago Google DeepMind created a math horizon repo</div></div></div><p class="sum">有人发现 DeepMind 新建 math-horizon 仓库，随即被转上 HN；目前链接已 404（转私有或改名）。评论区在猜这是新的数学评测基准，还是内部工具外泄。</p><div class="tags"><span class="tag score">▲ 43</span><span class="tag cmt">💬 25</span><span class="tag cat-ai">AI</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50582629" target="_blank" rel="noopener">HN #9 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#24</span><div><h3><a href="https://www.researchgate.net/publication/418143113_The_Hungry_Butler_Effect_Concealed_Commercial_Incentives_and_the_Erosion_of_Epistemic_Rigour_in_Large_Language_Models" target="_blank" rel="noopener">饥饿管家效应：LLM 中隐藏的商业激励</a></h3><div class="orig">researchgate.net · 原文英文标题：The Hungry Butler Effect: Concealed Commercial Incentives in LLMs</div></div></div><p class="sum">论文提出 LLM 可能携带不易察觉的商业偏向（推荐、比较、默认选项），并正在侵蚀科研与信息获取中的认识论严谨性——「免费管家」其实自带菜单。</p><div class="tags"><span class="tag score">▲ 8</span><span class="tag cmt">💬 3</span><span class="tag cat-ai">AI</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583117" target="_blank" rel="noopener">HN #24 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#26</span><div><h3><a href="https://www.economist.com/science-and-technology/2026/11/20/ai-may-have-solved-the-most-important-problem-in-mathematics" target="_blank" rel="noopener">经济学人：AI 可能已解决数学中最重要的问题</a></h3><div class="orig">economist.com · 原文英文标题：AI may have solved the most important problem in mathematics</div></div></div><p class="sum">主流媒体视角的 GRH 事件综述，把「AI 会不会做数学」从远景拉成当日新闻；讨论量不高，但它是这轮热潮里少见的非技术圈叙事。</p><div class="tags"><span class="tag score">▲ 5</span><span class="tag cmt">💬 2</span><span class="tag cat-ai">AI</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583445" target="_blank" rel="noopener">HN #26 · 讨论 ↗</a></div></article></div></section>
+
+<section><h2 class="sec"><span class="bar"></span>💻 编程 &amp; 开源 <span class="n">6 ITEMS</span></h2><p class="sec-note">共 6 篇，按得分降序。</p><div class="grid"><article class="card"><div class="top"><span class="rank">#6</span><div><h3><a href="https://manidoraisamy.com/developer-to-architect.html" target="_blank" rel="noopener">我们把开发者提拔成架构师，却没告诉他们</a></h3><div class="orig">manidoraisamy.com · 原文英文标题：We promoted developers into architects without informing them</div></div></div><p class="sum">一次排查引出反面教材：vibe coding 出来的日志逻辑每次安装串行打多次 Google API，把欢迎页拖到 15 秒。作者说真正的「资深/架构」能力，是知道每个方法背后几次调用、以及肯对市场部说「这个数据拿不到」。</p><div class="tags"><span class="tag score">▲ 253</span><span class="tag cmt">💬 163</span><span class="tag cat-dev">编程 / 开源</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50579331" target="_blank" rel="noopener">HN #6 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#16</span><div><h3><a href="https://winedroid.soham.sh/demo/" target="_blank" rel="noopener">Winedroid：不装 Android 也能跑 Android 应用（WASM）</a></h3><div class="orig">winedroid.soham.sh · 原文英文标题：Winedroid – run Android apps without Android (WASM demo)</div></div></div><p class="sum">用 WebAssembly 在浏览器里直接跑 Android 应用，不需要 Android 运行时或模拟器；Demo 已可交互，思路与 Wine 同类但落在 WASM 上。</p><div class="tags"><span class="tag score">▲ 83</span><span class="tag cmt">💬 25</span><span class="tag cat-dev">编程 / 开源</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50580536" target="_blank" rel="noopener">HN #16 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#11</span><div><h3><a href="https://www.masteringemacs.org/article/announcing-dreamcoder" target="_blank" rel="noopener">DreamCoder：来自 Mastering Emacs 作者的编码 harness + IDE</a></h3><div class="orig">masteringemacs.org · 原文英文标题：DreamCoder: Coding harness and IDE from the author of Mastering Emacs</div></div></div><p class="sum">Mickey Petersen 发布自研 IDE，核心想法是把 agent 嵌进真实的编辑与调试循环，而不是开一个聊天框另起一套工作流。</p><div class="tags"><span class="tag score">▲ 70</span><span class="tag cmt">💬 9</span><span class="tag cat-dev">编程 / 开源</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581110" target="_blank" rel="noopener">HN #11 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#21</span><div><h3><a href="https://github.com/diggerhq/opencomputer" target="_blank" rel="noopener">Show HN：OpenComputer，开源版 Devin</a></h3><div class="orig">github.com · 原文英文标题：Show HN: OpenComputer – an open source alternative to Devin</div></div></div><p class="sum">diggerhq 把自主编码 agent 的整套组件开源，目标是对标 Devin：从任务分解到代码执行全链路可自托管。</p><div class="tags"><span class="tag score">▲ 50</span><span class="tag cmt">💬 14</span><span class="tag cat-dev">编程 / 开源</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581403" target="_blank" rel="noopener">HN #21 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#25</span><div><h3><a href="https://euler.dawei7.com" target="_blank" rel="noopener">Show HN：Professor Euler，离线数学工作台</a></h3><div class="orig">euler.dawei7.com · 原文英文标题：Show HN: Professor Euler – Offline math desk, 300-function CAS, workbooks</div></div></div><p class="sum">纯本地运行的数学桌面：300 个函数的 CAS 加练习册，不联网、不依赖云端，适合教学与离线演算。</p><div class="tags"><span class="tag score">▲ 9</span><span class="tag cmt">💬 0</span><span class="tag cat-dev">编程 / 开源</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50537626" target="_blank" rel="noopener">HN #25 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#18</span><div><h3><a href="https://typedb.com/blog/replacing-implicit-optionals-with-a-none-type-in-typedb" target="_blank" rel="noopener">TypeDB 用显式 None 类型替掉隐式 optional</a></h3><div class="orig">typedb.com · 原文英文标题：Replacing implicit optionals with a None type in TypeDB</div></div></div><p class="sum">数据库团队讲类型系统设计取舍：把「没有值」从隐式可空提升为一等类型，可空性就从散落的约定变成可推理、可校验的东西。</p><div class="tags"><span class="tag score">▲ 6</span><span class="tag cmt">💬 0</span><span class="tag cat-dev">编程 / 开源</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50535504" target="_blank" rel="noopener">HN #18 · 讨论 ↗</a></div></article></div></section>
+
+<section><h2 class="sec"><span class="bar"></span>🔒 安全 &amp; 政策 <span class="n">5 ITEMS</span></h2><p class="sec-note">共 5 篇，按得分降序。</p><div class="grid"><article class="card"><div class="top"><span class="rank">#20</span><div><h3><a href="https://signal.org/blog/protecting-your-privacy/" target="_blank" rel="noopener">Signal 认真对待你的隐私：收紧系统级 AI 助手</a></h3><div class="orig">signal.org · 原文英文标题：Signal Is Serious About Protecting Your Privacy</div></div></div><p class="sum">Signal 称取证调查发现，手机系统内置的 AI agent（Siri、Spotlight 一类）可能抓取并留存 Signal 内容，因此对这类访问做了限制。评论两派：一派问「截图/录屏这类正当能力怎么办」，另一派质疑「靠单一应用守隐私」本身是否可行。</p><div class="tags"><span class="tag score">▲ 482</span><span class="tag cmt">💬 291</span><span class="tag cat-sec">安全 / 政策</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50572348" target="_blank" rel="noopener">HN #20 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#22</span><div><h3><a href="https://finance.yahoo.com/markets/article/nvidia-stock-extends-25-trillion-rout-as-sec-probe-reportedly-investigates-its-accounting-194945274.html" target="_blank" rel="noopener">消息称 SEC 正在调查 Nvidia 的会计处理</a></h3><div class="orig">finance.yahoo.com · 原文英文标题：Nvidia accounting under SEC investigation, sources say</div></div></div><p class="sum">媒体报道 SEC 已就 Nvidia 的会计处理展开调查，同日股价延续大幅回撤；讨论集中在收入确认、渠道库存与「AI 需求」叙事的价格。</p><div class="tags"><span class="tag score">▲ 199</span><span class="tag cmt">💬 95</span><span class="tag cat-sec">安全 / 政策</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581438" target="_blank" rel="noopener">HN #22 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#23</span><div><h3><a href="https://www.cnbc.com/2026/11/19/stock-market-today-live-updates.html" target="_blank" rel="noopener">纳斯达克抹平 2026 年全部涨幅</a></h3><div class="orig">cnbc.com · 原文英文标题：Nasdaq erases all 2026 gains</div></div></div><p class="sum">指数回吐年内全部涨幅，与 AI 资本开支预期降温、Nvidia 被查消息同日共振；和上面两条一起看，就是今天市场侧的三连击。</p><div class="tags"><span class="tag score">▲ 65</span><span class="tag cmt">💬 20</span><span class="tag cat-sec">安全 / 政策</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583254" target="_blank" rel="noopener">HN #23 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#27</span><div><h3><a href="https://www.bleepingcomputer.com/news/microsoft/microsoft-announces-windows-server-2028-with-hardened-security/" target="_blank" rel="noopener">微软发布 Windows Server 2028，主打强化安全</a></h3><div class="orig">bleepingcomputer.com · 原文英文标题：Microsoft announces Windows Server 2028 with hardened security</div></div></div><p class="sum">新版本以「加固过的安全基线」为主线：更小的默认攻击面、更严格的服务与凭据加固。69 条评论更关心升级成本与旧负载兼容性。</p><div class="tags"><span class="tag score">▲ 63</span><span class="tag cmt">💬 69</span><span class="tag cat-sec">安全 / 政策</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50550430" target="_blank" rel="noopener">HN #27 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#5</span><div><h3><a href="https://nate.mecca1.net/posts/2026-11-20_help/" target="_blank" rel="noopener">GitHub 无理由封了我的号，而且联系不上人</a></h3><div class="orig">nate.mecca1.net · 原文英文标题：GitHub nuked me with no reason, and (so far) no ability to contact a human</div></div></div><p class="sum">作者账号被直接停用：GitHub 页面 404、个人站与项目全消失，没有任何邮件或通知，工单只收到自动回复。帖子成了「别把全部身家押在单一平台」的现场教材。</p><div class="tags"><span class="tag score">▲ 33</span><span class="tag cmt">💬 12</span><span class="tag cat-sec">安全 / 政策</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583911" target="_blank" rel="noopener">HN #5 · 讨论 ↗</a></div></article></div></section>
+
+<section><h2 class="sec"><span class="bar"></span>🎯 其他值得关注 <span class="n">6 ITEMS</span></h2><p class="sec-note">共 6 篇，按得分降序。</p><div class="grid"><article class="card"><div class="top"><span class="rank">#7</span><div><h3><a href="https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/" target="_blank" rel="noopener">陶哲轩：无外力 Euler 与 Navier–Stokes 奇点，以及广义黎曼猜想</a></h3><div class="orig">terrytao.wordpress.com · 原文英文标题：Unforced Navier-Stokes Singularity and the Generalized Riemann Hypothesis</div></div></div><p class="sum">陶哲轩同日撰文，把「无外力驱动」版本的 Euler 与 Navier–Stokes 奇点问题同 GRH 放进同一条方法论线索里，讨论这批新证明的可验证性与它在数学地图上的位置。</p><div class="tags"><span class="tag score">▲ 303</span><span class="tag cmt">💬 119</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50578358" target="_blank" rel="noopener">HN #7 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#10</span><div><h3><a href="https://github.com/tristanbuckmaster/navier-stokes/" target="_blank" rel="noopener">Navier–Stokes 方程的有限时间爆破（论文与 Lean 4 形式化）</a></h3><div class="orig">github.com · 原文英文标题：Finite-time blow-up for the Navier–Stokes equations</div></div></div><p class="sum">Alpöge 与 Buckmaster 的 79 页论文仓库，配套 Lean 4 形式化（Lean v4.33.1 + Mathlib），其中 NOTICE 逐条说明形式化与原论文定理的对应关系及差异。</p><div class="tags"><span class="tag score">▲ 247</span><span class="tag cmt">💬 77</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50576232" target="_blank" rel="noopener">HN #10 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#29</span><div><h3><a href="https://news.ycombinator.com/item?id=50577613" target="_blank" rel="noopener">AMA：给 YC 和创业公司办移民的律师 Peter Roberts</a></h3><div class="orig">news.ycombinator.com · 原文英文标题：I'm Peter Roberts, immigration attorney who does work for YC and startups. AMA</div></div></div><p class="sum">专做创始人移民事务的律师在线答疑，129 条评论集中在 H-1B、O-1、跨国创业者的身份路径与现实时间线。</p><div class="tags"><span class="tag score">▲ 91</span><span class="tag cmt">💬 129</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50577613" target="_blank" rel="noopener">HN #29 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#12</span><div><h3><a href="https://signoregalilei.com/2026/11/20/and-yet-it-moves/" target="_blank" rel="noopener">And Yet, It Moves（可它仍在动）</a></h3><div class="orig">signoregalilei.com · 原文英文标题：And Yet, It Moves</div></div></div><p class="sum">借伽利略那句 eppur si muove 写的一篇随笔：当机器接连攻下人类视为智力顶点的难题，人该怎么摆放自己。评论区直接开吵——AI 成果算不算人类成就。</p><div class="tags"><span class="tag score">▲ 62</span><span class="tag cmt">💬 28</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50581177" target="_blank" rel="noopener">HN #12 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#4</span><div><h3><a href="https://ninlive.com/" target="_blank" rel="noopener">NINLIVE：Nine Inch Nails 现场档案</a></h3><div class="orig">ninlive.com · 原文英文标题：NINLIVE: The Nine Inch Nails live archive</div></div></div><p class="sum">粉丝维护的 NIN 现场录音档案馆，按巡演整理音源与曲目，是「互联网还留着好东西」那一类站点。</p><div class="tags"><span class="tag score">▲ 55</span><span class="tag cmt">💬 11</span><span class="tag cat-misc">其他</span><span class="tag key">重点</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583274" target="_blank" rel="noopener">HN #4 · 讨论 ↗</a></div></article><article class="card"><div class="top"><span class="rank">#17</span><div><h3><a href="https://www.esa.int/articles/about-us/directorates/operations/space-safety/hera/sir-brian-may-adds-new-dimension-to-hera-asteroid" target="_blank" rel="noopener">Brian May 给 Hera 小行星任务添了一个新维度</a></h3><div class="orig">esa.int · 原文英文标题：Sir Brian May adds new dimension to Hera asteroid</div></div></div><p class="sum">ESA 官方报道：天体物理学家、Queen 吉他手 Brian May 参与 Hera 小行星探测任务；ESA 称他为这颗小行星的科学成像带来新的维度。</p><div class="tags"><span class="tag score">▲ 7</span><span class="tag cmt">💬 0</span><span class="tag cat-misc">其他</span><a class="tag hn" href="https://news.ycombinator.com/item?id=50583768" target="_blank" rel="noopener">HN #17 · 讨论 ↗</a></div></article></div></section>
+
+<section>
+  <h2 class="sec"><span class="bar"></span>💬 今日最热讨论 <span class="n">1,548 COMMENTS</span></h2>
+  <p class="sec-note">主战场是 Alpöge 的黎曼猜动手稿：2,284 分、1,548 条评论，热度是第二名的 2.4 倍。</p>
+  <div class="disc">
+    <div class="head">
+      <h3>Levent Alpöge claims proof of the Generalized Riemann Hypothesis</h3>
+      <span class="tag score">▲ 2284</span><span class="tag cmt">💬 1548</span>
+    </div>
+    <p class="sum" style="margin:0;color:var(--fg-dim);font-size:14.5px">讨论没有停在「证明对不对」——那是审稿人的活；它迅速分叉成三条线：<b>一、AI 参与的可信度</b>：手稿明确写作是与 Claude 共同完成并已形式化，于是「形式化通过是否等于定理成立」被反复追问；<b>二、可读性危机</b>：当论证长到没人能读完，数学共同体赖以成立的「理解」还剩什么；<b>三、优先级地震</b>：如果这条路走得通，那些压了十年的私人项目该不该现在就公开。</p>
+    <ul class="quotes"><li><b>jackschultz</b>把论文里那段自述贴了出来：「Claude 和我最近几个月度过了很好的时光，但这一次，在终点线前它远远超过了我。不，Claude 飞了起来，还跳了舞，在终点线附近闪闪发光。」——整条帖子最被反复引用的就是这段文字。</li><li><b>puff_pastry</b>如果成立，这将是数学、计算机科学、乃至 AI 的大事件。但他更在意方法论的转向：论证「目前极其冗长」，形式化虽然完成，产出却是一份没人读得完的巨大文档，这像是离开了我们熟悉的「理解」方式。</li><li><b>faangguyindia</b>一个被顶上来的担忧：大厂员工完全可以 grep 全公司的聊天记录找「Riemann Hypothesis」，再用模型筛潜在线索——「有多少人正在跟模型聊他们的证明和登月级想法？」</li><li><b>yewenjie</b>提前引用了 Aaronson 的判断：即便到今天，仍会有人用居高临下的语气解释为什么这些都不算数——而真正的问题已经不是「能不能」，而是「算不算」。</li></ul>
+    <p class="sum" style="margin:0;color:var(--fg-mute);font-size:13.5px">次热讨论依次为：Masullo 全人类版 GRH 草案（634 评论，主线是「两份草案该一起严肃审」）、AI 设计的 CPU Frostbite（319）、Signal 收紧系统级 AI 助手访问（291）、2017 年旧文「讲不清就是没懂」（288）。</p>
+  </div>
+</section>
+
+<footer>
+  <div>数据来源：<code>hacker-news.firebaseio.com/v0</code>（topstories + item，取前 30 条，抓取于 2026-11-21 08:06 CST）；评论文本参考 <code>hn.algolia.com/api/v1</code>，原文要点由各站点页面抓取后人工摘要。</div>
+  <div>统计口径：得分/评论数均为抓取时刻快照，HN 实时变动，可能与页面现值不同；「重点」= 得分 ≥ 50 或 评论 ≥ 30。</div>
+  <div>链接状态：Signal、经济学人、ResearchGate、BleepingComputer 等站点对脚本请求返回 403/429（反爬），浏览器访问正常；DeepMind 的 math-horizon 仓库当前为 404。</div>
+  <div>生成：Hermes Agent（reviewer profile）· 本页为静态 HTML，无外部依赖，可直接部署到 GitHub Pages。</div>
+</footer>
+</main>
+
+</div>
+</body>
+</html>
