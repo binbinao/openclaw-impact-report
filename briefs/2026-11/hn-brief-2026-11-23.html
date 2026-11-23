@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hacker News 每日热门简报 2026-11-23：Top 30 热门文章中文摘要、分类与讨论热度分析。">
+<title>Hacker News 每日简报 — 2026年11月23日</title>
+<style>
+  :root{
+    --bg:#0d1117; --surface:#161b22; --surface-2:#1c2128; --border:#30363d;
+    --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --accent-2:#1f6feb;
+    --ai:#a371f7; --code:#3fb950; --sec:#f85149; --policy:#d29922; --other:#39c5cf;
+    --score:#f0883e; --radius:14px; --maxw:1080px;
+    --shadow:0 1px 0 rgba(255,255,255,.03), 0 8px 24px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:15px; -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0 0 auto 0; height:420px; pointer-events:none; z-index:0;
+    background:radial-gradient(900px 320px at 15% -10%,rgba(88,166,255,.16),transparent 65%),
+               radial-gradient(700px 260px at 85% -15%,rgba(163,113,247,.14),transparent 65%);
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 64px; position:relative; z-index:1}
+  header.hero{padding:56px 0 26px; border-bottom:1px solid var(--border)}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent); border:1px solid rgba(88,166,255,.35);
+    background:rgba(88,166,255,.08); padding:5px 12px; border-radius:999px; font-weight:600;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--code);box-shadow:0 0 0 4px rgba(63,185,80,.15)}
+  h1{
+    font-size:clamp(26px,4.4vw,40px); line-height:1.25; margin:18px 0 10px; letter-spacing:-.02em;
+    background:linear-gradient(96deg,#fff 0%,#c9d7f0 45%,#8ab4f8 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .sub{color:var(--muted); font-size:14px; margin:0}
+  .sub strong{color:var(--text); font-weight:600}
+  nav.jump{display:flex; flex-wrap:wrap; gap:8px; padding:18px 0 0}
+  nav.jump a{
+    font-size:12.5px; color:var(--muted); text-decoration:none; border:1px solid var(--border);
+    padding:4px 11px; border-radius:999px; transition:.18s;
+  }
+  nav.jump a:hover{color:var(--text); border-color:var(--accent); background:rgba(88,166,255,.08)}
+  section{padding-top:40px}
+  h2{font-size:20px; margin:0 0 4px; display:flex; align-items:center; gap:10px; letter-spacing:-.01em}
+  .sec-note{color:var(--muted); font-size:12.5px; margin:0 0 18px}
+  .grid{display:grid; gap:14px}
+  .stats{grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); margin-top:20px}
+  .stat{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 18px; position:relative; overflow:hidden;
+  }
+  .stat::after{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent); opacity:.8}
+  .stat:nth-child(2)::after{background:var(--code)}
+  .stat:nth-child(3)::after{background:var(--score)}
+  .stat:nth-child(4)::after{background:var(--ai)}
+  .stat .k{font-size:11.5px; color:var(--muted); letter-spacing:.06em; letter-spacing:.05em}
+  .stat .v{font-size:27px; font-weight:700; letter-spacing:-.02em; margin-top:2px; font-variant-numeric:tabular-nums}
+  .stat .m{font-size:11.5px; color:var(--muted); margin-top:2px}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 18px; box-shadow:var(--shadow); transition:transform .18s ease, border-color .18s ease;
+  }
+  .card:hover{transform:translateY(-2px); border-color:#475569}
+  .card.top{background:linear-gradient(180deg,rgba(88,166,255,.055),transparent 62%),var(--surface)}
+  .row{display:flex; align-items:flex-start; gap:12px}
+  .rank{
+    flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+    font-size:13px; font-weight:700; color:var(--muted); background:var(--surface-2);
+    border:1px solid var(--border); font-variant-numeric:tabular-nums;
+  }
+  .rank.r1{color:#0d1117; background:linear-gradient(135deg,#ffd76e,#f0883e); border-color:transparent}
+  .rank.r2{color:#0d1117; background:linear-gradient(135deg,#e2e8f0,#94a3b8); border-color:transparent}
+  .rank.r3{color:#0d1117; background:linear-gradient(135deg,#e0a878,#b87333); border-color:transparent}
+  .body{flex:1 1 auto; min-width:0}
+  .t{font-size:15.5px; font-weight:650; margin:0; line-height:1.45}
+  .t a{color:var(--text); text-decoration:none}
+  .t a:hover{color:var(--accent); text-decoration:underline; text-underline-offset:3px}
+  .orig{display:block; font-size:11.5px; color:#6e7b8b; margin-top:3px; word-break:break-all}
+  .zh{margin:7px 0 0; color:#b6c2cf; font-size:13.5px}
+  .meta{display:flex; flex-wrap:wrap; align-items:center; gap:7px; margin-top:10px}
+  .pill{
+    font-size:11.5px; font-weight:600; padding:2.5px 9px; border-radius:999px;
+    border:1px solid transparent; font-variant-numeric:tabular-nums; white-space:nowrap;
+  }
+  .p-score{color:var(--score); background:rgba(240,136,62,.12); border-color:rgba(240,136,62,.3)}
+  .p-com{color:var(--accent); background:rgba(88,166,255,.1); border-color:rgba(88,166,255,.28)}
+  .p-cat{font-weight:600}
+  .c-ai{color:var(--ai); background:rgba(163,113,247,.12); border-color:rgba(163,113,247,.3)}
+  .c-code{color:var(--code); background:rgba(63,185,80,.1); border-color:rgba(63,185,80,.28)}
+  .c-sec{color:var(--sec); background:rgba(248,81,73,.1); border-color:rgba(248,81,73,.28)}
+  .c-pol{color:var(--policy); background:rgba(210,153,34,.1); border-color:rgba(210,153,34,.3)}
+  .c-oth{color:var(--other); background:rgba(57,197,207,.1); border-color:rgba(57,197,207,.28)}
+  .bar{height:3px; border-radius:2px; background:#21262d; margin-top:11px; overflow:hidden}
+  .bar i{display:block; height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent-2),var(--accent))}
+  .duo{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .hot{
+    border-left:3px solid var(--sec); padding-left:16px;
+  }
+  .hot .quote{font-size:13.5px; color:#b6c2cf; margin:8px 0 0}
+  .kb{display:grid; gap:6px; margin-top:10px; padding:0; list-style:none}
+  .kb li{font-size:13px; color:#b6c2cf; display:flex; gap:8px}
+  .kb li b{color:var(--text); font-weight:600; flex:0 0 auto}
+  footer{margin-top:52px; padding-top:22px; border-top:1px solid var(--border); color:var(--muted); font-size:12px}
+  footer p{margin:5px 0}
+  footer a{color:var(--accent); text-decoration:none}
+  @media (max-width:560px){
+    .wrap{padding:0 14px 48px}
+    header.hero{padding:38px 0 22px}
+    .card{padding:14px}
+    .stat .v{font-size:23px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <span class="eyebrow"><span class="dot"></span>Hacker News Daily Digest</span>
+  <h1>Hacker News 每日简报 — 2026年11月23日</h1>
+  <p class="sub">抓取 HN 首页 <strong>Top 30</strong> 实时榜单，按主题聚类后筛出 <strong>20 篇</strong> 重点内容（得分 ≥ 50 或评论 ≥ 30）。今日主线：<strong>AI 的电力账本</strong>、<strong>日本车企的降本联盟</strong>，以及一场关于「谁还在为工程师文化买单」的争论。</p>
+  <nav class="jump">
+    <a href="#stats">📊 今日概况</a>
+    <a href="#top5">🔥 必读 Top 5</a>
+    <a href="#ai">🤖 AI 动态</a>
+    <a href="#code">💻 编程 &amp; 开源</a>
+    <a href="#sec">🔒 安全 &amp; 政策</a>
+    <a href="#other">🎯 其他</a>
+    <a href="#hot">💬 最热讨论</a>
+  </nav>
+</header>
+
+<section id="stats">
+  <h2>📊 今日概况</h2>
+  <p class="sec-note">数据取自 HN Firebase API 的 topstories 前 30 条，分数为抓取瞬时值。</p>
+  <div class="grid stats">
+    <div class="stat"><div class="k">抓取文章数</div><div class="v">30</div><div class="m">首页 Top 30</div></div>
+    <div class="stat"><div class="k">重点入选</div><div class="v">20</div><div class="m">得分≥50 或 评论≥30</div></div>
+    <div class="stat"><div class="k">最高得分</div><div class="v">1172</div><div class="m">丰田/日产/本田 零部件标准化</div></div>
+    <div class="stat"><div class="k">最热评论</div><div class="v">865</div><div class="m">AI 数据中心的电力结构之争</div></div>
+  </div>
+  <div class="grid stats" style="margin-top:12px">
+    <div class="stat"><div class="k">总得分池</div><div class="v">5439</div><div class="m">30 篇合计</div></div>
+    <div class="stat"><div class="k">中位得分</div><div class="v">74</div><div class="m">上榜门槛附近</div></div>
+    <div class="stat"><div class="k">平均评论</div><div class="v">102</div><div class="m">30 篇平均评论数</div></div>
+    <div class="stat"><div class="k">评论/分数比</div><div class="v">0.56</div><div class="m">评论 3067 / 得分 5439</div></div>
+  </div>
+</section>
+
+<section id="top5">
+  <h2>🔥 必读 Top 5</h2>
+  <p class="sec-note">按得分排序，兼顾讨论热度。摘译为编辑视角转述，非原文逐句翻译。</p>
+  <div class="grid">
+    <article class="card top">
+      <div class="row">
+        <div class="rank r1">1</div>
+        <div class="body">
+          <h3 class="t"><a href="https://www.caranddriver.com/news/a74490092/toyota-nissan-honda-standardize-parts-lower-costs/" target="_blank" rel="noopener">丰田、日产、本田将统一零部件规格以降低成本</a></h3>
+          <span class="orig">caranddriver.com</span>
+          <p class="zh">日本三大车企计划共享零部件规格与采购体系，用规模效应压低生产成本，直接目标是抵御中国车企在电动化与价格上的双重挤压。评论区把它读作「日系车终于承认单打独斗撑不住了」。</p>
+          <div class="meta"><span class="pill p-score">▲ 1172</span><span class="pill p-com">💬 670</span><span class="pill p-cat c-pol">科技政策</span><span class="pill p-cat c-oth">产业</span></div>
+          <div class="bar"><i style="width:100%"></i></div>
+        </div>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="row">
+        <div class="rank r2">2</div>
+        <div class="body">
+          <h3 class="t"><a href="https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/" target="_blank" rel="noopener">2028 年 Anthropic 算力用电：87% 来自天然气，11% 来自煤电</a></h3>
+          <span class="orig">betterdatacenterproject.com</span>
+          <p class="zh">文章拆解「自带电力（BYOP）+ 电网供电」的混合模式，逐项核算数据中心电源构成，结论是化石能源仍占绝对多数。今日争议最大的帖子，评论里对口径、PUE 与碳账计算方式争论不休。</p>
+          <div class="meta"><span class="pill p-score">▲ 854</span><span class="pill p-com">💬 865</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-pol">能源政策</span></div>
+          <div class="bar"><i style="width:73%"></i></div>
+        </div>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="row">
+        <div class="rank r3">3</div>
+        <div class="body">
+          <h3 class="t"><a href="https://stulle.app/" target="_blank" rel="noopener">三明治模拟器（Stullensimulator）</a></h3>
+          <span class="orig">stulle.app</span>
+          <p class="zh">一个德文界面的纯前端玩具：给面包抹酱、拖拽配料、拍照存档，每份三明治会得到一个编号和永久链接。技术上平平无奇，却因为手感与幽默感拿下今日第三高分。</p>
+          <div class="meta"><span class="pill p-score">▲ 564</span><span class="pill p-com">💬 198</span><span class="pill p-cat c-oth">趣味</span></div>
+          <div class="bar"><i style="width:48%"></i></div>
+        </div>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="row">
+        <div class="rank">4</div>
+        <div class="body">
+          <h3 class="t"><a href="https://openai.com/index/perplexity-and-intelligence/" target="_blank" rel="noopener">困惑度与智能（Perplexity and Intelligence）</a></h3>
+          <span class="orig">openai.com</span>
+          <p class="zh">OpenAI 首席科学家 Jakub Pachocki 主张把 perplexity 重新扶正为衡量模型能力的公共标尺，理由是它可跨架构比较、可复现，比榜单分数更接近「压缩即智能」的本体。评论质疑其忽略了推理与工具使用维度。</p>
+          <div class="meta"><span class="pill p-score">▲ 447</span><span class="pill p-com">💬 303</span><span class="pill p-cat c-ai">AI</span></div>
+          <div class="bar"><i style="width:38%"></i></div>
+        </div>
+      </div>
+    </article>
+    <article class="card top">
+      <div class="row">
+        <div class="rank">5</div>
+        <div class="body">
+          <h3 class="t"><a href="https://www.oreilly.com/radar/what-happened-to-silicon-valley/" target="_blank" rel="noopener">硅谷到底发生了什么？</a></h3>
+          <span class="orig">oreilly.com</span>
+          <p class="zh">O'Reilly Radar 的长文复盘：硅谷如何从「做工具、卖工具」的工程文化，滑向以融资叙事与规模指标为核心的金融化运作，以及这种转向对开发者生态的长期代价。HN 上的老派工程师集体破防。</p>
+          <div class="meta"><span class="pill p-score">▲ 348</span><span class="pill p-com">💬 193</span><span class="pill p-cat c-pol">行业观察</span></div>
+          <div class="bar"><i style="width:30%"></i></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+<section id="ai">
+  <h2>🤖 AI 相关动态</h2>
+  <p class="sec-note">11 篇与 AI 直接相关，占今日重点一半——但讨论重心已明显从「能力」转向「成本、能源与治理」。</p>
+  <div class="grid duo">
+    <article class="card">
+      <div class="row"><div class="rank">6</div><div class="body">
+        <h3 class="t"><a href="https://github.com/gulivan/worker755" target="_blank" rel="noopener">Show HN：我做了个游戏，你就是 LLM 的 subagent</a></h3>
+        <span class="orig">github.com/gulivan/worker755</span>
+        <p class="zh">浏览器游戏，AI 经理把你当作它的子代理派活，玩家要在含糊指令与随时变更的需求中「交付」。把当下 agent 工作流的荒诞感做成了可玩体验。</p>
+        <div class="meta"><span class="pill p-score">▲ 261</span><span class="pill p-com">💬 59</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-code">开源</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">7</div><div class="body">
+        <h3 class="t"><a href="https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth" target="_blank" rel="noopener">本地 AI 入门：用 Inkling、Qwen 与 Unsloth 搭一台家用 ChatGPT</a></h3>
+        <span class="orig">gpupartner.com</span>
+        <p class="zh">面向新手的完整流程：选开源权重模型、用 Unsloth 做量化与微调、在自己机器上跑起可全屋共享的私有推理服务。核心卖点是隐私与零边际成本。</p>
+        <div class="meta"><span class="pill p-score">▲ 136</span><span class="pill p-com">💬 47</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-code">本地部署</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">8</div><div class="body">
+        <h3 class="t"><a href="https://pequalnp.com/" target="_blank" rel="noopener">一支 AI agent 舰队正在公开攻关 P vs NP</a></h3>
+        <span class="orig">pequalnp.com</span>
+        <p class="zh">协调多个 agent 分工证明 P≠NP 的开放问题，每一步尝试、反驳与死胡同都实时公开，所有引理必须过同一个 Lean 检查器。作者明确声明「这是实验，不是成果」。</p>
+        <div class="meta"><span class="pill p-score">▲ 62</span><span class="pill p-com">💬 62</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-code">形式化</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">9</div><div class="body">
+        <h3 class="t"><a href="https://12gramsofcarbon.com/p/agentics-mushy-software" target="_blank" rel="noopener">Agentics：糊状软件</a></h3>
+        <span class="orig">12gramsofcarbon.com</span>
+        <p class="zh">作者用「胶水代码」作比：传统集成会变脆、一掰就断，而 agent 可以在运行时现写代码，因此内部工具「半成品反而更好用」。是对 2026 年新工程范式的冷静辩护。</p>
+        <div class="meta"><span class="pill p-score">▲ 38</span><span class="pill p-com">💬 6</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-oth">方法论</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">10</div><div class="body">
+        <h3 class="t"><a href="https://boazbk.github.io/mltheoryseminar/" target="_blank" rel="noopener">哈佛 CS 2881R：AI 安全课程全公开</a></h3>
+        <span class="orig">boazbk.github.io</span>
+        <p class="zh">2026 秋季课表与作业全部上线：网络能力、现代 LLM 训练、递归自我改进、奖励作弊、前沿监管、可解释性与模型福利等 13 讲，含 Sam Altman 问答场次。</p>
+        <div class="meta"><span class="pill p-score">▲ 26</span><span class="pill p-com">💬 1</span><span class="pill p-cat c-ai">AI 治理</span><span class="pill p-cat c-oth">学习资源</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">11</div><div class="body">
+        <h3 class="t"><a href="https://github.com/mjwsolo/localcode" target="_blank" rel="noopener">Localcode：在 Mac 上一条命令跑本地 agentic 编程</a></h3>
+        <span class="orig">github.com/mjwsolo/localcode</span>
+        <p class="zh">把本地权重模型、工具调用与仓库上下文打包成一条命令启动的编码 agent，不走云端 API。新生项目，评论主要关心小内存机器上的实际可用性。</p>
+        <div class="meta"><span class="pill p-score">▲ 8</span><span class="pill p-com">💬 1</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-code">开源</span></div>
+      </div></div>
+    </article>
+  </div>
+</section>
+
+<section id="code">
+  <h2>💻 编程 &amp; 开源</h2>
+  <p class="sec-note">语言与工具链的硬核内容依旧稳定产出，C++26 与 PyPy 是今天的技术主线。</p>
+  <div class="grid">
+    <article class="card">
+      <div class="row"><div class="rank">12</div><div class="body">
+        <h3 class="t"><a href="https://alperenkeles.com/posts/vocab-for-testing/" target="_blank" rel="noopener">给「测试」换一套更准确的词汇</a></h3>
+        <span class="orig">alperenkeles.com</span>
+        <p class="zh">作者认为 unit / integration / E2E 这套词汇早已失效：integration 的边界任意，E2E 又说不清究竟测了什么行为、用什么手段测。他提出按「被测行为 + 执行方式 + 判定依据」三维重建分类。</p>
+        <div class="meta"><span class="pill p-score">▲ 105</span><span class="pill p-com">💬 28</span><span class="pill p-cat c-code">工程实践</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">13</div><div class="body">
+        <h3 class="t"><a href="https://claude.ai/artifact/CtQyX8qfYAF822bgHJHHE3" target="_blank" rel="noopener">Masullo 手稿 Lean 形式化进度图</a></h3>
+        <span class="orig">claude.ai</span>
+        <p class="zh">一份持续更新的依赖图，展示某篇数学手稿被拆成引理后逐条形式化的完成度。值得注意的是载体：作者把进度可视化直接放在 AI 生成的 artifact 里托管。</p>
+        <div class="meta"><span class="pill p-score">▲ 74</span><span class="pill p-com">💬 23</span><span class="pill p-cat c-code">形式化</span><span class="pill p-cat c-ai">AI</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">14</div><div class="body">
+        <h3 class="t"><a href="https://herbsutter.com/2026/11/21/c26-is-done-again-trip-report-november-2026-iso-c-standards-meeting-buzios-brazil/" target="_blank" rel="noopener">C++26 又完成了：2026 年 11 月 ISO C++ 布济奥斯会议纪要</a></h3>
+        <span class="orig">herbsutter.com</span>
+        <p class="zh">三月已冻结的 C++26 因国际意见被重新打开，本周重新完成技术工作，重点修订 contracts（契约）特性，并将再次提交批准投票。Herb Sutter 的例行高质量 trip report。</p>
+        <div class="meta"><span class="pill p-score">▲ 58</span><span class="pill p-com">💬 34</span><span class="pill p-cat c-code">C++</span><span class="pill p-cat c-oth">标准</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">15</div><div class="body">
+        <h3 class="t"><a href="https://bernsteinbear.com/blog/inside-pypy-first-contact-with-rpython/" target="_blank" rel="noopener">深入 PyPy：第一次接触 RPython</a></h3>
+        <span class="orig">bernsteinbear.com</span>
+        <p class="zh">Max Bernstein 记录自己动手改 PyPy 源码的入门过程：RPython 的受限子集怎么表达、为什么翻译链能把解释器编译成 JIT。适合想理解「用 Python 写 Python 实现」的人。</p>
+        <div class="meta"><span class="pill p-score">▲ 58</span><span class="pill p-com">💬 8</span><span class="pill p-cat c-code">Python</span><span class="pill p-cat c-oth">编译器</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">16</div><div class="body">
+        <h3 class="t"><a href="https://fosscomics.com/posts/16.%20BSD%20Unix%20Part%206%20-%20The%20Struggle%20for%20Freedom/" target="_blank" rel="noopener">自由的挣扎：BSD 如何从 AT&T 许可中挣脱（漫画第 6 篇）</a></h3>
+        <span class="orig">fosscomics.com</span>
+        <p class="zh">连载漫画讲到关键一章：1956 年反垄断和解协议曾把 AT&T 挡在计算机商业之外，Unix 源码因此得以廉价流通——也正是这条历史偶然，最终逼出了 BSD 与自由软件运动。</p>
+        <div class="meta"><span class="pill p-score">▲ 23</span><span class="pill p-com">💬 7</span><span class="pill p-cat c-oth">历史</span><span class="pill p-cat c-code">开源</span></div>
+      </div></div>
+    </article>
+  </div>
+</section>
+<section id="sec">
+  <h2>🔒 安全 &amp; 政策</h2>
+  <p class="sec-note">三条线索：路由固件的在野利用、自动化系统单点故障，以及「社交协议该由谁定」的立法争夺。</p>
+  <div class="grid">
+    <article class="card">
+      <div class="row"><div class="rank">17</div><div class="body">
+        <h3 class="t"><a href="https://osw-alliance.net/en/" target="_blank" rel="noopener">开放社交网络联盟（Open Social Web Alliance）</a></h3>
+        <span class="orig">osw-alliance.net</span>
+        <p class="zh">新成立的联盟发布政策白皮书，主张社交网络应像电子邮件一样建立在共享标准协议上：地址服务商各异，消息仍能互通。诉求直指平台互操作立法，评论区在争论「协议已存在，缺的是采用动机」。</p>
+        <div class="meta"><span class="pill p-score">▲ 209</span><span class="pill p-com">💬 206</span><span class="pill p-cat c-pol">科技政策</span><span class="pill p-cat c-oth">开放协议</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">18</div><div class="body">
+        <h3 class="t"><a href="https://www.nytimes.com/2026/11/22/us/delta-flight-delays-system-outage.html" target="_blank" rel="noopener">亚特兰大枢纽自动化系统故障，达美全部航班延误</a></h3>
+        <span class="orig">nytimes.com</span>
+        <p class="zh">亚特兰大机场的自动化调度系统失灵，导致达美经该枢纽的所有航班受阻。HN 讨论集中在航空业把关键调度收敛到少数自动化系统后的可用性风险与降级预案缺失。</p>
+        <div class="meta"><span class="pill p-score">▲ 83</span><span class="pill p-com">💬 33</span><span class="pill p-cat c-sec">可靠性</span><span class="pill p-cat c-pol">基础设施</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">19</div><div class="body">
+        <h3 class="t"><a href="https://www.gl-inet.com/en-us/blogs/blog/glinet-security-notice-2026-11-20" target="_blank" rel="noopener">GL.iNet 安全公告（2026-11-20）：云管理服务漏洞被在野利用</a></h3>
+        <span class="orig">gl-inet.com</span>
+        <p class="zh">厂商确认其云远程管理服务存在漏洞，未授权方已利用它在部分路由器与 KVM 设备上植入恶意软件。建议相关用户立即断开云管理、升级固件并排查持久化后门。</p>
+        <div class="meta"><span class="pill p-score">▲ 31</span><span class="pill p-com">💬 10</span><span class="pill p-cat c-sec">安全</span><span class="pill p-cat c-oth">IoT</span></div>
+      </div></div>
+    </article>
+  </div>
+</section>
+
+<section id="other">
+  <h2>🎯 其他值得关注</h2>
+  <p class="sec-note">从鸟类图鉴到最老三明治机，今天的长尾内容质量意外地高。</p>
+  <div class="grid duo">
+    <article class="card">
+      <div class="row"><div class="rank">20</div><div class="body">
+        <h3 class="t"><a href="https://www.audubon.org/magazine/birds-of-gta-6-field-guide-vice-city-wildlife" target="_blank" rel="noopener">GTA 6 的鸟类：罪恶都市与雷奥尼达野生动物图鉴</a></h3>
+        <span class="orig">audubon.org</span>
+        <p class="zh">奥杜邦学会给游戏做了一份正经的鸟类野外图鉴：有哪些物种、观鸟机制怎么玩、Rockstar 的生态考据有多准。严肃机构下场写游戏，效果出奇地好。</p>
+        <div class="meta"><span class="pill p-score">▲ 301</span><span class="pill p-com">💬 123</span><span class="pill p-cat c-oth">游戏</span><span class="pill p-cat c-oth">科学</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">21</div><div class="body">
+        <h3 class="t"><a href="https://www.jeffgeerling.com/blog/2026/i-joined-the-ntp-pool/" target="_blank" rel="noopener">我加入了 NTP Pool——但用的不是那台 Stratum 1 树莓派</a></h3>
+        <span class="orig">jeffgeerling.com</span>
+        <p class="zh">Geerling 终于把工作室的时间服务器接入公共 NTP 池，提供 Stratum 2 服务，上游是他用 TimeHAT v6 + u-blox ZED-F9T 搭的 Stratum 1。一篇写给「时间极客」的务实记录。</p>
+        <div class="meta"><span class="pill p-score">▲ 120</span><span class="pill p-com">💬 31</span><span class="pill p-cat c-oth">硬件</span><span class="pill p-cat c-oth">基础设施</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">22</div><div class="body">
+        <h3 class="t"><a href="https://news.ycombinator.com/item?id=50555002" target="_blank" rel="noopener">Ask HN：从 Web 开发转嵌入式/固件，有什么建议？</a></h3>
+        <span class="orig">news.ycombinator.com</span>
+        <p class="zh">提问者想从 Web 转向固件。回复里最有价值的部分是路径排序：先补 C 与内存模型，再用一块开发板做能测量的小项目，最后才是 RTOS 与硬件调试工具链——别一上来啃数据手册。</p>
+        <div class="meta"><span class="pill p-score">▲ 107</span><span class="pill p-com">💬 68</span><span class="pill p-cat c-oth">职业</span><span class="pill p-cat c-code">嵌入式</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">23</div><div class="body">
+        <h3 class="t"><a href="https://smallsf.com/" target="_blank" rel="noopener">迷你旧金山：跑着真实的公交、飞机与船只</a></h3>
+        <span class="orig">smallsf.com</span>
+        <p class="zh">一个三维微缩旧金山，公交、航班与渡轮位置全部接入实时数据源，在浏览器里就能看城市如何呼吸。属于「数据可视化做到极致的玩具」这一类。</p>
+        <div class="meta"><span class="pill p-score">▲ 100</span><span class="pill p-com">💬 40</span><span class="pill p-cat c-oth">可视化</span><span class="pill p-cat c-oth">Web</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">24</div><div class="body">
+        <h3 class="t"><a href="https://nyx.net/" target="_blank" rel="noopener">Nyx：现存最古老的互联网服务提供商</a></h3>
+        <span class="orig">nyx.net</span>
+        <p class="zh">一家 501(c)(3) 非营利 ISP，仍由志愿者维护，免费提供邮箱、网页空间、未审查的 Usenet 新闻组和 Linux shell 账号。页面还是九十年代的排版，但服务确实在跑。</p>
+        <div class="meta"><span class="pill p-score">▲ 73</span><span class="pill p-com">💬 8</span><span class="pill p-cat c-oth">互联网考古</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">25</div><div class="body">
+        <h3 class="t"><a href="https://apnews.com/article/sudan-antiquities-nubia-cathedral-1b16f67da881ee5592de4481ee55c527" target="_blank" rel="noopener">苏丹出土中世纪大教堂地面，规模位居最大之列</a></h3>
+        <span class="orig">apnews.com</span>
+        <p class="zh">努比亚地区一次发掘让巨型教堂的地面重见天日，为理解中世纪非洲基督教王国提供了新的空间尺度证据。在与战乱并行的考古条件下完成，格外不易。</p>
+        <div class="meta"><span class="pill p-score">▲ 57</span><span class="pill p-com">💬 1</span><span class="pill p-cat c-oth">考古</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">26</div><div class="body">
+        <h3 class="t"><a href="http://togelius.blogspot.com/2026/11/advice-for-young-researchers.html" target="_blank" rel="noopener">给青年研究者的建议</a></h3>
+        <span class="orig">togelius.blogspot.com</span>
+        <p class="zh">Julian Togelius 给刚入行的研究者列了一份朴素清单：把问题写清楚、尽早公开写作、别把评审意见当人身评价、主动找合作者。没有方法论神话，只有节奏建议。</p>
+        <div class="meta"><span class="pill p-score">▲ 38</span><span class="pill p-com">💬 14</span><span class="pill p-cat c-oth">学术</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">27</div><div class="body">
+        <h3 class="t"><a href="https://www.ias.edu/sites/default/files/library/UsefulnessHarpers.pdf" target="_blank" rel="noopener">《无用知识的有用性》（1939，PDF）</a></h3>
+        <span class="orig">ias.edu</span>
+        <p class="zh">普林斯顿高等研究院创始人 Abraham Flexner 的经典短文：真正改变世界的成果，往往来自当时看不出用途的好奇心。每隔几年被 HN 翻出来一次，每次都能对上当下的焦虑。</p>
+        <div class="meta"><span class="pill p-score">▲ 34</span><span class="pill p-com">💬 4</span><span class="pill p-cat c-oth">思想</span><span class="pill p-cat c-oth">历史</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">28</div><div class="body">
+        <h3 class="t"><a href="https://danielsada.tech/blog/assume-people-are-not-interested-in-your-blog-post/" target="_blank" rel="noopener">默认没人对你的博客感兴趣</a></h3>
+        <span class="orig">danielsada.tech</span>
+        <p class="zh">写作建议：开头第一句就说清「这篇是写给谁的」，读者才能决定要不要继续读。作者把这套做法追溯到在 Snowflake 时的邮件礼仪——先写适用人群，再写正文。</p>
+        <div class="meta"><span class="pill p-score">▲ 31</span><span class="pill p-com">💬 13</span><span class="pill p-cat c-oth">写作</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">29</div><div class="body">
+        <h3 class="t"><a href="https://www.pharmavoice.com/news/race-first-psilocybin-blockbuster-compass-usona/875270/" target="_blank" rel="noopener">首个获批迷幻药会成为重磅药物吗？</a></h3>
+        <span class="orig">pharmavoice.com</span>
+        <p class="zh">赛洛西宾类疗法正在冲向首批商业化，Compass 与 Usona 的竞速决定了谁先拿到市场。文章讨论的不只是疗效，还有支付方是否愿意为「一次性疗程」买单。</p>
+        <div class="meta"><span class="pill p-score">▲ 14</span><span class="pill p-com">💬 11</span><span class="pill p-cat c-oth">生物医药</span></div>
+      </div></div>
+    </article>
+    <article class="card">
+      <div class="row"><div class="rank">30</div><div class="body">
+        <h3 class="t"><a href="https://frankforce.com/the-gateless-gate-3d/" target="_blank" rel="noopener">无门关 3D：把禅宗公案做成可交互三维作品</a></h3>
+        <span class="orig">frankforce.com</span>
+        <p class="zh">作者把 1228 年编纂的《无门关》公案集改造成全交互 3D 版本，灵感来自都灵东方艺术博物馆的佛教造像展厅。代码开源，属于「用 WebGL 做人文」的少数派。</p>
+        <div class="meta"><span class="pill p-score">▲ 7</span><span class="pill p-com">💬 0</span><span class="pill p-cat c-oth">艺术</span><span class="pill p-cat c-oth">WebGL</span></div>
+      </div></div>
+    </article>
+  </div>
+</section>
+<section id="hot">
+  <h2>💬 今日最热讨论</h2>
+  <p class="sec-note">评论数最高的文章，以及「评论/得分」比透露出的争议强度。</p>
+  <div class="grid">
+    <article class="card hot">
+      <h3 class="t" style="font-size:17px"><a href="https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/" target="_blank" rel="noopener">87% of the Anthropic power will come from gas and 11% from coal in 2028</a></h3>
+      <div class="meta">
+        <span class="pill p-score">▲ 854</span><span class="pill p-com">💬 865</span><span class="pill p-cat c-ai">AI</span><span class="pill p-cat c-pol">能源</span>
+        <span class="pill" style="color:#d29922;background:rgba(210,153,34,.1);border-color:rgba(210,153,34,.3)">评论/得分 1.01 — 今日之最</span>
+      </div>
+      <p class="zh" style="margin-top:10px">这是今天唯一「评论数超过得分」的帖子，说明争论动力不是认同，而是反驳。<strong>核心分歧有三层</strong>：其一，口径——把「自带电力（BYOP）」与电网购电混算，是否系统性低估了可再生能源占比；其二，方法——用年度平均功率还是峰值负荷，PUE 取值是否与厂商公开数据一致；其三，立场——「用电结构脏」到底是 AI 公司的责任，还是电网与监管的责任。</p>
+      <ul class="kb">
+        <li><b>值得读：</b>几条高赞回复给出了逐项复核的算式，指出原文对天然气机组的利用率假设偏保守。</li>
+        <li><b>值得警惕：</b>不少反驳只攻击结论、不复核数据，属于典型的立场先行。</li>
+        <li><b>编辑判断：</b>数据可能有争议，但「AI 扩张的瓶颈已从芯片转向电力与并网」这一趋势判断，在评论区几乎没有反对者。</li>
+      </ul>
+      <p class="quote">次热讨论：<a href="https://osw-alliance.net/en/" style="color:var(--accent);text-decoration:none">开放社交网络联盟</a>（206 评论，比 0.99）——争论「互操作立法能否强制平台开放」，技术共识度高、商业动机共识度低。</p>
+    </article>
+    <article class="card">
+      <h3 class="t" style="font-size:15px;margin-bottom:10px">争议光谱（按评论/得分比排序）</h3>
+      <div class="grid" style="gap:8px">
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">AI 电力结构</span><span class="pill p-com">1.01</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">P vs NP agent 舰队</span><span class="pill p-com">1.00</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">开放社交联盟</span><span class="pill p-com">0.99</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">困惑度与智能</span><span class="pill p-com">0.68</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">丰田等零部件标准化</span><span class="pill p-com">0.57</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">硅谷发生了什么</span><span class="pill p-com">0.55</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">达美亚特兰大延误</span><span class="pill p-com">0.40</span></div>
+        <div class="meta" style="margin:0;justify-content:space-between"><span style="font-size:13px;color:#b6c2cf">worker755 游戏</span><span class="pill p-com">0.23</span></div>
+      </div>
+      <p class="quote" style="margin-top:12px">比值 &gt; 1 通常意味着「有人不同意所以来吵」；&lt; 0.3 说明大家只是点赞收藏，懒得展开——典型的工具类/展示类内容。</p>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <p><strong>数据来源</strong>：Hacker News 官方 Firebase API（<a href="https://github.com/HackerNews/API" target="_blank" rel="noopener">HackerNews/API</a>），<code>topstories</code> 前 30 条 + 逐条 <code>item</code> 详情。</p>
+  <p><strong>筛选口径</strong>：得分 ≥ 50 或 评论 ≥ 30，共 20 篇；Top 5 按得分排序，分类区域按主题人工归并（同一篇文章可能带多个标签）。</p>
+  <p><strong>统计口径</strong>：30 篇合计得分 5,439、评论 3,067，平均评论 102、中位得分 74；分数为抓取瞬时值，会随后续投票变动。</p>
+  <p><strong>生成时间</strong>：2026-11-23 08:00（CST，UTC+08:00） · 摘译为编辑视角中文转述，非原文逐句翻译 · 链接均指向原文。</p>
+</footer>
+</div>
+</body>
+</html>
