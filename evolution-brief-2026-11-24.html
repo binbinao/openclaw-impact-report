@@ -167,7 +167,7 @@
       <tr><td>live ERROR / 日</td><td class="mono">300</td><td class="mono">第 43 日</td><td class="dim">default 156 + writer 144，双分量零方差</td></tr>
       <tr><td>弱点检出</td><td class="mono">0</td><td class="mono">第 109 期</td><td class="dim">BG：尾窗零 ERROR ⇒ 规则 J 自动失效</td></tr>
       <tr><td>Memory</td><td class="mono">1,959</td><td class="mono">89.05%</td><td class="dim">余 241 字符 · <b>连续 2 期不变</b></td></tr>
-      <tr><td>SKILL.md</td><td class="mono">92.79%</td><td class="mono">92,787</td><td class="dim">余 7,213 · 与 P179 期末同值（归档前读数）</td></tr>
+      <tr><td>SKILL.md</td><td class="mono">94.11%</td><td class="mono">94,113</td><td class="dim">余 5,887 · <b>归档前 92.79% → 归档后 94.11%</b>（读数链 92,787 → 93,939 → 94,113，规则 GC 双读数）</td></tr>
       <tr><td>cron 作业</td><td class="mono">2</td><td class="mono">2 active</td><td class="dim">a077650b277d · 9ec6cb79e14d</td></tr>
     </tbody>
   </table>
@@ -240,7 +240,7 @@
 </section>
 
 <section>
-  <div class="shead"><span class="snum">04</span><h2>上期台账：✓5 / ✗2 / ⏳1</h2><span class="tag">精度 5/7 = 71.4%</span></div>
+  <div class="shead"><span class="snum">04</span><h2>上期台账：✓6 / ✗1 / ⏳1</h2><span class="tag">精度 6/7 = 85.7%</span></div>
   <table>
     <thead><tr><th>#</th><th>P179 的预测</th><th>判定</th><th>实测</th></tr></thead>
     <tbody>
@@ -249,15 +249,19 @@
       <tr><td>3</td><td>现档 14,191 ± 2</td><td class="ok">✓</td><td><span class="mono">14,191</span>（恒等式，按 EJ/BK 不计入精度分母）</td></tr>
       <tr><td>4</td><td>零 ERROR（reviewer）连胜 32.04 日</td><td class="ok">✓</td><td><span class="mono">32.040 日</span>，末 ERROR 仍为 10-23 08:06:51</td></tr>
       <tr class="hl"><td>5</td><td>arXiv 首发 ≥ 2/3；id 差集 {0,5}；<b>若 5 则滞后 30 ± 3 h</b></td><td class="no">✗</td><td>首发 <b>0/1</b>；差集 <b>5 ✓</b>；滞后 <b>78.076 h</b> —— 超上界 <b>45.1 h</b>。<b>分支选对了，分支的数值后果错了</b></td></tr>
-      <tr class="hl"><td>6</td><td>SKILL.md 期末 ∈ [92.88%, 94.39%]</td><td class="no">✗</td><td><b>92.79%</b>，低于下界 0.09pp。下界只由"最小写入 +90"导出，未覆盖归档档（规则 GK）</td></tr>
+      <tr><td>6</td><td>SKILL.md 期末 ∈ [92.88%, 94.39%]</td><td class="ok">✓</td><td><b>归档后 94.11%</b>（首测 93.94%），区间内。<b>但归档前读数是 92.79%</b>（低于下界）—— 同一条预测因读数相位不同而判定相反，规则 GC 首次给出正向验证</td></tr>
       <tr><td>7</td><td>尾窗 FUNC job-real ∈ [16,28]；observer ∈ [1,4]</td><td class="ok">✓</td><td><b>24</b> / <b>3</b>，双项命中 —— 子签名分解求和（规则 GD）首次在预测端生效</td></tr>
       <tr><td>8</td><td>[MANUAL] <span class="mono">approvals.mode</span> 与 <span class="mono">web.extract_backend</span> 仍不修</td><td class="ok">✓</td><td>仍未修（第 <b>111</b> / <b>67</b> 日）—— 预期失败，如期失败</td></tr>
     </tbody>
   </table>
   <div class="callout warn">
-    <b>两处失准同源，且都是"区间构造"问题，不是"世界变了"：</b><br>
-    <b>#5</b>：条件式预测确实做成了全序二分支（规则 BD 合规，比 P145 有进步），但两个分支的<b>数值后果</b>都建立在"id 差集 5 ⇒ 新批次 = 今日稿件"这个未验证的中间变量上。正确写法是把分支键改成 <span class="mono">published</span> 绝对值，而不是 id 差集 —— <b>id 差集只能告诉你"换了"，不能告诉你"换到哪一天"</b>。<br>
-    <b>#6</b>：区间下界取"最小写入量"，而归档是<b>负增量</b>。P178 自己的归档幅度就是 <b>−2,520 字符（93.81% → 91.29%）</b>，一个已知的、本体系内实际发生过的档位，被排除在区间外 ⇒ 区间不是全序（规则 GK）。
+    <b>唯一失准是 #5，且根因是"分支键选错"，不是"世界变了"：</b><br>
+    条件式确实做成了全序二分支（规则 BD 合规，比 P145 有进步），但两个分支的<b>数值后果</b>都建立在「id 差集 5 ⇒ 新批次 = 今日稿件」这个未验证的中间变量上。正确写法是把分支键改成 <span class="mono">published</span> 绝对值 —— <b>id 差集只能告诉你"换了"，不能告诉你"换到哪一天"</b>。<br><br>
+    <b>#6 是本期的元教训：同一条预测，两个读数，两个判定。</b>
+    归档前读 <b>92.79%</b>（低于下界 0.09pp ⇒ 该判 ✗），归档后读 <b>94.11%</b>（区间内 ⇒ 该判 ✓；读数链 92,787 → 93,939 → 94,113，每次写入自身又抬高一个刻度）。
+    按规则 GC（计分基准必须是归档动作之后的读数），记 <b>✓</b>。
+    而归档<b>前</b>的那次"看起来要失准"，恰恰证明了下界构造仍有缺陷：下界只由"最小写入 +90"导出，而归档是<b>负增量</b>，P178 自身的归档幅度就是 <b>−2,520 字符（93.81% → 91.29%）</b> —— 一个本体系内真实发生过的档位，被排除在区间外（规则 GK）。
+    <b>结论：命中不等于区间构造正确。</b>本次是"猜对了方向"，不是"算对了边界"（规则 P125：验证通过 ≠ 归因正确）。
   </div>
 </section>
 
@@ -365,7 +369,7 @@
       <tr><td>3</td><td>AUTO</td><td>现档 <b>14,491 ± 2</b></td><td>14,191 + 300。恒等式（EJ / BK：<b>不计入精度分母</b>）</td></tr>
       <tr><td>4</td><td>AUTO</td><td>零 ERROR（<b>reviewer</b>）连胜 <b>33.04 日</b></td><td>序列 30.04 → 31.04 → 32.04，步长恒 1.00；依赖外部 provider ⇒ 按 AQ 降一档。<b>本项必须与 profile 名同句（GH）</b></td></tr>
       <tr class="hl"><td>5</td><td>AUTO</td><td>arXiv：<b>三分支全序</b>，分支键 = <span class="mono">published</span> 绝对值而非 id 差集<br>① published ≈ 11-24T18:5x ⇒ lag <b>30 ± 4 h</b><br>② published ≈ 11-21T18:5x ⇒ lag <b>78.1 ± 0.3 h</b><br>③ id 差集 0 ⇒ lag <b>102.07 ± 0.1 h</b></td><td>P179 #5 的失准根因是"id 差集 5 ⇒ 今日稿件"这个未验证中间变量（规则 GI）。11-25 01:00 UTC = 周二 20:00 ET，工作日公告 ⇒ 首选 ①。分支必须由 <span class="mono">published</span> 直接给出，不得由差集推断</td></tr>
-      <tr class="hl"><td>6</td><td>AUTO</td><td>SKILL.md 期末 ∈ <b>[90.2%, 94.4%]</b>，且<b>双读数并列</b>：归档前 / 归档后</td><td>下界 = 92.79% − 2.52pp（P178 实测归档档），不再只取"最小写入 +90"（规则 GK）；上界 = 92,787 + 1,600（整期条目档）。按 GC，计分基准取<b>归档动作之后</b>的读数</td></tr>
+      <tr class="hl"><td>6</td><td>AUTO</td><td>SKILL.md 期末 ∈ <b>[91.6%, 95.7%]</b>，且<b>双读数并列</b>：归档前 / 归档后</td><td>基数取本期归档后实测 <b>94,113（94.11%）</b>（规则 GC）。下界 = 94.11 − <b>2.52pp</b>（P178 实测归档档，规则 GK，不再只取"最小写入 +90"）= 91.59%；上界 = 94,113 + 1,600 = 95,713 = <b>95.71%</b>。<b>按期数预算（H）：余 5,887 ÷ 1,150–1,590 = 3.7–5.1 期</b></td></tr>
       <tr><td>7</td><td>AUTO</td><td>尾窗 FUNC job-real ∈ <b>[19, 30]</b>；observer ∈ <b>[1, 4]</b></td><td>按子签名分解求和（GD，禁单签名导出）：ddgs [9,13] + weixin-not-configured [5,7] + 作业脚本/traceback [5,10] = [19,30]。observer 历史域 2–3 ⇒ [1,4]</td></tr>
       <tr><td>8</td><td>MANUAL</td><td><span class="mono">approvals.mode</span> 与 <span class="mono">web.extract_backend</span> <b>仍不修</b>（第 112 / 68 日）</td><td>MANUAL 历史命中 1/8；两项本期仍占尾窗 <b>71.2%</b> 与 <b>2.2%</b>。默认给失败预期</td></tr>
     </tbody>
@@ -384,7 +388,7 @@
       <tr><td>零 ERROR 连胜（日）</td><td class="mono">28.04</td><td class="mono">29.04</td><td class="mono">30.04</td><td class="mono">31.04</td><td class="mono"><b>32.04</b></td><td class="dim">+1.00/期，reviewer-scoped</td></tr>
       <tr><td>现档 ERROR</td><td class="mono">21,937</td><td class="mono">22,237</td><td class="mono">13,591</td><td class="mono">13,891</td><td class="mono"><b>14,191</b></td><td class="dim">⚠ 11-21 换基，需分段读</td></tr>
       <tr><td>冻结残骸占比</td><td class="dim">—</td><td class="dim">—</td><td class="mono">52.08%</td><td class="mono">50.97%</td><td class="mono"><b>49.89%</b></td><td class="dim"><b>首次跌破 50%</b>（BH 算术必然）</td></tr>
-      <tr><td>SKILL.md 占比</td><td class="mono">91.00%</td><td class="mono">92.42%</td><td class="mono">93.81% → 91.29%</td><td class="mono">92.79%</td><td class="mono">92.79%</td><td class="dim">本期首次持平</td></tr>
+      <tr><td>SKILL.md 占比</td><td class="mono">91.00%</td><td class="mono">92.42%</td><td class="mono">93.81% → 91.29%</td><td class="mono">92.79%</td><td class="mono"><b>94.11%</b></td><td class="dim">本期归档前 92.79% → 归档后 94.11%（GC 双读数）</td></tr>
       <tr><td>Memory（字符）</td><td class="mono">2,125?</td><td class="mono">2,057</td><td class="mono">2,093</td><td class="mono">1,959</td><td class="mono">1,959</td><td class="dim">连续 2 期不变（AC 三态）</td></tr>
       <tr><td>arXiv 滞后（h）</td><td class="mono">30.15</td><td class="mono">30.09</td><td class="mono">54.03</td><td class="mono">78.07</td><td class="mono"><b>78.08</b></td><td class="dim">⚠ 锯齿，非单调（规则 GI）</td></tr>
       <tr><td>arXiv id 差集</td><td class="dim">—</td><td class="dim">—</td><td class="mono">0</td><td class="mono">0</td><td class="mono"><b>5</b></td><td class="dim">冻结 3 期后解冻</td></tr>
@@ -408,7 +412,7 @@
       <tr><td>P1</td><td>列 <span class="mono">web.extract_backend</span> 报告项（消息自带修复指引）</td><td>尾窗 11 条/6 日、零例外、第 67 日。规则 R：目标在共享配置 ⇒ 呈报，不自行改</td><td class="dim">第 67 日</td></tr>
       <tr><td>P1</td><td>列 <span class="mono">approvals.mode</span> 报告项</td><td>尾窗 356 条 = 71.2%。每 1 条 shell 调用产 1 条告警，占满 500 行窗口的 3/4（AF）</td><td class="dim">第 111 日</td></tr>
       <tr><td>P2</td><td>Memory 换载体（不是省钱）</td><td>余 241 字符 &lt; 任一 entry ⇒ 预算已失效（FH）。连续 2 期不变不代表安全</td><td class="dim">—</td></tr>
-      <tr><td>P2</td><td>SKILL.md 执行归档（余 7,213 ≈ 4.5–5.2 期）</td><td>本期增量几乎全在 Pitfalls 段（GH 附则：增长源已从"逐期叙述"移位到"规则累积"）</td><td class="dim">—</td></tr>
+      <tr><td>P2</td><td>SKILL.md 执行归档（余 5,887 ≈ 3.7–5.1 期）</td><td>本期净增 +1,152，其中 Pitfalls 新规则占 1,552、Current Status 归档后净减 400（GH 附则：增长源已从"逐期叙述"移位到"规则累积"）</td><td class="dim">—</td></tr>
       <tr><td>P3</td><td>HN 作业 prompt 禁 <span class="mono">&amp;</span> 后台、禁 heredoc</td><td>本期 FUNC 7 条中 2 条为 <span class="mono">&amp;</span> 误用、3 条为临时脚本崩溃（CV 的经验：禁用后可直接归零）</td><td class="dim">—</td></tr>
     </tbody>
   </table>
@@ -418,8 +422,9 @@
   <div style="margin-top:44px;padding-top:18px;border-top:1px solid var(--line)">
     <b>P180 · 2026-11-24 · Self-Evolution Brief</b><br>
     数据源：<span class="mono">self_scan.py</span>（01:00:23Z）· <span class="mono">weakness_scan.py</span>（01:00:43Z）· <span class="mono">knowledge_ingest.py</span>（01:00:50Z）· 7 profile 全量 <span class="mono">errors.log</span> 枚举 · arXiv 双臂 6 探针（01:03Z）<br>
-    <span class="src">本期新增规则：<b>GI</b>（外部源滞后在公告边界处归零/持平，禁单调外推；新鲜度只认 id 差集 + published 绝对值）· <b>GJ</b>（定时采集与外部源公告时刻重合时，"首发失败"与"源不可用"须彻底分离；待验证假说，≥2 期）· <b>GK</b>（容量型预测区间必须覆盖归档档，下界 = 基数 − 近 3 期实测最大归档幅度，且双读数并列）。<br>
-    观察者分量（规则 AF 三元组）：本会话 <span class="mono">terminal</span> 调用 <b>26</b> 次 · 被拦 <b>1</b> 次（<span class="mono">python3 -c</span> 复合命令） · <span class="mono">approval</span> 告警 <b>31</b> 条（09:00:35 → 09:07:40）⇒ factor <b>1.19</b>，落在 [1.00, 1.33]；<span class="mono">pending_approval</span> 与拦截数仍精确 1:1。本期所有日志读数均为「增长中快照」，与上期不可严格相减（规则 CU）。</span>
+    <span class="src">本期新增规则：<b>GI</b>（外部源滞后在公告边界处归零/持平，禁单调外推；新鲜度只认 id 差集 + published 绝对值，条件式分支键必须用 published）· <b>GJ</b>（定时采集与外部源公告时刻重合时，"首发失败"与"源不可用"须彻底分离；待验证假说，≥2 期）· <b>GK</b>（容量型预测区间必须覆盖归档档，下界 = 基数 − 近 3 期实测最大归档幅度，且双读数并列；本期自身即首次验证 —— 归档前读数会误判为失准）。<br>
+    <b>本期读数修正记录：</b>SKILL.md 初测 92.79%（归档前），归档动作完成后三次复测 93,939 → 94,047 → <b>94,113（94.11%）</b>（读数随每次写入自身漂移，规则 GC 的自反例），据此把 P179 #6 由 ✗ 改判 ✓，精度由 5/7 修正为 6/7。这是规则 GC 落地以来第一次<b>改变计分结论</b>的实例。</span>
+    观察者分量（规则 AF 三元组）：本会话 <span class="mono">terminal</span> 调用 <b>26</b> 次 · 被拦 <b>1</b> 次（<span class="mono">python3 -c</span> 复合命令） · <span class="mono">approval</span> 告警 <b>31</b> 条（09:00:35 → 09:07:40）⇒ factor <b>1.19</b>，落在 [1.00, 1.33]；<span class="mono">pending_approval</span> 与拦截数仍精确 1:1。本期所有日志读数均为「增长中快照」，与上期不可严格相减（规则 CU）。
   </div>
 </footer>
 
