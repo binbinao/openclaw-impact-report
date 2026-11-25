@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>进化简报 P181 · 2026-11-25</title>
+<style>
+  :root{
+    --bg:#070a11; --bg2:#0c1120; --card:#101725; --card2:#141c2e;
+    --line:#1e2740; --line2:#2a3552;
+    --tx:#e6ecf7; --tx2:#9aa8c4; --tx3:#64728f;
+    --teal:#4ee0c4; --violet:#a78bfa; --pink:#f472b6; --amber:#fbbf24;
+    --red:#f87171; --green:#4ade80; --blue:#60a5fa;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:
+      radial-gradient(1200px 600px at 15% -10%, #14213a 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 0%, #1b1430 0%, transparent 55%),
+      var(--bg);
+    color:var(--tx);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.72; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:44px 26px 90px}
+  .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+
+  header{margin-bottom:38px}
+  .eyebrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .pill{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);
+    border:1px solid rgba(78,224,196,.32);background:rgba(78,224,196,.08);
+    padding:4px 11px;border-radius:999px;font-weight:600}
+  .pill.v{color:var(--violet);border-color:rgba(167,139,250,.32);background:rgba(167,139,250,.08)}
+  .pill.a{color:var(--amber);border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08)}
+  h1{font-size:clamp(30px,4.4vw,46px);line-height:1.16;margin:0 0 12px;font-weight:800;letter-spacing:-.02em}
+  h1 .g{background:linear-gradient(100deg,var(--teal),var(--violet) 55%,var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--tx2);font-size:15px;max-width:850px;margin:0}
+  .sub b{color:var(--tx)}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:13px;margin:32px 0 8px}
+  .kpi{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--line);
+    border-radius:15px;padding:17px 18px;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--teal);opacity:.75}
+  .kpi.v::before{background:var(--violet)} .kpi.p::before{background:var(--pink)}
+  .kpi.a::before{background:var(--amber)} .kpi.b::before{background:var(--blue)}
+  .kpi.g::before{background:var(--green)}
+  .kpi .lab{font-size:11.5px;color:var(--tx3);letter-spacing:.05em;text-transform:uppercase;font-weight:600}
+  .kpi .val{font-size:29px;font-weight:800;letter-spacing:-.02em;margin:5px 0 1px;font-variant-numeric:tabular-nums}
+  .kpi .note{font-size:12px;color:var(--tx3)}
+
+  section{margin-top:52px}
+  .shead{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;
+    padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .snum{font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.16em}
+  .shead h2{font-size:22px;margin:0;font-weight:750;letter-spacing:-.01em}
+  .shead .tag{margin-left:auto;font-size:12px;color:var(--tx3)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:22px 24px;margin-bottom:15px}
+  .card h3{margin:0 0 12px;font-size:15.5px;font-weight:700;letter-spacing:.01em}
+  .card h3 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--teal);
+    margin-right:9px;vertical-align:middle;transform:translateY(-1px)}
+  .card.v h3 .dot{background:var(--violet)} .card.p h3 .dot{background:var(--pink)}
+  .card.a h3 .dot{background:var(--amber)} .card.b h3 .dot{background:var(--blue)}
+  .card.r h3 .dot{background:var(--red)} .card.g h3 .dot{background:var(--green)}
+
+  table{width:100%;border-collapse:collapse;font-size:13.6px}
+  th{text-align:left;color:var(--tx3);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    font-weight:650;padding:8px 10px;border-bottom:1px solid var(--line2);white-space:nowrap}
+  td{padding:9px 10px;border-bottom:1px solid rgba(30,39,64,.62);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:rgba(120,150,255,.045)}
+  td.n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+  .ok{color:var(--green);font-weight:700} .no{color:var(--red);font-weight:700}
+  .mid{color:var(--amber);font-weight:700} .dim{color:var(--tx3)}
+  .hl{color:var(--teal);font-weight:700} .vi{color:var(--violet);font-weight:700}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.4px;
+    background:rgba(120,150,255,.09);border:1px solid rgba(120,150,255,.15);
+    padding:1px 5px;border-radius:5px;color:#c9d7f5;white-space:nowrap}
+
+  .barrow{margin:14px 0}
+  .barrow .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+  .barrow .top .k{color:var(--tx2)} .barrow .top .v{font-variant-numeric:tabular-nums;font-weight:700}
+  .bar{height:9px;border-radius:99px;background:#151d31;overflow:hidden;border:1px solid var(--line)}
+  .bar > i{display:block;height:100%;border-radius:99px;
+    background:linear-gradient(90deg,var(--teal),var(--violet))}
+  .bar.warn > i{background:linear-gradient(90deg,var(--amber),var(--pink))}
+  .bar.red > i{background:linear-gradient(90deg,var(--red),var(--pink))}
+
+  ul.clean{margin:10px 0 0;padding-left:0;list-style:none}
+  ul.clean li{position:relative;padding-left:20px;margin-bottom:9px;font-size:14px;color:var(--tx2)}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:10px;width:6px;height:6px;
+    border-radius:50%;background:var(--teal);opacity:.8}
+  ul.clean li b{color:var(--tx)}
+  ul.clean li.v::before{background:var(--violet)} ul.clean li.a::before{background:var(--amber)}
+  ul.clean li.r::before{background:var(--red)} ul.clean li.b::before{background:var(--blue)}
+
+  .callout{border-left:3px solid var(--teal);background:linear-gradient(90deg,rgba(78,224,196,.09),transparent 65%);
+    padding:14px 18px;border-radius:0 10px 10px 0;margin:14px 0;font-size:14px;color:var(--tx2)}
+  .callout.v{border-color:var(--violet);background:linear-gradient(90deg,rgba(167,139,250,.1),transparent 65%)}
+  .callout.a{border-color:var(--amber);background:linear-gradient(90deg,rgba(251,191,36,.1),transparent 65%)}
+  .callout.r{border-color:var(--red);background:linear-gradient(90deg,rgba(248,113,113,.1),transparent 65%)}
+  .callout b{color:var(--tx)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
+
+  .eq{background:#0a1020;border:1px solid var(--line2);border-radius:12px;padding:16px 18px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:2;color:#c9d7f5;
+    overflow-x:auto;margin:12px 0}
+  .eq .c{color:var(--tx3)}
+  .eq .k{color:var(--teal);font-weight:700}
+  .eq .p{color:var(--pink);font-weight:700}
+
+  .story{display:flex;gap:13px;padding:11px 0;border-bottom:1px solid rgba(30,39,64,.6);font-size:13.8px}
+  .story:last-child{border-bottom:none}
+  .story .rk{font-variant-numeric:tabular-nums;color:var(--tx3);font-size:12px;min-width:22px;padding-top:2px}
+  .story .bd{flex:1}
+  .story .ti{color:var(--tx);font-weight:600;display:block;margin-bottom:2px;line-height:1.45}
+  .story .meta{font-size:11.8px;color:var(--tx3)}
+  .story .meta .sc{color:var(--amber);font-weight:700}
+
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;
+    letter-spacing:.03em;white-space:nowrap}
+  .b-p0{background:rgba(248,113,113,.15);color:#fca5a5;border:1px solid rgba(248,113,113,.3)}
+  .b-p1{background:rgba(251,191,36,.14);color:#fcd34d;border:1px solid rgba(251,191,36,.3)}
+  .b-p2{background:rgba(96,165,250,.14);color:#93c5fd;border:1px solid rgba(96,165,250,.3)}
+  .b-own{background:rgba(74,222,128,.13);color:#86efac;border:1px solid rgba(74,222,128,.28)}
+  .b-x{background:rgba(167,139,250,.13);color:#c4b5fd;border:1px solid rgba(167,139,250,.28)}
+
+  footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--line);
+    color:var(--tx3);font-size:12.3px;line-height:1.8}
+  footer b{color:var(--tx2)}
+  .src{font-size:11.6px;color:var(--tx3);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">
+    <span class="pill">Self-Evolution · P181</span>
+    <span class="pill v">2026-11-25</span>
+    <span class="pill a">四常量第 35 期</span>
+  </div>
+  <h1>30 小时不是"慢"<br><span class="g">是一道减法恒等式</span></h1>
+  <p class="sub">
+    arXiv 最新批次 <span class="mono">2611.31227–31240</span> 的 <span class="mono">published</span> 是
+    <b>2026-11-23T18:59:52Z</b> = <b>11-23 13:59:52 ET</b> —— 比 arXiv 的 14:00 ET 截稿时间早 <b>8 秒</b>。
+    快照是 <b>11-24 20:04:13 ET</b>。两者相减 = <b>30.07 h</b>，而实测滞后 <b>30.05 h</b>。
+    <b>滞后不是源的属性，是"采样相位 − 截稿相位"的减法。</b>连续 8 期的 30.0 / 30.12 / 30.15 / 30.09 / 54.03 / 78.07 / 78.08 / 30.05，
+    全都落在这条恒等式上。
+  </p>
+</header>
+
+<div class="kpis">
+  <div class="kpi p"><div class="lab">现档 ERROR</div><div class="val mono">14,491</div><div class="note">+300 · 恒等式精确命中</div></div>
+  <div class="kpi g"><div class="lab">零 ERROR（reviewer）</div><div class="val mono">33.04<span style="font-size:15px"> 日</span></div><div class="note">第 33 日 · profile 范围内</div></div>
+  <div class="kpi v"><div class="lab">弱点检出</div><div class="val mono">0</div><div class="note">第 110 期 · 尾窗 0 ERROR ⇒ 无信息量</div></div>
+  <div class="kpi b"><div class="lab">健康度（审查后）</div><div class="val mono">99.34</div><div class="note">FUNC 22 × 0.03</div></div>
+  <div class="kpi a"><div class="lab">arXiv 滞后</div><div class="val mono">30.05<span style="font-size:15px"> h</span></div><div class="note">落后 <b>1</b> 个批次（非"慢 30 小时"）</div></div>
+  <div class="kpi"><div class="lab">上期台账</div><div class="val mono">4/5</div><div class="note">80.0% · 1 项未到期</div></div>
+</div>
+
+<div class="callout a">
+  <b>规则 GH 强制并列（scope）：</b>本期"零 ERROR"专指 <b>reviewer profile</b>（<span class="mono">errors.log</span> 1,488 行 + <span class="mono">agent.log</span> 23,112 行，ERROR 均为 0）。
+  同期 <b>系统级 live ERROR 恒为 300 条/日</b> —— default 156 + writer 144，两者连续 47 日零方差。
+  同一份报告里两个真值必须带 scope，否则互相证伪。
+</div>
+
+<!-- ============ 01 ============ -->
+<section>
+  <div class="shead"><span class="snum">01</span><h2>能力状态</h2><span class="tag">四常量第 35 期 · 全冻</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>维度</th><th>本期</th><th>连续期数 / 上次变化</th><th>判读</th></tr></thead>
+      <tbody>
+        <tr><td>可用工具</td><td class="mono hl">45</td><td class="dim">第 <b>72</b> 日零变化</td><td class="dim">结构常量，无信息量</td></tr>
+        <tr><td>技能（总数 / 活跃 / 过期 / 归档）</td><td class="mono">81 / 10 / 21 / 50</td><td class="dim">第 <b>57</b> 期零变化</td><td class="dim">活跃衰减无新增</td></tr>
+        <tr><td>agent 自建技能</td><td class="mono">3</td><td class="dim">document-output-format · scheduled-content-briefs · weixin-content</td><td class="dim">—</td></tr>
+        <tr><td>Cron 作业</td><td class="mono">2 活跃 / 0 暂停</td><td class="dim">a077650b277d（HN 08:00）· 9ec6cb79e14d（本作业 09:00）</td><td class="dim">—</td></tr>
+        <tr><td>Memory</td><td class="mono mid">1,984 / 2,200（90.18%）</td><td class="dim">上期 1,959（89.05%）· +25</td><td class="no">余 <b>216</b> 字符</td></tr>
+        <tr><td>USER</td><td class="mono">231 / 1,375（16.8%）</td><td class="dim">自 05-10 未变</td><td class="dim">余 1,144</td></tr>
+        <tr><td>SKILL.md（self-evolution）</td><td class="mono mid">94,113（94.11%）</td><td class="dim">上期 94,113 · <b>±0</b></td><td class="dim">余 5,887 ≈ 3.7–5.1 期</td></tr>
+        <tr><td>SessionDB</td><td class="mono no">错误</td><td class="dim"><code>'SessionDB' object has no attribute 'list_sessions'</code></td><td class="dim">已知，长期未修（不影响本报告）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card v">
+    <h3><span class="dot"></span>本期唯一"变化"，是一个 <b>±0</b></h3>
+    <p style="font-size:14px;color:var(--tx2);margin:0 0 10px">
+      P180 在写成瞬间把 SKILL.md 的<b>归档后基线</b>记成 <span class="mono">94,113（94.11%）</span>，并据此设了区间 <span class="mono">[91.6%, 95.7%]</span>。
+      本期从头测量：<b>94,113 —— 一个字符都没动</b>。
+    </p>
+    <div class="callout v" style="margin:0">
+      这是规则 <b>AC</b>（agent 可写量是三态事件：<span class="mono">{0} ∪ [+1, Δmax] ∪ [−Δmax, −1]</span>）的
+      <b>{0} 档首次被单期干净验证</b>：在没有作业写入的日子里，容量型载体的增量<b>恰好为零</b>，既不是"小幅增长"，也不是"缓慢衰减"。
+      同时它反向确认了规则 <b>GC</b> —— P180 用归档后读数做基数，才让本期区间一次命中；若沿用归档前读数（92.79%），
+      区间上界会凭空低 1.32pp，而实测值正好落在其外。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section>
+  <div class="shead"><span class="snum">02</span><h2>弱点告警</h2><span class="tag">尾窗 500 行 · 5.99 日</span></div>
+
+  <div class="callout r">
+    <b>先说结论的可信度上限（规则 BG + T）：</b>本期尾窗 500 行 <b>100% 是 WARNING、0 条 ERROR</b>。
+    在"尾窗 ERROR = 0"状态下，规则 J 的窗口位移模型自动失效 —— 任何新 ERROR 一落盘就是窗口内位次 500、<b>100% 可见</b>。
+    因此<b>"弱点 = 0"在本期不含信息量</b>，它既不证明系统变好，也不证明检测器变灵。
+    已读档案清单：reviewer <span class="mono">errors.log</span>（1,488 行 / 0 ERROR）、reviewer <span class="mono">agent.log</span>（23,112 行 / 0 ERROR）、
+    default <span class="mono">errors.log</span>（1,184 行 / 616 ERROR）、writer <span class="mono">errors.log</span>（6,795 行 / 6,795 ERROR），
+    以及 4 个冻结 profile（analyst / researcher / orchestrator / developer）。
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3><span class="dot"></span>尾窗构成：94.8% 是结构常量</h3>
+      <table>
+        <thead><tr><th>logger</th><th class="n">条数</th><th>性质</th></tr></thead>
+        <tbody>
+          <tr><td><code>tools.approval</code></td><td class="n">355</td><td class="dim">INFRA · 活动计数器（<span class="mono">approvals.mode='auto'</span> 非法值）</td></tr>
+          <tr><td><code>tools.registry</code></td><td class="n">78</td><td class="dim">INFRA · 13 个 check_fn × 6 日，精确恒定</td></tr>
+          <tr><td><code>hermes_cli.plugins</code></td><td class="n">36</td><td class="dim">INFRA · superpowers 三份 plugin.json × 2 会话 × 6 日</td></tr>
+          <tr><td><code>agent.tool_executor</code></td><td class="n">22</td><td class="dim">混合容器：5 pending（INFRA）+ 17 真实失败</td></tr>
+          <tr><td><code>cron.scheduler</code></td><td class="n">6</td><td class="dim">weixin not configured（报告项）</td></tr>
+          <tr><td><code>plugins.web.ddgs.provider</code></td><td class="n">1</td><td class="hl">FUNC · DDGS ConnectError</td></tr>
+          <tr><td><code>tools.web_tools</code></td><td class="n">1</td><td class="hl">FUNC · 同一次事件（复写，规则 P）</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12.8px;color:var(--tx3);margin:12px 0 0">
+        INFRA <b>474</b>（94.8%）· FUNC job-real <b>22</b> · observer <b>2</b>。FUNC 全部来自 HN 作业（<span class="mono">a077650b277d</span>），
+        本作业（<span class="mono">9ec6cb79e14d</span>）在窗口内贡献 2 条，均为自建脚本 exit 1（<code>No matches found (not an error)</code>）。
+      </p>
+    </div>
+
+    <div class="card a">
+      <h3><span class="dot"></span>常驻缺陷：ddgs 已第 66 日</h3>
+      <p style="font-size:13.8px;color:var(--tx2);margin:0 0 10px">
+        <code>Tool web_extract returned error … Set web.extract_backend to firecrawl, tavily, keenable, exa, or parallel.</code>
+      </p>
+      <table>
+        <thead><tr><th>窗口内 ddgs 失败</th><th class="n">10</th></tr></thead>
+        <tbody>
+          <tr><td>折算</td><td class="n">1.67 条/日</td></tr>
+          <tr><td>首次发现</td><td class="n">2026-09-20（P115）</td></tr>
+          <tr><td>距今</td><td class="n no">66 日</td></tr>
+          <tr><td>同期修复动作</td><td class="n no">0</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12.8px;color:var(--tx3);margin:10px 0 0">
+        这是本系统内<b>唯一自带完整修复指引、零成本可闭环、却连续 66 日零执行</b>的项。
+        它不是"没被发现"，是"被发现了 66 天"（规则 L③：可见性驱动的修复优先级陷阱）。
+      </p>
+    </div>
+  </div>
+
+  <div class="card b">
+    <h3><span class="dot"></span>系统级：live ERROR = 300/日（两个 profile 各占一半）</h3>
+    <table>
+      <thead><tr><th>profile</th><th>载体</th><th class="n">总行</th><th class="n">ERROR</th><th class="n">WARNING</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td class="hl">reviewer</td><td><code>errors.log</code></td><td class="n">1,488</td><td class="n ok">0</td><td class="n">1,488</td><td class="dim">活跃 · 零 ERROR 第 33 日</td></tr>
+        <tr><td class="hl">reviewer</td><td><code>agent.log</code></td><td class="n">23,112</td><td class="n ok">0</td><td class="n">1,134</td><td class="dim">活跃</td></tr>
+        <tr><td>default</td><td><code>errors.log</code></td><td class="n">1,184</td><td class="n no">616</td><td class="n">200</td><td class="dim">活跃 · 156/日（+ 08h 突发）</td></tr>
+        <tr><td>writer</td><td><code>errors.log</code></td><td class="n">6,795</td><td class="n no">6,795</td><td class="n">0</td><td class="dim">活跃 · 144/日，47 日零方差</td></tr>
+        <tr><td class="dim">analyst · researcher<br>orchestrator · developer</td><td class="dim"><code>errors.log</code></td><td class="n dim">7,195</td><td class="n dim">7,080</td><td class="n dim">115</td><td class="dim">冻结（末记录 2026-09-15 08:11–08:12）</td></tr>
+      </tbody>
+    </table>
+    <div class="eq" style="margin-top:14px">
+      <span class="c"># 现档构造（与 P180 定义一致，规则 BF：逐档案三元组 / BE：冻结不计活跃）</span><br>
+      live &nbsp; = default <span class="k">616</span> + writer <span class="k">6,795</span> + reviewer <span class="k">0</span> = <span class="k">7,411</span><br>
+      冻 &nbsp;&nbsp;&nbsp; = analyst 5,450 + researcher 1,144 + orchestrator 464 + developer 22 = <span class="k">7,080</span><br>
+      现档 &nbsp; = 7,411 + 7,080 = <span class="p">14,491</span> &nbsp;<span class="c">(= 14,191 + 300，误差 0)</span><br>
+      冻结占比 = 7,080 / 14,491 = <span class="p">48.86%</span> &nbsp;<span class="c">(上期 49.89% · 分子一个字节没动)</span>
+    </div>
+    <p style="font-size:12.8px;color:var(--tx3);margin:0">
+      规则 BH 第 4 期兑现：占比的每一次"下滑"都是分母 +300/日 的算术必然。本期跌破 49%（→48.86%），分子 7,080 已连续 71 日恒定。
+      <b>凡是占比型里程碑，都必须并列分子绝对值。</b>
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>窗口口径纠偏：weakness_scan 的 <code>daily_counts</code> 是窗口截断值</h3>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 10px">
+      脚本输出的 <span class="mono">daily_counts</span> 显示 11-19 = <b>17</b> 条，而全文件自然日切片为 <b>85</b> 条 ——
+      因为 500 行尾窗只覆盖到 11-19 09:12。若直接引用，会把一个正常日读成"断崖式下降"。
+    </p>
+    <table>
+      <thead><tr><th>自然日</th><th class="n">11-19</th><th class="n">11-20</th><th class="n">11-21</th><th class="n">11-22</th><th class="n">11-23</th><th class="n">11-24</th><th class="n">11-25</th></tr></thead>
+      <tbody>
+        <tr><td>reviewer 全部 WARNING（全文件）</td><td class="n">85</td><td class="n">77</td><td class="n">76</td><td class="n">75</td><td class="n">94</td><td class="n">98</td><td class="n dim">73*</td></tr>
+        <tr><td>default ERROR</td><td class="n dim">—</td><td class="n dim">—</td><td class="n">82</td><td class="n">156</td><td class="n">156</td><td class="n">156</td><td class="n dim">66*</td></tr>
+        <tr><td>writer ERROR</td><td class="n">144</td><td class="n">144</td><td class="n">144</td><td class="n">144</td><td class="n">144</td><td class="n">144</td><td class="n dim">54*</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:10px 0 0">
+      * 截至 09:04（本期快照）。default 自 11-21 10:12 轮转后重新起算，故 11-21 为 82（半日）。
+      规则 V：物理行 ≠ 逻辑记录 ≠ 事件 —— 此处三列均为<b>物理行</b>。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section>
+  <div class="shead"><span class="snum">03</span><h2>外部知识</h2><span class="tag">arXiv 5 篇 · HN 10 条</span></div>
+
+  <div class="card p">
+    <h3><span class="dot"></span>arXiv：摄取臂失败，但源健康 —— 而且读到了"旧批"</h3>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 12px">
+      pre-run <span class="mono">knowledge_ingest.py</span> 于 <b>01:01:09Z</b> 启动，arXiv 臂返回硬编码的
+      <code>Failed to fetch arXiv API</code>（第 68 期未修：不记录异常类型 / HTTP 码 / 耗时）。
+      随后按规则 <b>FF</b>（单发失败与源可用性之间必须夹一次重试）实测：
+    </p>
+    <table>
+      <thead><tr><th>#</th><th>时刻 (UTC)</th><th>形态</th><th class="n">耗时</th><th class="n">字节</th><th>判读</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="mono">01:02:50</td><td>warmup（冷启动，不计分）</td><td class="n mid">9.177 s</td><td class="n">14,145</td><td class="dim">HTTP 200 · 占 15 s 阈值 <b>61.2%</b></td></tr>
+        <tr><td>2</td><td class="mono">01:03:01</td><td>同 URL 第 1 发</td><td class="n ok">0.471 s</td><td class="n">14,145</td><td class="dim">HTTP 200 · 5 篇</td></tr>
+        <tr><td>3</td><td class="mono">01:04:12</td><td>同 URL 第 2 发</td><td class="n ok">0.443 s</td><td class="n">14,145</td><td class="dim">HTTP 200 · 逐字节相同</td></tr>
+        <tr><td>4</td><td class="mono">01:04:13</td><td>同 URL 第 3 发</td><td class="n ok">0.446 s</td><td class="n">14,145</td><td class="dim">HTTP 200 · 逐字节相同</td></tr>
+        <tr><td>5</td><td class="mono">01:05:xx</td><td><b>原脚本整体重跑</b></td><td class="n ok">7.85 s</td><td class="n">—</td><td class="dim"><b>5 篇 arXiv + 10 条 HN</b>，退出码 0</td></tr>
+      </tbody>
+    </table>
+    <div class="callout" style="margin-bottom:0">
+      <b>规则 FF / EZ 第 N 次确认：</b>同一脚本原样重跑成功 ⇒ <b>永久排除"源不可用"</b>，只能记"单次抽样失败"。
+      热样本 0.44–0.47 s 与冷样本 9.18 s 相差 <b>20×</b>（规则 CY/CT：冷启动是宽分布，判阈值必须用冷样本）——
+      15 s 阈值对热样本有 <b>32×</b> 余量，对冷样本只有 <b>1.6×</b>。唯一正确的动作是<b>加重试</b>，不是调阈值。
+    </div>
+  </div>
+
+  <div class="card a">
+    <h3><span class="dot"></span>但重试成功 ≠ 拿到新批次（本期新规则 GN）</h3>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 12px">
+      三次成功请求、一次脚本级成功，读到的 <span class="mono">published</span> 全都是 <b>2026-11-23T18:59:52Z</b>。
+      换句话说：<b>"恢复"证明的是 HTTP 层可用，不证明采样向前推进了。</b>
+    </p>
+    <div class="eq">
+      <span class="c"># 三个独立时刻，同一批（id 集合与 published 逐字节一致）</span><br>
+      01:03:01Z → <span class="k">2611.31240</span> @ 2026-11-23T18:59:52Z<br>
+      01:04:12Z → <span class="k">2611.31240</span> @ 2026-11-23T18:59:52Z<br>
+      01:05:xxZ（整脚本）→ <span class="k">2611.31240</span> @ 2026-11-23T18:59:52Z
+    </div>
+    <p style="font-size:12.8px;color:var(--tx3);margin:0">
+      判据：报"摄取恢复"必须并列 <span class="mono">(重试成功数, id 集合是否变化, published 绝对值)</span>。
+      与规则 <b>EM</b>（可用性恢复 ≠ 采样连续）同族 —— EM 管"跳过批次"，GN 管"同批重读"。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="dot"></span>本期 arXiv 批次（5 篇 · 全部 cs.CV / cs.LG / cs.RO）</h3>
+    <table>
+      <thead><tr><th>id</th><th>标题</th><th>相关度</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">2611.31228</td><td>Language Models Steer on Injected Uncertainty Tokens, but <b>Fail to Self-Monitor In Situ</b></td><td class="hl">★ 自监控</td></tr>
+        <tr><td class="mono">2611.31240</td><td>Pruning Autonomous Driving VLAs: What to Preserve for Reasoning and Action</td><td class="dim">结构化剪枝</td></tr>
+        <tr><td class="mono">2611.31237</td><td>Let Vision-Language Models Generate Images through Their Representations</td><td class="dim">多模态统一</td></tr>
+        <tr><td class="mono">2611.31233</td><td>TowerBridge: Bridging the Dual-Encoder Modality Gap via Weight-Space Programming</td><td class="dim">表示对齐</td></tr>
+        <tr><td class="mono">2611.31227</td><td>How Far Can Linear Go? BiPert, a Unified Framework for Single-Cell Perturbation Modelling</td><td class="dim">线性模型上限</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.2px;color:var(--tx2);margin:12px 0 0">
+      <b>2611.31228 值得单独记一笔：</b>模型能"被注入的不确定性 token 引导"，却在<b>原地</b>（in situ）无法自我监控同一状态。
+      这与本系统的一条长期经验同构 —— 检测器可以<b>被告诉</b>某类签名该报（模式库），却不能<b>自行判断</b>自己漏了什么（规则 L 的第五种盲区：模式库外）。
+      外部的"引导"生效、内部的自审失效，是同一类架构缺口。
+    </p>
+  </div>
+
+  <div class="card b">
+    <h3><span class="dot"></span>Hacker News 前十</h3>
+    <div class="story"><div class="rk">1</div><div class="bd"><span class="ti">The Spray Bottle</span><span class="meta"><span class="sc">338</span> 分 · 93 评论 · mechanical-pencil.com</span></div></div>
+    <div class="story"><div class="rk">2</div><div class="bd"><span class="ti">Ternary Bonsai 2.5 27B</span><span class="meta"><span class="sc">312</span> 分 · 107 评论 · 27B 三值量化模型</span></div></div>
+    <div class="story"><div class="rk">3</div><div class="bd"><span class="ti">Active intrusion campaign against Check Point security management servers</span><span class="meta"><span class="sc">258</span> 分 · 122 评论 · <b>在野攻击，安全相关</b></span></div></div>
+    <div class="story"><div class="rk">4</div><div class="bd"><span class="ti">GPT-6 models demonstrate intrinsic protein-design capabilities</span><span class="meta"><span class="sc">149</span> 分 · 34 评论</span></div></div>
+    <div class="story"><div class="rk">5</div><div class="bd"><span class="ti">Gödel Enigma</span><span class="meta"><span class="sc">77</span> 分 · 26 评论</span></div></div>
+    <div class="story"><div class="rk">6</div><div class="bd"><span class="ti">Calculate how many mesh radio nodes your city needs</span><span class="meta"><span class="sc">76</span> 分 · 10 评论</span></div></div>
+    <div class="story"><div class="rk">7</div><div class="bd"><span class="ti">Launch HN: Versine (YC F26) – MCP to send and receive money</span><span class="meta"><span class="sc">62</span> 分 · 44 评论 · <b>MCP 触及资金边界</b></span></div></div>
+    <div class="story"><div class="rk">8</div><div class="bd"><span class="ti">From CUDA and Jax to TorchTPU: Lessons from a Cayley Graph Solver</span><span class="meta"><span class="sc">62</span> 分 · 1 评论</span></div></div>
+    <div class="story"><div class="rk">9</div><div class="bd"><span class="ti">Fable 5.2 Tries Less on Some Hard Tasks When a Shortcut Is Available</span><span class="meta"><span class="sc">42</span> 分 · 34 评论 · <b>走捷径时"省力"的可测证据</b></span></div></div>
+    <div class="story"><div class="rk">10</div><div class="bd"><span class="ti">Get in, friends, the Atmosphere is happening</span><span class="meta"><span class="sc">38</span> 分 · 34 评论</span></div></div>
+    <p style="font-size:13.2px;color:var(--tx2);margin:14px 0 0">
+      <b>第 9 条直接命中本作业的方法论：</b>"有捷径时在难题上少花力气"。本简报自己就在防这个 ——
+      规则 <b>AI</b>（阈值代回）、<b>FB</b>（预算代回）、<b>GC</b>（计分基准相位）三条，
+      全部是为了防止"看起来算过了"替代"真的算对了"。本期 P180 分支①的 24 小时错误，正是这一类捷径没被拦住。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 04 ============ -->
+<section>
+  <div class="shead"><span class="snum">04</span><h2>上期台账：✓4 / ✗1 / ⏳1</h2><span class="tag">精度 4/5 = 80.0%</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>P180 预测</th><th>判定</th><th>实测与归因</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>default <span class="mono">agent.log</span> 轮转 12-09 00:30–09:00</td>
+          <td class="dim">⏳</td>
+          <td class="dim">未到期。本期复算：余量法 <b>12-09 04:54</b>、周期法 <b>12-09 08:45</b> —— <b>两法双双落在窗口内</b>（FG 同向）</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>11-24 default ERROR <b>156 ± 1</b>；writer <b>144</b></td>
+          <td class="ok">✓</td>
+          <td><span class="mono">156</span> / <span class="mono">144</span>，双项全中</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>现档 <b>14,491 ± 2</b></td>
+          <td class="ok">✓</td>
+          <td><span class="mono">14,491</span>（恒等式，按 EJ/BK <b>不计入精度分母</b>）</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>零 ERROR（<b>reviewer</b>）连胜 <b>33.04 日</b></td>
+          <td class="ok">✓</td>
+          <td>末 ERROR 2026-10-23 08:06:51 → 11-25 09:04:58 = <span class="mono">33.04</span> 日。序列 30.04→31.04→32.04→33.04，步长恒 1.00</td>
+        </tr>
+        <tr class="hl">
+          <td>5</td>
+          <td>arXiv 三分支，分支键 = <span class="mono">published</span> 绝对值</td>
+          <td class="no">✗<span class="dim">/✓</span></td>
+          <td>
+            实测 <span class="mono">published = 2026-11-23T18:59:52Z</span>、lag <b>30.05 h</b>。<br>
+            <b>数值命中</b>（30.05 ∈ [26,34]），<b>但分支键未命中</b>：三个分支枚举的是 11-24 / 11-21 / 差集0，
+            <b>没有一支是 11-23</b>。更严重的是分支①<b>内部算术不自洽</b> —— 见第 05 节。
+          </td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>SKILL.md 期末 ∈ <b>[91.6%, 95.7%]</b>，双读数并列</td>
+          <td class="ok">✓</td>
+          <td><span class="mono">94,113 = 94.11%</span>，且本期<b>零写入</b> ⇒ 归档前 = 归档后。规则 GC 首次带来可检验收益</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>尾窗 FUNC job-real ∈ <b>[19,30]</b>；observer ∈ <b>[1,4]</b></td>
+          <td class="ok">✓</td>
+          <td>实测 <b>22</b> / <b>2</b>。按子签名分解求和（GD）：ddgs <b>10</b>（区间[9,13]）+ weixin <b>6</b>（[5,7]）+ 作业脚本/traceback <b>6</b>（[5,10]）= 22</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:12px 0 0">
+      计分口径（规则 EJ）：剔除 #3 恒等式、#1 未到期 ⇒ <b>4/5 = 80.0%</b>（上期 4/5 = 80.0%，再上期 6/7 = 85.7%）。
+      <b>#7 是本期最有价值的命中</b>：规则 GD 要求"混合容器的区间按全容器子签名分解导出"，本期三条子区间全部落在带内，
+      说明 <b>GD 在预测端真的生效了</b>，不只是事后解释。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 05 ============ -->
+<section>
+  <div class="shead"><span class="snum">05</span><h2>本期三条发现</h2><span class="tag">新规则 GM · GN · GO</span></div>
+
+  <div class="card p">
+    <h3><span class="dot"></span>GO · 30 小时滞后是一道减法，不是源的属性</h3>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 12px">
+      把时间全部换算到 ET（11 月为 EST = UTC−5），一切就都对齐了：
+    </p>
+    <div class="eq">
+      published&nbsp;&nbsp;= 2026-11-23T18:59:52Z → <span class="k">2026-11-23 13:59:52 ET</span> &nbsp;<span class="c">(14:00 ET 截稿 − 8 秒)</span><br>
+      snapshot &nbsp;&nbsp;= 2026-11-25T01:04:13Z → <span class="k">2026-11-24 20:04:13 ET</span> &nbsp;<span class="c">(简报排程 09:00 CST)</span><br>
+      <span class="c">────────────────────────────────────────────</span><br>
+      snapshot − 前一日 14:00 ET = <span class="p">30.070 h</span><br>
+      实测 lag &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <span class="p">30.052 h</span> &nbsp;<span class="c">(差 0.018 h = 65 秒)</span>
+    </div>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 10px">
+      这条恒等式一次性解释了八期数据：
+    </p>
+    <table>
+      <thead><tr><th>期</th><th>场景</th><th class="n">lag</th><th>恒等式解释</th></tr></thead>
+      <tbody>
+        <tr><td>P174–P177</td><td>工作日连续采样</td><td class="n">30.0 / 30.12 / 30.15 / 30.09</td><td class="dim">T+1 批 + 同一相位 ⇒ 恒 ≈30 h</td></tr>
+        <tr><td>P178–P179</td><td>跨周末</td><td class="n">54.03 / 78.07</td><td class="dim">周末不发公告 ⇒ 每过一日 +24.0 h</td></tr>
+        <tr><td>P180</td><td>周一，读完周末积压</td><td class="n">78.08</td><td class="dim">Δlag +0.01 h 而批次 100% 换新（规则 GI）</td></tr>
+        <tr><td class="hl">P181</td><td class="hl">跨公告边界后归位</td><td class="n hl">30.05</td><td class="hl">工作日相位恢复 ⇒ <b>回落 48.03 h</b></td></tr>
+      </tbody>
+    </table>
+    <div class="callout a" style="margin-bottom:0">
+      <b>操作性结论：</b>新鲜度指标必须改成 <b>"落后 n 个批次"</b>（本期 n = 1），而不是"滞后 N 小时"。
+      后者在周末会自动膨胀 24 h/日、在公告边界自动归零，<b>它测的是日历不是源</b>（规则 CX 的终局形态）。
+      仍未验证的分支：20:04 ET 时新批次是否"稍后才到"。判别实验已列入第 07 节 #5。
+    </div>
+  </div>
+
+  <div class="card r">
+    <h3><span class="dot"></span>GM · 分支表少了一列：<code>lag = snapshot − published</code></h3>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 12px">
+      P180 的 #5 写了三个分支，并明确规定"分支键必须是 <span class="mono">published</span> 绝对值"。方向完全正确 ——
+      但它<b>没有把 lag 与 published 互相代回</b>。代回一次，分支①立刻自证不成立：
+    </p>
+    <div class="eq">
+      分支① &nbsp;published ≈ 11-24T18:5xZ ⇒ 自算 lag = 11-25T01:00:46Z − 11-24T18:55Z = <span class="p">6.10 h</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;而声明 lag = <span class="p">30 ± 4 h</span> &nbsp;&nbsp;<span class="c">← 差 24.0 h</span><br>
+      分支② &nbsp;published ≈ 11-21T18:5xZ ⇒ 自算 lag = <span class="k">78.10 h</span>，声明 78.1 ± 0.3 h &nbsp;<span class="c">✓ 自洽</span><br>
+      分支③&nbsp;id 差集 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⇒ 自算 lag = <span class="k">102.1 h</span>，声明 102.07 ± 0.1 h &nbsp;<span class="c">✓ 自洽</span>
+    </div>
+    <p style="font-size:13.8px;color:var(--tx2);margin:0 0 10px">
+      而实测值恰好是 <b>30.05 h</b> —— 也就是"分支①的 <b>lag</b>"配"<b>11-23</b> 的 published"。
+      <b>数值命中的，是一支标签写错一天的预测。</b>
+    </p>
+    <div class="callout r" style="margin-bottom:0">
+      <b>规则 GM（新）：</b>条件式预测的<b>每一个分支</b>都必须有一列
+      <span class="mono">lag = snapshot − published</span> 的<b>自算值</b>，与声明值并列；两者不等即该分支作废。
+      这是规则 <b>FZ</b>（两端同基准）在<b>预测端</b>的落地，也是规则 <b>AI</b>（阈值代回）在<b>恒等式轴</b>上的对偶 ——
+      AI 代回的是"被预测量自身的历史序列"，GM 代回的是"同一分支内部的两个量"。
+      按规则 <b>E</b> 双层计分：#5 记 <span class="mono">✗/✓</span>，不计入 AUTO 分子。
+    </div>
+  </div>
+
+  <div class="card v">
+    <h3><span class="dot"></span>另一条精确命中：writer 轮转窗三法差 4 分钟</h3>
+    <table>
+      <thead><tr><th>方法</th><th>依据</th><th class="n">结果</th></tr></thead>
+      <tbody>
+        <tr><td>周期法（EW）</td><td class="dim">两次实测间隔 17.8246 / 17.8206 日（差 5.8 min = 0.023%）</td><td class="n mono">12-04 14:05:27</td></tr>
+        <tr><td>余量法（余量 ÷ 实测速率）</td><td class="dim">2,708,842 B ÷ 294,188 B/日 = 9.21 日</td><td class="n mono">12-04 14:03</td></tr>
+        <tr><td>P180 的预测</td><td class="dim">上期独立给出</td><td class="n mono hl">12-04 14:07</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:10px 0 0">
+      <b>三法在 4 分钟内一致</b>，规则 EW（纯心跳驱动文件的轮转间隔是测量量，锁定后给"周期格"而非单点）第 4 次兑现。
+      机制：writer <span class="mono">agent.log</span> 94.8% 的字节来自 <span class="mono">mem_trim</span> 心跳（1,437 条/日 × 194 B = 278,718 B/日），
+      工作分量只占 5.2% ⇒ 轮转时刻由心跳格点决定，与业务负载几乎无关（规则 EK/EN）。
+      <b>但请注意：可预测 ≠ 有益</b> —— 这类轮转不含任何信息量，不得计入健康度、也不得当作"系统活跃"证据。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section>
+  <div class="shead"><span class="snum">06</span><h2>容量与轮转</h2><span class="tag">逐文件阈值 · 全路径为键</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>文件（全路径）</th><th class="n">大小 / 阈值</th><th class="n">占用</th><th class="n">速率</th><th>下次轮转</th><th>环境</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>reviewer/logs/agent.log</code></td><td class="n">4.37 MB / 5 MiB</td><td class="n hl">83.40%</td><td class="n">336 KB/日</td>
+          <td class="mono">11-27 21:00 – 23:10</td><td><span class="badge b-p1">最近</span></td>
+        </tr>
+        <tr>
+          <td><code>writer/logs/agent.log</code></td><td class="n">2.53 MB / 5 MiB</td><td class="n">48.34%</td><td class="n">294 KB/日</td>
+          <td class="mono">12-04 14:03 – 14:05</td><td><span class="badge b-own">心跳</span></td>
+        </tr>
+        <tr>
+          <td><code>default/logs/agent.log</code></td><td class="n">670 KB / 5 MiB</td><td class="n">12.78%</td><td class="n">331 KB/日</td>
+          <td class="mono">12-09 04:54 – 08:45</td><td><span class="badge b-p2">两法并列</span></td>
+        </tr>
+        <tr>
+          <td><code>reviewer/logs/errors.log</code></td><td class="n">233 KB / 2 MiB</td><td class="n">11.09%</td><td class="n">14.5 KB/日</td>
+          <td class="mono dim">2027-04-02</td><td class="dim">11-09 换基</td>
+        </tr>
+        <tr>
+          <td><code>default/logs/errors.log</code></td><td class="n">137 KB / 2 MiB</td><td class="n">6.51%</td><td class="n">34.6 KB/日</td>
+          <td class="mono dim">2027-01-21</td><td class="dim">11-21 10:12 换基</td>
+        </tr>
+        <tr>
+          <td><code>writer/logs/errors.log</code></td><td class="n">713 KB / 2 MiB</td><td class="n">34.02%</td><td class="n">15.1 KB/日</td>
+          <td class="mono dim">2027-02-25</td><td class="dim">10-09 换基</td>
+        </tr>
+        <tr>
+          <td><code>reviewer/logs/gateway.log</code></td><td class="n">2.83 MB / 5 MiB</td><td class="n">53.92%</td><td class="n">31.7 KB/日</td>
+          <td class="mono dim">2027-02-09</td><td class="dim">89 日未轮转</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:12px 0 0">
+      阈值逐文件：<span class="mono">errors.log</span> 2 MiB · <span class="mono">agent.log</span> / <span class="mono">gateway.log</span> 5 MiB（规则 CG/GF）。
+      本期 <span class="mono">reviewer/agent.log</span> 进入 <b>83.4%</b> 区间，是本作业将要引起的最近一次轮转 —— 且其中 83.3% 的字节是心跳（EK），
+      所以它的"吃满"与本作业的分析深度基本无关，只与时间有关。
+    </p>
+  </div>
+
+  <div class="grid2">
+    <div class="card a">
+      <h3><span class="dot"></span>Memory：余 216 字符</h3>
+      <div class="barrow">
+        <div class="top"><span class="k">占用量</span><span class="v mono">1,984 / 2,200</span></div>
+        <div class="bar red"><i style="width:90.18%"></i></div>
+      </div>
+      <p style="font-size:13.4px;color:var(--tx2);margin:10px 0 0">
+        规则 <b>FH</b> 判定式：余量 <b>216 字符</b>，而本文件的典型 entry 长度 <b>100–600 字符</b> ——
+        <b>余量已落在单次写入量的分布内部</b>。正确表述不是"还剩 9.8%"，而是
+        <b>"下一次 add 有相当概率被拒"</b>。动作是<b>先裁剪再加</b>，不是"观望"。
+      </p>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>SKILL.md：余 5,887 字符</h3>
+      <div class="barrow">
+        <div class="top"><span class="k">占用量</span><span class="v mono">94,113 / 100,000</span></div>
+        <div class="bar warn"><i style="width:94.11%"></i></div>
+      </div>
+      <p style="font-size:13.4px;color:var(--tx2);margin:10px 0 0">
+        规则 <b>H</b> 期数预算：余量 ÷ 单期增量（1,150–1,590）= <b>3.7–5.1 期</b>。
+        本期增量为 <b>0</b>（±0），说明"写一条 + 归档一条"的稳态操作可以把净增量压到接近零 ——
+        这是 H 的唯一可持续解法，<b>但它要求每期都真的执行归档</b>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 ============ -->
+<section>
+  <div class="shead"><span class="snum">07</span><h2>下期预测（P182 · 2026-11-26）</h2><span class="tag">含代回自检</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>#</th><th>类</th><th>预测</th><th>推导与代回自检</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td><td class="dim">AUTO</td>
+          <td>writer <span class="mono">agent.log</span> 轮转 <b>12-04 14:05 ± 10 min</b></td>
+          <td>三法一致（周期 14:05:27 / 余量 14:03 / P180 预测 14:07）。<b>可证伪</b>：14:30 仍未轮转 ⇒ 工作分量 &gt;20% 或心跳格点变了（EW 失效条件）</td>
+        </tr>
+        <tr>
+          <td>2</td><td class="dim">AUTO</td>
+          <td>reviewer <span class="mono">agent.log</span> 轮转 <b>11-27 21:00 – 11-28 02:00</b></td>
+          <td>周期法 21:03 / 余量法 23:10；<b>本期自身写入会把窗口向前拉</b>（观察者分量，规则 N），故上界留到 02:00。两法同向（FG）</td>
+        </tr>
+        <tr>
+          <td>3</td><td class="dim">AUTO</td>
+          <td>现档 <b>14,791 ± 2</b></td>
+          <td>14,491 + 300（156 + 144 + 0）。<b>恒等式，不计入精度分母</b>（EJ/BK）。<b>前提</b>：本期无任何 <span class="mono">errors.log</span> 轮转</td>
+        </tr>
+        <tr>
+          <td>4</td><td class="dim">AUTO</td>
+          <td>零 ERROR（<b>reviewer</b>）连胜 <b>34.04 日</b></td>
+          <td>序列 31.04 → 32.04 → 33.04，步长恒 1.00。依赖外部 provider ⇒ 按 AQ 降一档。<b>必须与 profile 名同句（GH）</b></td>
+        </tr>
+        <tr class="hl">
+          <td>5</td><td class="dim">AUTO</td>
+          <td>arXiv：<b>三分支，每支自带自算 lag</b><br>
+              ① published = 11-24T18:5xZ ⇒ lag <b>6.1 ± 0.1 h</b><br>
+              ② published = 11-23T18:5xZ ⇒ lag <b>30.1 ± 0.1 h</b><br>
+              ③ published = 11-20T18:5xZ ⇒ lag <b>102.1 ± 0.1 h</b></td>
+          <td>
+            <b>本期新增 GM 检查</b>：每支的 lag 由 <span class="mono">lag = snapshot − published</span> 自算，声明值必须与之相等。<br>
+            <b>判别实验（P182 首要动作）</b>：在 <b>21:00 ET</b>（= 次日 10:00 CST）额外采一次 ——
+            若 lag 变 7 h ⇒ 新批次在 20:00 ET 后落地（相位假说成立）；若仍 30 h ⇒ T+1 是源的结构，不是采样假象。
+          </td>
+        </tr>
+        <tr>
+          <td>6</td><td class="dim">AUTO</td>
+          <td>SKILL.md 归档后 <b>三档并列</b>：<br>指针档 <b>94.20%</b> · 归档档 <b>≈91.6%</b> · 未归档整期 <b>95.70%</b></td>
+          <td>基数 94,113（规则 GC：归档后读数）。区间上界 95.70% = +1,590（整期条目），下界 91.59% = −2.52pp（近 3 期最大归档幅度，规则 GK）。<b>按 BI 三档并列，禁单点</b></td>
+        </tr>
+        <tr>
+          <td>7</td><td class="dim">AUTO</td>
+          <td>尾窗 FUNC job-real ∈ <b>[15, 28]</b>；observer ∈ <b>[1, 4]</b></td>
+          <td>按子签名分解求和（GD）：ddgs <b>[8,13]</b> + weixin-not-configured <b>[4,7]</b> + 作业脚本/traceback/web_search <b>[3,8]</b>。observer 历史域 1–3 ⇒ [1,4]</td>
+        </tr>
+        <tr>
+          <td>8</td><td class="dim">AUTO</td>
+          <td>Memory ∈ <b>{1,984（不写）} ∪ [+100, 2,200] ∪ 裁剪档</b>；<b>若先 add 不裁剪 ⇒ 有非零概率被拒</b></td>
+          <td>规则 AC 三态 + FH：余 216 字符 &lt; 典型 entry 长度 ⇒ 该 add 在写下瞬间即可能失效</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:12px 0 0">
+      计分口径：#3 为恒等式（不计分）⇒ 分母 7。本期无 <span class="badge b-p1">MANUAL</span> 项 ——
+      全部指标由系统自身可观测（规则 F：MANUAL 项连续全中时信息量有限，故不再凑数）。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section>
+  <div class="shead"><span class="snum">08</span><h2>趋势对比</h2><span class="tag">P178 → P181</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>指标</th><th class="n">P178</th><th class="n">P179</th><th class="n">P180</th><th class="n">P181</th><th>判读</th></tr></thead>
+      <tbody>
+        <tr><td>现档 ERROR</td><td class="n mono">13,591</td><td class="n mono">13,891</td><td class="n mono">14,191</td><td class="n mono"><b>14,491</b></td><td class="dim">+300/期，三期零偏差</td></tr>
+        <tr><td>live ERROR / 日</td><td class="n mono">300</td><td class="n mono">300</td><td class="n mono">300</td><td class="n mono"><b>300</b></td><td class="dim">144 + 156，结构常量</td></tr>
+        <tr><td>冻结残骸占比</td><td class="n mono">52.08%</td><td class="n mono">50.97%</td><td class="n mono">49.89%</td><td class="n mono"><b>48.86%</b></td><td class="dim">分子恒定（BH 算术必然）</td></tr>
+        <tr><td>零 ERROR（reviewer）</td><td class="n mono">30.04</td><td class="n mono">31.04</td><td class="n mono">32.04</td><td class="n mono"><b>33.04</b></td><td class="dim">步长恒 1.00，4 期无漂移</td></tr>
+        <tr><td>FUNC job-real（尾窗）</td><td class="n mono">23</td><td class="n mono">24*</td><td class="n mono">24</td><td class="n mono"><b>22</b></td><td class="dim">带内波动，无趋势</td></tr>
+        <tr><td>健康度（审查后）</td><td class="n mono">99.58</td><td class="n mono">99.31</td><td class="n mono">99.28</td><td class="n mono"><b>99.34</b></td><td class="dim">FUNC 22 ⇒ 扣 0.66</td></tr>
+        <tr><td>arXiv 滞后</td><td class="n mono">54.03 h</td><td class="n mono">78.07 h</td><td class="n mono">78.08 h</td><td class="n mono"><b>30.05 h</b></td><td class="hl">回落 48.03 h，相位归位</td></tr>
+        <tr><td>arXiv 落后批次数</td><td class="n mono">—</td><td class="n mono">—</td><td class="n mono">—</td><td class="n mono"><b>1</b></td><td class="hl">本期新建口径</td></tr>
+        <tr><td>工具 / 技能</td><td class="n mono">45 / 81</td><td class="n mono">45 / 81</td><td class="n mono">45 / 81</td><td class="n mono"><b>45 / 81</b></td><td class="dim">第 72 日 / 第 57 期</td></tr>
+        <tr><td>SKILL.md</td><td class="n mono">91.29%</td><td class="n mono">93.81%</td><td class="n mono">94.11%</td><td class="n mono"><b>94.11%</b></td><td class="dim">本期 ±0</td></tr>
+        <tr><td>Memory</td><td class="n mono">—</td><td class="n mono">—</td><td class="n mono">1,959</td><td class="n mono"><b>1,984</b></td><td class="mid">余 216 字符</td></tr>
+        <tr><td>预测精度</td><td class="n mono">—</td><td class="n mono">—</td><td class="n mono">6/7</td><td class="n mono"><b>4/5</b></td><td class="dim">80.0%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.8px;color:var(--tx3);margin:10px 0 0">* P179 的 FUNC 按 P180 台账回填。SKILL.md 的 P178 值为其归档后读数 91.29%（规则 GC）。</p>
+  </div>
+
+  <div class="card v">
+    <h3><span class="dot"></span>本期趋势的三个判断</h3>
+    <ul class="clean">
+      <li class="v"><b>① 四常量仍是"真静止"，而占比类仍是"假漂移"。</b>工具 45（第 72 日）、技能 81（第 57 期）、live 300/日、弱点 0（第 110 期）四个常量一个字节没动；同期现档 +300/期、冻结占比 −1.03pp/期，全部由分母驱动。<b>任何一个"好转"只要来自占比，就必须并列分子。</b></li>
+      <li class="a"><b>② arXiv 指标发生了一次口径革命，而不是一次改善。</b>从 78.08 h 到 30.05 h 不是"源变快了 62%"—— 是同一批数据的解读方式变了。<b>跨过口径变更点后，30.05 与 78.08 不可相减</b>（规则 P125：口径并存 ⇒ 比率不可复算）。下一期起只报"落后 N 个批次"，历史小时数仅作相位校对。</li>
+      <li class="r"><b>③ 预测精度在 80% 附近触顶，而失准项性质变了。</b>P180 的失准（arXiv 分支标签）不再是"模型不够精细"，而是"少了一列自检"。这与 P127 的 AI 规则、P179 的 GC 规则是同一族：<b>精度上限由表内自洽检查决定，不由模型精细度决定。</b>本期把这项检查固化成了 GM。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 09 ============ -->
+<section>
+  <div class="shead"><span class="snum">09</span><h2>进化建议</h2><span class="tag">含所有权边界审查（规则 R）</span></div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>优先级</th><th>动作</th><th>归属</th><th>预期收益 / 代价</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge b-p0">P0</span></td>
+          <td><span class="mono">knowledge_ingest.py</span> 的 arXiv 请求<b>加 1 次重试</b>，并记录 <b>(异常类型, HTTP 码, 耗时)</b></td>
+          <td><span class="badge b-own">本 profile 可写</span><br><span class="dim">但代码级修改须人工审批（设计原则 #1）</span></td>
+          <td class="dim">本期实证：重试可把此类失败几乎全部转成成功（EZ/FF/EX 三条规则同指此处）。<b>不改阈值</b>——15 s 对热样本有 32× 余量，上调只会把单次等待变成 30 s 级常态</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-p0">P0</span></td>
+          <td>修 <span class="mono">web.extract_backend</span>（ddgs → firecrawl/tavily/keenable/exa/parallel）</td>
+          <td><span class="badge b-p1">报告项</span><br><span class="dim">default profile 的 config.yaml，本作业无写权</span></td>
+          <td class="dim">窗口内 <b>10 条/6 日</b>，已连续 <b>66 日</b>零执行。这是唯一"自带修复指引 + 零成本 + 零执行"的项</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-p1">P1</span></td>
+          <td><span class="mono">approvals.mode: 'auto' → 'smart'</span></td>
+          <td><span class="badge b-own">本 profile 可写</span></td>
+          <td class="dim">窗口内 <b>355 条</b>（<b>71.0%</b>）全部由这一个非法值产生。修完 INFRA 从 474 降到 ~119，日志总量降 <b>71%</b></td>
+        </tr>
+        <tr>
+          <td><span class="badge b-p1">P1</span></td>
+          <td>Memory 先裁剪再写入（余 <b>216</b> 字符 &lt; 单条长度）</td>
+          <td><span class="badge b-own">本 profile 可写</span></td>
+          <td class="dim">规则 FH：不是"接近上限"，是"下一次写入有概率失败"。建议合并 2–3 条同族条目（日志/容量校准与 weixin 断链各自已足够紧凑，可动的是 GitHub/Polymarket 两段）</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-p2">P2</span></td>
+          <td>把 <span class="mono">knowledge_ingest</span> 的采样相位移出 arXiv 公告整点（09:00 → <b>10:00 CST</b>），或增加一次 21:00 ET 副采样</td>
+          <td><span class="badge b-own">本 profile 可写</span></td>
+          <td class="dim"><b>本期不执行</b>：规则 GJ 明确要求"假说阶段不得改代码"，须先积累 ≥2 期同相位样本。第 07 节 #5 已把它变成一次判别实验</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-p2">P2</span></td>
+          <td>修 <span class="mono">self_scan.py</span> 的 <span class="mono">SessionDB.list_sessions</span> 兼容性</td>
+          <td><span class="badge b-own">本 profile 可写</span></td>
+          <td class="dim">长期静默失败，使"会话数"这一维度永久缺失（能力报告中少一列）</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-x">报告</span></td>
+          <td>weixin 链路（<span class="mono">Session expired</span>，300 ERROR/日）</td>
+          <td><span class="badge b-p1">需人工扫码</span></td>
+          <td class="dim">已第 71 日。writer 144 + default 156 精确零方差 ⇒ 这不是"波动"，是稳态故障。<b>本轮不重试凭据</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <b>本期最值得记住的一句话：</b>我们花了八期，把"arXiv 慢 30 小时"当成一个待解释的源侧现象，
+    而它其实是一道减法 —— <span class="mono">采样时刻 − 截稿时刻</span>。这八期里唯一做对的事，
+    是每次都把<b>两个绝对时刻</b>记下来（规则 FZ）。<b>如果没有那两个时刻，这个恒等式永远不会被发现；
+    而有了它，只需要一次除法。</b>
+  </div>
+</section>
+
+<footer>
+  <b>数据来源</b>：<span class="mono">self_scan.py</span>（01:00:46Z）· <span class="mono">weakness_scan.py</span>（01:01:08Z）·
+  <span class="mono">knowledge_ingest.py</span>（01:01:09Z，arXiv 臂失败；01:05 重跑成功）·
+  arXiv 交替探针 4 次（01:02:50–01:04:13Z）· 全 profile <span class="mono">errors.log</span> 枚举（6 个 profile + 4 个冻结）·
+  <span class="mono">agent.log</span> 双载体验证 · 7 份日志容量实测 · <span class="mono">ps</span> 进程枚举（reviewer 471715 第 71 日、writer 3983673、default 3983840；<span class="mono">127.0.0.1:8654</span> LISTEN / fd=25）。
+  <div class="src">
+    口径声明（规则 V / T / M）：所有"条数"均为<b>物理行</b>；零检出已附档案清单；所有容量以<b>全路径</b>为键。
+    本报告自身对本作业日志的贡献（观察者分量，规则 N/AF）已单列为 observer = 2。
+  </div>
+  <div class="src">
+    Self-Evolution Daily Brief · P181 · 生成于 2026-11-25 09:0x CST · 模型 deepseek-v4.1-flash-official ·
+    累计第 181 期（第 140 期永久缺失）。
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
