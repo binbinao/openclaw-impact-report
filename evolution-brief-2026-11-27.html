@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自进化简报 P183 · 2026-11-27</title>
+<style>
+:root{
+  --bg:#070a10; --panel:#0d131d; --panel2:#111a27; --line:#1d2a3a;
+  --txt:#e6edf7; --muted:#8296ad; --cyan:#38d3ff; --vio:#a78bfa;
+  --green:#3ddc97; --amber:#ffb547; --red:#ff5470; --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 15% -10%,#122033 0%,transparent 60%),
+radial-gradient(900px 500px at 95% 0%,#1a1230 0%,transparent 55%),var(--bg);
+color:var(--txt);font:15px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:44px 22px 70px}
+header{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:34px}
+.eyebrow{font:12px/1 var(--mono);letter-spacing:.22em;color:var(--cyan);text-transform:uppercase;margin-bottom:14px}
+h1{margin:0 0 10px;font-size:34px;line-height:1.25;letter-spacing:-.5px;
+background:linear-gradient(92deg,#fff 10%,var(--cyan) 55%,var(--vio) 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:14px}
+.sub b{color:var(--txt);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 8px}
+.kpi{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px 15px}
+.kpi .k{font-size:11px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.kpi .v{font:600 25px/1.3 var(--mono);margin-top:6px}
+.kpi .d{font-size:11.5px;color:var(--muted);margin-top:3px}
+section{margin:38px 0}
+h2{display:flex;align-items:center;gap:12px;font-size:19px;margin:0 0 16px;letter-spacing:-.2px}
+h2 .n{font:600 12px/1 var(--mono);color:#04121a;background:linear-gradient(135deg,var(--cyan),var(--vio));
+border-radius:7px;padding:6px 9px;letter-spacing:.06em}
+h3{font-size:15px;margin:22px 0 10px;color:#cfe0f2}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+background:#0a1119;padding:10px 12px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #16202c;vertical-align:top}
+tr:last-child td{border-bottom:0}
+tr:hover td{background:#0f1826}
+.num{text-align:right;font-family:var(--mono);white-space:nowrap}
+.mono{font-family:var(--mono);font-size:12.5px}
+code{font-family:var(--mono);font-size:12.5px;background:#0a1420;border:1px solid #1b2a3c;border-radius:5px;padding:1px 5px;color:#9fd8ef}
+.tag{display:inline-block;font:600 10.5px/1 var(--mono);letter-spacing:.06em;padding:4px 7px;border-radius:5px;
+border:1px solid;white-space:nowrap}
+.t-auto{color:var(--cyan);border-color:#1d5f77;background:#0a2230}
+.t-man{color:var(--amber);border-color:#6b4a12;background:#2a1c06}
+.t-ok{color:var(--green);border-color:#1c6349;background:#07231a}
+.t-bad{color:var(--red);border-color:#732233;background:#2a0a12}
+.t-wait{color:var(--muted);border-color:#31404f;background:#101820}
+.up{color:var(--red);font-family:var(--mono)}
+.down{color:var(--green);font-family:var(--mono)}
+.ok{color:var(--green);font-family:var(--mono)}
+.warn{color:var(--amber)}
+.bad{color:var(--red)}
+.muted{color:var(--muted)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:linear-gradient(180deg,#101a27,#0b1220);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:12px;padding:16px 18px}
+.card.warnb{border-left-color:var(--amber)}
+.card.badb{border-left-color:var(--red)}
+.card h3{margin:0 0 8px;font-size:14.5px;color:#e9f3ff}
+.card p{margin:0;font-size:13.5px;color:#b9cade}
+ul.clean{margin:8px 0 0;padding-left:18px;color:#b9cade;font-size:13.5px}
+ul.clean li{margin:5px 0}
+.note{font-size:12.5px;color:var(--muted);margin-top:10px}
+footer{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+footer b{color:#cfe0f2}
+@media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Self-Evolution Brief · Period 183</div>
+  <h1>冷启动仍是抽样：今天首发成功，不代表源已修好</h1>
+  <div class="sub">
+    2026-11-27 · 自进化第 <b>183</b> 期 · 四常量第 <b>37</b> 期 ·
+    快照 <b>2026-11-27T01:00:43Z</b>（CST 09:00:43 / ET 11-26 20:00:43） ·
+    reviewer profile · 只读观测
+  </div>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="k">现档 ERROR</div><div class="v">15,091</div><div class="d">= 14,791 + 300，误差 <b class="ok">0</b></div></div>
+  <div class="kpi"><div class="k">live / 冻结</div><div class="v">8,011<span style="font-size:15px;color:var(--muted)">/7,080</span></div><div class="d">冻结占 <b>46.92%</b>（−0.95pp）</div></div>
+  <div class="kpi"><div class="k">零 ERROR 连胜</div><div class="v">35.04<span style="font-size:14px">日</span></div><div class="d">reviewer-scoped · 系统级 300/日</div></div>
+  <div class="kpi"><div class="k">健康度 传统/审查</div><div class="v">85.0<span style="font-size:14px">/</span>99.5</div><div class="d">差距 14.5 = 构造污染</div></div>
+</div>
+
+<section>
+  <h2><span class="n">01</span>本期三条头条</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>① arXiv 首发一次成功 —— 但这是分布的另一次抽样</h3>
+      <p>本期 <code>knowledge_ingest.py</code> <b>首次在近期样本中首发即成</b>（无重试），得 5 篇 + 10 HN。随后三次同 URL 探针 <b>0.393 / 0.403 / 0.408 s</b>、均 <b>11,563 B</b>。
+      冷启动分布（9.18 / 14.85 / 15.98 / &gt;20 s）<b>仍跨 15 s 阈值</b>，本次只是抽到阈值以内 ⇒ 记「成功」，不记「修复」（规则 <b>GT</b>）。</p>
+    </div>
+    <div class="card warnb">
+      <h3>② 弱点 0 的第 112 期：灵敏度 0/17 = 0%</h3>
+      <p><code>weakness_scan</code> 输出 <code>weaknesses: []</code>，而<b>同一 500 行窗口内有 17 个 FUNC 事件</b>（ddgs 10 + weixin 6 + 作业脚本 1）。
+      规则 <b>GV</b>：零检出必须与 <span class="mono">(FUNC 事件数, 检出数, 灵敏度)</span> 三元组同时出现，<b>「弱点 0」不能单独当健康证据</b>。</p>
+    </div>
+    <div class="card">
+      <h3>③ 现档恒等式误差 0，但只在「完整日」成立</h3>
+      <p>15,091 = 14,791 + 156（default）+ 144（writer）+ 0（reviewer），<b>误差 0</b>。但 default 11-21（换基日）= <b>82</b>、11-27（部分日）= <b>66</b>，都不是 156 ⇒
+      规则 <b>GU</b>：恒等式项须标 <span class="mono">full | partial | 换基</span>，部分日读数不得塞进 ±2 区间。</p>
+    </div>
+    <div class="card badb">
+      <h3>④ 下一个动作已可预测：reviewer agent.log 今夜轮转</h3>
+      <p><code>profiles/reviewer/logs/agent.log</code> 已到 <b>96.33%</b>（5,050,582 / 5,242,880 B），余量 <b>192,298 B</b>。
+      余量法 <b>11-27 22:37</b>、周期法（15.49 日）<b>11-27 21:03</b> —— 两法同向，下一期即跨轮转验证。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">02</span>能力状态</h2>
+  <table>
+    <thead><tr><th>维度</th><th class="num">本期</th><th class="num">上期</th><th>判定 / 说明</th></tr></thead>
+    <tbody>
+      <tr><td>工具</td><td class="num">45</td><td class="num">45</td><td>第 <b>74</b> 日零变化 · 历史 31→30→32→34→37→43→45</td></tr>
+      <tr><td>技能</td><td class="num">81</td><td class="num">81</td><td>10 active / 21 stale / 50 archived · 第 <b>59</b> 期零变化</td></tr>
+      <tr><td>Cron 作业</td><td class="num">2</td><td class="num">2</td><td><code>a077650b277d</code>（HN 08:00 CST）· <code>9ec6cb79e14d</code>（本作业 09:00 CST）</td></tr>
+      <tr><td>Memory</td><td class="num">2,124</td><td class="num">2,058</td><td><b class="bad">96.55%</b> · 余 <b>76</b> 字符 ⇒ 下一次写入必须先裁剪（规则 <b>FH</b>）</td></tr>
+      <tr><td>SKILL.md</td><td class="num">93.85%</td><td class="num">94.32%</td><td class="ok">−0.47pp</td> · 余 6,149 · 本期首次触发红灯自纠（95.37% → 93.85%）</td></tr>
+      <tr><td>网关</td><td class="num">PID 471715</td><td class="num">471715</td><td>第 <b>73</b> 日 · uptime 73-00:31 · <code>127.0.0.1:8654</code> LISTEN</td></tr>
+      <tr><td>会话维度</td><td class="num">0</td><td class="num">0</td><td class="bad">SessionDB 无 <code>list_sessions</code>（多期未修，指标缺口）</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="n">03</span>弱点警报 · 尾窗 500 行分类</h2>
+  <p class="muted" style="margin-top:-6px">窗口 <code>2026-11-22 08:03:33 → 2026-11-27 09:02:06</code> = <b>5.041 日</b>，解析率 <b>500/500</b>，产出 <b>99.2 行/日</b>。有效延迟 &gt; 2 日 ⇒ 仅作残留检测，不作状态判定（规则 Z）。</p>
+  <table>
+    <thead><tr><th>分类</th><th class="num">行数</th><th>构成</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag t-wait">INFRA</span></td><td class="num">482</td>
+        <td><code>tools.approval</code> 359（71.8%）· <code>tools.registry</code> 78（13 × 6 日）· <code>hermes_cli.plugins</code> 33（3 份 plugin.json × 11 会话）· <code>pending_approval</code> 7</td></tr>
+      <tr><td><span class="tag t-bad">FUNC job-real</span></td><td class="num">18 行<br><span class="muted" style="font-size:11.5px">17 事件</span></td>
+        <td>ddgs <code>web_extract</code> 9 · DDGS <code>ConnectError</code>（2 行 = 1 事件，复写）· <code>weixin not configured</code> 6 · HN 作业脚本 exit≠0 1</td></tr>
+      <tr><td><span class="tag t-bad">FUNC observer</span></td><td class="num">5</td>
+        <td>P179 会话 2 · P181 采集脚本 1 · P182 手术脚本 1 · <b>本期 <code>execute_code</code> 被 cron 策略阻断 1</b></td></tr>
+    </tbody>
+  </table>
+  <div class="note">健康度：传统 <b>85.0</b>（尾窗整体按密度 500/100 × 3 扣分，已退化为构造常量）· 审查后 <b>99.5</b>（100 − 3 × 0.18）· 差距 <b>14.5</b> 即「指标构造污染」的量化值。<br>
+  混合容器累计 3 个：<code>agent.tool_executor</code>（P115）· <code>tools.approval</code>（P118）· <code>agent.tool_executor.returned_error</code>（P128）；本期 19 条 executor 行中 7 条是 <code>pending_approval</code>（INFRA），12 条为真实失败。</div>
+  <h3>可一次修掉的 INFRA：superpowers 插件清单</h3>
+  <p class="muted" style="margin-top:0">33 条 = <b>3 个</b> <code>plugin.json</code>（<code>.claude-plugin</code> / <code>.codex-plugin</code> / <code>.cursor-plugin</code>）× <b>11 个会话</b>，占尾窗 <b>6.6%</b>。签名固定为「declares an unsupported / failed to parse」，删/修这 3 份清单即可把该簇整块归零 —— 这也是尾窗第二大的 INFRA 族。</p>
+</section>
+
+<section>
+  <h2><span class="n">04</span>知识摄取</h2>
+  <h3>arXiv（5 篇，首发成功 · lag 30.013–30.025 h）</h3>
+  <table>
+    <thead><tr><th>论文</th><th>为什么值得看</th></tr></thead>
+    <tbody>
+      <tr><td><b>Tokenisation is not in APX</b><br><span class="muted mono">2611.34938 · cs.CL</span></td>
+        <td>证明除非 P=NP，不存在常数因子近似的最优分词器 ⇒ 「分词器选择」是结构性取舍，不是工程调参问题。</td></tr>
+      <tr><td><b>Attack Policy Selection can Mislead Monitor Evaluators</b><br><span class="muted mono">2611.34934 · cs.LG</span></td>
+        <td>监视器假阴性率随「攻击策略生成方式」在 <b>0.5%–20.8%</b> 间摆动 ⇒ 与本系统「同一检测器、不同抽样给出相反结论」同构（规则 GV）。</td></tr>
+      <tr><td><b>Can image generation help visual reasoning?</b><br><span class="muted mono">2611.34935 · cs.LG/CV</span></td>
+        <td>13 组模型/生成器配对，生成辅助图平均 <b>降低 3.7 pp</b> 准确率 ⇒ 「加一个工具」的默认假设需要 A/B 证据。</td></tr>
+      <tr><td><b>Spectrum Adaptation of AI-Native Autoencoder Comms</b><br><span class="muted mono">2611.34942 · cs.NI</span></td>
+        <td>训练-测试信道失配下 BER 在 Rayleigh 衰落上严重退化 —— 分布偏移的经典形态。</td></tr>
+      <tr><td><b>BioScore: gene-informed benchmark</b><br><span class="muted mono">2611.34930 · cs.LG</span></td>
+        <td>用空间转录组做参照评「编码器代表了多少生物学」⇒ 指标必须锚在外部真值，而非下游任务分数。</td></tr>
+    </tbody>
+  </table>
+  <div class="note">批次 <code>2611.34930–34942</code>，published 全为 <b>2026-11-25T18:59:1x–5xZ</b>；与上期批（<code>2611.33141–33158</code>）重叠 <b>0/5</b>。落后批次 <b>1（T-1）</b>；工作日 lag 恒 ≈30 h 是采样相位 − 截稿相位的减法（规则 GO），只报「落后 n 批」。</div>
+
+  <h3>Hacker News（10 条）</h3>
+  <table>
+    <thead><tr><th class="num">分</th><th>标题</th><th>与本系统的关系</th></tr></thead>
+    <tbody>
+      <tr><td class="num">457</td><td>Intel One Mono font</td><td>等宽字体/终端渲染，日志审阅体验</td></tr>
+      <tr><td class="num">275</td><td>AMD-specific fork of llama.cpp</td><td>本地推理分支化：与 mlops/llama-cpp 技能同域</td></tr>
+      <tr><td class="num">251</td><td>AI made self-hosting fun again</td><td>自托管回归 —— 本作业本身就是自托管 agent</td></tr>
+      <tr><td class="num">250</td><td>YouTube Ad Punisher（广告即自动重载）</td><td>「自动反制」类脚本：副作用边界的反面教材</td></tr>
+      <tr><td class="num">218</td><td>Kamil Khan Mumtaz：巴基斯坦建筑师</td><td>—</td></tr>
+      <tr><td class="num">198</td><td>RansomwareHelp 的 CTO 被起诉</td><td>凭据/账户治理的反面案例（Krebs）</td></tr>
+      <tr><td class="num">76</td><td>Rvoip：Rust 写的 VoIP 栈</td><td>—</td></tr>
+      <tr><td class="num">72</td><td>Show HN: Olumino（Markdown + 间隔重复）</td><td>与本简报「规则累积」记忆结构同构</td></tr>
+      <tr><td class="num">49</td><td>BlenderUI 2D 图表库</td><td>—</td></tr>
+      <tr><td class="num">31</td><td>Novita / StreamLake 是 ByteDance Ark 包装</td><td>provider 供应链透明度 —— 选型时须核验上游</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="n">05</span>容量与轮转</h2>
+  <table>
+    <thead><tr><th>载体（全路径为键）</th><th class="num">大小</th><th class="num">占用</th><th class="num">速率</th><th>上次轮转</th><th>ETA（双法）</th></tr></thead>
+    <tbody>
+      <tr><td><code>profiles/reviewer/logs/agent.log</code> <span class="muted">5 MiB</span></td><td class="num">5,050,582</td><td class="num bad">96.33%</td><td class="num">339,490 B/日</td><td>11-12 09:12:50</td><td><b>11-27 22:37</b>（余量）/ <b>11-27 21:03</b>（周期 15.49 日）</td></tr>
+      <tr><td><code>profiles/writer/logs/agent.log</code> <span class="muted">5 MiB</span></td><td class="num">3,122,069</td><td class="num">59.55%</td><td class="num">293,731 B/日</td><td>11-16 18:20:56</td><td>12-04 14:19</td></tr>
+      <tr><td><code>logs/agent.log</code>（default）</td><td class="num">1,323,232</td><td class="num">25.24%</td><td class="num">326,259 B/日</td><td>11-23 08:30:40</td><td>12-09 09:22</td></tr>
+      <tr><td><code>profiles/reviewer/logs/errors.log</code> <span class="muted">2 MiB</span></td><td class="num">260,021</td><td class="num">12.40%</td><td class="num">14,539 B/日</td><td>11-09 09:06:55</td><td>2027-04 量级</td></tr>
+      <tr><td><code>logs/errors.log</code>（default）</td><td class="num">205,164</td><td class="num">9.78%</td><td class="num">34,554 B/日</td><td>11-21 10:12:19</td><td>2027-01 量级</td></tr>
+      <tr><td><code>profiles/writer/logs/errors.log</code></td><td class="num">743,715</td><td class="num">35.46%</td><td class="num">15,117 B/日</td><td>10-09 04:20:08</td><td>2027-02 量级</td></tr>
+      <tr><td><code>profiles/reviewer/logs/gateway.log</code></td><td class="num">2,826,824</td><td class="num">53.92%</td><td class="num bad">0（161.0 h 零增长）</td><td>08-28 05:02:33（91 日）</td><td>静默，不可外推</td></tr>
+    </tbody>
+  </table>
+  <p class="note">逐小时直方图（末 2,000 行）：<code>hermes_cli.mem_trim</code> <b>1,498 行 = 74.9% 行数</b>（精确 60 行/h · 194 B/条 ⇒ 279 KB/日），其余为 08h（348）/ 09h（334）两簇 ⇒ 规则 <b>EK/EN</b>：该轮转可预测，但<b>不含信息量</b>，不计入健康度、不作为「系统活跃」证据。<br>
+  reviewer <code>gateway.log</code> 自 11-20 16:04:48 起 <b>161 小时零增长</b>，但 PID 存活、端口 LISTEN、另两载体在写 ⇒ 按规则 <b>AB</b> 记观察项，不是网关死亡。</p>
+</section>
+
+<section>
+  <h2><span class="n">06</span>趋势（近 5 期 + 长期）</h2>
+  <table>
+    <thead><tr><th>期</th><th class="num">现档 ERROR</th><th class="num">live</th><th class="num">冻结（占比）</th><th class="num">零 ERROR</th><th class="num">FUNC job-real</th><th class="num">SKILL.md</th><th class="num">Memory</th></tr></thead>
+    <tbody>
+      <tr><td>P179 · 11-23</td><td class="num">13,891</td><td class="num">6,811</td><td class="num">7,080（50.97%）</td><td class="num">31.04</td><td class="num muted">—</td><td class="num">94.11%</td><td class="num muted">—</td></tr>
+      <tr><td>P180 · 11-24</td><td class="num">14,191</td><td class="num">7,111</td><td class="num">7,080（49.89%）</td><td class="num">32.04</td><td class="num">24</td><td class="num">94.11%</td><td class="num">1,959</td></tr>
+      <tr><td>P181 · 11-25</td><td class="num">14,491</td><td class="num">7,411</td><td class="num">7,080（48.86%）</td><td class="num">33.04</td><td class="num">22</td><td class="num">94.69%</td><td class="num">1,984</td></tr>
+      <tr><td>P182 · 11-26</td><td class="num">14,791</td><td class="num">7,711</td><td class="num">7,080（47.87%）</td><td class="num">34.04</td><td class="num">21</td><td class="num">94.32%</td><td class="num">1,998 → 2,058</td></tr>
+      <tr><td><b>P183 · 11-27</b></td><td class="num"><b>15,091</b></td><td class="num"><b>8,011</b></td><td class="num"><b>7,080（46.92%）</b></td><td class="num"><b>35.04</b></td><td class="num"><b>18</b></td><td class="num"><b>93.85%</b></td><td class="num"><b>2,124</b></td></tr>
+    </tbody>
+  </table>
+  <div class="cards" style="margin-top:14px">
+    <div class="card">
+      <h3>长期（首期 2026-05-17 → 本期）</h3>
+      <p>共 <b>183</b> 期 · 现档 15,091 · 工具 45 · 技能 81 · 零 ERROR 35.04 日（reviewer）· 系统级 live ERROR <b>恒 300/日</b>（156 + 144，已 46 日零方差）。</p>
+    </div>
+    <div class="card warnb">
+      <h3>加速 / 平台判定</h3>
+      <p><b>加速（算术，非趋势）：</b>冻结占比连续 6 期下降 1.12 / 1.12 / 1.08 / 1.03 / 0.99 / <b>0.95 pp</b> —— 分子 73 日恒定、分母 +300/日，是纯算术产物（规则 BH），<b>不是改善</b>。<br>
+      <b>平台（真平台）：</b>工具 45 已 74 日零变化、技能 81 已 59 期零变化、传统健康度 85.0 为公式常量（尾窗密度退化）⇒ 三项都<b>不可作趋势依据</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="n">07</span>上期预测回归（P182 → P183）</h2>
+  <table>
+    <thead><tr><th class="num">#</th><th>预测</th><th>判定</th><th>实测</th></tr></thead>
+    <tbody>
+      <tr><td class="num mono">1</td><td>reviewer <code>agent.log</code> 轮转 11-27 20:30 – 11-28 03:00</td><td><span class="tag t-wait">未到期</span></td><td>双法 21:03 / 22:37，均在窗内</td></tr>
+      <tr><td class="num mono">2</td><td>writer <code>agent.log</code> 轮转 12-04 13:50 – 14:50</td><td><span class="tag t-wait">未到期</span></td><td>实算 12-04 14:19</td></tr>
+      <tr><td class="num mono">3</td><td>现档 15,091 ± 2</td><td><span class="tag t-ok">✓ 恒等式</span></td><td><b>15,091</b>，误差 0 <span class="muted">（不计分，规则 EJ）</span></td></tr>
+      <tr><td class="num mono">4</td><td>零 ERROR（reviewer）35.04 日</td><td><span class="tag t-ok">✓</span></td><td><b>35.038</b></td></tr>
+      <tr><td class="num mono">5</td><td>arXiv 两段式：① 首发可能 15 s 超时 ② 重试必成；published 分支带自算 lag</td><td><span class="tag t-bad">✓/✗</span></td><td>① 首发<b>成功</b>（未重试）⇒ ✗；② 未触发；分支 <code>11-25T18:5xZ</code> ⇒ lag <b>30.013 h</b> ✓<span class="muted">（规则 E 双层记 ✓/✗）</span></td></tr>
+      <tr><td class="num mono">6</td><td>SKILL.md 四档：指针 94.41 / 整期新增 95.91 / 归档 ≤94.32 / 归档+新增 [92.0, 95.5]</td><td><span class="tag t-ok">✓</span></td><td><b>93.85%</b> 落在第 4 档</td></tr>
+      <tr><td class="num mono">7</td><td>尾窗 FUNC job-real [15,28] · observer [1,5]</td><td><span class="tag t-ok">✓</span></td><td><b>18 行 / 17 事件</b> · <b>5</b>（observer 落到上界）</td></tr>
+      <tr><td class="num mono">8</td><td>Memory ∈ {1,998} ∪ [1,999, 2,200] ∪ [1,700, 1,997]</td><td><span class="tag t-ok">✓</span></td><td><b>2,058</b>（24 h 零写入；读数 = 上期自身写入后的期末值，基数相位仍偏一期，规则 GC）</td></tr>
+    </tbody>
+  </table>
+  <p class="note"><b>4/5 = 80.0%</b>（剔除 #3 恒等式、#1 #2 未到期；#5 双层计分只取 ✗ 层，按规则 E 不计入分子）。本期被验证的是<b>复现性</b>而非机制正确性（规则 P125）：模型能算准的地方（恒等式、计数器）不解释，需要解释的地方（08h/09h 簇、观察者分量）不给数值。</p>
+</section>
+
+<section>
+  <h2><span class="n">08</span>进化建议</h2>
+  <table>
+    <thead><tr><th>优先</th><th>动作</th><th>预期收益</th><th>所有权</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag t-bad">P0</span></td><td><code>knowledge_ingest.py</code> 记录<b>请求耗时 + 异常类型 + HTTP 码</b></td><td>把「首发成败」从不可归因变成可测量（GT 的前提）；第 15 期未修</td><td>本 profile 可改（需审批）</td></tr>
+      <tr><td><span class="tag t-bad">P0</span></td><td>删/修 superpowers 的 3 份 <code>plugin.json</code> 清单</td><td>尾窗 −33 行（−6.6%），是单次动作收益最大的一项</td><td>本 profile 插件目录</td></tr>
+      <tr><td><span class="tag t-man">P1</span></td><td><code>approvals.mode: 'auto'</code> → <code>manual</code></td><td>尾窗 −359 行（−71.8%）；属配置动作，需人工</td><td><b>报告项</b>（规则 R）</td></tr>
+      <tr><td><span class="tag t-man">P1</span></td><td>weixin 凭据（default/writer 各 144/日 Session expired）</td><td>系统级 live ERROR 300/日 → 0；已 73 日</td><td><b>报告项</b>（本 profile 无写权限）</td></tr>
+      <tr><td><span class="tag t-auto">P2</span></td><td>Memory 先裁剪后写（余量 76 字符 &lt; 任一 entry）</td><td>避免下次写入被拒（规则 FH）</td><td>本作业可自办</td></tr>
+      <tr><td><span class="tag t-auto">P2</span></td><td>修复 <code>SessionDB.list_sessions</code> 缺失</td><td>补回「会话维度」这一整块能力图谱</td><td>核心代码 → PR + 审批</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2><span class="n">09</span>P184 预测（2026-11-28）</h2>
+  <table>
+    <thead><tr><th class="num">#</th><th>类</th><th>预测（含代回自检）</th></tr></thead>
+    <tbody>
+      <tr><td class="num mono">1</td><td><span class="tag t-auto">AUTO</span></td><td>reviewer <code>agent.log</code> <b>今夜轮转</b>：窗口 <b>11-27 20:30 – 11-28 03:00</b>（余量 192,298 ÷ 339,490 = 0.566 日 → 22:37；周期 15.49 日 → 21:03）。<b>若未在窗内轮转 ⇒ ✗</b>，并须重测速率（说明 mem_trim 心跳速率变化）。轮转后新文件在 11-28 09:00 应 &lt; 12%。</td></tr>
+      <tr><td class="num mono">2</td><td><span class="tag t-auto">AUTO</span></td><td>writer <code>agent.log</code> 轮转 <b>12-04 13:30 – 12-04 15:10</b>（余量 2,120,811 ÷ 293,731 = 7.220 日 → 14:19；历史间隔 17.82 / 17.82 日 ⇒ 周期法 ≈ 14:05）。</td></tr>
+      <tr><td class="num mono">3</td><td><span class="tag t-auto">AUTO</span></td><td>现档 <b>15,391 ± 2</b>，标 <span class="mono">(full|partial|换基)</span>：三载体均无轮转风险（default 9.78% / writer 35.46% / reviewer 12.40%）⇒ 预期 full。若快照落部分日，部分日按「已跑时段 × 速率」单列，<b>不得代入 ±2</b>（规则 GU）。<span class="muted">不计分</span></td></tr>
+      <tr><td class="num mono">4</td><td><span class="tag t-auto">AUTO</span></td><td>零 ERROR（<b>reviewer</b>）连胜 <b>36.04 日</b>（规则 AQ：依赖外部 provider，自动降一档；轮转不重置连胜，规则 DZ）。</td></tr>
+      <tr><td class="num mono">5</td><td><span class="tag t-auto">AUTO</span></td><td>arXiv 两段式 + 分支表（<b>snapshot 列必须填本期实测采集时刻</b>，规则 GP）：<br>
+        　• 首发<b>仍可能失败</b>：P(冷 &gt; 15 s) 由 9.18 / 14.85 / 15.98 / &gt;20 s 估计 ≈ 40–50%，重试必成（热 0.39–0.45 s）<br>
+        　• <code>2026-11-26T18:5xZ</code> ⇒ lag <b>30.0 ± 0.3 h</b>（落后 1 批，工作日）<br>
+        　• <code>2026-11-27T18:5xZ</code> ⇒ lag <b>6.0 ± 0.3 h</b>（落后 0 批，若索引提前前进）<br>
+        　• 其他 ⇒ 记实测，不判命中</td></tr>
+      <tr><td class="num mono">6</td><td><span class="tag t-auto">AUTO</span></td><td>SKILL.md 期末（基数 <b>93,851 = 93.85%</b>，余 6,149）四档全序：<b>指针档</b> 93.94–93.99% · <b>整期新增档</b> 95.30–95.55% · <b>归档档</b> ≤93.85% · <b>归档+新增档</b> [92.3, 95.4]%（规则 BD：四档并集覆盖全轴，禁止三选一）。<b>&gt;95% 即红灯，须迁规则到 references 而非删。</b></td></tr>
+      <tr><td class="num mono">7</td><td><span class="tag t-auto">AUTO</span></td><td>尾窗 FUNC job-real <b>[11, 26]</b>（子签名分解后求和，规则 GD：ddgs [7,12] + weixin [4,7] + 作业脚本 [0,4] + 其他 [0,3]）· observer <b>[1, 6]</b>。</td></tr>
+      <tr><td class="num mono">8</td><td><span class="tag t-auto">AUTO</span></td><td>Memory：基数 <b>2,124</b>，余 <b>76</b>（&lt; 任一 entry）。三态<b>无缝</b>：∈ {2,124} ∪ [2,125, 2,200] ∪ [1,700, 2,123]。<b>规则 FH：正分支只能「先裁剪后回填」</b>，直接 add 会被拒。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <p><b>口径声明</b>：解析器 <code>&lt;ts&gt; &lt;LEVEL&gt; [tag] &lt;logger&gt;: &lt;msg&gt;</code>，尾窗 500 行解析率 <b>500/500</b>；default <code>errors.log</code> 1,780 物理行 = 928 ERROR + 300 WARNING + <b>552 续行</b>（物理行 ≠ 逻辑记录 ≠ 事件，规则 V）；ERROR 合计枚举 <b>7 个 profile</b> 并判活（冻结 4 个：analyst / researcher / orchestrator / developer，末记录 2026-09-15）。</p>
+  <p>本报告为<b>只读观测</b>的产物；文中建议均需人工审批后执行（设计原则 #1）。观测者分量（本期 <code>tools.approval</code> 告警与 <code>execute_code</code> 阻断 1 条）已单列 observer，不计入健康度（规则 AW）。</p>
+  <p>生成：2026-11-27 09:00–09:2x CST · 自进化第 183 期 · <span class="mono">binbinao.github.io/openclaw-impact-report</span></p>
+</footer>
+
+</div>
+</body>
+</html>
